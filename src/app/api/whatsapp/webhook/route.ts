@@ -17,13 +17,27 @@ const genericSchema = z
   })
   .passthrough();
 
-export async function GET() {
-  return NextResponse.json({ ok: true, channel: "whatsapp", mode: "mock-webhook" });
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const mode = url.searchParams.get("hub.mode");
+  const token = url.searchParams.get("hub.verify_token");
+  const challenge = url.searchParams.get("hub.challenge");
+
+  if (mode === "subscribe" && token === process.env.WHATSAPP_VERIFY_TOKEN && challenge) {
+    return new Response(challenge, {
+      status: 200,
+      headers: { "Content-Type": "text/plain" }
+    });
+  }
+
+  return NextResponse.json({ error: "Invalid verify token" }, { status: 403 });
 }
 
 export async function POST(request: Request) {
-  const unauthorized = requireWebhookSecret(request);
-  if (unauthorized) return unauthorized;
+  if (process.env.WHATSAPP_PROVIDER !== "meta") {
+    const unauthorized = requireWebhookSecret(request);
+    if (unauthorized) return unauthorized;
+  }
 
   const rawPayload = genericSchema.parse(await request.json());
   const inbound = whatsappAdapter.parseInbound(rawPayload);
@@ -34,15 +48,37 @@ export async function POST(request: Request) {
 
   const conversation = await handleInboundMessage(inbound);
   const response = toChannelResponse(conversation);
-  await whatsappAdapter.sendMessage(inbound.phone, response.reply, response);
+  let outbound;
+
+  try {
+    outbound = await whatsappAdapter.sendMessage(inbound.phone, formatWhatsAppReply(response), response);
+  } catch (error) {
+    console.error("[whatsapp:webhook:send-error]", error);
+    return NextResponse.json({ ok: false, error: "Failed to send outbound WhatsApp message" }, { status: 502 });
+  }
 
   return NextResponse.json({
     ok: true,
-    provider: "mock",
+    provider: outbound.provider,
     outbound: {
       to: inbound.phone,
-      text: response.reply
+      text: formatWhatsAppReply(response)
     },
     data: response
   });
+}
+
+function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {
+  if (response.products.length) {
+    const options = response.products
+      .map(
+        (option) =>
+          `${option.rank}. ${option.reason}\n${option.product.title}\nR$ ${option.product.price.toFixed(2)} + frete R$ ${option.product.shippingPrice.toFixed(2)}\n${option.product.deliveryEstimate}`
+      )
+      .join("\n\n");
+
+    return `${response.reply}\n\n${options}`;
+  }
+
+  return response.reply;
 }

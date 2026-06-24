@@ -127,6 +127,9 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `API_TOKEN`: token bearer para endpoints `/api/v1/*`.
 - `WHATSAPP_PROVIDER`: `mock`, `twilio` ou `zapi`.
 - `WHATSAPP_WEBHOOK_SECRET`: segredo exigido no header `x-webhook-secret`.
+- `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.
+- `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
+- `WHATSAPP_PHONE_NUMBER_ID`: ID do numero remetente na WhatsApp Cloud API.
 
 ## Como trocar mock por OpenAI real
 
@@ -158,7 +161,22 @@ Substitua `src/lib/adapters/payment.ts`:
 
 ## Como integrar WhatsApp
 
-O endpoint de entrada ja existe em `/api/whatsapp/webhook`. Para sair do mock, implemente envio real em `src/lib/adapters/whatsapp.ts`:
+O endpoint de entrada ja existe em `/api/whatsapp/webhook`. Para usar a Meta WhatsApp Cloud API, configure:
+
+```env
+WHATSAPP_PROVIDER="meta"
+WHATSAPP_VERIFY_TOKEN="um-token-que-voce-escolhe"
+WHATSAPP_ACCESS_TOKEN="token-da-meta"
+WHATSAPP_PHONE_NUMBER_ID="id-do-numero"
+```
+
+Na Meta, configure o callback URL:
+
+```text
+https://SEU_DOMINIO/api/whatsapp/webhook
+```
+
+E use o mesmo valor de `WHATSAPP_VERIFY_TOKEN` no campo Verify Token.
 
 - Webhook Twilio/Z-API recebe mensagem e identifica `phone`.
 - Busque ou crie `User` pelo telefone.
