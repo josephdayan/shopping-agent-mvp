@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id             String         @id @default(cuid())
+  name           String?
+  phone          String         @unique
+  email          String?
+  defaultAddress String?
+  createdAt      DateTime       @default(now())
+  conversations  Conversation[]
+  orders         Order[]
+  preferences    Preference[]
+}
+
+model Conversation {
+  id          String          @id @default(cuid())
+  userId      String
+  status      String          @default("active")
+  intent      String?
+  currentStep String          @default("collecting_request")
+  context     String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id])
+  messages    Message[]
+  options     ProductOption[]
+  orders      Order[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  sender         String
+  text           String
+  metadata       String?
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+model Product {
+  id               String          @id @default(cuid())
+  externalId       String          @unique
+  title            String
+  brand            String
+  category         String
+  price            Float
+  shippingPrice    Float
+  store            String
+  rating           Float
+  deliveryEstimate String
+  deliveryHours    Int
+  imageUrl         String
+  productUrl       String
+  availability     Boolean         @default(true)
+  options          ProductOption[]
+  orders           Order[]
+}
+
+model ProductOption {
+  id             String       @id @default(cuid())
+  conversationId String
+  productId      String
+  rank           Int
+  reason         String
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  product        Product      @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id                String       @id @default(cuid())
+  userId            String
+  conversationId    String
+  productId         String
+  status            String       @default("pending_payment")
+  paymentStatus     String       @default("awaiting_payment")
+  fulfillmentStatus String       @default("not_started")
+  paymentLink       String?
+  subtotal          Float
+  shipping          Float
+  serviceFee        Float
+  total             Float
+  deliveryAddress   String
+  trackingCode      String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  user              User         @relation(fields: [userId], references: [id])
+  conversation      Conversation @relation(fields: [conversationId], references: [id])
+  product           Product      @relation(fields: [productId], references: [id])
+}
+
+model Preference {
+  id                  String   @id @default(cuid())
+  userId              String
+  category            String
+  preferredBrand      String?
+  preferredStore      String?
+  priceSensitivity    String?
+  deliverySensitivity String?
+  notes               String?
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, category])
+}

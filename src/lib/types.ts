@@ -1,0 +1,30 @@
+import type { Product } from "@prisma/client";
+
+export type PriceSensitivity = "cheap" | "balanced" | "premium";
+export type DeliverySensitivity = "fast" | "normal";
+
+export type ProductIntent = {
+  category?: string;
+  urgency?: DeliverySensitivity;
+  priceSensitivity?: PriceSensitivity;
+  preferredBrand?: string;
+  restrictions?: string[];
+  wantsRepeat?: boolean;
+  unsupported?: boolean;
+  ambiguous?: boolean;
+};
+
+export type ConversationContext = {
+  intent?: ProductIntent;
+  selectedProductId?: string;
+  selectedProductExternalId?: string;
+  deliveryAddress?: string;
+  paymentMethod?: "pix" | "card" | "link";
+  orderId?: string;
+};
+
+export type RankedProduct = Product & {
+  rank: number;
+  reason: string;
+  score: number;
+};

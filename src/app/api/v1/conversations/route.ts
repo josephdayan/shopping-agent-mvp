@@ -1,0 +1,22 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { requireApiToken } from "@/lib/auth";
+import { createConversation, toChannelResponse } from "@/lib/chat-service";
+
+export const dynamic = "force-dynamic";
+
+const schema = z.object({
+  phone: z.string().min(6),
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  defaultAddress: z.string().optional()
+});
+
+export async function POST(request: Request) {
+  const unauthorized = requireApiToken(request);
+  if (unauthorized) return unauthorized;
+
+  const payload = schema.parse(await request.json());
+  const conversation = await createConversation(payload);
+  return NextResponse.json(toChannelResponse(conversation), { status: 201 });
+}
