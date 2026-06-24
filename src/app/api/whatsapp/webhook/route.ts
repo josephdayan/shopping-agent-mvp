@@ -9,8 +9,10 @@ export const dynamic = "force-dynamic";
 const genericSchema = z
   .object({
     from: z.string().optional(),
+    From: z.string().optional(),
     phone: z.string().optional(),
     body: z.string().optional(),
+    Body: z.string().optional(),
     text: z.string().optional(),
     name: z.string().optional(),
     profileName: z.string().optional()
@@ -34,13 +36,16 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (process.env.WHATSAPP_PROVIDER !== "meta") {
+  const contentType = request.headers.get("content-type") ?? "";
+  const rawPayload = contentType.includes("application/x-www-form-urlencoded")
+    ? Object.fromEntries(await request.formData())
+    : genericSchema.parse(await request.json());
+  const inbound = whatsappAdapter.parseInbound(rawPayload);
+
+  if (process.env.WHATSAPP_PROVIDER !== "meta" && inbound.provider !== "twilio") {
     const unauthorized = requireWebhookSecret(request);
     if (unauthorized) return unauthorized;
   }
-
-  const rawPayload = genericSchema.parse(await request.json());
-  const inbound = whatsappAdapter.parseInbound(rawPayload);
 
   if (!inbound.phone || !inbound.text) {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
@@ -48,10 +53,18 @@ export async function POST(request: Request) {
 
   const conversation = await handleInboundMessage(inbound);
   const response = toChannelResponse(conversation);
+  const replyText = formatWhatsAppReply(response);
   let outbound;
 
+  if (inbound.provider === "twilio") {
+    return new Response(toTwilioXml(replyText), {
+      status: 200,
+      headers: { "Content-Type": "text/xml" }
+    });
+  }
+
   try {
-    outbound = await whatsappAdapter.sendMessage(inbound.phone, formatWhatsAppReply(response), response);
+    outbound = await whatsappAdapter.sendMessage(inbound.phone, replyText, response);
   } catch (error) {
     console.error("[whatsapp:webhook:send-error]", error);
     return NextResponse.json({ ok: false, error: "Failed to send outbound WhatsApp message" }, { status: 502 });
@@ -62,10 +75,23 @@ export async function POST(request: Request) {
     provider: outbound.provider,
     outbound: {
       to: inbound.phone,
-      text: formatWhatsAppReply(response)
+      text: replyText
     },
     data: response
   });
+}
+
+function toTwilioXml(message: string) {
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${escapeXml(message)}</Message></Response>`;
+}
+
+function escapeXml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {

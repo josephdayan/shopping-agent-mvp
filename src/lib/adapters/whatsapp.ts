@@ -14,8 +14,10 @@ type RawInbound = {
     }>;
   }>;
   from?: string;
+  From?: string;
   phone?: string;
   body?: string;
+  Body?: string;
   text?: string;
   name?: string;
   profileName?: string;
@@ -29,10 +31,17 @@ export const whatsappAdapter = {
     const metaContact = metaChange?.contacts?.[0];
 
     return {
-      phone: metaMessage?.from ?? payload.from ?? payload.phone ?? extractNestedString(payload, ["message", "from"]) ?? "",
+      phone:
+        metaMessage?.from ??
+        normalizeTwilioFrom(payload.From) ??
+        payload.from ??
+        payload.phone ??
+        extractNestedString(payload, ["message", "from"]) ??
+        "",
       text:
         metaMessage?.text?.body ??
         payload.body ??
+        payload.Body ??
         payload.text ??
         extractNestedString(payload, ["message", "text"]) ??
         "",
@@ -43,7 +52,7 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id,
-      provider: metaMessage ? "meta" : "mock"
+      provider: metaMessage ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
     };
   },
 
@@ -104,6 +113,10 @@ async function sendMetaMessage(to: string, text: string) {
 
 function normalizeWhatsAppPhone(phone: string) {
   return phone.replace(/\D/g, "");
+}
+
+function normalizeTwilioFrom(phone?: string) {
+  return phone?.replace(/^whatsapp:/, "");
 }
 
 function extractNestedString(payload: RawInbound, path: string[]) {

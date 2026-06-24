@@ -83,7 +83,7 @@ curl -X POST http://localhost:3000/api/v1/conversations/CONVERSATION_ID/approve-
 
 ### WhatsApp webhook
 
-Webhook mockado para Twilio/Z-API:
+Webhook compativel com Twilio Sandbox e Meta Cloud API:
 
 ```bash
 curl -X POST http://localhost:3000/api/whatsapp/webhook \
@@ -97,6 +97,24 @@ curl -X POST http://localhost:3000/api/whatsapp/webhook \
 ```
 
 Resposta retorna `outbound.text`, simulando a mensagem que seria enviada de volta ao WhatsApp. O adapter fica em `src/lib/adapters/whatsapp.ts`.
+
+Para Twilio Sandbox, configure no console da Twilio:
+
+```text
+When a message comes in:
+https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
+
+Method:
+POST
+```
+
+Na Vercel:
+
+```env
+WHATSAPP_PROVIDER="twilio"
+```
+
+O webhook responde TwiML diretamente para a Twilio.
 
 ## Fluxos para testar
 
@@ -125,7 +143,7 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `OPENAI_API_KEY`: opcional. Sem ela, o adapter de IA usa heuristicas locais.
 - `OPENAI_MODEL`: modelo de interpretacao de intencao. Padrao: `gpt-5.4-mini`.
 - `API_TOKEN`: token bearer para endpoints `/api/v1/*`.
-- `WHATSAPP_PROVIDER`: `mock`, `twilio` ou `zapi`.
+- `WHATSAPP_PROVIDER`: `twilio`, `meta`, `mock` ou `zapi`.
 - `WHATSAPP_WEBHOOK_SECRET`: segredo exigido no header `x-webhook-secret`.
 - `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.
 - `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
@@ -161,7 +179,22 @@ Substitua `src/lib/adapters/payment.ts`:
 
 ## Como integrar WhatsApp
 
-O endpoint de entrada ja existe em `/api/whatsapp/webhook`. Para usar a Meta WhatsApp Cloud API, configure:
+O endpoint de entrada ja existe em `/api/whatsapp/webhook`.
+
+Para testar agora com Twilio WhatsApp Sandbox:
+
+1. No Twilio Console, abra `Messaging > Try it out > Send a WhatsApp message`.
+2. Entre no sandbox pelo WhatsApp usando o codigo indicado pela Twilio.
+3. Em `Sandbox settings`, configure `When a message comes in`:
+
+```text
+https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
+```
+
+4. Metodo: `POST`.
+5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`.
+
+Para usar a Meta WhatsApp Cloud API depois, configure:
 
 ```env
 WHATSAPP_PROVIDER="meta"
