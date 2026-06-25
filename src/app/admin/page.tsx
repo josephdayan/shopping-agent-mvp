@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, CircleDollarSign, FastForward, Users } from "lucide-react";
+import { ArrowLeft, CheckCircle2, CircleDollarSign, FastForward, ListTodo, Users } from "lucide-react";
 import { getAdminSnapshot } from "@/lib/admin-service";
 import AdminActions from "@/components/admin-actions";
+import ProductActions from "@/components/product-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,7 @@ export default async function AdminPage() {
           <Metric icon={<Users size={18} />} label="Usuarios" value={data.users.length} />
           <Metric icon={<CircleDollarSign size={18} />} label="Pagamentos pendentes" value={pending} />
           <Metric icon={<CheckCircle2 size={18} />} label="Pagos" value={paid} />
-          <Metric icon={<FastForward size={18} />} label="Conversas" value={data.conversations.length} />
+          <Metric icon={<ListTodo size={18} />} label="Tarefas ops" value={data.opsTasks.filter((task) => task.status === "open").length} />
         </section>
 
         <section className="grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
@@ -53,11 +54,14 @@ export default async function AdminPage() {
                     <tr key={order.id} className="border-t border-ink/10">
                       <td className="px-4 py-3">
                         <p className="font-medium">{order.product.title}</p>
-                        <p className="text-xs text-ink/55">{order.product.store}</p>
+                        <p className="text-xs text-ink/55">{order.product.store} · {sourceLabel(order.product.source)}</p>
                       </td>
                       <td className="px-4 py-3">{order.user.name ?? order.user.phone}</td>
                       <td className="px-4 py-3">{order.paymentStatus}</td>
-                      <td className="px-4 py-3">{order.fulfillmentStatus}</td>
+                      <td className="px-4 py-3">
+                        <p>{order.fulfillmentStatus}</p>
+                        <p className="text-xs text-ink/55">{fulfillmentLabel(order.fulfillmentMode)}</p>
+                      </td>
                       <td className="px-4 py-3">R$ {order.total.toFixed(2)}</td>
                       <td className="px-4 py-3">
                         <AdminActions orderId={order.id} canApprove={order.paymentStatus === "awaiting_payment"} canAdvance={order.paymentStatus === "approved"} />
@@ -97,13 +101,35 @@ export default async function AdminPage() {
                   <div key={product.id} className="flex items-center justify-between gap-3 rounded-md border border-ink/10 p-2 text-sm">
                     <div>
                       <p className="font-medium">{product.title}</p>
-                      <p className="text-xs text-ink/55">{product.category} · {product.store}</p>
+                      <p className="text-xs text-ink/55">
+                        {product.category} · {sourceLabel(product.source)} · {fulfillmentLabel(product.fulfillmentMode)}
+                      </p>
+                      <ProductActions productId={product.id} available={product.availability} />
                     </div>
                     <span className="font-semibold">R$ {product.price.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
             </Panel>
+          </div>
+        </section>
+
+        <section className="rounded-md border border-ink/10 bg-white p-4 shadow-soft">
+          <h2 className="mb-3 font-semibold">Fila operacional</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {data.opsTasks.map((task) => (
+              <div key={task.id} className="rounded-md border border-ink/10 p-3 text-sm">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <span className="font-medium">{task.title}</span>
+                  <span className="rounded-md bg-mist px-2 py-1 text-xs text-leaf">{task.status}</span>
+                </div>
+                <p className="text-ink/65">{task.notes}</p>
+                <p className="mt-2 text-xs text-ink/50">
+                  {task.order.product.title} · {task.order.user.name ?? task.order.user.phone}
+                </p>
+              </div>
+            ))}
+            {!data.opsTasks.length && <p className="text-sm text-ink/55">Nenhuma tarefa operacional aberta.</p>}
           </div>
         </section>
 
@@ -131,6 +157,26 @@ export default async function AdminPage() {
     </main>
   );
 }
+
+function sourceLabel(source: string) {
+  const labels: Record<string, string> = {
+    mercado_livre: "Mercado Livre",
+    rappi: "Rappi",
+    farmacia: "Farmacia",
+    loja_local: "Loja local"
+  };
+  return labels[source] ?? source;
+}
+
+function fulfillmentLabel(mode: string) {
+  const labels: Record<string, string> = {
+    marketplace_native: "entrega nativa",
+    local_courier: "courier",
+    manual_operator: "manual"
+  };
+  return labels[mode] ?? mode;
+}
+
 
 function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (

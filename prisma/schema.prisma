@@ -51,6 +51,10 @@ model Product {
   title            String
   brand            String
   category         String
+  source           String          @default("mock")
+  sourceType       String          @default("marketplace")
+  fulfillmentMode  String          @default("marketplace_native")
+  automationLevel  String          @default("mock")
   price            Float
   shippingPrice    Float
   store            String
@@ -83,6 +87,10 @@ model Order {
   status            String       @default("pending_payment")
   paymentStatus     String       @default("awaiting_payment")
   fulfillmentStatus String       @default("not_started")
+  fulfillmentMode   String       @default("marketplace_native")
+  fulfillmentNotes  String?
+  source            String       @default("mock")
+  refundStatus      String       @default("none")
   paymentLink       String?
   subtotal          Float
   shipping          Float
@@ -95,6 +103,19 @@ model Order {
   user              User         @relation(fields: [userId], references: [id])
   conversation      Conversation @relation(fields: [conversationId], references: [id])
   product           Product      @relation(fields: [productId], references: [id])
+  opsTasks          OpsTask[]
+}
+
+model OpsTask {
+  id          String   @id @default(cuid())
+  orderId     String
+  type        String
+  status      String   @default("open")
+  title       String
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  order       Order    @relation(fields: [orderId], references: [id])
 }
 
 model Preference {

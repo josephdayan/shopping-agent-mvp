@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CheckCircle2, FastForward, RefreshCw } from "lucide-react";
+import { Ban, CheckCircle2, FastForward, PackageCheck, RefreshCw, RotateCcw, Truck } from "lucide-react";
 import { useState } from "react";
 
 export default function AdminActions({
@@ -16,7 +16,7 @@ export default function AdminActions({
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
 
-  async function call(action: "approve" | "advance") {
+  async function call(action: "approve" | "advance" | "purchased" | "delivered" | "substitution" | "cancel-refund") {
     if (!orderId) {
       router.refresh();
       return;
@@ -56,6 +56,38 @@ export default function AdminActions({
       >
         <FastForward size={14} />
         Avancar
+      </button>
+      <button
+        disabled={loading !== null}
+        onClick={() => call("purchased")}
+        className="inline-flex items-center gap-2 rounded-md border border-ink/15 px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+      >
+        <PackageCheck size={14} />
+        Comprado
+      </button>
+      <button
+        disabled={loading !== null}
+        onClick={() => call("delivered")}
+        className="inline-flex items-center gap-2 rounded-md border border-ink/15 px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+      >
+        <Truck size={14} />
+        Entregue
+      </button>
+      <button
+        disabled={loading !== null}
+        onClick={() => call("substitution")}
+        className="inline-flex items-center gap-2 rounded-md border border-gold/40 px-3 py-2 text-xs font-semibold text-gold disabled:cursor-not-allowed disabled:opacity-45"
+      >
+        <RotateCcw size={14} />
+        Substituir
+      </button>
+      <button
+        disabled={loading !== null}
+        onClick={() => call("cancel-refund")}
+        className="inline-flex items-center gap-2 rounded-md border border-coral/40 px-3 py-2 text-xs font-semibold text-coral disabled:cursor-not-allowed disabled:opacity-45"
+      >
+        <Ban size={14} />
+        Cancelar
       </button>
     </div>
   );

@@ -108,7 +108,7 @@ export async function handleUserMessage(conversationId: string, text: string) {
 
   await messagingAdapter.receiveMessage(conversationId, text);
 
-  if (/cancel|desist|para|parar/.test(normalize(text))) {
+  if (/\b(cancelar|cancela|cancel|desistir|desisto|parar|para tudo)\b/.test(normalize(text))) {
     await prisma.conversation.update({
       where: { id: conversationId },
       data: { status: "cancelled", currentStep: "cancelled" }
@@ -301,7 +301,9 @@ async function confirmOrder(conversationId: string, text: string) {
       deliveryAddress: context.deliveryAddress ?? conversation.user.defaultAddress ?? "",
       paymentStatus: "awaiting_payment",
       status: "pending_payment",
-      fulfillmentStatus: "not_started"
+      fulfillmentStatus: "not_started",
+      fulfillmentMode: product.fulfillmentMode,
+      source: product.source
     }
   });
   const paidOrder = await paymentAdapter.createPayment(order.id, paymentMethod);
@@ -354,6 +356,7 @@ async function sendCheckoutSummary(conversationId: string, productId: string, ad
     [
       aiAdapter.generateAssistantResponse("checkout"),
       `${product.title}`,
+      `Fonte: ${sourceLabel(product.source)} | Fulfillment: ${fulfillmentLabel(product.fulfillmentMode)}`,
       `Produto: R$ ${product.price.toFixed(2)} | Frete: R$ ${product.shippingPrice.toFixed(2)} | Taxa: R$ ${SERVICE_FEE.toFixed(2)}`,
       `Total: R$ ${total.toFixed(2)}`,
       `Entrega: ${product.deliveryEstimate}`,
@@ -391,7 +394,7 @@ async function savePreference(userId: string, productId: string, deliveryAddress
       preferredStore: product.store,
       priceSensitivity: product.price < 15 ? "cheap" : "balanced",
       deliverySensitivity: product.deliveryHours <= 4 ? "fast" : "normal",
-      notes: `Ultima compra: ${product.title}`
+      notes: `Ultima compra: ${product.title} via ${product.store}`
     },
     create: {
       userId,
@@ -400,7 +403,7 @@ async function savePreference(userId: string, productId: string, deliveryAddress
       preferredStore: product.store,
       priceSensitivity: product.price < 15 ? "cheap" : "balanced",
       deliverySensitivity: product.deliveryHours <= 4 ? "fast" : "normal",
-      notes: `Ultima compra: ${product.title}`
+      notes: `Ultima compra: ${product.title} via ${product.store}`
     }
   });
 }
@@ -441,4 +444,23 @@ function normalizePhone(phone: string) {
   if (trimmed.startsWith("+")) return trimmed;
   const digits = trimmed.replace(/\D/g, "");
   return digits ? `+${digits}` : DEMO_PHONE;
+}
+
+function sourceLabel(source: string) {
+  const labels: Record<string, string> = {
+    mercado_livre: "Mercado Livre",
+    rappi: "Rappi",
+    farmacia: "Farmacia",
+    loja_local: "Loja local"
+  };
+  return labels[source] ?? source;
+}
+
+function fulfillmentLabel(mode: string) {
+  const labels: Record<string, string> = {
+    marketplace_native: "entrega nativa",
+    local_courier: "courier local",
+    manual_operator: "operador manual"
+  };
+  return labels[mode] ?? mode;
 }

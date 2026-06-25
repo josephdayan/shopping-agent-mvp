@@ -8,6 +8,8 @@ type Product = {
   title: string;
   brand: string;
   category: string;
+  source: string;
+  fulfillmentMode: string;
   price: number;
   shippingPrice: number;
   store: string;
@@ -34,6 +36,8 @@ type Conversation = {
     status: string;
     paymentStatus: string;
     fulfillmentStatus: string;
+    fulfillmentMode: string;
+    source: string;
     paymentLink?: string;
     total: number;
     trackingCode?: string;
@@ -159,7 +163,9 @@ export default function ChatApp() {
                       <span>#{option.rank}</span>
                     </div>
                     <h3 className="text-sm font-semibold leading-snug">{option.product.title}</h3>
-                    <p className="text-xs text-ink/65">{option.product.store} · {option.product.rating.toFixed(1)} estrelas</p>
+                    <p className="text-xs text-ink/65">
+                      {option.product.store} · {sourceLabel(option.product.source)} · {option.product.rating.toFixed(1)} estrelas
+                    </p>
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">R$ {option.product.price.toFixed(2)}</span>
                       <span className="text-xs text-ink/60">{option.product.deliveryEstimate}</span>
@@ -219,6 +225,8 @@ export default function ChatApp() {
               <p className="font-medium">{activeOrder.product.title}</p>
               <StatusRow label="Pagamento" value={activeOrder.paymentStatus} />
               <StatusRow label="Fulfillment" value={activeOrder.fulfillmentStatus} />
+              <StatusRow label="Modo" value={fulfillmentLabel(activeOrder.fulfillmentMode)} />
+              <StatusRow label="Fonte" value={sourceLabel(activeOrder.source)} />
               <StatusRow label="Pedido" value={activeOrder.status} />
               <StatusRow label="Total" value={`R$ ${activeOrder.total.toFixed(2)}`} />
               {activeOrder.trackingCode && <StatusRow label="Rastreio" value={activeOrder.trackingCode} />}
@@ -267,4 +275,23 @@ function StatusRow({ label, value }: { label: string; value: string }) {
       <span className="text-right font-medium">{value}</span>
     </div>
   );
+}
+
+function sourceLabel(source: string) {
+  const labels: Record<string, string> = {
+    mercado_livre: "Mercado Livre",
+    rappi: "Rappi",
+    farmacia: "Farmacia",
+    loja_local: "Loja local"
+  };
+  return labels[source] ?? source;
+}
+
+function fulfillmentLabel(mode: string) {
+  const labels: Record<string, string> = {
+    marketplace_native: "entrega nativa",
+    local_courier: "courier",
+    manual_operator: "manual"
+  };
+  return labels[mode] ?? mode;
 }

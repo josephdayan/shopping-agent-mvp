@@ -23,6 +23,9 @@ export type ConversationContext = {
   orderId?: string;
 };
 
+export type SupplierSource = "mercado_livre" | "rappi" | "farmacia" | "loja_local";
+export type FulfillmentMode = "marketplace_native" | "local_courier" | "manual_operator";
+
 export type RankedProduct = Product & {
   rank: number;
   reason: string;

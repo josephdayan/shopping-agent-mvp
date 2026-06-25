@@ -5,10 +5,30 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["escova de dente", ["escova", "escova dental", "toothbrush"]],
   ["pasta de dente", ["pasta", "creme dental", "toothpaste"]],
   ["shampoo", ["shampoo", "xampu"]],
-  ["lenco de papel", ["lenco", "lenço", "kleenex", "papel"]]
+  ["lenco de papel", ["lenco", "lenço", "kleenex", "papel"]],
+  ["protetor solar", ["protetor", "protetor solar", "filtro solar"]],
+  ["desodorante", ["desodorante", "antitranspirante"]],
+  ["carregador", ["carregador", "cabo", "usb-c", "iphone"]],
+  ["pilhas", ["pilha", "pilhas", "bateria aa", "bateria aaa"]],
+  ["agua", ["agua", "água", "garrafa de agua"]],
+  ["chocolate", ["chocolate", "bombom", "barra"]]
 ];
 
-const BRANDS = ["Colgate", "Curaprox", "Oral-B", "Sorriso", "Pantene", "Seda", "Kleenex"];
+const BRANDS = [
+  "Colgate",
+  "Curaprox",
+  "Oral-B",
+  "Sorriso",
+  "Pantene",
+  "Seda",
+  "Kleenex",
+  "Nivea",
+  "Rexona",
+  "Anker",
+  "Duracell",
+  "Crystal",
+  "Lacta"
+];
 const FORBIDDEN = ["arma", "cigarro", "remedio controlado", "medicamento controlado", "alcool"];
 
 export const aiAdapter = {
