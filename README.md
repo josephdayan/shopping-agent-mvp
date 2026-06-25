@@ -170,6 +170,7 @@ No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata
 - `TWILIO_CONVERSATION_CONFIGURATION_ID`: configuracao do Conversation Orchestrator.
 - `TWILIO_MEMORY_STORE_ID`: Memory Store do Conversation Memory.
 - `TWILIO_TRAIT_GROUPS`: grupos de traits usados na memoria. Padrao: `Contact,Preferences`.
+- `TWILIO_PRODUCT_OPTIONS_CONTENT_SID`: ContentSid de template `twilio/quick-reply` para botoes de escolha no WhatsApp. Sem ele, Atlas usa imagens + texto como fallback.
 - `TWILIO_PHONE_NUMBER`: numero Twilio principal em formato E.164.
 - `TWILIO_VOICE_PUBLIC_DOMAIN`: dominio publico para voz/ConversationRelay, se ativar voz.
 - `MERCADO_LIVRE_REAL_SEARCH`: `true` para tentar busca real no Mercado Livre.
@@ -228,6 +229,26 @@ https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
 5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` e `TWILIO_WEBHOOK_URL`.
 
 Em conta trial, a Twilio so envia para numeros verificados e o sandbox WhatsApp tem limite diario. Isso e normal para teste.
+
+### Imagens e botoes no WhatsApp
+
+Quando a resposta tem opcoes de produto, o webhook Twilio responde com TwiML contendo uma mensagem de resumo e uma mensagem por produto com imagem (`<Media>`), descricao, preco, prazo, fonte e instrucao para responder `1`, `2` ou `3`.
+
+Para habilitar botoes nativos de escolha, crie um template de quick reply na Twilio Content API:
+
+```bash
+TWILIO_ACCOUNT_SID="AC..." \
+TWILIO_AUTH_TOKEN="..." \
+npm run twilio:create-product-options-template
+```
+
+O comando imprime:
+
+```env
+TWILIO_PRODUCT_OPTIONS_CONTENT_SID=HX...
+```
+
+Coloque esse valor na Vercel em Production/Preview e faca redeploy. Dentro da janela de 24h do WhatsApp, a Twilio pode enviar quick replies sem aprovacao de template; se o envio com botoes falhar ou a variavel nao existir, Atlas cai automaticamente para imagem + texto.
 
 ### Twilio Agent Connect
 

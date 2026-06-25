@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
-import { whatsappAdapter } from "@/lib/adapters/whatsapp";
+import { whatsappAdapter, type WhatsAppRichReply } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
 
@@ -58,18 +58,30 @@ export async function POST(request: Request) {
 
   const conversation = await handleInboundMessage(inbound);
   const response = toChannelResponse(conversation);
-  const replyText = formatWhatsAppReply(response);
+  const richReply = formatWhatsAppReply(response);
   let outbound;
 
   if (inbound.provider === "twilio") {
-    return new Response(toTwilioXml(replyText), {
+    try {
+      const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);
+      if (interactive) {
+        return new Response(toTwilioXml({ text: "" }), {
+          status: 200,
+          headers: { "Content-Type": "text/xml" }
+        });
+      }
+    } catch (error) {
+      console.warn("[whatsapp:twilio:quick-reply:fallback]", error);
+    }
+
+    return new Response(toTwilioXml(richReply), {
       status: 200,
       headers: { "Content-Type": "text/xml" }
     });
   }
 
   try {
-    outbound = await whatsappAdapter.sendMessage(inbound.phone, replyText, response);
+    outbound = await whatsappAdapter.sendMessage(inbound.phone, richReply.text, response);
   } catch (error) {
     console.error("[whatsapp:webhook:send-error]", error);
     return NextResponse.json({ ok: false, error: "Failed to send outbound WhatsApp message" }, { status: 502 });
@@ -80,14 +92,42 @@ export async function POST(request: Request) {
     provider: outbound.provider,
     outbound: {
       to: inbound.phone,
-      text: replyText
+      text: richReply.text
     },
     data: response
   });
 }
 
-function toTwilioXml(message: string) {
-  return `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${escapeXml(message)}</Message></Response>`;
+function toTwilioXml(reply: WhatsAppRichReply) {
+  if (!reply.text && !reply.options?.length) return `<?xml version="1.0" encoding="UTF-8"?><Response></Response>`;
+
+  const intro = reply.options?.length ? shortIntro(reply.text) : reply.text;
+  const messages = reply.options?.length
+    ? [
+        `<Message>${messageBody(intro)}</Message>`,
+        ...reply.options.slice(0, 3).map((option) => {
+          const total = option.product.price + option.product.shippingPrice;
+          const body = [
+            `${option.rank}) ${option.reason}`,
+            option.product.title,
+            `Total aprox: R$ ${total.toFixed(2)}`,
+            option.product.deliveryEstimate,
+            `Fonte: ${sourceLabel(option.product.source)}`,
+            option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
+              ? `Link: ${option.product.productUrl}`
+              : null,
+            `Para escolher, responda ${option.rank}.`
+          ]
+            .filter(Boolean)
+            .join("\n");
+
+          return `<Message>${messageBody(body)}${mediaTag(option.product.imageUrl)}</Message>`;
+        }),
+        `<Message>${messageBody("Responda 1, 2 ou 3. Se aparecerem botoes no seu WhatsApp, pode tocar direto neles.")}</Message>`
+      ]
+    : [`<Message>${messageBody(reply.text)}</Message>`];
+
+  return `<?xml version="1.0" encoding="UTF-8"?><Response>${messages.join("")}</Response>`;
 }
 
 function escapeXml(value: string) {
@@ -99,7 +139,24 @@ function escapeXml(value: string) {
     .replace(/'/g, "&apos;");
 }
 
-function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {
+function messageBody(message: string) {
+  return message ? `<Body>${escapeXml(message)}</Body>` : "";
+}
+
+function mediaTag(url: string) {
+  if (!isPublicMediaUrl(url)) return "";
+  return `<Media>${escapeXml(url)}</Media>`;
+}
+
+function isPublicMediaUrl(url: string) {
+  return /^https:\/\/.+/i.test(url);
+}
+
+function shortIntro(text: string) {
+  return text.split(/\n\n1\)/)[0] || text;
+}
+
+function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): WhatsAppRichReply {
   if (response.products.length) {
     const options = response.products
       .map((option) => {
@@ -118,10 +175,13 @@ function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {
       })
       .join("\n\n");
 
-    return `${response.reply}\n\n${options}\n\nResponda 1, 2 ou 3.`;
+    return {
+      text: `${response.reply}\n\n${options}\n\nResponda 1, 2 ou 3.`,
+      options: response.products
+    };
   }
 
-  return response.reply;
+  return { text: response.reply };
 }
 
 function sourceLabel(source: string) {

@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "twilio:create-product-options-template": "node scripts/create-twilio-product-options-template.mjs"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",

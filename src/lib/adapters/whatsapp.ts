@@ -1,4 +1,5 @@
 import twilio from "twilio";
+import type { Product } from "@prisma/client";
 
 type RawInbound = {
   entry?: Array<{
@@ -23,7 +24,20 @@ type RawInbound = {
   text?: string;
   name?: string;
   profileName?: string;
+  ButtonText?: string;
+  ButtonPayload?: string;
   [key: string]: unknown;
+};
+
+export type WhatsAppProductOption = {
+  rank: number;
+  reason: string;
+  product: Product;
+};
+
+export type WhatsAppRichReply = {
+  text: string;
+  options?: WhatsAppProductOption[];
 };
 
 export const whatsappAdapter = {
@@ -41,6 +55,8 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["message", "from"]) ??
         "",
       text:
+        payload.ButtonPayload ??
+        payload.ButtonText ??
         metaMessage?.text?.body ??
         payload.body ??
         payload.Body ??
@@ -74,6 +90,12 @@ export const whatsappAdapter = {
 
     console.log("[whatsapp:mock]", { to, text, metadata });
     return { provider: "mock", to, text, metadata };
+  },
+
+  async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
+    if (!reply.options?.length) return null;
+    if (process.env.WHATSAPP_PROVIDER !== "twilio") return null;
+    return sendTwilioQuickReplyOptions(to, reply);
   }
 };
 
@@ -145,6 +167,49 @@ async function sendTwilioWhatsAppMessage(to: string, text: string, metadata?: un
     sid: message.sid,
     status: message.status
   };
+}
+
+async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_WHATSAPP_FROM;
+  const contentSid = process.env.TWILIO_PRODUCT_OPTIONS_CONTENT_SID;
+
+  if (!accountSid || !authToken || !from || !contentSid) return null;
+
+  const variables = buildProductOptionVariables(reply);
+  const client = twilio(accountSid, authToken);
+  const message = await client.messages.create({
+    from: normalizeTwilioWhatsAppAddress(from),
+    to: normalizeTwilioWhatsAppAddress(to),
+    contentSid,
+    contentVariables: JSON.stringify(variables)
+  });
+
+  return {
+    provider: "twilio",
+    mode: "quick_reply",
+    to,
+    sid: message.sid,
+    status: message.status
+  };
+}
+
+function buildProductOptionVariables(reply: WhatsAppRichReply) {
+  const options = reply.options ?? [];
+  const optionText = options
+    .slice(0, 3)
+    .map((option) => {
+      const total = option.product.price + option.product.shippingPrice;
+      return `${option.rank}) ${option.product.title} - R$ ${total.toFixed(2)} - ${option.product.deliveryEstimate}`;
+    })
+    .join("\n");
+
+  return { "1": optionText ? `${shortIntro(reply.text)}\n\n${optionText}`.slice(0, 1000) : reply.text.slice(0, 1000) };
+}
+
+function shortIntro(text: string) {
+  return text.split(/\n\n1\)/)[0] || text;
 }
 
 function normalizeWhatsAppPhone(phone: string) {
