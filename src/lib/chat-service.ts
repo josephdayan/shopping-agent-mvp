@@ -212,6 +212,7 @@ async function startProductSearch(conversationId: string, text: string) {
 async function selectProduct(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
+  if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
   if (/outr|mais opc/.test(normalize(text))) return startProductSearch(conversationId, stringifyIntent(conversation.context));
 
   const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
@@ -444,6 +445,12 @@ function normalizePhone(phone: string) {
   if (trimmed.startsWith("+")) return trimmed;
   const digits = trimmed.replace(/\D/g, "");
   return digits ? `+${digits}` : DEMO_PHONE;
+}
+
+function looksLikeNewProductRequest(text: string) {
+  const normalized = normalize(text);
+  if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
+  return /\b(quero|preciso|procura|procurar|busca|buscar|compra|comprar)\b/.test(normalized);
 }
 
 function sourceLabel(source: string) {

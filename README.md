@@ -112,9 +112,11 @@ Na Vercel:
 
 ```env
 WHATSAPP_PROVIDER="twilio"
+TWILIO_AUTH_TOKEN="seu-auth-token-da-twilio"
+TWILIO_WEBHOOK_URL="https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook"
 ```
 
-O webhook responde TwiML diretamente para a Twilio.
+O webhook responde TwiML diretamente para a Twilio. Se `TWILIO_AUTH_TOKEN` estiver configurado, o app valida o header `X-Twilio-Signature` antes de processar a mensagem. `TWILIO_WEBHOOK_URL` precisa ser exatamente a URL configurada no console da Twilio.
 
 ## Fluxos para testar
 
@@ -148,6 +150,8 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.
 - `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
 - `WHATSAPP_PHONE_NUMBER_ID`: ID do numero remetente na WhatsApp Cloud API.
+- `TWILIO_AUTH_TOKEN`: Auth Token da Twilio usado para validar `X-Twilio-Signature`.
+- `TWILIO_WEBHOOK_URL`: URL publica exata configurada no webhook da Twilio. Use em producao para evitar divergencia de proxy/host.
 
 ## Como trocar mock por OpenAI real
 
@@ -192,7 +196,7 @@ https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
 ```
 
 4. Metodo: `POST`.
-5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`.
+5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`, `TWILIO_AUTH_TOKEN` e `TWILIO_WEBHOOK_URL`.
 
 Para usar a Meta WhatsApp Cloud API depois, configure:
 

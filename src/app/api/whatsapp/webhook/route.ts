@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireWebhookSecret } from "@/lib/auth";
+import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 
@@ -44,6 +44,11 @@ export async function POST(request: Request) {
 
   if (process.env.WHATSAPP_PROVIDER !== "meta" && inbound.provider !== "twilio") {
     const unauthorized = requireWebhookSecret(request);
+    if (unauthorized) return unauthorized;
+  }
+
+  if (inbound.provider === "twilio") {
+    const unauthorized = requireTwilioSignature(request, rawPayload);
     if (unauthorized) return unauthorized;
   }
 
