@@ -17,12 +17,14 @@ export const productSearchAdapter = {
     );
     const products = productsBySource.flat();
 
-    return this.rankProducts(products, {
+    const ranked = this.rankProducts(products, {
       ...intent,
       preferredBrand: intent.preferredBrand ?? preference?.preferredBrand ?? undefined,
       priceSensitivity: intent.priceSensitivity ?? (preference?.priceSensitivity as ProductIntent["priceSensitivity"]),
       urgency: intent.urgency ?? (preference?.deliverySensitivity === "fast" ? "fast" : "normal")
-    }).slice(0, 3);
+    });
+
+    return ensureLiveSupplierResult(ranked).slice(0, 3);
   },
 
   rankProducts(products: Product[], intent: ProductIntent): RankedProduct[] {
@@ -75,6 +77,21 @@ export const productSearchAdapter = {
     return prisma.product.findUnique({ where: { id: productId } });
   }
 };
+
+function ensureLiveSupplierResult(ranked: RankedProduct[]) {
+  const topThree = ranked.slice(0, 3);
+  if (topThree.some(isLiveSupplierResult)) return topThree;
+
+  const liveResult = ranked.find(isLiveSupplierResult);
+  if (!liveResult) return topThree;
+
+  const selected = topThree.length < 3 ? [...topThree, liveResult] : [topThree[0], topThree[1], liveResult];
+  return selected.map((product, index) => ({ ...product, rank: index + 1 }));
+}
+
+function isLiveSupplierResult(product: RankedProduct) {
+  return product.automationLevel.startsWith("real_");
+}
 
 function reasonFor(product: Product, intent: ProductIntent) {
   if (intent.preferredBrand?.toLowerCase() === product.brand.toLowerCase()) return `Combina com sua preferencia por ${product.brand}`;
