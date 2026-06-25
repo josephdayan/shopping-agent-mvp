@@ -250,6 +250,22 @@ TWILIO_PRODUCT_OPTIONS_CONTENT_SID=HX...
 
 Coloque esse valor na Vercel em Production/Preview e faca redeploy. Dentro da janela de 24h do WhatsApp, a Twilio pode enviar quick replies sem aprovacao de template; se o envio com botoes falhar ou a variavel nao existir, Atlas cai automaticamente para imagem + texto.
 
+Tambem da para checar ou criar o template por API, usando `API_TOKEN`:
+
+```bash
+curl https://shopping-agent-mvp.vercel.app/api/twilio/product-options-template \
+  -H "Authorization: Bearer SEU_API_TOKEN"
+```
+
+Se `TWILIO_ACCOUNT_SID` e `TWILIO_AUTH_TOKEN` existirem no ambiente:
+
+```bash
+curl -X POST https://shopping-agent-mvp.vercel.app/api/twilio/product-options-template \
+  -H "Authorization: Bearer SEU_API_TOKEN"
+```
+
+O retorno mostra o `TWILIO_PRODUCT_OPTIONS_CONTENT_SID` que deve ser salvo na Vercel.
+
 ### Twilio Agent Connect
 
 O Atlas ainda roda seu proprio concierge de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
