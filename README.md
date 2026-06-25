@@ -1,6 +1,6 @@
-# MVP Agente de Compras Conversacional
+# Atlas
 
-MVP de um agente de compras conversacional via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
+Atlas funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
 
 ## Como rodar localmente
 
@@ -127,7 +127,7 @@ curl https://shopping-agent-mvp.vercel.app/api/twilio/status \
   -H "Authorization: Bearer SEU_API_TOKEN"
 ```
 
-O status tambem mostra preparo para Twilio Agent Connect.
+O status do Atlas tambem mostra preparo para Twilio Agent Connect.
 
 ## Fluxos para testar
 
@@ -136,7 +136,7 @@ O status tambem mostra preparo para Twilio Agent Connect.
 - `quero lenco de papel para entregar hoje`
 - `repete meu ultimo pedido`
 
-No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`, `mais rapida`, nome da marca), confirme com `sim` e use `Simular pagamento aprovado`. O dashboard fica em `/admin` e permite aprovar pagamento e avancar fulfillment.
+No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`, `mais rapida`, nome da marca), confirme com `sim` e use `Simular pagamento aprovado`. O dashboard fica em `/admin` e permite aprovar pagamento e avancar fulfillment.
 
 ## Estrutura do projeto
 
@@ -231,7 +231,7 @@ Em conta trial, a Twilio so envia para numeros verificados e o sandbox WhatsApp 
 
 ### Twilio Agent Connect
 
-O projeto ainda roda seu proprio agente de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
+O Atlas ainda roda seu proprio concierge de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
 
 Hoje existem dois modos:
 
@@ -252,7 +252,7 @@ curl "https://shopping-agent-mvp.vercel.app/api/twilio/agent-connect/context?pho
   -H "Authorization: Bearer SEU_API_TOKEN"
 ```
 
-Quando TAC for habilitado de verdade, use o setup wizard do SDK Python da Twilio para criar Conversation Memory e Conversation Configuration, depois preencha `TWILIO_CONVERSATION_CONFIGURATION_ID` e `TWILIO_MEMORY_STORE_ID`. O SDK TypeScript do TAC ainda nao esta publicado no npm; por isso este MVP nao instala esse runtime diretamente.
+Quando TAC for habilitado de verdade, use o setup wizard do SDK Python da Twilio para criar Conversation Memory e Conversation Configuration, depois preencha `TWILIO_CONVERSATION_CONFIGURATION_ID` e `TWILIO_MEMORY_STORE_ID`. O SDK TypeScript do TAC ainda nao esta publicado no npm; por isso o Atlas nao instala esse runtime diretamente.
 
 Para usar a Meta WhatsApp Cloud API depois, configure:
 
@@ -277,16 +277,16 @@ E use o mesmo valor de `WHATSAPP_VERIFY_TOKEN` no campo Verify Token.
 - Envie respostas via API do provedor.
 - Para cards, envie lista/template quando o provedor suportar; caso contrario, transforme as opcoes em texto numerado.
 
-## Limitacoes do MVP
+## Limitacoes atuais do Atlas
 
-- IA usa heuristica local por padrao.
-- Catalogo e pagamento sao mockados.
+- A IA usa heuristica local por padrao quando nao ha chave OpenAI.
+- Alguns fornecedores ainda usam catalogo demo quando nao ha API real configurada.
 - Nao ha autenticacao no admin.
 - Um usuario demo e usado no web chat.
 - Status de entrega avanca manualmente.
 - Imagens sao demonstrativas.
 
-## Proximos passos tecnicos
+## Proximos passos tecnicos do Atlas
 
 - Autenticacao e permissoes do admin.
 - Webhooks reais de pagamento e WhatsApp.

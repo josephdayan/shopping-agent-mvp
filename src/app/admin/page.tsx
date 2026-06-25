@@ -20,7 +20,7 @@ export default async function AdminPage() {
               <ArrowLeft size={16} />
               Voltar ao chat
             </Link>
-            <h1 className="text-2xl font-semibold">Admin dashboard</h1>
+            <h1 className="text-2xl font-semibold">Atlas Admin</h1>
           </div>
           <AdminActions />
         </header>
@@ -95,7 +95,7 @@ export default async function AdminPage() {
               </div>
             </Panel>
 
-            <Panel title="Catalogo mockado">
+            <Panel title="Catalogo Atlas">
               <div className="max-h-[420px] space-y-2 overflow-y-auto">
                 {data.products.map((product) => (
                   <div key={product.id} className="flex items-center justify-between gap-3 rounded-md border border-ink/10 p-2 text-sm">

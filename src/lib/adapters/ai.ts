@@ -97,7 +97,7 @@ export const aiAdapter = {
       clarify: "Posso buscar. Voce prefere menor preco, melhor avaliada ou entrega mais rapida?",
       options: "Encontrei estas opcoes. Pode tocar em uma delas ou responder 1, 2, 3, mais barata, mais rapida ou a marca.",
       checkout: "Separei o resumo do pedido. Confirmo esse pedido?",
-      unsupported: "Ainda nao consigo comprar esse tipo de item no MVP. Posso ajudar com higiene, beleza e mercado basico.",
+      unsupported: "Ainda nao consigo comprar esse tipo de item pelo Atlas. Posso ajudar com higiene, beleza e mercado basico.",
       paid: "Pagamento aprovado. Pedido criado e enviado para processamento.",
       status: "Aqui esta o status mais recente do seu pedido."
     };
@@ -121,7 +121,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Voce extrai intencao de compra em portugues do Brasil para um agente de compras. Responda apenas JSON valido."
+              "Voce extrai intencao de compra em portugues do Brasil para o Atlas, um concierge de compras. Responda apenas JSON valido."
           },
           {
             role: "user",

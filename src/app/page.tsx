@@ -11,7 +11,7 @@ export default function Home() {
             <span className="grid h-9 w-9 place-items-center rounded-md bg-leaf text-white">
               <Bot size={19} />
             </span>
-            Agente de Compras API/WhatsApp
+            Atlas
           </div>
           <Link
             href="/admin"

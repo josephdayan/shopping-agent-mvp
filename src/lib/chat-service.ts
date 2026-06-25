@@ -55,7 +55,7 @@ export async function createConversation(input: UserInput = {}) {
 
   await messagingAdapter.sendMessage(
     conversation.id,
-    "Oi. Sou seu agente de compras. Me diga o que voce quer comprar hoje."
+    "Oi. Sou o Atlas, seu concierge de compras. Me diga o que voce quer comprar hoje."
   );
 
   return getConversation(conversation.id);
@@ -361,7 +361,7 @@ async function confirmOrder(conversationId: string, text: string) {
 
   await messagingAdapter.sendMessage(
     conversationId,
-    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo MVP, responda "paguei" aqui no WhatsApp para simular aprovacao.`,
+    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo modo demo do Atlas, responda "paguei" aqui no WhatsApp para simular aprovacao.`,
     { orderId: order.id }
   );
 
@@ -492,7 +492,7 @@ function whatsappHelpText() {
     "Comandos:",
     "- comprar: quero escova de dente para hoje",
     "- escolher: 1, 2 ou 3",
-    "- pagar mockado: paguei",
+    "- pagar no demo: paguei",
     "- acompanhar: status",
     "- novo pedido: novo",
     "- cancelar: cancelar"

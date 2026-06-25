@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Agente de Compras",
-  description: "MVP conversacional de compras via API e WhatsApp"
+  title: "Atlas",
+  description: "Concierge de compras com IA via WhatsApp e API"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

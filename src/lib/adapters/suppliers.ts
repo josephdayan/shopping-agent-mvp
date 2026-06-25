@@ -77,7 +77,7 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
     const response = await fetch(url, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "shopping-agent-mvp/0.1",
+        "User-Agent": "atlas/0.1",
         ...(token ? { Authorization: `Bearer ${token}` } : {})
       },
       next: { revalidate: 300 }
