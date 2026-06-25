@@ -112,11 +112,20 @@ Na Vercel:
 
 ```env
 WHATSAPP_PROVIDER="twilio"
+TWILIO_ACCOUNT_SID="AC..."
 TWILIO_AUTH_TOKEN="seu-auth-token-da-twilio"
+TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"
 TWILIO_WEBHOOK_URL="https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook"
 ```
 
-O webhook responde TwiML diretamente para a Twilio. Se `TWILIO_AUTH_TOKEN` estiver configurado, o app valida o header `X-Twilio-Signature` antes de processar a mensagem. `TWILIO_WEBHOOK_URL` precisa ser exatamente a URL configurada no console da Twilio.
+O webhook responde TwiML diretamente para a Twilio. Se `TWILIO_AUTH_TOKEN` estiver configurado, o app valida o header `X-Twilio-Signature` antes de processar a mensagem. `TWILIO_WEBHOOK_URL` precisa ser exatamente a URL configurada no console da Twilio. Para sandbox, `TWILIO_WHATSAPP_FROM` costuma ser `whatsapp:+14155238886`.
+
+Depois de configurar as variaveis, valide sem expor segredo:
+
+```bash
+curl https://shopping-agent-mvp.vercel.app/api/twilio/status \
+  -H "Authorization: Bearer SEU_API_TOKEN"
+```
 
 ## Fluxos para testar
 
@@ -150,7 +159,9 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.
 - `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
 - `WHATSAPP_PHONE_NUMBER_ID`: ID do numero remetente na WhatsApp Cloud API.
+- `TWILIO_ACCOUNT_SID`: Account SID da Twilio.
 - `TWILIO_AUTH_TOKEN`: Auth Token da Twilio usado para validar `X-Twilio-Signature`.
+- `TWILIO_WHATSAPP_FROM`: remetente WhatsApp no formato `whatsapp:+14155238886` no sandbox, ou seu numero aprovado depois.
 - `TWILIO_WEBHOOK_URL`: URL publica exata configurada no webhook da Twilio. Use em producao para evitar divergencia de proxy/host.
 
 ## Como trocar mock por OpenAI real
@@ -196,7 +207,9 @@ https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
 ```
 
 4. Metodo: `POST`.
-5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`, `TWILIO_AUTH_TOKEN` e `TWILIO_WEBHOOK_URL`.
+5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` e `TWILIO_WEBHOOK_URL`.
+
+Em conta trial, a Twilio so envia para numeros verificados e o sandbox WhatsApp tem limite diario. Isso e normal para teste.
 
 Para usar a Meta WhatsApp Cloud API depois, configure:
 

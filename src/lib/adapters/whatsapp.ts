@@ -1,3 +1,5 @@
+import twilio from "twilio";
+
 type RawInbound = {
   entry?: Array<{
     changes?: Array<{
@@ -62,8 +64,7 @@ export const whatsappAdapter = {
     }
 
     if (process.env.WHATSAPP_PROVIDER === "twilio") {
-      // Plug Twilio here: POST /Messages with From, To and Body.
-      return { provider: "twilio", mocked: true, to, text, metadata };
+      return sendTwilioWhatsAppMessage(to, text, metadata);
     }
 
     if (process.env.WHATSAPP_PROVIDER === "zapi") {
@@ -111,8 +112,50 @@ async function sendMetaMessage(to: string, text: string) {
   return { provider: "meta", to, payload };
 }
 
+async function sendTwilioWhatsAppMessage(to: string, text: string, metadata?: unknown) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_WHATSAPP_FROM;
+
+  if (!accountSid || !authToken || !from) {
+    return {
+      provider: "twilio",
+      mocked: true,
+      to,
+      text,
+      metadata,
+      missingConfig: [
+        !accountSid ? "TWILIO_ACCOUNT_SID" : null,
+        !authToken ? "TWILIO_AUTH_TOKEN" : null,
+        !from ? "TWILIO_WHATSAPP_FROM" : null
+      ].filter(Boolean)
+    };
+  }
+
+  const client = twilio(accountSid, authToken);
+  const message = await client.messages.create({
+    from: normalizeTwilioWhatsAppAddress(from),
+    to: normalizeTwilioWhatsAppAddress(to),
+    body: text.slice(0, 1600)
+  });
+
+  return {
+    provider: "twilio",
+    to,
+    sid: message.sid,
+    status: message.status
+  };
+}
+
 function normalizeWhatsAppPhone(phone: string) {
   return phone.replace(/\D/g, "");
+}
+
+function normalizeTwilioWhatsAppAddress(phone: string) {
+  const cleaned = phone.trim();
+  if (cleaned.startsWith("whatsapp:")) return cleaned;
+  if (cleaned.startsWith("+")) return `whatsapp:${cleaned}`;
+  return `whatsapp:+${cleaned.replace(/\D/g, "")}`;
 }
 
 function normalizeTwilioFrom(phone?: string) {
