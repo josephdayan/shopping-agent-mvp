@@ -172,6 +172,11 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `TWILIO_TRAIT_GROUPS`: grupos de traits usados na memoria. Padrao: `Contact,Preferences`.
 - `TWILIO_PHONE_NUMBER`: numero Twilio principal em formato E.164.
 - `TWILIO_VOICE_PUBLIC_DOMAIN`: dominio publico para voz/ConversationRelay, se ativar voz.
+- `MERCADO_LIVRE_REAL_SEARCH`: `true` para tentar busca real no Mercado Livre.
+- `MERCADO_LIVRE_ACCESS_TOKEN`: token OAuth do Mercado Livre. Sem ele, a API de listings pode responder 403 e o app cai no mock.
+- `MERCADO_LIVRE_SEARCH_LIMIT`: quantidade de resultados buscados antes do ranking. Padrao: `8`.
+- `MERCADO_LIVRE_DEFAULT_SHIPPING`: frete estimado quando a API nao traz frete. Padrao: `12.90`.
+- `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
 
 ## Como trocar mock por OpenAI real
 
@@ -185,12 +190,16 @@ O retorno segue `ProductIntent`. Uma boa evolucao e trocar a validacao manual po
 
 ## Como integrar Mercado Livre
 
-Substitua ou complemente `src/lib/adapters/products.ts`:
+O conector fica em `src/lib/adapters/suppliers.ts`. Ele ja tenta buscar listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
 
-- `searchProducts()` chama a API de search do Mercado Livre por categoria/termo.
-- Normalize os resultados para o modelo `Product`.
-- Guarde `externalId`, `productUrl`, preco, frete, loja, disponibilidade e prazo.
-- Mantenha `rankProducts()` local para combinar preco, prazo, avaliacao e preferencias do usuario.
+Importante: a API publica de search pode retornar `403` sem credenciais OAuth. Nesse caso, o app nao finge que buscou fora; ele registra fallback no log e usa o seed mockado de Mercado Livre. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
+
+- `externalId`: `mlb-{item_id}`
+- `productUrl`: link real do item
+- `automationLevel`: `real_search_manual_checkout`
+- `fulfillmentMode`: `marketplace_native`
+
+Isso ainda nao compra automaticamente. A etapa de compra/checkout real precisara de OAuth, regras comerciais e provavelmente operacao manual ou API autorizada.
 
 ## Como integrar Mercado Pago/PIX
 

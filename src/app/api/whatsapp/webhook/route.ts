@@ -108,8 +108,13 @@ function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {
           `${option.rank}) ${option.reason}`,
           option.product.title,
           `Total aprox: R$ ${total.toFixed(2)} · ${option.product.deliveryEstimate}`,
-          `Fonte: ${sourceLabel(option.product.source)}`
-        ].join("\n");
+          `Fonte: ${sourceLabel(option.product.source)}`,
+          option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
+            ? `Link: ${option.product.productUrl}`
+            : null
+        ]
+          .filter(Boolean)
+          .join("\n");
       })
       .join("\n\n");
 
