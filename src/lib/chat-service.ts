@@ -107,8 +107,29 @@ export async function handleUserMessage(conversationId: string, text: string) {
   if (!conversation) throw new Error("Conversation not found");
 
   await messagingAdapter.receiveMessage(conversationId, text);
+  const normalized = normalize(text);
 
-  if (/\b(cancelar|cancela|cancel|desistir|desisto|parar|para tudo)\b/.test(normalize(text))) {
+  if (/\b(ajuda|help|menu|comandos)\b/.test(normalized)) {
+    await messagingAdapter.sendMessage(conversationId, whatsappHelpText());
+    return getConversation(conversationId);
+  }
+
+  if (/\b(status|rastreio|pedido)\b/.test(normalized)) {
+    await sendLatestOrderStatus(conversationId, conversation.userId);
+    return getConversation(conversationId);
+  }
+
+  if (/\b(novo|novo pedido|recomecar|reiniciar)\b/.test(normalized)) {
+    await prisma.productOption.deleteMany({ where: { conversationId } });
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { status: "active", currentStep: "collecting_request", context: null, intent: null }
+    });
+    await messagingAdapter.sendMessage(conversationId, "Beleza. Me diga o que voce quer comprar agora.");
+    return getConversation(conversationId);
+  }
+
+  if (/\b(cancelar|cancela|cancel|desistir|desisto|parar|para tudo)\b/.test(normalized)) {
     await prisma.conversation.update({
       where: { id: conversationId },
       data: { status: "cancelled", currentStep: "cancelled" }
@@ -122,9 +143,13 @@ export async function handleUserMessage(conversationId: string, text: string) {
   if (step === "awaiting_address") return captureAddress(conversationId, text);
   if (step === "awaiting_confirmation") return confirmOrder(conversationId, text);
   if (step === "awaiting_payment") {
+    if (/\b(paguei|pago|pagou|aprovar|aprovado|simular pagamento)\b/.test(normalized)) {
+      return approveConversationPayment(conversationId);
+    }
+
     await messagingAdapter.sendMessage(
       conversationId,
-      "O pagamento ainda esta aguardando aprovacao. No MVP, use o botao Simular pagamento aprovado."
+      "Ainda estou aguardando o pagamento mockado. Para simular no WhatsApp, responda: paguei"
     );
     return getConversation(conversationId);
   }
@@ -156,6 +181,21 @@ export function toChannelResponse(conversation: Awaited<ReturnType<typeof getCon
       : [],
     order: conversation.orders[0] ?? null
   };
+}
+
+async function sendLatestOrderStatus(conversationId: string, userId: string) {
+  const order = await prisma.order.findFirst({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    include: { product: true }
+  });
+
+  if (!order) {
+    await messagingAdapter.sendMessage(conversationId, "Voce ainda nao tem pedido comigo. Me diga o que quer comprar.");
+    return;
+  }
+
+  await messagingAdapter.sendMessage(conversationId, formatOrderStatus(order));
 }
 
 async function startProductSearch(conversationId: string, text: string) {
@@ -321,7 +361,7 @@ async function confirmOrder(conversationId: string, text: string) {
 
   await messagingAdapter.sendMessage(
     conversationId,
-    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}. No MVP, aprove pelo admin ou pelo botao do chat.`,
+    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo MVP, responda "paguei" aqui no WhatsApp para simular aprovacao.`,
     { orderId: order.id }
   );
 
@@ -343,7 +383,7 @@ export async function approveConversationPayment(conversationId: string) {
   });
   await messagingAdapter.sendMessage(
     conversationId,
-    `Pagamento aprovado. Pedido ${fulfilledOrder.id.slice(-6).toUpperCase()} em processamento. Rastreio: ${fulfilledOrder.trackingCode}.`
+    `Pagamento aprovado. Pedido ${fulfilledOrder.id.slice(-6).toUpperCase()} em processamento.\nRastreio: ${fulfilledOrder.trackingCode}\n\nPara acompanhar, responda: status`
   );
   return getConversation(conversationId);
 }
@@ -445,6 +485,32 @@ function normalizePhone(phone: string) {
   if (trimmed.startsWith("+")) return trimmed;
   const digits = trimmed.replace(/\D/g, "");
   return digits ? `+${digits}` : DEMO_PHONE;
+}
+
+function whatsappHelpText() {
+  return [
+    "Comandos:",
+    "- comprar: quero escova de dente para hoje",
+    "- escolher: 1, 2 ou 3",
+    "- pagar mockado: paguei",
+    "- acompanhar: status",
+    "- novo pedido: novo",
+    "- cancelar: cancelar"
+  ].join("\n");
+}
+
+function formatOrderStatus(order: Awaited<ReturnType<typeof prisma.order.findFirst>> & { product: NonNullable<Awaited<ReturnType<typeof prisma.product.findFirst>>> }) {
+  return [
+    `Pedido ${order.id.slice(-6).toUpperCase()}`,
+    `${order.product.title}`,
+    `Pagamento: ${order.paymentStatus}`,
+    `Entrega: ${order.fulfillmentStatus}`,
+    `Canal: ${sourceLabel(order.source)} / ${fulfillmentLabel(order.fulfillmentMode)}`,
+    order.trackingCode ? `Rastreio: ${order.trackingCode}` : null,
+    `Total: R$ ${order.total.toFixed(2)}`
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function looksLikeNewProductRequest(text: string) {

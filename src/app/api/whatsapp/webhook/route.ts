@@ -102,14 +102,29 @@ function escapeXml(value: string) {
 function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>) {
   if (response.products.length) {
     const options = response.products
-      .map(
-        (option) =>
-          `${option.rank}. ${option.reason}\n${option.product.title}\nR$ ${option.product.price.toFixed(2)} + frete R$ ${option.product.shippingPrice.toFixed(2)}\n${option.product.deliveryEstimate}`
-      )
+      .map((option) => {
+        const total = option.product.price + option.product.shippingPrice;
+        return [
+          `${option.rank}) ${option.reason}`,
+          option.product.title,
+          `Total aprox: R$ ${total.toFixed(2)} · ${option.product.deliveryEstimate}`,
+          `Fonte: ${sourceLabel(option.product.source)}`
+        ].join("\n");
+      })
       .join("\n\n");
 
-    return `${response.reply}\n\n${options}`;
+    return `${response.reply}\n\n${options}\n\nResponda 1, 2 ou 3.`;
   }
 
   return response.reply;
+}
+
+function sourceLabel(source: string) {
+  const labels: Record<string, string> = {
+    mercado_livre: "Mercado Livre",
+    rappi: "Rappi",
+    farmacia: "Farmacia",
+    loja_local: "Loja local"
+  };
+  return labels[source] ?? source;
 }
