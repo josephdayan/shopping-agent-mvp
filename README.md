@@ -127,6 +127,8 @@ curl https://shopping-agent-mvp.vercel.app/api/twilio/status \
   -H "Authorization: Bearer SEU_API_TOKEN"
 ```
 
+O status tambem mostra preparo para Twilio Agent Connect.
+
 ## Fluxos para testar
 
 - `quero uma escova de dente`
@@ -163,6 +165,13 @@ No chat, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`
 - `TWILIO_AUTH_TOKEN`: Auth Token da Twilio usado para validar `X-Twilio-Signature`.
 - `TWILIO_WHATSAPP_FROM`: remetente WhatsApp no formato `whatsapp:+14155238886` no sandbox, ou seu numero aprovado depois.
 - `TWILIO_WEBHOOK_URL`: URL publica exata configurada no webhook da Twilio. Use em producao para evitar divergencia de proxy/host.
+- `TWILIO_AGENT_CONNECT_ENABLED`: `true` quando voce for usar TAC/Conversation Memory.
+- `TWILIO_API_KEY` e `TWILIO_API_SECRET`: credenciais recomendadas para TAC em producao.
+- `TWILIO_CONVERSATION_CONFIGURATION_ID`: configuracao do Conversation Orchestrator.
+- `TWILIO_MEMORY_STORE_ID`: Memory Store do Conversation Memory.
+- `TWILIO_TRAIT_GROUPS`: grupos de traits usados na memoria. Padrao: `Contact,Preferences`.
+- `TWILIO_PHONE_NUMBER`: numero Twilio principal em formato E.164.
+- `TWILIO_VOICE_PUBLIC_DOMAIN`: dominio publico para voz/ConversationRelay, se ativar voz.
 
 ## Como trocar mock por OpenAI real
 
@@ -210,6 +219,31 @@ https://shopping-agent-mvp.vercel.app/api/whatsapp/webhook
 5. Na Vercel, use `WHATSAPP_PROVIDER="twilio"`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` e `TWILIO_WEBHOOK_URL`.
 
 Em conta trial, a Twilio so envia para numeros verificados e o sandbox WhatsApp tem limite diario. Isso e normal para teste.
+
+### Twilio Agent Connect
+
+O projeto ainda roda seu proprio agente de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
+
+Hoje existem dois modos:
+
+- `local_memory`: usa as preferencias e pedidos salvos no nosso Postgres.
+- `conversation_memory`: ativado quando `TWILIO_MEMORY_STORE_ID` existir.
+
+Para checar o preparo:
+
+```bash
+curl https://shopping-agent-mvp.vercel.app/api/twilio/status \
+  -H "Authorization: Bearer SEU_API_TOKEN"
+```
+
+Para ver o contexto de memoria local que seria injetado num agente TAC:
+
+```bash
+curl "https://shopping-agent-mvp.vercel.app/api/twilio/agent-connect/context?phone=+5511999990000" \
+  -H "Authorization: Bearer SEU_API_TOKEN"
+```
+
+Quando TAC for habilitado de verdade, use o setup wizard do SDK Python da Twilio para criar Conversation Memory e Conversation Configuration, depois preencha `TWILIO_CONVERSATION_CONFIGURATION_ID` e `TWILIO_MEMORY_STORE_ID`. O SDK TypeScript do TAC ainda nao esta publicado no npm; por isso este MVP nao instala esse runtime diretamente.
 
 Para usar a Meta WhatsApp Cloud API depois, configure:
 

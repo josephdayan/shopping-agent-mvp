@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import twilio from "twilio";
+import { twilioAgentConnectAdapter } from "@/lib/adapters/twilio-agent-connect";
 import { requireApiToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +14,13 @@ export async function GET(request: Request) {
   const whatsappFrom = process.env.TWILIO_WHATSAPP_FROM;
   const webhookUrl = process.env.TWILIO_WEBHOOK_URL;
   const ready = Boolean(accountSid && authToken && whatsappFrom && webhookUrl);
+  const agentConnect = twilioAgentConnectAdapter.readiness();
 
   if (!accountSid || !authToken) {
     return NextResponse.json({
       ready,
       provider: process.env.WHATSAPP_PROVIDER ?? "mock",
+      agentConnect,
       credentials: {
         accountSid: Boolean(accountSid),
         authToken: Boolean(authToken),
@@ -34,6 +37,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       ready,
       provider: process.env.WHATSAPP_PROVIDER ?? "mock",
+      agentConnect,
       account: {
         sid: maskSid(account.sid),
         friendlyName: account.friendlyName,
@@ -53,6 +57,7 @@ export async function GET(request: Request) {
       {
         ready: false,
         provider: process.env.WHATSAPP_PROVIDER ?? "mock",
+        agentConnect,
         error: "Twilio credentials could not be verified"
       },
       { status: 502 }
