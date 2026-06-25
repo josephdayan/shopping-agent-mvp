@@ -11,6 +11,11 @@ type RawInbound = {
           id?: string;
           timestamp?: string;
           text?: { body?: string };
+          button?: { payload?: string; text?: string };
+          interactive?: {
+            button_reply?: { id?: string; title?: string };
+            list_reply?: { id?: string; title?: string };
+          };
           type?: string;
         }>;
       };
@@ -57,6 +62,12 @@ export const whatsappAdapter = {
       text:
         payload.ButtonPayload ??
         payload.ButtonText ??
+        metaMessage?.interactive?.button_reply?.id ??
+        metaMessage?.interactive?.button_reply?.title ??
+        metaMessage?.interactive?.list_reply?.id ??
+        metaMessage?.interactive?.list_reply?.title ??
+        metaMessage?.button?.payload ??
+        metaMessage?.button?.text ??
         metaMessage?.text?.body ??
         payload.body ??
         payload.Body ??
@@ -94,6 +105,7 @@ export const whatsappAdapter = {
 
   async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
     if (!reply.options?.length) return null;
+    if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
     if (process.env.WHATSAPP_PROVIDER !== "twilio") return null;
     return sendTwilioQuickReplyOptions(to, reply);
   }
@@ -132,6 +144,112 @@ async function sendMetaMessage(to: string, text: string) {
   }
 
   return { provider: "meta", to, payload };
+}
+
+async function sendMetaInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
+  const token = process.env.WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+
+  if (!token || !phoneNumberId) {
+    throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+  }
+
+  const normalizedTo = normalizeWhatsAppPhone(to);
+  const optionMessages = await Promise.all(
+    (reply.options ?? []).slice(0, 3).map((option) =>
+      sendMetaProductImageMessage(phoneNumberId, token, normalizedTo, option)
+    )
+  );
+  const buttons = await sendMetaProductButtons(phoneNumberId, token, normalizedTo, reply);
+
+  return {
+    provider: "meta",
+    mode: "interactive_buttons",
+    to,
+    optionMessages,
+    buttons
+  };
+}
+
+async function sendMetaProductImageMessage(
+  phoneNumberId: string,
+  token: string,
+  to: string,
+  option: WhatsAppProductOption
+) {
+  const total = option.product.price + option.product.shippingPrice;
+  const caption = [
+    `${option.rank}) ${option.reason}`,
+    option.product.title,
+    `Total aprox: R$ ${total.toFixed(2)}`,
+    option.product.deliveryEstimate,
+    `Fonte: ${sourceLabel(option.product.source)}`,
+    option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
+      ? `Link: ${option.product.productUrl}`
+      : null
+  ]
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, 1024);
+
+  if (!isPublicMediaUrl(option.product.imageUrl)) {
+    return sendMetaMessage(to, caption);
+  }
+
+  return sendMetaPayload(phoneNumberId, token, {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to,
+    type: "image",
+    image: {
+      link: option.product.imageUrl,
+      caption
+    }
+  });
+}
+
+async function sendMetaProductButtons(phoneNumberId: string, token: string, to: string, reply: WhatsAppRichReply) {
+  const options = (reply.options ?? []).slice(0, 3);
+  return sendMetaPayload(phoneNumberId, token, {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to,
+    type: "interactive",
+    interactive: {
+      type: "button",
+      body: {
+        text: `${shortIntro(reply.text)}\n\nToque em uma opcao ou responda 1, 2 ou 3.`.slice(0, 1024)
+      },
+      action: {
+        buttons: options.map((option) => ({
+          type: "reply",
+          reply: {
+            id: String(option.rank),
+            title: String(option.rank)
+          }
+        }))
+      }
+    }
+  });
+}
+
+async function sendMetaPayload(phoneNumberId: string, token: string, body: Record<string, unknown>) {
+  const response = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  const payload = await response.json();
+  if (!response.ok) {
+    console.error("[whatsapp:meta:error]", payload);
+    throw new Error("Failed to send WhatsApp message");
+  }
+
+  return payload;
 }
 
 async function sendTwilioWhatsAppMessage(to: string, text: string, metadata?: unknown) {
@@ -210,6 +328,20 @@ function buildProductOptionVariables(reply: WhatsAppRichReply) {
 
 function shortIntro(text: string) {
   return text.split(/\n\n1\)/)[0] || text;
+}
+
+function isPublicMediaUrl(url: string) {
+  return /^https:\/\/.+/i.test(url);
+}
+
+function sourceLabel(source: string) {
+  const labels: Record<string, string> = {
+    mercado_livre: "Mercado Livre",
+    rappi: "Rappi",
+    farmacia: "Farmacia",
+    loja_local: "Loja local"
+  };
+  return labels[source] ?? source;
 }
 
 function normalizeWhatsAppPhone(phone: string) {

@@ -81,6 +81,20 @@ export async function POST(request: Request) {
   }
 
   try {
+    const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);
+    if (interactive) {
+      return NextResponse.json({
+        ok: true,
+        provider: interactive.provider,
+        outbound: {
+          to: inbound.phone,
+          text: richReply.text,
+          mode: "interactive_product_options"
+        },
+        data: response
+      });
+    }
+
     outbound = await whatsappAdapter.sendMessage(inbound.phone, richReply.text, response);
   } catch (error) {
     console.error("[whatsapp:webhook:send-error]", error);
