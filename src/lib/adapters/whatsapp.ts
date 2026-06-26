@@ -297,9 +297,25 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
 
   const variables = buildProductOptionVariables(reply);
   const client = twilio(accountSid, authToken);
+  const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
+  const normalizedTo = normalizeTwilioWhatsAppAddress(to);
+  const mediaMessages = await Promise.all(
+    (reply.options ?? []).slice(0, 3).map((option) => {
+      const body = buildTwilioProductCaption(option);
+      const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+
+      return client.messages.create({
+        from: normalizedFrom,
+        to: normalizedTo,
+        body,
+        ...(mediaUrl ? { mediaUrl } : {})
+      });
+    })
+  );
+
   const message = await client.messages.create({
-    from: normalizeTwilioWhatsAppAddress(from),
-    to: normalizeTwilioWhatsAppAddress(to),
+    from: normalizedFrom,
+    to: normalizedTo,
     contentSid,
     contentVariables: JSON.stringify(variables)
   });
@@ -308,9 +324,31 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
     provider: "twilio",
     mode: "quick_reply",
     to,
+    mediaMessages: mediaMessages.map((mediaMessage) => ({
+      sid: mediaMessage.sid,
+      status: mediaMessage.status
+    })),
     sid: message.sid,
     status: message.status
   };
+}
+
+function buildTwilioProductCaption(option: WhatsAppProductOption) {
+  const total = option.product.price + option.product.shippingPrice;
+  return [
+    `${option.rank}) ${option.reason}`,
+    option.product.title,
+    `Total aprox: R$ ${total.toFixed(2)}`,
+    option.product.deliveryEstimate,
+    `Fonte: ${sourceLabel(option.product.source)}`,
+    option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
+      ? `Link: ${option.product.productUrl}`
+      : null,
+    `Para escolher, toque no botao ${option.rank} ou responda ${option.rank}.`
+  ]
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, 1500);
 }
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
