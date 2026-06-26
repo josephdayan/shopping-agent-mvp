@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">Atlas</title>
+  <defs>
+    <linearGradient id="atlas-bg" x1="176" y1="96" x2="848" y2="928" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A3AA0"/>
+      <stop offset="0.72" stop-color="#1A1526"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="246" fill="url(#atlas-bg)"/>
+  <ellipse cx="512" cy="512" rx="330" ry="132" transform="rotate(-20 512 512)" fill="none" stroke="#6D5BE0" stroke-width="48"/>
+  <circle cx="512" cy="512" r="112" fill="#6D5BE0"/>
+</svg>
