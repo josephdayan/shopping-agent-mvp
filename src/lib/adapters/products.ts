@@ -17,13 +17,23 @@ export const productSearchAdapter = {
     );
     const excludedProductIds = new Set(intent.excludedProductIds ?? []);
     const products = productsBySource.flat().filter((product) => !excludedProductIds.has(product.id));
-
-    const ranked = this.rankProducts(products, {
+    const rankingIntent = {
       ...intent,
       preferredBrand: intent.preferredBrand ?? preference?.preferredBrand ?? undefined,
       priceSensitivity: intent.priceSensitivity ?? (preference?.priceSensitivity as ProductIntent["priceSensitivity"]),
       urgency: intent.urgency ?? (preference?.deliverySensitivity === "fast" ? "fast" : "normal")
-    });
+    };
+
+    const liveMercadoLivreProducts = products.filter(
+      (product) => product.source === "mercado_livre" && product.automationLevel.startsWith("real_")
+    );
+    const rankedLiveProducts = this.rankProducts(liveMercadoLivreProducts, rankingIntent);
+    const requiresLiveSearch =
+      Boolean(intent.searchQuery?.trim()) && process.env.ATLAS_ALLOW_MOCK_RESULTS_FOR_SEARCH !== "true";
+    if (requiresLiveSearch) return rankedLiveProducts.slice(0, 3);
+    if (rankedLiveProducts.length >= 3) return rankedLiveProducts.slice(0, 3);
+
+    const ranked = this.rankProducts(products, rankingIntent);
 
     return ensureLiveSupplierResult(ranked).slice(0, 3);
   },
@@ -103,13 +113,20 @@ function reasonFor(product: Product, intent: ProductIntent) {
 function filterRelevantProducts(products: Product[], intent: ProductIntent) {
   const query = normalize([intent.category, intent.searchQuery].filter(Boolean).join(" "));
   const terms = requiredTermsFor(query);
+  const tokens = significantTokens(query);
   const blockedTerms = blockedTermsFor(query);
-  if (!terms.length) return products;
+  if (!terms.length && !tokens.length) return products;
 
   return products.filter((product) => {
-    const haystack = normalize([product.title, product.brand, product.category].join(" "));
+    const haystack = normalize([product.title, product.brand, product.category, product.store].join(" "));
     if (blockedTerms.some((term) => haystack.includes(term))) return false;
-    return terms.every((group) => group.some((term) => haystack.includes(term)));
+    const passesRequiredGroups = terms.every((group) => group.some((term) => haystack.includes(term)));
+    if (!passesRequiredGroups) return false;
+
+    if (!tokens.length) return true;
+    const matchedTokens = tokens.filter((token) => haystack.includes(token)).length;
+    const minimumMatches = tokens.length <= 2 ? tokens.length : Math.ceil(tokens.length * 0.75);
+    return matchedTokens >= minimumMatches;
   });
 }
 
@@ -153,6 +170,48 @@ function blockedTermsFor(query: string) {
   }
 
   return [];
+}
+
+function significantTokens(query: string) {
+  const stopwords = new Set([
+    "quero",
+    "queria",
+    "preciso",
+    "comprar",
+    "compra",
+    "produto",
+    "mercado",
+    "livre",
+    "para",
+    "pra",
+    "pro",
+    "com",
+    "sem",
+    "uma",
+    "umas",
+    "uns",
+    "das",
+    "dos",
+    "hoje",
+    "agora",
+    "urgente",
+    "rapido",
+    "rapida",
+    "entrega",
+    "barato",
+    "barata",
+    "melhor",
+    "the",
+    "and"
+  ]);
+
+  return Array.from(
+    new Set(
+      normalize(query)
+        .split(/[^a-z0-9]+/)
+        .filter((token) => token.length >= 3 && !stopwords.has(token))
+    )
+  );
 }
 
 function sourceReliability(source: string, fulfillmentMode: string) {

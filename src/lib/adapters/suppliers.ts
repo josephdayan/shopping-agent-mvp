@@ -33,7 +33,9 @@ const mercadoLivreConnector: SupplierConnector = {
 
     const liveProducts = await searchMercadoLivre(query, intent);
     if (liveProducts.length) return liveProducts;
-    if (isSpecificSearch(intent, query)) return fallbackGeneratedProducts(intent);
+    if (isSpecificSearch(intent, query)) {
+      return process.env.ATLAS_ALLOW_GENERATED_FALLBACKS === "true" ? fallbackGeneratedProducts(intent) : [];
+    }
 
     return fallbackMercadoLivreProducts(intent);
   }
@@ -86,46 +88,53 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
   const token = process.env.MERCADO_LIVRE_ACCESS_TOKEN;
   if (process.env.MERCADO_LIVRE_REAL_SEARCH !== "true" && !token) return [];
 
-  if (token) {
-    const catalogProducts = await searchMercadoLivreCatalog(query, intent, token);
-    if (catalogProducts.length) return catalogProducts;
-  }
-
   try {
-    const url = new URL("https://api.mercadolibre.com/sites/MLB/search");
-    url.searchParams.set("q", query);
-    url.searchParams.set("limit", process.env.MERCADO_LIVRE_SEARCH_LIMIT ?? "8");
+    const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, token);
+    if (marketplaceProducts.length) return marketplaceProducts;
 
-    let response = await fetch(url, {
-      headers: mercadoLivreHeaders(token),
-      next: { revalidate: 300 }
-    });
-
-    if ((response.status === 401 || response.status === 403) && token) {
-      console.warn("[mercado-livre:search:retry-public]", response.status);
-      response = await fetch(url, {
-        headers: mercadoLivreHeaders(),
-        next: { revalidate: 300 }
-      });
+    if (token) {
+      const catalogProducts = await searchMercadoLivreCatalog(query, intent, token);
+      if (catalogProducts.length) return catalogProducts;
     }
 
-    if (!response.ok) {
-      console.warn("[mercado-livre:search:fallback]", response.status, await response.text());
-      return [];
-    }
-
-    const payload = (await response.json()) as MercadoLivreSearchResponse;
-    const items = rankMercadoLivreItems(
-      (payload.results ?? []).filter((item) => item.id && item.title && item.price),
-      query,
-      (item) => item.title
-    );
-    const products = await Promise.all(items.map((item) => upsertMercadoLivreProduct(item, intent)));
-    return products.filter((product): product is Product => Boolean(product));
+    return [];
   } catch (error) {
     console.warn("[mercado-livre:search:error]", error);
     return [];
   }
+}
+
+async function searchMercadoLivreMarketplace(query: string, intent: ProductIntent, token?: string) {
+  const url = new URL("https://api.mercadolibre.com/sites/MLB/search");
+  url.searchParams.set("q", query);
+  url.searchParams.set("limit", process.env.MERCADO_LIVRE_SEARCH_LIMIT ?? "12");
+
+  let response = await fetch(url, {
+    headers: mercadoLivreHeaders(token),
+    next: { revalidate: 300 }
+  });
+
+  if ((response.status === 401 || response.status === 403) && token) {
+    console.warn("[mercado-livre:search:retry-public]", response.status);
+    response = await fetch(url, {
+      headers: mercadoLivreHeaders(),
+      next: { revalidate: 300 }
+    });
+  }
+
+  if (!response.ok) {
+    console.warn("[mercado-livre:search:fallback]", response.status, await response.text());
+    return [];
+  }
+
+  const payload = (await response.json()) as MercadoLivreSearchResponse;
+  const items = rankMercadoLivreItems(
+    (payload.results ?? []).filter((item) => item.id && item.title && item.price),
+    query,
+    (item) => item.title
+  );
+  const products = await Promise.all(items.map((item) => upsertMercadoLivreProduct(item, intent, query)));
+  return products.filter((product): product is Product => Boolean(product));
 }
 
 function mercadoLivreHeaders(token?: string) {
@@ -171,7 +180,7 @@ async function searchMercadoLivreCatalog(query: string, intent: ProductIntent, t
   }
 }
 
-async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: ProductIntent) {
+async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: ProductIntent, query: string) {
   const shippingPrice = item.shipping?.free_shipping ? 0 : Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
   const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
   const imageUrl = item.thumbnail?.replace(/^http:/, "https:") ?? "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
@@ -182,7 +191,7 @@ async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: Product
     update: {
       title: item.title,
       brand,
-      category: intent.category ?? "produto",
+      category: intent.category ?? query,
       source: "mercado_livre",
       sourceType: "marketplace",
       fulfillmentMode: "marketplace_native",
@@ -201,7 +210,7 @@ async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: Product
       externalId: `mlb-${item.id}`,
       title: item.title,
       brand,
-      category: intent.category ?? "produto",
+      category: intent.category ?? query,
       source: "mercado_livre",
       sourceType: "marketplace",
       fulfillmentMode: "marketplace_native",
