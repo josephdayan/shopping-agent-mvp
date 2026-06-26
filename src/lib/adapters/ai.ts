@@ -11,7 +11,8 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["carregador", ["carregador", "cabo", "usb-c", "iphone"]],
   ["pilhas", ["pilha", "pilhas", "bateria aa", "bateria aaa"]],
   ["agua", ["agua", "água", "garrafa de agua"]],
-  ["chocolate", ["chocolate", "bombom", "barra"]]
+  ["chocolate", ["chocolate", "bombom", "barra"]],
+  ["livro", ["livro", "book"]]
 ];
 
 const BRANDS = [
@@ -55,6 +56,7 @@ export const aiAdapter = {
         break;
       }
     }
+    intent.searchQuery = buildSearchQueryFromText(text, intent.category);
 
     const brand = BRANDS.find((candidate) => normalized.includes(normalize(candidate)));
     if (brand) intent.preferredBrand = brand;
@@ -73,7 +75,7 @@ export const aiAdapter = {
       intent.urgency = "normal";
     }
 
-    intent.ambiguous = !intent.category && !intent.wantsRepeat;
+    intent.ambiguous = !intent.category && !intent.searchQuery && !intent.wantsRepeat;
     return intent;
   },
 
@@ -121,7 +123,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Voce extrai intencao de compra em portugues do Brasil para o Atlas, um concierge de compras. Responda apenas JSON valido."
+              "Voce extrai intencao de compra em portugues do Brasil para o Atlas, um concierge de compras. Preserve nomes especificos, titulos de livros, modelos e marcas em searchQuery. Exemplo: 'quero o livro crime e castigo' vira category 'livro' e searchQuery 'livro crime e castigo'. Responda apenas JSON valido."
           },
           {
             role: "user",
@@ -138,6 +140,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
               additionalProperties: false,
               properties: {
                 category: { type: ["string", "null"] },
+                searchQuery: { type: ["string", "null"] },
                 urgency: { type: ["string", "null"], enum: ["fast", "normal", null] },
                 priceSensitivity: { type: ["string", "null"], enum: ["cheap", "balanced", "premium", null] },
                 preferredBrand: { type: ["string", "null"] },
@@ -148,6 +151,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
               },
               required: [
                 "category",
+                "searchQuery",
                 "urgency",
                 "priceSensitivity",
                 "preferredBrand",
@@ -169,9 +173,13 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
     if (!jsonText) return null;
 
     const parsed = JSON.parse(jsonText) as ProductIntent;
+    const category = parsed.category ?? undefined;
+    const fallbackSearchQuery = buildSearchQueryFromText(text, category);
+    const searchQuery = isGenericSearchQuery(parsed.searchQuery, category) ? fallbackSearchQuery : parsed.searchQuery;
     return {
       ...parsed,
-      category: parsed.category ?? undefined,
+      category,
+      searchQuery,
       preferredBrand: parsed.preferredBrand ?? undefined,
       urgency: parsed.urgency ?? "normal",
       priceSensitivity: parsed.priceSensitivity ?? "balanced",
@@ -181,6 +189,39 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
     console.warn("[ai:openai:fallback]", error);
     return null;
   }
+}
+
+function isGenericSearchQuery(searchQuery?: string, category?: string) {
+  if (!searchQuery) return true;
+  if (!category) return false;
+  return normalize(searchQuery).trim() === normalize(category).trim();
+}
+
+function buildSearchQueryFromText(text: string, category?: string) {
+  let query = normalize(text)
+    .replace(/\b(eu|vc|voce|voces|por favor|pfv|pls|please)\b/g, " ")
+    .replace(/\b(quero|queria|preciso|necessito|procuro|busca|buscar|comprar|compra|compraria|me ve|manda|arruma)\b/g, " ")
+    .replace(/\b(um|uma|uns|umas|o|a|os|as|de|do|da|dos|das|para|pra|pro|com|sem)\b/g, " ")
+    .replace(/\b(hoje|agora|urgente|rapido|rapida|mais rapido|entrega|entregar)\b/g, " ")
+    .replace(/\b(barato|barata|baratos|baratas|menor preco|mais em conta|economico|economica|premium|melhor|qualidade)\b/g, " ")
+    .replace(/\b(mesma|mesmo|ultimo|ultima|vez|novo|nova)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!query || query.length < 2) return category;
+  if (category && isCoveredByCategory(query, category)) return category;
+  if (category && category !== "produto" && !query.includes(normalize(category))) {
+    query = `${category} ${query}`;
+  }
+  return query;
+}
+
+function isCoveredByCategory(query: string, category: string) {
+  const categoryTokens = new Set(normalize(category).split(/\s+/));
+  const queryTokens = normalize(query)
+    .split(/\s+/)
+    .filter((token) => token.length > 1);
+  return queryTokens.length > 0 && queryTokens.every((token) => categoryTokens.has(token));
 }
 
 function normalize(input: string) {

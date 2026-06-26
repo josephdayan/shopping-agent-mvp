@@ -5,6 +5,7 @@ export type DeliverySensitivity = "fast" | "normal";
 
 export type ProductIntent = {
   category?: string;
+  searchQuery?: string;
   urgency?: DeliverySensitivity;
   priceSensitivity?: PriceSensitivity;
   preferredBrand?: string;

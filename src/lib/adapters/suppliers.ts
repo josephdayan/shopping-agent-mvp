@@ -33,6 +33,7 @@ const mercadoLivreConnector: SupplierConnector = {
 
     const liveProducts = await searchMercadoLivre(query, intent);
     if (liveProducts.length) return liveProducts;
+    if (isSpecificSearch(intent, query)) return [];
 
     return fallbackMercadoLivreProducts(intent);
   }
@@ -110,7 +111,11 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
     }
 
     const payload = (await response.json()) as MercadoLivreSearchResponse;
-    const items = (payload.results ?? []).filter((item) => item.id && item.title && item.price);
+    const items = rankMercadoLivreItems(
+      (payload.results ?? []).filter((item) => item.id && item.title && item.price),
+      query,
+      (item) => item.title
+    );
     const products = await Promise.all(items.map((item) => upsertMercadoLivreProduct(item, intent)));
     return products.filter((product): product is Product => Boolean(product));
   } catch (error) {
@@ -141,7 +146,11 @@ async function searchMercadoLivreCatalog(query: string, intent: ProductIntent, t
     }
 
     const payload = (await response.json()) as MercadoLivreCatalogSearchResponse;
-    const items = (payload.results ?? []).filter((item) => item.id && item.name);
+    const items = rankMercadoLivreItems(
+      (payload.results ?? []).filter((item) => item.id && item.name),
+      query,
+      (item) => [item.name, ...(item.attributes?.map((attribute) => attribute.value_name) ?? [])].filter(Boolean).join(" ")
+    );
     const products = await Promise.all(items.map((item) => upsertMercadoLivreCatalogProduct(item, intent, query)));
     return products.filter((product): product is Product => Boolean(product));
   } catch (error) {
@@ -255,7 +264,23 @@ function fallbackMercadoLivreProducts(intent: ProductIntent) {
   return dbConnector("mercado_livre", "Mercado Livre").searchProducts(intent);
 }
 
+function isSpecificSearch(intent: ProductIntent, query: string) {
+  if (!intent.searchQuery) return false;
+  const category = intent.category ? normalize(intent.category) : "";
+  const normalizedQuery = normalize(query);
+  return normalizedQuery !== category && significantTokens(normalizedQuery).length > 1;
+}
+
 function buildSearchQuery(intent: ProductIntent) {
+  const explicitQuery = intent.searchQuery?.trim();
+  if (explicitQuery) {
+    const normalizedQuery = normalize(explicitQuery);
+    const normalizedBrand = intent.preferredBrand ? normalize(intent.preferredBrand) : "";
+    if (normalizedBrand && !normalizedQuery.includes(normalizedBrand)) {
+      return `${intent.preferredBrand} ${explicitQuery}`.trim();
+    }
+    return explicitQuery;
+  }
   return [intent.preferredBrand, intent.category].filter(Boolean).join(" ").trim();
 }
 
@@ -280,9 +305,68 @@ function estimatedPriceForCategory(category?: string) {
     carregador: 49.9,
     pilhas: 19.9,
     agua: 6.9,
-    chocolate: 8.9
+    chocolate: 8.9,
+    livro: 29.9
   };
   return prices[category ?? ""] ?? 29.9;
+}
+
+function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) => string) {
+  const tokens = significantTokens(query);
+  if (!tokens.length) return items;
+
+  return items
+    .map((item) => {
+      const text = normalize(textFor(item));
+      const matched = tokens.filter((token) => text.includes(token));
+      const contiguousBoost = text.includes(normalize(query)) ? 5 : 0;
+      return {
+        item,
+        score: matched.length * 2 + contiguousBoost
+      };
+    })
+    .filter(({ score }) => {
+      if (tokens.length <= 1) return score > 0;
+      return score >= tokens.length * 2;
+    })
+    .sort((a, b) => b.score - a.score)
+    .map(({ item }) => item);
+}
+
+function significantTokens(query: string) {
+  const stopwords = new Set([
+    "quero",
+    "queria",
+    "preciso",
+    "comprar",
+    "compra",
+    "produto",
+    "mercado",
+    "livre",
+    "para",
+    "pra",
+    "com",
+    "sem",
+    "uma",
+    "uns",
+    "das",
+    "dos",
+    "the",
+    "and"
+  ]);
+
+  const tokens = normalize(query)
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length >= 3 && !stopwords.has(token));
+
+  return Array.from(new Set(tokens));
+}
+
+function normalize(input: string) {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 function slugify(value: string) {
