@@ -242,7 +242,7 @@ async function startProductSearch(conversationId: string, text: string) {
     data: {
       intent: JSON.stringify(intent),
       currentStep: "awaiting_selection",
-      context: JSON.stringify({ intent })
+      context: JSON.stringify({ intent, rejectedProductIds: [] })
     }
   });
   await messagingAdapter.sendMessage(conversationId, aiAdapter.generateAssistantResponse("options"), { options });
@@ -253,7 +253,7 @@ async function selectProduct(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
   if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
-  if (/outr|mais opc/.test(normalize(text))) return startProductSearch(conversationId, stringifyIntent(conversation.context));
+  if (isRejectionOrMoreOptions(text)) return searchMoreOptions(conversationId);
 
   const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
   if (!selectedProductId) {
@@ -264,7 +264,7 @@ async function selectProduct(conversationId: string, text: string) {
   const product = await productSearchAdapter.getProductById(selectedProductId);
   if (!product || !product.availability) {
     await messagingAdapter.sendMessage(conversationId, "Esse produto ficou indisponivel. Vou buscar novas opcoes.");
-    return startProductSearch(conversationId, stringifyIntent(conversation.context));
+    return searchMoreOptions(conversationId);
   }
 
   const context = readContext(conversation.context);
@@ -288,6 +288,56 @@ async function selectProduct(conversationId: string, text: string) {
   context.deliveryAddress = conversation.user.defaultAddress ?? undefined;
   await prisma.conversation.update({ where: { id: conversationId }, data: { context: JSON.stringify(context) } });
   await sendCheckoutSummary(conversationId, product.id, context.deliveryAddress);
+  return getConversation(conversationId);
+}
+
+async function searchMoreOptions(conversationId: string) {
+  const conversation = await getConversation(conversationId);
+  if (!conversation) throw new Error("Conversation not found");
+  const context = readContext(conversation.context);
+  const rejectedProductIds = Array.from(
+    new Set([...(context.rejectedProductIds ?? []), ...conversation.options.map((option) => option.productId)])
+  );
+  const intent = {
+    ...(context.intent ?? {}),
+    excludedProductIds: rejectedProductIds
+  };
+
+  if (!intent.category && !intent.searchQuery) {
+    await messagingAdapter.sendMessage(conversationId, "Me diz melhor o que voce quer, que eu procuro de novo.");
+    return getConversation(conversationId);
+  }
+
+  const options = await productSearchAdapter.searchProducts(intent, conversation.userId);
+  if (!options.length) {
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { context: JSON.stringify({ ...context, rejectedProductIds }) }
+    });
+    await messagingAdapter.sendMessage(
+      conversationId,
+      "Nao achei opcoes melhores agora. Quer mudar algum detalhe? Ex: marca, preco ou prazo."
+    );
+    return getConversation(conversationId);
+  }
+
+  await prisma.productOption.deleteMany({ where: { conversationId } });
+  await prisma.productOption.createMany({
+    data: options.map((option) => ({
+      conversationId,
+      productId: option.id,
+      rank: option.rank,
+      reason: option.reason
+    }))
+  });
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: {
+      currentStep: "awaiting_selection",
+      context: JSON.stringify({ ...context, intent: context.intent, rejectedProductIds })
+    }
+  });
+  await messagingAdapter.sendMessage(conversationId, "Achei outras opcoes:", { options });
   return getConversation(conversationId);
 }
 
@@ -461,18 +511,6 @@ function readContext(value: unknown): ConversationContext {
   return value as ConversationContext;
 }
 
-function stringifyIntent(value: unknown) {
-  const context = readContext(value);
-  return [
-    context.intent?.category,
-    context.intent?.preferredBrand,
-    context.intent?.priceSensitivity,
-    context.intent?.urgency === "fast" ? "entrega hoje" : ""
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
-
 function normalize(input: string) {
   return input
     .toLowerCase()
@@ -517,6 +555,14 @@ function looksLikeNewProductRequest(text: string) {
   const normalized = normalize(text);
   if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
   return /\b(quero|preciso|procura|procurar|busca|buscar|compra|comprar)\b/.test(normalized);
+}
+
+function isRejectionOrMoreOptions(text: string) {
+  const normalized = normalize(text);
+  return (
+    /\b(outr|mais opc|mais alternativa|nova opc|novas opc|trocar opc)\b/.test(normalized) ||
+    /\b(nao gostei|nao curti|nenhuma|n gostei|n curti|ruim|horrivel)\b/.test(normalized)
+  );
 }
 
 function sourceLabel(source: string) {

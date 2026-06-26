@@ -10,6 +10,7 @@ export type ProductIntent = {
   priceSensitivity?: PriceSensitivity;
   preferredBrand?: string;
   restrictions?: string[];
+  excludedProductIds?: string[];
   wantsRepeat?: boolean;
   unsupported?: boolean;
   ambiguous?: boolean;
@@ -19,6 +20,7 @@ export type ConversationContext = {
   intent?: ProductIntent;
   selectedProductId?: string;
   selectedProductExternalId?: string;
+  rejectedProductIds?: string[];
   deliveryAddress?: string;
   paymentMethod?: "pix" | "card" | "link";
   orderId?: string;

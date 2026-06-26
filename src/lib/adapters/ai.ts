@@ -12,7 +12,8 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["pilhas", ["pilha", "pilhas", "bateria aa", "bateria aaa"]],
   ["agua", ["agua", "água", "garrafa de agua"]],
   ["chocolate", ["chocolate", "bombom", "barra"]],
-  ["livro", ["livro", "book"]]
+  ["livro", ["livro", "book"]],
+  ["camiseta", ["camiseta", "camisa", "blusa", "t-shirt", "camiseta preta"]]
 ];
 
 const BRANDS = [
@@ -97,7 +98,7 @@ export const aiAdapter = {
   generateAssistantResponse(kind: "clarify" | "options" | "checkout" | "unsupported" | "paid" | "status") {
     const responses = {
       clarify: "Posso buscar. Voce prefere menor preco, melhor avaliada ou entrega mais rapida?",
-      options: "Encontrei estas opcoes. Pode tocar em uma delas ou responder 1, 2, 3, mais barata, mais rapida ou a marca.",
+      options: "Separei algumas opcoes. Toque em uma ou responda o numero.",
       checkout: "Separei o resumo do pedido. Confirmo esse pedido?",
       unsupported: "Ainda nao consigo comprar esse tipo de item pelo Atlas. Posso ajudar com higiene, beleza e mercado basico.",
       paid: "Pagamento aprovado. Pedido criado e enviado para processamento.",

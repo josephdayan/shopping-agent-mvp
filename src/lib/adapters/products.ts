@@ -15,7 +15,8 @@ export const productSearchAdapter = {
     const productsBySource = await Promise.all(
       supplierConnectors.map((connector) => connector.searchProducts({ ...intent, category }))
     );
-    const products = productsBySource.flat();
+    const excludedProductIds = new Set(intent.excludedProductIds ?? []);
+    const products = productsBySource.flat().filter((product) => !excludedProductIds.has(product.id));
 
     const ranked = this.rankProducts(products, {
       ...intent,
@@ -28,12 +29,13 @@ export const productSearchAdapter = {
   },
 
   rankProducts(products: Product[], intent: ProductIntent): RankedProduct[] {
-    if (!products.length) return [];
+    const relevantProducts = filterRelevantProducts(products, intent);
+    if (!relevantProducts.length) return [];
 
-    const maxPrice = Math.max(...products.map((product) => product.price + product.shippingPrice));
-    const maxHours = Math.max(...products.map((product) => product.deliveryHours));
+    const maxPrice = Math.max(...relevantProducts.map((product) => product.price + product.shippingPrice));
+    const maxHours = Math.max(...relevantProducts.map((product) => product.deliveryHours));
 
-    return products
+    return relevantProducts
       .map((product) => {
         const total = product.price + product.shippingPrice;
         const priceScore = 1 - total / Math.max(maxPrice, 1);
@@ -62,13 +64,11 @@ export const productSearchAdapter = {
         const cheapest = [...list].sort((a, b) => a.price + a.shippingPrice - (b.price + b.shippingPrice))[0];
         const fastest = [...list].sort((a, b) => a.deliveryHours - b.deliveryHours)[0];
         const reason =
-          index === 0
-            ? "Melhor geral"
-            : product.id === fastest?.id
-              ? "Entrega mais rapida"
-              : product.id === cheapest?.id
-                ? "Mais barata aceitavel"
-                : product.reason;
+          product.id === fastest?.id
+            ? "Entrega mais rapida"
+            : product.id === cheapest?.id
+              ? "Mais em conta"
+              : product.reason;
         return { ...product, rank: index + 1, reason };
       });
   },
@@ -94,10 +94,35 @@ function isLiveSupplierResult(product: RankedProduct) {
 }
 
 function reasonFor(product: Product, intent: ProductIntent) {
-  if (intent.preferredBrand?.toLowerCase() === product.brand.toLowerCase()) return `Combina com sua preferencia por ${product.brand}`;
-  if (intent.urgency === "fast") return `Entrega em ${product.deliveryEstimate}`;
-  if (intent.priceSensitivity === "cheap") return `Boa opcao por R$ ${product.price.toFixed(2)}`;
-  return `${sourceLabel(product.source)} · avaliacao ${product.rating.toFixed(1)}`;
+  if (intent.preferredBrand?.toLowerCase() === product.brand.toLowerCase()) return product.brand;
+  if (intent.urgency === "fast") return product.deliveryEstimate;
+  if (intent.priceSensitivity === "cheap") return `R$ ${product.price.toFixed(2)}`;
+  return sourceLabel(product.source);
+}
+
+function filterRelevantProducts(products: Product[], intent: ProductIntent) {
+  const query = normalize([intent.category, intent.searchQuery].filter(Boolean).join(" "));
+  const terms = requiredTermsFor(query);
+  if (!terms.length) return products;
+
+  return products.filter((product) => {
+    const haystack = normalize([product.title, product.brand, product.category].join(" "));
+    return terms.every((group) => group.some((term) => haystack.includes(term)));
+  });
+}
+
+function requiredTermsFor(query: string) {
+  const groups: string[][] = [];
+
+  if (/\b(camiseta|camisa|blusa|t shirt|tshirt)\b/.test(query)) {
+    groups.push(["camiseta", "camisa", "blusa", "t shirt", "tshirt"]);
+  }
+
+  if (/\b(preta|preto|black)\b/.test(query)) {
+    groups.push(["preta", "preto", "black"]);
+  }
+
+  return groups;
 }
 
 function sourceReliability(source: string, fulfillmentMode: string) {
@@ -116,4 +141,11 @@ function sourceLabel(source: string) {
     loja_local: "Loja local"
   };
   return labels[source] ?? source;
+}
+
+function normalize(input: string) {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
