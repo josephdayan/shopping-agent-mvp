@@ -1,4 +1,5 @@
 import type { Product } from "@prisma/client";
+import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { ProductIntent, SupplierSource } from "@/lib/types";
 
@@ -64,6 +65,30 @@ type MercadoLivreCatalogSearchResponse = {
   results?: MercadoLivreCatalogProduct[];
 };
 
+type UnwrangleSearchResponse = {
+  results?: UnwrangleProduct[];
+  search_results?: UnwrangleProduct[];
+  items?: UnwrangleProduct[];
+  data?: UnwrangleProduct[];
+};
+
+type UnwrangleProduct = {
+  title?: string;
+  name?: string;
+  price?: string | number;
+  raw_price?: string | number;
+  current_price?: string | number;
+  url?: string;
+  link?: string;
+  product_url?: string;
+  thumbnail?: string;
+  image?: string;
+  image_url?: string;
+  rating?: string | number;
+  seller?: string;
+  store?: string;
+};
+
 type MercadoLivreItem = {
   id: string;
   title: string;
@@ -99,6 +124,9 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
   try {
     const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, token);
     if (marketplaceProducts.length) return marketplaceProducts;
+
+    const externalProducts = await searchMercadoLivreViaUnwrangle(query, intent);
+    if (externalProducts.length) return externalProducts;
 
     const catalogToken = await getMercadoLivreAccessToken();
     if (catalogToken) {
@@ -250,6 +278,44 @@ async function searchMercadoLivreCatalog(query: string, intent: ProductIntent, t
   }
 }
 
+async function searchMercadoLivreViaUnwrangle(query: string, intent: ProductIntent) {
+  const apiKey = process.env.UNWRANGLE_API_KEY;
+  if (!apiKey) return [];
+
+  try {
+    const url = new URL(process.env.UNWRANGLE_MERCADO_LIVRE_URL ?? "https://data.unwrangle.com/api/getter/");
+    url.searchParams.set("platform", process.env.UNWRANGLE_MERCADO_LIVRE_PLATFORM ?? "mercado_search");
+    url.searchParams.set("search", query);
+    url.searchParams.set("api_key", apiKey);
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "atlas/0.1"
+      },
+      next: { revalidate: 300 }
+    });
+
+    if (!response.ok) {
+      console.warn("[mercado-livre:unwrangle:fallback]", response.status, await response.text());
+      return [];
+    }
+
+    const payload = (await response.json()) as UnwrangleSearchResponse;
+    const rawItems = payload.results ?? payload.search_results ?? payload.items ?? payload.data ?? [];
+    const items = rankMercadoLivreItems(
+      rawItems.filter((item) => unwrangleTitle(item) && unwranglePrice(item) > 0),
+      query,
+      (item) => unwrangleTitle(item)
+    );
+    const products = await Promise.all(items.map((item) => upsertUnwrangleMercadoLivreProduct(item, intent, query)));
+    return products.filter((product): product is Product => Boolean(product));
+  } catch (error) {
+    console.warn("[mercado-livre:unwrangle:error]", error);
+    return [];
+  }
+}
+
 async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: ProductIntent, query: string) {
   const shippingPrice = item.shipping?.free_shipping ? 0 : Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
   const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
@@ -293,6 +359,60 @@ async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: Product
       deliveryHours,
       imageUrl,
       productUrl: item.permalink ?? `https://www.mercadolivre.com.br/p/${item.id}`,
+      availability: true
+    }
+  });
+}
+
+async function upsertUnwrangleMercadoLivreProduct(item: UnwrangleProduct, intent: ProductIntent, query: string) {
+  const title = unwrangleTitle(item);
+  const productUrl = absoluteMercadoLivreUrl(item.url ?? item.link ?? item.product_url ?? `https://lista.mercadolivre.com.br/${slugify(query)}`);
+  const externalId = `mlb-ext-${hashProductIdentity(productUrl || title)}`;
+  const shippingPrice = Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
+  const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
+  const imageUrl =
+    normalizeImageUrl(item.thumbnail ?? item.image ?? item.image_url) ??
+    "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
+  const brand = inferBrand(title, intent.preferredBrand);
+  const rating = Number(item.rating ?? 4.2);
+
+  return prisma.product.upsert({
+    where: { externalId },
+    update: {
+      title,
+      brand,
+      category: intent.category ?? query,
+      source: "mercado_livre",
+      sourceType: "marketplace",
+      fulfillmentMode: "manual_operator",
+      automationLevel: "real_external_search",
+      price: unwranglePrice(item),
+      shippingPrice,
+      store: item.store ?? item.seller ?? "Mercado Livre",
+      rating: Number.isFinite(rating) ? rating : 4.2,
+      deliveryEstimate: deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias",
+      deliveryHours,
+      imageUrl,
+      productUrl,
+      availability: true
+    },
+    create: {
+      externalId,
+      title,
+      brand,
+      category: intent.category ?? query,
+      source: "mercado_livre",
+      sourceType: "marketplace",
+      fulfillmentMode: "manual_operator",
+      automationLevel: "real_external_search",
+      price: unwranglePrice(item),
+      shippingPrice,
+      store: item.store ?? item.seller ?? "Mercado Livre",
+      rating: Number.isFinite(rating) ? rating : 4.2,
+      deliveryEstimate: deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias",
+      deliveryHours,
+      imageUrl,
+      productUrl,
       availability: true
     }
   });
@@ -591,6 +711,41 @@ function significantTokens(query: string) {
     .filter((token) => token.length >= 3 && !stopwords.has(token));
 
   return Array.from(new Set(tokens));
+}
+
+function unwrangleTitle(item: UnwrangleProduct) {
+  return (item.title ?? item.name ?? "").trim();
+}
+
+function unwranglePrice(item: UnwrangleProduct) {
+  const value = item.raw_price ?? item.current_price ?? item.price;
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+
+  const normalized = value
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\.(?=\d{3}(?:\D|$))/g, "")
+    .replace(",", ".");
+
+  const price = Number(normalized);
+  return Number.isFinite(price) ? price : 0;
+}
+
+function normalizeImageUrl(url?: string) {
+  if (!url) return null;
+  if (url.startsWith("//")) return `https:${url}`;
+  return url.replace(/^http:/, "https:");
+}
+
+function absoluteMercadoLivreUrl(url?: string) {
+  if (!url) return "https://www.mercadolivre.com.br";
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("//")) return `https:${url}`;
+  return new URL(url, "https://www.mercadolivre.com.br").toString();
+}
+
+function hashProductIdentity(value: string) {
+  return createHash("sha1").update(value).digest("hex").slice(0, 16);
 }
 
 function normalize(input: string) {
