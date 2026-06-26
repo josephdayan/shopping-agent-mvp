@@ -129,7 +129,19 @@ function requiredTermsFor(query: string) {
 
 function blockedTermsFor(query: string) {
   if (/\b(camiseta|camisa|blusa|t shirt|tshirt)\b/.test(query)) {
-    return ["chaveiro", "keychain", "miniatura", "boneco", "adesivo", "poster", "quadro", "caneca"];
+    return [
+      "chaveiro",
+      "keychain",
+      "miniatura",
+      "boneco",
+      "boneca",
+      "pelucia",
+      "brinquedo",
+      "adesivo",
+      "poster",
+      "quadro",
+      "caneca"
+    ];
   }
 
   return [];
