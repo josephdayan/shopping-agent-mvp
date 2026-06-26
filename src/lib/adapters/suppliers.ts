@@ -100,8 +100,9 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
     const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, token);
     if (marketplaceProducts.length) return marketplaceProducts;
 
-    if (token) {
-      const catalogProducts = await searchMercadoLivreCatalog(query, intent, token);
+    const catalogToken = await getMercadoLivreAccessToken();
+    if (catalogToken) {
+      const catalogProducts = await searchMercadoLivreCatalog(query, intent, catalogToken);
       if (catalogProducts.length) return catalogProducts;
     }
 
