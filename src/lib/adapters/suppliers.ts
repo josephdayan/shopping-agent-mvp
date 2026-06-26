@@ -52,6 +52,14 @@ type MercadoLivreSearchResponse = {
   results?: MercadoLivreItem[];
 };
 
+type MercadoLivreTokenResponse = {
+  access_token?: string;
+  refresh_token?: string;
+  expires_in?: number;
+  error?: string;
+  message?: string;
+};
+
 type MercadoLivreCatalogSearchResponse = {
   results?: MercadoLivreCatalogProduct[];
 };
@@ -85,7 +93,7 @@ type MercadoLivreCatalogProduct = {
 };
 
 async function searchMercadoLivre(query: string, intent: ProductIntent) {
-  const token = process.env.MERCADO_LIVRE_ACCESS_TOKEN;
+  const token = await getMercadoLivreAccessToken();
   if (process.env.MERCADO_LIVRE_REAL_SEARCH !== "true" && !token) return [];
 
   try {
@@ -115,11 +123,20 @@ async function searchMercadoLivreMarketplace(query: string, intent: ProductInten
   });
 
   if ((response.status === 401 || response.status === 403) && token) {
-    console.warn("[mercado-livre:search:retry-public]", response.status);
-    response = await fetch(url, {
-      headers: mercadoLivreHeaders(),
-      next: { revalidate: 300 }
-    });
+    const refreshedToken = response.status === 401 ? await refreshMercadoLivreAccessToken() : null;
+    if (refreshedToken) {
+      console.warn("[mercado-livre:search:retry-refreshed]", response.status);
+      response = await fetch(url, {
+        headers: mercadoLivreHeaders(refreshedToken),
+        next: { revalidate: 300 }
+      });
+    } else {
+      console.warn("[mercado-livre:search:retry-public]", response.status);
+      response = await fetch(url, {
+        headers: mercadoLivreHeaders(),
+        next: { revalidate: 300 }
+      });
+    }
   }
 
   if (!response.ok) {
@@ -143,6 +160,58 @@ function mercadoLivreHeaders(token?: string) {
     "User-Agent": "atlas/0.1",
     ...(token ? { Authorization: `Bearer ${token}` } : {})
   };
+}
+
+let mercadoLivreTokenCache: { accessToken: string; refreshToken?: string; expiresAt: number } | null = null;
+
+async function getMercadoLivreAccessToken() {
+  if (mercadoLivreTokenCache && mercadoLivreTokenCache.expiresAt > Date.now() + 60_000) {
+    return mercadoLivreTokenCache.accessToken;
+  }
+
+  return process.env.MERCADO_LIVRE_ACCESS_TOKEN;
+}
+
+async function refreshMercadoLivreAccessToken() {
+  const clientId = process.env.MERCADO_LIVRE_CLIENT_ID;
+  const clientSecret = process.env.MERCADO_LIVRE_CLIENT_SECRET;
+  const refreshToken = mercadoLivreTokenCache?.refreshToken ?? process.env.MERCADO_LIVRE_REFRESH_TOKEN;
+
+  if (!clientId || !clientSecret || !refreshToken) return null;
+
+  try {
+    const response = await fetch("https://api.mercadolibre.com/oauth/token", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken
+      }),
+      cache: "no-store"
+    });
+
+    const payload = (await response.json()) as MercadoLivreTokenResponse;
+    if (!response.ok || !payload.access_token) {
+      console.warn("[mercado-livre:token-refresh:fallback]", response.status, payload.error ?? payload.message ?? "unknown");
+      return null;
+    }
+
+    mercadoLivreTokenCache = {
+      accessToken: payload.access_token,
+      refreshToken: payload.refresh_token ?? refreshToken,
+      expiresAt: Date.now() + Math.max((payload.expires_in ?? 3600) - 60, 60) * 1000
+    };
+
+    return payload.access_token;
+  } catch (error) {
+    console.warn("[mercado-livre:token-refresh:error]", error);
+    return null;
+  }
 }
 
 async function searchMercadoLivreCatalog(query: string, intent: ProductIntent, token: string) {
