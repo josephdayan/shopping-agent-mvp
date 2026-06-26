@@ -55,7 +55,7 @@ export async function createConversation(input: UserInput = {}) {
 
   await messagingAdapter.sendMessage(
     conversation.id,
-    "Oi. Sou o Atlas, seu concierge de compras. Me diga o que voce quer comprar hoje."
+    "Olá. Sou o Atlas, seu concierge de compras. Me diga o que você quer comprar hoje."
   );
 
   return getConversation(conversation.id);
@@ -125,7 +125,7 @@ export async function handleUserMessage(conversationId: string, text: string) {
       where: { id: conversationId },
       data: { status: "active", currentStep: "collecting_request", context: null, intent: null }
     });
-    await messagingAdapter.sendMessage(conversationId, "Beleza. Me diga o que voce quer comprar agora.");
+    await messagingAdapter.sendMessage(conversationId, "Perfeito. Me diga o que você quer comprar agora.");
     return getConversation(conversationId);
   }
 
@@ -191,7 +191,7 @@ async function sendLatestOrderStatus(conversationId: string, userId: string) {
   });
 
   if (!order) {
-    await messagingAdapter.sendMessage(conversationId, "Voce ainda nao tem pedido comigo. Me diga o que quer comprar.");
+    await messagingAdapter.sendMessage(conversationId, "Você ainda não tem pedido comigo. Me diga o que quer comprar.");
     return;
   }
 
@@ -214,7 +214,7 @@ async function startProductSearch(conversationId: string, text: string) {
       where: { id: conversationId },
       data: { currentStep: "collecting_request", intent: JSON.stringify(parsed), context: JSON.stringify({ intent: parsed }) }
     });
-    await messagingAdapter.sendMessage(conversationId, "Claro. Qual produto voce quer que eu procure?");
+    await messagingAdapter.sendMessage(conversationId, "Claro. Qual produto você quer que eu procure?");
     return getConversation(conversationId);
   }
 
@@ -222,7 +222,7 @@ async function startProductSearch(conversationId: string, text: string) {
   if (!options.length) {
     await messagingAdapter.sendMessage(
       conversationId,
-      "Nao encontrei produto disponivel para essa busca. Pode tentar outra marca ou categoria?"
+      "Não encontrei uma opção boa para essa busca. Pode me passar mais algum detalhe?"
     );
     return getConversation(conversationId);
   }
@@ -257,13 +257,13 @@ async function selectProduct(conversationId: string, text: string) {
 
   const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
   if (!selectedProductId) {
-    await messagingAdapter.sendMessage(conversationId, "Nao consegui identificar a escolha. Pode responder 1, 2, 3 ou o nome da marca?");
+    await messagingAdapter.sendMessage(conversationId, "Não consegui identificar a escolha. Pode responder 1, 2, 3 ou o nome da marca?");
     return getConversation(conversationId);
   }
 
   const product = await productSearchAdapter.getProductById(selectedProductId);
   if (!product || !product.availability) {
-    await messagingAdapter.sendMessage(conversationId, "Esse produto ficou indisponivel. Vou buscar novas opcoes.");
+    await messagingAdapter.sendMessage(conversationId, "Esse produto ficou indisponível. Vou buscar novas opções.");
     return searchMoreOptions(conversationId);
   }
 
@@ -304,7 +304,7 @@ async function searchMoreOptions(conversationId: string) {
   };
 
   if (!intent.category && !intent.searchQuery) {
-    await messagingAdapter.sendMessage(conversationId, "Me diz melhor o que voce quer, que eu procuro de novo.");
+    await messagingAdapter.sendMessage(conversationId, "Me diga melhor o que você quer, que eu procuro de novo.");
     return getConversation(conversationId);
   }
 
@@ -316,7 +316,7 @@ async function searchMoreOptions(conversationId: string) {
     });
     await messagingAdapter.sendMessage(
       conversationId,
-      "Nao achei opcoes melhores agora. Quer mudar algum detalhe? Ex: marca, preco ou prazo."
+      "Não achei opções melhores agora. Quer mudar algum detalhe? Ex.: marca, preço ou prazo."
     );
     return getConversation(conversationId);
   }
@@ -337,7 +337,7 @@ async function searchMoreOptions(conversationId: string) {
       context: JSON.stringify({ ...context, intent: context.intent, rejectedProductIds })
     }
   });
-  await messagingAdapter.sendMessage(conversationId, "Achei outras opcoes:", { options });
+  await messagingAdapter.sendMessage(conversationId, "Encontrei outras opções:", { options });
   return getConversation(conversationId);
 }
 
@@ -347,7 +347,7 @@ async function captureAddress(conversationId: string, text: string) {
   const context = readContext(conversation.context);
   context.deliveryAddress = text.trim();
   if (text.trim().length < 8) {
-    await messagingAdapter.sendMessage(conversationId, "Esse endereco parece curto demais. Pode enviar rua, numero, bairro e cidade?");
+    await messagingAdapter.sendMessage(conversationId, "Esse endereço parece curto demais. Pode enviar rua, número, bairro e cidade?");
     return getConversation(conversationId);
   }
 
@@ -368,7 +368,7 @@ async function confirmOrder(conversationId: string, text: string) {
   if (!conversation) throw new Error("Conversation not found");
   const normalized = normalize(text);
   if (!/(sim|confirma|confirmo|pode|ok|fechar|pix|cartao|cartão|link)/.test(normalized)) {
-    await messagingAdapter.sendMessage(conversationId, "Pedido nao confirmado. Posso alterar produto, endereco ou cancelar.");
+    await messagingAdapter.sendMessage(conversationId, "Pedido não confirmado. Posso alterar produto, endereço ou cancelar.");
     return getConversation(conversationId);
   }
 
@@ -411,7 +411,7 @@ async function confirmOrder(conversationId: string, text: string) {
 
   await messagingAdapter.sendMessage(
     conversationId,
-    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo modo demo do Atlas, responda "paguei" aqui no WhatsApp para simular aprovacao.`,
+    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo modo demo do Atlas, responda "paguei" aqui no WhatsApp para simular aprovação.`,
     { orderId: order.id }
   );
 
@@ -451,8 +451,8 @@ async function sendCheckoutSummary(conversationId: string, productId: string, ad
       `Produto: R$ ${product.price.toFixed(2)} | Frete: R$ ${product.shippingPrice.toFixed(2)} | Taxa: R$ ${SERVICE_FEE.toFixed(2)}`,
       `Total: R$ ${total.toFixed(2)}`,
       `Entrega: ${product.deliveryEstimate}`,
-      `Endereco: ${address ?? "a confirmar"}`,
-      "Forma padrao: PIX mockado"
+      `Endereço: ${address ?? "a confirmar"}`,
+      "Forma padrão: PIX mockado"
     ].join("\n"),
     { checkout: { productId, total, address } }
   );

@@ -65,7 +65,7 @@ export const productSearchAdapter = {
         const fastest = [...list].sort((a, b) => a.deliveryHours - b.deliveryHours)[0];
         const reason =
           product.id === fastest?.id
-            ? "Entrega mais rapida"
+            ? "Entrega mais rápida"
             : product.id === cheapest?.id
               ? "Mais em conta"
               : product.reason;
@@ -122,6 +122,14 @@ function requiredTermsFor(query: string) {
 
   if (/\b(preta|preto|black)\b/.test(query)) {
     groups.push(["preta", "preto", "black"]);
+  }
+
+  if (/\b(branca|branco|white)\b/.test(query)) {
+    groups.push(["branca", "branco", "white"]);
+  }
+
+  if (/\b(social|dress shirt)\b/.test(query)) {
+    groups.push(["social", "dress shirt"]);
   }
 
   return groups;

@@ -191,7 +191,7 @@ async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: Product
       shippingPrice,
       store: item.seller?.nickname ? `Mercado Livre: ${item.seller.nickname}` : "Mercado Livre",
       rating: 4.3,
-      deliveryEstimate: deliveryHours <= 24 ? "Mercado Livre, entrega estimada em ate 24h" : "Mercado Livre, entrega estimada em 1-2 dias",
+      deliveryEstimate: deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias",
       deliveryHours,
       imageUrl,
       productUrl: item.permalink ?? `https://www.mercadolivre.com.br/p/${item.id}`,
@@ -210,7 +210,7 @@ async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: Product
       shippingPrice,
       store: item.seller?.nickname ? `Mercado Livre: ${item.seller.nickname}` : "Mercado Livre",
       rating: 4.3,
-      deliveryEstimate: deliveryHours <= 24 ? "Mercado Livre, entrega estimada em ate 24h" : "Mercado Livre, entrega estimada em 1-2 dias",
+      deliveryEstimate: deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias",
       deliveryHours,
       imageUrl,
       productUrl: item.permalink ?? `https://www.mercadolivre.com.br/p/${item.id}`,
@@ -244,7 +244,7 @@ async function upsertMercadoLivreCatalogProduct(item: MercadoLivreCatalogProduct
       shippingPrice,
       store: "Mercado Livre Catalogo",
       rating: item.status === "active" ? 4.2 : 4.0,
-      deliveryEstimate: "Mercado Livre, produto real encontrado; preco/prazo a confirmar",
+      deliveryEstimate: "Entrega estimada em 1-2 dias",
       deliveryHours,
       imageUrl,
       productUrl: item.permalink || searchUrl,
@@ -263,7 +263,7 @@ async function upsertMercadoLivreCatalogProduct(item: MercadoLivreCatalogProduct
       shippingPrice,
       store: "Mercado Livre Catalogo",
       rating: item.status === "active" ? 4.2 : 4.0,
-      deliveryEstimate: "Mercado Livre, produto real encontrado; preco/prazo a confirmar",
+      deliveryEstimate: "Entrega estimada em 1-2 dias",
       deliveryHours,
       imageUrl,
       productUrl: item.permalink || searchUrl,
@@ -322,133 +322,140 @@ function estimatedPriceForCategory(category?: string) {
     agua: 6.9,
     chocolate: 8.9,
     livro: 29.9,
-    camiseta: 49.9
+    camiseta: 49.9,
+    "camisa social": 79.9
   };
   return prices[category ?? ""] ?? 29.9;
 }
 
 async function fallbackGeneratedProducts(intent: ProductIntent) {
-  if (normalize([intent.category, intent.searchQuery].filter(Boolean).join(" ")).includes("camiseta")) {
-    return Promise.all(
-      [
-        {
-          externalId: "atlas-camiseta-preta-basica",
-          title: "Camiseta Preta Basica Algodao",
-          brand: "Atlas Curadoria",
-          source: "loja_local",
-          store: "Loja local parceira",
-          price: 39.9,
-          shippingPrice: 8.9,
-          deliveryHours: 3,
-          deliveryEstimate: "Hoje, em ate 3 horas",
-          imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"
-        },
-        {
-          externalId: "atlas-camiseta-preta-premium",
-          title: "Camiseta Preta Premium Lisa",
-          brand: "Atlas Curadoria",
-          source: "mercado_livre",
-          store: "Marketplace parceiro",
-          price: 59.9,
-          shippingPrice: 12.9,
-          deliveryHours: 48,
-          deliveryEstimate: "Entrega estimada em 1-2 dias",
-          imageUrl: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=700&q=80"
-        },
-        {
-          externalId: "atlas-camiseta-preta-dry",
-          title: "Camiseta Preta Dry Fit",
-          brand: "Atlas Curadoria",
-          source: "rappi",
-          store: "Rappi Mock",
-          price: 49.9,
-          shippingPrice: 10.9,
-          deliveryHours: 2,
-          deliveryEstimate: "Hoje, em ate 2 horas",
-          imageUrl: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=700&q=80"
-        },
-        {
-          externalId: "atlas-camiseta-preta-oversized",
-          title: "Camiseta Preta Oversized",
-          brand: "Atlas Curadoria",
-          source: "mercado_livre",
-          store: "Marketplace parceiro",
-          price: 69.9,
-          shippingPrice: 12.9,
-          deliveryHours: 48,
-          deliveryEstimate: "Entrega estimada em 1-2 dias",
-          imageUrl: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=700&q=80"
-        },
-        {
-          externalId: "atlas-camiseta-preta-gola-v",
-          title: "Camiseta Preta Gola V",
-          brand: "Atlas Curadoria",
-          source: "loja_local",
-          store: "Loja local parceira",
-          price: 44.9,
-          shippingPrice: 8.9,
-          deliveryHours: 4,
-          deliveryEstimate: "Hoje, em ate 4 horas",
-          imageUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=700&q=80"
-        },
-        {
-          externalId: "atlas-camiseta-preta-pack",
-          title: "Kit 2 Camisetas Pretas",
-          brand: "Atlas Curadoria",
-          source: "mercado_livre",
-          store: "Marketplace parceiro",
-          price: 89.9,
-          shippingPrice: 12.9,
-          deliveryHours: 48,
-          deliveryEstimate: "Entrega estimada em 1-2 dias",
-          imageUrl: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=700&q=80"
-        }
-      ].map((product) =>
-        prisma.product.upsert({
-          where: { externalId: product.externalId },
-          update: {
-            title: product.title,
-            brand: product.brand,
-            category: "camiseta",
-            source: product.source,
-            sourceType: product.source === "loja_local" ? "local_store" : "marketplace",
-            fulfillmentMode: product.source === "loja_local" ? "local_courier" : "manual_operator",
-            automationLevel: "mock_manual_checkout",
-            price: product.price,
-            shippingPrice: product.shippingPrice,
-            store: product.store,
-            rating: 4.1,
-            deliveryEstimate: product.deliveryEstimate,
-            deliveryHours: product.deliveryHours,
-            imageUrl: product.imageUrl,
-            productUrl: `https://lista.mercadolivre.com.br/${slugify(product.title)}`,
-            availability: true
-          },
-          create: {
-            externalId: product.externalId,
-            title: product.title,
-            brand: product.brand,
-            category: "camiseta",
-            source: product.source,
-            sourceType: product.source === "loja_local" ? "local_store" : "marketplace",
-            fulfillmentMode: product.source === "loja_local" ? "local_courier" : "manual_operator",
-            automationLevel: "mock_manual_checkout",
-            price: product.price,
-            shippingPrice: product.shippingPrice,
-            store: product.store,
-            rating: 4.1,
-            deliveryEstimate: product.deliveryEstimate,
-            deliveryHours: product.deliveryHours,
-            imageUrl: product.imageUrl,
-            productUrl: `https://lista.mercadolivre.com.br/${slugify(product.title)}`,
-            availability: true
-          }
-        })
-      )
-    );
-  }
+  const query = normalize([intent.category, intent.searchQuery].filter(Boolean).join(" "));
+  if (!/\b(camisa|camiseta|blusa|t shirt|tshirt)\b/.test(query)) return [];
 
-  return [];
+  const isSocial = /\bsocial\b/.test(query);
+  const color = /\b(branca|branco|white)\b/.test(query) ? "Branca" : /\b(preta|preto|black)\b/.test(query) ? "Preta" : "";
+  const category = isSocial ? "camisa social" : "camiseta";
+  const baseTitle = isSocial ? `Camisa Social ${color}`.trim() : `Camiseta ${color}`.trim();
+
+  return Promise.all(
+    generatedApparelProducts(baseTitle, category, isSocial).map((product) => upsertGeneratedProduct(product, category))
+  );
+}
+
+function generatedApparelProducts(baseTitle: string, category: string, isSocial: boolean) {
+  const imageUrl = isSocial
+    ? "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=700&q=80"
+    : "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80";
+
+  return [
+    {
+      externalId: `atlas-${slugify(baseTitle)}-local`,
+      title: `${baseTitle} Regular`,
+      brand: "Atlas Curadoria",
+      source: "loja_local" as SupplierSource,
+      store: "Loja local parceira",
+      price: isSocial ? 79.9 : 39.9,
+      shippingPrice: 8.9,
+      deliveryHours: 3,
+      deliveryEstimate: "Hoje, em até 3 horas",
+      imageUrl
+    },
+    {
+      externalId: `atlas-${slugify(baseTitle)}-premium`,
+      title: `${baseTitle} Premium`,
+      brand: "Atlas Curadoria",
+      source: "mercado_livre" as SupplierSource,
+      store: "Marketplace parceiro",
+      price: isSocial ? 119.9 : 59.9,
+      shippingPrice: 12.9,
+      deliveryHours: 48,
+      deliveryEstimate: "Entrega estimada em 1-2 dias",
+      imageUrl
+    },
+    {
+      externalId: `atlas-${slugify(baseTitle)}-slim`,
+      title: `${baseTitle} Slim`,
+      brand: "Atlas Curadoria",
+      source: "rappi" as SupplierSource,
+      store: "Rappi Mock",
+      price: isSocial ? 99.9 : 49.9,
+      shippingPrice: 10.9,
+      deliveryHours: 2,
+      deliveryEstimate: "Hoje, em até 2 horas",
+      imageUrl
+    },
+    {
+      externalId: `atlas-${slugify(baseTitle)}-kit`,
+      title: `Kit 2 ${pluralizeApparelTitle(baseTitle, isSocial)}`,
+      brand: "Atlas Curadoria",
+      source: "mercado_livre" as SupplierSource,
+      store: "Marketplace parceiro",
+      price: isSocial ? 179.9 : 89.9,
+      shippingPrice: 12.9,
+      deliveryHours: 48,
+      deliveryEstimate: "Entrega estimada em 1-2 dias",
+      imageUrl
+    },
+    {
+      externalId: `atlas-${slugify(baseTitle)}-confort`,
+      title: `${baseTitle} Comfort`,
+      brand: "Atlas Curadoria",
+      source: "loja_local" as SupplierSource,
+      store: "Loja local parceira",
+      price: isSocial ? 89.9 : 44.9,
+      shippingPrice: 8.9,
+      deliveryHours: 4,
+      deliveryEstimate: "Hoje, em até 4 horas",
+      imageUrl
+    },
+    {
+      externalId: `atlas-${slugify(baseTitle)}-classica`,
+      title: `${baseTitle} Clássica`,
+      brand: "Atlas Curadoria",
+      source: "mercado_livre" as SupplierSource,
+      store: "Marketplace parceiro",
+      price: isSocial ? 109.9 : 69.9,
+      shippingPrice: 12.9,
+      deliveryHours: 48,
+      deliveryEstimate: "Entrega estimada em 1-2 dias",
+      imageUrl
+    }
+  ];
+}
+
+function pluralizeApparelTitle(baseTitle: string, isSocial: boolean) {
+  if (isSocial) return baseTitle.replace(/^Camisa Social/i, "Camisas Sociais");
+  return `${baseTitle}s`;
+}
+
+function upsertGeneratedProduct(product: ReturnType<typeof generatedApparelProducts>[number], category: string) {
+  const data = {
+    title: product.title,
+    brand: product.brand,
+    category,
+    source: product.source,
+    sourceType: product.source === "loja_local" ? "local_store" : "marketplace",
+    fulfillmentMode: product.source === "loja_local" ? "local_courier" : "manual_operator",
+    automationLevel: "mock_manual_checkout",
+    price: product.price,
+    shippingPrice: product.shippingPrice,
+    store: product.store,
+    rating: 4.1,
+    deliveryEstimate: product.deliveryEstimate,
+    deliveryHours: product.deliveryHours,
+    imageUrl: product.imageUrl,
+    productUrl: `https://lista.mercadolivre.com.br/${slugify(product.title)}`,
+    availability: true
+  };
+
+  return prisma.product.upsert({
+    where: { externalId: product.externalId },
+    update: data,
+    create: {
+      externalId: product.externalId,
+      ...data
+    }
+  });
 }
 
 function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) => string) {

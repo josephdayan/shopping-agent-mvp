@@ -179,11 +179,9 @@ async function sendMetaProductImageMessage(
 ) {
   const total = option.product.price + option.product.shippingPrice;
   const caption = [
-    `${option.rank}) ${option.reason}`,
-    option.product.title,
-    `Total aprox: R$ ${total.toFixed(2)}`,
-    option.product.deliveryEstimate,
-    `Fonte: ${sourceLabel(option.product.source)}`,
+    `${option.rank}) ${option.product.title}`,
+    `Total: R$ ${total.toFixed(2)}`,
+    `Entrega: ${option.product.deliveryEstimate}`,
     option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
       ? `Link: ${option.product.productUrl}`
       : null
@@ -218,7 +216,7 @@ async function sendMetaProductButtons(phoneNumberId: string, token: string, to: 
     interactive: {
       type: "button",
       body: {
-        text: `${shortIntro(reply.text)}\n\nToque em uma opcao ou responda 1, 2 ou 3.`.slice(0, 1024)
+        text: "Escolha uma opção:".slice(0, 1024)
       },
       action: {
         buttons: options.map((option) => ({
@@ -299,19 +297,20 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
   const client = twilio(accountSid, authToken);
   const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
   const normalizedTo = normalizeTwilioWhatsAppAddress(to);
-  const mediaMessages = await Promise.all(
-    (reply.options ?? []).slice(0, 3).map((option) => {
-      const body = buildTwilioProductCaption(option);
-      const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+  const mediaMessages = [];
+  for (const option of (reply.options ?? []).slice(0, 3)) {
+    const body = buildTwilioProductCaption(option);
+    const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
 
-      return client.messages.create({
+    mediaMessages.push(
+      await client.messages.create({
         from: normalizedFrom,
         to: normalizedTo,
         body,
         ...(mediaUrl ? { mediaUrl } : {})
-      });
-    })
-  );
+      })
+    );
+  }
 
   const message = await client.messages.create({
     from: normalizedFrom,
@@ -336,15 +335,13 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
 function buildTwilioProductCaption(option: WhatsAppProductOption) {
   const total = option.product.price + option.product.shippingPrice;
   return [
-    `${option.rank}) ${option.reason}`,
-    option.product.title,
-    `Total aprox: R$ ${total.toFixed(2)}`,
-    option.product.deliveryEstimate,
-    `Fonte: ${sourceLabel(option.product.source)}`,
+    `${option.rank}) ${option.product.title}`,
+    `Total: R$ ${total.toFixed(2)}`,
+    `Entrega: ${option.product.deliveryEstimate}`,
     option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
       ? `Link: ${option.product.productUrl}`
       : null,
-    `Para escolher, toque no botao ${option.rank} ou responda ${option.rank}.`
+    `Para escolher, responda ${option.rank}.`
   ]
     .filter(Boolean)
     .join("\n")
@@ -352,34 +349,11 @@ function buildTwilioProductCaption(option: WhatsAppProductOption) {
 }
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
-  const options = reply.options ?? [];
-  const optionText = options
-    .slice(0, 3)
-    .map((option) => {
-      const total = option.product.price + option.product.shippingPrice;
-      return `${option.rank}) ${option.product.title} - R$ ${total.toFixed(2)} - ${option.product.deliveryEstimate}`;
-    })
-    .join("\n");
-
-  return { "1": optionText ? `${shortIntro(reply.text)}\n\n${optionText}`.slice(0, 1000) : reply.text.slice(0, 1000) };
-}
-
-function shortIntro(text: string) {
-  return text.split(/\n\n1\)/)[0] || text;
+  return { "1": "Escolha uma opção:" };
 }
 
 function isPublicMediaUrl(url: string) {
   return /^https:\/\/.+/i.test(url);
-}
-
-function sourceLabel(source: string) {
-  const labels: Record<string, string> = {
-    mercado_livre: "Mercado Livre",
-    rappi: "Rappi",
-    farmacia: "Farmacia",
-    loja_local: "Loja local"
-  };
-  return labels[source] ?? source;
 }
 
 function normalizeWhatsAppPhone(phone: string) {

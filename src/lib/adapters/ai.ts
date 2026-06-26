@@ -13,7 +13,8 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["agua", ["agua", "água", "garrafa de agua"]],
   ["chocolate", ["chocolate", "bombom", "barra"]],
   ["livro", ["livro", "book"]],
-  ["camiseta", ["camiseta", "camisa", "blusa", "t-shirt", "camiseta preta"]]
+  ["camisa social", ["camisa social", "social branca", "camisa branca social"]],
+  ["camiseta", ["camiseta", "blusa", "t-shirt", "tshirt"]]
 ];
 
 const BRANDS = [
@@ -36,7 +37,7 @@ const FORBIDDEN = ["arma", "cigarro", "remedio controlado", "medicamento control
 export const aiAdapter = {
   async parseUserIntent(text: string): Promise<ProductIntent> {
     const openAiIntent = await parseIntentWithOpenAI(text);
-    if (openAiIntent) return openAiIntent;
+    if (openAiIntent) return refineIntentFromText(text, openAiIntent);
 
     const normalized = normalize(text);
     const intent: ProductIntent = {
@@ -57,6 +58,7 @@ export const aiAdapter = {
         break;
       }
     }
+    Object.assign(intent, refineIntentFromText(text, intent));
     intent.searchQuery = buildSearchQueryFromText(text, intent.category);
 
     const brand = BRANDS.find((candidate) => normalized.includes(normalize(candidate)));
@@ -97,12 +99,12 @@ export const aiAdapter = {
 
   generateAssistantResponse(kind: "clarify" | "options" | "checkout" | "unsupported" | "paid" | "status") {
     const responses = {
-      clarify: "Posso buscar. Voce prefere menor preco, melhor avaliada ou entrega mais rapida?",
-      options: "Separei algumas opcoes. Toque em uma ou responda o numero.",
+      clarify: "Posso buscar. Você prefere menor preço, melhor qualidade ou entrega mais rápida?",
+      options: "Separei algumas opções. Toque em uma ou responda o número.",
       checkout: "Separei o resumo do pedido. Confirmo esse pedido?",
-      unsupported: "Ainda nao consigo comprar esse tipo de item pelo Atlas. Posso ajudar com higiene, beleza e mercado basico.",
+      unsupported: "Ainda não consigo comprar esse tipo de item pelo Atlas. Posso ajudar com higiene, beleza e mercado básico.",
       paid: "Pagamento aprovado. Pedido criado e enviado para processamento.",
-      status: "Aqui esta o status mais recente do seu pedido."
+      status: "Aqui está o status mais recente do seu pedido."
     };
     return responses[kind];
   }
@@ -124,7 +126,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Voce extrai intencao de compra em portugues do Brasil para o Atlas, um concierge de compras. Preserve nomes especificos, titulos de livros, modelos e marcas em searchQuery. Exemplo: 'quero o livro crime e castigo' vira category 'livro' e searchQuery 'livro crime e castigo'. Responda apenas JSON valido."
+              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve nomes específicos, títulos de livros, modelos, marcas, cores e estilos em searchQuery. Exemplo: 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'. Responda apenas JSON válido."
           },
           {
             role: "user",
@@ -192,6 +194,23 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
   }
 }
 
+function refineIntentFromText(text: string, intent: ProductIntent): ProductIntent {
+  const normalized = normalize(text);
+  const refined: ProductIntent = { ...intent };
+
+  if (/\b(camisa social|social branca|camisa branca social)\b/.test(normalized)) {
+    refined.category = "camisa social";
+  } else if (/\b(camiseta|tshirt|t shirt|blusa)\b/.test(normalized)) {
+    refined.category = "camiseta";
+  }
+
+  if (/\b(camisa|camiseta|blusa|tshirt|t shirt)\b/.test(normalized)) {
+    refined.searchQuery = buildSearchQueryFromText(text, refined.category);
+  }
+
+  return refined;
+}
+
 function isGenericSearchQuery(searchQuery?: string, category?: string) {
   if (!searchQuery) return true;
   if (!category) return false;
@@ -211,10 +230,18 @@ function buildSearchQueryFromText(text: string, category?: string) {
 
   if (!query || query.length < 2) return category;
   if (category && isCoveredByCategory(query, category)) return category;
-  if (category && category !== "produto" && !query.includes(normalize(category))) {
+  if (category && category !== "produto" && !query.includes(normalize(category)) && !hasCategoryTokens(query, category)) {
     query = `${category} ${query}`;
   }
   return query;
+}
+
+function hasCategoryTokens(query: string, category: string) {
+  const queryTokens = new Set(normalize(query).split(/\s+/).filter(Boolean));
+  return normalize(category)
+    .split(/\s+/)
+    .filter(Boolean)
+    .every((token) => queryTokens.has(token));
 }
 
 function isCoveredByCategory(query: string, category: string) {

@@ -115,18 +115,14 @@ export async function POST(request: Request) {
 function toTwilioXml(reply: WhatsAppRichReply) {
   if (!reply.text && !reply.options?.length) return `<?xml version="1.0" encoding="UTF-8"?><Response></Response>`;
 
-  const intro = reply.options?.length ? shortIntro(reply.text) : reply.text;
   const messages = reply.options?.length
     ? [
-        `<Message>${messageBody(intro)}</Message>`,
         ...reply.options.slice(0, 3).map((option) => {
           const total = option.product.price + option.product.shippingPrice;
           const body = [
-            `${option.rank}) ${option.reason}`,
-            option.product.title,
-            `Total aprox: R$ ${total.toFixed(2)}`,
-            option.product.deliveryEstimate,
-            `Fonte: ${sourceLabel(option.product.source)}`,
+            `${option.rank}) ${option.product.title}`,
+            `Total: R$ ${total.toFixed(2)}`,
+            `Entrega: ${option.product.deliveryEstimate}`,
             option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
               ? `Link: ${option.product.productUrl}`
               : null,
@@ -137,7 +133,7 @@ function toTwilioXml(reply: WhatsAppRichReply) {
 
           return `<Message>${messageBody(body)}${mediaTag(option.product.imageUrl)}</Message>`;
         }),
-        `<Message>${messageBody("Responda 1, 2 ou 3. Se aparecerem botoes no seu WhatsApp, pode tocar direto neles.")}</Message>`
+        `<Message>${messageBody("Escolha uma opção ou responda 1, 2 ou 3.")}</Message>`
       ]
     : [`<Message>${messageBody(reply.text)}</Message>`];
 
@@ -166,10 +162,6 @@ function isPublicMediaUrl(url: string) {
   return /^https:\/\/.+/i.test(url);
 }
 
-function shortIntro(text: string) {
-  return text.split(/\n\n1\)/)[0] || text;
-}
-
 function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): WhatsAppRichReply {
   if (response.products.length) {
     const options = response.products
@@ -178,8 +170,7 @@ function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): Wh
         return [
           `${option.rank}) ${option.reason}`,
           option.product.title,
-          `Total aprox: R$ ${total.toFixed(2)} · ${option.product.deliveryEstimate}`,
-          `Fonte: ${sourceLabel(option.product.source)}`,
+          `Total: R$ ${total.toFixed(2)} · ${option.product.deliveryEstimate}`,
           option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
             ? `Link: ${option.product.productUrl}`
             : null
@@ -196,14 +187,4 @@ function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): Wh
   }
 
   return { text: response.reply };
-}
-
-function sourceLabel(source: string) {
-  const labels: Record<string, string> = {
-    mercado_livre: "Mercado Livre",
-    rappi: "Rappi",
-    farmacia: "Farmacia",
-    loja_local: "Loja local"
-  };
-  return labels[source] ?? source;
 }
