@@ -103,10 +103,12 @@ function reasonFor(product: Product, intent: ProductIntent) {
 function filterRelevantProducts(products: Product[], intent: ProductIntent) {
   const query = normalize([intent.category, intent.searchQuery].filter(Boolean).join(" "));
   const terms = requiredTermsFor(query);
+  const blockedTerms = blockedTermsFor(query);
   if (!terms.length) return products;
 
   return products.filter((product) => {
     const haystack = normalize([product.title, product.brand, product.category].join(" "));
+    if (blockedTerms.some((term) => haystack.includes(term))) return false;
     return terms.every((group) => group.some((term) => haystack.includes(term)));
   });
 }
@@ -123,6 +125,14 @@ function requiredTermsFor(query: string) {
   }
 
   return groups;
+}
+
+function blockedTermsFor(query: string) {
+  if (/\b(camiseta|camisa|blusa|t shirt|tshirt)\b/.test(query)) {
+    return ["chaveiro", "keychain", "miniatura", "boneco", "adesivo", "poster", "quadro", "caneca"];
+  }
+
+  return [];
 }
 
 function sourceReliability(source: string, fulfillmentMode: string) {
