@@ -554,7 +554,12 @@ function formatOrderStatus(order: Awaited<ReturnType<typeof prisma.order.findFir
 function looksLikeNewProductRequest(text: string) {
   const normalized = normalize(text);
   if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
-  return /\b(quero|preciso|procura|procurar|busca|buscar|compra|comprar)\b/.test(normalized);
+  return (
+    /\b(quero|preciso|procura|procurar|busca|buscar|compra|comprar)\b/.test(normalized) ||
+    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco)\b/.test(
+      normalized
+    )
+  );
 }
 
 function isRejectionOrMoreOptions(text: string) {

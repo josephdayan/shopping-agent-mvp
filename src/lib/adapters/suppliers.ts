@@ -424,7 +424,12 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
 }
 
 function pluralizeApparelTitle(baseTitle: string, isSocial: boolean) {
-  if (isSocial) return baseTitle.replace(/^Camisa Social/i, "Camisas Sociais");
+  if (isSocial) {
+    return baseTitle
+      .replace(/^Camisa Social Branca/i, "Camisas Sociais Brancas")
+      .replace(/^Camisa Social Preta/i, "Camisas Sociais Pretas")
+      .replace(/^Camisa Social/i, "Camisas Sociais");
+  }
   return `${baseTitle}s`;
 }
 
