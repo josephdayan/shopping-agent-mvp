@@ -821,6 +821,8 @@ function buildApifyMercadoLivreInput(query: string) {
     search: query,
     query,
     productName: query,
+    nomeProduto: query,
+    nome_do_produto: query,
     product: query,
     maxPages,
     maxPaginas: maxPages,
@@ -836,15 +838,43 @@ function buildApifyMercadoLivreInput(query: string) {
 }
 
 function apifyTitle(item: ApifyProduct) {
-  return stringFromUnknown(firstPresent(item, ["title", "name", "nome", "productName", "product_name", "titulo"])).trim();
+  return stringFromUnknown(
+    firstPresent(item, [
+      "title",
+      "name",
+      "nome",
+      "productName",
+      "product_name",
+      "titulo",
+      "tituloProduto",
+      "títuloProduto",
+      "eTituloProduto",
+      "titulo_do_produto"
+    ])
+  ).trim();
 }
 
 function apifyPrice(item: ApifyProduct) {
-  return priceFromUnknown(firstPresent(item, ["price", "preco", "preço", "currentPrice", "current_price", "rawPrice", "raw_price", "amount", "valor"]));
+  return priceFromUnknown(
+    firstPresent(item, [
+      "price",
+      "preco",
+      "preço",
+      "currentPrice",
+      "current_price",
+      "rawPrice",
+      "raw_price",
+      "amount",
+      "valor",
+      "novoPreco",
+      "precoNovo",
+      "preçoNovo"
+    ])
+  );
 }
 
 function apifyShippingPrice(item: ApifyProduct) {
-  const raw = firstPresent(item, ["shippingPrice", "shipping_price", "frete", "shipping", "deliveryPrice"]);
+  const raw = firstPresent(item, ["shippingPrice", "shipping_price", "frete", "shipping", "deliveryPrice", "envio", "informacoesEnvio", "informaçõesEnvio"]);
   const text = stringFromUnknown(raw).toLowerCase();
   if (text.includes("gratis") || text.includes("grátis") || text.includes("free")) return 0;
   const price = priceFromUnknown(raw);
@@ -861,7 +891,9 @@ function apifyImageUrl(item: ApifyProduct) {
     "picture",
     "pictureUrl",
     "img",
-    "foto"
+    "foto",
+    "imagemLink",
+    "linkImagem"
   ]);
 
   if (Array.isArray(value)) return stringFromUnknown(value[0]);
@@ -869,7 +901,7 @@ function apifyImageUrl(item: ApifyProduct) {
 }
 
 function apifyUrl(item: ApifyProduct) {
-  return stringFromUnknown(firstPresent(item, ["url", "link", "productUrl", "product_url", "permalink", "href"]));
+  return stringFromUnknown(firstPresent(item, ["url", "link", "productUrl", "product_url", "permalink", "href", "produtoLink", "linkProduto"]));
 }
 
 function apifyStore(item: ApifyProduct) {
@@ -882,7 +914,19 @@ function apifyRating(item: ApifyProduct) {
 }
 
 function apifyDeliveryEstimate(item: ApifyProduct) {
-  const value = stringFromUnknown(firstPresent(item, ["delivery", "deliveryEstimate", "delivery_estimate", "prazo", "shippingText", "shipping_text"])).trim();
+  const value = stringFromUnknown(
+    firstPresent(item, [
+      "delivery",
+      "deliveryEstimate",
+      "delivery_estimate",
+      "prazo",
+      "shippingText",
+      "shipping_text",
+      "envio",
+      "informacoesEnvio",
+      "informaçõesEnvio"
+    ])
+  ).trim();
   return value || null;
 }
 
