@@ -178,6 +178,10 @@ No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata
 - `MERCADO_LIVRE_SEARCH_LIMIT`: quantidade de resultados buscados antes do ranking. Padrao: `8`.
 - `MERCADO_LIVRE_DEFAULT_SHIPPING`: frete estimado quando a API nao traz frete. Padrao: `12.90`.
 - `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
+- `APIFY_API_TOKEN`: chave opcional da Apify para buscar Mercado Livre via actor externo quando a API oficial responder 403.
+- `APIFY_MERCADO_LIVRE_ACTOR`: actor da Apify. Padrao: `karamelo/mercadolivre-scraper-brasil-portugues`.
+- `APIFY_MERCADO_LIVRE_MAX_PAGES`: paginas por busca na Apify. Padrao: `1`.
+- `APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS`: timeout da execucao sincrona. Padrao: `60`.
 - `UNWRANGLE_API_KEY`: chave opcional para busca externa real no Mercado Livre quando a API oficial de listings responder 403.
 - `UNWRANGLE_MERCADO_LIVRE_URL`: endpoint opcional da Unwrangle. Padrao: `https://data.unwrangle.com/api/getter/`.
 - `UNWRANGLE_MERCADO_LIVRE_PLATFORM`: plataforma opcional da Unwrangle. Padrao: `mercado_search`.
@@ -196,11 +200,11 @@ O retorno segue `ProductIntent`. Uma boa evolucao e trocar a validacao manual po
 
 O conector fica em `src/lib/adapters/suppliers.ts`. Ele ja tenta buscar listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
 
-Importante: a API publica de search pode retornar `403` mesmo com credenciais OAuth se o app ainda nao tiver acesso liberado. Nesse caso, o Atlas tenta a Unwrangle quando `UNWRANGLE_API_KEY` existe; se tambem nao houver resultado, cai no catalogo do Mercado Livre e, por ultimo, nos dados internos. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
+Importante: a API publica de search pode retornar `403` mesmo com credenciais OAuth se o app ainda nao tiver acesso liberado. Nesse caso, o Atlas tenta a Apify quando `APIFY_API_TOKEN` existe; depois tenta a Unwrangle quando `UNWRANGLE_API_KEY` existe; se tambem nao houver resultado, cai no catalogo do Mercado Livre e, por ultimo, nos dados internos. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
 
 - `externalId`: `mlb-{item_id}`
 - `productUrl`: link real do item
-- `automationLevel`: `real_search_manual_checkout`, `real_external_search` ou `real_catalog_manual_checkout`
+- `automationLevel`: `real_search_manual_checkout`, `real_apify_search`, `real_external_search` ou `real_catalog_manual_checkout`
 - `fulfillmentMode`: `marketplace_native` ou `manual_operator`
 
 Isso ainda nao compra automaticamente. A etapa de compra/checkout real precisara de OAuth, regras comerciais e provavelmente operacao manual ou API autorizada.

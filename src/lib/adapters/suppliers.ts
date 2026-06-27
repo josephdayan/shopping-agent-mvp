@@ -89,6 +89,8 @@ type UnwrangleProduct = {
   store?: string;
 };
 
+type ApifyProduct = Record<string, unknown>;
+
 type MercadoLivreItem = {
   id: string;
   title: string;
@@ -125,6 +127,9 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
     const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, token);
     if (marketplaceProducts.length) return marketplaceProducts;
 
+    const apifyProducts = await searchMercadoLivreViaApify(query, intent);
+    if (apifyProducts.length) return apifyProducts;
+
     const externalProducts = await searchMercadoLivreViaUnwrangle(query, intent);
     if (externalProducts.length) return externalProducts;
 
@@ -137,6 +142,48 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
     return [];
   } catch (error) {
     console.warn("[mercado-livre:search:error]", error);
+    return [];
+  }
+}
+
+async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) {
+  const token = process.env.APIFY_API_TOKEN;
+  const actor = process.env.APIFY_MERCADO_LIVRE_ACTOR ?? "karamelo/mercadolivre-scraper-brasil-portugues";
+  if (!token || !actor) return [];
+
+  try {
+    const actorId = actor.replace("/", "~");
+    const url = new URL(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items`);
+    url.searchParams.set("token", token);
+    url.searchParams.set("timeout", process.env.APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS ?? "60");
+    url.searchParams.set("clean", "true");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "atlas/0.1"
+      },
+      body: JSON.stringify(buildApifyMercadoLivreInput(query)),
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      console.warn("[mercado-livre:apify:fallback]", response.status, await response.text());
+      return [];
+    }
+
+    const payload = (await response.json()) as ApifyProduct[];
+    const items = rankMercadoLivreItems(
+      payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0),
+      query,
+      (item) => apifyTitle(item)
+    );
+    const products = await Promise.all(items.map((item) => upsertApifyMercadoLivreProduct(item, intent, query)));
+    return products.filter((product): product is Product => Boolean(product));
+  } catch (error) {
+    console.warn("[mercado-livre:apify:error]", error);
     return [];
   }
 }
@@ -314,6 +361,60 @@ async function searchMercadoLivreViaUnwrangle(query: string, intent: ProductInte
     console.warn("[mercado-livre:unwrangle:error]", error);
     return [];
   }
+}
+
+async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: ProductIntent, query: string) {
+  const title = apifyTitle(item);
+  const productUrl = absoluteMercadoLivreUrl(apifyUrl(item) ?? `https://lista.mercadolivre.com.br/${slugify(query)}`);
+  const externalId = `mlb-apify-${hashProductIdentity(productUrl || title)}`;
+  const shippingPrice = apifyShippingPrice(item) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
+  const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
+  const imageUrl =
+    normalizeImageUrl(apifyImageUrl(item)) ??
+    "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
+  const brand = inferBrand(title, intent.preferredBrand);
+  const rating = apifyRating(item) ?? 4.2;
+
+  return prisma.product.upsert({
+    where: { externalId },
+    update: {
+      title,
+      brand,
+      category: intent.category ?? query,
+      source: "mercado_livre",
+      sourceType: "marketplace",
+      fulfillmentMode: "manual_operator",
+      automationLevel: "real_apify_search",
+      price: apifyPrice(item),
+      shippingPrice,
+      store: apifyStore(item) ?? "Mercado Livre",
+      rating,
+      deliveryEstimate: apifyDeliveryEstimate(item) ?? (deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias"),
+      deliveryHours,
+      imageUrl,
+      productUrl,
+      availability: true
+    },
+    create: {
+      externalId,
+      title,
+      brand,
+      category: intent.category ?? query,
+      source: "mercado_livre",
+      sourceType: "marketplace",
+      fulfillmentMode: "manual_operator",
+      automationLevel: "real_apify_search",
+      price: apifyPrice(item),
+      shippingPrice,
+      store: apifyStore(item) ?? "Mercado Livre",
+      rating,
+      deliveryEstimate: apifyDeliveryEstimate(item) ?? (deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias"),
+      deliveryHours,
+      imageUrl,
+      productUrl,
+      availability: true
+    }
+  });
 }
 
 async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: ProductIntent, query: string) {
@@ -713,22 +814,85 @@ function significantTokens(query: string) {
   return Array.from(new Set(tokens));
 }
 
+function buildApifyMercadoLivreInput(query: string) {
+  const maxPages = Number(process.env.APIFY_MERCADO_LIVRE_MAX_PAGES ?? 1);
+  return {
+    keyword: query,
+    search: query,
+    query,
+    productName: query,
+    product: query,
+    maxPages,
+    maxPaginas: maxPages,
+    maximoPaginas: maxPages,
+    maxPagesBusca: maxPages,
+    maximoDePaginasBusca: maxPages,
+    maxPagesOfertas: 1,
+    maximoPaginasOfertas: 1,
+    modoOfertasDoDia: false,
+    sponsoredProducts: false,
+    produtosPatrocinados: false
+  };
+}
+
+function apifyTitle(item: ApifyProduct) {
+  return stringFromUnknown(firstPresent(item, ["title", "name", "nome", "productName", "product_name", "titulo"])).trim();
+}
+
+function apifyPrice(item: ApifyProduct) {
+  return priceFromUnknown(firstPresent(item, ["price", "preco", "preço", "currentPrice", "current_price", "rawPrice", "raw_price", "amount", "valor"]));
+}
+
+function apifyShippingPrice(item: ApifyProduct) {
+  const raw = firstPresent(item, ["shippingPrice", "shipping_price", "frete", "shipping", "deliveryPrice"]);
+  const text = stringFromUnknown(raw).toLowerCase();
+  if (text.includes("gratis") || text.includes("grátis") || text.includes("free")) return 0;
+  const price = priceFromUnknown(raw);
+  return price > 0 ? price : null;
+}
+
+function apifyImageUrl(item: ApifyProduct) {
+  const value = firstPresent(item, [
+    "image",
+    "imageUrl",
+    "image_url",
+    "thumbnail",
+    "thumbnailUrl",
+    "picture",
+    "pictureUrl",
+    "img",
+    "foto"
+  ]);
+
+  if (Array.isArray(value)) return stringFromUnknown(value[0]);
+  return stringFromUnknown(value);
+}
+
+function apifyUrl(item: ApifyProduct) {
+  return stringFromUnknown(firstPresent(item, ["url", "link", "productUrl", "product_url", "permalink", "href"]));
+}
+
+function apifyStore(item: ApifyProduct) {
+  return stringFromUnknown(firstPresent(item, ["seller", "sellerName", "seller_name", "store", "loja", "shop"])).trim() || null;
+}
+
+function apifyRating(item: ApifyProduct) {
+  const value = Number(firstPresent(item, ["rating", "avaliacao", "avaliação", "stars", "score"]));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function apifyDeliveryEstimate(item: ApifyProduct) {
+  const value = stringFromUnknown(firstPresent(item, ["delivery", "deliveryEstimate", "delivery_estimate", "prazo", "shippingText", "shipping_text"])).trim();
+  return value || null;
+}
+
 function unwrangleTitle(item: UnwrangleProduct) {
   return (item.title ?? item.name ?? "").trim();
 }
 
 function unwranglePrice(item: UnwrangleProduct) {
   const value = item.raw_price ?? item.current_price ?? item.price;
-  if (typeof value === "number") return value;
-  if (!value) return 0;
-
-  const normalized = value
-    .replace(/[^\d,.-]/g, "")
-    .replace(/\.(?=\d{3}(?:\D|$))/g, "")
-    .replace(",", ".");
-
-  const price = Number(normalized);
-  return Number.isFinite(price) ? price : 0;
+  return priceFromUnknown(value);
 }
 
 function normalizeImageUrl(url?: string) {
@@ -746,6 +910,34 @@ function absoluteMercadoLivreUrl(url?: string) {
 
 function hashProductIdentity(value: string) {
   return createHash("sha1").update(value).digest("hex").slice(0, 16);
+}
+
+function firstPresent(item: ApifyProduct, keys: string[]) {
+  for (const key of keys) {
+    const value = item[key];
+    if (value !== undefined && value !== null && value !== "") return value;
+  }
+  return undefined;
+}
+
+function stringFromUnknown(value: unknown) {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  if (typeof value === "boolean") return String(value);
+  return "";
+}
+
+function priceFromUnknown(value: unknown) {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+
+  const normalized = stringFromUnknown(value)
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\.(?=\d{3}(?:\D|$))/g, "")
+    .replace(",", ".");
+
+  const price = Number(normalized);
+  return Number.isFinite(price) ? price : 0;
 }
 
 function normalize(input: string) {
