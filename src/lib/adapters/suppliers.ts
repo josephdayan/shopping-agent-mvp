@@ -120,18 +120,27 @@ type MercadoLivreCatalogProduct = {
 };
 
 async function searchMercadoLivre(query: string, intent: ProductIntent) {
-  const token = await getMercadoLivreAccessToken();
-  if (process.env.MERCADO_LIVRE_REAL_SEARCH !== "true" && !token) return [];
+  const mercadoLivreToken = await getMercadoLivreAccessToken();
+  const shouldTryMercadoLivreOfficial = process.env.MERCADO_LIVRE_REAL_SEARCH === "true" || Boolean(mercadoLivreToken);
+  const shouldTryApify = Boolean(process.env.APIFY_API_TOKEN);
+  const shouldTryUnwrangle = Boolean(process.env.UNWRANGLE_API_KEY);
+  if (!shouldTryApify && !shouldTryUnwrangle && !shouldTryMercadoLivreOfficial) return [];
 
   try {
-    const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, token);
-    if (marketplaceProducts.length) return marketplaceProducts;
+    if (shouldTryApify) {
+      const apifyProducts = await searchMercadoLivreViaApify(query, intent);
+      if (apifyProducts.length) return apifyProducts;
+    }
 
-    const apifyProducts = await searchMercadoLivreViaApify(query, intent);
-    if (apifyProducts.length) return apifyProducts;
+    if (shouldTryMercadoLivreOfficial) {
+      const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, mercadoLivreToken);
+      if (marketplaceProducts.length) return marketplaceProducts;
+    }
 
-    const externalProducts = await searchMercadoLivreViaUnwrangle(query, intent);
-    if (externalProducts.length) return externalProducts;
+    if (shouldTryUnwrangle) {
+      const externalProducts = await searchMercadoLivreViaUnwrangle(query, intent);
+      if (externalProducts.length) return externalProducts;
+    }
 
     const catalogToken = await getMercadoLivreAccessToken();
     if (catalogToken) {

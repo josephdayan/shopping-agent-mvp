@@ -178,7 +178,7 @@ No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata
 - `MERCADO_LIVRE_SEARCH_LIMIT`: quantidade de resultados buscados antes do ranking. Padrao: `8`.
 - `MERCADO_LIVRE_DEFAULT_SHIPPING`: frete estimado quando a API nao traz frete. Padrao: `12.90`.
 - `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
-- `APIFY_API_TOKEN`: chave opcional da Apify para buscar Mercado Livre via actor externo quando a API oficial responder 403.
+- `APIFY_API_TOKEN`: chave opcional da Apify. Quando existe, o Atlas usa Apify primeiro para buscar Mercado Livre.
 - `APIFY_MERCADO_LIVRE_ACTOR`: actor da Apify. Padrao: `karamelo/mercadolivre-scraper-brasil-portugues`.
 - `APIFY_MERCADO_LIVRE_MAX_PAGES`: paginas por busca na Apify. Padrao: `1`.
 - `APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS`: timeout da execucao sincrona. Padrao: `60`.
@@ -198,9 +198,9 @@ O retorno segue `ProductIntent`. Uma boa evolucao e trocar a validacao manual po
 
 ## Como integrar Mercado Livre
 
-O conector fica em `src/lib/adapters/suppliers.ts`. Ele ja tenta buscar listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
+O conector fica em `src/lib/adapters/suppliers.ts`. Quando `APIFY_API_TOKEN` existe, o Atlas busca primeiro pela Apify. Sem Apify, ele tenta listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
 
-Importante: a API publica de search pode retornar `403` mesmo com credenciais OAuth se o app ainda nao tiver acesso liberado. Nesse caso, o Atlas tenta a Apify quando `APIFY_API_TOKEN` existe; depois tenta a Unwrangle quando `UNWRANGLE_API_KEY` existe; se tambem nao houver resultado, cai no catalogo do Mercado Livre e, por ultimo, nos dados internos. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
+Importante: a API publica de search pode retornar `403` mesmo com credenciais OAuth se o app ainda nao tiver acesso liberado. Por isso, em producao a ordem recomendada e Apify -> Mercado Livre oficial -> Unwrangle -> catalogo do Mercado Livre -> dados internos. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
 
 - `externalId`: `mlb-{item_id}`
 - `productUrl`: link real do item
