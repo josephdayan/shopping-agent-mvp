@@ -74,6 +74,17 @@ export async function getOrCreateActiveConversation(input: UserInput = {}) {
   });
 
   if (activeConversation && activeConversation.currentStep !== "order_created") {
+    // Auto-abandon: if the user walked away without buying for a while, start clean
+    // on the next message instead of forcing them to type "cancelar".
+    const staleMinutes = Number(process.env.LIA_CONVERSATION_TTL_MIN ?? 15);
+    const idleMs = Date.now() - new Date(activeConversation.updatedAt).getTime();
+    if (Number.isFinite(staleMinutes) && staleMinutes > 0 && idleMs > staleMinutes * 60_000) {
+      await prisma.productOption.deleteMany({ where: { conversationId: activeConversation.id } });
+      await prisma.conversation.update({
+        where: { id: activeConversation.id },
+        data: { currentStep: "collecting_request", status: "active", context: null, intent: null }
+      });
+    }
     return getConversation(activeConversation.id);
   }
 
