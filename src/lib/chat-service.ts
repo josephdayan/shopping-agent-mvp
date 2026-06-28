@@ -258,7 +258,23 @@ export async function completeWhatsAppProductSearchJob(input: {
   if (!conversation) throw new Error("Conversation not found");
 
   const products = await getMercadoLivreApifyProductsFromRun(input.runId, input.intent);
-  const ranked = productSearchAdapter.rankProducts(products, input.intent).slice(0, SEARCH_BATCH_SIZE);
+  const rankedAll = productSearchAdapter.rankProducts(products, input.intent);
+  // rankProducts can over-filter a relevant pool down to 1; the Apify-side products
+  // are already deduped and relevance-ranked, so backfill from them to reliably
+  // show up to 3 (they're the top results for the query, not junk).
+  const seen = new Set(rankedAll.map((product) => product.id));
+  const backfill = products
+    .filter((product) => !seen.has(product.id))
+    .map((product) => ({ ...product, rank: 0, reason: "", score: 0 }));
+  const ranked = [...rankedAll, ...backfill]
+    .slice(0, SEARCH_BATCH_SIZE)
+    .map((product, index) => ({ ...product, rank: index + 1 }));
+  console.log("[lia:search:counts]", {
+    query: input.intent.searchQuery,
+    products: products.length,
+    rankedAll: rankedAll.length,
+    shown: ranked.length
+  });
 
   if (!ranked.length) {
     const context = readContext(conversation.context);

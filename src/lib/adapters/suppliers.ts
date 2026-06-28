@@ -1291,7 +1291,9 @@ function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
 function batchCandidateSize(intent: ProductIntent) {
   const configured = Number(process.env.LIA_SEARCH_CANDIDATE_SIZE ?? process.env.ATLAS_SEARCH_CANDIDATE_SIZE);
   if (Number.isFinite(configured) && configured > 0) return Math.min(Math.floor(configured), 15);
-  return Math.min(Math.max(batchSize(intent) * 2, 6), 8);
+  // Keep a bigger pool than we show (3): backfill if filtering over-cuts, and serve
+  // "me manda outras" from the same scrape instead of hitting Apify again.
+  return Math.min(Math.max(batchSize(intent) * 3, 9), 12);
 }
 
 function apifyTitle(item: ApifyProduct) {

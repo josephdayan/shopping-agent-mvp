@@ -440,19 +440,14 @@ function buildTwilioProductListText(options: WhatsAppProductOption[]) {
 }
 
 function buildTwilioProductCaption(option: WhatsAppProductOption) {
-  const total = option.product.price + option.product.shippingPrice;
+  // Minimal card, no link — Lia resolves everything inside WhatsApp.
   return [
-    `${option.rank}) ${option.product.title}`,
-    `Total: R$ ${total.toFixed(2)}`,
-    `Entrega: ${option.product.deliveryEstimate}`,
-    option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
-      ? `Link: ${option.product.productUrl}`
-      : null,
-    `Escolher este: responda ${option.rank}.`
+    `*${option.rank})* ${option.product.title}`,
+    `💰 R$ ${option.product.price.toFixed(2)}`,
+    `_Responda ${option.rank} para escolher este._`
   ]
-    .filter(Boolean)
     .join("\n")
-    .slice(0, 1500);
+    .slice(0, 1000);
 }
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
