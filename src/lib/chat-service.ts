@@ -298,9 +298,20 @@ async function searchMoreOptions(conversationId: string) {
   const rejectedProductIds = Array.from(
     new Set([...(context.rejectedProductIds ?? []), ...conversation.options.map((option) => option.productId)])
   );
+  const rejectedProductKeys = Array.from(
+    new Set([
+      ...(context.rejectedProductKeys ?? []),
+      ...conversation.options.flatMap((option) => [
+        option.product.externalId,
+        option.product.productUrl,
+        option.product.title
+      ])
+    ])
+  );
   const intent = {
     ...(context.intent ?? {}),
-    excludedProductIds: rejectedProductIds
+    excludedProductIds: rejectedProductIds,
+    excludedProductKeys: rejectedProductKeys
   };
 
   if (!intent.category && !intent.searchQuery) {
@@ -312,7 +323,7 @@ async function searchMoreOptions(conversationId: string) {
   if (!options.length) {
     await prisma.conversation.update({
       where: { id: conversationId },
-      data: { context: JSON.stringify({ ...context, rejectedProductIds }) }
+      data: { context: JSON.stringify({ ...context, rejectedProductIds, rejectedProductKeys }) }
     });
     await messagingAdapter.sendMessage(
       conversationId,
@@ -334,7 +345,7 @@ async function searchMoreOptions(conversationId: string) {
     where: { id: conversationId },
     data: {
       currentStep: "awaiting_selection",
-      context: JSON.stringify({ ...context, intent: context.intent, rejectedProductIds })
+      context: JSON.stringify({ ...context, intent: context.intent, rejectedProductIds, rejectedProductKeys })
     }
   });
   await messagingAdapter.sendMessage(conversationId, "Encontrei outras opções:", { options });
@@ -565,8 +576,8 @@ function looksLikeNewProductRequest(text: string) {
 function isRejectionOrMoreOptions(text: string) {
   const normalized = normalize(text);
   return (
-    /\b(outr|mais opc|mais alternativa|nova opc|novas opc|trocar opc)\b/.test(normalized) ||
-    /\b(nao gostei|nao curti|nenhuma|n gostei|n curti|ruim|horrivel)\b/.test(normalized)
+    /\b(outr|outra|outras|mais opc|mais alternativa|nova opc|novas opc|trocar opc|manda mais|me manda mais|ver mais)\b/.test(normalized) ||
+    /\b(nao gostei|nao gostei de nenhuma|nao curti|nenhuma|nenhuma delas|nenhum deles|n gostei|n curti|ruim|horrivel|nao quero essas|nao quero esses)\b/.test(normalized)
   );
 }
 

@@ -775,23 +775,89 @@ function upsertGeneratedProduct(product: ReturnType<typeof generatedApparelProdu
 function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) => string) {
   const tokens = significantTokens(query);
   if (!tokens.length) return items;
+  const normalizedQuery = normalize(query);
+  const positiveTerms = queryExpansionTerms(normalizedQuery);
+  const unwantedTerms = unwantedModifierTerms(normalizedQuery);
 
   return items
-    .map((item) => {
+    .map((item, index) => {
       const text = normalize(textFor(item));
       const matched = tokens.filter((token) => text.includes(token));
-      const contiguousBoost = text.includes(normalize(query)) ? 5 : 0;
+      const matchedExpanded = positiveTerms.filter((term) => text.includes(term));
+      const unwantedMatches = unwantedTerms.filter((term) => text.includes(term));
+      const contiguousBoost = text.includes(normalizedQuery) ? 8 : 0;
+      const expandedBoost = matchedExpanded.length * 3;
+      const unwantedPenalty = unwantedMatches.length * 12;
+      const positionPenalty = Math.min(index, 30) * 0.05;
       return {
         item,
-        score: matched.length * 2 + contiguousBoost
+        score: matched.length * 4 + contiguousBoost + expandedBoost - unwantedPenalty - positionPenalty,
+        unwantedMatches
       };
     })
-    .filter(({ score }) => {
-      if (tokens.length <= 1) return score > 0;
-      return score >= tokens.length * 2;
+    .filter(({ score, unwantedMatches }) => {
+      if (unwantedMatches.length) return false;
+      if (tokens.length <= 1) return score >= 4;
+      return score >= tokens.length * 4;
     })
     .sort((a, b) => b.score - a.score)
     .map(({ item }) => item);
+}
+
+function queryExpansionTerms(query: string) {
+  const terms = new Set(significantTokens(query));
+
+  if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
+    ["sapato", "sapatos", "tenis", "sapatilha", "sapatilhas", "sapatênis", "sapatenis", "bota", "botas", "sneaker", "calcado"].forEach((term) =>
+      terms.add(normalize(term))
+    );
+  }
+
+  if (/\b(violao|guitarra|baixo|ukulele)\b/.test(query)) {
+    ["violao", "guitarra", "baixo", "ukulele", "instrumento"].forEach((term) => terms.add(term));
+  }
+
+  return Array.from(terms);
+}
+
+function unwantedModifierTerms(query: string) {
+  const candidates = [
+    "adesivo",
+    "adesivos",
+    "sticker",
+    "stickers",
+    "chaveiro",
+    "keychain",
+    "miniatura",
+    "miniaturas",
+    "boneco",
+    "boneca",
+    "pelucia",
+    "brinquedo",
+    "pingente",
+    "pendente",
+    "enfeite",
+    "decoracao",
+    "poster",
+    "quadro",
+    "caneca",
+    "capa",
+    "case",
+    "suporte",
+    "apoio",
+    "aroma",
+    "aromas",
+    "aromatizador",
+    "ambientador",
+    "fragrancia",
+    "cheiro",
+    "perfume",
+    "purificador",
+    "lavanda",
+    "pinho"
+  ];
+
+  return candidates.map(normalize).filter((term) => !query.includes(term));
 }
 
 function significantTokens(query: string) {

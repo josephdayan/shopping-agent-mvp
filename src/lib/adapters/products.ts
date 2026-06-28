@@ -16,7 +16,12 @@ export const productSearchAdapter = {
       supplierConnectors.map((connector) => connector.searchProducts({ ...intent, category }))
     );
     const excludedProductIds = new Set(intent.excludedProductIds ?? []);
-    const products = productsBySource.flat().filter((product) => !excludedProductIds.has(product.id));
+    const excludedProductKeys = new Set((intent.excludedProductKeys ?? []).map(normalize));
+    const products = productsBySource.flat().filter((product) => {
+      if (excludedProductIds.has(product.id)) return false;
+      const keys = [product.externalId, product.productUrl, product.title].map(normalize);
+      return !keys.some((key) => excludedProductKeys.has(key));
+    });
     const rankingIntent = {
       ...intent,
       preferredBrand: intent.preferredBrand ?? preference?.preferredBrand ?? undefined,
