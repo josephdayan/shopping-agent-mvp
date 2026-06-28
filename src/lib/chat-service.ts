@@ -209,21 +209,11 @@ async function startProductSearch(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
   await prisma.productOption.deleteMany({ where: { conversationId } });
+
   const parsed = await aiAdapter.parseUserIntent(text);
 
   if (parsed.unsupported) {
     await messagingAdapter.sendMessage(conversationId, aiAdapter.generateAssistantResponse("unsupported"));
-    return getConversation(conversationId);
-  }
-
-  // Mercado Livre does not list medicines, so don't burn ~40s scraping for them —
-  // answer honestly right away.
-  if (isRestrictedMedicineQuery(text)) {
-    await prisma.conversation.update({
-      where: { id: conversationId },
-      data: { currentStep: "collecting_request", context: null, intent: null }
-    });
-    await messagingAdapter.sendMessage(conversationId, restrictedMedicineMessage());
     return getConversation(conversationId);
   }
 
@@ -243,7 +233,7 @@ async function startProductSearch(conversationId: string, text: string) {
 
   const options = await productSearchAdapter.searchProducts(intent, conversation.userId);
   if (!options.length) {
-    await messagingAdapter.sendMessage(conversationId, notFoundMessage(text));
+    await messagingAdapter.sendMessage(conversationId, notFoundMessage(intent.searchQuery ?? text));
     return getConversation(conversationId);
   }
 
@@ -866,24 +856,26 @@ function looksLikeSearchRefinement(text: string) {
   );
 }
 
-const MEDICINE_TERMS = [
-  "tylenol", "dipirona", "paracetamol", "ibuprofeno", "novalgina", "advil", "neosaldina", "dorflex",
-  "buscopan", "omeprazol", "losartana", "amoxicilina", "antibiotico", "anti-inflamatorio", "analgesico",
-  "remedio", "medicamento", "comprimido", "xarope", "pomada", "insulina", "ozempic", "rivotril", "clonazepam"
-];
-
-function isRestrictedMedicineQuery(text: string) {
-  const normalized = normalize(text);
-  return MEDICINE_TERMS.some((term) => new RegExp(`(?:^|[^a-z0-9])${term}(?:[^a-z0-9]|$)`).test(normalized));
+function mercadoLivreSearchUrl(query: string) {
+  const slug = normalize(query)
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `https://lista.mercadolivre.com.br/${slug || "ofertas"}`;
 }
 
-function restrictedMedicineMessage() {
-  return "Remédio eu ainda não consigo comprar — o Mercado Livre não vende medicamento. 💊 Mas te ajudo com farmácia (higiene, beleza, cuidados), mercado, casa, pet e o que mais precisar. O que você quer?";
-}
-
-function notFoundMessage(text: string) {
-  if (isRestrictedMedicineQuery(text)) return restrictedMedicineMessage();
-  return "Não achei uma opção boa pra isso agora. Me dá um detalhe a mais (marca, cor ou modelo) ou tenta outro produto?";
+// When the scraper finds nothing (a brand it can't reach like "tylenol", a slow
+// cold start, or a niche term), don't dead-end — point the user to the real ML
+// search so they still get there.
+function notFoundMessage(query: string) {
+  const cleanQuery = (query ?? "").trim();
+  return [
+    "Não achei uma opção boa pra isso na busca automática. 😕",
+    cleanQuery ? `Dá pra ver direto no Mercado Livre aqui: ${mercadoLivreSearchUrl(cleanQuery)}` : "",
+    "Ou me dá um detalhe a mais (marca, cor ou modelo) que eu tento de novo."
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function currentSearchQuery(conversation: NonNullable<Awaited<ReturnType<typeof getConversation>>>) {
