@@ -3,6 +3,8 @@ import { z } from "zod";
 import { handleUserMessage } from "@/lib/chat-service";
 
 export const dynamic = "force-dynamic";
+// Real product search can take up to ~55s on an Apify cold start.
+export const maxDuration = 60;
 
 const schema = z.object({ text: z.string().min(1) });
 

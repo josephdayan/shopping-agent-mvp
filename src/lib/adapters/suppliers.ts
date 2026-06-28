@@ -167,34 +167,15 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
 
   try {
     const actorId = actor.replace("/", "~");
-    const url = new URL(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items`);
-    url.searchParams.set("token", token);
-    url.searchParams.set("timeout", process.env.APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS ?? "60");
-    url.searchParams.set("clean", "true");
+    const payload = await runApifyActor(actorId, token, buildApifyMercadoLivreInput(query, intent));
+    if (!payload) return [];
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "User-Agent": "lia/0.1"
-      },
-      body: JSON.stringify(buildApifyMercadoLivreInput(query, intent)),
-      cache: "no-store"
-    });
-
-    if (!response.ok) {
-      console.warn("[mercado-livre:apify:fallback]", response.status, await response.text());
-      return [];
-    }
-
-    const payload = (await response.json()) as ApifyProduct[];
-    const usable = Array.isArray(payload) ? payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0) : [];
+    const usable = payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0);
     const ranked = rankMercadoLivreItems(usable, query, (item) => apifyTitle(item));
     if (!ranked.length) {
       console.warn("[mercado-livre:apify:empty]", {
         query,
-        received: Array.isArray(payload) ? payload.length : 0,
+        received: payload.length,
         withTitleAndPrice: usable.length
       });
       return [];
@@ -206,6 +187,67 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
     console.warn("[mercado-livre:apify:error]", error);
     return [];
   }
+}
+
+// Drive the Apify actor run explicitly: start the run, poll until it finishes,
+// then read the dataset. The synchronous run-sync-get-dataset-items endpoint is
+// unreliable for the Mercado Livre scraper — on a cold start it returns 502 or a
+// 200 with an EMPTY dataset (the run is aborted before it scrapes), which is what
+// made production return "Não encontrei uma opção boa para essa busca".
+async function runApifyActor(actorId: string, token: string, input: unknown): Promise<ApifyProduct[] | null> {
+  const startResponse = await fetch(`https://api.apify.com/v2/acts/${actorId}/runs?token=${token}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "User-Agent": "lia/0.1" },
+    body: JSON.stringify(input),
+    cache: "no-store"
+  });
+
+  if (!startResponse.ok) {
+    console.warn("[mercado-livre:apify:start-failed]", startResponse.status, await startResponse.text().catch(() => ""));
+    return null;
+  }
+
+  const startPayload = (await startResponse.json()) as { data?: { id?: string; defaultDatasetId?: string } };
+  const runId = startPayload.data?.id;
+  const datasetId = startPayload.data?.defaultDatasetId;
+  if (!runId || !datasetId) {
+    console.warn("[mercado-livre:apify:no-run-id]");
+    return null;
+  }
+
+  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 50000);
+  const pollEveryMs = Number(process.env.APIFY_MERCADO_LIVRE_POLL_MS ?? 2500);
+  const deadline = Date.now() + (Number.isFinite(maxWaitMs) ? maxWaitMs : 45000);
+  let status = "READY";
+
+  while (Date.now() < deadline) {
+    await delay(pollEveryMs);
+    const runResponse = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`, { cache: "no-store" });
+    if (!runResponse.ok) continue;
+    const runPayload = (await runResponse.json()) as { data?: { status?: string } };
+    status = runPayload.data?.status ?? status;
+    if (["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT", "TIMING-OUT"].includes(status)) break;
+  }
+
+  if (status !== "SUCCEEDED") {
+    // Still read whatever landed in the dataset — partial real results beat none.
+    console.warn("[mercado-livre:apify:run-not-ready]", { runId, status });
+  }
+
+  const itemsResponse = await fetch(
+    `https://api.apify.com/v2/datasets/${datasetId}/items?token=${token}&clean=true`,
+    { cache: "no-store" }
+  );
+  if (!itemsResponse.ok) {
+    console.warn("[mercado-livre:apify:dataset-failed]", itemsResponse.status);
+    return null;
+  }
+  const items = (await itemsResponse.json()) as ApifyProduct[];
+  return Array.isArray(items) ? items : [];
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function searchMercadoLivreMarketplace(query: string, intent: ProductIntent, token?: string) {
