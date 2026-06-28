@@ -440,14 +440,30 @@ function buildTwilioProductListText(options: WhatsAppProductOption[]) {
 }
 
 function buildTwilioProductCaption(option: WhatsAppProductOption) {
-  // Minimal card, no link — Lia resolves everything inside WhatsApp.
+  const product = option.product;
   return [
-    `*${option.rank})* ${option.product.title}`,
-    `💰 R$ ${option.product.price.toFixed(2)}`,
+    `*${option.rank})*`,
+    `🛒 *Produto:* ${product.title}`,
+    `💰 *Preço:* ${formatBRL(product.price)}`,
+    `🚚 *Entrega:* ${deliveryLabel(product)}`,
+    "",
     `_Responda ${option.rank} para escolher este._`
   ]
     .join("\n")
     .slice(0, 1000);
+}
+
+function formatBRL(value: number) {
+  return `R$ ${value.toFixed(2).replace(".", ",")}`;
+}
+
+function deliveryLabel(product: Product) {
+  const estimate = (product.deliveryEstimate ?? "").trim();
+  // Show the real shipping/delivery text the listing gave us; otherwise fall back
+  // to free-shipping / the shipping price (never a faked delivery time).
+  if (estimate && !/informado no link|prazo no link/i.test(estimate)) return estimate;
+  if (product.shippingPrice === 0) return "Frete grátis";
+  return `Frete ${formatBRL(product.shippingPrice)}`;
 }
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
