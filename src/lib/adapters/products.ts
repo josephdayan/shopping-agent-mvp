@@ -157,24 +157,46 @@ function requiredTermsFor(query: string) {
 }
 
 function blockedTermsFor(query: string) {
+  const genericAccessoryBlocks = [
+    "chaveiro",
+    "keychain",
+    "miniatura",
+    "boneco",
+    "boneca",
+    "pelucia",
+    "brinquedo",
+    "adesivo",
+    "poster",
+    "quadro",
+    "caneca",
+    "pingente",
+    "pendente",
+    "enfeite",
+    "decoracao"
+  ];
+
   if (/\b(camiseta|camisa|blusa|t shirt|tshirt)\b/.test(query)) {
-    return [
-      "chaveiro",
-      "keychain",
-      "miniatura",
-      "boneco",
-      "boneca",
-      "pelucia",
-      "brinquedo",
-      "adesivo",
-      "poster",
-      "quadro",
-      "caneca"
-    ];
+    return genericAccessoryBlocks;
   }
 
   if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
-    return ["chaveiro", "keychain", "miniatura", "boneco", "boneca", "pelucia", "brinquedo", "adesivo", "poster", "quadro", "caneca"];
+    return [
+      ...genericAccessoryBlocks,
+      "aroma",
+      "aromas",
+      "aromatizador",
+      "ambientador",
+      "cheiro",
+      "fragrancia",
+      "lavanda",
+      "pinho",
+      "purificador",
+      "carro",
+      "concept car",
+      "casa",
+      "escritorio",
+      "esportivo para carro"
+    ];
   }
 
   return [];

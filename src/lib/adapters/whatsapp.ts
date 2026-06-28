@@ -341,7 +341,7 @@ function buildTwilioProductCaption(option: WhatsAppProductOption) {
     option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
       ? `Link: ${option.product.productUrl}`
       : null,
-    `Para escolher, responda ${option.rank}.`
+    `Escolher este: responda ${option.rank}.`
   ]
     .filter(Boolean)
     .join("\n")

@@ -56,6 +56,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
   }
 
+  if (inbound.provider === "twilio" && shouldSendProcessingAck(inbound.text)) {
+    try {
+      await whatsappAdapter.sendMessage(inbound.phone, "Analisando seu pedido. Um instante, por favor.");
+    } catch (error) {
+      console.warn("[whatsapp:ack:error]", error);
+    }
+  }
+
   const conversation = await handleInboundMessage(inbound);
   const response = toChannelResponse(conversation);
   const richReply = formatWhatsAppReply(response);
@@ -128,14 +136,14 @@ function toTwilioXml(reply: WhatsAppRichReply) {
             option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
               ? `Link: ${option.product.productUrl}`
               : null,
-            `Para escolher, responda ${option.rank}.`
+            `Escolher este: responda ${option.rank}.`
           ]
             .filter(Boolean)
             .join("\n");
 
           return `<Message>${messageBody(body)}${mediaTag(option.product.imageUrl)}</Message>`;
         }),
-        `<Message>${messageBody("Escolha uma opção ou responda 1, 2 ou 3.")}</Message>`
+        `<Message>${messageBody("Responda 1, 2 ou 3.")}</Message>`
       ]
     : [`<Message>${messageBody(reply.text)}</Message>`];
 
@@ -162,6 +170,25 @@ function mediaTag(url: string) {
 
 function isPublicMediaUrl(url: string) {
   return /^https:\/\/.+/i.test(url);
+}
+
+function shouldSendProcessingAck(text: string) {
+  const normalized = normalizeText(text);
+  if (!normalized) return false;
+  if (/^(1|2|3)\b/.test(normalized)) return false;
+  if (/\b(primeira|primeiro|segunda|segundo|terceira|terceiro|essa|esse|esta|este)\b/.test(normalized)) return false;
+  if (/\b(status|rastreio|pedido|paguei|pago|novo|cancelar|ajuda|help|mais barata|mais rapido|mais rapida)\b/.test(normalized)) {
+    return false;
+  }
+
+  return /\b(quero|queria|preciso|necessito|procuro|buscar|busca|comprar|compra)\b/.test(normalized);
+}
+
+function normalizeText(input: string) {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): WhatsAppRichReply {
