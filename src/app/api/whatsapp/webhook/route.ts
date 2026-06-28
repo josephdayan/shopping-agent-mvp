@@ -56,9 +56,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
   }
 
+  let sentProcessingAck = false;
   if (inbound.provider === "twilio" && shouldSendProcessingAck(inbound.text)) {
     try {
       await whatsappAdapter.sendMessage(inbound.phone, "Analisando seu pedido. Um instante, por favor.");
+      sentProcessingAck = true;
     } catch (error) {
       console.warn("[whatsapp:ack:error]", error);
     }
@@ -70,6 +72,23 @@ export async function POST(request: Request) {
   let outbound;
 
   if (inbound.provider === "twilio") {
+    if (sentProcessingAck) {
+      try {
+        await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
+      } catch (error) {
+        console.error("[whatsapp:twilio:async-send-error]", error);
+        await whatsappAdapter.sendMessage(
+          inbound.phone,
+          "Não consegui concluir essa busca agora. Pode tentar de novo em alguns instantes?"
+        );
+      }
+
+      return new Response(toTwilioXml({ text: "" }), {
+        status: 200,
+        headers: { "Content-Type": "text/xml" }
+      });
+    }
+
     if (process.env.TWILIO_USE_QUICK_REPLY_OPTIONS === "true") {
       try {
         const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);

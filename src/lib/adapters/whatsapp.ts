@@ -108,6 +108,14 @@ export const whatsappAdapter = {
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
     if (process.env.WHATSAPP_PROVIDER !== "twilio") return null;
     return sendTwilioQuickReplyOptions(to, reply);
+  },
+
+  async sendRichReplyMessages(to: string, reply: WhatsAppRichReply) {
+    if (process.env.WHATSAPP_PROVIDER !== "twilio") {
+      return this.sendMessage(to, reply.text);
+    }
+
+    return sendTwilioRichReplyMessages(to, reply);
   }
 };
 
@@ -329,6 +337,63 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
     })),
     sid: message.sid,
     status: message.status
+  };
+}
+
+async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_WHATSAPP_FROM;
+
+  if (!accountSid || !authToken || !from) {
+    return sendTwilioWhatsAppMessage(to, reply.text);
+  }
+
+  const client = twilio(accountSid, authToken);
+  const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
+  const normalizedTo = normalizeTwilioWhatsAppAddress(to);
+  const messages = [];
+
+  if (reply.options?.length) {
+    for (const option of reply.options.slice(0, 3)) {
+      const body = buildTwilioProductCaption(option);
+      const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+
+      messages.push(
+        await client.messages.create({
+          from: normalizedFrom,
+          to: normalizedTo,
+          body,
+          ...(mediaUrl ? { mediaUrl } : {})
+        })
+      );
+    }
+
+    messages.push(
+      await client.messages.create({
+        from: normalizedFrom,
+        to: normalizedTo,
+        body: "Responda 1, 2 ou 3."
+      })
+    );
+  } else if (reply.text) {
+    messages.push(
+      await client.messages.create({
+        from: normalizedFrom,
+        to: normalizedTo,
+        body: reply.text
+      })
+    );
+  }
+
+  return {
+    provider: "twilio",
+    mode: "rich_reply_messages",
+    to,
+    messages: messages.map((message) => ({
+      sid: message.sid,
+      status: message.status
+    }))
   };
 }
 
