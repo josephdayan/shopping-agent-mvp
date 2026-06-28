@@ -167,7 +167,7 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
 
   try {
     const actorId = actor.replace("/", "~");
-    const payload = await runApifyActor(actorId, token, buildApifyMercadoLivreInput(query, intent));
+    const payload = await runApifyActorCached(actorId, token, query, intent);
     if (!payload) return [];
 
     const usable = payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0);
@@ -187,6 +187,31 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
     console.warn("[mercado-livre:apify:error]", error);
     return [];
   }
+}
+
+// In-memory cache of raw Apify datasets keyed by query, so repeated and refined
+// searches (e.g. the user sending "garrafa de agua" three times, or "me manda
+// outras") reuse one scrape instead of burning Apify quota on every message.
+// The cached dataset is the full page; client-side slicing still varies by offset.
+const apifyResultCache = new Map<string, { at: number; items: ApifyProduct[] }>();
+
+async function runApifyActorCached(actorId: string, token: string, query: string, intent: ProductIntent) {
+  const ttl = Number(process.env.APIFY_CACHE_TTL_MS ?? 600000);
+  const key = `${actorId}|${normalize(query)}`;
+  const hit = apifyResultCache.get(key);
+  if (hit && Number.isFinite(ttl) && ttl > 0 && Date.now() - hit.at < ttl) {
+    return hit.items;
+  }
+
+  const items = await runApifyActor(actorId, token, buildApifyMercadoLivreInput(query, intent));
+  if (items && items.length) {
+    apifyResultCache.set(key, { at: Date.now(), items });
+    if (apifyResultCache.size > 200) {
+      const oldest = [...apifyResultCache.entries()].sort((a, b) => a[1].at - b[1].at)[0]?.[0];
+      if (oldest) apifyResultCache.delete(oldest);
+    }
+  }
+  return items;
 }
 
 // Drive the Apify actor run explicitly: start the run, poll until it finishes,

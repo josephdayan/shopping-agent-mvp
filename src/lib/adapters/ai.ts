@@ -85,6 +85,9 @@ export const aiAdapter = {
         break;
       }
     }
+    // Seed the query from the user's own words first, so refinement enriches a real
+    // query instead of collapsing to the bare category ("tênis nike" -> "sapato").
+    intent.searchQuery = buildSearchQueryFromText(text, intent.category);
     Object.assign(intent, refineIntentFromText(text, intent));
     intent.searchQuery = intent.searchQuery ?? buildSearchQueryFromText(text, intent.category);
 

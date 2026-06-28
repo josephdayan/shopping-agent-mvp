@@ -231,7 +231,13 @@ function blockedTermsFor(query: string) {
     "peca",
     "peça",
     "pecas",
-    "peças"
+    "peças",
+    "bico",
+    "valvula",
+    "válvula",
+    "vedacao",
+    "vedação",
+    "refil"
   ];
   let blockedTerms = isAccessoryLikeRequest(query) ? [] : [...genericAccessoryBlocks];
 
