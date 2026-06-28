@@ -2,6 +2,21 @@ import type { Product } from "@prisma/client";
 
 export type PriceSensitivity = "cheap" | "balanced" | "premium";
 export type DeliverySensitivity = "fast" | "normal";
+export type PetSize = "small" | "medium" | "large";
+export type PetLifeStage = "puppy" | "adult" | "senior";
+export type SortPreference = "best" | "cheapest" | "fastest";
+
+export type ProductFilters = {
+  petType?: "dog" | "cat";
+  petSize?: PetSize;
+  lifeStage?: PetLifeStage;
+  color?: string;
+  size?: string;
+  packageSize?: "small" | "medium" | "large";
+  freeShipping?: boolean;
+  maxDeliveryDays?: number;
+  sort?: SortPreference;
+};
 
 export type ProductIntent = {
   category?: string;
@@ -9,6 +24,7 @@ export type ProductIntent = {
   urgency?: DeliverySensitivity;
   priceSensitivity?: PriceSensitivity;
   preferredBrand?: string;
+  productFilters?: ProductFilters;
   restrictions?: string[];
   excludedProductIds?: string[];
   excludedProductKeys?: string[];

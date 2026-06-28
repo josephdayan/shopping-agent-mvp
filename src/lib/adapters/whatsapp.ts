@@ -43,6 +43,7 @@ export type WhatsAppProductOption = {
 export type WhatsAppRichReply = {
   text: string;
   options?: WhatsAppProductOption[];
+  actions?: Array<{ id: string; title: string }>;
 };
 
 export const whatsappAdapter = {
@@ -306,7 +307,8 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
   const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
   const normalizedTo = normalizeTwilioWhatsAppAddress(to);
   const mediaMessages = [];
-  for (const option of (reply.options ?? []).slice(0, 3)) {
+  const options = (reply.options ?? []).slice(0, 3);
+  for (const [index, option] of options.entries()) {
     const body = buildTwilioProductCaption(option);
     const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
 
@@ -318,6 +320,7 @@ async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply)
         ...(mediaUrl ? { mediaUrl } : {})
       })
     );
+    await delayBetweenProductMessages(index, options.length);
   }
 
   const message = await client.messages.create({
@@ -355,7 +358,8 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
   const messages = [];
 
   if (reply.options?.length) {
-    for (const option of reply.options.slice(0, 3)) {
+    const options = reply.options.slice(0, 3);
+    for (const [index, option] of options.entries()) {
       const body = buildTwilioProductCaption(option);
       const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
 
@@ -367,15 +371,20 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
           ...(mediaUrl ? { mediaUrl } : {})
         })
       );
+      await delayBetweenProductMessages(index, options.length);
     }
 
   } else if (reply.text) {
+    const actionMessage = reply.actions?.length
+      ? await sendTwilioActionMessage(client, normalizedFrom, normalizedTo, reply)
+      : null;
     messages.push(
-      await client.messages.create({
-        from: normalizedFrom,
-        to: normalizedTo,
-        body: reply.text
-      })
+      actionMessage ??
+        (await client.messages.create({
+          from: normalizedFrom,
+          to: normalizedTo,
+          body: reply.text
+        }))
     );
   }
 
@@ -408,6 +417,35 @@ function buildTwilioProductCaption(option: WhatsAppProductOption) {
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
   return { "1": "Escolha uma opção:" };
+}
+
+async function sendTwilioActionMessage(
+  client: ReturnType<typeof twilio>,
+  from: string,
+  to: string,
+  reply: WhatsAppRichReply
+) {
+  const contentSid = process.env.TWILIO_CHECKOUT_ACTIONS_CONTENT_SID;
+  if (!contentSid) return null;
+
+  try {
+    return await client.messages.create({
+      from,
+      to,
+      contentSid,
+      contentVariables: JSON.stringify({ "1": reply.text })
+    });
+  } catch (error) {
+    console.warn("[whatsapp:twilio:checkout-actions:fallback]", error);
+    return null;
+  }
+}
+
+async function delayBetweenProductMessages(index: number, total: number) {
+  if (index >= total - 1) return;
+  const delayMs = Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 2000);
+  if (!Number.isFinite(delayMs) || delayMs <= 0) return;
+  await new Promise((resolve) => setTimeout(resolve, Math.min(delayMs, 4000)));
 }
 
 function isPublicMediaUrl(url: string) {

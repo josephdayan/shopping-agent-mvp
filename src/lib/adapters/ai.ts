@@ -1,5 +1,5 @@
 import type { ProductOption } from "@prisma/client";
-import type { ProductIntent, RankedProduct } from "@/lib/types";
+import type { ProductFilters, ProductIntent, RankedProduct } from "@/lib/types";
 
 const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["escova de dente", ["escova", "escova dental", "toothbrush"]],
@@ -15,6 +15,8 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["chocolate", ["chocolate", "bombom", "barra"]],
   ["livro", ["livro", "book"]],
   ["sapato", ["sapato", "sapatos", "tenis", "tênis", "sneaker", "calcado", "calçado"]],
+  ["racao cachorro", ["racao cachorro", "ração cachorro", "racao para cachorro", "ração para cachorro", "racao de cachorro", "ração de cachorro", "dog food"]],
+  ["racao gato", ["racao gato", "ração gato", "racao para gato", "ração para gato", "racao de gato", "ração de gato", "cat food"]],
   ["camisa social", ["camisa social", "social branca", "camisa branca social"]],
   ["camiseta", ["camiseta", "blusa", "t-shirt", "tshirt"]]
 ];
@@ -35,7 +37,16 @@ const BRANDS = [
   "Lacta",
   "Pampers",
   "Huggies",
-  "Johnson"
+  "Johnson",
+  "Gran Plus",
+  "Premier",
+  "Royal Canin",
+  "Pedigree",
+  "Golden",
+  "Special Dog",
+  "Dog Chow",
+  "Whiskas",
+  "Special Cat"
 ];
 const FORBIDDEN = ["arma", "cigarro", "remedio controlado", "medicamento controlado", "alcool"];
 
@@ -71,14 +82,20 @@ export const aiAdapter = {
 
     if (/(barat|menor preco|mais em conta|econom)/.test(normalized)) {
       intent.priceSensitivity = "cheap";
+      intent.productFilters = mergeProductFilters(intent.productFilters, { sort: "cheapest" });
     } else if (/(melhor|premium|qualidade|avaliad)/.test(normalized)) {
       intent.priceSensitivity = "premium";
+      intent.productFilters = mergeProductFilters(intent.productFilters, { sort: "best" });
     } else {
       intent.priceSensitivity = "balanced";
     }
 
     if (/(hoje|agora|rapido|rápido|urgente|entrega rapida)/.test(normalized)) {
       intent.urgency = "fast";
+      intent.productFilters = mergeProductFilters(intent.productFilters, {
+        sort: "fastest",
+        maxDeliveryDays: normalized.includes("hoje") || normalized.includes("agora") ? 0 : 1
+      });
     } else {
       intent.urgency = "normal";
     }
@@ -143,7 +160,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve exatamente o produto pedido: não substitua por outro item, não use histórico e não invente categoria. Se o usuário escrever em inglês, traduza para um termo comum no Mercado Livre Brasil apenas quando isso melhorar a busca. Exemplos: 'baby wipes' vira category 'lenco umedecido' e searchQuery 'lenço umedecido bebê'; 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'. Preserve títulos de livros, modelos, marcas, cores e estilos em searchQuery. Responda apenas JSON válido."
+              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve exatamente o produto pedido: não substitua por outro item, não use histórico e não invente categoria. Se o usuário escrever em inglês, traduza para um termo comum no Mercado Livre Brasil apenas quando isso melhorar a busca. Exemplos: 'baby wipes' vira category 'lenco umedecido' e searchQuery 'lenço umedecido bebê'; 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'; 'ração para meu cachorro pequeno' vira category 'racao cachorro', searchQuery 'ração cachorro porte pequeno' e productFilters.petSize 'small'. Preserve títulos de livros, modelos, marcas, cores, estilos, porte, idade do pet, frete e prazo. Se o usuário pedir 'mais barato', coloque priceSensitivity 'cheap' e productFilters.sort 'cheapest'. Se pedir marca, coloque preferredBrand. Responda apenas JSON válido."
           },
           {
             role: "user",
@@ -164,6 +181,32 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
                 urgency: { type: ["string", "null"], enum: ["fast", "normal", null] },
                 priceSensitivity: { type: ["string", "null"], enum: ["cheap", "balanced", "premium", null] },
                 preferredBrand: { type: ["string", "null"] },
+                productFilters: {
+                  type: "object",
+                  additionalProperties: false,
+                  properties: {
+                    petType: { type: ["string", "null"], enum: ["dog", "cat", null] },
+                    petSize: { type: ["string", "null"], enum: ["small", "medium", "large", null] },
+                    lifeStage: { type: ["string", "null"], enum: ["puppy", "adult", "senior", null] },
+                    color: { type: ["string", "null"] },
+                    size: { type: ["string", "null"] },
+                    packageSize: { type: ["string", "null"], enum: ["small", "medium", "large", null] },
+                    freeShipping: { type: ["boolean", "null"] },
+                    maxDeliveryDays: { type: ["number", "null"] },
+                    sort: { type: ["string", "null"], enum: ["best", "cheapest", "fastest", null] }
+                  },
+                  required: [
+                    "petType",
+                    "petSize",
+                    "lifeStage",
+                    "color",
+                    "size",
+                    "packageSize",
+                    "freeShipping",
+                    "maxDeliveryDays",
+                    "sort"
+                  ]
+                },
                 restrictions: { type: "array", items: { type: "string" } },
                 wantsRepeat: { type: "boolean" },
                 unsupported: { type: "boolean" },
@@ -175,6 +218,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
                 "urgency",
                 "priceSensitivity",
                 "preferredBrand",
+                "productFilters",
                 "restrictions",
                 "wantsRepeat",
                 "unsupported",
@@ -201,6 +245,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
       category,
       searchQuery,
       preferredBrand: parsed.preferredBrand ?? undefined,
+      productFilters: cleanProductFilters(parsed.productFilters),
       urgency: parsed.urgency ?? "normal",
       priceSensitivity: parsed.priceSensitivity ?? "balanced",
       restrictions: parsed.restrictions ?? []
@@ -213,22 +258,153 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
 
 function refineIntentFromText(text: string, intent: ProductIntent): ProductIntent {
   const normalized = normalize(text);
-  const refined: ProductIntent = { ...intent };
+  const refined: ProductIntent = {
+    ...intent,
+    productFilters: cleanProductFilters(intent.productFilters)
+  };
 
   if (/\b(baby wipes|wipes|lenco umedecido|lenço umedecido|toalha umedecida|toalhas umedecidas)\b/.test(normalized)) {
     refined.category = "lenco umedecido";
     refined.searchQuery = /\b(baby|bebe|bebê)\b/.test(normalized) ? "lenço umedecido bebê" : "lenço umedecido";
+  } else if (/\b(racao|ração|dog food|comida de cachorro|cachorro|cao|cão)\b/.test(normalized)) {
+    if (/\b(gato|cat|felino)\b/.test(normalized) && !/\b(cachorro|cao|cão|dog)\b/.test(normalized)) {
+      refined.category = "racao gato";
+      refined.searchQuery = "ração gato";
+      refined.productFilters = mergeProductFilters(refined.productFilters, { petType: "cat" });
+    } else if (/\b(racao|ração|dog food|comida de cachorro)\b/.test(normalized)) {
+      refined.category = "racao cachorro";
+      refined.searchQuery = "ração cachorro";
+      refined.productFilters = mergeProductFilters(refined.productFilters, { petType: "dog" });
+    }
   } else if (/\b(camisa social|social branca|camisa branca social)\b/.test(normalized)) {
     refined.category = "camisa social";
   } else if (/\b(camiseta|tshirt|t shirt|blusa)\b/.test(normalized)) {
     refined.category = "camiseta";
   }
 
+  const brand = BRANDS.find((candidate) => normalized.includes(normalize(candidate)));
+  if (brand) refined.preferredBrand = brand;
+
+  const mentionsSmallSize =
+    /\b(pequeno|pequena|porte pequeno|mini|small|raca pequena|raça pequena|racas pequenas|raças pequenas)\b/.test(normalized) ||
+    (/\b(menor|menores)\b/.test(normalized) && !/\bmenor\s+(preco|preço)\b/.test(normalized));
+  if (mentionsSmallSize) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { petSize: "small" });
+  } else if (/\b(grande|porte grande|large|raca grande|raça grande|racas grandes|raças grandes)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { petSize: "large" });
+  } else if (/\b(medio|media|médio|média|porte medio|porte médio|medium)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { petSize: "medium" });
+  }
+
+  if (/\b(filhote|puppy|junior)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { lifeStage: "puppy" });
+  } else if (/\b(senior|idoso|idosa|velho|velha)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { lifeStage: "senior" });
+  } else if (/\b(adulto|adult)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { lifeStage: "adult" });
+  }
+
+  const color = extractColor(normalized);
+  if (color) refined.productFilters = mergeProductFilters(refined.productFilters, { color });
+
+  const size = extractSize(normalized);
+  if (size) refined.productFilters = mergeProductFilters(refined.productFilters, { size });
+
+  if (/\b(frete gratis|frete grátis|envio gratis|envio grátis|sem frete)\b/.test(normalized)) {
+    refined.productFilters = mergeProductFilters(refined.productFilters, { freeShipping: true });
+  }
+
+  if (/\b(hoje|agora|mesmo dia)\b/.test(normalized)) {
+    refined.urgency = "fast";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "fastest", maxDeliveryDays: 0 });
+  } else if (/\b(amanha|amanhã|ate amanha|até amanhã)\b/.test(normalized)) {
+    refined.urgency = "fast";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "fastest", maxDeliveryDays: 1 });
+  } else if (/\b(rapido|rápido|mais rapida|mais rápida|prazo|entrega)\b/.test(normalized)) {
+    refined.urgency = "fast";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "fastest" });
+  }
+
+  if (/(barat|menor preco|menor preço|mais em conta|econom)/.test(normalized)) {
+    refined.priceSensitivity = "cheap";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "cheapest" });
+  } else if (/(melhor|premium|qualidade|avaliad|mais vendido|best seller|bestseller)/.test(normalized)) {
+    refined.priceSensitivity = "premium";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "best" });
+  }
+
   if (/\b(camisa|camiseta|blusa|tshirt|t shirt)\b/.test(normalized) && !refined.searchQuery) {
     refined.searchQuery = buildSearchQueryFromText(text, refined.category);
   }
 
+  refined.searchQuery = enrichSearchQueryWithFilters(refined);
+
   return refined;
+}
+
+function cleanProductFilters(filters?: ProductFilters | null): ProductFilters | undefined {
+  if (!filters) return undefined;
+  const cleaned: ProductFilters = {};
+  for (const [key, value] of Object.entries(filters) as Array<[keyof ProductFilters, ProductFilters[keyof ProductFilters]]>) {
+    if (value === null || value === undefined || value === "") continue;
+    (cleaned as Record<string, unknown>)[key] = value;
+  }
+  return Object.keys(cleaned).length ? cleaned : undefined;
+}
+
+function mergeProductFilters(current: ProductFilters | undefined, next: ProductFilters): ProductFilters {
+  return cleanProductFilters({ ...(current ?? {}), ...next }) ?? {};
+}
+
+function enrichSearchQueryWithFilters(intent: ProductIntent) {
+  const parts = new Set(
+    normalize([intent.preferredBrand, intent.searchQuery ?? intent.category].filter(Boolean).join(" "))
+      .split(/\s+/)
+      .filter(Boolean)
+  );
+  const filters = intent.productFilters;
+
+  if (intent.preferredBrand) normalize(intent.preferredBrand).split(/\s+/).forEach((part) => parts.add(part));
+  if (filters?.petSize === "small") ["porte", "pequeno"].forEach((part) => parts.add(part));
+  if (filters?.petSize === "medium") ["porte", "medio"].forEach((part) => parts.add(part));
+  if (filters?.petSize === "large") ["porte", "grande"].forEach((part) => parts.add(part));
+  if (filters?.lifeStage === "puppy") parts.add("filhote");
+  if (filters?.lifeStage === "adult") parts.add("adulto");
+  if (filters?.lifeStage === "senior") parts.add("senior");
+  if (filters?.color) parts.add(normalize(filters.color));
+  if (filters?.size) parts.add(normalize(filters.size));
+
+  const query = Array.from(parts).join(" ").trim();
+  return query || intent.searchQuery;
+}
+
+function extractColor(normalized: string) {
+  const colors = [
+    "preto",
+    "preta",
+    "branco",
+    "branca",
+    "azul",
+    "vermelho",
+    "vermelha",
+    "verde",
+    "amarelo",
+    "amarela",
+    "rosa",
+    "roxo",
+    "roxa",
+    "cinza",
+    "bege",
+    "marrom"
+  ];
+  return colors.find((color) => new RegExp(`\\b${color}\\b`).test(normalized));
+}
+
+function extractSize(normalized: string) {
+  const letterSize = normalized.match(/\b(pp|p|m|g|gg|xg|xgg|xp|xs|s|xl|xxl)\b/);
+  if (letterSize) return letterSize[1].toUpperCase();
+  const numericSize = normalized.match(/\b(tam|tamanho|numero|número|num|n)\s*(\d{2})\b/);
+  return numericSize?.[2];
 }
 
 async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedProduct[]) {
@@ -247,7 +423,7 @@ async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedP
           {
             role: "system",
             content:
-              "Você é curador de resultados de marketplace para um concierge de compras. Selecione somente produtos que sejam o produto principal pedido, não acessórios, enfeites, peças, suportes, capas, chaveiros, adesivos, aromatizadores, miniaturas ou itens apenas relacionados. Prefira resultados populares/comerciais normais, não itens estranhos. Preserve a ordem de relevância quando houver empate. Responda apenas JSON válido."
+              "Você é curador de resultados de marketplace para um concierge de compras. Selecione somente produtos que sejam o produto principal pedido e obedeçam aos filtros. Não selecione acessórios, enfeites, peças, suportes, capas, chaveiros, adesivos, aromatizadores, miniaturas ou itens apenas relacionados. Se o pedido tiver marca, porte, cor, tamanho, idade do pet, frete ou prazo, descarte resultados conflitantes. Para ração, descarte petiscos, brinquedos e itens para porte errado. Prefira resultados populares/comerciais normais, não itens estranhos. Preserve a ordem de relevância quando houver empate. Responda apenas JSON válido."
           },
           {
             role: "user",
@@ -255,7 +431,8 @@ async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedP
               pedido: {
                 categoria: intent.category,
                 busca: intent.searchQuery,
-                marca: intent.preferredBrand
+                marca: intent.preferredBrand,
+                filtros: intent.productFilters
               },
               candidatos: products.map((product) => ({
                 id: product.id,
@@ -331,8 +508,25 @@ function looksLikePrimaryProduct(intent: ProductIntent, title: string) {
 
   if (accessoryWords.some((word) => normalizedTitle.includes(word) && !query.includes(word))) return false;
 
+  if (intent.preferredBrand && !normalizedTitle.includes(normalize(intent.preferredBrand))) {
+    return false;
+  }
+
   if (/\b(lenco umedecido|baby wipes|wipes|toalha umedecida)\b/.test(query)) {
     return /\b(lenco|toalha|toalhas|umedecido|umedecida|wipes|baby|bebe)\b/.test(normalizedTitle);
+  }
+
+  if (/\b(racao cachorro|racao para cachorro|dog food|cachorro|cao)\b/.test(query)) {
+    if (!/\b(racao|ração|alimento|comida|dog food|cao|caes|cachorro|canino)\b/.test(normalizedTitle)) return false;
+    if (/\b(petisco|bifinho|brinquedo|coleira|tapete|areia|comedouro|bebedouro)\b/.test(normalizedTitle)) return false;
+    if (intent.productFilters?.petSize === "small" && /\b(porte grande|racas grandes|raças grandes|grande porte|large breed|gigante)\b/.test(normalizedTitle)) return false;
+    if (intent.productFilters?.petSize === "large" && /\b(porte pequeno|racas pequenas|raças pequenas|pequeno porte|small breed|mini)\b/.test(normalizedTitle)) return false;
+    return true;
+  }
+
+  if (/\b(racao gato|racao para gato|cat food|gato|felino)\b/.test(query)) {
+    if (!/\b(racao|ração|alimento|comida|cat food|gato|felino)\b/.test(normalizedTitle)) return false;
+    return !/\b(petisco|brinquedo|coleira|tapete|areia|comedouro|bebedouro)\b/.test(normalizedTitle);
   }
 
   if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {

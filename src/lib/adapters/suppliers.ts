@@ -374,12 +374,14 @@ async function searchMercadoLivreViaUnwrangle(query: string, intent: ProductInte
 
 async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: ProductIntent, query: string) {
   const title = apifyTitle(item);
-  const productUrl = absoluteMercadoLivreUrl(apifyUrl(item) ?? `https://lista.mercadolivre.com.br/${slugify(query)}`);
-  const externalId = `mlb-apify-${hashProductIdentity(productUrl || title)}`;
+  const rawProductUrl = apifyUrl(item);
+  const rawImageUrl = apifyImageUrl(item);
+  const productUrl = absoluteMercadoLivreUrl(rawProductUrl || `https://lista.mercadolivre.com.br/${slugify(title || query)}`);
+  const externalId = `mlb-apify-${hashProductIdentity(rawProductUrl || `${title}|${rawImageUrl}|${apifyPrice(item)}`)}`;
   const shippingPrice = apifyShippingPrice(item) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
   const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
   const imageUrl =
-    normalizeImageUrl(apifyImageUrl(item)) ??
+    normalizeImageUrl(rawImageUrl) ??
     "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
   const brand = inferBrand(title, intent.preferredBrand);
   const rating = apifyRating(item) ?? 4.2;
@@ -596,7 +598,7 @@ function isSpecificSearch(intent: ProductIntent, query: string) {
 }
 
 function buildSearchQuery(intent: ProductIntent) {
-  const explicitQuery = intent.searchQuery?.trim();
+  const explicitQuery = enrichSupplierSearchQuery(intent.searchQuery?.trim() ?? "", intent);
   if (explicitQuery) {
     const normalizedQuery = normalize(explicitQuery);
     const normalizedBrand = intent.preferredBrand ? normalize(intent.preferredBrand) : "";
@@ -605,13 +607,62 @@ function buildSearchQuery(intent: ProductIntent) {
     }
     return explicitQuery;
   }
-  return [intent.preferredBrand, intent.category].filter(Boolean).join(" ").trim();
+  return enrichSupplierSearchQuery([intent.preferredBrand, intent.category].filter(Boolean).join(" "), intent);
 }
 
 function inferBrand(title: string, preferredBrand?: string) {
   if (preferredBrand && title.toLowerCase().includes(preferredBrand.toLowerCase())) return preferredBrand;
-  const knownBrands = ["Colgate", "Oral-B", "Curaprox", "Sorriso", "Pantene", "Seda", "Kleenex", "Nivea", "Rexona", "Anker", "Duracell", "Crystal", "Lacta", "Pampers", "Huggies", "Johnson"];
+  const knownBrands = [
+    "Colgate",
+    "Oral-B",
+    "Curaprox",
+    "Sorriso",
+    "Pantene",
+    "Seda",
+    "Kleenex",
+    "Nivea",
+    "Rexona",
+    "Anker",
+    "Duracell",
+    "Crystal",
+    "Lacta",
+    "Pampers",
+    "Huggies",
+    "Johnson",
+    "Gran Plus",
+    "Premier",
+    "Royal Canin",
+    "Pedigree",
+    "Golden",
+    "Special Dog",
+    "Dog Chow",
+    "Whiskas",
+    "Special Cat"
+  ];
   return knownBrands.find((brand) => title.toLowerCase().includes(brand.toLowerCase())) ?? "Mercado Livre";
+}
+
+function enrichSupplierSearchQuery(query: string, intent: ProductIntent) {
+  const parts = new Set(normalize(query).split(/\s+/).filter(Boolean));
+  const filters = intent.productFilters;
+
+  if (intent.preferredBrand) normalize(intent.preferredBrand).split(/\s+/).forEach((part) => parts.add(part));
+  if (filters?.petType === "dog" || normalize(intent.category ?? "").includes("cachorro")) {
+    parts.add("cachorro");
+  }
+  if (filters?.petType === "cat" || normalize(intent.category ?? "").includes("gato")) {
+    parts.add("gato");
+  }
+  if (filters?.petSize === "small") ["porte", "pequeno"].forEach((part) => parts.add(part));
+  if (filters?.petSize === "medium") ["porte", "medio"].forEach((part) => parts.add(part));
+  if (filters?.petSize === "large") ["porte", "grande"].forEach((part) => parts.add(part));
+  if (filters?.lifeStage === "puppy") parts.add("filhote");
+  if (filters?.lifeStage === "adult") parts.add("adulto");
+  if (filters?.lifeStage === "senior") parts.add("senior");
+  if (filters?.color) parts.add(normalize(filters.color));
+  if (filters?.size) parts.add(normalize(filters.size));
+
+  return Array.from(parts).join(" ").trim();
 }
 
 function attributeValue(item: MercadoLivreCatalogProduct, id: string) {
@@ -633,7 +684,9 @@ function estimatedPriceForCategory(category?: string) {
     chocolate: 8.9,
     livro: 29.9,
     camiseta: 49.9,
-    "camisa social": 79.9
+    "camisa social": 79.9,
+    "racao cachorro": 89.9,
+    "racao gato": 79.9
   };
   return prices[category ?? ""] ?? 29.9;
 }
@@ -799,7 +852,7 @@ function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) 
     .filter(({ score, unwantedMatches }) => {
       if (unwantedMatches.length) return false;
       if (tokens.length <= 1) return score >= 4;
-      return score >= tokens.length * 4;
+      return score >= tokens.length * 3.5;
     })
     .sort((a, b) => b.score - a.score)
     .map(({ item }) => item);
@@ -816,6 +869,12 @@ function queryExpansionTerms(query: string) {
 
   if (/\b(lenco umedecido|baby wipes|wipes|toalha umedecida)\b/.test(query)) {
     ["lenco", "lenço", "toalha", "toalhas", "umedecido", "umedecida", "bebe", "bebê", "baby", "wipes"].forEach((term) => terms.add(normalize(term)));
+  }
+
+  if (/\b(racao|ração|dog food|cat food|cachorro|cao|gato|felino)\b/.test(query)) {
+    ["racao", "ração", "alimento", "cachorro", "cao", "cão", "caes", "cães", "canino", "gato", "felino", "porte", "pequeno", "medio", "grande", "filhote", "adulto", "senior"].forEach((term) =>
+      terms.add(normalize(term))
+    );
   }
 
   if (/\b(violao|guitarra|baixo|ukulele)\b/.test(query)) {
@@ -852,6 +911,10 @@ function unwantedModifierTerms(query: string) {
     "forma",
     "formas",
     "palminha",
+    "horn",
+    "shoehorn",
+    "shoe horn",
+    "metal removivel",
     "cadargo",
     "cadarco",
     "cadarço",
@@ -859,6 +922,12 @@ function unwantedModifierTerms(query: string) {
     "case",
     "suporte",
     "apoio",
+    "corda",
+    "cordas",
+    "peca",
+    "peça",
+    "pecas",
+    "peças",
     "aroma",
     "aromas",
     "aromatizador",
@@ -868,7 +937,16 @@ function unwantedModifierTerms(query: string) {
     "perfume",
     "purificador",
     "lavanda",
-    "pinho"
+    "pinho",
+    "petisco",
+    "bifinho",
+    "tapete",
+    "comedouro",
+    "bebedouro",
+    "coleira",
+    "guia",
+    "areia",
+    "suplemento"
   ];
 
   return candidates.map(normalize).filter((term) => !query.includes(term));
@@ -893,7 +971,17 @@ function significantTokens(query: string) {
     "das",
     "dos",
     "the",
-    "and"
+    "and",
+    "porte",
+    "pequeno",
+    "pequena",
+    "grande",
+    "medio",
+    "media",
+    "mini",
+    "adulto",
+    "filhote",
+    "senior"
   ]);
 
   const tokens = normalize(query)
@@ -969,7 +1057,7 @@ function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
 function batchCandidateSize(intent: ProductIntent) {
   const configured = Number(process.env.ATLAS_SEARCH_CANDIDATE_SIZE);
   if (Number.isFinite(configured) && configured > 0) return Math.min(Math.floor(configured), 15);
-  return Math.min(Math.max(batchSize(intent) * 4, 6), 12);
+  return Math.min(Math.max(batchSize(intent) * 2, 6), 8);
 }
 
 function apifyTitle(item: ApifyProduct) {
@@ -1024,12 +1112,17 @@ function apifyImageUrl(item: ApifyProduct) {
     "thumbnail",
     "thumbnailUrl",
     "picture",
-    "pictureUrl",
-    "img",
-    "foto",
-    "imagemLink",
-    "linkImagem"
-  ]);
+      "pictureUrl",
+      "img",
+      "foto",
+      "imagem",
+      "link_da_imagem",
+      "linkDaImagem",
+      "imagemLink",
+      "linkImagem",
+      "imageLink",
+      "src"
+    ]);
 
   if (Array.isArray(value)) return stringFromUnknown(value[0]);
   return stringFromUnknown(value);

@@ -72,7 +72,7 @@ export async function POST(request: Request) {
   let outbound;
 
   if (inbound.provider === "twilio") {
-    if (sentProcessingAck) {
+    if (sentProcessingAck || richReply.options?.length || richReply.actions?.length) {
       try {
         await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
       } catch (error) {
@@ -193,11 +193,11 @@ function shouldSendProcessingAck(text: string) {
   if (!normalized) return false;
   if (/^(1|2|3)\b/.test(normalized)) return false;
   if (/\b(primeira|primeiro|segunda|segundo|terceira|terceiro|essa|esse|esta|este)\b/.test(normalized)) return false;
-  if (/\b(status|rastreio|pedido|paguei|pago|novo|cancelar|ajuda|help|mais barata|mais rapido|mais rapida)\b/.test(normalized)) {
+  if (/\b(status|rastreio|paguei|pago|novo|cancelar|ajuda|help|confirmar pedido|alterar endereco|alterar pagamento|forma de pagamento)\b/.test(normalized)) {
     return false;
   }
 
-  return /\b(quero|queria|preciso|necessito|procuro|buscar|busca|comprar|compra)\b/.test(normalized);
+  return /\b(quero|queria|preciso|necessito|procuro|buscar|busca|comprar|compra|mais barato|mais barata|menor preco|mais rapido|mais rapida|frete gratis|sem frete|porte pequeno|porte grande|pequeno|pequena|menor|menores|grande|medio|media|filhote|adulto|senior|huggies|pampers|royal canin|gran plus|pedigree|golden)\b/.test(normalized);
 }
 
 function normalizeText(input: string) {
@@ -215,5 +215,5 @@ function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): Wh
     };
   }
 
-  return { text: response.reply };
+  return { text: response.reply, actions: response.actions };
 }

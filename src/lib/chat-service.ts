@@ -4,7 +4,7 @@ import { fulfillmentAdapter } from "@/lib/adapters/fulfillment";
 import { messagingAdapter } from "@/lib/adapters/messaging";
 import { paymentAdapter } from "@/lib/adapters/payment";
 import { productSearchAdapter } from "@/lib/adapters/products";
-import type { ConversationContext, ProductIntent } from "@/lib/types";
+import type { ConversationContext, ProductFilters, ProductIntent } from "@/lib/types";
 
 const SERVICE_FEE = 2.99;
 const DEMO_PHONE = "+5511999990000";
@@ -109,13 +109,17 @@ export async function handleUserMessage(conversationId: string, text: string) {
 
   await messagingAdapter.receiveMessage(conversationId, text);
   const normalized = normalize(text);
+  const step = conversation.currentStep;
+  const checkoutAction =
+    step === "awaiting_confirmation" &&
+    /\b(confirmar pedido|alterar endereco|alterar endereço|alterar pagamento|forma de pagamento|cancelar)\b/.test(normalized);
 
   if (/\b(ajuda|help|menu|comandos)\b/.test(normalized)) {
     await messagingAdapter.sendMessage(conversationId, whatsappHelpText());
     return getConversation(conversationId);
   }
 
-  if (/\b(status|rastreio|pedido)\b/.test(normalized)) {
+  if (!checkoutAction && /\b(status|rastreio|pedido)\b/.test(normalized)) {
     await sendLatestOrderStatus(conversationId, conversation.userId);
     return getConversation(conversationId);
   }
@@ -139,9 +143,9 @@ export async function handleUserMessage(conversationId: string, text: string) {
     return getConversation(conversationId);
   }
 
-  const step = conversation.currentStep;
   if (step === "awaiting_selection") return selectProduct(conversationId, text);
   if (step === "awaiting_address") return captureAddress(conversationId, text);
+  if (step === "awaiting_payment_method") return capturePaymentMethod(conversationId, text);
   if (step === "awaiting_confirmation") return confirmOrder(conversationId, text);
   if (step === "awaiting_payment") {
     if (/\b(paguei|pago|pagou|aprovar|aprovado|simular pagamento)\b/.test(normalized)) {
@@ -167,12 +171,14 @@ export async function handleInboundMessage(input: UserInput & { text: string }) 
 export function toChannelResponse(conversation: Awaited<ReturnType<typeof getConversation>>) {
   if (!conversation) throw new Error("Conversation not found");
   const lastAssistantMessage = [...conversation.messages].reverse().find((message) => message.sender === "assistant");
+  const metadata = readMessageMetadata(lastAssistantMessage?.metadata);
   return {
     conversationId: conversation.id,
     userId: conversation.userId,
     status: conversation.status,
     currentStep: conversation.currentStep,
     reply: lastAssistantMessage?.text ?? "",
+    actions: metadata.checkoutActions ?? [],
     products: conversation.currentStep === "awaiting_selection"
       ? conversation.options.map((option) => ({
           rank: option.rank,
@@ -258,8 +264,10 @@ async function startProductSearch(conversationId: string, text: string) {
 async function selectProduct(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
-  if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
   if (isRejectionOrMoreOptions(text)) return searchMoreOptions(conversationId);
+  if (looksLikeStandaloneProductRequest(text)) return startProductSearch(conversationId, text);
+  if (looksLikeSearchRefinement(text)) return refineCurrentSearch(conversationId, text);
+  if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
 
   const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
   if (!selectedProductId) {
@@ -276,6 +284,7 @@ async function selectProduct(conversationId: string, text: string) {
   const context = readContext(conversation.context);
   context.selectedProductId = product.id;
   context.selectedProductExternalId = product.externalId;
+  context.paymentMethod = context.paymentMethod ?? "pix";
 
   const hasAddress = Boolean(conversation.user.defaultAddress);
   await prisma.conversation.update({
@@ -293,7 +302,62 @@ async function selectProduct(conversationId: string, text: string) {
 
   context.deliveryAddress = conversation.user.defaultAddress ?? undefined;
   await prisma.conversation.update({ where: { id: conversationId }, data: { context: JSON.stringify(context) } });
-  await sendCheckoutSummary(conversationId, product.id, context.deliveryAddress);
+  await sendCheckoutSummary(conversationId, product.id, context.deliveryAddress, context.paymentMethod);
+  return getConversation(conversationId);
+}
+
+async function refineCurrentSearch(conversationId: string, text: string) {
+  const conversation = await getConversation(conversationId);
+  if (!conversation) throw new Error("Conversation not found");
+  const context = readContext(conversation.context);
+  const refinement = await aiAdapter.parseUserIntent(text);
+  const intent = mergeIntentRefinement(context.intent ?? readIntent(conversation.intent), refinement);
+
+  if (!intent.category && !intent.searchQuery) {
+    await messagingAdapter.sendMessage(conversationId, "Me diga qual produto você quer ajustar e eu procuro de novo.");
+    return getConversation(conversationId);
+  }
+
+  const options = await productSearchAdapter.searchProducts({
+    ...intent,
+    excludedProductIds: [],
+    excludedProductKeys: [],
+    searchBatchSize: SEARCH_BATCH_SIZE,
+    searchOffset: 0
+  }, conversation.userId);
+
+  if (!options.length) {
+    await messagingAdapter.sendMessage(conversationId, "Não encontrei uma opção boa com esse filtro. Pode tentar outra marca, preço ou prazo?");
+    return getConversation(conversationId);
+  }
+
+  await prisma.productOption.deleteMany({ where: { conversationId } });
+  await prisma.productOption.createMany({
+    data: options.map((option) => ({
+      conversationId,
+      productId: option.id,
+      rank: option.rank,
+      reason: option.reason
+    }))
+  });
+
+  const updatedContext: ConversationContext = {
+    ...context,
+    intent: { ...intent, searchBatchSize: SEARCH_BATCH_SIZE, searchOffset: 0 },
+    rejectedProductIds: [],
+    rejectedProductKeys: [],
+    searchOffset: 0
+  };
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: {
+      currentStep: "awaiting_selection",
+      intent: JSON.stringify(updatedContext.intent),
+      context: JSON.stringify(updatedContext)
+    }
+  });
+  await messagingAdapter.sendMessage(conversationId, "Atualizei a busca com esse filtro.", { options });
   return getConversation(conversationId);
 }
 
@@ -384,7 +448,33 @@ async function captureAddress(conversationId: string, text: string) {
     where: { id: conversationId },
     data: { currentStep: "awaiting_confirmation", context: JSON.stringify(context) }
   });
-  await sendCheckoutSummary(conversationId, context.selectedProductId!, context.deliveryAddress);
+  context.paymentMethod = context.paymentMethod ?? "pix";
+  await prisma.conversation.update({ where: { id: conversationId }, data: { context: JSON.stringify(context) } });
+  await sendCheckoutSummary(conversationId, context.selectedProductId!, context.deliveryAddress, context.paymentMethod);
+  return getConversation(conversationId);
+}
+
+async function capturePaymentMethod(conversationId: string, text: string) {
+  const conversation = await getConversation(conversationId);
+  if (!conversation) throw new Error("Conversation not found");
+  const context = readContext(conversation.context);
+  const paymentMethod = paymentMethodFromText(text);
+  if (!paymentMethod) {
+    await messagingAdapter.sendMessage(conversationId, "Qual forma de pagamento você prefere: PIX ou cartão?");
+    return getConversation(conversationId);
+  }
+
+  context.paymentMethod = paymentMethod;
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { currentStep: "awaiting_confirmation", context: JSON.stringify(context) }
+  });
+  await sendCheckoutSummary(
+    conversationId,
+    context.selectedProductId!,
+    context.deliveryAddress ?? conversation.user.defaultAddress ?? undefined,
+    context.paymentMethod
+  );
   return getConversation(conversationId);
 }
 
@@ -392,15 +482,34 @@ async function confirmOrder(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
   const normalized = normalize(text);
-  if (!/(sim|confirma|confirmo|pode|ok|fechar|pix|cartao|cartão|link)/.test(normalized)) {
-    await messagingAdapter.sendMessage(conversationId, "Pedido não confirmado. Posso alterar produto, endereço ou cancelar.");
+  const context = readContext(conversation.context);
+
+  if (/^(2|alterar endereco|alterar endereço|endereco|endereço|mudar endereco|mudar endereço)$/.test(normalized)) {
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { currentStep: "awaiting_address", context: JSON.stringify(context) }
+    });
+    await messagingAdapter.sendMessage(conversationId, "Claro. Envie o novo endereço com rua, número, bairro e cidade.");
     return getConversation(conversationId);
   }
 
-  const context = readContext(conversation.context);
+  if (/^(3|alterar forma de pagamento|alterar pagamento|forma de pagamento|pagamento|mudar pagamento)$/.test(normalized)) {
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { currentStep: "awaiting_payment_method", context: JSON.stringify(context) }
+    });
+    await messagingAdapter.sendMessage(conversationId, "Qual forma de pagamento você prefere: PIX ou cartão?");
+    return getConversation(conversationId);
+  }
+
+  if (!/(^1$|sim|confirma|confirmo|confirmar pedido|pode|ok|fechar|pix|cartao|cartão|link)/.test(normalized)) {
+    await messagingAdapter.sendMessage(conversationId, "Pedido não confirmado. Posso alterar endereço, forma de pagamento ou cancelar.");
+    return getConversation(conversationId);
+  }
+
   const product = await productSearchAdapter.getProductById(context.selectedProductId!);
   if (!product) throw new Error("Product not found");
-  const paymentMethod = normalized.includes("cartao") || normalized.includes("cartão") ? "card" : normalized.includes("link") ? "link" : "pix";
+  const paymentMethod = paymentMethodFromText(text) ?? context.paymentMethod ?? "pix";
   const subtotal = product.price;
   const shipping = product.shippingPrice;
   const total = subtotal + shipping + SERVICE_FEE;
@@ -463,24 +572,117 @@ export async function approveConversationPayment(conversationId: string) {
   return getConversation(conversationId);
 }
 
-async function sendCheckoutSummary(conversationId: string, productId: string, address?: string) {
+async function sendCheckoutSummary(
+  conversationId: string,
+  productId: string,
+  address?: string,
+  paymentMethod: ConversationContext["paymentMethod"] = "pix"
+) {
   const product = await productSearchAdapter.getProductById(productId);
   if (!product) throw new Error("Product not found");
   const total = product.price + product.shippingPrice + SERVICE_FEE;
   await messagingAdapter.sendMessage(
     conversationId,
     [
-      aiAdapter.generateAssistantResponse("checkout"),
-      `${product.title}`,
-      `Fonte: ${sourceLabel(product.source)} | Fulfillment: ${fulfillmentLabel(product.fulfillmentMode)}`,
-      `Produto: R$ ${product.price.toFixed(2)} | Frete: R$ ${product.shippingPrice.toFixed(2)} | Taxa: R$ ${SERVICE_FEE.toFixed(2)}`,
-      `Total: R$ ${total.toFixed(2)}`,
-      `Entrega: ${product.deliveryEstimate}`,
-      `Endereço: ${address ?? "a confirmar"}`,
-      "Forma padrão: PIX mockado"
+      "*Resumo do pedido*",
+      "",
+      `🛍️ *Nome do produto*: ${product.title}`,
+      `💵 *Preço*: ${formatCurrency(product.price)}`,
+      `🚚 *Frete*: ${formatCurrency(product.shippingPrice)}`,
+      `🧾 *Total*: ${formatCurrency(total)}`,
+      `📍 *Endereço*: ${address ?? "a confirmar"}`,
+      `💳 *Forma de Pagamento*: ${paymentMethodLabel(paymentMethod)}`,
+      "",
+      "Confirmar Pedido",
+      "Alterar Endereço",
+      "Alterar Forma de Pagamento",
+      "Cancelar"
     ].join("\n"),
-    { checkout: { productId, total, address } }
+    {
+      checkout: { productId, total, address, paymentMethod },
+      checkoutActions: [
+        { id: "confirmar_pedido", title: "Confirmar Pedido" },
+        { id: "alterar_endereco", title: "Alterar Endereço" },
+        { id: "alterar_pagamento", title: "Alterar Forma de Pagamento" },
+        { id: "cancelar", title: "Cancelar" }
+      ]
+    }
   );
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  }).format(value);
+}
+
+function paymentMethodFromText(text: string): ConversationContext["paymentMethod"] | null {
+  const normalized = normalize(text);
+  if (/\b(cartao|cartão|credito|crédito|debito|débito)\b/.test(normalized)) return "card";
+  if (/\b(link)\b/.test(normalized)) return "link";
+  if (/\b(pix)\b/.test(normalized)) return "pix";
+  return null;
+}
+
+function paymentMethodLabel(method?: ConversationContext["paymentMethod"]) {
+  if (method === "card") return "Cartão";
+  if (method === "link") return "Link";
+  return "PIX";
+}
+
+function readIntent(value: unknown): ProductIntent {
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value) as ProductIntent;
+    } catch {
+      return {};
+    }
+  }
+  if (!value || typeof value !== "object") return {};
+  return value as ProductIntent;
+}
+
+function mergeIntentRefinement(base: ProductIntent, refinement: ProductIntent): ProductIntent {
+  const hasNewCategory = Boolean(refinement.category);
+  const productFilters = mergeProductFilters(base.productFilters, refinement.productFilters);
+  const merged: ProductIntent = {
+    ...base,
+    urgency: refinement.urgency ?? base.urgency,
+    priceSensitivity: refinement.priceSensitivity ?? base.priceSensitivity,
+    preferredBrand: refinement.preferredBrand ?? base.preferredBrand,
+    restrictions: Array.from(new Set([...(base.restrictions ?? []), ...(refinement.restrictions ?? [])])),
+    productFilters: Object.keys(productFilters).length ? productFilters : undefined,
+    category: hasNewCategory ? refinement.category : base.category,
+    searchQuery: hasNewCategory ? refinement.searchQuery ?? base.searchQuery : base.searchQuery,
+    ambiguous: false,
+    unsupported: refinement.unsupported
+  };
+
+  if (merged.preferredBrand && merged.searchQuery) {
+    const normalizedBrand = normalize(merged.preferredBrand);
+    if (!normalize(merged.searchQuery).includes(normalizedBrand)) {
+      merged.searchQuery = `${merged.preferredBrand} ${merged.searchQuery}`;
+    }
+  }
+
+  if (merged.productFilters?.petSize && merged.category?.startsWith("racao") && merged.searchQuery) {
+    const sizeText = merged.productFilters.petSize === "small" ? "porte pequeno" : merged.productFilters.petSize === "large" ? "porte grande" : "porte médio";
+    if (!normalize(merged.searchQuery).includes(normalize(sizeText))) {
+      merged.searchQuery = `${merged.searchQuery} ${sizeText}`;
+    }
+  }
+
+  return merged;
+}
+
+function mergeProductFilters(base?: ProductFilters, refinement?: ProductFilters): ProductFilters {
+  const merged: ProductFilters = { ...(base ?? {}) };
+  for (const [key, value] of Object.entries(refinement ?? {}) as Array<[keyof ProductFilters, ProductFilters[keyof ProductFilters]]>) {
+    if (value === undefined || value === null || value === "") continue;
+    (merged as Record<string, unknown>)[key] = value;
+  }
+  return merged;
 }
 
 async function intentFromLastOrder(userId: string): Promise<ProductIntent> {
@@ -536,6 +738,18 @@ function readContext(value: unknown): ConversationContext {
   return value as ConversationContext;
 }
 
+function readMessageMetadata(value: unknown): { checkoutActions?: Array<{ id: string; title: string }> } {
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value) as { checkoutActions?: Array<{ id: string; title: string }> };
+    } catch {
+      return {};
+    }
+  }
+  if (!value || typeof value !== "object") return {};
+  return value as { checkoutActions?: Array<{ id: string; title: string }> };
+}
+
 function normalize(input: string) {
   return input
     .toLowerCase()
@@ -581,7 +795,38 @@ function looksLikeNewProductRequest(text: string) {
   if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
   if (/\b(quero|queria|preciso|necessito|procuro|busca|buscar|compra|comprar)\b/.test(normalized)) return true;
   return (
-    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado)\b/.test(
+    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila)\b/.test(
+      normalized
+    )
+  );
+}
+
+function looksLikeStandaloneProductRequest(text: string) {
+  const normalized = normalize(text);
+  if (!/\b(quero|queria|preciso|necessito|procuro|busca|buscar|compra|comprar)\b/.test(normalized)) {
+    return hasExplicitProductTerm(normalized);
+  }
+
+  if (hasExplicitProductTerm(normalized)) return true;
+
+  const remainder = normalized
+    .replace(/\b(quero|queria|preciso|necessito|procuro|busca|buscar|compra|comprar|muito|um|uma|uns|umas|de|do|da|dos|das|para|pra|por favor)\b/g, " ")
+    .replace(/\b(mais barato|mais barata|menor preco|menor preço|mais em conta|barato|barata|mais rapido|mais rapida|frete gratis|frete grátis|sem frete|entrega hoje|entrega amanha|entrega amanhã|marca|porte pequeno|pequeno|pequena|menor|menores|porte grande|grande|porte medio|porte médio|filhote|adulto|senior)\b/g, " ")
+    .replace(/\b(huggies|pampers|johnson|colgate|royal canin|gran plus|premier|pedigree|golden|special dog|dog chow|whiskas|special cat)\b/g, " ")
+    .trim();
+
+  return remainder.split(/\s+/).filter((token) => token.length >= 3).length > 0 && !looksLikeSearchRefinement(remainder);
+}
+
+function hasExplicitProductTerm(normalized: string) {
+  return /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila)\b/.test(normalized);
+}
+
+function looksLikeSearchRefinement(text: string) {
+  const normalized = normalize(text);
+  if (/^(1|2|3)\b/.test(normalized)) return false;
+  return (
+    /\b(mais barato|mais barata|menor preco|menor preço|mais em conta|barato|barata|mais rapido|mais rapida|mais rápido|mais rápida|frete gratis|frete grátis|sem frete|entrega hoje|entrega amanha|entrega amanhã|marca|huggies|pampers|johnson|colgate|royal canin|gran plus|premier|pedigree|golden|special dog|dog chow|porte pequeno|pequeno|pequena|menor|menores|porte grande|grande|porte medio|porte médio|filhote|adulto|senior|preto|preta|branco|branca|azul|vermelho|vermelha|verde|rosa|tamanho|tam)\b/.test(
       normalized
     )
   );
