@@ -632,7 +632,7 @@ function looksLikePrimaryProduct(intent: ProductIntent, title: string) {
     "sticker"
   ];
 
-  if (accessoryWords.some((word) => normalizedTitle.includes(word) && !query.includes(word))) return false;
+  if (accessoryWords.some((word) => containsWord(normalizedTitle, word) && !query.includes(word))) return false;
 
   if (intent.preferredBrand && !normalizedTitle.includes(normalize(intent.preferredBrand))) {
     return false;
@@ -708,4 +708,12 @@ function normalize(input: string) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
+}
+
+// Word-boundary match so "forma" doesn't match "informado" nor "case" "casual".
+function containsWord(haystack: string, term: string) {
+  if (!term) return false;
+  if (/\s/.test(term)) return haystack.includes(term);
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`).test(haystack);
 }

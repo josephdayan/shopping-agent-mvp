@@ -897,7 +897,7 @@ function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) 
       const text = normalize(textFor(item));
       const matched = tokens.filter((token) => text.includes(token));
       const matchedExpanded = positiveTerms.filter((term) => text.includes(term));
-      const unwantedMatches = unwantedTerms.filter((term) => text.includes(term));
+      const unwantedMatches = unwantedTerms.filter((term) => containsWord(text, term));
       const contiguousBoost = text.includes(normalizedQuery) ? 8 : 0;
       const expandedBoost = matchedExpanded.length * 3;
       const unwantedPenalty = unwantedMatches.length * 12;
@@ -1394,6 +1394,14 @@ function normalize(input: string) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
+}
+
+// Word-boundary match so an accessory term like "capa" doesn't reject "capacete".
+function containsWord(haystack: string, term: string) {
+  if (!term) return false;
+  if (/\s/.test(term)) return haystack.includes(term);
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`).test(haystack);
 }
 
 function slugify(value: string) {

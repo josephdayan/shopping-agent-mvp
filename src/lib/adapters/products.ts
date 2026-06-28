@@ -135,7 +135,7 @@ function filterRelevantProducts(products: Product[], intent: ProductIntent) {
     ? products
     : products.filter((product) => {
         const haystack = productText(product);
-        if (blockedTerms.some((term) => haystack.includes(term))) return false;
+        if (blockedTerms.some((term) => containsWord(haystack, term))) return false;
         const passesRequiredGroups = terms.every((group) => group.some((term) => haystack.includes(term)));
         if (!passesRequiredGroups) return false;
 
@@ -515,4 +515,14 @@ function normalize(input: string) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
+}
+
+// Match a blocked word on word boundaries, not as a raw substring, so "forma"
+// does not match "informado" and "case" does not match "casual". Multi-word
+// phrases keep substring matching.
+function containsWord(haystack: string, term: string) {
+  if (!term) return false;
+  if (/\s/.test(term)) return haystack.includes(term);
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`).test(haystack);
 }
