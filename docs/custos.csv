@@ -1,6 +1,6 @@
 date,service,type,description,monthly_cost_usd,status,notes
 2026-06-28,Apify,recurring,Plano pago para scraping Mercado Livre,29.00,active,Contratado para buscar produtos reais no Mercado Livre
 2026-06-28,Supabase,recurring,Plano Free,0.00,active,Manter enquanto couber no free tier
-2026-06-28,Vercel,recurring,Plano Hobby,0.00,active,Manter enquanto couber no free tier
+2026-06-28,Vercel,recurring,Plano pago Vercel,20.00,active,Upgrade previsto/contratado para producao e operacao do MVP
 2026-06-28,OpenAI,variable,API por uso,,active,Preencher custo conforme usage dashboard
 2026-06-28,Twilio,variable,WhatsApp/API por mensagem,,active,Preencher custo conforme Billing/Usage

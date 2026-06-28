@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 // Real Mercado Livre search via Apify can take up to ~55s on a cold start, so the
 // function needs a longer budget than the default. Replies go out over the Twilio
 // REST API, so the user still gets results even if Twilio's 15s HTTP timeout fires.
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 const genericSchema = z
   .object({
