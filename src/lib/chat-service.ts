@@ -265,8 +265,8 @@ async function selectProduct(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
   if (isRejectionOrMoreOptions(text)) return searchMoreOptions(conversationId);
-  if (looksLikeStandaloneProductRequest(text)) return startProductSearch(conversationId, text);
   if (looksLikeSearchRefinement(text)) return refineCurrentSearch(conversationId, text);
+  if (looksLikeStandaloneProductRequest(text)) return startProductSearch(conversationId, text);
   if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
 
   const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
@@ -795,7 +795,7 @@ function looksLikeNewProductRequest(text: string) {
   if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
   if (/\b(quero|queria|preciso|necessito|procuro|busca|buscar|compra|comprar)\b/.test(normalized)) return true;
   return (
-    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila)\b/.test(
+    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila|cinto)\b/.test(
       normalized
     )
   );
@@ -815,18 +815,18 @@ function looksLikeStandaloneProductRequest(text: string) {
     .replace(/\b(huggies|pampers|johnson|colgate|royal canin|gran plus|premier|pedigree|golden|special dog|dog chow|whiskas|special cat)\b/g, " ")
     .trim();
 
-  return remainder.split(/\s+/).filter((token) => token.length >= 3).length > 0 && !looksLikeSearchRefinement(remainder);
+  return hasExplicitProductTerm(remainder);
 }
 
 function hasExplicitProductTerm(normalized: string) {
-  return /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila)\b/.test(normalized);
+  return /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado|racao|ração|dog food|cat food|violao|violão|guitarra|cadeira|mesa|mochila|cinto)\b/.test(normalized);
 }
 
 function looksLikeSearchRefinement(text: string) {
   const normalized = normalize(text);
   if (/^(1|2|3)\b/.test(normalized)) return false;
   return (
-    /\b(mais barato|mais barata|menor preco|menor preço|mais em conta|barato|barata|mais rapido|mais rapida|mais rápido|mais rápida|frete gratis|frete grátis|sem frete|entrega hoje|entrega amanha|entrega amanhã|marca|huggies|pampers|johnson|colgate|royal canin|gran plus|premier|pedigree|golden|special dog|dog chow|porte pequeno|pequeno|pequena|menor|menores|porte grande|grande|porte medio|porte médio|filhote|adulto|senior|preto|preta|branco|branca|azul|vermelho|vermelha|verde|rosa|tamanho|tam)\b/.test(
+    /\b(mais barato|mais barata|menor preco|menor preço|mais em conta|barato|barata|menos de|abaixo de|ate|até|maximo|máximo|mais rapido|mais rapida|mais rápido|mais rápida|chega hoje|chegue hoje|chegar hoje|pra hoje|frete gratis|frete grátis|sem frete|entrega hoje|entrega amanha|entrega amanhã|marca|huggies|pampers|johnson|colgate|royal canin|gran plus|premier|pedigree|golden|special dog|dog chow|porte pequeno|pequeno|pequena|menor|menores|porte grande|grande|porte medio|porte médio|filhote|adulto|senior|preto|preta|branco|branca|azul|vermelho|vermelha|verde|rosa|tamanho|tam)\b/.test(
       normalized
     )
   );

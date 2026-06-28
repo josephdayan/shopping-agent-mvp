@@ -142,12 +142,6 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
       if (externalProducts.length) return externalProducts;
     }
 
-    const catalogToken = await getMercadoLivreAccessToken();
-    if (catalogToken) {
-      const catalogProducts = await searchMercadoLivreCatalog(query, intent, catalogToken);
-      if (catalogProducts.length) return catalogProducts;
-    }
-
     return [];
   } catch (error) {
     console.warn("[mercado-livre:search:error]", error);
@@ -375,14 +369,15 @@ async function searchMercadoLivreViaUnwrangle(query: string, intent: ProductInte
 async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: ProductIntent, query: string) {
   const title = apifyTitle(item);
   const rawProductUrl = apifyUrl(item);
-  const rawImageUrl = apifyImageUrl(item);
+  const imageUrl = normalizeImageUrl(apifyImageUrl(item));
+  const price = apifyPrice(item);
+  if (!title || !imageUrl || price <= 0 || isMercadoLivreLogo(imageUrl)) return null;
+
   const productUrl = absoluteMercadoLivreUrl(rawProductUrl || `https://lista.mercadolivre.com.br/${slugify(title || query)}`);
-  const externalId = `mlb-apify-${hashProductIdentity(rawProductUrl || `${title}|${rawImageUrl}|${apifyPrice(item)}`)}`;
-  const shippingPrice = apifyShippingPrice(item) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
-  const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
-  const imageUrl =
-    normalizeImageUrl(rawImageUrl) ??
-    "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
+  const externalId = `mlb-apify-${hashProductIdentity(rawProductUrl || `${canonicalProductKey(title)}|${imageUrl}|${price}`)}`;
+  const shippingPrice = apifyShippingPrice(item) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 0);
+  const deliveryEstimate = apifyDeliveryEstimate(item);
+  const deliveryHours = deliveryHoursFromEstimate(deliveryEstimate) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 72);
   const brand = inferBrand(title, intent.preferredBrand);
   const rating = apifyRating(item) ?? 4.2;
 
@@ -396,11 +391,11 @@ async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: Produc
       sourceType: "marketplace",
       fulfillmentMode: "manual_operator",
       automationLevel: "real_apify_search",
-      price: apifyPrice(item),
+      price,
       shippingPrice,
       store: apifyStore(item) ?? "Mercado Livre",
       rating,
-      deliveryEstimate: apifyDeliveryEstimate(item) ?? (deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias"),
+      deliveryEstimate: deliveryEstimate ?? "Prazo informado no link",
       deliveryHours,
       imageUrl,
       productUrl,
@@ -415,11 +410,11 @@ async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: Produc
       sourceType: "marketplace",
       fulfillmentMode: "manual_operator",
       automationLevel: "real_apify_search",
-      price: apifyPrice(item),
+      price,
       shippingPrice,
       store: apifyStore(item) ?? "Mercado Livre",
       rating,
-      deliveryEstimate: apifyDeliveryEstimate(item) ?? (deliveryHours <= 24 ? "Entrega estimada em até 24h" : "Entrega estimada em 1-2 dias"),
+      deliveryEstimate: deliveryEstimate ?? "Prazo informado no link",
       deliveryHours,
       imageUrl,
       productUrl,
@@ -431,7 +426,8 @@ async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: Produc
 async function upsertMercadoLivreProduct(item: MercadoLivreItem, intent: ProductIntent, query: string) {
   const shippingPrice = item.shipping?.free_shipping ? 0 : Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
   const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
-  const imageUrl = item.thumbnail?.replace(/^http:/, "https:") ?? "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
+  const imageUrl = normalizeImageUrl(item.thumbnail);
+  if (!imageUrl || isMercadoLivreLogo(imageUrl) || !item.price) return null;
   const brand = inferBrand(item.title, intent.preferredBrand);
 
   return prisma.product.upsert({
@@ -480,11 +476,12 @@ async function upsertUnwrangleMercadoLivreProduct(item: UnwrangleProduct, intent
   const title = unwrangleTitle(item);
   const productUrl = absoluteMercadoLivreUrl(item.url ?? item.link ?? item.product_url ?? `https://lista.mercadolivre.com.br/${slugify(query)}`);
   const externalId = `mlb-ext-${hashProductIdentity(productUrl || title)}`;
-  const shippingPrice = Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 12.9);
+  const price = unwranglePrice(item);
+  const imageUrl = normalizeImageUrl(item.thumbnail ?? item.image ?? item.image_url);
+  if (!title || price <= 0 || !imageUrl || isMercadoLivreLogo(imageUrl)) return null;
+
+  const shippingPrice = Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 0);
   const deliveryHours = Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 48);
-  const imageUrl =
-    normalizeImageUrl(item.thumbnail ?? item.image ?? item.image_url) ??
-    "https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus.png";
   const brand = inferBrand(title, intent.preferredBrand);
   const rating = Number(item.rating ?? 4.2);
 
@@ -498,7 +495,7 @@ async function upsertUnwrangleMercadoLivreProduct(item: UnwrangleProduct, intent
       sourceType: "marketplace",
       fulfillmentMode: "manual_operator",
       automationLevel: "real_external_search",
-      price: unwranglePrice(item),
+      price,
       shippingPrice,
       store: item.store ?? item.seller ?? "Mercado Livre",
       rating: Number.isFinite(rating) ? rating : 4.2,
@@ -517,7 +514,7 @@ async function upsertUnwrangleMercadoLivreProduct(item: UnwrangleProduct, intent
       sourceType: "marketplace",
       fulfillmentMode: "manual_operator",
       automationLevel: "real_external_search",
-      price: unwranglePrice(item),
+      price,
       shippingPrice,
       store: item.store ?? item.seller ?? "Mercado Livre",
       rating: Number.isFinite(rating) ? rating : 4.2,
@@ -858,6 +855,27 @@ function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) 
     .map(({ item }) => item);
 }
 
+function dedupeMercadoLivreItems<T>(items: T[], keyFor: (item: T) => string) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = canonicalProductKey(keyFor(item));
+    if (!key) return false;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function canonicalProductKey(value: string) {
+  return normalize(value)
+    .replace(/\b(tamanho|tam|numero|n)\s*\d{1,3}\b/g, " ")
+    .replace(/\b\d{2,3}\b/g, " ")
+    .replace(/\b(pp|p|m|g|gg|xg|xgg|xp|xs|s|xl|xxl)\b/g, " ")
+    .replace(/\b(preto|preta|branco|branca|azul|vermelho|vermelha|verde|rosa|marrom|cinza|bege)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function queryExpansionTerms(query: string) {
   const terms = new Set(significantTokens(query));
 
@@ -1049,9 +1067,10 @@ function batchOffset(intent: ProductIntent) {
 function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
   const limit = batchCandidateSize(intent);
   const offset = batchOffset(intent);
-  if (offset <= 0) return items.slice(0, limit);
-  if (items.length <= limit) return items;
-  return items.slice(offset, offset + limit);
+  const deduped = dedupeMercadoLivreItems(items, (item) => apifyTitle(item as ApifyProduct));
+  if (offset <= 0) return deduped.slice(0, limit);
+  if (deduped.length <= limit) return deduped;
+  return deduped.slice(offset, offset + limit);
 }
 
 function batchCandidateSize(intent: ProductIntent) {
@@ -1083,6 +1102,7 @@ function apifyPrice(item: ApifyProduct) {
       "price",
       "preco",
       "preço",
+      "Preço",
       "currentPrice",
       "current_price",
       "rawPrice",
@@ -1090,14 +1110,29 @@ function apifyPrice(item: ApifyProduct) {
       "amount",
       "valor",
       "novoPreco",
+      "Preço Novo",
+      "preço novo",
       "precoNovo",
-      "preçoNovo"
+      "preçoNovo",
+      "precoAtual",
+      "preçoAtual",
+      "current_price_text"
     ])
   );
 }
 
 function apifyShippingPrice(item: ApifyProduct) {
-  const raw = firstPresent(item, ["shippingPrice", "shipping_price", "frete", "shipping", "deliveryPrice", "envio", "informacoesEnvio", "informaçõesEnvio"]);
+  const raw = firstPresent(item, [
+    "shippingPrice",
+    "shipping_price",
+    "frete",
+    "shipping",
+    "deliveryPrice",
+    "envio",
+    "Informações de Envio",
+    "informacoesEnvio",
+    "informaçõesEnvio"
+  ]);
   const text = stringFromUnknown(raw).toLowerCase();
   if (text.includes("gratis") || text.includes("grátis") || text.includes("free")) return 0;
   const price = priceFromUnknown(raw);
@@ -1116,6 +1151,8 @@ function apifyImageUrl(item: ApifyProduct) {
       "img",
       "foto",
       "imagem",
+      "Link da imagem",
+      "link da imagem",
       "link_da_imagem",
       "linkDaImagem",
       "imagemLink",
@@ -1129,7 +1166,20 @@ function apifyImageUrl(item: ApifyProduct) {
 }
 
 function apifyUrl(item: ApifyProduct) {
-  return stringFromUnknown(firstPresent(item, ["url", "link", "productUrl", "product_url", "permalink", "href", "produtoLink", "linkProduto"]));
+  return stringFromUnknown(
+    firstPresent(item, [
+      "url",
+      "link",
+      "Link",
+      "productUrl",
+      "product_url",
+      "permalink",
+      "href",
+      "produtoLink",
+      "linkProduto",
+      "Link do produto"
+    ])
+  );
 }
 
 function apifyStore(item: ApifyProduct) {
@@ -1151,6 +1201,8 @@ function apifyDeliveryEstimate(item: ApifyProduct) {
       "shippingText",
       "shipping_text",
       "envio",
+      "Informações de Envio",
+      "informacoes de envio",
       "informacoesEnvio",
       "informaçõesEnvio"
     ])
@@ -1189,18 +1241,40 @@ function firstPresent(item: ApifyProduct, keys: string[]) {
     const value = item[key];
     if (value !== undefined && value !== null && value !== "") return value;
   }
+  const normalizedEntries = Object.entries(item).map(([key, value]) => [normalizeKey(key), value] as const);
+  for (const key of keys) {
+    const normalizedKey = normalizeKey(key);
+    const entry = normalizedEntries.find(([candidateKey, value]) => candidateKey === normalizedKey && value !== undefined && value !== null && value !== "");
+    if (entry) return entry[1];
+  }
   return undefined;
 }
 
-function stringFromUnknown(value: unknown) {
+function stringFromUnknown(value: unknown): string {
   if (typeof value === "string") return value;
   if (typeof value === "number") return String(value);
   if (typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(stringFromUnknown).find(Boolean) ?? "";
+  if (value && typeof value === "object") {
+    const direct = firstPresent(value as ApifyProduct, ["url", "link", "text", "value", "amount", "price", "preco", "preço"]);
+    if (direct !== undefined) return stringFromUnknown(direct);
+  }
   return "";
 }
 
-function priceFromUnknown(value: unknown) {
+function priceFromUnknown(value: unknown): number {
   if (typeof value === "number") return value;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const price = priceFromUnknown(item);
+      if (price > 0) return price;
+    }
+    return 0;
+  }
+  if (value && typeof value === "object") {
+    const direct = firstPresent(value as ApifyProduct, ["price", "preco", "preço", "value", "amount", "text"]);
+    if (direct !== undefined && direct !== value) return priceFromUnknown(direct);
+  }
   if (!value) return 0;
 
   const normalized = stringFromUnknown(value)
@@ -1210,6 +1284,28 @@ function priceFromUnknown(value: unknown) {
 
   const price = Number(normalized);
   return Number.isFinite(price) ? price : 0;
+}
+
+function deliveryHoursFromEstimate(estimate?: string | null) {
+  if (!estimate) return null;
+  const normalized = normalize(estimate);
+  if (/\b(hoje|same day|mesmo dia)\b/.test(normalized)) return 12;
+  const hourMatch = normalized.match(/(\d+)\s*(h|hora|horas)/);
+  if (hourMatch) return Number(hourMatch[1]);
+  const dayRange = normalized.match(/(\d+)\s*[-a]\s*(\d+)\s*dias?/);
+  if (dayRange) return Number(dayRange[2]) * 24;
+  const dayMatch = normalized.match(/(\d+)\s*dias?/);
+  if (dayMatch) return Number(dayMatch[1]) * 24;
+  if (/\bamanha\b/.test(normalized)) return 24;
+  return null;
+}
+
+function isMercadoLivreLogo(url: string) {
+  return /mercadolibre\/logo|mlstatic\.com\/frontend-assets\/ml-web-navigation/i.test(url);
+}
+
+function normalizeKey(input: string) {
+  return normalize(input).replace(/[^a-z0-9]/g, "");
 }
 
 function normalize(input: string) {

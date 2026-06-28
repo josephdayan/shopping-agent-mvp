@@ -13,6 +13,7 @@ export type ProductFilters = {
   color?: string;
   size?: string;
   packageSize?: "small" | "medium" | "large";
+  maxPrice?: number;
   freeShipping?: boolean;
   maxDeliveryDays?: number;
   sort?: SortPreference;

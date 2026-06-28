@@ -78,6 +78,8 @@ export const productSearchAdapter = {
       .sort((a, b) => compareRankedProducts(a, b, intent))
       .reduce<RankedProduct[]>((ranked, product) => {
         if (ranked.some((item) => item.id === product.id)) return ranked;
+        const productKey = canonicalProductKey(product.title);
+        if (productKey && ranked.some((item) => canonicalProductKey(item.title) === productKey)) return ranked;
         ranked.push(product);
         return ranked;
       }, [])
@@ -332,6 +334,11 @@ function applyStrongFilters(products: Product[], intent: ProductIntent) {
     if (freeShipping.length) filtered = freeShipping;
   }
 
+  if (typeof intent.productFilters?.maxPrice === "number") {
+    const underBudget = filtered.filter((product) => product.price + product.shippingPrice <= intent.productFilters!.maxPrice!);
+    if (underBudget.length) filtered = underBudget;
+  }
+
   if (typeof intent.productFilters?.maxDeliveryDays === "number") {
     const maxHours = intent.productFilters.maxDeliveryDays <= 0 ? 24 : intent.productFilters.maxDeliveryDays * 24;
     const fastEnough = filtered.filter((product) => product.deliveryHours <= maxHours);
@@ -351,6 +358,10 @@ function filterPreferenceScore(product: Product, intent: ProductIntent) {
   if (filters.color && productText(product).includes(normalize(filters.color))) score += 0.12;
   if (filters.size && productText(product).includes(normalize(filters.size))) score += 0.1;
   if (filters.freeShipping && product.shippingPrice === 0) score += 0.18;
+  if (typeof filters.maxPrice === "number") {
+    const total = product.price + product.shippingPrice;
+    score += total <= filters.maxPrice ? 0.24 : -0.35;
+  }
   if (typeof filters.maxDeliveryDays === "number") {
     const maxHours = filters.maxDeliveryDays <= 0 ? 24 : filters.maxDeliveryDays * 24;
     score += product.deliveryHours <= maxHours ? 0.18 : -0.08;
@@ -414,6 +425,16 @@ function conflictsWithLifeStage(product: Product, lifeStage: NonNullable<Product
 
 function productText(product: Product) {
   return normalize([product.title, product.brand, product.category, product.store, product.deliveryEstimate].join(" "));
+}
+
+function canonicalProductKey(value: string) {
+  return normalize(value)
+    .replace(/\b(tamanho|tam|numero|n)\s*\d{1,3}\b/g, " ")
+    .replace(/\b\d{2,3}\b/g, " ")
+    .replace(/\b(pp|p|m|g|gg|xg|xgg|xp|xs|s|xl|xxl)\b/g, " ")
+    .replace(/\b(preto|preta|branco|branca|azul|vermelho|vermelha|verde|rosa|marrom|cinza|bege)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function significantTokens(query: string) {

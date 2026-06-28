@@ -18,7 +18,8 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["racao cachorro", ["racao cachorro", "ração cachorro", "racao para cachorro", "ração para cachorro", "racao de cachorro", "ração de cachorro", "dog food"]],
   ["racao gato", ["racao gato", "ração gato", "racao para gato", "ração para gato", "racao de gato", "ração de gato", "cat food"]],
   ["camisa social", ["camisa social", "social branca", "camisa branca social"]],
-  ["camiseta", ["camiseta", "blusa", "t-shirt", "tshirt"]]
+  ["camiseta", ["camiseta", "blusa", "t-shirt", "tshirt"]],
+  ["cinto", ["cinto", "belt"]]
 ];
 
 const BRANDS = [
@@ -86,7 +87,7 @@ export const aiAdapter = {
     } else if (/(melhor|premium|qualidade|avaliad)/.test(normalized)) {
       intent.priceSensitivity = "premium";
       intent.productFilters = mergeProductFilters(intent.productFilters, { sort: "best" });
-    } else {
+    } else if (!intent.priceSensitivity) {
       intent.priceSensitivity = "balanced";
     }
 
@@ -191,6 +192,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
                     color: { type: ["string", "null"] },
                     size: { type: ["string", "null"] },
                     packageSize: { type: ["string", "null"], enum: ["small", "medium", "large", null] },
+                    maxPrice: { type: ["number", "null"] },
                     freeShipping: { type: ["boolean", "null"] },
                     maxDeliveryDays: { type: ["number", "null"] },
                     sort: { type: ["string", "null"], enum: ["best", "cheapest", "fastest", null] }
@@ -202,6 +204,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
                     "color",
                     "size",
                     "packageSize",
+                    "maxPrice",
                     "freeShipping",
                     "maxDeliveryDays",
                     "sort"
@@ -280,6 +283,8 @@ function refineIntentFromText(text: string, intent: ProductIntent): ProductInten
     refined.category = "camisa social";
   } else if (/\b(camiseta|tshirt|t shirt|blusa)\b/.test(normalized)) {
     refined.category = "camiseta";
+  } else if (/\b(cinto|belt)\b/.test(normalized)) {
+    refined.category = "cinto";
   }
 
   const brand = BRANDS.find((candidate) => normalized.includes(normalize(candidate)));
@@ -314,7 +319,7 @@ function refineIntentFromText(text: string, intent: ProductIntent): ProductInten
     refined.productFilters = mergeProductFilters(refined.productFilters, { freeShipping: true });
   }
 
-  if (/\b(hoje|agora|mesmo dia)\b/.test(normalized)) {
+  if (/\b(hoje|agora|mesmo dia|chega hoje|chegue hoje|chegar hoje|pra hoje)\b/.test(normalized)) {
     refined.urgency = "fast";
     refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "fastest", maxDeliveryDays: 0 });
   } else if (/\b(amanha|amanhã|ate amanha|até amanhã)\b/.test(normalized)) {
@@ -331,6 +336,12 @@ function refineIntentFromText(text: string, intent: ProductIntent): ProductInten
   } else if (/(melhor|premium|qualidade|avaliad|mais vendido|best seller|bestseller)/.test(normalized)) {
     refined.priceSensitivity = "premium";
     refined.productFilters = mergeProductFilters(refined.productFilters, { sort: "best" });
+  }
+
+  const maxPrice = extractMaxPrice(normalized);
+  if (maxPrice) {
+    refined.priceSensitivity = "cheap";
+    refined.productFilters = mergeProductFilters(refined.productFilters, { maxPrice, sort: "cheapest" });
   }
 
   if (/\b(camisa|camiseta|blusa|tshirt|t shirt)\b/.test(normalized) && !refined.searchQuery) {
@@ -405,6 +416,13 @@ function extractSize(normalized: string) {
   if (letterSize) return letterSize[1].toUpperCase();
   const numericSize = normalized.match(/\b(tam|tamanho|numero|número|num|n)\s*(\d{2})\b/);
   return numericSize?.[2];
+}
+
+function extractMaxPrice(normalized: string) {
+  const match = normalized.match(/\b(?:menos de|ate|até|abaixo de|max(?:imo)?|no maximo|no máximo)\s*r?\$?\s*(\d+(?:[,.]\d{1,2})?)\b/);
+  if (!match) return null;
+  const value = Number(match[1].replace(",", "."));
+  return Number.isFinite(value) && value > 0 ? value : null;
 }
 
 async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedProduct[]) {
@@ -547,7 +565,7 @@ function buildSearchQueryFromText(text: string, category?: string) {
     .replace(/\b(eu|vc|voce|voces|por favor|pfv|pls|please|muito|muita|mt)\b/g, " ")
     .replace(/\b(quero|queria|preciso|necessito|procuro|busca|buscar|comprar|compra|compraria|me ve|manda|arruma)\b/g, " ")
     .replace(/\b(um|uma|uns|umas|o|a|os|as|de|do|da|dos|das|para|pra|pro|com|sem)\b/g, " ")
-    .replace(/\b(hoje|agora|urgente|rapido|rapida|mais rapido|entrega|entregar)\b/g, " ")
+    .replace(/\b(hoje|agora|urgente|rapido|rapida|mais rapido|entrega|entregar|chega|chegue|chegar)\b/g, " ")
     .replace(/\b(barato|barata|baratos|baratas|menor preco|mais em conta|economico|economica|premium|melhor|qualidade)\b/g, " ")
     .replace(/\b(mesma|mesmo|ultimo|ultima|vez|novo|nova)\b/g, " ")
     .replace(/\s+/g, " ")
