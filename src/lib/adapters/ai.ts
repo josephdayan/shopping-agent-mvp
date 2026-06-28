@@ -13,6 +13,7 @@ const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["agua", ["agua", "água", "garrafa de agua"]],
   ["chocolate", ["chocolate", "bombom", "barra"]],
   ["livro", ["livro", "book"]],
+  ["sapato", ["sapato", "sapatos", "tenis", "tênis", "sneaker", "calcado", "calçado"]],
   ["camisa social", ["camisa social", "social branca", "camisa branca social"]],
   ["camiseta", ["camiseta", "blusa", "t-shirt", "tshirt"]]
 ];
@@ -219,7 +220,7 @@ function isGenericSearchQuery(searchQuery?: string, category?: string) {
 
 function buildSearchQueryFromText(text: string, category?: string) {
   let query = normalize(text)
-    .replace(/\b(eu|vc|voce|voces|por favor|pfv|pls|please)\b/g, " ")
+    .replace(/\b(eu|vc|voce|voces|por favor|pfv|pls|please|muito|muita|mt)\b/g, " ")
     .replace(/\b(quero|queria|preciso|necessito|procuro|busca|buscar|comprar|compra|compraria|me ve|manda|arruma)\b/g, " ")
     .replace(/\b(um|uma|uns|umas|o|a|os|as|de|do|da|dos|das|para|pra|pro|com|sem)\b/g, " ")
     .replace(/\b(hoje|agora|urgente|rapido|rapida|mais rapido|entrega|entregar)\b/g, " ")

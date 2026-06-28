@@ -62,16 +62,18 @@ export async function POST(request: Request) {
   let outbound;
 
   if (inbound.provider === "twilio") {
-    try {
-      const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);
-      if (interactive) {
-        return new Response(toTwilioXml({ text: "" }), {
-          status: 200,
-          headers: { "Content-Type": "text/xml" }
-        });
+    if (process.env.TWILIO_USE_QUICK_REPLY_OPTIONS === "true") {
+      try {
+        const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);
+        if (interactive) {
+          return new Response(toTwilioXml({ text: "" }), {
+            status: 200,
+            headers: { "Content-Type": "text/xml" }
+          });
+        }
+      } catch (error) {
+        console.warn("[whatsapp:twilio:quick-reply:fallback]", error);
       }
-    } catch (error) {
-      console.warn("[whatsapp:twilio:quick-reply:fallback]", error);
     }
 
     return new Response(toTwilioXml(richReply), {

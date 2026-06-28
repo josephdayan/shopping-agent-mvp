@@ -137,6 +137,10 @@ function requiredTermsFor(query: string) {
     groups.push(["camiseta", "camisa", "blusa", "t shirt", "tshirt"]);
   }
 
+  if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
+    groups.push(["sapato", "sapatos", "tenis", "sneaker", "calcado"]);
+  }
+
   if (/\b(preta|preto|black)\b/.test(query)) {
     groups.push(["preta", "preto", "black"]);
   }
@@ -167,6 +171,10 @@ function blockedTermsFor(query: string) {
       "quadro",
       "caneca"
     ];
+  }
+
+  if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
+    return ["chaveiro", "keychain", "miniatura", "boneco", "boneca", "pelucia", "brinquedo", "adesivo", "poster", "quadro", "caneca"];
   }
 
   return [];
@@ -201,6 +209,8 @@ function significantTokens(query: string) {
     "barato",
     "barata",
     "melhor",
+    "muito",
+    "muita",
     "the",
     "and"
   ]);
