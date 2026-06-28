@@ -359,12 +359,15 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
 
   if (reply.options?.length) {
     const options = reply.options.slice(0, 3);
-    const sendImages = process.env.TWILIO_SEND_PRODUCT_IMAGES === "true";
+    // Images on by default now that we serve a WhatsApp-deliverable .jpg. Set
+    // TWILIO_SEND_PRODUCT_IMAGES=false to fall back to a single text message.
+    const sendImages = process.env.TWILIO_SEND_PRODUCT_IMAGES !== "false";
 
     if (sendImages) {
       for (const [index, option] of options.entries()) {
         const body = buildTwilioProductCaption(option);
-        const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+        const imageUrl = toWhatsAppImageUrl(option.product.imageUrl);
+        const mediaUrl = isPublicMediaUrl(imageUrl) ? [imageUrl] : undefined;
 
         messages.push(
           await client.messages.create({
@@ -412,6 +415,13 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
       status: message.status
     }))
   };
+}
+
+function toWhatsAppImageUrl(url: string) {
+  // WhatsApp/Twilio don't deliver .webp images; Mercado Livre serves the very same
+  // picture as JPEG when the extension is .jpg, which WhatsApp accepts.
+  if (!url) return url;
+  return url.replace(/\.webp(\?|$)/i, ".jpg$1");
 }
 
 function buildTwilioProductListText(options: WhatsAppProductOption[]) {
