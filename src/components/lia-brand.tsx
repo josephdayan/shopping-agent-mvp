@@ -25,15 +25,35 @@ const sizeClasses = {
 export function LiaSymbol({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
-      <path
-        d="M36 18 L36 54 Q36 74 56 74 L74 74"
+      <polyline
+        points="38,25 38,72 71,72"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="13"
+        strokeWidth="16"
       />
-      <circle cx="70" cy="27" r="9" fill="currentColor" />
+      <path
+        d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+export function LiaAppIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
+      <rect width="100" height="100" rx="24" fill="#0F3D3A" />
+      <polyline
+        points="38,25 38,72 71,72"
+        fill="none"
+        stroke="#28FEE5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="16"
+      />
+      <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z" fill="#28FEE5" />
     </svg>
   );
 }

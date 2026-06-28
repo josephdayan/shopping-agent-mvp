@@ -240,7 +240,7 @@ async function runApifyActor(actorId: string, token: string, input: unknown): Pr
     return null;
   }
 
-  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 50000);
+  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 55000);
   const pollEveryMs = Number(process.env.APIFY_MERCADO_LIVRE_POLL_MS ?? 2500);
   const deadline = Date.now() + (Number.isFinite(maxWaitMs) ? maxWaitMs : 45000);
   let status = "READY";
@@ -285,21 +285,12 @@ async function searchMercadoLivreMarketplace(query: string, intent: ProductInten
     next: { revalidate: 300 }
   });
 
-  if ((response.status === 401 || response.status === 403) && token) {
-    const refreshedToken = response.status === 401 ? await refreshMercadoLivreAccessToken() : null;
-    if (refreshedToken) {
-      console.warn("[mercado-livre:search:retry-refreshed]", response.status);
-      response = await fetch(url, {
-        headers: mercadoLivreHeaders(refreshedToken),
-        next: { revalidate: 300 }
-      });
-    } else {
-      console.warn("[mercado-livre:search:retry-public]", response.status);
-      response = await fetch(url, {
-        headers: mercadoLivreHeaders(),
-        next: { revalidate: 300 }
-      });
-    }
+  // The official ML listings API is gated for this account (always 401/403). Don't
+  // burn the function budget on token-refresh + public retries — fail fast so the
+  // Apify path stays authoritative and slow cold starts still fit in 60s.
+  if (response.status === 401 || response.status === 403) {
+    console.warn("[mercado-livre:search:gated]", response.status);
+    return [];
   }
 
   if (!response.ok) {
