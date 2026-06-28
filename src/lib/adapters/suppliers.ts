@@ -1231,8 +1231,21 @@ function envFlag(liaKey: string, atlasKey: string) {
 }
 
 function mercadoLivreApifyCallbackUrl() {
+  const secret = process.env.APIFY_WEBHOOK_SECRET ?? process.env.WHATSAPP_WEBHOOK_SECRET ?? process.env.API_TOKEN;
+
+  // When APIFY_MERCADO_LIVRE_CALLBACK_URL is set, STILL append the secret. The
+  // callback validates it, so a URL without ?secret= is rejected with 401 and the
+  // scraped results are silently dropped — the bug that broke WhatsApp delivery.
   const explicit = process.env.APIFY_MERCADO_LIVRE_CALLBACK_URL;
-  if (explicit) return explicit;
+  if (explicit) {
+    try {
+      const url = new URL(explicit);
+      if (secret) url.searchParams.set("secret", secret);
+      return url.toString();
+    } catch {
+      return explicit;
+    }
+  }
 
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ??
@@ -1246,7 +1259,6 @@ function mercadoLivreApifyCallbackUrl() {
   }
 
   const url = new URL("/api/apify/mercadolivre/callback", baseUrl);
-  const secret = process.env.APIFY_WEBHOOK_SECRET ?? process.env.WHATSAPP_WEBHOOK_SECRET ?? process.env.API_TOKEN;
   if (secret) url.searchParams.set("secret", secret);
   return url.toString();
 }
