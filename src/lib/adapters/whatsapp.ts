@@ -359,21 +359,36 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
 
   if (reply.options?.length) {
     const options = reply.options.slice(0, 3);
-    for (const [index, option] of options.entries()) {
-      const body = buildTwilioProductCaption(option);
-      const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+    const sendImages = process.env.TWILIO_SEND_PRODUCT_IMAGES === "true";
 
+    if (sendImages) {
+      for (const [index, option] of options.entries()) {
+        const body = buildTwilioProductCaption(option);
+        const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
+
+        messages.push(
+          await client.messages.create({
+            from: normalizedFrom,
+            to: normalizedTo,
+            body,
+            ...(mediaUrl ? { mediaUrl } : {})
+          })
+        );
+        await delayBetweenProductMessages(index, options.length);
+      }
+    } else {
+      // The Twilio WhatsApp Sandbox does not deliver the Mercado Livre .webp
+      // product images, so by default send ONE reliable text message with all the
+      // options. Set TWILIO_SEND_PRODUCT_IMAGES=true on an approved sender to bring
+      // the image cards back.
       messages.push(
         await client.messages.create({
           from: normalizedFrom,
           to: normalizedTo,
-          body,
-          ...(mediaUrl ? { mediaUrl } : {})
+          body: buildTwilioProductListText(options)
         })
       );
-      await delayBetweenProductMessages(index, options.length);
     }
-
   } else if (reply.text) {
     const actionMessage = reply.actions?.length
       ? await sendTwilioActionMessage(client, normalizedFrom, normalizedTo, reply)
@@ -397,6 +412,21 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
       status: message.status
     }))
   };
+}
+
+function buildTwilioProductListText(options: WhatsAppProductOption[]) {
+  const lines: string[] = ["Achei estas opções:", ""];
+  for (const option of options) {
+    const total = option.product.price + option.product.shippingPrice;
+    lines.push(`*${option.rank}) ${option.product.title}*`);
+    lines.push(`R$ ${total.toFixed(2)}`);
+    if (option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")) {
+      lines.push(option.product.productUrl);
+    }
+    lines.push("");
+  }
+  lines.push("Responda *1*, *2* ou *3* para escolher.");
+  return lines.join("\n").slice(0, 1500);
 }
 
 function buildTwilioProductCaption(option: WhatsAppProductOption) {
