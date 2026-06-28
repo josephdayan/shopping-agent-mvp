@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
 import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
@@ -60,58 +61,49 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
   }
 
-  let sentProcessingAck = false;
-  if (inbound.provider === "twilio" && shouldSendProcessingAck(inbound.text)) {
-    try {
-      await whatsappAdapter.sendMessage(inbound.phone, "Analisando seu pedido. Um instante, por favor.");
-      sentProcessingAck = true;
-    } catch (error) {
-      console.warn("[whatsapp:ack:error]", error);
+  if (inbound.provider === "twilio") {
+    if (shouldSendProcessingAck(inbound.text)) {
+      try {
+        await whatsappAdapter.sendMessage(inbound.phone, "Analisando seu pedido. Um instante, por favor.");
+      } catch (error) {
+        console.warn("[whatsapp:ack:error]", error);
+      }
     }
+
+    // Answer Twilio immediately and run the slow search + reply in the background.
+    // This gives the full function budget to the work (instead of sharing it with the
+    // HTTP round-trip) and means Twilio's 15s webhook timeout never fires — so the user
+    // reliably gets the result after "Analisando..." instead of silence.
+    waitUntil(
+      (async () => {
+        try {
+          const bgConversation = await handleInboundMessage(inbound);
+          const bgReply = formatWhatsAppReply(toChannelResponse(bgConversation));
+          await whatsappAdapter.sendRichReplyMessages(inbound.phone, bgReply);
+        } catch (error) {
+          console.error("[whatsapp:twilio:bg-error]", error);
+          try {
+            await whatsappAdapter.sendMessage(
+              inbound.phone,
+              "Não consegui concluir essa busca agora. Pode tentar de novo em instantes?"
+            );
+          } catch (sendError) {
+            console.error("[whatsapp:twilio:bg-fallback-error]", sendError);
+          }
+        }
+      })()
+    );
+
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?><Response></Response>`, {
+      status: 200,
+      headers: { "Content-Type": "text/xml" }
+    });
   }
 
   const conversation = await handleInboundMessage(inbound);
   const response = toChannelResponse(conversation);
   const richReply = formatWhatsAppReply(response);
   let outbound;
-
-  if (inbound.provider === "twilio") {
-    if (sentProcessingAck || richReply.options?.length || richReply.actions?.length) {
-      try {
-        await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
-      } catch (error) {
-        console.error("[whatsapp:twilio:async-send-error]", error);
-        await whatsappAdapter.sendMessage(
-          inbound.phone,
-          "Não consegui concluir essa busca agora. Pode tentar de novo em alguns instantes?"
-        );
-      }
-
-      return new Response(toTwilioXml({ text: "" }), {
-        status: 200,
-        headers: { "Content-Type": "text/xml" }
-      });
-    }
-
-    if (process.env.TWILIO_USE_QUICK_REPLY_OPTIONS === "true") {
-      try {
-        const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);
-        if (interactive) {
-          return new Response(toTwilioXml({ text: "" }), {
-            status: 200,
-            headers: { "Content-Type": "text/xml" }
-          });
-        }
-      } catch (error) {
-        console.warn("[whatsapp:twilio:quick-reply:fallback]", error);
-      }
-    }
-
-    return new Response(toTwilioXml(richReply), {
-      status: 200,
-      headers: { "Content-Type": "text/xml" }
-    });
-  }
 
   try {
     const interactive = await whatsappAdapter.sendInteractiveProductOptions(inbound.phone, richReply);

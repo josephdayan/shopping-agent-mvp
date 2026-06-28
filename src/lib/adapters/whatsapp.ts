@@ -443,7 +443,7 @@ async function sendTwilioActionMessage(
 
 async function delayBetweenProductMessages(index: number, total: number) {
   if (index >= total - 1) return;
-  const delayMs = Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 2000);
+  const delayMs = Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 700);
   if (!Number.isFinite(delayMs) || delayMs <= 0) return;
   await new Promise((resolve) => setTimeout(resolve, Math.min(delayMs, 4000)));
 }
