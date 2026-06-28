@@ -870,9 +870,8 @@ function mercadoLivreSearchUrl(query: string) {
 function notFoundMessage(query: string) {
   const cleanQuery = (query ?? "").trim();
   return [
-    "Não achei uma opção boa pra isso na busca automática. 😕",
-    cleanQuery ? `Dá pra ver direto no Mercado Livre aqui: ${mercadoLivreSearchUrl(cleanQuery)}` : "",
-    "Ou me dá um detalhe a mais (marca, cor ou modelo) que eu tento de novo."
+    "Não consegui trazer agora. 😕 Às vezes a busca demora pra aquecer — *me manda de novo em uns 10 segundos* que costuma vir.",
+    cleanQuery ? `Ou veja direto no Mercado Livre: ${mercadoLivreSearchUrl(cleanQuery)}` : ""
   ]
     .filter(Boolean)
     .join("\n");

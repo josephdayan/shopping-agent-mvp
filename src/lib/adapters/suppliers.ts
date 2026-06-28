@@ -240,7 +240,7 @@ async function runApifyActor(actorId: string, token: string, input: unknown): Pr
     return null;
   }
 
-  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 55000);
+  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 38000);
   const pollEveryMs = Number(process.env.APIFY_MERCADO_LIVRE_POLL_MS ?? 2500);
   const deadline = Date.now() + (Number.isFinite(maxWaitMs) ? maxWaitMs : 45000);
   let status = "READY";
