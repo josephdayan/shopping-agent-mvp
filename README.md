@@ -180,6 +180,8 @@ Na Lia, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`,
 - `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
 - `APIFY_API_TOKEN`: chave opcional da Apify. Quando existe, a Lia usa Apify primeiro para buscar Mercado Livre.
 - `APIFY_MERCADO_LIVRE_ACTOR`: actor da Apify. Padrao: `karamelo/mercadolivre-scraper-brasil-portugues`.
+- `APIFY_WEBHOOK_SECRET`: segredo usado no callback assíncrono da Apify. Pode ser o mesmo valor de `WHATSAPP_WEBHOOK_SECRET`.
+- `APIFY_MERCADO_LIVRE_CALLBACK_URL`: URL pública que a Apify chama ao terminar a busca. Ex.: `https://shopping-agent-mvp.vercel.app/api/apify/mercadolivre/callback`.
 - `APIFY_MERCADO_LIVRE_MAX_PAGES`: paginas por busca na Apify. Padrao: `1`.
 - `APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS`: timeout da execucao sincrona. Padrao: `60`.
 - `UNWRANGLE_API_KEY`: chave opcional para busca externa real no Mercado Livre quando a API oficial de listings responder 403.

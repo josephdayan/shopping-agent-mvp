@@ -4,7 +4,12 @@ import { fulfillmentAdapter } from "@/lib/adapters/fulfillment";
 import { messagingAdapter } from "@/lib/adapters/messaging";
 import { paymentAdapter } from "@/lib/adapters/payment";
 import { productSearchAdapter } from "@/lib/adapters/products";
+import {
+  getMercadoLivreApifyProductsFromRun,
+  startMercadoLivreApifySearchJob
+} from "@/lib/adapters/suppliers";
 import type { ConversationContext, ProductFilters, ProductIntent } from "@/lib/types";
+import { randomUUID } from "crypto";
 
 const SERVICE_FEE = 2.99;
 const DEMO_PHONE = "+5511999990000";
@@ -15,6 +20,7 @@ type UserInput = {
   name?: string;
   email?: string;
   defaultAddress?: string;
+  messageId?: string;
 };
 
 export async function getOrCreateUser(input: UserInput = {}) {
@@ -177,6 +183,243 @@ export async function handleInboundMessage(input: UserInput & { text: string }) 
   const conversation = await getOrCreateActiveConversation(input);
   if (!conversation) throw new Error("Conversation not found");
   return handleUserMessage(conversation.id, input.text);
+}
+
+export async function queueWhatsAppProductSearch(input: UserInput & { text: string }) {
+  const conversation = await getOrCreateActiveConversation(input);
+  if (!conversation) throw new Error("Conversation not found");
+
+  const existingContext = readContext(conversation.context);
+  if (input.messageId && existingContext.pendingSearch?.id === input.messageId) {
+    return { queued: true, conversation, duplicate: true };
+  }
+
+  await messagingAdapter.receiveMessage(conversation.id, input.text, {
+    provider: "twilio",
+    messageId: input.messageId,
+    queued: true
+  });
+
+  const prepared = await prepareQueuedSearchIntent(conversation, input.text);
+  if ("reply" in prepared) {
+    await messagingAdapter.sendMessage(conversation.id, prepared.reply);
+    return { queued: false, conversation: await getConversation(conversation.id), reply: prepared.reply };
+  }
+
+  const jobId = input.messageId ?? randomUUID();
+  const started = await startMercadoLivreApifySearchJob({
+    jobId,
+    conversationId: conversation.id,
+    phone: normalizePhone(input.phone ?? conversation.user.phone),
+    intent: prepared.intent
+  });
+
+  if (!started?.runId) {
+    const reply = "Não consegui iniciar essa busca agora. Pode tentar de novo em instantes?";
+    await messagingAdapter.sendMessage(conversation.id, reply);
+    return { queued: false, conversation: await getConversation(conversation.id), reply };
+  }
+
+  const context: ConversationContext = {
+    ...prepared.context,
+    intent: prepared.intent,
+    pendingSearch: {
+      id: jobId,
+      provider: "apify",
+      status: "running",
+      phone: normalizePhone(input.phone ?? conversation.user.phone),
+      runId: started.runId,
+      datasetId: started.datasetId,
+      intent: prepared.intent,
+      queuedAt: new Date().toISOString()
+    }
+  };
+
+  await prisma.conversation.update({
+    where: { id: conversation.id },
+    data: {
+      currentStep: "searching",
+      intent: JSON.stringify(prepared.intent),
+      context: JSON.stringify(context)
+    }
+  });
+
+  return { queued: true, conversation: await getConversation(conversation.id), runId: started.runId };
+}
+
+export async function completeWhatsAppProductSearchJob(input: {
+  conversationId: string;
+  phone: string;
+  runId: string;
+  jobId?: string;
+  intent: ProductIntent;
+}) {
+  const conversation = await getConversation(input.conversationId);
+  if (!conversation) throw new Error("Conversation not found");
+
+  const products = await getMercadoLivreApifyProductsFromRun(input.runId, input.intent);
+  const ranked = productSearchAdapter.rankProducts(products, input.intent).slice(0, SEARCH_BATCH_SIZE);
+
+  if (!ranked.length) {
+    const context = readContext(conversation.context);
+    await prisma.conversation.update({
+      where: { id: input.conversationId },
+      data: {
+        currentStep: "collecting_request",
+        context: JSON.stringify({
+          ...context,
+          pendingSearch: context.pendingSearch
+            ? { ...context.pendingSearch, status: "failed", completedAt: new Date().toISOString(), error: "no_results" }
+            : undefined
+        })
+      }
+    });
+    await messagingAdapter.sendMessage(input.conversationId, notFoundMessage(input.intent.searchQuery ?? input.intent.category ?? ""));
+    return getConversation(input.conversationId);
+  }
+
+  await saveProductOptions(input.conversationId, ranked, input.intent, {
+    ...readContext(conversation.context),
+    pendingSearch: readContext(conversation.context).pendingSearch
+      ? {
+          ...readContext(conversation.context).pendingSearch!,
+          status: "completed",
+          completedAt: new Date().toISOString()
+        }
+      : undefined
+  });
+  await messagingAdapter.sendMessage(input.conversationId, "Escolha uma opção:", { options: ranked });
+  return getConversation(input.conversationId);
+}
+
+export async function failWhatsAppProductSearchJob(input: {
+  conversationId: string;
+  runId?: string;
+  error?: string;
+}) {
+  const conversation = await getConversation(input.conversationId);
+  if (!conversation) return null;
+  const context = readContext(conversation.context);
+  await prisma.conversation.update({
+    where: { id: input.conversationId },
+    data: {
+      currentStep: "collecting_request",
+      context: JSON.stringify({
+        ...context,
+        pendingSearch: context.pendingSearch
+          ? { ...context.pendingSearch, status: "failed", completedAt: new Date().toISOString(), error: input.error ?? "apify_failed" }
+          : undefined
+      })
+    }
+  });
+  await messagingAdapter.sendMessage(
+    input.conversationId,
+    "Não consegui concluir essa busca agora. Pode tentar de novo em instantes?"
+  );
+  return getConversation(input.conversationId);
+}
+
+async function prepareQueuedSearchIntent(
+  conversation: NonNullable<Awaited<ReturnType<typeof getConversation>>>,
+  text: string
+): Promise<{ intent: ProductIntent; context: ConversationContext } | { reply: string }> {
+  const context = readContext(conversation.context);
+
+  if (conversation.currentStep === "awaiting_selection" && conversation.options.length) {
+    const turn = await aiAdapter.classifyTurn(text, {
+      options: conversation.options.map((option) => ({
+        rank: option.rank,
+        title: option.product.title,
+        brand: option.product.brand,
+        price: option.product.price
+      })),
+      lastQuery: currentSearchQuery(conversation)
+    });
+
+    if (turn?.type === "reject" || (!turn && isRejectionOrMoreOptions(text))) {
+      const rejectedProductIds = Array.from(
+        new Set([...(context.rejectedProductIds ?? []), ...conversation.options.map((option) => option.productId)])
+      );
+      const rejectedProductKeys = Array.from(
+        new Set([
+          ...(context.rejectedProductKeys ?? []),
+          ...conversation.options.flatMap((option) => [
+            option.product.externalId,
+            option.product.productUrl,
+            option.product.title
+          ])
+        ])
+      );
+      const intent = {
+        ...(context.intent ?? readIntent(conversation.intent)),
+        excludedProductIds: rejectedProductIds,
+        excludedProductKeys: rejectedProductKeys,
+        searchBatchSize: SEARCH_BATCH_SIZE,
+        searchOffset: (context.searchOffset ?? context.intent?.searchOffset ?? 0) + SEARCH_BATCH_SIZE
+      };
+
+      if (!intent.category && !intent.searchQuery) return { reply: "Me diga melhor o que você quer, que eu procuro de novo." };
+      return { intent, context: { ...context, rejectedProductIds, rejectedProductKeys, searchOffset: intent.searchOffset } };
+    }
+
+    if (turn?.type === "refine" || (!turn && looksLikeSearchRefinement(text))) {
+      const refinement = await aiAdapter.parseUserIntent(text);
+      const intent = {
+        ...mergeIntentRefinement(context.intent ?? readIntent(conversation.intent), refinement),
+        searchBatchSize: SEARCH_BATCH_SIZE,
+        searchOffset: 0
+      };
+      if (!intent.category && !intent.searchQuery) {
+        return { reply: "Me diga qual produto você quer ajustar e eu procuro de novo." };
+      }
+      return { intent, context: { ...context, rejectedProductIds: [], rejectedProductKeys: [], searchOffset: 0 } };
+    }
+  }
+
+  const parsed = await aiAdapter.parseUserIntent(text);
+  if (parsed.unsupported) return { reply: aiAdapter.generateAssistantResponse("unsupported") };
+
+  const intent = {
+    ...(parsed.wantsRepeat ? await intentFromLastOrder(conversation.userId) : parsed),
+    searchBatchSize: SEARCH_BATCH_SIZE,
+    searchOffset: 0
+  };
+
+  if (!intent.category && !intent.searchQuery) {
+    return { reply: "Claro. Qual produto você quer que eu procure?" };
+  }
+
+  return { intent, context: { intent, rejectedProductIds: [], rejectedProductKeys: [], searchOffset: 0 } };
+}
+
+async function saveProductOptions(
+  conversationId: string,
+  options: Awaited<ReturnType<typeof productSearchAdapter.rankProducts>>,
+  intent: ProductIntent,
+  context: ConversationContext
+) {
+  await prisma.productOption.deleteMany({ where: { conversationId } });
+  await prisma.productOption.createMany({
+    data: options.slice(0, SEARCH_BATCH_SIZE).map((option) => ({
+      conversationId,
+      productId: option.id,
+      rank: option.rank,
+      reason: option.reason
+    }))
+  });
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: {
+      intent: JSON.stringify(intent),
+      currentStep: "awaiting_selection",
+      context: JSON.stringify({
+        ...context,
+        intent,
+        searchOffset: intent.searchOffset ?? context.searchOffset ?? 0
+      })
+    }
+  });
 }
 
 export function toChannelResponse(conversation: Awaited<ReturnType<typeof getConversation>>) {

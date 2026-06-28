@@ -81,7 +81,7 @@ export const whatsappAdapter = {
         payload.profileName ??
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
-      messageId: metaMessage?.id,
+      messageId: metaMessage?.id ?? stringFromPayload(payload.MessageSid),
       provider: metaMessage ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
     };
   },
@@ -465,6 +465,10 @@ function normalizeTwilioWhatsAppAddress(phone: string) {
 
 function normalizeTwilioFrom(phone?: string) {
   return phone?.replace(/^whatsapp:/, "");
+}
+
+function stringFromPayload(value: unknown) {
+  return typeof value === "string" && value.trim() ? value : undefined;
 }
 
 function extractNestedString(payload: RawInbound, path: string[]) {

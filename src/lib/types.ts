@@ -38,6 +38,18 @@ export type ProductIntent = {
 
 export type ConversationContext = {
   intent?: ProductIntent;
+  pendingSearch?: {
+    id: string;
+    provider: "apify";
+    status: "queued" | "running" | "completed" | "failed";
+    phone: string;
+    runId?: string;
+    datasetId?: string;
+    intent: ProductIntent;
+    queuedAt: string;
+    completedAt?: string;
+    error?: string;
+  };
   selectedProductId?: string;
   selectedProductExternalId?: string;
   rejectedProductIds?: string[];

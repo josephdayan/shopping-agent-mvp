@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
-import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
+import { handleInboundMessage, queueWhatsAppProductSearch, toChannelResponse } from "@/lib/chat-service";
 import { whatsappAdapter, type WhatsAppRichReply } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -67,13 +67,32 @@ export async function POST(request: Request) {
       } catch (error) {
         console.warn("[whatsapp:ack:error]", error);
       }
+
+      try {
+        const queued = await queueWhatsAppProductSearch(inbound);
+        if (!queued.queued && queued.reply) {
+          await whatsappAdapter.sendMessage(inbound.phone, queued.reply);
+        }
+      } catch (error) {
+        console.error("[whatsapp:twilio:queue-error]", error);
+        try {
+          await whatsappAdapter.sendMessage(
+            inbound.phone,
+            "Não consegui iniciar essa busca agora. Pode tentar de novo em instantes?"
+          );
+        } catch (sendError) {
+          console.error("[whatsapp:twilio:fallback-error]", sendError);
+        }
+      }
+
+      return new Response(`<?xml version="1.0" encoding="UTF-8"?><Response></Response>`, {
+        status: 200,
+        headers: { "Content-Type": "text/xml" }
+      });
     }
 
-    // Do the search + reply INLINE. Vercel Pro gives up to 300s, and waitUntil
-    // background work was being dropped in this runtime (the search never ran),
-    // so synchronous is the reliable path. Replies go out over the Twilio REST
-    // API, so the user still receives them even though this HTTP response returns
-    // after Twilio's 15s timeout (Twilio does not retry inbound-message webhooks).
+    // Fast flows such as selection, payment, cancellation and order status still
+    // run inline because they do not depend on the Mercado Livre scraper.
     try {
       const conversation = await handleInboundMessage(inbound);
       const richReply = formatWhatsAppReply(toChannelResponse(conversation));
@@ -189,7 +208,7 @@ function shouldSendProcessingAck(text: string) {
     return false;
   }
 
-  return /\b(quero|queria|preciso|necessito|procuro|buscar|busca|comprar|compra|mais barato|mais barata|menor preco|mais rapido|mais rapida|frete gratis|sem frete|porte pequeno|porte grande|pequeno|pequena|menor|menores|grande|medio|media|filhote|adulto|senior|huggies|pampers|royal canin|gran plus|pedigree|golden)\b/.test(normalized);
+  return /\b(quero|queria|preciso|necessito|procuro|buscar|busca|comprar|compra|outra|outras|mais opcoes|mais opções|nao gostei|não gostei|nenhuma|mais barato|mais barata|menor preco|mais rapido|mais rapida|frete gratis|sem frete|porte pequeno|porte grande|pequeno|pequena|menor|menores|grande|medio|media|filhote|adulto|senior|huggies|pampers|royal canin|gran plus|pedigree|golden)\b/.test(normalized);
 }
 
 function normalizeText(input: string) {

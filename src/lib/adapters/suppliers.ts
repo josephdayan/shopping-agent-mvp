@@ -91,6 +91,13 @@ type UnwrangleProduct = {
 
 type ApifyProduct = Record<string, unknown>;
 
+type ApifySearchJobMetadata = {
+  jobId: string;
+  conversationId: string;
+  phone: string;
+  intent: ProductIntent;
+};
+
 type MercadoLivreItem = {
   id: string;
   title: string;
@@ -189,6 +196,79 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
   }
 }
 
+export async function startMercadoLivreApifySearchJob(metadata: ApifySearchJobMetadata) {
+  const token = process.env.APIFY_API_TOKEN;
+  const actor = process.env.APIFY_MERCADO_LIVRE_ACTOR ?? "karamelo/mercadolivre-scraper-brasil-portugues";
+  const query = buildSearchQuery(metadata.intent);
+  if (!token || !actor || !query) return null;
+
+  const callbackUrl = mercadoLivreApifyCallbackUrl();
+  if (!callbackUrl) return null;
+
+  const actorId = actor.replace("/", "~");
+  const webhooks = [
+    {
+      eventTypes: ["ACTOR.RUN.SUCCEEDED", "ACTOR.RUN.FAILED", "ACTOR.RUN.TIMED_OUT", "ACTOR.RUN.ABORTED"],
+      requestUrl: callbackUrl,
+      payloadTemplate: JSON.stringify({
+        eventType: "{{eventType}}",
+        resource: "{{resource}}",
+        metadata: encodeJobMetadata(metadata)
+      }).replace('"{{resource}}"', "{{resource}}")
+    }
+  ];
+  const url = new URL(`https://api.apify.com/v2/acts/${actorId}/runs`);
+  url.searchParams.set("token", token);
+  url.searchParams.set("webhooks", Buffer.from(JSON.stringify(webhooks)).toString("base64"));
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "User-Agent": "lia/0.1" },
+    body: JSON.stringify(buildApifyMercadoLivreInput(query, metadata.intent)),
+    cache: "no-store"
+  });
+
+  if (!response.ok) {
+    console.warn("[mercado-livre:apify:job-start-failed]", response.status, await response.text().catch(() => ""));
+    return null;
+  }
+
+  const payload = (await response.json()) as { data?: { id?: string; defaultDatasetId?: string } };
+  return {
+    runId: payload.data?.id,
+    datasetId: payload.data?.defaultDatasetId,
+    query
+  };
+}
+
+export async function getMercadoLivreApifyProductsFromRun(runId: string, intent: ProductIntent) {
+  const token = process.env.APIFY_API_TOKEN;
+  const query = buildSearchQuery(intent);
+  if (!token || !runId || !query) return [];
+
+  const items = await fetchApifyRunDataset(runId, token);
+  if (!items?.length) return [];
+
+  const usable = items.filter((item) => apifyTitle(item) && apifyPrice(item) > 0);
+  const ranked = rankMercadoLivreItems(usable, query, (item) => apifyTitle(item));
+  const selected = selectApifyBatch(ranked, intent);
+  const products = await Promise.all(selected.map((item) => upsertApifyMercadoLivreProduct(item, intent, query)));
+  return products.filter((product): product is Product => Boolean(product));
+}
+
+export function decodeApifySearchJobMetadata(value: unknown): ApifySearchJobMetadata | null {
+  if (typeof value !== "string" || !value) return null;
+  try {
+    return JSON.parse(Buffer.from(value, "base64url").toString("utf8")) as ApifySearchJobMetadata;
+  } catch {
+    try {
+      return JSON.parse(Buffer.from(value, "base64").toString("utf8")) as ApifySearchJobMetadata;
+    } catch {
+      return null;
+    }
+  }
+}
+
 // In-memory cache of raw Apify datasets keyed by query, so repeated and refined
 // searches (e.g. the user sending "garrafa de agua" three times, or "me manda
 // outras") reuse one scrape instead of burning Apify quota on every message.
@@ -259,6 +339,22 @@ async function runApifyActor(actorId: string, token: string, input: unknown): Pr
     console.warn("[mercado-livre:apify:run-not-ready]", { runId, status });
   }
 
+  return fetchApifyDatasetItems(datasetId, token);
+}
+
+async function fetchApifyRunDataset(runId: string, token: string) {
+  const runResponse = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`, { cache: "no-store" });
+  if (!runResponse.ok) {
+    console.warn("[mercado-livre:apify:run-fetch-failed]", runResponse.status);
+    return null;
+  }
+  const runPayload = (await runResponse.json()) as { data?: { defaultDatasetId?: string } };
+  const datasetId = runPayload.data?.defaultDatasetId;
+  if (!datasetId) return null;
+  return fetchApifyDatasetItems(datasetId, token);
+}
+
+async function fetchApifyDatasetItems(datasetId: string, token: string) {
   const itemsResponse = await fetch(
     `https://api.apify.com/v2/datasets/${datasetId}/items?token=${token}&clean=true`,
     { cache: "no-store" }
@@ -1132,6 +1228,31 @@ function buildApifyMercadoLivreInput(query: string, intent: ProductIntent) {
 
 function envFlag(liaKey: string, atlasKey: string) {
   return (process.env[liaKey] ?? process.env[atlasKey]) === "true";
+}
+
+function mercadoLivreApifyCallbackUrl() {
+  const explicit = process.env.APIFY_MERCADO_LIVRE_CALLBACK_URL;
+  if (explicit) return explicit;
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.APP_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined) ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
+  if (!baseUrl) {
+    console.warn("[mercado-livre:apify:no-callback-url] Set NEXT_PUBLIC_APP_URL or APIFY_MERCADO_LIVRE_CALLBACK_URL.");
+    return null;
+  }
+
+  const url = new URL("/api/apify/mercadolivre/callback", baseUrl);
+  const secret = process.env.APIFY_WEBHOOK_SECRET ?? process.env.WHATSAPP_WEBHOOK_SECRET ?? process.env.API_TOKEN;
+  if (secret) url.searchParams.set("secret", secret);
+  return url.toString();
+}
+
+function encodeJobMetadata(metadata: ApifySearchJobMetadata) {
+  return Buffer.from(JSON.stringify(metadata), "utf8").toString("base64url");
 }
 
 function batchSize(intent: ProductIntent) {
