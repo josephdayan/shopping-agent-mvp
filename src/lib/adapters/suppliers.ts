@@ -174,7 +174,7 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
         "Content-Type": "application/json",
         "User-Agent": "atlas/0.1"
       },
-      body: JSON.stringify(buildApifyMercadoLivreInput(query)),
+      body: JSON.stringify(buildApifyMercadoLivreInput(query, intent)),
       cache: "no-store"
     });
 
@@ -184,11 +184,11 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
     }
 
     const payload = (await response.json()) as ApifyProduct[];
-    const items = rankMercadoLivreItems(
+    const items = selectApifyBatch(rankMercadoLivreItems(
       payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0),
       query,
       (item) => apifyTitle(item)
-    );
+    ), intent);
     const products = await Promise.all(items.map((item) => upsertApifyMercadoLivreProduct(item, intent, query)));
     return products.filter((product): product is Product => Boolean(product));
   } catch (error) {
@@ -889,8 +889,11 @@ function significantTokens(query: string) {
   return Array.from(new Set(tokens));
 }
 
-function buildApifyMercadoLivreInput(query: string) {
+function buildApifyMercadoLivreInput(query: string, intent: ProductIntent) {
   const maxPages = Number(process.env.APIFY_MERCADO_LIVRE_MAX_PAGES ?? 1);
+  const limit = batchSize(intent);
+  const offset = batchOffset(intent);
+  const maxItems = Math.max(limit + offset, limit);
   return {
     keyword: query,
     search: query,
@@ -906,10 +909,44 @@ function buildApifyMercadoLivreInput(query: string) {
     maximoDePaginasBusca: maxPages,
     maxPagesOfertas: 1,
     maximoPaginasOfertas: 1,
+    limit,
+    limite: limit,
+    maxItems,
+    max_items: maxItems,
+    maxResults: maxItems,
+    max_results: maxItems,
+    maximoResultados: maxItems,
+    quantidadeResultados: maxItems,
+    resultsLimit: maxItems,
+    offset,
+    start: offset,
+    startIndex: offset,
+    start_index: offset,
+    skip: offset,
     modoOfertasDoDia: false,
     sponsoredProducts: false,
     produtosPatrocinados: false
   };
+}
+
+function batchSize(intent: ProductIntent) {
+  const value = Number(intent.searchBatchSize ?? process.env.ATLAS_SEARCH_BATCH_SIZE ?? 3);
+  if (!Number.isFinite(value) || value <= 0) return 3;
+  return Math.min(Math.floor(value), 6);
+}
+
+function batchOffset(intent: ProductIntent) {
+  const value = Number(intent.searchOffset ?? 0);
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  return Math.floor(value);
+}
+
+function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
+  const limit = batchSize(intent);
+  const offset = batchOffset(intent);
+  if (offset <= 0) return items.slice(0, limit);
+  if (items.length <= limit) return items;
+  return items.slice(offset, offset + limit);
 }
 
 function apifyTitle(item: ApifyProduct) {

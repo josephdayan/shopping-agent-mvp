@@ -8,6 +8,7 @@ import type { ConversationContext, ProductIntent } from "@/lib/types";
 
 const SERVICE_FEE = 2.99;
 const DEMO_PHONE = "+5511999990000";
+const SEARCH_BATCH_SIZE = 3;
 
 type UserInput = {
   phone?: string;
@@ -208,7 +209,11 @@ async function startProductSearch(conversationId: string, text: string) {
     return getConversation(conversationId);
   }
 
-  const intent = parsed.wantsRepeat ? await intentFromLastOrder(conversation.userId) : parsed;
+  const intent = {
+    ...(parsed.wantsRepeat ? await intentFromLastOrder(conversation.userId) : parsed),
+    searchBatchSize: SEARCH_BATCH_SIZE,
+    searchOffset: 0
+  };
   if (!intent.category) {
     await prisma.conversation.update({
       where: { id: conversationId },
@@ -242,7 +247,7 @@ async function startProductSearch(conversationId: string, text: string) {
     data: {
       intent: JSON.stringify(intent),
       currentStep: "awaiting_selection",
-      context: JSON.stringify({ intent, rejectedProductIds: [] })
+      context: JSON.stringify({ intent, rejectedProductIds: [], rejectedProductKeys: [], searchOffset: 0 })
     }
   });
   await messagingAdapter.sendMessage(conversationId, aiAdapter.generateAssistantResponse("options"), { options });
@@ -311,7 +316,9 @@ async function searchMoreOptions(conversationId: string) {
   const intent = {
     ...(context.intent ?? {}),
     excludedProductIds: rejectedProductIds,
-    excludedProductKeys: rejectedProductKeys
+    excludedProductKeys: rejectedProductKeys,
+    searchBatchSize: SEARCH_BATCH_SIZE,
+    searchOffset: (context.searchOffset ?? context.intent?.searchOffset ?? 0) + SEARCH_BATCH_SIZE
   };
 
   if (!intent.category && !intent.searchQuery) {
@@ -323,7 +330,7 @@ async function searchMoreOptions(conversationId: string) {
   if (!options.length) {
     await prisma.conversation.update({
       where: { id: conversationId },
-      data: { context: JSON.stringify({ ...context, rejectedProductIds, rejectedProductKeys }) }
+      data: { context: JSON.stringify({ ...context, searchOffset: intent.searchOffset, rejectedProductIds, rejectedProductKeys }) }
     });
     await messagingAdapter.sendMessage(
       conversationId,
@@ -345,7 +352,13 @@ async function searchMoreOptions(conversationId: string) {
     where: { id: conversationId },
     data: {
       currentStep: "awaiting_selection",
-      context: JSON.stringify({ ...context, intent: context.intent, rejectedProductIds, rejectedProductKeys })
+      context: JSON.stringify({
+        ...context,
+        intent,
+        searchOffset: intent.searchOffset,
+        rejectedProductIds,
+        rejectedProductKeys
+      })
     }
   });
   await messagingAdapter.sendMessage(conversationId, "Encontrei outras opções:", { options });

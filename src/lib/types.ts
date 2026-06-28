@@ -12,6 +12,8 @@ export type ProductIntent = {
   restrictions?: string[];
   excludedProductIds?: string[];
   excludedProductKeys?: string[];
+  searchBatchSize?: number;
+  searchOffset?: number;
   wantsRepeat?: boolean;
   unsupported?: boolean;
   ambiguous?: boolean;
@@ -23,6 +25,7 @@ export type ConversationContext = {
   selectedProductExternalId?: string;
   rejectedProductIds?: string[];
   rejectedProductKeys?: string[];
+  searchOffset?: number;
   deliveryAddress?: string;
   paymentMethod?: "pix" | "card" | "link";
   orderId?: string;
