@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Atlas",
-  description: "Concierge de compras com IA via WhatsApp e API",
+  title: "Lia",
+  description: "Sua assistente de compras por WhatsApp e API",
   icons: {
-    icon: "/brand/atlas-icon.svg"
+    icon: "/brand/lia-icon.svg"
   }
 };
 

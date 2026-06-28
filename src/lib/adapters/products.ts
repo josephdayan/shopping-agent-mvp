@@ -35,7 +35,8 @@ export const productSearchAdapter = {
     );
     const rankedLiveProducts = this.rankProducts(liveMercadoLivreProducts, rankingIntent);
     const requiresLiveSearch =
-      Boolean(intent.searchQuery?.trim()) && process.env.ATLAS_ALLOW_MOCK_RESULTS_FOR_SEARCH !== "true";
+      Boolean(intent.searchQuery?.trim()) &&
+      (process.env.LIA_ALLOW_MOCK_RESULTS_FOR_SEARCH ?? process.env.ATLAS_ALLOW_MOCK_RESULTS_FOR_SEARCH) !== "true";
     if (requiresLiveSearch) return aiAdapter.curateProductOptions(rankingIntent, rankedLiveProducts);
     if (rankedLiveProducts.length >= 3) return aiAdapter.curateProductOptions(rankingIntent, rankedLiveProducts);
 

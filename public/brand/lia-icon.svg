@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">Lia</title>
+  <rect width="1024" height="1024" rx="246" fill="#0F3D3A"/>
+  <path d="M368 184 L368 553 Q368 758 573 758 L758 758" fill="none" stroke="#28FEE5" stroke-width="118" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="718" cy="284" r="82" fill="#28FEE5"/>
+</svg>

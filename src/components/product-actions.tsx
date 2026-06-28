@@ -18,7 +18,7 @@ export default function ProductActions({ productId, available }: { productId: st
     <button
       disabled={!available || loading}
       onClick={markUnavailable}
-      className="mt-2 rounded-md border border-atlas-line px-2 py-1 text-xs text-atlas-body hover:border-atlas-violet hover:text-atlas-violet disabled:opacity-45"
+      className="mt-2 rounded-md border border-lia-line px-2 py-1 text-xs text-lia-body hover:border-lia-aqua hover:text-lia-night disabled:opacity-45"
     >
       {available ? "Marcar indisponivel" : "Indisponivel"}
     </button>

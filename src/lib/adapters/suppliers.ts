@@ -35,7 +35,7 @@ const mercadoLivreConnector: SupplierConnector = {
     const liveProducts = await searchMercadoLivre(query, intent);
     if (liveProducts.length) return liveProducts;
     if (isSpecificSearch(intent, query)) {
-      return process.env.ATLAS_ALLOW_GENERATED_FALLBACKS === "true" ? fallbackGeneratedProducts(intent) : [];
+      return envFlag("LIA_ALLOW_GENERATED_FALLBACKS", "ATLAS_ALLOW_GENERATED_FALLBACKS") ? fallbackGeneratedProducts(intent) : [];
     }
 
     return fallbackMercadoLivreProducts(intent);
@@ -120,11 +120,17 @@ type MercadoLivreCatalogProduct = {
 };
 
 async function searchMercadoLivre(query: string, intent: ProductIntent) {
-  const mercadoLivreToken = await getMercadoLivreAccessToken();
-  const shouldTryMercadoLivreOfficial = process.env.MERCADO_LIVRE_REAL_SEARCH === "true" || Boolean(mercadoLivreToken);
   const shouldTryApify = Boolean(process.env.APIFY_API_TOKEN);
   const shouldTryUnwrangle = Boolean(process.env.UNWRANGLE_API_KEY);
-  if (!shouldTryApify && !shouldTryUnwrangle && !shouldTryMercadoLivreOfficial) return [];
+  // The official Mercado Livre listings API is blocked/limited for this account
+  // (returns 401/403), so we only call it when explicitly opted in. Apify is the
+  // authoritative source for real photos and real prices.
+  const shouldTryMercadoLivreOfficial = process.env.MERCADO_LIVRE_REAL_SEARCH === "true";
+
+  if (!shouldTryApify && !shouldTryUnwrangle && !shouldTryMercadoLivreOfficial) {
+    console.warn("[mercado-livre:search:no-backend] Set APIFY_API_TOKEN to enable real product search.");
+    return [];
+  }
 
   try {
     if (shouldTryApify) {
@@ -132,14 +138,15 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
       if (apifyProducts.length) return apifyProducts;
     }
 
-    if (shouldTryMercadoLivreOfficial) {
-      const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, mercadoLivreToken);
-      if (marketplaceProducts.length) return marketplaceProducts;
-    }
-
     if (shouldTryUnwrangle) {
       const externalProducts = await searchMercadoLivreViaUnwrangle(query, intent);
       if (externalProducts.length) return externalProducts;
+    }
+
+    if (shouldTryMercadoLivreOfficial) {
+      const mercadoLivreToken = await getMercadoLivreAccessToken();
+      const marketplaceProducts = await searchMercadoLivreMarketplace(query, intent, mercadoLivreToken);
+      if (marketplaceProducts.length) return marketplaceProducts;
     }
 
     return [];
@@ -152,7 +159,11 @@ async function searchMercadoLivre(query: string, intent: ProductIntent) {
 async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) {
   const token = process.env.APIFY_API_TOKEN;
   const actor = process.env.APIFY_MERCADO_LIVRE_ACTOR ?? "karamelo/mercadolivre-scraper-brasil-portugues";
-  if (!token || !actor) return [];
+  if (!token) {
+    console.warn("[mercado-livre:apify:no-token] APIFY_API_TOKEN is not set; cannot run real search.");
+    return [];
+  }
+  if (!actor) return [];
 
   try {
     const actorId = actor.replace("/", "~");
@@ -166,7 +177,7 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "atlas/0.1"
+        "User-Agent": "lia/0.1"
       },
       body: JSON.stringify(buildApifyMercadoLivreInput(query, intent)),
       cache: "no-store"
@@ -178,11 +189,17 @@ async function searchMercadoLivreViaApify(query: string, intent: ProductIntent) 
     }
 
     const payload = (await response.json()) as ApifyProduct[];
-    const items = selectApifyBatch(rankMercadoLivreItems(
-      payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0),
-      query,
-      (item) => apifyTitle(item)
-    ), intent);
+    const usable = Array.isArray(payload) ? payload.filter((item) => apifyTitle(item) && apifyPrice(item) > 0) : [];
+    const ranked = rankMercadoLivreItems(usable, query, (item) => apifyTitle(item));
+    if (!ranked.length) {
+      console.warn("[mercado-livre:apify:empty]", {
+        query,
+        received: Array.isArray(payload) ? payload.length : 0,
+        withTitleAndPrice: usable.length
+      });
+      return [];
+    }
+    const items = selectApifyBatch(ranked, intent);
     const products = await Promise.all(items.map((item) => upsertApifyMercadoLivreProduct(item, intent, query)));
     return products.filter((product): product is Product => Boolean(product));
   } catch (error) {
@@ -236,7 +253,7 @@ async function searchMercadoLivreMarketplace(query: string, intent: ProductInten
 function mercadoLivreHeaders(token?: string) {
   return {
     Accept: "application/json",
-    "User-Agent": "atlas/0.1",
+    "User-Agent": "lia/0.1",
     ...(token ? { Authorization: `Bearer ${token}` } : {})
   };
 }
@@ -304,7 +321,7 @@ async function searchMercadoLivreCatalog(query: string, intent: ProductIntent, t
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
-        "User-Agent": "atlas/0.1"
+        "User-Agent": "lia/0.1"
       },
       next: { revalidate: 300 }
     });
@@ -341,7 +358,7 @@ async function searchMercadoLivreViaUnwrangle(query: string, intent: ProductInte
     const response = await fetch(url, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "atlas/0.1"
+        "User-Agent": "lia/0.1"
       },
       next: { revalidate: 300 }
     });
@@ -378,7 +395,7 @@ async function upsertApifyMercadoLivreProduct(item: ApifyProduct, intent: Produc
   const shippingPrice = apifyShippingPrice(item) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_SHIPPING ?? 0);
   const deliveryEstimate = apifyDeliveryEstimate(item);
   const deliveryHours = deliveryHoursFromEstimate(deliveryEstimate) ?? Number(process.env.MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS ?? 72);
-  const brand = inferBrand(title, intent.preferredBrand);
+  const brand = inferBrand(title, intent.preferredBrand, apifyBrand(item));
   const rating = apifyRating(item) ?? 4.2;
 
   return prisma.product.upsert({
@@ -607,7 +624,7 @@ function buildSearchQuery(intent: ProductIntent) {
   return enrichSupplierSearchQuery([intent.preferredBrand, intent.category].filter(Boolean).join(" "), intent);
 }
 
-function inferBrand(title: string, preferredBrand?: string) {
+function inferBrand(title: string, preferredBrand?: string, explicitBrand?: string | null) {
   if (preferredBrand && title.toLowerCase().includes(preferredBrand.toLowerCase())) return preferredBrand;
   const knownBrands = [
     "Colgate",
@@ -636,7 +653,10 @@ function inferBrand(title: string, preferredBrand?: string) {
     "Whiskas",
     "Special Cat"
   ];
-  return knownBrands.find((brand) => title.toLowerCase().includes(brand.toLowerCase())) ?? "Mercado Livre";
+  const known = knownBrands.find((brand) => title.toLowerCase().includes(brand.toLowerCase()));
+  if (known) return known;
+  if (explicitBrand && explicitBrand.toLowerCase() !== "mercado livre") return explicitBrand;
+  return "Mercado Livre";
 }
 
 function enrichSupplierSearchQuery(query: string, intent: ProductIntent) {
@@ -709,9 +729,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
 
   return [
     {
-      externalId: `atlas-${slugify(baseTitle)}-local`,
+      externalId: `lia-${slugify(baseTitle)}-local`,
       title: `${baseTitle} Regular`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "loja_local" as SupplierSource,
       store: "Loja local parceira",
       price: isSocial ? 79.9 : 39.9,
@@ -721,9 +741,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
       imageUrl
     },
     {
-      externalId: `atlas-${slugify(baseTitle)}-premium`,
+      externalId: `lia-${slugify(baseTitle)}-premium`,
       title: `${baseTitle} Premium`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "mercado_livre" as SupplierSource,
       store: "Marketplace parceiro",
       price: isSocial ? 119.9 : 59.9,
@@ -733,9 +753,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
       imageUrl
     },
     {
-      externalId: `atlas-${slugify(baseTitle)}-slim`,
+      externalId: `lia-${slugify(baseTitle)}-slim`,
       title: `${baseTitle} Slim`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "rappi" as SupplierSource,
       store: "Rappi Mock",
       price: isSocial ? 99.9 : 49.9,
@@ -745,9 +765,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
       imageUrl
     },
     {
-      externalId: `atlas-${slugify(baseTitle)}-kit`,
+      externalId: `lia-${slugify(baseTitle)}-kit`,
       title: `Kit 2 ${pluralizeApparelTitle(baseTitle, isSocial)}`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "mercado_livre" as SupplierSource,
       store: "Marketplace parceiro",
       price: isSocial ? 179.9 : 89.9,
@@ -757,9 +777,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
       imageUrl
     },
     {
-      externalId: `atlas-${slugify(baseTitle)}-confort`,
+      externalId: `lia-${slugify(baseTitle)}-confort`,
       title: `${baseTitle} Comfort`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "loja_local" as SupplierSource,
       store: "Loja local parceira",
       price: isSocial ? 89.9 : 44.9,
@@ -769,9 +789,9 @@ function generatedApparelProducts(baseTitle: string, category: string, isSocial:
       imageUrl
     },
     {
-      externalId: `atlas-${slugify(baseTitle)}-classica`,
+      externalId: `lia-${slugify(baseTitle)}-classica`,
       title: `${baseTitle} Clássica`,
-      brand: "Atlas Curadoria",
+      brand: "Lia Curadoria",
       source: "mercado_livre" as SupplierSource,
       store: "Marketplace parceiro",
       price: isSocial ? 109.9 : 69.9,
@@ -1010,50 +1030,52 @@ function significantTokens(query: string) {
 }
 
 function buildApifyMercadoLivreInput(query: string, intent: ProductIntent) {
-  const maxPages = Number(process.env.APIFY_MERCADO_LIVRE_MAX_PAGES ?? 1);
+  const configuredPages = Number(process.env.APIFY_MERCADO_LIVRE_MAX_PAGES ?? 1);
   const displayLimit = batchSize(intent);
   const offset = batchOffset(intent);
   const candidateLimit = batchCandidateSize(intent);
   const maxItems = Math.max(candidateLimit + offset, candidateLimit);
+  // The actor paginates by page (~48 items/page). Scrape enough pages to cover the
+  // requested offset window so "me manda outras" can surface genuinely new results.
+  const maxPages = Math.min(Math.max(Number.isFinite(configuredPages) ? configuredPages : 1, Math.ceil(maxItems / 40)), 3);
   return {
+    // Primary param expected by karamelo/mercadolivre-scraper; aliases kept so the
+    // search keeps working if APIFY_MERCADO_LIVRE_ACTOR points to a different actor.
     keyword: query,
     search: query,
     query,
     productName: query,
     nomeProduto: query,
-    nome_do_produto: query,
     product: query,
+    // Keyword search, never the daily-deals feed.
+    scrapeOfertas: false,
+    modoOfertasDoDia: false,
+    ofertasFilter: "all",
+    // Drop sponsored/"patrocinado" items so ads and accessories stop polluting results.
+    promoted: false,
+    sponsoredProducts: false,
+    produtosPatrocinados: false,
     maxPages,
     maxPaginas: maxPages,
-    maximoPaginas: maxPages,
-    maxPagesBusca: maxPages,
-    maximoDePaginasBusca: maxPages,
     maxPagesOfertas: 1,
-    maximoPaginasOfertas: 1,
     limit: candidateLimit,
-    limite: candidateLimit,
     displayLimit,
-    limiteExibicao: displayLimit,
     maxItems,
     max_items: maxItems,
     maxResults: maxItems,
-    max_results: maxItems,
-    maximoResultados: maxItems,
-    quantidadeResultados: maxItems,
     resultsLimit: maxItems,
     offset,
     start: offset,
-    startIndex: offset,
-    start_index: offset,
-    skip: offset,
-    modoOfertasDoDia: false,
-    sponsoredProducts: false,
-    produtosPatrocinados: false
+    skip: offset
   };
 }
 
+function envFlag(liaKey: string, atlasKey: string) {
+  return (process.env[liaKey] ?? process.env[atlasKey]) === "true";
+}
+
 function batchSize(intent: ProductIntent) {
-  const value = Number(intent.searchBatchSize ?? process.env.ATLAS_SEARCH_BATCH_SIZE ?? 3);
+  const value = Number(intent.searchBatchSize ?? process.env.LIA_SEARCH_BATCH_SIZE ?? process.env.ATLAS_SEARCH_BATCH_SIZE ?? 3);
   if (!Number.isFinite(value) || value <= 0) return 3;
   return Math.min(Math.floor(value), 6);
 }
@@ -1074,7 +1096,7 @@ function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
 }
 
 function batchCandidateSize(intent: ProductIntent) {
-  const configured = Number(process.env.ATLAS_SEARCH_CANDIDATE_SIZE);
+  const configured = Number(process.env.LIA_SEARCH_CANDIDATE_SIZE ?? process.env.ATLAS_SEARCH_CANDIDATE_SIZE);
   if (Number.isFinite(configured) && configured > 0) return Math.min(Math.floor(configured), 15);
   return Math.min(Math.max(batchSize(intent) * 2, 6), 8);
 }
@@ -1168,6 +1190,7 @@ function apifyImageUrl(item: ApifyProduct) {
 function apifyUrl(item: ApifyProduct) {
   return stringFromUnknown(
     firstPresent(item, [
+      "zProdutoLink",
       "url",
       "link",
       "Link",
@@ -1183,31 +1206,47 @@ function apifyUrl(item: ApifyProduct) {
 }
 
 function apifyStore(item: ApifyProduct) {
-  return stringFromUnknown(firstPresent(item, ["seller", "sellerName", "seller_name", "store", "loja", "shop"])).trim() || null;
+  return stringFromUnknown(firstPresent(item, ["Vendedor", "vendedor", "seller", "sellerName", "seller_name", "store", "loja", "shop"])).trim() || null;
+}
+
+function apifyBrand(item: ApifyProduct) {
+  return stringFromUnknown(firstPresent(item, ["produtoMarca", "brand", "marca", "fabricante"])).trim() || null;
 }
 
 function apifyRating(item: ApifyProduct) {
-  const value = Number(firstPresent(item, ["rating", "avaliacao", "avaliação", "stars", "score"]));
-  return Number.isFinite(value) && value > 0 ? value : null;
+  const value = Number(firstPresent(item, ["rating", "avaliacao", "avaliação", "stars", "score", "produtoReviews", "nota"]));
+  // Some actors expose a review count rather than a star rating; only trust a 1–5 star value.
+  return Number.isFinite(value) && value > 0 && value <= 5 ? value : null;
 }
 
 function apifyDeliveryEstimate(item: ApifyProduct) {
-  const value = stringFromUnknown(
-    firstPresent(item, [
-      "delivery",
-      "deliveryEstimate",
-      "delivery_estimate",
-      "prazo",
-      "shippingText",
-      "shipping_text",
-      "envio",
-      "Informações de Envio",
-      "informacoes de envio",
-      "informacoesEnvio",
-      "informaçõesEnvio"
-    ])
-  ).trim();
-  return value || null;
+  const candidateKeys = [
+    "envio",
+    "Informações de Envio",
+    "informacoes de envio",
+    "informacoesEnvio",
+    "informaçõesEnvio",
+    "delivery",
+    "deliveryEstimate",
+    "delivery_estimate",
+    "prazo",
+    "shippingText",
+    "shipping_text",
+    "disponivelEm",
+    "disponívelEm"
+  ];
+  for (const key of candidateKeys) {
+    const value = stringFromUnknown(firstPresent(item, [key])).trim();
+    // Skip variant noise like "Disponível em 2 cores" — that is not delivery info.
+    if (value && looksLikeDeliveryText(value)) return value;
+  }
+  return null;
+}
+
+function looksLikeDeliveryText(value: string) {
+  const normalized = normalize(value);
+  if (/\b(cores?|cor|tamanhos?|voltagem|volts?|unidades?|modelos?)\b/.test(normalized)) return false;
+  return /\b(chega|chegara|hoje|amanha|dias?|horas?|frete|gratis|envio|entrega|full|flex|imediata|estoque)\b/.test(normalized);
 }
 
 function unwrangleTitle(item: UnwrangleProduct) {

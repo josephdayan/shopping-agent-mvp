@@ -1,6 +1,16 @@
 import type { ProductOption } from "@prisma/client";
 import type { ProductFilters, ProductIntent, RankedProduct } from "@/lib/types";
 
+export type TurnContext = {
+  options: Array<{ rank: number; title: string; brand: string; price: number }>;
+  lastQuery?: string;
+};
+
+export type TurnClassification = {
+  type: "new_search" | "refine" | "select" | "reject" | "smalltalk" | "other";
+  selection?: { ordinal?: number | null; hint?: "cheapest" | "fastest" | "brand" | null };
+};
+
 const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["escova de dente", ["escova", "escova dental", "toothbrush"]],
   ["pasta de dente", ["pasta", "creme dental", "toothpaste"]],
@@ -101,6 +111,12 @@ export const aiAdapter = {
       intent.urgency = "normal";
     }
 
+    // Any concrete product term should be searchable, even if it is not one of the
+    // known categories — otherwise the bot dead-ends on "qual produto?".
+    if (!intent.category && intent.searchQuery && intent.searchQuery.trim().length >= 2) {
+      intent.category = intent.searchQuery.trim();
+    }
+
     intent.ambiguous = !intent.category && !intent.searchQuery && !intent.wantsRepeat;
     return intent;
   },
@@ -122,14 +138,21 @@ export const aiAdapter = {
 
   generateAssistantResponse(kind: "clarify" | "options" | "checkout" | "unsupported" | "paid" | "status") {
     const responses = {
-      clarify: "Posso buscar. Você prefere menor preço, melhor qualidade ou entrega mais rápida?",
-      options: "Separei algumas opções. Toque em uma ou responda o número.",
-      checkout: "Separei o resumo do pedido. Confirmo esse pedido?",
-      unsupported: "Ainda não consigo comprar esse tipo de item pelo Atlas. Posso ajudar com higiene, beleza e mercado básico.",
+      clarify: "Posso buscar pra você. Prefere o mais barato, o melhor avaliado ou o que chega mais rápido?",
+      options: "Achei estas opções. Toque em uma ou responda o número.",
+      checkout: "Montei o resumo do pedido. Posso confirmar?",
+      unsupported: "Esse tipo de item eu ainda não consigo comprar. Posso ajudar com itens do dia a dia, casa, pet, beleza e mercado.",
       paid: "Pagamento aprovado. Pedido criado e enviado para processamento.",
       status: "Aqui está o status mais recente do seu pedido."
     };
     return responses[kind];
+  },
+
+  // Classify a message sent while the user is looking at the 3 options, using the
+  // conversation context. Returns null when OpenAI is unavailable or unsure, so the
+  // caller can fall back to deterministic heuristics.
+  async classifyTurn(text: string, context: TurnContext): Promise<TurnClassification | null> {
+    return classifyTurnWithOpenAI(text, context);
   },
 
   async curateProductOptions(intent: ProductIntent, products: RankedProduct[]) {
@@ -161,7 +184,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve exatamente o produto pedido: não substitua por outro item, não use histórico e não invente categoria. Se o usuário escrever em inglês, traduza para um termo comum no Mercado Livre Brasil apenas quando isso melhorar a busca. Exemplos: 'baby wipes' vira category 'lenco umedecido' e searchQuery 'lenço umedecido bebê'; 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'; 'ração para meu cachorro pequeno' vira category 'racao cachorro', searchQuery 'ração cachorro porte pequeno' e productFilters.petSize 'small'. Preserve títulos de livros, modelos, marcas, cores, estilos, porte, idade do pet, frete e prazo. Se o usuário pedir 'mais barato', coloque priceSensitivity 'cheap' e productFilters.sort 'cheapest'. Se pedir marca, coloque preferredBrand. Responda apenas JSON válido."
+              "Você é a Lia, uma assistente de compras brasileira. Leia a mensagem e extraia a intenção de compra em JSON, funcionando para QUALQUER produto. Regras: (1) Preserve exatamente o produto pedido; nunca troque por outro item nem invente. (2) 'searchQuery' é um termo curto e natural para buscar no Mercado Livre Brasil, com 2 a 5 palavras, sem verbos ('quero','preciso'), sem preço e sem prazo. Ex.: 'quero um cinto de couro masculino preto bem barato' -> searchQuery 'cinto couro masculino preto'. (3) 'category' é o substantivo principal do produto, no singular (ex.: 'cinto', 'fone de ouvido', 'cadeira gamer', 'ração cachorro'). (4) Traduza inglês para português quando ajudar a busca: 'baby wipes' -> category 'lenço umedecido', searchQuery 'lenço umedecido bebê'. (5) Extraia filtros quando houver: preferredBrand (marca), productFilters.color (cor), productFilters.size (tamanho ou numeração), petType/petSize/lifeStage (itens de pet), productFilters.maxPrice (número em reais quando disser 'até/menos de/no máximo X'), productFilters.freeShipping (frete grátis), productFilters.maxDeliveryDays (0 = hoje, 1 = amanhã), productFilters.sort ('cheapest' para 'mais barato', 'fastest' para 'mais rápido' ou 'hoje', 'best' para 'melhor/mais vendido/top'). (6) priceSensitivity e urgency conforme o texto. (7) unsupported=true apenas para itens proibidos (armas, drogas, medicamento controlado, cigarro, bebida alcoólica). Responda apenas JSON válido."
           },
           {
             role: "user",
@@ -233,16 +256,21 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
       })
     });
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.warn("[ai:openai:intent:fallback]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
 
     const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
     const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
     if (!jsonText) return null;
 
     const parsed = JSON.parse(jsonText) as ProductIntent;
-    const category = parsed.category ?? undefined;
-    const fallbackSearchQuery = buildSearchQueryFromText(text, category);
-    const searchQuery = isGenericSearchQuery(parsed.searchQuery, category) ? fallbackSearchQuery : parsed.searchQuery;
+    const parsedCategory = parsed.category ?? undefined;
+    const fallbackSearchQuery = buildSearchQueryFromText(text, parsedCategory);
+    const searchQuery = isGenericSearchQuery(parsed.searchQuery, parsedCategory) ? fallbackSearchQuery : parsed.searchQuery;
+    // Always keep a searchable category so arbitrary products don't dead-end on "qual produto?".
+    const category = parsedCategory ?? (searchQuery ? searchQuery.trim() : undefined);
     return {
       ...parsed,
       category,
@@ -255,6 +283,86 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
     };
   } catch (error) {
     console.warn("[ai:openai:fallback]", error);
+    return null;
+  }
+}
+
+async function classifyTurnWithOpenAI(text: string, context: TurnContext): Promise<TurnClassification | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+  const normalized = normalize(text).trim();
+  // A bare 1/2/3 is unambiguously a selection — never spend a model call on it.
+  if (/^[123]$/.test(normalized)) {
+    return { type: "select", selection: { ordinal: Number(normalized), hint: null } };
+  }
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "O usuário está vendo 3 opções de produto que a Lia ofereceu e respondeu algo. Classifique a resposta em 'type': 'select' (escolheu uma das opções: número, 'a primeira', 'a mais barata', o nome da marca de uma opção, 'quero essa'); 'reject' (não gostou de NENHUMA e quer outras opções do MESMO produto: 'não gostei', 'me manda outras', 'tem mais?', 'nenhuma delas'); 'refine' (mantém o MESMO produto mas muda um filtro como preço, cor, marca, tamanho, porte ou prazo: 'tem mais barato?', 'preciso que chegue hoje', 'quero a preta', 'a versão pequena'); 'new_search' (pediu um produto DIFERENTE dos mostrados); 'smalltalk' (saudação ou dúvida sem pedido); ou 'other'. Para 'select', preencha selection.ordinal (1, 2 ou 3) quando indicar a posição, ou selection.hint ('cheapest' para a mais barata, 'fastest' para a mais rápida, 'brand' quando citar a marca). Responda apenas JSON válido."
+          },
+          {
+            role: "user",
+            content: JSON.stringify({
+              mensagem: text,
+              ultimaBusca: context.lastQuery ?? null,
+              opcoes: context.options.map((option) => ({
+                n: option.rank,
+                titulo: option.title,
+                marca: option.brand,
+                preco: option.price
+              }))
+            })
+          }
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name: "turn_classification",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                type: { type: "string", enum: ["new_search", "refine", "select", "reject", "smalltalk", "other"] },
+                selection: {
+                  type: "object",
+                  additionalProperties: false,
+                  properties: {
+                    ordinal: { type: ["number", "null"] },
+                    hint: { type: ["string", "null"], enum: ["cheapest", "fastest", "brand", null] }
+                  },
+                  required: ["ordinal", "hint"]
+                }
+              },
+              required: ["type", "selection"]
+            }
+          }
+        }
+      })
+    });
+
+    if (!response.ok) {
+      console.warn("[ai:openai:turn:fallback]", response.status);
+      return null;
+    }
+
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
+    if (!jsonText) return null;
+    const parsed = JSON.parse(jsonText) as TurnClassification;
+    return parsed?.type ? parsed : null;
+  } catch (error) {
+    console.warn("[ai:openai:turn:error]", error);
     return null;
   }
 }

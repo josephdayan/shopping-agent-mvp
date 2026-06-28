@@ -31,7 +31,7 @@ export default function AdminActions({
     return (
       <button
         onClick={() => router.refresh()}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-line bg-white px-3 py-2 text-sm font-semibold text-atlas-night hover:border-atlas-violet hover:text-atlas-violet"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-line bg-white px-3 py-2 text-sm font-semibold text-lia-night hover:border-lia-aqua hover:bg-lia-mint"
       >
         <RefreshCw size={16} />
         Atualizar
@@ -44,7 +44,7 @@ export default function AdminActions({
       <button
         disabled={!canApprove || loading !== null}
         onClick={() => call("approve")}
-        className="inline-flex items-center gap-2 rounded-md bg-atlas-violet px-3 py-2 text-xs font-semibold text-atlas-night disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md bg-lia-aqua px-3 py-2 text-xs font-semibold text-lia-night disabled:cursor-not-allowed disabled:opacity-45"
       >
         <CheckCircle2 size={14} />
         Aprovar
@@ -52,7 +52,7 @@ export default function AdminActions({
       <button
         disabled={!canAdvance || loading !== null}
         onClick={() => call("advance")}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
       >
         <FastForward size={14} />
         Avancar
@@ -60,7 +60,7 @@ export default function AdminActions({
       <button
         disabled={loading !== null}
         onClick={() => call("purchased")}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
       >
         <PackageCheck size={14} />
         Comprado
@@ -68,7 +68,7 @@ export default function AdminActions({
       <button
         disabled={loading !== null}
         onClick={() => call("delivered")}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-line px-3 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-45"
       >
         <Truck size={14} />
         Entregue
@@ -76,7 +76,7 @@ export default function AdminActions({
       <button
         disabled={loading !== null}
         onClick={() => call("substitution")}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-warning/50 px-3 py-2 text-xs font-semibold text-atlas-warning disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-warning/50 px-3 py-2 text-xs font-semibold text-lia-warning disabled:cursor-not-allowed disabled:opacity-45"
       >
         <RotateCcw size={14} />
         Substituir
@@ -84,7 +84,7 @@ export default function AdminActions({
       <button
         disabled={loading !== null}
         onClick={() => call("cancel-refund")}
-        className="inline-flex items-center gap-2 rounded-md border border-atlas-danger/50 px-3 py-2 text-xs font-semibold text-atlas-danger disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex items-center gap-2 rounded-md border border-lia-danger/50 px-3 py-2 text-xs font-semibold text-lia-danger disabled:cursor-not-allowed disabled:opacity-45"
       >
         <Ban size={14} />
         Cancelar

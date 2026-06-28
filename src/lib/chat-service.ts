@@ -56,7 +56,7 @@ export async function createConversation(input: UserInput = {}) {
 
   await messagingAdapter.sendMessage(
     conversation.id,
-    "Olá. Sou o Atlas, seu concierge de compras. Me diga o que você quer comprar hoje."
+    "Oi! Sou a Lia, sua assistente de compras. Me diz o que você quer comprar que eu procuro pra você."
   );
 
   return getConversation(conversation.id);
@@ -264,14 +264,37 @@ async function startProductSearch(conversationId: string, text: string) {
 async function selectProduct(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
-  if (isRejectionOrMoreOptions(text)) return searchMoreOptions(conversationId);
-  if (looksLikeSearchRefinement(text)) return refineCurrentSearch(conversationId, text);
-  if (looksLikeStandaloneProductRequest(text)) return startProductSearch(conversationId, text);
-  if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
 
-  const selectedProductId = aiAdapter.interpretSelection(text, conversation.options);
+  // Context-aware routing: decide whether this message is a selection, a request for
+  // other options, a refinement of the same search, or a brand-new product.
+  const turn = await aiAdapter.classifyTurn(text, {
+    options: conversation.options.map((option) => ({
+      rank: option.rank,
+      title: option.product.title,
+      brand: option.product.brand,
+      price: option.product.price
+    })),
+    lastQuery: currentSearchQuery(conversation)
+  });
+
+  if (turn?.type === "reject") return searchMoreOptions(conversationId);
+  if (turn?.type === "refine") return refineCurrentSearch(conversationId, text);
+  if (turn?.type === "new_search") return startProductSearch(conversationId, text);
+
+  // Deterministic heuristics backstop the model when it is unavailable or unsure.
+  if (turn?.type !== "select") {
+    if (isRejectionOrMoreOptions(text)) return searchMoreOptions(conversationId);
+    if (looksLikeSearchRefinement(text)) return refineCurrentSearch(conversationId, text);
+    if (looksLikeStandaloneProductRequest(text)) return startProductSearch(conversationId, text);
+    if (looksLikeNewProductRequest(text)) return startProductSearch(conversationId, text);
+  }
+
+  const selectedProductId = selectionFromTurn(turn, conversation.options) ?? aiAdapter.interpretSelection(text, conversation.options);
   if (!selectedProductId) {
-    await messagingAdapter.sendMessage(conversationId, "Não consegui identificar a escolha. Pode responder 1, 2, 3 ou o nome da marca?");
+    await messagingAdapter.sendMessage(
+      conversationId,
+      "Não consegui identificar a escolha. Me responda 1, 2 ou 3, ou diga \"me manda outras\" que eu busco mais opções."
+    );
     return getConversation(conversationId);
   }
 
@@ -417,6 +440,9 @@ async function searchMoreOptions(conversationId: string) {
     where: { id: conversationId },
     data: {
       currentStep: "awaiting_selection",
+      // Keep the top-level intent column in sync with context.intent so a later
+      // refinement never reads a stale search.
+      intent: JSON.stringify(intent),
       context: JSON.stringify({
         ...context,
         intent,
@@ -545,7 +571,7 @@ async function confirmOrder(conversationId: string, text: string) {
 
   await messagingAdapter.sendMessage(
     conversationId,
-    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo modo demo do Atlas, responda "paguei" aqui no WhatsApp para simular aprovação.`,
+    `Pagamento ${paymentMethod.toUpperCase()} gerado: ${paidOrder.paymentLink}\n\nNo modo demo da Lia, responda "paguei" aqui no WhatsApp para simular a aprovação.`,
     { orderId: order.id }
   );
 
@@ -586,8 +612,8 @@ async function sendCheckoutSummary(
     [
       "*Resumo do pedido*",
       "",
-      `🛍️ *Nome do produto*: ${product.title}`,
-      `💵 *Preço*: ${formatCurrency(product.price)}`,
+      `🛒 *Nome do produto*: ${product.title}`,
+      `💰 *Preço*: ${formatCurrency(product.price)}`,
       `🚚 *Frete*: ${formatCurrency(product.shippingPrice)}`,
       `🧾 *Total*: ${formatCurrency(total)}`,
       `📍 *Endereço*: ${address ?? "a confirmar"}`,
@@ -830,6 +856,23 @@ function looksLikeSearchRefinement(text: string) {
       normalized
     )
   );
+}
+
+function currentSearchQuery(conversation: NonNullable<Awaited<ReturnType<typeof getConversation>>>) {
+  const context = readContext(conversation.context);
+  return context.intent?.searchQuery ?? readIntent(conversation.intent).searchQuery ?? undefined;
+}
+
+function selectionFromTurn(
+  turn: Awaited<ReturnType<typeof aiAdapter.classifyTurn>>,
+  options: Array<{ productId: string; product: { price: number; deliveryHours: number } }>
+) {
+  if (!turn || turn.type !== "select" || !turn.selection) return undefined;
+  const { ordinal, hint } = turn.selection;
+  if (ordinal && options[ordinal - 1]) return options[ordinal - 1].productId;
+  if (hint === "cheapest") return [...options].sort((a, b) => a.product.price - b.product.price)[0]?.productId;
+  if (hint === "fastest") return [...options].sort((a, b) => a.product.deliveryHours - b.product.deliveryHours)[0]?.productId;
+  return undefined;
 }
 
 function isRejectionOrMoreOptions(text: string) {

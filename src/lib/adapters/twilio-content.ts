@@ -1,6 +1,6 @@
 import twilio from "twilio";
 
-const PRODUCT_OPTIONS_TEMPLATE_NAME = "atlas_product_options_quick_reply";
+const PRODUCT_OPTIONS_TEMPLATE_NAME = "lia_product_options_quick_reply";
 
 export type TwilioContentReadiness = {
   ready: boolean;

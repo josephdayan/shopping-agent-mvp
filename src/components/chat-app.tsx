@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, CreditCard, Loader2, RotateCcw, Send, ShoppingBag } from "lucide-react";
-import { AtlasSymbol } from "@/components/atlas-brand";
+import { LiaSymbol } from "@/components/lia-brand";
 
 type Product = {
   id: string;
@@ -117,68 +117,83 @@ export default function ChatApp() {
   if (loading || !conversation) {
     return (
       <div className="grid min-h-[70vh] place-items-center">
-        <Loader2 className="animate-spin text-atlas-violet" />
+        <Loader2 className="animate-spin text-lia-green" />
       </div>
     );
   }
 
   return (
     <section className="mx-auto grid max-w-6xl gap-5 px-4 py-5 lg:grid-cols-[1fr_330px]">
-      <div className="flex min-h-[calc(100vh-120px)] flex-col overflow-hidden rounded-md border border-atlas-line bg-white shadow-brand">
-        <div className="flex items-center justify-between border-b border-atlas-line bg-atlas-night px-4 py-3 text-atlas-lavender">
+      <div className="flex min-h-[calc(100vh-120px)] flex-col overflow-hidden rounded-md border border-lia-line bg-white shadow-brand">
+        <div className="flex items-center justify-between border-b border-lia-line bg-lia-night px-4 py-3 text-lia-lavender">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-white/8 text-atlas-violet">
-              <AtlasSymbol className="h-5 w-5" />
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-white/8 text-lia-aqua">
+              <LiaSymbol className="h-5 w-5" />
             </span>
             <div>
-              <p className="text-sm font-semibold">Atlas</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-atlas-lavender/55">
-                concierge · online
+              <p className="text-sm font-semibold">Lia</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-lia-lavender/55">
+                assistente · online
               </p>
             </div>
           </div>
-          <span className="rounded-md bg-atlas-violet px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-atlas-night">
+          <span className="rounded-md bg-lia-aqua px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-lia-night">
             {statusLabel}
           </span>
         </div>
 
-        <div className="flex-1 space-y-4 overflow-y-auto bg-atlas-lavender/65 p-4">
+        <div className="flex-1 space-y-4 overflow-y-auto bg-lia-lavender/65 p-4">
           {conversation.messages.map((message) => (
             <div key={message.id} className={message.sender === "user" ? "flex justify-end" : "flex justify-start"}>
               <div
                 className={
                   message.sender === "user"
-                    ? "max-w-[78%] rounded-[18px_18px_4px_18px] bg-[#DCE5F4] px-4 py-3 text-sm text-atlas-ink"
-                    : "max-w-[88%] rounded-[18px_18px_18px_4px] border border-atlas-line bg-white px-4 py-3 text-sm text-atlas-ink shadow-sm"
+                    ? "max-w-[78%] rounded-[18px_18px_4px_18px] bg-lia-aqua/25 px-4 py-3 text-sm text-lia-ink"
+                    : "max-w-[88%] rounded-[18px_18px_18px_4px] border border-lia-line bg-white px-4 py-3 text-sm text-lia-ink shadow-sm"
                 }
               >
-                <p className="whitespace-pre-line leading-relaxed">{message.text}</p>
+                <p className="whitespace-pre-line leading-relaxed">{renderWhatsAppText(message.text)}</p>
               </div>
             </div>
           ))}
 
           {conversation.currentStep === "awaiting_selection" && (
-            <div className="grid gap-3 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3">
               {conversation.options.map((option) => (
                 <button
                   key={option.id}
                   onClick={() => send(String(option.rank))}
-                  className="overflow-hidden rounded-md border border-atlas-line bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-atlas-violet hover:shadow-soft"
+                  className="group overflow-hidden rounded-[22px] border-[8px] border-white bg-white text-left shadow-soft outline outline-1 outline-lia-line/60 transition hover:-translate-y-0.5 hover:outline-lia-aqua"
                   title={`Escolher ${option.product.title}`}
                 >
-                  <img src={option.product.imageUrl} alt="" className="h-28 w-full object-cover" />
-                  <div className="space-y-2 p-3">
-                    <div className="flex items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.1em] text-atlas-violet">
-                      <span>{option.reason}</span>
-                      <span>#{option.rank}</span>
+                  <div className="overflow-hidden rounded-[14px] bg-lia-lavender">
+                    <img
+                      src={option.product.imageUrl}
+                      alt=""
+                      className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                    />
+                  </div>
+                  <div className="space-y-3 px-3 pb-4 pt-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-base font-semibold leading-snug text-lia-ink">{option.product.title}</h3>
+                      <span className="shrink-0 rounded-full bg-lia-aqua/20 px-2.5 py-1 text-xs font-semibold text-lia-night">
+                        #{option.rank}
+                      </span>
                     </div>
-                    <h3 className="text-sm font-semibold leading-snug">{option.product.title}</h3>
-                    <p className="text-xs text-atlas-body">
-                      {option.product.store} · {sourceLabel(option.product.source)} · {option.product.rating.toFixed(1)} estrelas
+                    <p className="line-clamp-2 text-sm leading-relaxed text-lia-muted">
+                      {option.product.store} · {sourceLabel(option.product.source)} · {option.reason}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold">R$ {option.product.price.toFixed(2)}</span>
-                      <span className="text-xs text-atlas-muted">{option.product.deliveryEstimate}</span>
+                    <div className="space-y-1.5 text-sm text-lia-body">
+                      <p>
+                        <span className="font-semibold text-lia-ink">Valor:</span> {formatCurrency(option.product.price)}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-lia-ink">Entrega:</span> {option.product.deliveryEstimate}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-lia-ink">Avaliação:</span>{" "}
+                        {option.product.rating.toFixed(1)} estrelas
+                      </p>
                     </div>
                   </div>
                 </button>
@@ -188,13 +203,13 @@ export default function ChatApp() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-atlas-line bg-white p-3">
+        <div className="border-t border-lia-line bg-white p-3">
           <div className="mb-2 flex flex-wrap gap-2">
             {QUICK_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 onClick={() => send(prompt)}
-                className="rounded-md border border-atlas-line px-2.5 py-1.5 text-xs text-atlas-body transition hover:border-atlas-violet hover:text-atlas-violet"
+                className="rounded-md border border-lia-line px-2.5 py-1.5 text-xs text-lia-body transition hover:border-lia-aqua hover:text-lia-night"
               >
                 {prompt}
               </button>
@@ -211,11 +226,11 @@ export default function ChatApp() {
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Digite sua mensagem"
-              className="min-w-0 flex-1 rounded-md border border-atlas-line px-3 py-3 outline-none transition focus:border-atlas-violet"
+              className="min-w-0 flex-1 rounded-md border border-lia-line px-3 py-3 outline-none transition focus:border-lia-aqua"
             />
             <button
               disabled={sending}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-atlas-violet text-atlas-night disabled:opacity-50"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-lia-aqua text-lia-night disabled:opacity-50"
               title="Enviar"
             >
               {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
@@ -225,10 +240,10 @@ export default function ChatApp() {
       </div>
 
       <aside className="space-y-4">
-        <div className="rounded-md border border-atlas-line bg-white p-4 shadow-soft">
+        <div className="rounded-md border border-lia-line bg-white p-4 shadow-soft">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold">Pedido</h2>
-            <ShoppingBag size={18} className="text-atlas-violet" />
+            <ShoppingBag size={18} className="text-lia-green" />
           </div>
           {activeOrder ? (
             <div className="space-y-3 text-sm">
@@ -244,7 +259,7 @@ export default function ChatApp() {
                 <button
                   onClick={approvePayment}
                   disabled={sending}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-atlas-violet px-3 py-2.5 text-sm font-semibold text-atlas-night disabled:opacity-50"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-lia-aqua px-3 py-2.5 text-sm font-semibold text-lia-night disabled:opacity-50"
                 >
                   <CreditCard size={16} />
                   Simular pagamento aprovado
@@ -252,24 +267,24 @@ export default function ChatApp() {
               )}
             </div>
           ) : (
-            <p className="text-sm text-atlas-body">Nenhum pedido criado ainda.</p>
+            <p className="text-sm text-lia-body">Nenhum pedido criado ainda.</p>
           )}
         </div>
 
         <button
           onClick={startConversation}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-atlas-line bg-white px-3 py-2.5 text-sm font-medium hover:border-atlas-violet hover:text-atlas-violet"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-lia-line bg-white px-3 py-2.5 text-sm font-medium hover:border-lia-aqua hover:bg-lia-mint"
         >
           <RotateCcw size={16} />
           Nova conversa
         </button>
 
-        <div className="rounded-md border border-atlas-line bg-white p-4 text-sm shadow-soft">
+        <div className="rounded-md border border-lia-line bg-white p-4 text-sm shadow-soft">
           <div className="mb-2 flex items-center gap-2 font-semibold">
-            <Check size={16} className="text-atlas-success" />
+            <Check size={16} className="text-lia-success" />
             Fluxo coberto
           </div>
-          <p className="leading-relaxed text-atlas-body">
+          <p className="leading-relaxed text-lia-body">
             Interpretacao, ranking, checkout, pagamento mockado, pedido e memoria, expostos por API e webhook.
           </p>
         </div>
@@ -280,8 +295,8 @@ export default function ChatApp() {
 
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-atlas-line pb-2 last:border-0 last:pb-0">
-      <span className="text-atlas-body">{label}</span>
+    <div className="flex items-center justify-between gap-3 border-b border-lia-line pb-2 last:border-0 last:pb-0">
+      <span className="text-lia-body">{label}</span>
       <span className="text-right font-medium">{value}</span>
     </div>
   );
@@ -304,4 +319,25 @@ function fulfillmentLabel(mode: string) {
     manual_operator: "manual"
   };
   return labels[mode] ?? mode;
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  }).format(value);
+}
+
+function renderWhatsAppText(text: string) {
+  return text.split(/(\*[^*\n]+\*)/g).map((part, index) => {
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <strong key={`${part}-${index}`} className="font-semibold">
+          {part.slice(1, -1)}
+        </strong>
+      );
+    }
+
+    return part;
+  });
 }

@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: atlas-postgres
+    container_name: lia-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres

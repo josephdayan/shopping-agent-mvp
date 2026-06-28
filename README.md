@@ -1,6 +1,6 @@
-# Atlas
+# Lia
 
-Atlas funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
+Lia funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
 
 ## Como rodar localmente
 
@@ -127,7 +127,7 @@ curl https://shopping-agent-mvp.vercel.app/api/twilio/status \
   -H "Authorization: Bearer SEU_API_TOKEN"
 ```
 
-O status do Atlas tambem mostra preparo para Twilio Agent Connect.
+O status da Lia tambem mostra preparo para Twilio Agent Connect.
 
 ## Fluxos para testar
 
@@ -136,7 +136,7 @@ O status do Atlas tambem mostra preparo para Twilio Agent Connect.
 - `quero lenco de papel para entregar hoje`
 - `repete meu ultimo pedido`
 
-No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`, `mais rapida`, nome da marca), confirme com `sim` e use `Simular pagamento aprovado`. O dashboard fica em `/admin` e permite aprovar pagamento e avancar fulfillment.
+Na Lia, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`, `mais rapida`, nome da marca), confirme com `sim` e use `Simular pagamento aprovado`. O dashboard fica em `/admin` e permite aprovar pagamento e avancar fulfillment.
 
 ## Estrutura do projeto
 
@@ -170,7 +170,7 @@ No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata
 - `TWILIO_CONVERSATION_CONFIGURATION_ID`: configuracao do Conversation Orchestrator.
 - `TWILIO_MEMORY_STORE_ID`: Memory Store do Conversation Memory.
 - `TWILIO_TRAIT_GROUPS`: grupos de traits usados na memoria. Padrao: `Contact,Preferences`.
-- `TWILIO_PRODUCT_OPTIONS_CONTENT_SID`: ContentSid de template `twilio/quick-reply` para botoes de escolha no WhatsApp. Sem ele, Atlas usa imagens + texto como fallback.
+- `TWILIO_PRODUCT_OPTIONS_CONTENT_SID`: ContentSid de template `twilio/quick-reply` para botoes de escolha no WhatsApp. Sem ele, Lia usa imagens + texto como fallback.
 - `TWILIO_PHONE_NUMBER`: numero Twilio principal em formato E.164.
 - `TWILIO_VOICE_PUBLIC_DOMAIN`: dominio publico para voz/ConversationRelay, se ativar voz.
 - `MERCADO_LIVRE_REAL_SEARCH`: `true` para tentar busca real no Mercado Livre.
@@ -178,7 +178,7 @@ No Atlas, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata
 - `MERCADO_LIVRE_SEARCH_LIMIT`: quantidade de resultados buscados antes do ranking. Padrao: `8`.
 - `MERCADO_LIVRE_DEFAULT_SHIPPING`: frete estimado quando a API nao traz frete. Padrao: `12.90`.
 - `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
-- `APIFY_API_TOKEN`: chave opcional da Apify. Quando existe, o Atlas usa Apify primeiro para buscar Mercado Livre.
+- `APIFY_API_TOKEN`: chave opcional da Apify. Quando existe, a Lia usa Apify primeiro para buscar Mercado Livre.
 - `APIFY_MERCADO_LIVRE_ACTOR`: actor da Apify. Padrao: `karamelo/mercadolivre-scraper-brasil-portugues`.
 - `APIFY_MERCADO_LIVRE_MAX_PAGES`: paginas por busca na Apify. Padrao: `1`.
 - `APIFY_MERCADO_LIVRE_TIMEOUT_SECONDS`: timeout da execucao sincrona. Padrao: `60`.
@@ -198,7 +198,7 @@ O retorno segue `ProductIntent`. Uma boa evolucao e trocar a validacao manual po
 
 ## Como integrar Mercado Livre
 
-O conector fica em `src/lib/adapters/suppliers.ts`. Quando `APIFY_API_TOKEN` existe, o Atlas busca primeiro pela Apify. Sem Apify, ele tenta listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
+O conector fica em `src/lib/adapters/suppliers.ts`. Quando `APIFY_API_TOKEN` existe, a Lia busca primeiro pela Apify. Sem Apify, ele tenta listings reais no Mercado Livre Brasil (`MLB`) quando `MERCADO_LIVRE_REAL_SEARCH="true"` ou `MERCADO_LIVRE_ACCESS_TOKEN` existe.
 
 Importante: a API publica de search pode retornar `403` mesmo com credenciais OAuth se o app ainda nao tiver acesso liberado. Por isso, em producao a ordem recomendada e Apify -> Mercado Livre oficial -> Unwrangle -> catalogo do Mercado Livre -> dados internos. Quando a busca real funciona, os itens sao salvos/atualizados em `Product` com:
 
@@ -255,7 +255,7 @@ O comando imprime:
 TWILIO_PRODUCT_OPTIONS_CONTENT_SID=HX...
 ```
 
-Coloque esse valor na Vercel em Production/Preview e faca redeploy. Dentro da janela de 24h do WhatsApp, a Twilio pode enviar quick replies sem aprovacao de template; se o envio com botoes falhar ou a variavel nao existir, Atlas cai automaticamente para imagem + texto.
+Coloque esse valor na Vercel em Production/Preview e faca redeploy. Dentro da janela de 24h do WhatsApp, a Twilio pode enviar quick replies sem aprovacao de template; se o envio com botoes falhar ou a variavel nao existir, Lia cai automaticamente para imagem + texto.
 
 Tambem da para checar ou criar o template por API, usando `API_TOKEN`:
 
@@ -275,7 +275,7 @@ O retorno mostra o `TWILIO_PRODUCT_OPTIONS_CONTENT_SID` que deve ser salvo na Ve
 
 ### Twilio Agent Connect
 
-O Atlas ainda roda seu proprio concierge de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
+A Lia ainda roda seu proprio concierge de compras. O Twilio Agent Connect entra como middleware futuro para memoria, orquestracao multi-canal e voz. A camada pronta fica em `src/lib/adapters/twilio-agent-connect.ts`.
 
 Hoje existem dois modos:
 
@@ -296,7 +296,7 @@ curl "https://shopping-agent-mvp.vercel.app/api/twilio/agent-connect/context?pho
   -H "Authorization: Bearer SEU_API_TOKEN"
 ```
 
-Quando TAC for habilitado de verdade, use o setup wizard do SDK Python da Twilio para criar Conversation Memory e Conversation Configuration, depois preencha `TWILIO_CONVERSATION_CONFIGURATION_ID` e `TWILIO_MEMORY_STORE_ID`. O SDK TypeScript do TAC ainda nao esta publicado no npm; por isso o Atlas nao instala esse runtime diretamente.
+Quando TAC for habilitado de verdade, use o setup wizard do SDK Python da Twilio para criar Conversation Memory e Conversation Configuration, depois preencha `TWILIO_CONVERSATION_CONFIGURATION_ID` e `TWILIO_MEMORY_STORE_ID`. O SDK TypeScript do TAC ainda nao esta publicado no npm; por isso a Lia nao instala esse runtime diretamente.
 
 Para usar a Meta WhatsApp Cloud API depois, configure:
 
@@ -321,7 +321,7 @@ E use o mesmo valor de `WHATSAPP_VERIFY_TOKEN` no campo Verify Token.
 - Envie respostas via API do provedor.
 - Para cards, envie lista/template quando o provedor suportar; caso contrario, transforme as opcoes em texto numerado.
 
-## Limitacoes atuais do Atlas
+## Limitacoes atuais da Lia
 
 - A IA usa heuristica local por padrao quando nao ha chave OpenAI.
 - Alguns fornecedores ainda usam catalogo demo quando nao ha API real configurada.
@@ -330,7 +330,7 @@ E use o mesmo valor de `WHATSAPP_VERIFY_TOKEN` no campo Verify Token.
 - Status de entrega avanca manualmente.
 - Imagens sao demonstrativas.
 
-## Proximos passos tecnicos do Atlas
+## Proximos passos tecnicos da Lia
 
 - Autenticacao e permissoes do admin.
 - Webhooks reais de pagamento e WhatsApp.
