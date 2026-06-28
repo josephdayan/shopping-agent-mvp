@@ -908,7 +908,7 @@ function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) 
   const positiveTerms = queryExpansionTerms(normalizedQuery);
   const unwantedTerms = unwantedModifierTerms(normalizedQuery);
 
-  return items
+  const scored = items
     .map((item, index) => {
       const text = normalize(textFor(item));
       const matched = tokens.filter((token) => text.includes(token));
@@ -924,13 +924,15 @@ function rankMercadoLivreItems<T>(items: T[], query: string, textFor: (item: T) 
         unwantedMatches
       };
     })
-    .filter(({ score, unwantedMatches }) => {
-      if (unwantedMatches.length) return false;
-      if (tokens.length <= 1) return score >= 4;
-      return score >= tokens.length * 3.5;
-    })
-    .sort((a, b) => b.score - a.score)
-    .map(({ item }) => item);
+    .filter(({ unwantedMatches }) => unwantedMatches.length === 0)
+    .sort((a, b) => b.score - a.score);
+
+  const passing = scored.filter(({ score }) => (tokens.length <= 1 ? score >= 4 : score >= tokens.length * 3.5));
+  // If nothing clears the relevance bar, still surface the best non-junk matches
+  // instead of returning nothing — better to show the closest items the scraper
+  // found (and let the user refine) than to dead-end on zero.
+  const chosen = passing.length ? passing : scored.slice(0, 3);
+  return chosen.map(({ item }) => item);
 }
 
 function dedupeMercadoLivreItems<T>(items: T[], keyFor: (item: T) => string) {

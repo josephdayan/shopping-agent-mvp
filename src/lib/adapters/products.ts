@@ -131,19 +131,25 @@ function filterRelevantProducts(products: Product[], intent: ProductIntent) {
   const terms = requiredTermsFor(query);
   const tokens = significantTokens(query);
   const blockedTerms = blockedTermsFor(query);
-  const baseProducts = !terms.length && !tokens.length
-    ? products
-    : products.filter((product) => {
-        const haystack = productText(product);
-        if (blockedTerms.some((term) => containsWord(haystack, term))) return false;
-        const passesRequiredGroups = terms.every((group) => group.some((term) => haystack.includes(term)));
-        if (!passesRequiredGroups) return false;
+  if (!terms.length && !tokens.length) return applyStrongFilters(products, intent);
 
-        if (!tokens.length) return true;
-        const matchedTokens = tokens.filter((token) => haystack.includes(token)).length;
-        const minimumMatches = tokens.length <= 2 ? tokens.length : Math.ceil(tokens.length * 0.75);
-        return matchedTokens >= minimumMatches;
-      });
+  // Drop accessories/junk first — we never want "buzina" for "sapato".
+  const notBlocked = products.filter((product) => !blockedTerms.some((term) => containsWord(productText(product), term)));
+
+  const strict = notBlocked.filter((product) => {
+    const haystack = productText(product);
+    const passesRequiredGroups = terms.every((group) => group.some((term) => haystack.includes(term)));
+    if (!passesRequiredGroups) return false;
+
+    if (!tokens.length) return true;
+    const matchedTokens = tokens.filter((token) => haystack.includes(token)).length;
+    const minimumMatches = tokens.length <= 2 ? tokens.length : Math.ceil(tokens.length * 0.75);
+    return matchedTokens >= minimumMatches;
+  });
+
+  // If the strict match leaves nothing, fall back to the closest non-junk items the
+  // scraper returned instead of dead-ending on zero.
+  const baseProducts = strict.length ? strict : notBlocked;
 
   return applyStrongFilters(baseProducts, intent);
 }
