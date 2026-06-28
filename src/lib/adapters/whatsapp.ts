@@ -459,11 +459,14 @@ function formatBRL(value: number) {
 
 function deliveryLabel(product: Product) {
   const estimate = (product.deliveryEstimate ?? "").trim();
-  // Show the real shipping/delivery text the listing gave us; otherwise fall back
-  // to free-shipping / the shipping price (never a faked delivery time).
-  if (estimate && !/informado no link|prazo no link/i.test(estimate)) return estimate;
-  if (product.shippingPrice === 0) return "Frete grátis";
-  return `Frete ${formatBRL(product.shippingPrice)}`;
+  // Prefer a real delivery time from the listing when it has one.
+  if (estimate && /\b(chega|chegar|amanh|hoje|dias?|horas?|uteis|úteis)\b/i.test(estimate)) {
+    return estimate;
+  }
+  // The exact per-item prazo depends on the buyer's CEP, which we don't have yet —
+  // show an honest estimated range instead of a fake single number.
+  const days = Math.max(2, Math.round((product.deliveryHours || 72) / 24));
+  return `Estimado em ${days} a ${days + 3} dias úteis`;
 }
 
 function buildProductOptionVariables(reply: WhatsAppRichReply) {
