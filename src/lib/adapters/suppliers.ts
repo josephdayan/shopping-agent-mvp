@@ -610,7 +610,7 @@ function buildSearchQuery(intent: ProductIntent) {
 
 function inferBrand(title: string, preferredBrand?: string) {
   if (preferredBrand && title.toLowerCase().includes(preferredBrand.toLowerCase())) return preferredBrand;
-  const knownBrands = ["Colgate", "Oral-B", "Curaprox", "Sorriso", "Pantene", "Seda", "Kleenex", "Nivea", "Rexona", "Anker", "Duracell", "Crystal", "Lacta"];
+  const knownBrands = ["Colgate", "Oral-B", "Curaprox", "Sorriso", "Pantene", "Seda", "Kleenex", "Nivea", "Rexona", "Anker", "Duracell", "Crystal", "Lacta", "Pampers", "Huggies", "Johnson"];
   return knownBrands.find((brand) => title.toLowerCase().includes(brand.toLowerCase())) ?? "Mercado Livre";
 }
 
@@ -624,6 +624,7 @@ function estimatedPriceForCategory(category?: string) {
     "pasta de dente": 12.9,
     shampoo: 24.9,
     "lenco de papel": 9.9,
+    "lenco umedecido": 19.9,
     "protetor solar": 49.9,
     desodorante: 18.9,
     carregador: 49.9,
@@ -808,9 +809,13 @@ function queryExpansionTerms(query: string) {
   const terms = new Set(significantTokens(query));
 
   if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
-    ["sapato", "sapatos", "tenis", "sapatilha", "sapatilhas", "sapatênis", "sapatenis", "bota", "botas", "sneaker", "calcado"].forEach((term) =>
+    ["sapato", "sapatos", "tenis", "sapatilha", "sapatilhas", "sapatênis", "sapatenis", "bota", "botas", "sneaker", "calcado", "calcados", "mocassim", "sandalia", "chinelo"].forEach((term) =>
       terms.add(normalize(term))
     );
+  }
+
+  if (/\b(lenco umedecido|baby wipes|wipes|toalha umedecida)\b/.test(query)) {
+    ["lenco", "lenço", "toalha", "toalhas", "umedecido", "umedecida", "bebe", "bebê", "baby", "wipes"].forEach((term) => terms.add(normalize(term)));
   }
 
   if (/\b(violao|guitarra|baixo|ukulele)\b/.test(query)) {
@@ -841,6 +846,15 @@ function unwantedModifierTerms(query: string) {
     "poster",
     "quadro",
     "caneca",
+    "calcadeira",
+    "chifre",
+    "buzina",
+    "forma",
+    "formas",
+    "palminha",
+    "cadargo",
+    "cadarco",
+    "cadarço",
     "capa",
     "case",
     "suporte",
@@ -891,9 +905,10 @@ function significantTokens(query: string) {
 
 function buildApifyMercadoLivreInput(query: string, intent: ProductIntent) {
   const maxPages = Number(process.env.APIFY_MERCADO_LIVRE_MAX_PAGES ?? 1);
-  const limit = batchSize(intent);
+  const displayLimit = batchSize(intent);
   const offset = batchOffset(intent);
-  const maxItems = Math.max(limit + offset, limit);
+  const candidateLimit = batchCandidateSize(intent);
+  const maxItems = Math.max(candidateLimit + offset, candidateLimit);
   return {
     keyword: query,
     search: query,
@@ -909,8 +924,10 @@ function buildApifyMercadoLivreInput(query: string, intent: ProductIntent) {
     maximoDePaginasBusca: maxPages,
     maxPagesOfertas: 1,
     maximoPaginasOfertas: 1,
-    limit,
-    limite: limit,
+    limit: candidateLimit,
+    limite: candidateLimit,
+    displayLimit,
+    limiteExibicao: displayLimit,
     maxItems,
     max_items: maxItems,
     maxResults: maxItems,
@@ -942,11 +959,17 @@ function batchOffset(intent: ProductIntent) {
 }
 
 function selectApifyBatch<T>(items: T[], intent: ProductIntent) {
-  const limit = batchSize(intent);
+  const limit = batchCandidateSize(intent);
   const offset = batchOffset(intent);
   if (offset <= 0) return items.slice(0, limit);
   if (items.length <= limit) return items;
   return items.slice(offset, offset + limit);
+}
+
+function batchCandidateSize(intent: ProductIntent) {
+  const configured = Number(process.env.ATLAS_SEARCH_CANDIDATE_SIZE);
+  if (Number.isFinite(configured) && configured > 0) return Math.min(Math.floor(configured), 15);
+  return Math.min(Math.max(batchSize(intent) * 4, 6), 12);
 }
 
 function apifyTitle(item: ApifyProduct) {

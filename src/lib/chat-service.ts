@@ -202,6 +202,7 @@ async function sendLatestOrderStatus(conversationId: string, userId: string) {
 async function startProductSearch(conversationId: string, text: string) {
   const conversation = await getConversation(conversationId);
   if (!conversation) throw new Error("Conversation not found");
+  await prisma.productOption.deleteMany({ where: { conversationId } });
   const parsed = await aiAdapter.parseUserIntent(text);
 
   if (parsed.unsupported) {
@@ -580,7 +581,7 @@ function looksLikeNewProductRequest(text: string) {
   if (/\b\d\b|primeir|segund|terceir|mais barata|mais rapida|melhor/.test(normalized)) return false;
   if (/\b(quero|queria|preciso|necessito|procuro|busca|buscar|compra|comprar)\b/.test(normalized)) return true;
   return (
-    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|sapato|sapatos|tenis|calcado)\b/.test(
+    /\b(camisa|camiseta|blusa|livro|escova|pasta|shampoo|desodorante|carregador|pilha|agua|chocolate|lenco|wipes|baby wipes|toalha umedecida|sapato|sapatos|tenis|calcado)\b/.test(
       normalized
     )
   );

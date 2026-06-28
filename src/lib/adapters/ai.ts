@@ -1,11 +1,12 @@
 import type { ProductOption } from "@prisma/client";
-import type { ProductIntent } from "@/lib/types";
+import type { ProductIntent, RankedProduct } from "@/lib/types";
 
 const CATEGORY_SYNONYMS: Array<[string, string[]]> = [
   ["escova de dente", ["escova", "escova dental", "toothbrush"]],
   ["pasta de dente", ["pasta", "creme dental", "toothpaste"]],
   ["shampoo", ["shampoo", "xampu"]],
   ["lenco de papel", ["lenco", "lenço", "kleenex", "papel"]],
+  ["lenco umedecido", ["lenco umedecido", "lenço umedecido", "baby wipes", "wipes", "toalha umedecida", "toalhas umedecidas"]],
   ["protetor solar", ["protetor", "protetor solar", "filtro solar"]],
   ["desodorante", ["desodorante", "antitranspirante"]],
   ["carregador", ["carregador", "cabo", "usb-c", "iphone"]],
@@ -31,7 +32,10 @@ const BRANDS = [
   "Anker",
   "Duracell",
   "Crystal",
-  "Lacta"
+  "Lacta",
+  "Pampers",
+  "Huggies",
+  "Johnson"
 ];
 const FORBIDDEN = ["arma", "cigarro", "remedio controlado", "medicamento controlado", "alcool"];
 
@@ -60,7 +64,7 @@ export const aiAdapter = {
       }
     }
     Object.assign(intent, refineIntentFromText(text, intent));
-    intent.searchQuery = buildSearchQueryFromText(text, intent.category);
+    intent.searchQuery = intent.searchQuery ?? buildSearchQueryFromText(text, intent.category);
 
     const brand = BRANDS.find((candidate) => normalized.includes(normalize(candidate)));
     if (brand) intent.preferredBrand = brand;
@@ -108,6 +112,18 @@ export const aiAdapter = {
       status: "Aqui está o status mais recente do seu pedido."
     };
     return responses[kind];
+  },
+
+  async curateProductOptions(intent: ProductIntent, products: RankedProduct[]) {
+    if (!products.length) return products;
+    const heuristicProducts = products.filter((product) => looksLikePrimaryProduct(intent, product.title));
+    const candidates = heuristicProducts.length >= 3 ? heuristicProducts : products;
+    const selectedIds = await curateProductsWithOpenAI(intent, candidates.slice(0, 12));
+    const selected = selectedIds
+      ? candidates.filter((product) => selectedIds.includes(product.id))
+      : heuristicProducts;
+    const curated = selected.length ? selected : heuristicProducts.length ? heuristicProducts : products;
+    return curated.slice(0, 3).map((product, index) => ({ ...product, rank: index + 1 }));
   }
 };
 
@@ -127,7 +143,7 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
           {
             role: "system",
             content:
-              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve nomes específicos, títulos de livros, modelos, marcas, cores e estilos em searchQuery. Exemplo: 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'. Responda apenas JSON válido."
+              "Você extrai intenção de compra em português do Brasil para o Atlas, um concierge de compras. Preserve exatamente o produto pedido: não substitua por outro item, não use histórico e não invente categoria. Se o usuário escrever em inglês, traduza para um termo comum no Mercado Livre Brasil apenas quando isso melhorar a busca. Exemplos: 'baby wipes' vira category 'lenco umedecido' e searchQuery 'lenço umedecido bebê'; 'quero uma camisa branca social' vira category 'camisa social' e searchQuery 'camisa branca social'. Preserve títulos de livros, modelos, marcas, cores e estilos em searchQuery. Responda apenas JSON válido."
           },
           {
             role: "user",
@@ -199,17 +215,131 @@ function refineIntentFromText(text: string, intent: ProductIntent): ProductInten
   const normalized = normalize(text);
   const refined: ProductIntent = { ...intent };
 
-  if (/\b(camisa social|social branca|camisa branca social)\b/.test(normalized)) {
+  if (/\b(baby wipes|wipes|lenco umedecido|lenço umedecido|toalha umedecida|toalhas umedecidas)\b/.test(normalized)) {
+    refined.category = "lenco umedecido";
+    refined.searchQuery = /\b(baby|bebe|bebê)\b/.test(normalized) ? "lenço umedecido bebê" : "lenço umedecido";
+  } else if (/\b(camisa social|social branca|camisa branca social)\b/.test(normalized)) {
     refined.category = "camisa social";
   } else if (/\b(camiseta|tshirt|t shirt|blusa)\b/.test(normalized)) {
     refined.category = "camiseta";
   }
 
-  if (/\b(camisa|camiseta|blusa|tshirt|t shirt)\b/.test(normalized)) {
+  if (/\b(camisa|camiseta|blusa|tshirt|t shirt)\b/.test(normalized) && !refined.searchQuery) {
     refined.searchQuery = buildSearchQueryFromText(text, refined.category);
   }
 
   return refined;
+}
+
+async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedProduct[]) {
+  if (!process.env.OPENAI_API_KEY || !products.length) return null;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "Você é curador de resultados de marketplace para um concierge de compras. Selecione somente produtos que sejam o produto principal pedido, não acessórios, enfeites, peças, suportes, capas, chaveiros, adesivos, aromatizadores, miniaturas ou itens apenas relacionados. Prefira resultados populares/comerciais normais, não itens estranhos. Preserve a ordem de relevância quando houver empate. Responda apenas JSON válido."
+          },
+          {
+            role: "user",
+            content: JSON.stringify({
+              pedido: {
+                categoria: intent.category,
+                busca: intent.searchQuery,
+                marca: intent.preferredBrand
+              },
+              candidatos: products.map((product) => ({
+                id: product.id,
+                titulo: product.title,
+                marca: product.brand,
+                preco: product.price,
+                loja: product.store
+              }))
+            })
+          }
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name: "product_curation",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                selectedIds: {
+                  type: "array",
+                  items: { type: "string" },
+                  maxItems: 3
+                }
+              },
+              required: ["selectedIds"]
+            }
+          }
+        }
+      })
+    });
+
+    if (!response.ok) return null;
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
+    if (!jsonText) return null;
+    const parsed = JSON.parse(jsonText) as { selectedIds?: string[] };
+    const validIds = new Set(products.map((product) => product.id));
+    return (parsed.selectedIds ?? []).filter((id) => validIds.has(id));
+  } catch (error) {
+    console.warn("[ai:product-curation:fallback]", error);
+    return null;
+  }
+}
+
+function looksLikePrimaryProduct(intent: ProductIntent, title: string) {
+  const query = normalize([intent.category, intent.searchQuery].filter(Boolean).join(" "));
+  const normalizedTitle = normalize(title);
+  const accessoryWords = [
+    "acessorio",
+    "acessorios",
+    "adesivo",
+    "aromatizador",
+    "aroma",
+    "buzina",
+    "calcadeira",
+    "chaveiro",
+    "chifre",
+    "capa",
+    "case",
+    "decoracao",
+    "enfeite",
+    "forma",
+    "miniatura",
+    "palminha",
+    "pendente",
+    "pingente",
+    "purificador",
+    "suporte",
+    "sticker"
+  ];
+
+  if (accessoryWords.some((word) => normalizedTitle.includes(word) && !query.includes(word))) return false;
+
+  if (/\b(lenco umedecido|baby wipes|wipes|toalha umedecida)\b/.test(query)) {
+    return /\b(lenco|toalha|toalhas|umedecido|umedecida|wipes|baby|bebe)\b/.test(normalizedTitle);
+  }
+
+  if (/\b(sapato|sapatos|tenis|sneaker|calcado)\b/.test(query)) {
+    return /\b(sapato|sapatos|tenis|sneaker|calcado|calcados|bota|sandalia|chinelo|mocassim|sapatilha)\b/.test(normalizedTitle);
+  }
+
+  return true;
 }
 
 function isGenericSearchQuery(searchQuery?: string, category?: string) {

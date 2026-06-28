@@ -369,13 +369,6 @@ async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply)
       );
     }
 
-    messages.push(
-      await client.messages.create({
-        from: normalizedFrom,
-        to: normalizedTo,
-        body: "Responda 1, 2 ou 3."
-      })
-    );
   } else if (reply.text) {
     messages.push(
       await client.messages.create({

@@ -2,6 +2,7 @@ import type { Product } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { ProductIntent, RankedProduct } from "@/lib/types";
 import { supplierConnectors } from "@/lib/adapters/suppliers";
+import { aiAdapter } from "@/lib/adapters/ai";
 
 export const productSearchAdapter = {
   async searchProducts(intent: ProductIntent, userId: string) {
@@ -35,12 +36,12 @@ export const productSearchAdapter = {
     const rankedLiveProducts = this.rankProducts(liveMercadoLivreProducts, rankingIntent);
     const requiresLiveSearch =
       Boolean(intent.searchQuery?.trim()) && process.env.ATLAS_ALLOW_MOCK_RESULTS_FOR_SEARCH !== "true";
-    if (requiresLiveSearch) return rankedLiveProducts.slice(0, 3);
-    if (rankedLiveProducts.length >= 3) return rankedLiveProducts.slice(0, 3);
+    if (requiresLiveSearch) return aiAdapter.curateProductOptions(rankingIntent, rankedLiveProducts);
+    if (rankedLiveProducts.length >= 3) return aiAdapter.curateProductOptions(rankingIntent, rankedLiveProducts);
 
     const ranked = this.rankProducts(products, rankingIntent);
 
-    return ensureLiveSupplierResult(ranked).slice(0, 3);
+    return aiAdapter.curateProductOptions(rankingIntent, ensureLiveSupplierResult(ranked));
   },
 
   rankProducts(products: Product[], intent: ProductIntent): RankedProduct[] {
@@ -146,6 +147,10 @@ function requiredTermsFor(query: string) {
     groups.push(["sapato", "sapatos", "tenis", "sneaker", "calcado"]);
   }
 
+  if (/\b(lenco umedecido|baby wipes|wipes|toalha umedecida)\b/.test(query)) {
+    groups.push(["lenco", "lenço", "toalha", "toalhas", "umedecido", "umedecida", "wipes"]);
+  }
+
   if (/\b(preta|preto|black)\b/.test(query)) {
     groups.push(["preta", "preto", "black"]);
   }
@@ -177,7 +182,15 @@ function blockedTermsFor(query: string) {
     "pingente",
     "pendente",
     "enfeite",
-    "decoracao"
+    "decoracao",
+    "calcadeira",
+    "chifre",
+    "buzina",
+    "forma",
+    "palminha",
+    "cadargo",
+    "cadarco",
+    "cadarço"
   ];
 
   if (/\b(camiseta|camisa|blusa|t shirt|tshirt)\b/.test(query)) {

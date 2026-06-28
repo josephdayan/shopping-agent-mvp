@@ -145,8 +145,7 @@ function toTwilioXml(reply: WhatsAppRichReply) {
   if (!reply.text && !reply.options?.length) return `<?xml version="1.0" encoding="UTF-8"?><Response></Response>`;
 
   const messages = reply.options?.length
-    ? [
-        ...reply.options.slice(0, 3).map((option) => {
+    ? reply.options.slice(0, 3).map((option) => {
           const total = option.product.price + option.product.shippingPrice;
           const body = [
             `${option.rank}) ${option.product.title}`,
@@ -161,9 +160,7 @@ function toTwilioXml(reply: WhatsAppRichReply) {
             .join("\n");
 
           return `<Message>${messageBody(body)}${mediaTag(option.product.imageUrl)}</Message>`;
-        }),
-        `<Message>${messageBody("Responda 1, 2 ou 3.")}</Message>`
-      ]
+        })
     : [`<Message>${messageBody(reply.text)}</Message>`];
 
   return `<?xml version="1.0" encoding="UTF-8"?><Response>${messages.join("")}</Response>`;
@@ -212,24 +209,8 @@ function normalizeText(input: string) {
 
 function formatWhatsAppReply(response: ReturnType<typeof toChannelResponse>): WhatsAppRichReply {
   if (response.products.length) {
-    const options = response.products
-      .map((option) => {
-        const total = option.product.price + option.product.shippingPrice;
-        return [
-          `${option.rank}) ${option.reason}`,
-          option.product.title,
-          `Total: R$ ${total.toFixed(2)} · ${option.product.deliveryEstimate}`,
-          option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")
-            ? `Link: ${option.product.productUrl}`
-            : null
-        ]
-          .filter(Boolean)
-          .join("\n");
-      })
-      .join("\n\n");
-
     return {
-      text: `${response.reply}\n\n${options}\n\nResponda 1, 2 ou 3.`,
+      text: "Escolha uma opção:",
       options: response.products
     };
   }
