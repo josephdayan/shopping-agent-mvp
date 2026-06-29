@@ -4,7 +4,7 @@ import { getStore, DEFAULT_STORE_KEY, type StoreConnector } from "@/lib/stores";
 import { queryTokens } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
 import { pixAdapter } from "@/lib/payments/mercadopago";
-import { matchCatalog } from "@/lib/adapters/ai";
+import { extractShoppingList } from "@/lib/adapters/ai";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
 // everyday items, fulfilled from a pluggable store via clique-e-retire + courier.
@@ -119,66 +119,51 @@ function parseBasketLines(text: string): { phrase: string; qty: number }[] {
 type BasketResult = { basket: BasketItem[]; notFound: string[]; greetingOnly: boolean; containsMedicine: boolean };
 
 async function buildBasket(text: string, store: StoreConnector): Promise<BasketResult> {
-  const catalog = store.listCatalog();
-
-  // Primary: the LLM maps the natural-language request to catalog SKUs — it handles
-  // synonyms ("pasta de dente"=creme dental), greetings, typos, qty and medicines.
-  const llm = await matchCatalog(
-    text,
-    catalog.map((item) => ({ sku: item.sku, name: item.name, brand: item.brand, category: item.category }))
-  );
-  if (llm) {
-    const bySku = new Map(catalog.map((item) => [item.sku, item]));
-    const basket: BasketItem[] = [];
-    const notFound: string[] = [];
-    for (const item of llm.items) {
-      const ci = item.sku ? bySku.get(item.sku) : undefined;
-      if (ci) {
-        basket.push({
-          sku: ci.sku,
-          name: ci.name,
-          brand: ci.brand,
-          qty: item.qty,
-          unitPrice: ci.unitPrice,
-          lineTotal: Math.round(ci.unitPrice * item.qty * 100) / 100,
-          storeKey: store.key,
-          storeLabel: store.label
-        });
-      } else if (item.query && queryTokens(item.query).length) {
-        notFound.push(item.query);
-      }
-    }
-    return {
-      basket: dedupeBasket(basket),
-      notFound,
-      greetingOnly: llm.greetingOnly && basket.length === 0,
-      containsMedicine: llm.containsMedicine
-    };
+  // 1. Clean the request into a shopping list. The LLM handles greetings, synonyms
+  //    ("pasta de dente"->creme dental), medicines and quantities. Falls back to a
+  //    deterministic line splitter when OpenAI is off.
+  const extraction = await extractShoppingList(text);
+  let lines: { phrase: string; qty: number }[];
+  let greetingOnly = false;
+  let containsMedicine = false;
+  if (extraction) {
+    greetingOnly = extraction.greetingOnly;
+    containsMedicine = extraction.containsMedicine;
+    lines = extraction.items.map((item) => ({ phrase: item.query, qty: item.qty }));
+  } else {
+    lines = parseBasketLines(text).filter((line) => queryTokens(line.phrase).length);
   }
 
-  // Fallback (OpenAI off): hardened deterministic token/word matcher.
-  const lines = parseBasketLines(text);
+  // 2. Search each item in the live Carrefour catalog (or seed) — in parallel so a
+  //    multi-item basket costs one scrape's latency, not the sum.
+  const results = await Promise.all(
+    lines.map(async (line) => ({ line, best: (await store.searchItems(line.phrase, 1))[0] }))
+  );
   const basket: BasketItem[] = [];
   const notFound: string[] = [];
-  for (const line of lines) {
-    if (!queryTokens(line.phrase).length) continue; // skip pure greeting/filler ("bom dia")
-    const best = (await store.searchItems(line.phrase, 1))[0];
-    if (!best) {
+  for (const { line, best } of results) {
+    if (best) {
+      basket.push({
+        sku: best.sku,
+        name: best.name,
+        brand: best.brand,
+        qty: line.qty,
+        unitPrice: best.unitPrice,
+        lineTotal: Math.round(best.unitPrice * line.qty * 100) / 100,
+        storeKey: store.key,
+        storeLabel: store.label
+      });
+    } else {
       notFound.push(line.phrase);
-      continue;
     }
-    basket.push({
-      sku: best.sku,
-      name: best.name,
-      brand: best.brand,
-      qty: line.qty,
-      unitPrice: best.unitPrice,
-      lineTotal: Math.round(best.unitPrice * line.qty * 100) / 100,
-      storeKey: store.key,
-      storeLabel: store.label
-    });
   }
-  return { basket: dedupeBasket(basket), notFound, greetingOnly: false, containsMedicine: false };
+
+  return {
+    basket: dedupeBasket(basket),
+    notFound,
+    greetingOnly: greetingOnly && basket.length === 0,
+    containsMedicine
+  };
 }
 
 function dedupeBasket(items: BasketItem[]): BasketItem[] {
@@ -273,8 +258,48 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // Global commands
   if (/^(cancelar|limpar|recome[cç]ar)$/.test(normalized)) {
-    await writeCtx(convo.id, {});
+    await writeCtx(convo.id, { cep: ctx.cep, deliveryAddress: ctx.deliveryAddress });
     await reply(phone, "Beleza, limpei seu pedido. É só me dizer o que você quer. 🙂");
+    return;
+  }
+
+  // Onboarding: the CEP/endereço is configured ONCE, up front, before any order.
+  // After it's saved on the user, every future order reuses the same address.
+  const savedCep = user.cep ?? ctx.cep;
+  if (!savedCep) {
+    const cepInMsg = (normalized.match(/\d{5}-?\d{3}/) ?? [])[0];
+    if (cepInMsg) {
+      ctx.cep = cepInMsg;
+      ctx.deliveryAddress = (await expandCep(cepInMsg)) ?? ctx.deliveryAddress;
+      await prisma.user.update({ where: { id: user.id }, data: { cep: cepInMsg } });
+      ctx.flow = "delivery";
+      if (ctx.basket?.length) {
+        await quoteBasket(ctx, store);
+        await writeCtx(convo.id, ctx);
+        await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${summaryText(ctx)}`);
+      } else {
+        ctx.step = "collecting";
+        await writeCtx(convo.id, ctx);
+        await reply(
+          phone,
+          `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}! Configurei uma vez e uso em todos os próximos pedidos. 💚\n\nAgora me diz o que você quer — ex.: *"guaraná, pasta de dente e papel higiênico"*.`
+        );
+      }
+      return;
+    }
+    // No CEP yet: capture anything they already mentioned, then ask the CEP first.
+    const built = await buildBasket(text, store);
+    if (built.basket.length) ctx.basket = mergeBaskets(ctx.basket ?? [], built.basket);
+    ctx.flow = "delivery";
+    ctx.step = "need_cep";
+    await writeCtx(convo.id, ctx);
+    const note = built.basket.length
+      ? `Já anotei:\n${built.basket.map((i) => `• ${i.qty}x ${i.name}`).join("\n")}\n\n`
+      : "";
+    await reply(
+      phone,
+      `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Pra começar, qual seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`
+    );
     return;
   }
 

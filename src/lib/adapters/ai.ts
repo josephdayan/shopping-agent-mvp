@@ -381,6 +381,83 @@ export async function matchCatalog(
   }
 }
 
+export type ShoppingExtraction = {
+  greetingOnly: boolean;
+  containsMedicine: boolean;
+  items: { query: string; qty: number }[];
+};
+
+// Extract a clean shopping list from the message WITHOUT a catalog (for the live
+// store search). Normalizes synonyms into searchable terms, drops greetings, flags
+// medicine, and parses quantities. Returns null if OpenAI is off (caller falls back
+// to the deterministic line splitter).
+export async function extractShoppingList(text: string): Promise<ShoppingExtraction | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+  try {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "Você é a Lia, assistente de compras do dia a dia no WhatsApp. Extraia a LISTA DE COMPRAS da mensagem. Para CADA produto: 'query' = termo curto e buscável para procurar no catálogo do Carrefour (inclua marca e tamanho se a pessoa disse), normalizando sinônimos e linguagem natural — 'pasta de dente'->'creme dental', 'refri'->'refrigerante', 'sabão em pó'->'sabão em pó', 'lenço de bebê'->'lenço umedecido', 'ração do cachorro'->'ração cachorro'. 'qty' = quantidade pedida (padrão 1). Regras: (1) Se a mensagem for só saudação/conversa sem produto ('bom dia', 'tudo bem?'), 'greetingOnly'=true e 'items'=[]. (2) Se pedir REMÉDIO/medicamento (dipirona, tylenol, antibiótico, tarja, controlado), 'containsMedicine'=true e NÃO inclua esse item. (3) Não invente produtos que a pessoa não pediu. Responda apenas JSON válido."
+          },
+          { role: "user", content: text }
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name: "shopping_list",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                greetingOnly: { type: "boolean" },
+                containsMedicine: { type: "boolean" },
+                items: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    properties: { query: { type: "string" }, qty: { type: "number" } },
+                    required: ["query", "qty"]
+                  }
+                }
+              },
+              required: ["greetingOnly", "containsMedicine", "items"]
+            }
+          }
+        }
+      })
+    });
+    if (!response.ok) {
+      console.warn("[ai:extractShoppingList:fallback]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
+    if (!jsonText) return null;
+    const parsed = JSON.parse(jsonText) as ShoppingExtraction;
+    return {
+      greetingOnly: Boolean(parsed.greetingOnly),
+      containsMedicine: Boolean(parsed.containsMedicine),
+      items: (parsed.items ?? [])
+        .filter((item) => item.query?.trim())
+        .map((item) => ({ query: item.query.trim(), qty: item.qty && item.qty > 0 ? Math.floor(item.qty) : 1 }))
+    };
+  } catch (error) {
+    console.warn("[ai:extractShoppingList:error]", error);
+    return null;
+  }
+}
+
 async function classifyTurnWithOpenAI(text: string, context: TurnContext): Promise<TurnClassification | null> {
   if (!process.env.OPENAI_API_KEY) return null;
   const normalized = normalize(text).trim();

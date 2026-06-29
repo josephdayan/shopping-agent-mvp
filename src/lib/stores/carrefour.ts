@@ -1,5 +1,7 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch } from "./types";
+import { scoreCatalogMatch, normalizeText } from "./types";
+import { prisma } from "@/lib/prisma";
+import { runApifyActor } from "@/lib/adapters/suppliers";
 
 // Carrefour (hipermercado) — the broad everyday base: comidinha, higiene, pet,
 // limpeza, bebida. Catalog below is a SEED for the MVP/sandbox; swap this for the
@@ -66,16 +68,101 @@ const UNITS: StoreUnit[] = [
   { id: "crf-tatuape", label: "Carrefour Tatuapé", address: "R. Tuiuti, 2100 - Tatuapé, São Paulo - SP", cep: "03081-000" }
 ];
 
+const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
+const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
+
+function seedSearch(query: string, limit: number): CatalogItem[] {
+  const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter((entry) => entry.score > 0);
+  scored.sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice);
+  return scored.slice(0, limit).map((entry) => entry.item);
+}
+
+// The community actor's exact field names vary — pull from the likely candidates.
+function pick(obj: Record<string, unknown>, keys: string[]): unknown {
+  for (const key of keys) {
+    if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") return obj[key];
+  }
+  return undefined;
+}
+function toStr(value: unknown): string {
+  return value == null ? "" : String(value).trim();
+}
+function toPrice(value: unknown): number {
+  if (typeof value === "number") return value;
+  const cleaned = toStr(value).replace(/[^0-9.,]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".");
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+function mapCarrefourItem(raw: Record<string, unknown>): CatalogItem | null {
+  const name = toStr(pick(raw, ["title", "Title", "name", "productName", "nome"]));
+  const unitPrice = toPrice(pick(raw, ["price", "Price", "preco", "preço", "currentPrice", "salePrice"]));
+  if (!name || unitPrice <= 0) return null;
+  return {
+    sku: toStr(pick(raw, ["sku", "id", "productId", "ean", "url", "link"])) || `crf-${name.slice(0, 48)}`,
+    name,
+    brand: toStr(pick(raw, ["brand", "Brand", "marca"])) || undefined,
+    unitPrice,
+    unit: "un",
+    category: "carrefour",
+    imageUrl: toStr(pick(raw, ["image", "Image", "imageUrl", "img", "thumbnail", "imagem"])) || undefined
+  };
+}
+
+// Live Carrefour catalog via Apify (keyword search), cached per query in SearchCache.
+async function searchCarrefourLive(query: string, limit: number): Promise<CatalogItem[]> {
+  const token = process.env.APIFY_API_TOKEN;
+  if (!token) return [];
+  const cacheKey = `carrefour|${normalizeText(query)}`;
+
+  try {
+    const row = await prisma.searchCache.findUnique({ where: { queryKey: cacheKey }, select: { items: true, updatedAt: true } });
+    if (row && Date.now() - new Date(row.updatedAt).getTime() < CACHE_TTL_MS) {
+      const cached = Array.isArray(row.items) ? (row.items as unknown as CatalogItem[]) : [];
+      if (cached.length) return cached.slice(0, limit);
+    }
+  } catch (error) {
+    console.warn("[carrefour:cache:read]", error instanceof Error ? error.message : error);
+  }
+
+  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 });
+  const items = (raw ?? [])
+    .map((entry) => mapCarrefourItem(entry as Record<string, unknown>))
+    .filter((item): item is CatalogItem => Boolean(item));
+  const ranked = items
+    .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
+    .sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice)
+    .map((entry) => entry.item);
+
+  if (ranked.length) {
+    try {
+      await prisma.searchCache.upsert({
+        where: { queryKey: cacheKey },
+        create: { queryKey: cacheKey, query, items: ranked as unknown as object },
+        update: { query, items: ranked as unknown as object }
+      });
+    } catch (error) {
+      console.warn("[carrefour:cache:write]", error instanceof Error ? error.message : error);
+    }
+  }
+  return ranked.slice(0, limit);
+}
+
 export const carrefourStore: StoreConnector = {
   key: "carrefour",
   label: "Carrefour",
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter(
-      (entry) => entry.score > 0
-    );
-    scored.sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice);
-    return scored.slice(0, limit).map((entry) => entry.item);
+    // Live Carrefour catalog (Apify) when a token is set; the seed is the safety net
+    // so the flow never breaks if the actor is down or returns nothing.
+    if (process.env.APIFY_API_TOKEN) {
+      try {
+        const live = await searchCarrefourLive(query, limit);
+        if (live.length) return live;
+      } catch (error) {
+        console.warn("[carrefour:live:fallback-seed]", error instanceof Error ? error.message : error);
+      }
+    }
+    return seedSearch(query, limit);
   },
 
   listCatalog(): CatalogItem[] {
