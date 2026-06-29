@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prewarmMercadoLivreSearches } from "@/lib/adapters/suppliers";
-import { PREWARM_QUERIES } from "@/lib/prewarm-queries";
+import { prewarmCarrefour } from "@/lib/stores/carrefour";
+import { CARREFOUR_QUERIES } from "@/lib/carrefour-queries";
 
 export const dynamic = "force-dynamic";
 // Each invocation scrapes a small batch of the stalest queries; give it room for
@@ -12,13 +12,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  // Manual runs may pass ?limit= to scrape a smaller/larger batch (clamped);
-  // the scheduled cron uses LIA_PREWARM_BATCH (default 6).
+  // Carrefour scrapes are slow (~60-90s each), so keep the batch small to fit the
+  // 300s budget. Manual runs may pass ?limit= (clamped). Default 3 per run.
   const requested = Number(
-    new URL(request.url).searchParams.get("limit") ?? process.env.LIA_PREWARM_BATCH ?? 6
+    new URL(request.url).searchParams.get("limit") ?? process.env.LIA_PREWARM_BATCH ?? 3
   );
-  const limit = Math.min(Math.max(Number.isFinite(requested) ? requested : 6, 1), 20);
-  const result = await prewarmMercadoLivreSearches(PREWARM_QUERIES, { limit });
+  const limit = Math.min(Math.max(Number.isFinite(requested) ? requested : 3, 1), 6);
+  const result = await prewarmCarrefour(CARREFOUR_QUERIES, { limit });
 
   console.log("[lia:prewarm:run]", result);
   return NextResponse.json(result);

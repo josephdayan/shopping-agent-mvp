@@ -112,7 +112,8 @@ function mapCarrefourItem(raw: Record<string, unknown>): CatalogItem | null {
 }
 
 // Live Carrefour catalog via Apify (keyword search), cached per query in SearchCache.
-async function searchCarrefourLive(query: string, limit: number): Promise<CatalogItem[]> {
+// maxWaitMs: short in the chat turn (don't hang the user); long in the prewarm cron.
+async function searchCarrefourLive(query: string, limit: number, maxWaitMs = CARREFOUR_MAX_WAIT_MS): Promise<CatalogItem[]> {
   const token = process.env.APIFY_API_TOKEN;
   if (!token) return [];
   const cacheKey = `carrefour|${normalizeText(query)}`;
@@ -127,7 +128,7 @@ async function searchCarrefourLive(query: string, limit: number): Promise<Catalo
     console.warn("[carrefour:cache:read]", error instanceof Error ? error.message : error);
   }
 
-  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 }, CARREFOUR_MAX_WAIT_MS);
+  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 }, maxWaitMs);
   const items = (raw ?? [])
     .map((entry) => mapCarrefourItem(entry as Record<string, unknown>))
     .filter((item): item is CatalogItem => Boolean(item));
@@ -148,6 +149,44 @@ async function searchCarrefourLive(query: string, limit: number): Promise<Catalo
     }
   }
   return ranked.slice(0, limit);
+}
+
+// Prewarm the cache for the most common everyday queries so they're INSTANT in chat
+// (the long-tail is still scraped on demand, then cached). Run from the cron with a
+// long wait since it's background, not a user turn.
+export async function prewarmCarrefour(queries: string[], options?: { limit?: number; minAgeMs?: number }) {
+  if (!process.env.APIFY_API_TOKEN) {
+    return { ok: false, reason: "no_apify_token", attempted: 0, warmed: 0, total: queries.length };
+  }
+  const limit = Math.max(1, Math.floor(options?.limit ?? 8));
+  const minAgeMs = options?.minAgeMs ?? Math.floor(CACHE_TTL_MS * 0.7);
+
+  let rows: { queryKey: string; updatedAt: Date }[] = [];
+  try {
+    rows = await prisma.searchCache.findMany({
+      where: { queryKey: { startsWith: "carrefour|" } },
+      select: { queryKey: true, updatedAt: true }
+    });
+  } catch (error) {
+    console.warn("[carrefour:prewarm:status-read]", error instanceof Error ? error.message : error);
+  }
+  const ageByKey = new Map(rows.map((r) => [r.queryKey, Date.now() - new Date(r.updatedAt).getTime()]));
+  const candidates = queries
+    .map((query) => ({ query, age: ageByKey.get(`carrefour|${normalizeText(query)}`) ?? Number.POSITIVE_INFINITY }))
+    .filter((candidate) => candidate.age >= minAgeMs)
+    .sort((a, b) => b.age - a.age)
+    .slice(0, limit);
+
+  let warmed = 0;
+  for (const candidate of candidates) {
+    try {
+      const items = await searchCarrefourLive(candidate.query, 8, Number(process.env.LIA_PREWARM_TIMEOUT_MS ?? 90000));
+      if (items.length) warmed += 1;
+    } catch (error) {
+      console.warn("[carrefour:prewarm:item]", candidate.query, error instanceof Error ? error.message : error);
+    }
+  }
+  return { ok: true, attempted: candidates.length, warmed, total: queries.length };
 }
 
 export const carrefourStore: StoreConnector = {

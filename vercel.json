@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron/prewarm-search",
-      "schedule": "0 */3 * * *"
+      "schedule": "0 * * * *"
     }
   ]
 }
