@@ -11,7 +11,9 @@ import { matchCatalog } from "@/lib/adapters/ai";
 // This module owns the WhatsApp conversation state machine AND the order lifecycle
 // the operator dashboard drives.
 
-const SERVICE_FEE = Number(process.env.LIA_SERVICE_FEE ?? 7.9);
+// Your margin is baked into the product price (no separate fee line). Customer sees
+// each item already +10%; you pay Carrefour the real price, the markup is yours.
+const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);
 
 type BasketItem = {
   sku: string;
@@ -218,7 +220,11 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
     pickupAddress: unit.address,
     dropoffAddress: ctx.deliveryAddress
   });
-  const itemsSubtotal = (ctx.basket ?? []).reduce((sum, item) => sum + item.lineTotal, 0);
+  // itemsSubtotal = real Carrefour cost (what the operator pays). serviceFee = the
+  // 10% markup margin (yours; NOT shown to the customer as a line). The customer is
+  // charged the marked-up products + the pass-through frete.
+  const realSubtotal = (ctx.basket ?? []).reduce((sum, item) => sum + item.lineTotal, 0);
+  const margin = Math.round(realSubtotal * (MARKUP - 1) * 100) / 100;
   ctx.storeUnitId = unit.id;
   ctx.storeUnitLabel = unit.label;
   ctx.storeUnitAddress = unit.address;
@@ -226,21 +232,24 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.etaMinutes = q.etaMinutes;
   ctx.courierQuoteId = q.quoteId;
   ctx.courierKey = q.courierKey;
-  ctx.serviceFee = SERVICE_FEE;
-  ctx.itemsSubtotal = Math.round(itemsSubtotal * 100) / 100;
-  ctx.total = Math.round((itemsSubtotal + q.fee + SERVICE_FEE) * 100) / 100;
+  ctx.serviceFee = margin;
+  ctx.itemsSubtotal = Math.round(realSubtotal * 100) / 100;
+  ctx.total = Math.round((realSubtotal + margin + q.fee) * 100) / 100;
   ctx.step = "quoted";
 }
 
 function summaryText(ctx: DeliveryContext): string {
-  const lines = (ctx.basket ?? []).map((item) => `• ${item.qty}x ${item.name} — ${brl(item.lineTotal)}`);
+  // Customer-facing prices already include the markup; no separate fee line.
+  const lines = (ctx.basket ?? []).map(
+    (item) => `• ${item.qty}x ${item.name} — ${brl(Math.round(item.unitPrice * MARKUP * item.qty * 100) / 100)}`
+  );
+  const produtos = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0)) * 100) / 100;
   const out = [
     "🛒 *Seu pedido:*",
     ...lines,
     "",
-    `Produtos: ${brl(ctx.itemsSubtotal ?? 0)}`,
+    `Produtos: ${brl(produtos)}`,
     `🛵 Frete (cotado agora): ${brl(ctx.deliveryFee ?? 0)} · chega em ~${ctx.etaMinutes ?? 40} min`,
-    `🤝 Taxa Lia: ${brl(ctx.serviceFee ?? SERVICE_FEE)}`,
     `*Total: ${brl(ctx.total ?? 0)}*`
   ];
   if (ctx.notFound?.length) {
@@ -402,7 +411,7 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
       courierKey: ctx.courierKey ?? "uber_direct",
       courierQuoteId: ctx.courierQuoteId,
       deliveryFee: ctx.deliveryFee ?? 0,
-      serviceFee: ctx.serviceFee ?? SERVICE_FEE,
+      serviceFee: ctx.serviceFee ?? 0,
       total: ctx.total ?? 0,
       status: "awaiting_payment"
     }

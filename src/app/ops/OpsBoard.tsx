@@ -109,8 +109,8 @@ export default function OpsBoard() {
             ))}
           </ul>
           <div style={{ fontSize: 13, color: "#475467" }}>
-            Produtos {brl(o.itemsSubtotal)} · Frete {brl(o.deliveryFee)} · Taxa {brl(o.serviceFee)} ·{" "}
-            <strong>Total {brl(o.total)}</strong>
+            Custo Carrefour {brl(o.itemsSubtotal)} · Frete {brl(o.deliveryFee)} · Margem {brl(o.serviceFee)} ·{" "}
+            <strong>Cliente pagou {brl(o.total)}</strong>
           </div>
           <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
             Loja: {o.storeLabel} {o.storeUnit ? `· ${o.storeUnit}` : ""}
