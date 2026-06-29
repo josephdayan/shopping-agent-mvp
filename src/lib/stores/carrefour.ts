@@ -155,6 +155,11 @@ async function searchCarrefourLive(query: string, limit: number, maxWaitMs = CAR
 // (the long-tail is still scraped on demand, then cached). Run from the cron with a
 // long wait since it's background, not a user turn.
 export async function prewarmCarrefour(queries: string[], options?: { limit?: number; minAgeMs?: number }) {
+  // Off until live scraping actually works — otherwise the cron burns Apify money on
+  // an actor that returns nothing.
+  if (process.env.LIA_CARREFOUR_LIVE !== "true") {
+    return { ok: false, reason: "live_disabled", attempted: 0, warmed: 0, total: queries.length };
+  }
   if (!process.env.APIFY_API_TOKEN) {
     return { ok: false, reason: "no_apify_token", attempted: 0, warmed: 0, total: queries.length };
   }
@@ -194,9 +199,11 @@ export const carrefourStore: StoreConnector = {
   label: "Carrefour",
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    // Live Carrefour catalog (Apify) when a token is set; the seed is the safety net
-    // so the flow never breaks if the actor is down or returns nothing.
-    if (process.env.APIFY_API_TOKEN) {
+    // Live Carrefour via Apify is OPT-IN (LIA_CARREFOUR_LIVE=true). The community
+    // actor gio21~carrefour-br-scraper currently returns "No items scraped" (its
+    // anti-bot bypass is broken), so by default we use the reliable, instant seed.
+    // Flip the flag back on once a working Carrefour data source is wired.
+    if (process.env.LIA_CARREFOUR_LIVE === "true" && process.env.APIFY_API_TOKEN) {
       try {
         const live = await searchCarrefourLive(query, limit);
         if (live.length) return live;
