@@ -5,6 +5,7 @@ import { messagingAdapter } from "@/lib/adapters/messaging";
 import { paymentAdapter } from "@/lib/adapters/payment";
 import { productSearchAdapter } from "@/lib/adapters/products";
 import {
+  getCachedMercadoLivreApifyProducts,
   getMercadoLivreApifyProductsFromRun,
   startMercadoLivreApifySearchJob
 } from "@/lib/adapters/suppliers";
@@ -206,6 +207,14 @@ export async function queueWhatsAppProductSearch(input: UserInput & { text: stri
     return { queued: false, conversation: await getConversation(conversation.id), reply: prepared.reply };
   }
 
+  // Cache hit: serve a fresh scraped pool instantly (no Apify run, no ~50s wait).
+  // "me manda outras"/refine reuse the same pool via the intent's offset/filters.
+  const cached = await getCachedMercadoLivreApifyProducts(prepared.intent);
+  if (cached.length) {
+    const delivered = await presentProductsToConversation(conversation, prepared.intent, cached, prepared.context);
+    return { queued: true, served: "cache" as const, conversation: delivered };
+  }
+
   const jobId = input.messageId ?? randomUUID();
   const started = await startMercadoLivreApifySearchJob({
     jobId,
@@ -258,7 +267,19 @@ export async function completeWhatsAppProductSearchJob(input: {
   if (!conversation) throw new Error("Conversation not found");
 
   const products = await getMercadoLivreApifyProductsFromRun(input.runId, input.intent);
-  const rankedAll = productSearchAdapter.rankProducts(products, input.intent);
+  return presentProductsToConversation(conversation, input.intent, products, readContext(conversation.context));
+}
+
+// Rank, backfill and deliver a product pool to a conversation, or send the
+// not-found message when nothing usable comes back. Shared by the live Apify
+// callback and the instant cache-hit path so both behave identically.
+async function presentProductsToConversation(
+  conversation: { id: string },
+  intent: ProductIntent,
+  products: Awaited<ReturnType<typeof getMercadoLivreApifyProductsFromRun>>,
+  context: ConversationContext
+) {
+  const rankedAll = productSearchAdapter.rankProducts(products, intent);
   // rankProducts can over-filter a relevant pool down to 1; the Apify-side products
   // are already deduped and relevance-ranked, so backfill from them to reliably
   // show up to 3 (they're the top results for the query, not junk).
@@ -270,16 +291,15 @@ export async function completeWhatsAppProductSearchJob(input: {
     .slice(0, SEARCH_BATCH_SIZE)
     .map((product, index) => ({ ...product, rank: index + 1 }));
   console.log("[lia:search:counts]", {
-    query: input.intent.searchQuery,
+    query: intent.searchQuery,
     products: products.length,
     rankedAll: rankedAll.length,
     shown: ranked.length
   });
 
   if (!ranked.length) {
-    const context = readContext(conversation.context);
     await prisma.conversation.update({
-      where: { id: input.conversationId },
+      where: { id: conversation.id },
       data: {
         currentStep: "collecting_request",
         context: JSON.stringify({
@@ -290,22 +310,18 @@ export async function completeWhatsAppProductSearchJob(input: {
         })
       }
     });
-    await messagingAdapter.sendMessage(input.conversationId, notFoundMessage(input.intent.searchQuery ?? input.intent.category ?? ""));
-    return getConversation(input.conversationId);
+    await messagingAdapter.sendMessage(conversation.id, notFoundMessage(intent.searchQuery ?? intent.category ?? ""));
+    return getConversation(conversation.id);
   }
 
-  await saveProductOptions(input.conversationId, ranked, input.intent, {
-    ...readContext(conversation.context),
-    pendingSearch: readContext(conversation.context).pendingSearch
-      ? {
-          ...readContext(conversation.context).pendingSearch!,
-          status: "completed",
-          completedAt: new Date().toISOString()
-        }
+  await saveProductOptions(conversation.id, ranked, intent, {
+    ...context,
+    pendingSearch: context.pendingSearch
+      ? { ...context.pendingSearch, status: "completed", completedAt: new Date().toISOString() }
       : undefined
   });
-  await messagingAdapter.sendMessage(input.conversationId, "Escolha uma opção:", { options: ranked });
-  return getConversation(input.conversationId);
+  await messagingAdapter.sendMessage(conversation.id, "Escolha uma opção:", { options: ranked });
+  return getConversation(conversation.id);
 }
 
 export async function failWhatsAppProductSearchJob(input: {

@@ -69,8 +69,18 @@ export async function POST(request: Request) {
       }
 
       try {
-        const queued = await queueWhatsAppProductSearch(inbound);
-        if (!queued.queued && queued.reply) {
+        const queued = (await queueWhatsAppProductSearch(inbound)) as {
+          queued: boolean;
+          served?: string;
+          reply?: string;
+          conversation?: Parameters<typeof toChannelResponse>[0];
+        };
+        if (queued.served === "cache" && queued.conversation) {
+          // Cache hit: cards are ready now — send them straight away instead of
+          // waiting on the (skipped) Apify callback.
+          const richReply = formatWhatsAppReply(toChannelResponse(queued.conversation));
+          await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
+        } else if (!queued.queued && queued.reply) {
           await whatsappAdapter.sendMessage(inbound.phone, queued.reply);
         }
       } catch (error) {

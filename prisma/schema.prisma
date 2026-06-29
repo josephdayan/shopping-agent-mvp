@@ -132,3 +132,18 @@ model Preference {
 
   @@unique([userId, category])
 }
+
+// Persistent, shared cache of raw Apify search results keyed by the normalized
+// query, so repeat/refine/"me manda outras" and the prewarm cron serve results
+// in ~1s instead of paying the ~50s Apify cold start. Stores the full scraped
+// pool; ranking/offset/filtering happen per request from these items.
+model SearchCache {
+  queryKey  String   @id
+  query     String
+  source    String   @default("mercado_livre")
+  items     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([updatedAt])
+}

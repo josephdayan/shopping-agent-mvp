@@ -1,4 +1,4 @@
-import type { Product } from "@prisma/client";
+import type { Prisma, Product } from "@prisma/client";
 import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { ProductIntent, SupplierSource } from "@/lib/types";
@@ -249,11 +249,114 @@ export async function getMercadoLivreApifyProductsFromRun(runId: string, intent:
   const items = await fetchApifyRunDataset(runId, token);
   if (!items?.length) return [];
 
+  // Warm the shared cache with the full scraped pool so the next user (or the
+  // same user's "me manda outras"/refine) is served in ~1s without re-scraping.
+  await writeSearchCache(query, items);
+  return buildProductsFromApifyItems(items, intent, query);
+}
+
+// Turn a raw Apify dataset (the scraped page pool) into the ranked, offset-sliced
+// Product[] for this intent. Shared by the live run and the cache so both paths
+// produce identical results.
+async function buildProductsFromApifyItems(items: ApifyProduct[], intent: ProductIntent, query: string) {
   const usable = items.filter((item) => apifyTitle(item) && apifyPrice(item) > 0);
   const ranked = rankMercadoLivreItems(usable, query, (item) => apifyTitle(item));
   const selected = selectApifyBatch(ranked, intent);
   const products = await Promise.all(selected.map((item) => upsertApifyMercadoLivreProduct(item, intent, query)));
   return products.filter((product): product is Product => Boolean(product));
+}
+
+const SEARCH_CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
+
+function searchCacheKey(query: string) {
+  const actor = process.env.APIFY_MERCADO_LIVRE_ACTOR ?? "karamelo/mercadolivre-scraper-brasil-portugues";
+  return `${actor}|${normalize(query)}`;
+}
+
+async function writeSearchCache(query: string, items: ApifyProduct[]) {
+  if (!query || !items?.length) return;
+  const queryKey = searchCacheKey(query);
+  const payload = items as unknown as Prisma.InputJsonValue;
+  try {
+    await prisma.searchCache.upsert({
+      where: { queryKey },
+      create: { queryKey, query, items: payload },
+      update: { query, items: payload }
+    });
+  } catch (error) {
+    // Best-effort: a missing table or transient DB error must never break search.
+    console.warn("[lia:search-cache:write-failed]", error instanceof Error ? error.message : error);
+  }
+}
+
+// Serve a fresh (< TTL) cached pool for this intent, or [] on miss/stale/error.
+export async function getCachedMercadoLivreApifyProducts(intent: ProductIntent): Promise<Product[]> {
+  const query = buildSearchQuery(intent);
+  if (!query) return [];
+  if (!(Number.isFinite(SEARCH_CACHE_TTL_MS) && SEARCH_CACHE_TTL_MS > 0)) return [];
+
+  let row: { items: Prisma.JsonValue; updatedAt: Date } | null = null;
+  try {
+    row = await prisma.searchCache.findUnique({
+      where: { queryKey: searchCacheKey(query) },
+      select: { items: true, updatedAt: true }
+    });
+  } catch (error) {
+    console.warn("[lia:search-cache:read-failed]", error instanceof Error ? error.message : error);
+    return [];
+  }
+  if (!row) return [];
+
+  const ageMs = Date.now() - new Date(row.updatedAt).getTime();
+  if (ageMs > SEARCH_CACHE_TTL_MS) return [];
+
+  const items = Array.isArray(row.items) ? (row.items as unknown as ApifyProduct[]) : [];
+  if (!items.length) return [];
+  return buildProductsFromApifyItems(items, intent, query);
+}
+
+// Prewarm cron entry point: refresh the stalest/missing queries from the seed
+// list (oldest first), bounded by `limit`, so common requests are always warm.
+export async function prewarmMercadoLivreSearches(
+  queries: string[],
+  options?: { limit?: number; minAgeMs?: number }
+) {
+  const token = process.env.APIFY_API_TOKEN;
+  const actor = process.env.APIFY_MERCADO_LIVRE_ACTOR ?? "karamelo/mercadolivre-scraper-brasil-portugues";
+  if (!token) return { ok: false, reason: "no_apify_token", attempted: 0, refreshed: 0, totalQueries: queries.length };
+
+  const limit = Math.max(1, Math.floor(options?.limit ?? 6));
+  const minAgeMs = options?.minAgeMs ?? Math.floor(SEARCH_CACHE_TTL_MS * 0.7);
+
+  let rows: { queryKey: string; updatedAt: Date }[] = [];
+  try {
+    rows = await prisma.searchCache.findMany({ select: { queryKey: true, updatedAt: true } });
+  } catch (error) {
+    console.warn("[lia:prewarm:status-read-failed]", error instanceof Error ? error.message : error);
+  }
+  const ageByKey = new Map(rows.map((r) => [r.queryKey, Date.now() - new Date(r.updatedAt).getTime()]));
+
+  const candidates = queries
+    .map((query) => ({ query, age: ageByKey.get(searchCacheKey(query)) ?? Number.POSITIVE_INFINITY }))
+    .filter((candidate) => candidate.age >= minAgeMs)
+    .sort((a, b) => b.age - a.age)
+    .slice(0, limit);
+
+  const actorId = actor.replace("/", "~");
+  let refreshed = 0;
+  for (const candidate of candidates) {
+    try {
+      const intent = { searchQuery: candidate.query } as ProductIntent;
+      const items = await runApifyActor(actorId, token, buildApifyMercadoLivreInput(candidate.query, intent));
+      if (items && items.length) {
+        await writeSearchCache(candidate.query, items);
+        refreshed += 1;
+      }
+    } catch (error) {
+      console.warn("[lia:prewarm:item-failed]", candidate.query, error instanceof Error ? error.message : error);
+    }
+  }
+  return { ok: true, attempted: candidates.length, refreshed, totalQueries: queries.length };
 }
 
 export function decodeApifySearchJobMetadata(value: unknown): ApifySearchJobMetadata | null {
