@@ -1,0 +1,437 @@
+import { prisma } from "@/lib/prisma";
+import { whatsappAdapter } from "@/lib/adapters/whatsapp";
+import { getStore, DEFAULT_STORE_KEY, type StoreConnector } from "@/lib/stores";
+import { getCourier } from "@/lib/couriers";
+import { pixAdapter } from "@/lib/payments/mercadopago";
+
+// The operational brain of the remodelled Lia. One conversation = one basket of
+// everyday items, fulfilled from a pluggable store via clique-e-retire + courier.
+// This module owns the WhatsApp conversation state machine AND the order lifecycle
+// the operator dashboard drives.
+
+const SERVICE_FEE = Number(process.env.LIA_SERVICE_FEE ?? 7.9);
+
+type BasketItem = {
+  sku: string;
+  name: string;
+  brand?: string;
+  qty: number;
+  unitPrice: number;
+  lineTotal: number;
+  storeKey: string;
+  storeLabel: string;
+};
+
+type DeliveryContext = {
+  flow?: "delivery";
+  step?: "collecting" | "need_cep" | "quoted" | "awaiting_payment";
+  basket?: BasketItem[];
+  notFound?: string[];
+  cep?: string;
+  deliveryAddress?: string;
+  storeUnitId?: string;
+  storeUnitLabel?: string;
+  storeUnitAddress?: string;
+  deliveryFee?: number;
+  etaMinutes?: number;
+  courierQuoteId?: string;
+  courierKey?: string;
+  serviceFee?: number;
+  itemsSubtotal?: number;
+  total?: number;
+  deliveryOrderId?: string;
+};
+
+// ---------- helpers: conversation + money + text ----------
+
+export function normalizePhone(phone?: string) {
+  if (!phone) return "+550000000000";
+  const cleaned = phone.replace("whatsapp:", "").trim();
+  if (cleaned.startsWith("+")) return cleaned;
+  const digits = cleaned.replace(/\D/g, "");
+  return `+${digits}`;
+}
+
+function brl(value: number) {
+  return `R$ ${value.toFixed(2).replace(".", ",")}`;
+}
+
+function normalize(input: string) {
+  return (input ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+}
+
+async function getOrCreateConvo(phone: string, name?: string) {
+  const user = await prisma.user.upsert({
+    where: { phone },
+    update: name ? { name } : {},
+    create: { phone, name }
+  });
+  let convo = await prisma.conversation.findFirst({
+    where: { userId: user.id, status: "active" },
+    orderBy: { updatedAt: "desc" }
+  });
+  if (!convo) {
+    convo = await prisma.conversation.create({
+      data: { userId: user.id, status: "active", currentStep: "delivery" }
+    });
+  }
+  return { user, convo };
+}
+
+function readCtx(context: string | null): DeliveryContext {
+  try {
+    return context ? (JSON.parse(context) as DeliveryContext) : {};
+  } catch {
+    return {};
+  }
+}
+
+async function writeCtx(convoId: string, ctx: DeliveryContext) {
+  await prisma.conversation.update({
+    where: { id: convoId },
+    data: { context: JSON.stringify(ctx), currentStep: ctx.step ?? "delivery" }
+  });
+}
+
+async function reply(phone: string, text: string) {
+  await whatsappAdapter.sendMessage(phone, text);
+}
+
+// ---------- basket parsing + catalog matching ----------
+
+function parseBasketLines(text: string): { phrase: string; qty: number }[] {
+  return text
+    .replace(/\bquero\b|\bme manda\b|\bmanda\b|\bpreciso de\b|\bpode ser\b/gi, "")
+    .split(/[,\n;]|\s+e\s+/i)
+    .map((raw) => raw.trim())
+    .filter((raw) => raw.length > 1)
+    .map((raw) => {
+      const m = raw.match(/^(\d+)\s*(?:x|un|unidades?)?\s+(.*)$/i);
+      if (m) return { phrase: m[2].trim(), qty: Math.max(1, Number(m[1])) };
+      return { phrase: raw, qty: 1 };
+    });
+}
+
+async function buildBasket(text: string, store: StoreConnector): Promise<{ basket: BasketItem[]; notFound: string[] }> {
+  const lines = parseBasketLines(text);
+  const basket: BasketItem[] = [];
+  const notFound: string[] = [];
+  for (const line of lines) {
+    const matches = await store.searchItems(line.phrase, 1);
+    const best = matches[0];
+    if (!best) {
+      notFound.push(line.phrase);
+      continue;
+    }
+    basket.push({
+      sku: best.sku,
+      name: best.name,
+      brand: best.brand,
+      qty: line.qty,
+      unitPrice: best.unitPrice,
+      lineTotal: Math.round(best.unitPrice * line.qty * 100) / 100,
+      storeKey: store.key,
+      storeLabel: store.label
+    });
+  }
+  return { basket, notFound };
+}
+
+async function expandCep(cep: string): Promise<string | undefined> {
+  const digits = cep.replace(/\D/g, "");
+  if (digits.length !== 8) return undefined;
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`, { cache: "no-store" });
+    if (!res.ok) return undefined;
+    const data = (await res.json()) as { logradouro?: string; bairro?: string; localidade?: string; uf?: string; erro?: boolean };
+    if (data.erro) return undefined;
+    return [data.logradouro, data.bairro, data.localidade, data.uf].filter(Boolean).join(", ");
+  } catch {
+    return undefined;
+  }
+}
+
+// ---------- quote + summary ----------
+
+async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
+  const unit = await store.nearestUnit(ctx.cep);
+  const courier = getCourier(ctx.courierKey);
+  const q = await courier.quote({
+    pickupCep: unit.cep,
+    dropoffCep: ctx.cep,
+    pickupAddress: unit.address,
+    dropoffAddress: ctx.deliveryAddress
+  });
+  const itemsSubtotal = (ctx.basket ?? []).reduce((sum, item) => sum + item.lineTotal, 0);
+  ctx.storeUnitId = unit.id;
+  ctx.storeUnitLabel = unit.label;
+  ctx.storeUnitAddress = unit.address;
+  ctx.deliveryFee = q.fee;
+  ctx.etaMinutes = q.etaMinutes;
+  ctx.courierQuoteId = q.quoteId;
+  ctx.courierKey = q.courierKey;
+  ctx.serviceFee = SERVICE_FEE;
+  ctx.itemsSubtotal = Math.round(itemsSubtotal * 100) / 100;
+  ctx.total = Math.round((itemsSubtotal + q.fee + SERVICE_FEE) * 100) / 100;
+  ctx.step = "quoted";
+}
+
+function summaryText(ctx: DeliveryContext): string {
+  const lines = (ctx.basket ?? []).map((item) => `• ${item.qty}x ${item.name} — ${brl(item.lineTotal)}`);
+  const out = [
+    "🛒 *Seu pedido:*",
+    ...lines,
+    "",
+    `Produtos: ${brl(ctx.itemsSubtotal ?? 0)}`,
+    `🛵 Frete (cotado agora): ${brl(ctx.deliveryFee ?? 0)} · chega em ~${ctx.etaMinutes ?? 40} min`,
+    `🤝 Taxa Lia: ${brl(ctx.serviceFee ?? SERVICE_FEE)}`,
+    `*Total: ${brl(ctx.total ?? 0)}*`
+  ];
+  if (ctx.notFound?.length) {
+    out.push("", `_Não achei: ${ctx.notFound.join(", ")} (me fala de outro jeito que eu procuro)._`);
+  }
+  out.push("", "Pode confirmar? Responda *pagar* que eu te mando o Pix. 💚");
+  return out.join("\n");
+}
+
+// ---------- the WhatsApp conversation state machine ----------
+
+export async function handleDeliveryMessage(input: { phone?: string; text: string; name?: string }) {
+  const phone = normalizePhone(input.phone);
+  const text = (input.text ?? "").trim();
+  const normalized = normalize(text);
+  const { user, convo } = await getOrCreateConvo(phone, input.name);
+  const ctx = readCtx(convo.context);
+  const store = getStore(DEFAULT_STORE_KEY);
+
+  await prisma.message.create({ data: { conversationId: convo.id, sender: "user", text } });
+
+  // Global commands
+  if (/^(cancelar|limpar|recome[cç]ar)$/.test(normalized)) {
+    await writeCtx(convo.id, {});
+    await reply(phone, "Beleza, limpei seu pedido. É só me dizer o que você quer. 🙂");
+    return;
+  }
+
+  // Payment confirmation (sandbox: "paguei" approves; prod: MP webhook does it)
+  if (ctx.step === "awaiting_payment" && /\b(paguei|pago|ja paguei|fiz o pix)\b/.test(normalized)) {
+    if (ctx.deliveryOrderId) {
+      await markDeliveryOrderPaid(ctx.deliveryOrderId);
+    }
+    await writeCtx(convo.id, {});
+    return;
+  }
+
+  // Confirm + generate Pix
+  if (ctx.step === "quoted" && /\b(pagar|confirmar|confirmo|fechar|sim|pode)\b/.test(normalized)) {
+    await createOrderAndCharge(phone, user.id, convo.id, ctx);
+    return;
+  }
+
+  // "repete o de sempre" — reorder last delivered basket (memory)
+  if (/\b(repete|repetir|de sempre|o mesmo|igual)\b/.test(normalized)) {
+    const last = await prisma.deliveryOrder.findFirst({
+      where: { userId: user.id, status: { in: ["delivered", "dispatched", "ready_for_pickup", "operator_buying", "paid"] } },
+      orderBy: { createdAt: "desc" }
+    });
+    const items = (last?.items as unknown as BasketItem[]) ?? [];
+    if (!items.length) {
+      await reply(phone, "Ainda não tenho um pedido anterior seu pra repetir. Me diz o que você quer. 🙂");
+      return;
+    }
+    const next: DeliveryContext = { flow: "delivery", basket: items, notFound: [], cep: user.cep ?? ctx.cep, deliveryAddress: ctx.deliveryAddress };
+    await continueAfterBasket(phone, user.id, convo.id, next, user.cep);
+    return;
+  }
+
+  // CEP step
+  if (ctx.step === "need_cep" && /\d{5}-?\d{3}/.test(normalized)) {
+    const cep = (normalized.match(/\d{5}-?\d{3}/) ?? [])[0];
+    ctx.cep = cep;
+    ctx.deliveryAddress = (await expandCep(cep!)) ?? ctx.deliveryAddress;
+    if (input.phone) {
+      await prisma.user.update({ where: { id: user.id }, data: { cep } });
+    }
+    await quoteBasket(ctx, store);
+    ctx.flow = "delivery";
+    await writeCtx(convo.id, ctx);
+    await reply(phone, summaryText(ctx));
+    return;
+  }
+
+  // Otherwise: treat as a basket (items list). Add to existing basket if present.
+  const { basket, notFound } = await buildBasket(text, store);
+  if (!basket.length) {
+    await reply(
+      phone,
+      "Não achei esses itens no Carrefour 🤔. Me diz de outro jeito (ex.: \"pasta de dente Colgate\", \"fralda Pampers M\", \"café Pilão\")."
+    );
+    return;
+  }
+  const merged = mergeBaskets(ctx.basket ?? [], basket);
+  const next: DeliveryContext = { flow: "delivery", basket: merged, notFound, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
+  await continueAfterBasket(phone, user.id, convo.id, next, user.cep);
+}
+
+function mergeBaskets(existing: BasketItem[], incoming: BasketItem[]): BasketItem[] {
+  const out = [...existing];
+  for (const item of incoming) {
+    const found = out.find((x) => x.sku === item.sku);
+    if (found) {
+      found.qty += item.qty;
+      found.lineTotal = Math.round(found.unitPrice * found.qty * 100) / 100;
+    } else {
+      out.push(item);
+    }
+  }
+  return out;
+}
+
+async function continueAfterBasket(
+  phone: string,
+  _userId: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  userCep?: string | null
+) {
+  const store = getStore(DEFAULT_STORE_KEY);
+  if (!ctx.cep && !userCep) {
+    ctx.step = "need_cep";
+    await writeCtx(convoId, ctx);
+    const list = (ctx.basket ?? []).map((i) => `• ${i.qty}x ${i.name}`).join("\n");
+    await reply(phone, `Anotei:\n${list}\n\nQual seu *CEP*? Assim eu calculo o frete e o prazo certinhos. 📦`);
+    return;
+  }
+  if (!ctx.cep && userCep) {
+    ctx.cep = userCep;
+    ctx.deliveryAddress = (await expandCep(userCep)) ?? ctx.deliveryAddress;
+  }
+  await quoteBasket(ctx, store);
+  await writeCtx(convoId, ctx);
+  await reply(phone, summaryText(ctx));
+}
+
+async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext) {
+  const order = await prisma.deliveryOrder.create({
+    data: {
+      userId,
+      conversationId: convoId,
+      phone,
+      cep: ctx.cep,
+      deliveryAddress: ctx.deliveryAddress,
+      storeKey: ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY,
+      storeLabel: ctx.basket?.[0]?.storeLabel ?? "Carrefour",
+      storeUnit: ctx.storeUnitLabel,
+      storeAddress: ctx.storeUnitAddress,
+      items: (ctx.basket ?? []) as unknown as object,
+      itemsSubtotal: ctx.itemsSubtotal ?? 0,
+      courierKey: ctx.courierKey ?? "uber_direct",
+      courierQuoteId: ctx.courierQuoteId,
+      deliveryFee: ctx.deliveryFee ?? 0,
+      serviceFee: ctx.serviceFee ?? SERVICE_FEE,
+      total: ctx.total ?? 0,
+      status: "awaiting_payment"
+    }
+  });
+
+  const charge = await pixAdapter.createPix({
+    orderId: order.id,
+    amount: order.total,
+    description: `Lia · pedido ${order.id.slice(-6)}`
+  });
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
+  });
+
+  ctx.deliveryOrderId = order.id;
+  ctx.step = "awaiting_payment";
+  await writeCtx(convoId, ctx);
+
+  await reply(
+    phone,
+    [
+      `Pronto! Total *${brl(order.total)}*.`,
+      "",
+      "Pague com o *Pix copia e cola* abaixo 👇",
+      charge.copiaECola,
+      "",
+      charge.mock
+        ? "_(sandbox: responda *paguei* pra simular o pagamento)_"
+        : "Assim que o pagamento cair, eu já começo a separar e te aviso o rastreio. 💚"
+    ].join("\n")
+  );
+}
+
+// ---------- order lifecycle (called by webhook + operator dashboard) ----------
+
+export async function markDeliveryOrderPaid(orderId: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order || order.status !== "awaiting_payment") return order;
+  const updated = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: { status: "paid", paidAt: new Date() }
+  });
+  await reply(order.phone, "Pagamento confirmado! ✅ Já estou separando seu pedido. Te aviso quando sair pra entrega. 🛵");
+  return updated;
+}
+
+export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
+  return prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: { status: "operator_buying", storeOrderNumber }
+  });
+}
+
+export async function opsDispatchCourier(orderId: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order) throw new Error("Order not found");
+  const store = getStore(order.storeKey);
+  const courier = getCourier(order.courierKey);
+  const dispatch = await courier.dispatch({
+    orderId: order.id,
+    pickupAddress: order.storeAddress ?? "",
+    dropoffAddress: order.deliveryAddress ?? "",
+    instructions: store.pickupInstructions(order.storeOrderNumber ?? "—"),
+    dropoffName: order.customerName ?? undefined,
+    dropoffPhone: order.phone
+  });
+  const updated = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: {
+      status: "dispatched",
+      courierTrackingUrl: dispatch.trackingUrl,
+      courierDispatchedAt: new Date()
+    }
+  });
+  await reply(
+    order.phone,
+    `🛵 Saiu pra entrega! Chega em ~${30} min.${dispatch.trackingUrl ? `\nRastreio: ${dispatch.trackingUrl}` : ""}`
+  );
+  return updated;
+}
+
+export async function opsMarkDelivered(orderId: string) {
+  const order = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: { status: "delivered", deliveredAt: new Date() }
+  });
+  await reply(order.phone, "Entregue! 🎉 Qualquer coisa é só me chamar. Quer que eu guarde isso pra repetir depois? 💚");
+  return order;
+}
+
+export async function opsCancelRefund(orderId: string) {
+  const order = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: { status: "canceled" }
+  });
+  await reply(order.phone, "Seu pedido foi cancelado e o valor estornado. Desculpa o transtorno! 🙏");
+  return order;
+}
+
+export async function getOperatorQueue() {
+  return prisma.deliveryOrder.findMany({
+    where: { status: { in: ["paid", "operator_buying", "ready_for_pickup", "dispatched"] } },
+    orderBy: { createdAt: "asc" }
+  });
+}

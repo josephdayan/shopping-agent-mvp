@@ -1,0 +1,40 @@
+import { NextResponse } from "next/server";
+import { opsCancelRefund, opsDispatchCourier, opsMarkBought, opsMarkDelivered } from "@/lib/delivery-service";
+
+export const dynamic = "force-dynamic";
+
+function authed(request: Request) {
+  const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
+  if (!expected) return true;
+  const url = new URL(request.url);
+  const key = request.headers.get("x-ops-key") ?? url.searchParams.get("key");
+  return key === expected;
+}
+
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  if (!authed(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const body = (await request.json().catch(() => ({}))) as { action?: string; storeOrderNumber?: string };
+  const id = params.id;
+  try {
+    switch (body.action) {
+      case "bought":
+        await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim());
+        break;
+      case "dispatch":
+        await opsDispatchCourier(id);
+        break;
+      case "delivered":
+        await opsMarkDelivered(id);
+        break;
+      case "cancel":
+        await opsCancelRefund(id);
+        break;
+      default:
+        return NextResponse.json({ error: "unknown action" }, { status: 400 });
+    }
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[ops:action:error]", error);
+    return NextResponse.json({ ok: false, error: "action failed" }, { status: 500 });
+  }
+}

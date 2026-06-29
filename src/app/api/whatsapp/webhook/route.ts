@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
-import { handleInboundMessage, queueWhatsAppProductSearch, toChannelResponse } from "@/lib/chat-service";
+import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
+import { handleDeliveryMessage } from "@/lib/delivery-service";
 import { whatsappAdapter, type WhatsAppRichReply } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -61,58 +62,17 @@ export async function POST(request: Request) {
   }
 
   if (inbound.provider === "twilio") {
-    if (shouldSendProcessingAck(inbound.text)) {
-      try {
-        await whatsappAdapter.sendMessage(inbound.phone, "Analisando seu pedido. Um instante, por favor.");
-      } catch (error) {
-        console.warn("[whatsapp:ack:error]", error);
-      }
-
-      try {
-        const queued = (await queueWhatsAppProductSearch(inbound)) as {
-          queued: boolean;
-          served?: string;
-          reply?: string;
-          conversation?: Parameters<typeof toChannelResponse>[0];
-        };
-        if (queued.served === "cache" && queued.conversation) {
-          // Cache hit: cards are ready now — send them straight away instead of
-          // waiting on the (skipped) Apify callback.
-          const richReply = formatWhatsAppReply(toChannelResponse(queued.conversation));
-          await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
-        } else if (!queued.queued && queued.reply) {
-          await whatsappAdapter.sendMessage(inbound.phone, queued.reply);
-        }
-      } catch (error) {
-        console.error("[whatsapp:twilio:queue-error]", error);
-        try {
-          await whatsappAdapter.sendMessage(
-            inbound.phone,
-            "Não consegui iniciar essa busca agora. Pode tentar de novo em instantes?"
-          );
-        } catch (sendError) {
-          console.error("[whatsapp:twilio:fallback-error]", sendError);
-        }
-      }
-
-      return new Response(`<?xml version="1.0" encoding="UTF-8"?><Response></Response>`, {
-        status: 200,
-        headers: { "Content-Type": "text/xml" }
-      });
-    }
-
-    // Fast flows such as selection, payment, cancellation and order status still
-    // run inline because they do not depend on the Mercado Livre scraper.
+    // The remodelled Lia: every inbound message drives the everyday-delivery flow
+    // (basket -> CEP -> courier quote -> Pix -> operator queue). handleDeliveryMessage
+    // owns the conversation and sends all replies over the Twilio REST API itself.
     try {
-      const conversation = await handleInboundMessage(inbound);
-      const richReply = formatWhatsAppReply(toChannelResponse(conversation));
-      await whatsappAdapter.sendRichReplyMessages(inbound.phone, richReply);
+      await handleDeliveryMessage(inbound);
     } catch (error) {
-      console.error("[whatsapp:twilio:send-error]", error);
+      console.error("[whatsapp:twilio:delivery-error]", error);
       try {
         await whatsappAdapter.sendMessage(
           inbound.phone,
-          "Não consegui concluir essa busca agora. Pode tentar de novo em instantes?"
+          "Tive um probleminha aqui agora 🙏. Pode mandar de novo em instantes?"
         );
       } catch (sendError) {
         console.error("[whatsapp:twilio:fallback-error]", sendError);
