@@ -12,10 +12,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const limit = Number(process.env.LIA_PREWARM_BATCH ?? 6);
-  const result = await prewarmMercadoLivreSearches(PREWARM_QUERIES, {
-    limit: Number.isFinite(limit) ? limit : 6
-  });
+  // Manual runs may pass ?limit= to scrape a smaller/larger batch (clamped);
+  // the scheduled cron uses LIA_PREWARM_BATCH (default 6).
+  const requested = Number(
+    new URL(request.url).searchParams.get("limit") ?? process.env.LIA_PREWARM_BATCH ?? 6
+  );
+  const limit = Math.min(Math.max(Number.isFinite(requested) ? requested : 6, 1), 20);
+  const result = await prewarmMercadoLivreSearches(PREWARM_QUERIES, { limit });
 
   console.log("[lia:prewarm:run]", result);
   return NextResponse.json(result);
