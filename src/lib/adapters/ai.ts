@@ -290,6 +290,97 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
   }
 }
 
+export type CatalogMatchResult = {
+  greetingOnly: boolean;
+  containsMedicine: boolean;
+  items: { sku: string | null; query: string; qty: number }[];
+};
+
+// Robust everyday-delivery matching: given the store catalog + the customer's
+// message, map the request to catalog SKUs. The LLM handles synonyms
+// ("pasta de dente"=creme dental, "refri"=refrigerante), greetings, typos, qty and
+// flags medicine (which we can't sell). Returns null if OpenAI is unavailable so
+// the caller can fall back to the deterministic matcher.
+export async function matchCatalog(
+  text: string,
+  catalog: { sku: string; name: string; brand?: string; category?: string }[]
+): Promise<CatalogMatchResult | null> {
+  if (!process.env.OPENAI_API_KEY || !catalog.length) return null;
+  try {
+    const compact = catalog.map((item) => ({ sku: item.sku, nome: item.name, marca: item.brand ?? "", cat: item.category ?? "" }));
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "Você é a Lia, uma assistente de compras do dia a dia no WhatsApp. Recebe um CATÁLOGO (lista de produtos com sku/nome/marca/cat) e a MENSAGEM do cliente. Sua tarefa: identificar quais produtos do catálogo o cliente quer. Regras: (1) Entenda sinônimos e linguagem natural: 'pasta de dente'=creme dental, 'refri'/'refrigerante'=refrigerante, 'sabão em pó'=sabão, 'lenço de bebê'=lenço umedecido, 'ração'=ração pet, 'papel'=papel higiênico, etc. (2) Para CADA produto pedido: se houver item correspondente no catálogo, devolva o 'sku' EXATO daquele item; se não houver, 'sku'=null e 'query'=o nome que o cliente pediu. NUNCA invente um sku que não está na lista. (3) 'qty'=quantidade pedida (padrão 1). (4) Ignore saudações e conversa fiada: se a mensagem não pede nenhum produto (ex.: 'bom dia', 'tudo bem?'), 'greetingOnly'=true e 'items'=[]. (5) Se o cliente pedir REMÉDIO/medicamento (dipirona, tylenol, antibiótico, tarja, controlado, etc.), 'containsMedicine'=true e NÃO inclua esse item (não vendemos remédio). (6) Quando o pedido for vago ('um refrigerante') escolha o item mais comum do catálogo que sirva. Responda apenas JSON válido."
+          },
+          { role: "user", content: `CATÁLOGO:\n${JSON.stringify(compact)}\n\nMENSAGEM DO CLIENTE:\n${text}` }
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name: "catalog_match",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                greetingOnly: { type: "boolean" },
+                containsMedicine: { type: "boolean" },
+                items: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    properties: {
+                      sku: { type: ["string", "null"] },
+                      query: { type: "string" },
+                      qty: { type: "number" }
+                    },
+                    required: ["sku", "query", "qty"]
+                  }
+                }
+              },
+              required: ["greetingOnly", "containsMedicine", "items"]
+            }
+          }
+        }
+      })
+    });
+
+    if (!response.ok) {
+      console.warn("[ai:matchCatalog:fallback]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
+    if (!jsonText) return null;
+
+    const parsed = JSON.parse(jsonText) as CatalogMatchResult;
+    const valid = new Set(catalog.map((item) => item.sku));
+    return {
+      greetingOnly: Boolean(parsed.greetingOnly),
+      containsMedicine: Boolean(parsed.containsMedicine),
+      items: (parsed.items ?? []).map((item) => ({
+        sku: item.sku && valid.has(item.sku) ? item.sku : null,
+        query: item.query ?? "",
+        qty: item.qty && item.qty > 0 ? Math.floor(item.qty) : 1
+      }))
+    };
+  } catch (error) {
+    console.warn("[ai:matchCatalog:error]", error);
+    return null;
+  }
+}
+
 async function classifyTurnWithOpenAI(text: string, context: TurnContext): Promise<TurnClassification | null> {
   if (!process.env.OPENAI_API_KEY) return null;
   const normalized = normalize(text).trim();

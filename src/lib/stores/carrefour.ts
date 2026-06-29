@@ -78,6 +78,10 @@ export const carrefourStore: StoreConnector = {
     return scored.slice(0, limit).map((entry) => entry.item);
   },
 
+  listCatalog(): CatalogItem[] {
+    return SEED_CATALOG;
+  },
+
   async nearestUnit(cep?: string): Promise<StoreUnit> {
     if (cep) {
       const digits = cep.replace(/\D/g, "");

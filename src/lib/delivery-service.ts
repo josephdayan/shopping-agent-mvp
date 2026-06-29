@@ -4,6 +4,7 @@ import { getStore, DEFAULT_STORE_KEY, type StoreConnector } from "@/lib/stores";
 import { queryTokens } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
 import { pixAdapter } from "@/lib/payments/mercadopago";
+import { matchCatalog } from "@/lib/adapters/ai";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
 // everyday items, fulfilled from a pluggable store via clique-e-retire + courier.
@@ -113,14 +114,53 @@ function parseBasketLines(text: string): { phrase: string; qty: number }[] {
     });
 }
 
-async function buildBasket(text: string, store: StoreConnector): Promise<{ basket: BasketItem[]; notFound: string[] }> {
+type BasketResult = { basket: BasketItem[]; notFound: string[]; greetingOnly: boolean; containsMedicine: boolean };
+
+async function buildBasket(text: string, store: StoreConnector): Promise<BasketResult> {
+  const catalog = store.listCatalog();
+
+  // Primary: the LLM maps the natural-language request to catalog SKUs — it handles
+  // synonyms ("pasta de dente"=creme dental), greetings, typos, qty and medicines.
+  const llm = await matchCatalog(
+    text,
+    catalog.map((item) => ({ sku: item.sku, name: item.name, brand: item.brand, category: item.category }))
+  );
+  if (llm) {
+    const bySku = new Map(catalog.map((item) => [item.sku, item]));
+    const basket: BasketItem[] = [];
+    const notFound: string[] = [];
+    for (const item of llm.items) {
+      const ci = item.sku ? bySku.get(item.sku) : undefined;
+      if (ci) {
+        basket.push({
+          sku: ci.sku,
+          name: ci.name,
+          brand: ci.brand,
+          qty: item.qty,
+          unitPrice: ci.unitPrice,
+          lineTotal: Math.round(ci.unitPrice * item.qty * 100) / 100,
+          storeKey: store.key,
+          storeLabel: store.label
+        });
+      } else if (item.query && queryTokens(item.query).length) {
+        notFound.push(item.query);
+      }
+    }
+    return {
+      basket: dedupeBasket(basket),
+      notFound,
+      greetingOnly: llm.greetingOnly && basket.length === 0,
+      containsMedicine: llm.containsMedicine
+    };
+  }
+
+  // Fallback (OpenAI off): hardened deterministic token/word matcher.
   const lines = parseBasketLines(text);
   const basket: BasketItem[] = [];
   const notFound: string[] = [];
   for (const line of lines) {
     if (!queryTokens(line.phrase).length) continue; // skip pure greeting/filler ("bom dia")
-    const matches = await store.searchItems(line.phrase, 1);
-    const best = matches[0];
+    const best = (await store.searchItems(line.phrase, 1))[0];
     if (!best) {
       notFound.push(line.phrase);
       continue;
@@ -136,7 +176,21 @@ async function buildBasket(text: string, store: StoreConnector): Promise<{ baske
       storeLabel: store.label
     });
   }
-  return { basket, notFound };
+  return { basket: dedupeBasket(basket), notFound, greetingOnly: false, containsMedicine: false };
+}
+
+function dedupeBasket(items: BasketItem[]): BasketItem[] {
+  const out: BasketItem[] = [];
+  for (const item of items) {
+    const found = out.find((x) => x.sku === item.sku);
+    if (found) {
+      found.qty += item.qty;
+      found.lineTotal = Math.round(found.unitPrice * found.qty * 100) / 100;
+    } else {
+      out.push(item);
+    }
+  }
+  return out;
 }
 
 async function expandCep(cep: string): Promise<string | undefined> {
@@ -262,14 +316,32 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
 
   // Otherwise: treat as a basket (items list). Add to existing basket if present.
-  const { basket, notFound } = await buildBasket(text, store);
-  if (!basket.length) {
+  const { basket, notFound, greetingOnly, containsMedicine } = await buildBasket(text, store);
+
+  if (greetingOnly && !basket.length) {
     await reply(
       phone,
-      "Não achei esses itens no Carrefour 🤔. Me diz de outro jeito (ex.: \"pasta de dente Colgate\", \"fralda Pampers M\", \"café Pilão\")."
+      "Oi! 💚 Sou a Lia. Me diz o que você precisa do dia a dia — ex.: *\"guaraná, pasta de dente e papel higiênico\"* — que eu trago e entrego pra você."
     );
     return;
   }
+  if (containsMedicine && !basket.length) {
+    await reply(
+      phone,
+      "Remédio eu não consigo trazer (por lei, só farmácia vende) 🙏. Mas faço higiene, beleza, limpeza, mercado, bebida e pet. O que você precisa?"
+    );
+    return;
+  }
+  if (!basket.length) {
+    await reply(
+      phone,
+      notFound.length
+        ? `Não achei ${notFound.join(", ")} no Carrefour 🤔. Tenta de outro jeito (ex.: \"pasta de dente Colgate\", \"fralda Pampers M\", \"café Pilão\").`
+        : "Não entendi seu pedido 🤔. Me diz os itens, ex.: \"guaraná e pasta de dente\"."
+    );
+    return;
+  }
+
   const merged = mergeBaskets(ctx.basket ?? [], basket);
   const next: DeliveryContext = { flow: "delivery", basket: merged, notFound, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
   await continueAfterBasket(phone, user.id, convo.id, next, user.cep);

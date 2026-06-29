@@ -29,6 +29,8 @@ export type StoreConnector = {
   nearestUnit(cep?: string): Promise<StoreUnit>;
   // Counter-pickup instructions for the click-e-retire order (operator + courier).
   pickupInstructions(orderNumber: string): string;
+  // Full catalog (used by the AI matcher; real stores return a fetched/cached list).
+  listCatalog(): CatalogItem[];
 };
 
 // Shared helper: accent-insensitive, lowercase token match scoring so a store's
@@ -59,8 +61,10 @@ function words(text: string): string[] {
 // whole word; tokens >=4 may match as a substring of a word ("colgate" in "colgate").
 function tokenMatchesWord(token: string, word: string): boolean {
   if (token === word) return true;
-  if (token.length >= 4 && word.includes(token)) return true;
-  if (word.length >= 4 && token.includes(word)) return true;
+  // Prefix match only — "refrigerante" matches "refri", but "restauração" must NOT
+  // match "ração" (it's a suffix), and "bombril" must NOT match "bom" (too short).
+  if (token.length >= 4 && word.startsWith(token)) return true;
+  if (word.length >= 4 && token.startsWith(word)) return true;
   return false;
 }
 
