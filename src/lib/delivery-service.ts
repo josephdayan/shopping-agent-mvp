@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, type StoreConnector } from "@/lib/stores";
+import { queryTokens } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
 import { pixAdapter } from "@/lib/payments/mercadopago";
 
@@ -117,6 +118,7 @@ async function buildBasket(text: string, store: StoreConnector): Promise<{ baske
   const basket: BasketItem[] = [];
   const notFound: string[] = [];
   for (const line of lines) {
+    if (!queryTokens(line.phrase).length) continue; // skip pure greeting/filler ("bom dia")
     const matches = await store.searchItems(line.phrase, 1);
     const best = matches[0];
     if (!best) {

@@ -44,6 +44,8 @@ const SEED_CATALOG: CatalogItem[] = [
   { sku: "CRF-SNK-005", name: "Amendoim Japonês Dori 150g", brand: "Dori", unitPrice: 5.49, unit: "un", category: "snack" },
   // Bebidas (não-alcoólica e embalada)
   { sku: "CRF-BEB-101", name: "Refrigerante Coca-Cola 2L", brand: "Coca-Cola", unitPrice: 9.99, unit: "un", category: "bebida" },
+  { sku: "CRF-BEB-105", name: "Refrigerante Guaraná Antarctica 2L", brand: "Antarctica", unitPrice: 8.49, unit: "un", category: "bebida" },
+  { sku: "CRF-BEB-106", name: "Energético Red Bull 250ml", brand: "Red Bull", unitPrice: 9.9, unit: "un", category: "bebida" },
   { sku: "CRF-BEB-102", name: "Água Mineral Crystal sem Gás 1,5L", brand: "Crystal", unitPrice: 2.99, unit: "un", category: "bebida" },
   { sku: "CRF-BEB-103", name: "Suco Del Valle Uva 1L", brand: "Del Valle", unitPrice: 7.9, unit: "un", category: "bebida" },
   { sku: "CRF-BEB-104", name: "Cerveja Heineken Long Neck 330ml", brand: "Heineken", unitPrice: 6.49, unit: "un", category: "bebida" },

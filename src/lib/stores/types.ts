@@ -43,17 +43,47 @@ export function normalizeText(input: string): string {
     .trim();
 }
 
+// Greetings / fillers / articles that must NOT drive product matching, otherwise
+// "Bom dia" matches "Bombril" and "quero um X" leaks "um".
+const STOPWORDS = new Set(
+  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada".split(
+    " "
+  )
+);
+
+function words(text: string): string[] {
+  return normalizeText(text).split(" ").filter(Boolean);
+}
+
+// Word-boundary match: avoids "bom"(3) hitting "bombril". Short tokens must match a
+// whole word; tokens >=4 may match as a substring of a word ("colgate" in "colgate").
+function tokenMatchesWord(token: string, word: string): boolean {
+  if (token === word) return true;
+  if (token.length >= 4 && word.includes(token)) return true;
+  if (word.length >= 4 && token.includes(word)) return true;
+  return false;
+}
+
+// The meaningful product tokens in a request (greetings/fillers removed).
+export function queryTokens(query: string): string[] {
+  return words(query).filter((token) => token.length > 1 && !STOPWORDS.has(token));
+}
+
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {
-  const brand = normalizeText(item.brand ?? "");
-  const haystack = normalizeText([item.name, item.brand, item.category].filter(Boolean).join(" "));
-  const tokens = normalizeText(query).split(" ").filter((t) => t.length > 1);
+  const tokens = queryTokens(query);
   if (!tokens.length) return 0;
+  const nameWords = words(item.name);
+  const brandWords = words(item.brand ?? "");
+  const categoryWords = words(item.category ?? "");
   let score = 0;
   for (const token of tokens) {
-    // An explicit brand match ("colgate") is a strong signal — outweighs a generic
-    // word that happens to appear in another product's name.
-    if (brand && brand.includes(token)) score += 4;
-    else if (haystack.includes(token)) score += token.length >= 4 ? 2 : 1;
+    if (brandWords.some((word) => tokenMatchesWord(token, word))) {
+      score += 4; // explicit brand match is the strongest signal
+    } else if (nameWords.some((word) => tokenMatchesWord(token, word))) {
+      score += token.length >= 4 ? 2 : 1;
+    } else if (categoryWords.some((word) => tokenMatchesWord(token, word))) {
+      score += 1;
+    }
   }
   return score;
 }
