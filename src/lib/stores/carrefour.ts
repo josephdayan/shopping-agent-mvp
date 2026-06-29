@@ -70,6 +70,9 @@ const UNITS: StoreUnit[] = [
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
+// Hard cap so a slow Carrefour scrape never hangs the WhatsApp turn — past this we
+// fall back to the seed and the user always gets a reply.
+const CARREFOUR_MAX_WAIT_MS = Number(process.env.LIA_CARREFOUR_TIMEOUT_MS ?? 22000);
 
 function seedSearch(query: string, limit: number): CatalogItem[] {
   const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter((entry) => entry.score > 0);
@@ -124,7 +127,7 @@ async function searchCarrefourLive(query: string, limit: number): Promise<Catalo
     console.warn("[carrefour:cache:read]", error instanceof Error ? error.message : error);
   }
 
-  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 });
+  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 }, CARREFOUR_MAX_WAIT_MS);
   const items = (raw ?? [])
     .map((entry) => mapCarrefourItem(entry as Record<string, unknown>))
     .filter((item): item is CatalogItem => Boolean(item));

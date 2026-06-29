@@ -402,7 +402,12 @@ async function runApifyActorCached(actorId: string, token: string, query: string
 // unreliable for the Mercado Livre scraper — on a cold start it returns 502 or a
 // 200 with an EMPTY dataset (the run is aborted before it scrapes), which is what
 // made production return "Não encontrei uma opção boa para essa busca".
-export async function runApifyActor(actorId: string, token: string, input: unknown): Promise<ApifyProduct[] | null> {
+export async function runApifyActor(
+  actorId: string,
+  token: string,
+  input: unknown,
+  maxWaitOverrideMs?: number
+): Promise<ApifyProduct[] | null> {
   const startResponse = await fetch(`https://api.apify.com/v2/acts/${actorId}/runs?token=${token}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "User-Agent": "lia/0.1" },
@@ -423,7 +428,7 @@ export async function runApifyActor(actorId: string, token: string, input: unkno
     return null;
   }
 
-  const maxWaitMs = Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 90000);
+  const maxWaitMs = maxWaitOverrideMs ?? Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 90000);
   const pollEveryMs = Number(process.env.APIFY_MERCADO_LIVRE_POLL_MS ?? 2500);
   const deadline = Date.now() + (Number.isFinite(maxWaitMs) ? maxWaitMs : 45000);
   let status = "READY";

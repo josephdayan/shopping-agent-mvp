@@ -349,7 +349,11 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
-  // Otherwise: treat as a basket (items list). Add to existing basket if present.
+  // Otherwise: treat as a basket (items list). Live Carrefour search can take a few
+  // seconds, so acknowledge first (except for plain greetings) — no more silence.
+  if (!/^(oi+|ola+|opa|e ?ai|bom dia|boa tarde|boa noite|tudo bem|tudo bom|alo)\??!?$/.test(normalized)) {
+    await reply(phone, "🔎 Procurando no Carrefour, só um instante…");
+  }
   const { basket, notFound, greetingOnly, containsMedicine } = await buildBasket(text, store);
 
   if (greetingOnly && !basket.length) {
