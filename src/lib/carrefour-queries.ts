@@ -2,6 +2,10 @@
 // cache hot so these answer INSTANTLY in chat (the long-tail is scraped on demand,
 // then cached). Mostly generic terms (how people ask) + a few top brands. Edit freely.
 export const CARREFOUR_QUERIES: string[] = [
+  // Campeões do dia a dia — aquecidos primeiro (o cron pega na ordem da lista).
+  "papel higiênico", "creme dental", "café", "arroz", "feijão", "açúcar", "leite",
+  "coca cola", "guaraná", "refrigerante", "sabão em pó", "detergente", "shampoo",
+  "fralda", "ração para cachorro", "água", "óleo de soja", "macarrão", "sabonete", "desodorante",
   // Higiene
   "creme dental", "creme dental colgate", "escova de dente", "fio dental", "enxaguante bucal",
   "shampoo", "condicionador", "sabonete", "sabonete líquido", "desodorante", "desodorante rexona",
