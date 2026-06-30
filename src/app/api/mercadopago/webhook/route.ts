@@ -1,7 +1,32 @@
 import { NextResponse } from "next/server";
+import { createHmac, timingSafeEqual } from "crypto";
 import { markDeliveryOrderPaid } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
+
+// Validate Mercado Pago's x-signature header (HMAC-SHA256 over the documented
+// manifest). Only enforced when MERCADO_PAGO_WEBHOOK_SECRET is set — otherwise we
+// skip it (sandbox), and we still re-fetch the payment from MP with our own token
+// below, so a spoofed body can never mark an order paid on its own.
+function signatureValid(request: Request, dataId: string): boolean {
+  const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+  if (!secret) return true; // not configured → rely on the re-fetch guard
+  const sig = request.headers.get("x-signature") ?? "";
+  const requestId = request.headers.get("x-request-id") ?? "";
+  const parts = Object.fromEntries(
+    sig.split(",").map((kv) => kv.split("=").map((s) => s.trim()) as [string, string])
+  );
+  const ts = parts.ts;
+  const v1 = parts.v1;
+  if (!ts || !v1) return false;
+  const manifest = `id:${dataId.toLowerCase()};request-id:${requestId};ts:${ts};`;
+  const expected = createHmac("sha256", secret).update(manifest).digest("hex");
+  try {
+    return timingSafeEqual(Buffer.from(expected), Buffer.from(v1));
+  } catch {
+    return false;
+  }
+}
 
 // Mercado Pago payment notification. On an approved Pix payment, mark the matching
 // DeliveryOrder paid (external_reference = order id) which moves it into the
@@ -21,6 +46,11 @@ export async function POST(request: Request) {
     const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
     if (!paymentId || !token) {
       return NextResponse.json({ ok: true, skipped: !paymentId ? "no-payment-id" : "no-token" });
+    }
+
+    if (!signatureValid(request, paymentId)) {
+      console.warn("[mercadopago:webhook:bad-signature]", paymentId);
+      return NextResponse.json({ ok: false, error: "bad-signature" }, { status: 401 });
     }
 
     const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
