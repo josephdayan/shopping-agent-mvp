@@ -23,6 +23,9 @@ export type StoreUnit = {
 export type StoreConnector = {
   key: string; // "carrefour"
   label: string; // "Carrefour"
+  // Minimum order this store requires, in REAL cost (R$ of products we pay the store).
+  // Store-specific (e.g. Carrefour clique-e-retire ≈ 30); 0/undefined = no minimum.
+  minOrder?: number;
   // Best catalog matches for one free-text basket line ("pasta de dente colgate").
   searchItems(query: string, limit?: number): Promise<CatalogItem[]>;
   // Store unit nearest to the buyer's CEP (mock returns a sensible default).

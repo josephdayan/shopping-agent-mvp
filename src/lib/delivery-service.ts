@@ -244,6 +244,34 @@ function summaryText(ctx: DeliveryContext): string {
   return out.join("\n");
 }
 
+// Minimum order is a PER-STORE rule (e.g., Carrefour clique-e-retire ≈ R$30 of
+// products), declared on the StoreConnector — NOT a global Lia rule. A store with no
+// minimum sets 0 and this never triggers. min is on the real cost (what we pay the
+// store); the customer is shown the marked-up equivalent.
+function storeMinReal(store: StoreConnector): number {
+  return store.minOrder ?? 0;
+}
+function belowMinimum(ctx: DeliveryContext, store: StoreConnector): boolean {
+  const min = storeMinReal(store);
+  return min > 0 && (ctx.itemsSubtotal ?? 0) < min;
+}
+function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
+  const displayMin = Math.round(storeMinReal(store) * MARKUP * 100) / 100;
+  const produtos = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0)) * 100) / 100;
+  const falta = Math.max(0, Math.round((displayMin - produtos) * 100) / 100);
+  const lines = (ctx.basket ?? []).map(
+    (item) => `• ${item.qty}x ${item.name} — ${brl(Math.round(item.unitPrice * MARKUP * item.qty * 100) / 100)}`
+  );
+  return [
+    "🛒 *Seu pedido até agora:*",
+    ...lines,
+    "",
+    `Produtos: ${brl(produtos)}`,
+    "",
+    `O *${store.label}* tem pedido mínimo de *${brl(displayMin)}* em produtos. Falta *${brl(falta)}* — me manda mais alguns itens que eu fecho o pedido! 🙂`
+  ].join("\n");
+}
+
 // ---------- the WhatsApp conversation state machine ----------
 
 export async function handleDeliveryMessage(input: { phone?: string; text: string; name?: string }) {
@@ -275,8 +303,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.flow = "delivery";
       if (ctx.basket?.length) {
         await quoteBasket(ctx, store);
-        await writeCtx(convo.id, ctx);
-        await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${summaryText(ctx)}`);
+        if (belowMinimum(ctx, store)) {
+          ctx.step = "collecting";
+          await writeCtx(convo.id, ctx);
+          await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${minimumOrderText(ctx, store)}`);
+        } else {
+          await writeCtx(convo.id, ctx);
+          await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${summaryText(ctx)}`);
+        }
       } else {
         ctx.step = "collecting";
         await writeCtx(convo.id, ctx);
@@ -344,6 +378,12 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     }
     await quoteBasket(ctx, store);
     ctx.flow = "delivery";
+    if (belowMinimum(ctx, store)) {
+      ctx.step = "collecting";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, minimumOrderText(ctx, store));
+      return;
+    }
     await writeCtx(convo.id, ctx);
     await reply(phone, summaryText(ctx));
     return;
@@ -419,11 +459,23 @@ async function continueAfterBasket(
     ctx.deliveryAddress = (await expandCep(userCep)) ?? ctx.deliveryAddress;
   }
   await quoteBasket(ctx, store);
+  if (belowMinimum(ctx, store)) {
+    ctx.step = "collecting"; // block payment until the basket clears the store minimum
+    await writeCtx(convoId, ctx);
+    await reply(phone, minimumOrderText(ctx, store));
+    return;
+  }
   await writeCtx(convoId, ctx);
   await reply(phone, summaryText(ctx));
 }
 
 async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext) {
+  // Hard guard: never charge an order below the store's minimum (un-fulfillable).
+  const store = getStore(ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
+  if (belowMinimum(ctx, store)) {
+    await reply(phone, minimumOrderText(ctx, store));
+    return;
+  }
   const order = await prisma.deliveryOrder.create({
     data: {
       userId,

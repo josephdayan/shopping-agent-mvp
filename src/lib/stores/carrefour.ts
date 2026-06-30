@@ -166,6 +166,8 @@ export async function prewarmCarrefour(queries: string[], options?: { limit?: nu
 export const carrefourStore: StoreConnector = {
   key: "carrefour",
   label: "Carrefour",
+  // Carrefour clique-e-retire requires a minimum order (~R$30 of products). Tunable.
+  minOrder: Number(process.env.LIA_CARREFOUR_MIN_ORDER ?? 30),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
     // Live Carrefour via Apify is OPT-IN (LIA_CARREFOUR_LIVE=true). The community
