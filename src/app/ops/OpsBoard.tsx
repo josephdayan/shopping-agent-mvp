@@ -113,7 +113,8 @@ export default function OpsBoard() {
             <strong>Cliente pagou {brl(o.total)}</strong>
           </div>
           <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
-            Loja: {o.storeLabel} {o.storeUnit ? `· ${o.storeUnit}` : ""}
+            🏬 Retirar em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
+            {o.storeAddress ? ` — ${o.storeAddress}` : ""}
           </div>
 
           <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>

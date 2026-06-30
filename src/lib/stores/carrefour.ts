@@ -135,13 +135,32 @@ const SEED_CATALOG: CatalogItem[] = [
   { sku: "CRF-PET-004", name: "Ração Úmida para Gato Friskies Atum Sachê 85g", brand: "Friskies", unitPrice: 3.58, unit: "un", category: "pet" }
 ];
 
-// A few São Paulo capital units. Mock CEP->unit: just returns the first for now;
-// the real impl would geocode the CEP and pick the closest open store.
+// Real Carrefour Hipermercado units in the São Paulo metro (these are the stores that
+// do Clique e Retire). Names/addresses/CEPs copied from carrefour.com.br/localizador-de-lojas
+// on 2026-06-30. `nearestUnit` picks the one whose CEP is numerically closest to the
+// customer's (a good proxy in SP, where CEP ranges map to regions). Add rows here as
+// coverage grows; swap to true geo-distance later if needed.
 const UNITS: StoreUnit[] = [
-  { id: "crf-pinheiros", label: "Carrefour Pinheiros", address: "R. dos Pinheiros, 1000 - Pinheiros, São Paulo - SP", cep: "05422-001" },
-  { id: "crf-paulista", label: "Carrefour Paulista", address: "Av. Paulista, 1800 - Bela Vista, São Paulo - SP", cep: "01310-100" },
-  { id: "crf-tatuape", label: "Carrefour Tatuapé", address: "R. Tuiuti, 2100 - Tatuapé, São Paulo - SP", cep: "03081-000" }
+  { id: "crf-washington-luis", label: "Carrefour Hiper Washington Luís", address: "Av. Washington Luiz, 1415 - São Paulo - SP", cep: "04662-002" },
+  { id: "crf-imigrantes", label: "Carrefour Hiper Imigrantes", address: "Rua Ribeiro Lacerda, 940 - São Paulo - SP", cep: "04150-000" },
+  { id: "crf-brooklin", label: "Carrefour Hiper Brooklin", address: "Av. Santo Amaro, 4815 - São Paulo - SP", cep: "04702-000" }, // CEP corrigido (o site trazia 47001-000, da BA)
+  { id: "crf-pinheiros", label: "Carrefour Hiper Pinheiros", address: "Av. das Nações Unidas, 15187 - São Paulo - SP", cep: "04794-000" },
+  { id: "crf-giovanni-gronchi", label: "Carrefour Hiper Giovanni Gronchi", address: "Av. Alberto Augusto Alves, 50 - São Paulo - SP", cep: "05724-030" },
+  { id: "crf-butanta", label: "Carrefour Hiper Butantã", address: "Av. Prof. Francisco Morato, 2718 - São Paulo - SP", cep: "05512-300" },
+  { id: "crf-raposo-tavares", label: "Carrefour Hiper Raposo Tavares", address: "Rod. Raposo Tavares, s/n - São Paulo - SP", cep: "05577-901" },
+  { id: "crf-aricanduva", label: "Carrefour Hiper Aricanduva", address: "Av. Rio das Pedras, 555 - São Paulo - SP", cep: "03453-000" },
+  { id: "crf-analia-franco", label: "Carrefour Hiper Anália Franco", address: "Av. Regente Feijó, 1759 - São Paulo - SP", cep: "03550-100" },
+  { id: "crf-limao", label: "Carrefour Hiper Limão", address: "Av. Otaviano Alves de Lima, 1824 - São Paulo - SP", cep: "02701-000" },
+  { id: "crf-tambore", label: "Carrefour Hiper Tamboré", address: "Av. Piracema, 669 - Barueri - SP", cep: "06460-930" },
+  { id: "crf-taboao", label: "Carrefour Hiper Taboão da Serra", address: "Rod. Régis Bittencourt, 1835 - Taboão da Serra - SP", cep: "06768-200" }
 ];
+
+// CEP -> comparable 8-digit number (zero-padded). Returns null if unusable.
+function cepToNumber(cep?: string | null): number | null {
+  const digits = (cep ?? "").replace(/\D/g, "");
+  if (digits.length < 5) return null;
+  return Number(digits.padEnd(8, "0").slice(0, 8));
+}
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
@@ -294,12 +313,21 @@ export const carrefourStore: StoreConnector = {
   },
 
   async nearestUnit(cep?: string): Promise<StoreUnit> {
-    if (cep) {
-      const digits = cep.replace(/\D/g, "");
-      const exact = UNITS.find((unit) => unit.cep?.replace(/\D/g, "") === digits);
-      if (exact) return exact;
+    const target = cepToNumber(cep);
+    if (target == null) return UNITS[0];
+    // Pick the unit whose CEP is numerically closest to the customer's.
+    let best = UNITS[0];
+    let bestDiff = Number.POSITIVE_INFINITY;
+    for (const unit of UNITS) {
+      const unitNum = cepToNumber(unit.cep);
+      if (unitNum == null) continue;
+      const diff = Math.abs(unitNum - target);
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        best = unit;
+      }
     }
-    return UNITS[0];
+    return best;
   },
 
   pickupInstructions(orderNumber: string): string {
