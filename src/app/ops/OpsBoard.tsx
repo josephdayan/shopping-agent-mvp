@@ -104,7 +104,16 @@ export default function OpsBoard() {
           <ul style={{ margin: "10px 0", paddingLeft: 18 }}>
             {(o.items ?? []).map((it, i) => (
               <li key={i} style={{ fontSize: 14 }}>
-                {it.qty}x {it.name} — {brl(it.lineTotal)}
+                {it.qty}x {it.name} — {brl(it.lineTotal)}{" "}
+                <a
+                  href={`https://mercado.carrefour.com.br/busca/${encodeURIComponent(it.name)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, color: "#0f3d3a" }}
+                  title="Conferir preço/estoque real no Carrefour"
+                >
+                  🔎 ver
+                </a>
               </li>
             ))}
           </ul>
