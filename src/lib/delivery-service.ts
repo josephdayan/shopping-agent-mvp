@@ -15,6 +15,14 @@ import { extractShoppingList } from "@/lib/adapters/ai";
 // each item already +10%; you pay Carrefour the real price, the markup is yours.
 const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);
 
+// Card MDR (~4.99% à vista) passed through to the customer when they choose card, so the
+// 10% margin survives. Gross-up: charged = net / (1 - mdr). Tunable via env as volume
+// lowers the rate. Pix has no fee, so its total is the base.
+const CARD_MDR = Math.min(0.3, Math.max(0, Number(process.env.LIA_CARD_MDR ?? 0.0499)));
+function cardTotal(base: number): number {
+  return Math.round((base / (1 - CARD_MDR)) * 100) / 100;
+}
+
 type BasketItem = {
   sku: string;
   name: string;
@@ -31,7 +39,7 @@ type PendingChoice = { query: string; qty: number; options: ChoiceOption[] };
 
 type DeliveryContext = {
   flow?: "delivery";
-  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "awaiting_payment";
+  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "choosing_payment" | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
   storeKey?: string;
@@ -329,8 +337,20 @@ function summaryText(ctx: DeliveryContext): string {
   if (ctx.notFound?.length) {
     out.push("", `_Não achei: ${ctx.notFound.join(", ")} (me fala de outro jeito que eu procuro)._`);
   }
-  out.push("", "Pode confirmar? Responda *pagar* que eu te mando o Pix. 💚");
+  out.push("", "Pode confirmar? Responda *pagar* que eu fecho o pedido. 💚");
   return out.join("\n");
+}
+
+// Pix (no fee) vs card (fee passed through). Shown after the customer confirms "pagar".
+function paymentMethodText(ctx: DeliveryContext): string {
+  const base = ctx.total ?? 0;
+  return [
+    "Como prefere pagar? 💳",
+    `• *Pix* — ${brl(base)} _(sem taxa)_`,
+    `• *Cartão* — ${brl(cardTotal(base))} _(já com a taxa do cartão)_`,
+    "",
+    "Responde *Pix* ou *cartão*."
+  ].join("\n");
 }
 
 // Minimum order is a PER-STORE rule (e.g., Carrefour clique-e-retire ≈ R$30 of
@@ -443,7 +463,29 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   const saysPay = /\b(pagar|pagamento|finaliza|finalizar|fecha|fechar|checkout)\b/.test(normalized);
   const confirmsQuote = ctx.step === "quoted" && /\b(confirmar|confirmo|sim|pode|isso|ok|fechado|bora)\b/.test(normalized);
   if ((ctx.step === "quoted" || ctx.step === "collecting") && (ctx.basket?.length ?? 0) > 0 && (saysPay || confirmsQuote)) {
-    await createOrderAndCharge(phone, user.id, convo.id, ctx);
+    const payStore = orderStore(ctx);
+    if (belowMinimum(ctx, payStore)) {
+      await writeCtx(convo.id, ctx);
+      await reply(phone, minimumOrderText(ctx, payStore));
+      return;
+    }
+    ctx.step = "choosing_payment";
+    await writeCtx(convo.id, ctx);
+    await reply(phone, paymentMethodText(ctx));
+    return;
+  }
+
+  // Customer is choosing how to pay (card carries the pass-through fee).
+  if (ctx.step === "choosing_payment" && (ctx.basket?.length ?? 0) > 0) {
+    if (/\bpix\b/.test(normalized)) {
+      await createOrderAndCharge(phone, user.id, convo.id, ctx, "pix");
+      return;
+    }
+    if (/\b(cart[aã]o|cartao|credito|crédito|debito|débito|cred)\b/.test(normalized)) {
+      await createOrderAndCharge(phone, user.id, convo.id, ctx, "card");
+      return;
+    }
+    await reply(phone, `Não peguei 🤔. ${paymentMethodText(ctx)}`);
     return;
   }
 
@@ -657,13 +699,19 @@ async function continueAfterBasket(
   await reply(phone, summaryText(ctx));
 }
 
-async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext) {
+async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext, method: "pix" | "card" = "pix") {
   // Hard guard: never charge an order below the store's minimum (un-fulfillable).
   const store = getStore(ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
   if (belowMinimum(ctx, store)) {
     await reply(phone, minimumOrderText(ctx, store));
     return;
   }
+  // Pix is charged at the base total (no fee); card grosses up by the MDR so the margin
+  // survives — the difference is the fee the customer agreed to absorb.
+  const base = ctx.total ?? 0;
+  const isCard = method === "card";
+  const total = isCard ? cardTotal(base) : base;
+  const cardFee = Math.round((total - base) * 100) / 100;
   const order = await prisma.deliveryOrder.create({
     data: {
       userId,
@@ -681,18 +729,21 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
       courierQuoteId: ctx.courierQuoteId,
       deliveryFee: ctx.deliveryFee ?? 0,
       serviceFee: ctx.serviceFee ?? 0,
-      total: ctx.total ?? 0,
+      total,
+      notes: isCard ? `Pagamento: cartão (taxa ~${brl(cardFee)} embutida)` : "Pagamento: Pix",
       status: "awaiting_payment"
     }
   });
 
-  // Checkout Pro link: one MP-hosted page with CARD + Pix. We reuse the existing
-  // nullable columns to avoid a migration — pixId = preference id, pixCopiaECola = the
-  // link we send. The webhook still reconciles by external_reference = order id.
+  // Checkout Pro link LOCKED to the chosen method (so a card link can't be paid by Pix
+  // at the fee'd price, and vice versa). We reuse the existing nullable columns to avoid
+  // a migration — pixId = preference id, pixCopiaECola = the link. The webhook still
+  // reconciles by external_reference = order id.
   const charge = await checkoutAdapter.createLink({
     orderId: order.id,
     amount: order.total,
-    description: `Lia · pedido ${order.id.slice(-6)}`
+    description: `Lia · pedido ${order.id.slice(-6)}`,
+    method
   });
   await prisma.deliveryOrder.update({
     where: { id: order.id },
@@ -714,9 +765,11 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
   await reply(
     phone,
     [
-      `Pronto! Total *${brl(order.total)}*.`,
+      isCard
+        ? `Pronto! Total *${brl(total)}* no cartão _(já com a taxa)_.`
+        : `Pronto! Total *${brl(total)}* no Pix.`,
       "",
-      "Pague com *cartão ou Pix* neste link 👇",
+      isCard ? "Pague no *cartão* por este link 👇" : "Pague no *Pix* por este link 👇",
       charge.initPoint,
       "",
       charge.mock

@@ -117,12 +117,15 @@ async function realCreatePix(input: { orderId: string; amount: number; descripti
 // Checkout Pro: create a payment preference and return its hosted link (init_point).
 // One link covers BOTH card and Pix — the customer chooses on MP's page. INERT until
 // MERCADO_PAGO_ACCESS_TOKEN is set (mock link in sandbox so the flow runs end-to-end).
+export type CheckoutMethod = "pix" | "card" | "any";
+
 export const checkoutAdapter = {
   async createLink(input: {
     orderId: string;
     amount: number;
     description?: string;
     payerEmail?: string;
+    method?: CheckoutMethod;
   }): Promise<CheckoutLink> {
     if (hasCreds()) {
       try {
@@ -140,7 +143,20 @@ export const checkoutAdapter = {
   }
 };
 
-async function realCreateCheckout(input: { orderId: string; amount: number; description?: string; payerEmail?: string }): Promise<CheckoutLink> {
+// Lock the hosted link to ONE payment type so the fee pass-through is honest: a Pix
+// link can't be paid by card (which would cost us the MDR at the no-fee price), and a
+// card link can't be paid by Pix (which would overcharge the customer the card fee).
+function excludedTypesFor(method?: CheckoutMethod): Array<{ id: string }> {
+  if (method === "pix") {
+    return [{ id: "credit_card" }, { id: "debit_card" }, { id: "prepaid_card" }, { id: "ticket" }, { id: "atm" }];
+  }
+  if (method === "card") {
+    return [{ id: "bank_transfer" }, { id: "ticket" }, { id: "atm" }]; // bank_transfer = Pix
+  }
+  return [];
+}
+
+async function realCreateCheckout(input: { orderId: string; amount: number; description?: string; payerEmail?: string; method?: CheckoutMethod }): Promise<CheckoutLink> {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
   // Link expires in 60 min so a stale total can't be paid after the quote drifts. MP
   // wants an explicit offset (-03:00), not the "Z" toISOString() emits — same trick as Pix.
@@ -158,8 +174,13 @@ async function realCreateCheckout(input: { orderId: string; amount: number; desc
       }
     ],
     external_reference: input.orderId,
-    // à vista only — parcelamento costs more and isn't passed through.
-    payment_methods: { installments: 1, default_installments: 1 },
+    // à vista only — parcelamento costs more and isn't passed through. excluded_payment_types
+    // locks the link to Pix-only or card-only when a method was chosen (fee pass-through).
+    payment_methods: {
+      installments: 1,
+      default_installments: 1,
+      excluded_payment_types: excludedTypesFor(input.method)
+    },
     expires: true,
     expiration_date_to: expiration
   };
