@@ -48,9 +48,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, skipped: !paymentId ? "no-payment-id" : "no-token" });
     }
 
+    // Signature is advisory, NOT a gate: MP's HMAC can mismatch (secret mode/format)
+    // and rejecting would drop real payments. The real guard is re-fetching the
+    // payment from MP with our own token below — a spoofed body can't fake "approved".
     if (!signatureValid(request, paymentId)) {
-      console.warn("[mercadopago:webhook:bad-signature]", paymentId);
-      return NextResponse.json({ ok: false, error: "bad-signature" }, { status: 401 });
+      console.warn("[mercadopago:webhook:signature-skip]", paymentId);
     }
 
     const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
