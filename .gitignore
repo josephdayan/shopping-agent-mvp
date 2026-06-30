@@ -7,3 +7,6 @@ prisma/dev.db
 prisma/dev.db-journal
 dist
 coverage
+
+# TypeScript incremental build info
+tsconfig.tsbuildinfo
