@@ -26,10 +26,14 @@ type BasketItem = {
   storeLabel: string;
 };
 
+type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number };
+type PendingChoice = { query: string; qty: number; options: ChoiceOption[] };
+
 type DeliveryContext = {
   flow?: "delivery";
-  step?: "collecting" | "need_cep" | "quoted" | "awaiting_payment";
+  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "awaiting_payment";
   basket?: BasketItem[];
+  pending?: PendingChoice[];
   notFound?: string[];
   cep?: string;
   deliveryAddress?: string;
@@ -180,6 +184,79 @@ function dedupeBasket(items: BasketItem[]): BasketItem[] {
   return out;
 }
 
+type ChoicesResult = {
+  autoAdded: BasketItem[];
+  pending: PendingChoice[];
+  notFound: string[];
+  greetingOnly: boolean;
+  containsMedicine: boolean;
+};
+
+// Like buildBasket, but instead of auto-picking the top match it returns up to 3
+// OPTIONS per item so the customer chooses (numbered list — tappable buttons need an
+// approved WhatsApp Business sender). Items with a single match are auto-added.
+async function buildChoices(text: string, store: StoreConnector): Promise<ChoicesResult> {
+  const extraction = await extractShoppingList(text);
+  let lines: { phrase: string; qty: number }[];
+  let greetingOnly = false;
+  let containsMedicine = false;
+  if (extraction) {
+    greetingOnly = extraction.greetingOnly;
+    containsMedicine = extraction.containsMedicine;
+    lines = extraction.items.map((item) => ({ phrase: item.query, qty: item.qty }));
+  } else {
+    lines = parseBasketLines(text).filter((line) => queryTokens(line.phrase).length);
+  }
+
+  const results = await Promise.all(
+    lines.map(async (line) => ({ line, options: await store.searchItems(line.phrase, 3) }))
+  );
+  const autoAdded: BasketItem[] = [];
+  const pending: PendingChoice[] = [];
+  const notFound: string[] = [];
+  for (const { line, options } of results) {
+    if (!options.length) {
+      notFound.push(line.phrase);
+    } else if (options.length === 1) {
+      autoAdded.push(choiceToBasketItem(options[0], line.qty, store));
+    } else {
+      pending.push({
+        query: line.phrase,
+        qty: line.qty,
+        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice }))
+      });
+    }
+  }
+  return {
+    autoAdded: dedupeBasket(autoAdded),
+    pending,
+    notFound,
+    greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
+    containsMedicine
+  };
+}
+
+function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector): BasketItem {
+  return {
+    sku: o.sku,
+    name: o.name,
+    brand: o.brand,
+    qty,
+    unitPrice: o.unitPrice,
+    lineTotal: Math.round(o.unitPrice * qty * 100) / 100,
+    storeKey: store.key,
+    storeLabel: store.label
+  };
+}
+
+// Customer-facing options message (prices already marked up; no store name).
+function choicesText(p: PendingChoice): string {
+  const opts = p.options.map((o, i) => `*${i + 1})* ${o.name} — ${brl(Math.round(o.unitPrice * MARKUP * 100) / 100)}`);
+  const nums = p.options.map((_, i) => i + 1);
+  const ask = nums.length <= 1 ? "Responda *1*" : `Responda *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}*`;
+  return [`Achei essas opções de *${p.query}*:`, ...opts, "", `${ask} pra escolher (ou *qualquer*). 🙂`].join("\n");
+}
+
 async function expandCep(cep: string): Promise<string | undefined> {
   const digits = cep.replace(/\D/g, "");
   if (digits.length !== 8) return undefined;
@@ -268,7 +345,7 @@ function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
     "",
     `Produtos: ${brl(produtos)}`,
     "",
-    `O *${store.label}* tem pedido mínimo de *${brl(displayMin)}* em produtos. Falta *${brl(falta)}* — me manda mais alguns itens que eu fecho o pedido! 🙂`
+    `O pedido mínimo é de *${brl(displayMin)}* em produtos. Falta *${brl(falta)}* — me manda mais alguns itens que eu fecho o pedido! 🙂`
   ].join("\n");
 }
 
@@ -352,6 +429,39 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
+  // Customer is choosing one of the (max 3) options we offered for an ambiguous item.
+  if (ctx.step === "choosing" && ctx.pending?.length) {
+    const current = ctx.pending[0];
+    let idx = -1;
+    if (/\b(qualquer|qualqer|tanto faz|pode ser|o primeiro|primeiro)\b/.test(normalized)) idx = 0;
+    else {
+      const m = normalized.match(/\b([1-9])\b/);
+      if (m) idx = Number(m[1]) - 1;
+    }
+    if (idx < 0 || idx >= current.options.length) {
+      await reply(phone, `Não peguei 🤔. ${choicesText(current)}`);
+      return;
+    }
+    const chosen = current.options[idx];
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
+    ctx.pending = ctx.pending.slice(1);
+    if (ctx.pending.length) {
+      await writeCtx(convo.id, ctx);
+      await reply(phone, `✅ ${chosen.name}.\n\n${choicesText(ctx.pending[0])}`);
+      return;
+    }
+    ctx.pending = undefined;
+    const next: DeliveryContext = {
+      flow: "delivery",
+      basket: ctx.basket,
+      notFound: [],
+      cep: ctx.cep ?? user.cep ?? undefined,
+      deliveryAddress: ctx.deliveryAddress
+    };
+    await continueAfterBasket(phone, user.id, convo.id, next, user.cep);
+    return;
+  }
+
   // "repete o de sempre" — reorder last delivered basket (memory)
   if (/\b(repete|repetir|de sempre|o mesmo|igual)\b/.test(normalized)) {
     const last = await prisma.deliveryOrder.findFirst({
@@ -389,39 +499,52 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
-  // Otherwise: treat as a basket (items list). Live Carrefour search can take a few
-  // seconds, so acknowledge first (except for plain greetings) — no more silence.
+  // Otherwise: treat as a basket (items list). The search can take a couple seconds,
+  // so acknowledge first (except for plain greetings) — no more silence.
   if (!/^(oi+|ola+|opa|e ?ai|bom dia|boa tarde|boa noite|tudo bem|tudo bom|alo)\??!?$/.test(normalized)) {
-    await reply(phone, "🔎 Procurando no Carrefour, só um instante…");
+    await reply(phone, "🔎 Procurando, só um instante…");
   }
-  const { basket, notFound, greetingOnly, containsMedicine } = await buildBasket(text, store);
+  const { autoAdded, pending, notFound, greetingOnly, containsMedicine } = await buildChoices(text, store);
 
-  if (greetingOnly && !basket.length) {
+  if (greetingOnly && !autoAdded.length && !pending.length) {
     await reply(
       phone,
       "Oi! 💚 Sou a Lia. Me diz o que você precisa do dia a dia — ex.: *\"guaraná, pasta de dente e papel higiênico\"* — que eu trago e entrego pra você."
     );
     return;
   }
-  if (containsMedicine && !basket.length) {
+  if (containsMedicine && !autoAdded.length && !pending.length) {
     await reply(
       phone,
       "Remédio eu não consigo trazer (por lei, só farmácia vende) 🙏. Mas faço higiene, beleza, limpeza, mercado, bebida e pet. O que você precisa?"
     );
     return;
   }
-  if (!basket.length) {
+  if (!autoAdded.length && !pending.length) {
     await reply(
       phone,
       notFound.length
-        ? `Não achei ${notFound.join(", ")} no Carrefour 🤔. Tenta de outro jeito (ex.: \"pasta de dente Colgate\", \"fralda Pampers M\", \"café Pilão\").`
+        ? `Não achei ${notFound.join(", ")} 🤔. Tenta de outro jeito (ex.: \"pasta de dente Colgate\", \"fralda Pampers M\", \"café Pilão\").`
         : "Não entendi seu pedido 🤔. Me diz os itens, ex.: \"guaraná e pasta de dente\"."
     );
     return;
   }
 
-  const merged = mergeBaskets(ctx.basket ?? [], basket);
-  const next: DeliveryContext = { flow: "delivery", basket: merged, notFound, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
+  const baseBasket = mergeBaskets(ctx.basket ?? [], autoAdded);
+
+  // Ambiguous items → ask the customer to pick from up to 3 options (one at a time).
+  if (pending.length) {
+    ctx.flow = "delivery";
+    ctx.step = "choosing";
+    ctx.basket = baseBasket;
+    ctx.pending = pending;
+    ctx.cep = ctx.cep ?? user.cep ?? undefined;
+    await writeCtx(convo.id, ctx);
+    await reply(phone, choicesText(pending[0]));
+    return;
+  }
+
+  const next: DeliveryContext = { flow: "delivery", basket: baseBasket, notFound, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
   await continueAfterBasket(phone, user.id, convo.id, next, user.cep);
 }
 
