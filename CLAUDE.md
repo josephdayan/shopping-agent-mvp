@@ -54,19 +54,30 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
 - **Economia:** produto e frete são **pass-through**; sua receita = **markup de 10%** embutido
   no preço (sem linha de "taxa"). Operador vê custo Carrefour / margem / cliente pagou.
 - **CEP/endereço:** configurado **uma vez no onboarding**; reusado em todos os pedidos.
-- **Catálogo:** **~113 itens reais** copiados de `mercado.carrefour.com.br` (nome + preço de
-  verdade, 46 termos do dia a dia × top resultados orgânicos) em `src/lib/stores/carrefour.ts`.
-  O `unitPrice` é o **custo real Carrefour** (o markup de 10% entra depois). O scrape ao vivo via
-  Apify está **dormente** (actor da comunidade quebrado, gated em `LIA_CARREFOUR_LIVE`). Como
-  recoletei: extensão Claude-no-Chrome navegando o storefront + lendo o DOM (a API VTEX/legada
-  dá 403/503 mesmo same-origin; só páginas renderizadas passam).
+- **Catálogo:** **~1094 itens reais** raspados de `mercado.carrefour.com.br` (nome + preço de
+  verdade, páginas de categoria dos 9 departamentos) em `src/lib/stores/carrefour-catalog.ts`.
+  O `unitPrice` é o **custo real Carrefour** (markup de 10% entra depois). Estático/instantâneo
+  (sem scrape no turno). Como recoletei: extensão Claude-no-Chrome paginando `/categoria/<dep>?page=N`
+  e lendo o DOM (a API VTEX/legada dá 403/503 mesmo same-origin; só páginas renderizadas passam,
+  por isso o actor Apify da comunidade falha — anti-bot Akamai). Pra regenerar: re-raspar as
+  categorias e rodar o gerador.
+- **Lojas:** **12 Carrefour Hiper reais de SP** (clique-e-retire) em `carrefour.ts`; `nearestUnit`
+  escolhe a mais próxima por **proximidade de CEP** (heurística boa no grosso de SP; bordas/leste
+  podem errar — geo-distância real é upgrade futuro).
+- **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
+  pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
 
 ### Riscos honestos a validar num piloto real
-1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional).
+1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:
+   Uber Direct é on-demand (motoboy aleatório), mas o Carrefour quer retirante conhecido →
+   pro 1º piloto, usar **motoboy fixo conhecido**, não o on-demand.
 2. O cliente **pagar o total** (produto+frete) pela conveniência vs. usar o Daki.
-3. Preço/estoque batendo na hora da compra (o catálogo de ~113 itens é real mas estático —
-   re-coletar periodicamente; respostas são instantâneas, sem scrape no turno).
+3. **Preço/estoque desatualizados** (catálogo estático). Desenho da solução: (a) grátis hoje =
+   link "ver no Carrefour" por item no `/ops` (operador confere na hora de comprar); (b) auto =
+   **1 scrape por pedido PAGO** (background, antes de comprar) — precisa de **serviço de scraping
+   com anti-bot** (ScrapingBee/Zyte/Bright Data/Apify-residencial), ~R$0,10/pedido + cache/prewarm.
+   Escala melhor que manter N catálogos frescos quando somar lojas.
 
 ---
 
