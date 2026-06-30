@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
-import { getStore, DEFAULT_STORE_KEY, type StoreConnector } from "@/lib/stores";
+import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
 import { queryTokens } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
 import { pixAdapter } from "@/lib/payments/mercadopago";
@@ -34,6 +34,7 @@ type DeliveryContext = {
   step?: "collecting" | "need_cep" | "choosing" | "quoted" | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
+  storeKey?: string;
   notFound?: string[];
   cep?: string;
   deliveryAddress?: string;
@@ -185,6 +186,7 @@ function dedupeBasket(items: BasketItem[]): BasketItem[] {
 }
 
 type ChoicesResult = {
+  store: StoreConnector;
   autoAdded: BasketItem[];
   pending: PendingChoice[];
   notFound: string[];
@@ -195,7 +197,7 @@ type ChoicesResult = {
 // Like buildBasket, but instead of auto-picking the top match it returns up to 3
 // OPTIONS per item so the customer chooses (numbered list — tappable buttons need an
 // approved WhatsApp Business sender). Items with a single match are auto-added.
-async function buildChoices(text: string, store: StoreConnector): Promise<ChoicesResult> {
+async function buildChoices(text: string, lockedStoreKey?: string): Promise<ChoicesResult> {
   const extraction = await extractShoppingList(text);
   let lines: { phrase: string; qty: number }[];
   let greetingOnly = false;
@@ -207,6 +209,10 @@ async function buildChoices(text: string, store: StoreConnector): Promise<Choice
   } else {
     lines = parseBasketLines(text).filter((line) => queryTokens(line.phrase).length);
   }
+
+  // One order = one store. If the order already has a store (items added earlier),
+  // stay on it; otherwise pick the store that best covers this basket.
+  const store = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries(lines.map((l) => l.phrase));
 
   const results = await Promise.all(
     lines.map(async (line) => ({ line, options: await store.searchItems(line.phrase, 3) }))
@@ -228,12 +234,18 @@ async function buildChoices(text: string, store: StoreConnector): Promise<Choice
     }
   }
   return {
+    store,
     autoAdded: dedupeBasket(autoAdded),
     pending,
     notFound,
     greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
     containsMedicine
   };
+}
+
+// The store an in-progress order belongs to (picked when the basket was built).
+function orderStore(ctx: DeliveryContext): StoreConnector {
+  return getStore(ctx.storeKey ?? ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
 }
 
 function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector): BasketItem {
@@ -431,6 +443,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // Customer is choosing one of the (max 3) options we offered for an ambiguous item.
   if (ctx.step === "choosing" && ctx.pending?.length) {
+    const chosenStore = orderStore(ctx);
     const current = ctx.pending[0];
     let idx = -1;
     if (/\b(qualquer|qualqer|tanto faz|pode ser|o primeiro|primeiro)\b/.test(normalized)) idx = 0;
@@ -443,7 +456,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       return;
     }
     const chosen = current.options[idx];
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, chosenStore)]);
     ctx.pending = ctx.pending.slice(1);
     if (ctx.pending.length) {
       await writeCtx(convo.id, ctx);
@@ -486,12 +499,13 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     if (input.phone) {
       await prisma.user.update({ where: { id: user.id }, data: { cep } });
     }
-    await quoteBasket(ctx, store);
+    const cepStore = orderStore(ctx);
+    await quoteBasket(ctx, cepStore);
     ctx.flow = "delivery";
-    if (belowMinimum(ctx, store)) {
+    if (belowMinimum(ctx, cepStore)) {
       ctx.step = "collecting";
       await writeCtx(convo.id, ctx);
-      await reply(phone, minimumOrderText(ctx, store));
+      await reply(phone, minimumOrderText(ctx, cepStore));
       return;
     }
     await writeCtx(convo.id, ctx);
@@ -504,7 +518,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   if (!/^(oi+|ola+|opa|e ?ai|bom dia|boa tarde|boa noite|tudo bem|tudo bom|alo)\??!?$/.test(normalized)) {
     await reply(phone, "🔎 Procurando, só um instante…");
   }
-  const { autoAdded, pending, notFound, greetingOnly, containsMedicine } = await buildChoices(text, store);
+  const { store: pickedStore, autoAdded, pending, notFound, greetingOnly, containsMedicine } = await buildChoices(text, ctx.storeKey);
 
   if (greetingOnly && !autoAdded.length && !pending.length) {
     await reply(
@@ -538,13 +552,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     ctx.step = "choosing";
     ctx.basket = baseBasket;
     ctx.pending = pending;
+    ctx.storeKey = pickedStore.key;
     ctx.cep = ctx.cep ?? user.cep ?? undefined;
     await writeCtx(convo.id, ctx);
     await reply(phone, choicesText(pending[0]));
     return;
   }
 
-  const next: DeliveryContext = { flow: "delivery", basket: baseBasket, notFound, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
+  const next: DeliveryContext = { flow: "delivery", basket: baseBasket, notFound, storeKey: pickedStore.key, cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress };
   await continueAfterBasket(phone, user.id, convo.id, next, user.cep);
 }
 
@@ -569,7 +584,7 @@ async function continueAfterBasket(
   ctx: DeliveryContext,
   userCep?: string | null
 ) {
-  const store = getStore(DEFAULT_STORE_KEY);
+  const store = orderStore(ctx);
   if (!ctx.cep && !userCep) {
     ctx.step = "need_cep";
     await writeCtx(convoId, ctx);
