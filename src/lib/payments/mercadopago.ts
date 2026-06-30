@@ -58,14 +58,18 @@ export const pixAdapter = {
 async function realCreatePix(input: { orderId: string; amount: number; description?: string; payerEmail?: string }): Promise<PixCharge> {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
   // Pix QR expires in 60 min so a stale charge can't be paid after the quote drifts.
-  const expiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  // MP wants an explicit offset (e.g. -03:00), not the "Z" that toISOString() emits —
+  // shift the instant by -3h so the wall-clock digits match BRT, then label it -03:00.
+  const expiration = new Date(Date.now() + 60 * 60 * 1000 - 3 * 60 * 60 * 1000)
+    .toISOString()
+    .replace("Z", "-03:00");
   const body: Record<string, unknown> = {
     transaction_amount: Number(input.amount.toFixed(2)),
     description: input.description ?? `Pedido Lia ${input.orderId}`,
     payment_method_id: "pix",
     external_reference: input.orderId,
     date_of_expiration: expiration,
-    payer: { email: input.payerEmail ?? "cliente@lia.app" }
+    payer: { email: input.payerEmail ?? "cliente@lia.app", first_name: "Cliente" }
   };
   // Per-payment notification_url is more reliable than the dashboard-only setting.
   if (process.env.MERCADO_PAGO_WEBHOOK_URL) body.notification_url = process.env.MERCADO_PAGO_WEBHOOK_URL;
@@ -79,7 +83,12 @@ async function realCreatePix(input: { orderId: string; amount: number; descripti
     body: JSON.stringify(body),
     cache: "no-store"
   });
-  if (!res.ok) throw new Error(`mercadopago createPix ${res.status}`);
+  if (!res.ok) {
+    // Surface MP's actual error body (it names the offending field) so a 400 is
+    // diagnosable from the logs instead of a bare status code.
+    const errBody = await res.text().catch(() => "");
+    throw new Error(`mercadopago createPix ${res.status}: ${errBody.slice(0, 400)}`);
+  }
   const data = (await res.json()) as {
     id?: number | string;
     point_of_interaction?: { transaction_data?: { qr_code?: string; qr_code_base64?: string } };
