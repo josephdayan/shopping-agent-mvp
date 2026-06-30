@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
-import { queryTokens } from "@/lib/stores/types";
+import { queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
 import { checkoutAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
@@ -435,8 +435,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
-  // Confirm + generate Pix
-  if (ctx.step === "quoted" && /\b(pagar|confirmar|confirmo|fechar|sim|pode)\b/.test(normalized)) {
+  // Confirm + generate the payment link. Explicit pay words ("pagar", "finalizar")
+  // also work when the basket is still below the store minimum (step "collecting") —
+  // createOrderAndCharge guards the minimum and replies with how much is missing,
+  // instead of "pagar" falling through to a product search and dead-ending on the
+  // greeting ("Oi! Sou a Lia…"), which is what happened in the reported bug.
+  const saysPay = /\b(pagar|pagamento|finaliza|finalizar|fecha|fechar|checkout)\b/.test(normalized);
+  const confirmsQuote = ctx.step === "quoted" && /\b(confirmar|confirmo|sim|pode|isso|ok|fechado|bora)\b/.test(normalized);
+  if ((ctx.step === "quoted" || ctx.step === "collecting") && (ctx.basket?.length ?? 0) > 0 && (saysPay || confirmsQuote)) {
     await createOrderAndCharge(phone, user.id, convo.id, ctx);
     return;
   }
@@ -510,6 +516,50 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     }
     await writeCtx(convo.id, ctx);
     await reply(phone, summaryText(ctx));
+    return;
+  }
+
+  // Remove / edit an item already in the basket: "tira a esponja", "remove o arroz",
+  // "tira tudo". Without this, "tira a esponja" was treated as a NEW product search —
+  // it re-added items and never removed anything (the reported bug).
+  const wantsRemove = /^(tira|tirar|remove|remover|retira|retirar|exclui|excluir|apaga|apagar|sem)\b/.test(normalized);
+  if (wantsRemove && (ctx.basket?.length ?? 0) > 0) {
+    const target = normalized
+      .replace(/^(tira|tirar|remove|remover|retira|retirar|exclui|excluir|apaga|apagar|sem)\b/, "")
+      .replace(/\b(o|a|os|as|um|uma|da cesta|do pedido|da lista|por favor|pff?v?|esse|essa)\b/g, " ")
+      .trim();
+    const clearAll = !target || /\b(tudo|todos|todas)\b/.test(target);
+    let removed: BasketItem[];
+    if (clearAll) {
+      removed = ctx.basket ?? [];
+      ctx.basket = [];
+    } else {
+      const keep = (ctx.basket ?? []).filter(
+        (item) => scoreCatalogMatch(target, { sku: item.sku, name: item.name, unitPrice: item.unitPrice }) <= 0
+      );
+      removed = (ctx.basket ?? []).filter((item) => !keep.includes(item));
+      ctx.basket = keep;
+    }
+    if (!removed.length) {
+      await reply(phone, "Não achei esse item na sua cesta 🤔. Me diz o nome como está na lista que eu tiro.");
+      return;
+    }
+    const removedNames = removed.map((i) => i.name).join(", ");
+    if (!ctx.basket.length) {
+      await writeCtx(convo.id, { flow: "delivery", cep: ctx.cep ?? user.cep ?? undefined, deliveryAddress: ctx.deliveryAddress });
+      await reply(phone, `Pronto, tirei ${removedNames}. Sua cesta ficou vazia — me diz o que você quer. 🙂`);
+      return;
+    }
+    const removeStore = orderStore(ctx);
+    await quoteBasket(ctx, removeStore);
+    if (belowMinimum(ctx, removeStore)) {
+      ctx.step = "collecting";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, `Pronto, tirei ${removedNames}.\n\n${minimumOrderText(ctx, removeStore)}`);
+      return;
+    }
+    await writeCtx(convo.id, ctx);
+    await reply(phone, `Pronto, tirei ${removedNames}.\n\n${summaryText(ctx)}`);
     return;
   }
 
@@ -649,9 +699,17 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     data: { pixId: charge.preferenceId, pixCopiaECola: charge.initPoint }
   });
 
-  ctx.deliveryOrderId = order.id;
-  ctx.step = "awaiting_payment";
-  await writeCtx(convoId, ctx);
+  // Order is committed to the DB now — DROP the basket from the conversation so the
+  // NEXT request starts fresh instead of inheriting these items. This is the "phantom
+  // item" bug (a sponge from a past order showing up in a new ração order). Keep only
+  // the address + the order id so "paguei" still resolves.
+  await writeCtx(convoId, {
+    flow: "delivery",
+    cep: ctx.cep,
+    deliveryAddress: ctx.deliveryAddress,
+    deliveryOrderId: order.id,
+    step: "awaiting_payment"
+  });
 
   await reply(
     phone,

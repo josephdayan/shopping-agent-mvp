@@ -60,6 +60,34 @@ function words(text: string): string[] {
   return normalizeText(text).split(" ").filter(Boolean);
 }
 
+// Pet vocabulary. Customers say "cachorro"/"gato"; catalogs say "Cães"/"Gatos"
+// (accent-stripped to "caes"). Without treating these as synonyms, a wet sachê that
+// literally says "Cachorro" outranks the dry-food bag that says "Cães", and cat food
+// leaks into dog results. Words here are already normalized (no accents).
+const DOG_WORDS = new Set(["cachorro", "cachorros", "cao", "caes", "canino", "canina", "dog"]);
+const CAT_WORDS = new Set(["gato", "gatos", "felino", "felina", "cat"]);
+// Wet-food markers ("Ração Úmida ... Sachê / Lata / Patê"). When the customer didn't
+// ask for wet food we de-prioritize these so the staple dry pack — what people mean by
+// "ração" — ranks first.
+const WET_WORDS = new Set(["umida", "umido", "sache", "lata", "pate"]);
+
+// Which species a set of words is ABOUT, or null if neither or BOTH (e.g. a shampoo
+// "para Cães e Gatos" serves both, so it shouldn't be excluded from either).
+function animalOf(wordList: string[]): "dog" | "cat" | null {
+  const dog = wordList.some((w) => DOG_WORDS.has(w));
+  const cat = wordList.some((w) => CAT_WORDS.has(w));
+  if (dog === cat) return null;
+  return dog ? "dog" : "cat";
+}
+
+// tokenMatchesWord plus pet-synonym equivalence (cachorro≈cães≈cão, gato≈felino).
+function tokenMatchesWordSyn(token: string, word: string): boolean {
+  if (tokenMatchesWord(token, word)) return true;
+  if (DOG_WORDS.has(token) && DOG_WORDS.has(word)) return true;
+  if (CAT_WORDS.has(token) && CAT_WORDS.has(word)) return true;
+  return false;
+}
+
 // Word-boundary match: avoids "bom"(3) hitting "bombril". Short tokens must match a
 // whole word; tokens >=4 may match as a substring of a word ("colgate" in "colgate").
 function tokenMatchesWord(token: string, word: string): boolean {
@@ -82,11 +110,19 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   const nameWords = words(item.name);
   const brandWords = words(item.brand ?? "");
   const categoryWords = words(item.category ?? "");
+
+  // Species guard: a dog request must NEVER surface cat food (or vice versa). Both
+  // exist in the catalog and "ração" matches both, so without this Whiskas leaks into
+  // "ração pro cachorro". Items for both species (animal=null) pass.
+  const queryAnimal = animalOf(tokens);
+  const itemAnimal = animalOf(nameWords);
+  if (queryAnimal && itemAnimal && queryAnimal !== itemAnimal) return 0;
+
   let score = 0;
   for (const token of tokens) {
     if (brandWords.some((word) => tokenMatchesWord(token, word))) {
       score += 4; // explicit brand match is the strongest signal
-    } else if (nameWords.some((word) => tokenMatchesWord(token, word))) {
+    } else if (nameWords.some((word) => tokenMatchesWordSyn(token, word))) {
       score += token.length >= 4 ? 2 : 1;
     } else if (categoryWords.some((word) => tokenMatchesWord(token, word))) {
       score += 1;
@@ -97,8 +133,17 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   // Condensado" (all contain "leite") and price alone breaks the tie — surfacing the
   // wrong product. Rewarding the head word makes "Leite ..." win for "leite".
   const headWord = nameWords[0];
-  if (score > 0 && headWord && tokens.some((token) => tokenMatchesWord(token, headWord))) {
+  if (score > 0 && headWord && tokens.some((token) => tokenMatchesWordSyn(token, headWord))) {
     score += 2;
+  }
+  // Staple-first: when the request didn't ask for wet food, de-prioritize "Ração Úmida
+  // ... Sachê 100g" so the dry pack (what "ração" means to most people) outranks it.
+  // The seedSearch tie-breaker is cheapest-first, which otherwise floats the tiny
+  // sachês to the top. Only applies to pet-food items.
+  if (score > 0 && itemAnimal) {
+    const wantsWet = tokens.some((token) => WET_WORDS.has(token));
+    const itemIsWet = nameWords.some((word) => WET_WORDS.has(word));
+    if (itemIsWet && !wantsWet) score -= 2;
   }
   return score;
 }
