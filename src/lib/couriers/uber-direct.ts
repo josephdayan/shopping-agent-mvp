@@ -123,7 +123,10 @@ async function realQuote(input: CourierQuoteInput): Promise<CourierQuote> {
     }),
     cache: "no-store"
   });
-  if (!res.ok) throw new Error(`uber_direct quote ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`uber_direct quote ${res.status}: ${body.slice(0, 300)}`);
+  }
   const data = (await res.json()) as { id?: string; fee?: number; duration?: number; dropoff_eta?: number };
   return {
     quoteId: data.id ?? `q_${randomUUID()}`,
@@ -158,7 +161,10 @@ async function realDispatch(input: CourierDispatchInput): Promise<CourierDispatc
     }),
     cache: "no-store"
   });
-  if (!res.ok) throw new Error(`uber_direct dispatch ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`uber_direct dispatch ${res.status}: ${body.slice(0, 300)}`);
+  }
   const data = (await res.json()) as { id?: string; tracking_url?: string };
   return { dispatchId: data.id ?? `d_${randomUUID()}`, trackingUrl: data.tracking_url ?? "", mock: false };
 }
