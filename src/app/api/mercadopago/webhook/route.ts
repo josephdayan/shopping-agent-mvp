@@ -35,11 +35,18 @@ export async function POST(request: Request) {
   try {
     const url = new URL(request.url);
     let paymentId = url.searchParams.get("data.id") ?? url.searchParams.get("id");
-    let body: { data?: { id?: string }; id?: string } = {};
+    let body: { data?: { id?: string }; id?: string; type?: string; topic?: string } = {};
     try {
       body = (await request.json()) as typeof body;
     } catch {
       // form/empty body is fine — id may come from the query string
+    }
+    // Checkout Pro fires both `payment` and `merchant_order` notifications. Only the
+    // payment ones carry the status we reconcile on; skip the rest so we don't waste a
+    // 404 fetch trying to read a merchant_order id as a payment.
+    const topic = url.searchParams.get("type") ?? url.searchParams.get("topic") ?? body?.type ?? body?.topic;
+    if (topic && topic !== "payment") {
+      return NextResponse.json({ ok: true, skipped: `topic:${topic}` });
     }
     paymentId = paymentId ?? body?.data?.id ?? body?.id ?? null;
 

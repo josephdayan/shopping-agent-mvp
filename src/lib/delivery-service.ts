@@ -3,7 +3,7 @@ import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
 import { queryTokens } from "@/lib/stores/types";
 import { getCourier } from "@/lib/couriers";
-import { pixAdapter } from "@/lib/payments/mercadopago";
+import { checkoutAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -636,14 +636,17 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     }
   });
 
-  const charge = await pixAdapter.createPix({
+  // Checkout Pro link: one MP-hosted page with CARD + Pix. We reuse the existing
+  // nullable columns to avoid a migration — pixId = preference id, pixCopiaECola = the
+  // link we send. The webhook still reconciles by external_reference = order id.
+  const charge = await checkoutAdapter.createLink({
     orderId: order.id,
     amount: order.total,
     description: `Lia · pedido ${order.id.slice(-6)}`
   });
   await prisma.deliveryOrder.update({
     where: { id: order.id },
-    data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
+    data: { pixId: charge.preferenceId, pixCopiaECola: charge.initPoint }
   });
 
   ctx.deliveryOrderId = order.id;
@@ -655,8 +658,8 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     [
       `Pronto! Total *${brl(order.total)}*.`,
       "",
-      "Pague com o *Pix copia e cola* abaixo 👇",
-      charge.copiaECola,
+      "Pague com *cartão ou Pix* neste link 👇",
+      charge.initPoint,
       "",
       charge.mock
         ? "_(sandbox: responda *paguei* pra simular o pagamento)_"

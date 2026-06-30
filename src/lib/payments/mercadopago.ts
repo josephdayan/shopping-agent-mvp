@@ -15,6 +15,17 @@ export type PixCharge = {
 
 export type PixStatus = "pending" | "approved" | "rejected" | "unknown";
 
+// Checkout Pro link: one hosted MP page per order where the customer pays with
+// CARD or Pix. We only create a "preference" and send the init_point URL — the card
+// never touches us (MP hosts everything; zero PCI on our side). Reconciliation is the
+// SAME as Pix: MP fires the payment webhook with external_reference = DeliveryOrder.id.
+export type CheckoutLink = {
+  preferenceId: string;
+  initPoint: string;
+  amount: number;
+  mock: boolean;
+};
+
 function hasCreds() {
   return Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN);
 }
@@ -98,6 +109,87 @@ async function realCreatePix(input: { orderId: string; amount: number; descripti
     pixId: String(data.id ?? `q_${randomUUID()}`),
     copiaECola: td?.qr_code ?? "",
     qrBase64: td?.qr_code_base64,
+    amount: input.amount,
+    mock: false
+  };
+}
+
+// Checkout Pro: create a payment preference and return its hosted link (init_point).
+// One link covers BOTH card and Pix — the customer chooses on MP's page. INERT until
+// MERCADO_PAGO_ACCESS_TOKEN is set (mock link in sandbox so the flow runs end-to-end).
+export const checkoutAdapter = {
+  async createLink(input: {
+    orderId: string;
+    amount: number;
+    description?: string;
+    payerEmail?: string;
+  }): Promise<CheckoutLink> {
+    if (hasCreds()) {
+      try {
+        return await realCreateCheckout(input);
+      } catch (error) {
+        console.warn("[checkout:create:fallback-mock]", error instanceof Error ? error.message : error);
+      }
+    }
+    return {
+      preferenceId: `mockpref_${randomUUID()}`,
+      initPoint: `https://mock.lia/pay/${input.orderId}`,
+      amount: input.amount,
+      mock: true
+    };
+  }
+};
+
+async function realCreateCheckout(input: { orderId: string; amount: number; description?: string; payerEmail?: string }): Promise<CheckoutLink> {
+  const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
+  // Link expires in 60 min so a stale total can't be paid after the quote drifts. MP
+  // wants an explicit offset (-03:00), not the "Z" toISOString() emits — same trick as Pix.
+  const expiration = new Date(Date.now() + 60 * 60 * 1000 - 3 * 60 * 60 * 1000)
+    .toISOString()
+    .replace("Z", "-03:00");
+  const body: Record<string, unknown> = {
+    items: [
+      {
+        id: input.orderId,
+        title: input.description ?? `Pedido Lia ${input.orderId}`,
+        quantity: 1,
+        currency_id: "BRL",
+        unit_price: Number(input.amount.toFixed(2))
+      }
+    ],
+    external_reference: input.orderId,
+    // à vista only — parcelamento costs more and isn't passed through.
+    payment_methods: { installments: 1, default_installments: 1 },
+    expires: true,
+    expiration_date_to: expiration
+  };
+  // Per-preference notification_url is more reliable than the dashboard-only setting.
+  if (process.env.MERCADO_PAGO_WEBHOOK_URL) body.notification_url = process.env.MERCADO_PAGO_WEBHOOK_URL;
+  if (input.payerEmail) body.payer = { email: input.payerEmail };
+  const base = process.env.LIA_PUBLIC_URL ?? "https://shopping-agent-mvp.vercel.app";
+  if (base) body.back_urls = { success: base, pending: base, failure: base };
+  const res = await fetch("https://api.mercadopago.com/checkout/preferences", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "X-Idempotency-Key": `pref_${input.orderId}`
+    },
+    body: JSON.stringify(body),
+    cache: "no-store"
+  });
+  if (!res.ok) {
+    // Surface MP's actual error body (it names the offending field) so a 400 is
+    // diagnosable from the logs instead of a bare status code.
+    const errBody = await res.text().catch(() => "");
+    throw new Error(`mercadopago createPreference ${res.status}: ${errBody.slice(0, 400)}`);
+  }
+  const data = (await res.json()) as { id?: string; init_point?: string; sandbox_init_point?: string };
+  const initPoint = data.init_point ?? data.sandbox_init_point ?? "";
+  if (!initPoint) throw new Error("mercadopago createPreference: no init_point in response");
+  return {
+    preferenceId: String(data.id ?? `pref_${randomUUID()}`),
+    initPoint,
     amount: input.amount,
     mock: false
   };
