@@ -89,5 +89,13 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
       score += 1;
     }
   }
+  // Head-noun bonus: the product whose name STARTS with what was asked is the literal
+  // match. Without this, "leite" ties "Leite Integral" with "Creme de Leite" / "Leite
+  // Condensado" (all contain "leite") and price alone breaks the tie — surfacing the
+  // wrong product. Rewarding the head word makes "Leite ..." win for "leite".
+  const headWord = nameWords[0];
+  if (score > 0 && headWord && tokens.some((token) => tokenMatchesWord(token, headWord))) {
+    score += 2;
+  }
   return score;
 }

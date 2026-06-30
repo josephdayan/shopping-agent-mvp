@@ -54,14 +54,19 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
 - **Economia:** produto e frete são **pass-through**; sua receita = **markup de 10%** embutido
   no preço (sem linha de "taxa"). Operador vê custo Carrefour / margem / cliente pagou.
 - **CEP/endereço:** configurado **uma vez no onboarding**; reusado em todos os pedidos.
-- **Catálogo:** Carrefour **ao vivo via Apify** (busca por item, com cache); seed de ~42 itens
-  como fallback.
+- **Catálogo:** **~113 itens reais** copiados de `mercado.carrefour.com.br` (nome + preço de
+  verdade, 46 termos do dia a dia × top resultados orgânicos) em `src/lib/stores/carrefour.ts`.
+  O `unitPrice` é o **custo real Carrefour** (o markup de 10% entra depois). O scrape ao vivo via
+  Apify está **dormente** (actor da comunidade quebrado, gated em `LIA_CARREFOUR_LIVE`). Como
+  recoletei: extensão Claude-no-Chrome navegando o storefront + lendo o DOM (a API VTEX/legada
+  dá 403/503 mesmo same-origin; só páginas renderizadas passam).
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
 
 ### Riscos honestos a validar num piloto real
 1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional).
 2. O cliente **pagar o total** (produto+frete) pela conveniência vs. usar o Daki.
-3. Latência do scrape ao vivo do Carrefour (mitigada por cache; aceito que "pode demorar").
+3. Preço/estoque batendo na hora da compra (o catálogo de ~113 itens é real mas estático —
+   re-coletar periodicamente; respostas são instantâneas, sem scrape no turno).
 
 ---
 
