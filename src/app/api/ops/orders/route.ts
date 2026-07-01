@@ -7,7 +7,10 @@ function authed(request: Request) {
   const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
   if (!expected) return true;
   const url = new URL(request.url);
-  const key = request.headers.get("x-ops-key") ?? url.searchParams.get("key");
+  const key =
+    request.headers.get("x-ops-key") ??
+    url.searchParams.get("key") ??
+    (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
   return key === expected;
 }
 

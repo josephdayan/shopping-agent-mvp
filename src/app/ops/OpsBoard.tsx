@@ -35,42 +35,59 @@ const brl = (v: number) => `R$ ${Number(v ?? 0).toFixed(2).replace(".", ",")}`;
 
 export default function OpsBoard() {
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
-  const [key, setKey] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+  const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [numbers, setNumbers] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
 
+  // On first load, if the URL carries ?key=, exchange it for a long-lived cookie and
+  // strip it from the URL — after that the operator just opens /ops (no token in link).
   useEffect(() => {
-    setKey(new URLSearchParams(window.location.search).get("key") ?? "");
+    (async () => {
+      const key = new URLSearchParams(window.location.search).get("key");
+      if (key) {
+        try {
+          await fetch(`/api/ops/login?key=${encodeURIComponent(key)}`, { cache: "no-store" });
+        } catch {
+          /* ignore — load() will surface auth failures */
+        }
+        window.history.replaceState({}, "", "/ops");
+      }
+      setReady(true);
+    })();
   }, []);
 
   const load = useCallback(async () => {
-    if (!key) return;
     try {
-      const res = await fetch(`/api/ops/orders?key=${encodeURIComponent(key)}`, { cache: "no-store" });
+      const res = await fetch(`/api/ops/orders`, { cache: "no-store" });
+      if (res.status === 401) {
+        setDenied(true);
+        return;
+      }
       if (res.ok) {
         const data = (await res.json()) as { orders?: DeliveryOrder[] };
         setOrders(data.orders ?? []);
+        setDenied(false);
       }
     } finally {
       setLoading(false);
     }
-  }, [key]);
+  }, []);
 
   useEffect(() => {
-    if (key === null) return;
+    if (!ready) return;
     void load();
     const t = setInterval(() => void load(), 10000);
     return () => clearInterval(t);
-  }, [key, load]);
+  }, [ready, load]);
 
   async function act(id: string, action: string, storeOrderNumber?: string) {
-    if (!key) return;
     setBusy(`${id}:${action}`);
     try {
       await fetch(`/api/ops/orders/${id}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-ops-key": key },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, storeOrderNumber })
       });
       await load();
@@ -79,11 +96,12 @@ export default function OpsBoard() {
     }
   }
 
-  if (key === null) return null;
-  if (!key) {
+  if (!ready) return null;
+  if (denied) {
     return (
       <p style={{ marginTop: 24, color: "#b42318" }}>
-        Acesso: abra <code>/ops?key=SEU_TOKEN</code> (o valor de OPS_TOKEN ou API_TOKEN).
+        Acesso negado. Abra <strong>uma vez</strong> com <code>/ops?key=SEU_TOKEN</code> (valor de
+        OPS_TOKEN/API_TOKEN) — depois disso a chave fica salva e você abre só <code>/ops</code>.
       </p>
     );
   }
