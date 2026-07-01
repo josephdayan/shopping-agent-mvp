@@ -353,10 +353,16 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.serviceFee = margin;
   ctx.itemsSubtotal = Math.round(realSubtotal * 100) / 100;
 
-  // Only offer a choice when "faster" is a genuine tradeoff (different courier that's
-  // strictly quicker AND strictly pricier). Otherwise just use the cheapest.
+  // Default: just use the CHEAPEST (the "fastest" option is only as trustworthy as each
+  // courier's ETA, and some — e.g. Lalamove — don't return one). The barato-vs-rápido
+  // choice is OFF unless LIA_OFFER_FRETE_CHOICE=true; flip it on once couriers expose a
+  // reliable ETA. When on, only offer it for a genuine tradeoff (different courier that's
+  // strictly quicker AND strictly pricier).
   const worthChoosing =
-    fastest.courierKey !== cheapest.courierKey && fastest.etaMinutes < cheapest.etaMinutes && fastest.fee > cheapest.fee + 0.001;
+    process.env.LIA_OFFER_FRETE_CHOICE === "true" &&
+    fastest.courierKey !== cheapest.courierKey &&
+    fastest.etaMinutes < cheapest.etaMinutes &&
+    fastest.fee > cheapest.fee + 0.001;
   ctx.courierOptions = worthChoosing
     ? [
         { kind: "barato", courierKey: cheapest.courierKey, quoteId: cheapest.quoteId, fee: cheapest.fee, etaMinutes: cheapest.etaMinutes },
