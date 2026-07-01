@@ -9,12 +9,11 @@ import { petzStore } from "./petz";
 // store-agnostic.
 const STORES: Record<string, StoreConnector> = {
   [carrefourStore.key]: carrefourStore,
-  // Petz IS a real fit (confirmed: "Retire na Loja" + third-party/motoboy pickup, like
-  // Carrefour), but it's OFF until after the pilot: its store UNITS are still placeholders,
-  // its counter-document rule is stricter (buyer's doc + often a signed authorization, no
-  // app field), and Petz already runs its own same-day. So pet routes to Carrefour's (real,
-  // photo'd) pet aisle. Flip on with LIA_ENABLE_PETZ=true once real units + pickup are wired.
-  ...(process.env.LIA_ENABLE_PETZ === "true" ? { [petzStore.key]: petzStore } : {})
+  // Petz is ON (real SP units + real catalog; "Retire na Loja" + third-party pickup
+  // confirmed). Set LIA_ENABLE_PETZ=false to route pet back to Carrefour's aisle only.
+  // Operational watch on a real Petz order: the counter enforces the titular's document +
+  // (often) a signed authorization — that's the pickup risk the pilot is validating.
+  ...(process.env.LIA_ENABLE_PETZ !== "false" ? { [petzStore.key]: petzStore } : {})
   // [cobasiStore.key]: cobasiStore,  // same recipe — one file
 };
 
