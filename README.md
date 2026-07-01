@@ -1,5 +1,12 @@
 # Lia
 
+> **⚠️ Estado atual (2026-07):** o produto vigente é a **concierge de entregas same-day no
+> WhatsApp** (Carrefour/Petz clique-e-retire + motoboy + Pix/cartão), descrito em
+> [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
+> (intenções em `src/lib/lia-intents.ts`, copy em `src/lib/lia-copy.ts`), painel do operador
+> em `/ops`, e os testes rodam com `npm test` (só unitários: `npm run test:unit`).
+> O fluxo abaixo (busca no Mercado Livre com 3 opções) é o caminho **legado/dormente**.
+
 Lia funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
 
 ## Como rodar localmente

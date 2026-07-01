@@ -11,6 +11,10 @@ export type CatalogItem = {
   unit?: string; // "un", "kg", "pacote", "L"
   category?: string;
   imageUrl?: string;
+  // Real deep link to the product page on the store, when the scrape captured it
+  // (Boticário has these; Carrefour SKUs are synthetic). Lets /ops open the exact
+  // item instead of a name search.
+  productUrl?: string;
 };
 
 export type StoreUnit = {
@@ -95,7 +99,10 @@ function tokenMatchesWord(token: string, word: string): boolean {
   // Prefix match only — "refrigerante" matches "refri", but "restauração" must NOT
   // match "ração" (it's a suffix), and "bombril" must NOT match "bom" (too short).
   if (token.length >= 4 && word.startsWith(token)) return true;
-  if (word.length >= 4 && token.startsWith(word)) return true;
+  // Reverse prefix covers inflections ("refrigerantes" ~ "refrigerante"), so cap the
+  // length gap — otherwise "galactica" matches the name word "Gala" and gibberish
+  // requests surface random products instead of an honest "não achei".
+  if (word.length >= 4 && token.startsWith(word) && token.length - word.length <= 3) return true;
   return false;
 }
 

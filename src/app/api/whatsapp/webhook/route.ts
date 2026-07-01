@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { handleInboundMessage, toChannelResponse } from "@/lib/chat-service";
 import { handleDeliveryMessage } from "@/lib/delivery-service";
+import { genericError } from "@/lib/lia-copy";
 import { whatsappAdapter, type WhatsAppRichReply } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -70,10 +71,7 @@ export async function POST(request: Request) {
     } catch (error) {
       console.error("[whatsapp:twilio:delivery-error]", error);
       try {
-        await whatsappAdapter.sendMessage(
-          inbound.phone,
-          "Tive um probleminha aqui agora 🙏. Pode mandar de novo em instantes?"
-        );
+        await whatsappAdapter.sendMessage(inbound.phone, genericError());
       } catch (sendError) {
         console.error("[whatsapp:twilio:fallback-error]", sendError);
       }

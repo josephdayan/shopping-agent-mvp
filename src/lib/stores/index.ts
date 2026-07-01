@@ -2,6 +2,7 @@ import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { scoreCatalogMatch } from "./types";
 import { carrefourStore } from "./carrefour";
 import { petzStore } from "./petz";
+import { boticarioStore } from "./boticario";
 
 // Store registry. Adding a supply source = write one connector file and register it
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
@@ -13,7 +14,11 @@ const STORES: Record<string, StoreConnector> = {
   // confirmed). Set LIA_ENABLE_PETZ=false to route pet back to Carrefour's aisle only.
   // Operational watch on a real Petz order: the counter enforces the titular's document +
   // (often) a signed authorization — that's the pickup risk the pilot is validating.
-  ...(process.env.LIA_ENABLE_PETZ !== "false" ? { [petzStore.key]: petzStore } : {})
+  ...(process.env.LIA_ENABLE_PETZ !== "false" ? { [petzStore.key]: petzStore } : {}),
+  // Boticário is ON (real catalog: perfumaria/maquiagem/corpo/cabelos; "Retire em loja"
+  // clique-e-retire). Set LIA_ENABLE_BOTICARIO=false to disable the beauty vertical.
+  // Units are major SP malls (verify the exact store + third-party-pickup policy live).
+  ...(process.env.LIA_ENABLE_BOTICARIO !== "false" ? { [boticarioStore.key]: boticarioStore } : {})
   // [cobasiStore.key]: cobasiStore,  // same recipe — one file
 };
 

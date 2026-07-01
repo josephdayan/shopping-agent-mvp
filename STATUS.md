@@ -1,6 +1,6 @@
 # Lia — Status do Projeto
 
-_Última atualização: 2026-06-30. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-07-01. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md)._
 
 ---
@@ -8,11 +8,11 @@ decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md)._
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem
-natural, paga por **Pix**, e a Lia compra numa loja local via **clique-e-retire** e
-entrega no **mesmo dia** por **motoboy** (Uber Direct).
+natural, paga por **Pix ou cartão** (Mercado Pago), e a Lia compra numa loja local via
+**clique-e-retire** e entrega no **mesmo dia** por **motoboy** (Uber Direct).
 
 - **Receita:** markup de **10%** embutido no preço (produto e frete são pass-through).
-- **Sem remédio** (ANVISA). **Loja-base:** Carrefour; **2ª loja:** Petz (pet).
+- **Sem remédio** (ANVISA). **Loja-base:** Carrefour; **+lojas:** Petz (pet), O Boticário (beleza).
 - **Moat:** a **largura** — "qualquer coisa, de qualquer loja, num WhatsApp só".
 
 ---
@@ -25,7 +25,8 @@ entrega no **mesmo dia** por **motoboy** (Uber Direct).
 3. 🤖 Lia acha os itens (catálogo real) e ROTEIA pra 1 loja só (a que cobre melhor)
 4. 🤖 Se ambíguo ("sal"), mostra até 3 opções → cliente responde o número
 5. 🤖 Cota o frete na Uber em tempo real + mostra o total
-6. 💳 Cliente responde "pagar" → 🤖 Lia gera o Pix REAL
+6. 💳 Cliente responde "pagar" → escolhe Pix (copia-e-cola, sem taxa) ou cartão
+   (link Checkout Pro, taxa repassada) → 🤖 Lia gera a cobrança REAL
 7. 💳 Cliente paga → 🤖 pedido vira "pago" e entra na fila do /ops
 ──────────── operador (você) ────────────
 8. 🧑 Compra os itens na loja (clique-e-retire)          ← ÚNICO passo 100% manual
@@ -45,9 +46,13 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
 | Componente | Status |
 |---|---|
 | **Catálogo Carrefour** | ✅ **1094 itens reais** (preço + nome) — 9 departamentos |
-| **Catálogo Petz** | ✅ **78 itens reais** (pet, sem remédio) |
-| **Multi-loja + roteamento** | ✅ Carrefour + Petz; **1 loja por pedido**, escolhida por match |
+| **Catálogo Petz** | ✅ **2.822 itens reais** (pet, sem remédio) + fotos re-hospedadas em `/api/petz-image` |
+| **Catálogo Boticário** | ✅ **1.409 itens reais** (beleza: perfumaria/maquiagem/corpo/cabelos) + **foto (98%)** + **URL real do produto** (deep-link no /ops) + 10 lojas de SP |
+| **Multi-loja + roteamento** | ✅ Carrefour + Petz + Boticário; **1 loja por pedido**, escolhida por match |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** |
+| **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
+| **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
+| **Testes/evals** | ✅ `npm test` — unitários (NLU + copy) + evals de conversa E2E |
 | **Motoboy (Uber Direct)** | ✅ **REAL** — OAuth + cotação testados com as credenciais |
 | **Lojas Carrefour** | ✅ 12 unidades Hiper reais de SP + escolha da mais próxima por CEP |
 | **Opções pra escolher** | ✅ até 3 opções (lista numerada) quando o item é ambíguo |
@@ -83,8 +88,11 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
   sandbox só faz lista numerada).
 - **Cesta multi-loja** (juntar Carrefour + Petz num pedido) — decidimos deixar pra depois
   (= 2 retiradas/fretes).
-- **Sinônimos no matcher** (cachorro = cães = cão) — hoje pode rotear errado alguns itens pet.
-- **Expandir catálogos** (Petz pra +itens; re-coletar Carrefour periodicamente).
+- **Expandir catálogos** (re-coletar Carrefour/Petz periodicamente).
+- **Migração de schema (quando fizer sentido):** coluna `paymentMethod` no DeliveryOrder
+  (hoje é inferido de `notes`/link — centralizado em `src/lib/order-flags.ts`) e índice
+  único em `Message(conversationId, metadata)` pra fechar de vez a janela de corrida do
+  dedupe de webhook (hoje é check-then-insert; janela pequena, mas existe).
 
 ---
 
@@ -103,8 +111,10 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
 → `pagar` → paga o Pix. Recebe "Pagamento confirmado ✅".
 
 **Operador (você):** abre `shopping-agent-mvp.vercel.app/ops?key=<API_TOKEN>` → vê o pedido
-pago → compra na loja (clique-e-retire) → "marquei como comprado" + nº → "Despachar motoboy"
-→ "marcar entregue".
+pago → confere preço/estoque no link "🔎 ver" de cada item → compra na loja
+(clique-e-retire) → "marquei como comprado" + nº → "Despachar motoboy" → "marcar entregue".
+O card também permite **avisar o cliente** (substituição/atraso, vira mensagem da Lia) e
+destaca em vermelho pedidos em que o **cliente pediu cancelamento** pelo WhatsApp.
 
 **Retirada (motoboy):** leva o **nº do pedido + documento do titular (VOCÊ) + autorização**.
 O documento do **cliente nunca é necessário** — quem compra na loja é sempre você.
@@ -129,6 +139,9 @@ O documento do **cliente nunca é necessário** — quem compra na loja é sempr
 | Peça | Arquivo |
 |---|---|
 | Cérebro da conversa (estado, roteamento, opções, mínimo) | `src/lib/delivery-service.ts` |
+| Detecção de intenção (pura, sem DB — unit-testável) | `src/lib/lia-intents.ts` |
+| Copy — todas as mensagens enviadas ao cliente | `src/lib/lia-copy.ts` |
+| Testes/evals de conversa | `tests/` (`npm test`) |
 | Lojas (plugável) | `src/lib/stores/` (`carrefour.ts`, `petz.ts`, `*-catalog.ts`, `index.ts`) |
 | Motoboys (plugável) | `src/lib/couriers/` (Uber Direct) |
 | Pix | `src/lib/payments/mercadopago.ts` + `/api/mercadopago/webhook` |
