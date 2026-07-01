@@ -61,6 +61,12 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   e lendo o DOM (a API VTEX/legada dá 403/503 mesmo same-origin; só páginas renderizadas passam,
   por isso o actor Apify da comunidade falha — anti-bot Akamai). Pra regenerar: re-raspar as
   categorias e rodar o gerador.
+- **Catálogo Petz:** **2.822 itens reais** (nome + preço + foto) em `src/lib/stores/petz-catalog.ts`,
+  raspados de `petz.com.br` (48 subcategorias, 6 deptos; sem remédio/antipulga — ANVISA). Mesmo
+  método DOM (Petz também é VTEX+Akamai). **Imagens re-hospedadas** em `/api/petz-image/<id>`
+  (tabela `PetzImage`, ~60MB) porque o CDN da Petz é Akamai e barra o Twilio no WhatsApp;
+  `LIA_MEDIA_BLOCK_HOSTS` evita imagem quebrada. Ver/buscar tudo em **`/ops/catalogo`** (foto +
+  custo/margem). ⚠️ prod: setar `OPS_TOKEN` forte (default cai no `API_TOKEN` fraco).
 - **Lojas:** **12 Carrefour Hiper reais de SP** (clique-e-retire) em `carrefour.ts`; `nearestUnit`
   escolhe a mais próxima por **proximidade de CEP** (heurística boa no grosso de SP; bordas/leste
   podem errar — geo-distância real é upgrade futuro).
