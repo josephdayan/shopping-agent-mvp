@@ -422,10 +422,30 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   await prisma.message.create({ data: { conversationId: convo.id, sender: "user", text } });
 
-  // Global commands
-  if (/^(cancelar|limpar|recome[cç]ar)$/.test(normalized)) {
-    await writeCtx(convo.id, { cep: ctx.cep, deliveryAddress: ctx.deliveryAddress });
-    await reply(phone, "Beleza, limpei seu pedido. É só me dizer o que você quer. 🙂");
+  // Auto-expire a stale cart: if the last activity was over 30 min ago, start fresh
+  // (keep only the saved address) so a leftover basket from a previous session doesn't
+  // bleed into a new order — the reported "old items still there" problem.
+  const CART_TTL_MS = Number(process.env.LIA_CART_TTL_MS ?? 30 * 60 * 1000);
+  if (ctx.basket?.length && convo.updatedAt && Date.now() - new Date(convo.updatedAt).getTime() > CART_TTL_MS) {
+    const keptCep = ctx.cep;
+    const keptAddr = ctx.deliveryAddress;
+    for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
+    ctx.flow = "delivery";
+    ctx.cep = keptCep;
+    ctx.deliveryAddress = keptAddr;
+  }
+
+  // Global "clear the cart" command — broad on purpose ("limpar carrinho", "zerar",
+  // "novo pedido", "tira tudo", "tira os anteriores", "começar de novo", …) so the
+  // customer can always start fresh without hunting for the exact word.
+  const clearCart =
+    /\b(cancelar|cancela tudo|recome[cç]ar|come[cç]ar de novo|novo pedido|outro pedido)\b/.test(normalized) ||
+    /\b(zera|zerar)\b/.test(normalized) ||
+    /\b(limpa|limpar)\s+(o\s+|a\s+)?(carrinho|cesta|pedido|tudo|lista)\b/.test(normalized) ||
+    /\b(tira|tirar|remove|remover|apaga|apagar|esquece|esquecer)\s+(o\s+|os\s+|a\s+|as\s+)?(tudo|anteriores|antigos|de antes|carrinho|cesta)\b/.test(normalized);
+  if (clearCart) {
+    await writeCtx(convo.id, { flow: "delivery", cep: ctx.cep, deliveryAddress: ctx.deliveryAddress });
+    await reply(phone, "Prontinho, limpei seu carrinho! 🧹 É só me dizer o que você quer agora. 🙂");
     return;
   }
 
