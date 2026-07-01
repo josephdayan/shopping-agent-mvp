@@ -32,17 +32,22 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 
-// Quote EVERY registered courier in parallel and return the CHEAPEST. Prefers REAL
-// quotes over mock ones, so a credential-less courier can't "win" with a fake price and
-// then fail to dispatch. A per-courier timeout keeps one slow courier from hanging the
-// WhatsApp turn. Falls back to the default courier if every quote fails/times out.
-export async function quoteCheapest(input: CourierQuoteInput): Promise<CourierQuote> {
+// Quote EVERY registered courier in parallel and return the valid quotes. Prefers REAL
+// quotes over mock ones (so a credential-less courier can't "win" with a fake price and
+// then fail to dispatch). A per-courier timeout keeps one slow courier from hanging the
+// WhatsApp turn. May return [] if every quote fails/times out.
+export async function quoteAll(input: CourierQuoteInput): Promise<CourierQuote[]> {
   const settled = await Promise.allSettled(listCouriers().map((c) => withTimeout(c.quote(input), QUOTE_TIMEOUT_MS)));
   const quotes = settled
     .filter((s): s is PromiseFulfilledResult<CourierQuote> => s.status === "fulfilled")
     .map((s) => s.value);
   const real = quotes.filter((q) => !q.mock);
-  const pool = real.length ? real : quotes;
+  return real.length ? real : quotes;
+}
+
+// The single cheapest courier quote (fallback to the default courier if all fail).
+export async function quoteCheapest(input: CourierQuoteInput): Promise<CourierQuote> {
+  const pool = await quoteAll(input);
   if (!pool.length) return getCourier(DEFAULT_COURIER_KEY).quote(input);
   return pool.reduce((best, q) => (q.fee < best.fee ? q : best));
 }

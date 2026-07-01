@@ -31,7 +31,7 @@ function mockFee(input: CourierQuoteInput) {
 function mockEta(input: CourierQuoteInput) {
   const digits = (input.dropoffCep ?? "").replace(/\D/g, "");
   const proxy = digits ? Number(digits.slice(-2)) % 30 : 10;
-  return 30 + proxy;
+  return 45 + proxy; // 45–74 min — mock: cheapest but slower than Uber (a real tradeoff)
 }
 
 export const lalamoveCourier: CourierConnector = {

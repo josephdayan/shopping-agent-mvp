@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
 import { queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
-import { getCourier, quoteCheapest } from "@/lib/couriers";
+import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
 
@@ -37,11 +37,15 @@ type BasketItem = {
 type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string };
 type PendingChoice = { query: string; qty: number; options: ChoiceOption[] };
 
+// A frete option the customer can pick between (cheapest vs fastest courier).
+type CourierOption = { kind: "barato" | "rapido"; courierKey: string; quoteId: string; fee: number; etaMinutes: number };
+
 type DeliveryContext = {
   flow?: "delivery";
-  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "choosing_payment" | "awaiting_payment";
+  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "choosing_courier" | "choosing_payment" | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
+  courierOptions?: CourierOption[];
   storeKey?: string;
   notFound?: string[];
   cep?: string;
@@ -324,14 +328,20 @@ async function expandCep(cep: string): Promise<string | undefined> {
 
 async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   const unit = await store.nearestUnit(ctx.cep);
-  // Quote every registered courier in parallel and keep the CHEAPEST (its key + quoteId
-  // are stored on the context/order for dispatch).
-  const q = await quoteCheapest({
+  // Quote every registered courier in parallel. Default to the CHEAPEST; if the FASTEST
+  // is a different courier that costs more, offer the customer the choice (barato vs rápido).
+  const pool = await quoteAll({
     pickupCep: unit.cep,
     dropoffCep: ctx.cep,
     pickupAddress: unit.address,
     dropoffAddress: ctx.deliveryAddress
   });
+  const quotes = pool.length
+    ? pool
+    : [await getCourier(ctx.courierKey).quote({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress })];
+  const cheapest = quotes.reduce((best, q) => (q.fee < best.fee ? q : best));
+  const fastest = quotes.reduce((best, q) => (q.etaMinutes < best.etaMinutes ? q : best));
+
   // itemsSubtotal = real Carrefour cost (what the operator pays). serviceFee = the
   // 10% markup margin (yours; NOT shown to the customer as a line). The customer is
   // charged the marked-up products + the pass-through frete.
@@ -340,14 +350,67 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.storeUnitId = unit.id;
   ctx.storeUnitLabel = unit.label;
   ctx.storeUnitAddress = unit.address;
+  ctx.serviceFee = margin;
+  ctx.itemsSubtotal = Math.round(realSubtotal * 100) / 100;
+
+  // Only offer a choice when "faster" is a genuine tradeoff (different courier that's
+  // strictly quicker AND strictly pricier). Otherwise just use the cheapest.
+  const worthChoosing =
+    fastest.courierKey !== cheapest.courierKey && fastest.etaMinutes < cheapest.etaMinutes && fastest.fee > cheapest.fee + 0.001;
+  ctx.courierOptions = worthChoosing
+    ? [
+        { kind: "barato", courierKey: cheapest.courierKey, quoteId: cheapest.quoteId, fee: cheapest.fee, etaMinutes: cheapest.etaMinutes },
+        { kind: "rapido", courierKey: fastest.courierKey, quoteId: fastest.quoteId, fee: fastest.fee, etaMinutes: fastest.etaMinutes }
+      ]
+    : undefined;
+
+  applyCourier(ctx, {
+    courierKey: cheapest.courierKey,
+    quoteId: cheapest.quoteId,
+    fee: cheapest.fee,
+    etaMinutes: cheapest.etaMinutes
+  });
+}
+
+// Apply a chosen courier quote to the context (fee/eta/key/quoteId + recompute total).
+function applyCourier(ctx: DeliveryContext, q: { courierKey: string; quoteId: string; fee: number; etaMinutes: number }) {
   ctx.deliveryFee = q.fee;
   ctx.etaMinutes = q.etaMinutes;
   ctx.courierQuoteId = q.quoteId;
   ctx.courierKey = q.courierKey;
-  ctx.serviceFee = margin;
-  ctx.itemsSubtotal = Math.round(realSubtotal * 100) / 100;
-  ctx.total = Math.round((realSubtotal + margin + q.fee) * 100) / 100;
+  ctx.total = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0) + q.fee) * 100) / 100;
+}
+
+// After quoting: show the minimum-order nudge, the frete choice (barato/rápido), or the
+// order summary — whichever applies. `prefix` is prepended (e.g. "Endereço salvo").
+async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector, prefix?: string) {
+  const pre = prefix ? `${prefix}\n\n` : "";
+  if (belowMinimum(ctx, store)) {
+    ctx.step = "collecting";
+    await writeCtx(convoId, ctx);
+    await reply(phone, pre + minimumOrderText(ctx, store));
+    return;
+  }
+  if ((ctx.courierOptions?.length ?? 0) >= 2) {
+    ctx.step = "choosing_courier";
+    await writeCtx(convoId, ctx);
+    await reply(phone, pre + freteChoiceText(ctx));
+    return;
+  }
   ctx.step = "quoted";
+  await writeCtx(convoId, ctx);
+  await reply(phone, pre + summaryText(ctx));
+}
+
+// Frete choice: cheapest vs fastest (frete is pass-through, shown raw).
+function freteChoiceText(ctx: DeliveryContext): string {
+  const barato = ctx.courierOptions?.find((o) => o.kind === "barato");
+  const rapido = ctx.courierOptions?.find((o) => o.kind === "rapido");
+  const lines = ["Como prefere o frete? 🛵"];
+  if (barato) lines.push(`*1)* Mais barato — ${brl(barato.fee)} · chega em ~${barato.etaMinutes} min`);
+  if (rapido) lines.push(`*2)* Mais rápido — ${brl(rapido.fee)} · chega em ~${rapido.etaMinutes} min`);
+  lines.push("", "Responde *1* (mais barato) ou *2* (mais rápido).");
+  return lines.join("\n");
 }
 
 function summaryText(ctx: DeliveryContext): string {
@@ -462,14 +525,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.flow = "delivery";
       if (ctx.basket?.length) {
         await quoteBasket(ctx, store);
-        if (belowMinimum(ctx, store)) {
-          ctx.step = "collecting";
-          await writeCtx(convo.id, ctx);
-          await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${minimumOrderText(ctx, store)}`);
-        } else {
-          await writeCtx(convo.id, ctx);
-          await reply(phone, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.\n\n${summaryText(ctx)}`);
-        }
+        await respondAfterQuote(phone, convo.id, ctx, store, `📍 Endereço salvo: ${ctx.deliveryAddress ?? cepInMsg}.`);
       } else {
         ctx.step = "collecting";
         await writeCtx(convo.id, ctx);
@@ -502,6 +558,26 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await markDeliveryOrderPaid(ctx.deliveryOrderId);
     }
     await writeCtx(convo.id, {});
+    return;
+  }
+
+  // Customer is choosing the frete (cheapest vs fastest).
+  if (ctx.step === "choosing_courier" && (ctx.courierOptions?.length ?? 0) >= 2) {
+    let chosen: CourierOption | undefined;
+    if (/\b(1|barato|mais barato|mais em conta|economico|econômico|barata)\b/.test(normalized)) {
+      chosen = ctx.courierOptions?.find((o) => o.kind === "barato");
+    } else if (/\b(2|rapido|rápido|mais rapido|mais rápido|rapida|rápida|urgente)\b/.test(normalized)) {
+      chosen = ctx.courierOptions?.find((o) => o.kind === "rapido");
+    }
+    if (!chosen) {
+      await reply(phone, `Não peguei 🤔. ${freteChoiceText(ctx)}`);
+      return;
+    }
+    applyCourier(ctx, chosen);
+    ctx.courierOptions = undefined;
+    ctx.step = "quoted";
+    await writeCtx(convo.id, ctx);
+    await reply(phone, summaryText(ctx));
     return;
   }
 
@@ -601,14 +677,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     const cepStore = orderStore(ctx);
     await quoteBasket(ctx, cepStore);
     ctx.flow = "delivery";
-    if (belowMinimum(ctx, cepStore)) {
-      ctx.step = "collecting";
-      await writeCtx(convo.id, ctx);
-      await reply(phone, minimumOrderText(ctx, cepStore));
-      return;
-    }
-    await writeCtx(convo.id, ctx);
-    await reply(phone, summaryText(ctx));
+    await respondAfterQuote(phone, convo.id, ctx, cepStore);
     return;
   }
 
@@ -645,14 +714,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     }
     const removeStore = orderStore(ctx);
     await quoteBasket(ctx, removeStore);
-    if (belowMinimum(ctx, removeStore)) {
-      ctx.step = "collecting";
-      await writeCtx(convo.id, ctx);
-      await reply(phone, `Pronto, tirei ${removedNames}.\n\n${minimumOrderText(ctx, removeStore)}`);
-      return;
-    }
-    await writeCtx(convo.id, ctx);
-    await reply(phone, `Pronto, tirei ${removedNames}.\n\n${summaryText(ctx)}`);
+    await respondAfterQuote(phone, convo.id, ctx, removeStore, `Pronto, tirei ${removedNames}.`);
     return;
   }
 
@@ -740,14 +802,7 @@ async function continueAfterBasket(
     ctx.deliveryAddress = (await expandCep(userCep)) ?? ctx.deliveryAddress;
   }
   await quoteBasket(ctx, store);
-  if (belowMinimum(ctx, store)) {
-    ctx.step = "collecting"; // block payment until the basket clears the store minimum
-    await writeCtx(convoId, ctx);
-    await reply(phone, minimumOrderText(ctx, store));
-    return;
-  }
-  await writeCtx(convoId, ctx);
-  await reply(phone, summaryText(ctx));
+  await respondAfterQuote(phone, convoId, ctx, store);
 }
 
 async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext, method: "pix" | "card" = "pix") {
