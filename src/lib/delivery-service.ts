@@ -3,7 +3,7 @@ import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
 import { queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
-import { checkoutAdapter } from "@/lib/payments/mercadopago";
+import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -847,25 +847,8 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     }
   });
 
-  // Checkout Pro link LOCKED to the chosen method (so a card link can't be paid by Pix
-  // at the fee'd price, and vice versa). We reuse the existing nullable columns to avoid
-  // a migration — pixId = preference id, pixCopiaECola = the link. The webhook still
-  // reconciles by external_reference = order id.
-  const charge = await checkoutAdapter.createLink({
-    orderId: order.id,
-    amount: order.total,
-    description: `Lia · pedido ${order.id.slice(-6)}`,
-    method
-  });
-  await prisma.deliveryOrder.update({
-    where: { id: order.id },
-    data: { pixId: charge.preferenceId, pixCopiaECola: charge.initPoint }
-  });
-
-  // Order is committed to the DB now — DROP the basket from the conversation so the
-  // NEXT request starts fresh instead of inheriting these items. This is the "phantom
-  // item" bug (a sponge from a past order showing up in a new ração order). Keep only
-  // the address + the order id so "paguei" still resolves.
+  // Order committed — DROP the basket from the conversation so the next request starts
+  // fresh (the "phantom item" bug). Keep only the address + order id so "paguei" resolves.
   await writeCtx(convoId, {
     flow: "delivery",
     cep: ctx.cep,
@@ -874,19 +857,57 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     step: "awaiting_payment"
   });
 
+  if (isCard) {
+    // Card → a Checkout Pro link (MP-hosted card page). Reuse the nullable columns:
+    // pixId = preference id, pixCopiaECola = the link. Webhook reconciles by order id.
+    const link = await checkoutAdapter.createLink({
+      orderId: order.id,
+      amount: order.total,
+      description: `Lia · pedido ${order.id.slice(-6)}`,
+      method: "card"
+    });
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }
+    });
+    await reply(
+      phone,
+      [
+        `Pronto! Total *${brl(total)}* no cartão _(já com a taxa)_.`,
+        "",
+        "Pague no *cartão* por este link 👇",
+        link.initPoint,
+        "",
+        link.mock
+          ? "_(sandbox: responda *paguei* pra simular o pagamento)_"
+          : "Assim que o pagamento cair, eu já começo a separar e te aviso o rastreio. 💚"
+      ].join("\n")
+    );
+    return;
+  }
+
+  // Pix → the raw copia-e-cola generated ON THE SPOT, paid inside the bank app (no
+  // leaving WhatsApp for a hosted page). Webhook reconciles by external_reference = order id.
+  const charge = await pixAdapter.createPix({
+    orderId: order.id,
+    amount: order.total,
+    description: `Lia · pedido ${order.id.slice(-6)}`
+  });
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
+  });
   await reply(
     phone,
     [
-      isCard
-        ? `Pronto! Total *${brl(total)}* no cartão _(já com a taxa)_.`
-        : `Pronto! Total *${brl(total)}* no Pix.`,
+      `Pronto! Total *${brl(total)}* no Pix.`,
       "",
-      isCard ? "Pague no *cartão* por este link 👇" : "Pague no *Pix* por este link 👇",
-      charge.initPoint,
+      "É só copiar o código abaixo e colar no *Pix copia e cola* do seu banco 👇",
+      charge.copiaECola,
       "",
       charge.mock
         ? "_(sandbox: responda *paguei* pra simular o pagamento)_"
-        : "Assim que o pagamento cair, eu já começo a separar e te aviso o rastreio. 💚"
+        : "Assim que o Pix cair, eu já começo a separar e te aviso o rastreio. 💚"
     ].join("\n")
   );
 }
