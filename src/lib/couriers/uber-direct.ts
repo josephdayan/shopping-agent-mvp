@@ -142,11 +142,19 @@ async function realDispatch(input: CourierDispatchInput): Promise<CourierDispatc
   const customerId = process.env.UBER_DIRECT_CUSTOMER_ID as string;
   const token = await getAccessToken();
   if (!token) throw new Error("uber_direct: missing token");
+  // Re-quote for a FRESH quote_id — the one from order time has expired (~5 min) by the
+  // time the operator dispatches. Uber's create-delivery requires a valid quote_id.
+  const fresh = await realQuote({
+    pickupCep: input.pickupCep,
+    dropoffCep: input.dropoffCep,
+    pickupAddress: input.pickupAddress,
+    dropoffAddress: input.dropoffAddress
+  });
   const res = await fetch(`${UBER_API}/${customerId}/deliveries`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      quote_id: input.quoteId,
+      quote_id: fresh.quoteId,
       // Pickup = the store (the operator who fetches the click-e-retire order).
       pickup_name: process.env.UBER_DIRECT_PICKUP_NAME ?? "Lia",
       pickup_phone_number: process.env.UBER_DIRECT_PICKUP_PHONE ?? input.dropoffPhone,

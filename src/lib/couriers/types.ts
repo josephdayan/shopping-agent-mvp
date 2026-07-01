@@ -23,6 +23,10 @@ export type CourierDispatchInput = {
   orderId: string;
   pickupAddress: string;
   dropoffAddress: string;
+  // CEPs so a connector can RE-quote at dispatch time (the quote from order time has
+  // usually expired by the time the operator dispatches).
+  pickupCep?: string;
+  dropoffCep?: string;
   instructions: string; // counter-pickup doc instructions for click-e-retire
   quoteId?: string;
   dropoffName?: string;

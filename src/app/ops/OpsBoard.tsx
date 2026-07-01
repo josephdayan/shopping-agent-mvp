@@ -20,8 +20,15 @@ type DeliveryOrder = {
   serviceFee: number;
   total: number;
   status: string;
+  courierKey?: string | null;
   courierTrackingUrl?: string | null;
   createdAt: string;
+};
+
+const COURIER_LABEL: Record<string, string> = {
+  uber_direct: "Uber Direct",
+  lalamove: "Lalamove",
+  loggi: "Loggi"
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -136,7 +143,8 @@ export default function OpsBoard() {
             ))}
           </ul>
           <div style={{ fontSize: 13, color: "#475467" }}>
-            Custo Carrefour {brl(o.itemsSubtotal)} · Frete {brl(o.deliveryFee)} · Margem {brl(o.serviceFee)} ·{" "}
+            Custo Carrefour {brl(o.itemsSubtotal)} · Frete {brl(o.deliveryFee)}
+            {o.courierKey ? ` (${COURIER_LABEL[o.courierKey] ?? o.courierKey})` : ""} · Margem {brl(o.serviceFee)} ·{" "}
             <strong>Cliente pagou {brl(o.total)}</strong>
           </div>
           <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>

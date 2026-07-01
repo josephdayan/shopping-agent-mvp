@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
 import { queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
-import { getCourier } from "@/lib/couriers";
+import { getCourier, quoteCheapest } from "@/lib/couriers";
 import { checkoutAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
 
@@ -324,8 +324,9 @@ async function expandCep(cep: string): Promise<string | undefined> {
 
 async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   const unit = await store.nearestUnit(ctx.cep);
-  const courier = getCourier(ctx.courierKey);
-  const q = await courier.quote({
+  // Quote every registered courier in parallel and keep the CHEAPEST (its key + quoteId
+  // are stored on the context/order for dispatch).
+  const q = await quoteCheapest({
     pickupCep: unit.cep,
     dropoffCep: ctx.cep,
     pickupAddress: unit.address,
@@ -854,11 +855,17 @@ export async function opsDispatchCourier(orderId: string) {
   if (!order) throw new Error("Order not found");
   const store = getStore(order.storeKey);
   const courier = getCourier(order.courierKey);
+  // Re-derive the pickup unit so the connector can re-quote at dispatch (the order-time
+  // quote has expired). dropoff CEP is the customer's.
+  const unit = await store.nearestUnit(order.cep ?? undefined);
   const dispatch = await courier.dispatch({
     orderId: order.id,
-    pickupAddress: order.storeAddress ?? "",
+    pickupAddress: order.storeAddress ?? unit.address,
     dropoffAddress: order.deliveryAddress ?? "",
+    pickupCep: unit.cep,
+    dropoffCep: order.cep ?? undefined,
     instructions: store.pickupInstructions(order.storeOrderNumber ?? "—"),
+    quoteId: order.courierQuoteId ?? undefined,
     dropoffName: order.customerName ?? undefined,
     dropoffPhone: order.phone
   });
