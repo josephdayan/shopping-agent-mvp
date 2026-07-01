@@ -34,7 +34,7 @@ type BasketItem = {
   storeLabel: string;
 };
 
-type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number };
+type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string };
 type PendingChoice = { query: string; qty: number; options: ChoiceOption[] };
 
 type DeliveryContext = {
@@ -237,7 +237,7 @@ async function buildChoices(text: string, lockedStoreKey?: string): Promise<Choi
       pending.push({
         query: line.phrase,
         qty: line.qty,
-        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice }))
+        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl }))
       });
     }
   }
@@ -275,6 +275,35 @@ function choicesText(p: PendingChoice): string {
   const nums = p.options.map((_, i) => i + 1);
   const ask = nums.length <= 1 ? "Responda *1*" : `Responda *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}*`;
   return [`Achei essas opções de *${p.query}*:`, ...opts, "", `${ask} pra escolher (ou *qualquer*). 🙂`].join("\n");
+}
+
+function askLine(p: PendingChoice): string {
+  const nums = p.options.map((_, i) => i + 1);
+  return nums.length <= 1
+    ? "Responda *1* pra escolher (ou *qualquer*). 🙂"
+    : `Responda *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* pra escolher (ou *qualquer*). 🙂`;
+}
+
+async function replyPhoto(phone: string, text: string, imageUrl?: string) {
+  if (imageUrl) await whatsappAdapter.sendMedia(phone, text, imageUrl);
+  else await reply(phone, text);
+}
+
+// Show the (up to 3) options with a product PHOTO each (one image message per option),
+// then the numbered prompt. Falls back to the single numbered-text message when photos
+// are off (LIA_SEND_PHOTOS=false) or none of the options has an image.
+async function sendChoices(phone: string, p: PendingChoice) {
+  const withPhotos = process.env.LIA_SEND_PHOTOS !== "false" && p.options.some((o) => o.imageUrl);
+  if (!withPhotos) {
+    await reply(phone, choicesText(p));
+    return;
+  }
+  await reply(phone, `Achei essas opções de *${p.query}*:`);
+  for (let i = 0; i < p.options.length; i++) {
+    const o = p.options[i];
+    await replyPhoto(phone, `*${i + 1})* ${o.name} — ${brl(Math.round(o.unitPrice * MARKUP * 100) / 100)}`, o.imageUrl);
+  }
+  await reply(phone, askLine(p));
 }
 
 async function expandCep(cep: string): Promise<string | undefined> {
@@ -508,7 +537,8 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     ctx.pending = ctx.pending.slice(1);
     if (ctx.pending.length) {
       await writeCtx(convo.id, ctx);
-      await reply(phone, `✅ ${chosen.name}.\n\n${choicesText(ctx.pending[0])}`);
+      await reply(phone, `✅ ${chosen.name}.`);
+      await sendChoices(phone, ctx.pending[0]);
       return;
     }
     ctx.pending = undefined;
@@ -647,7 +677,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     ctx.storeKey = pickedStore.key;
     ctx.cep = ctx.cep ?? user.cep ?? undefined;
     await writeCtx(convo.id, ctx);
-    await reply(phone, choicesText(pending[0]));
+    await sendChoices(phone, pending[0]);
     return;
   }
 

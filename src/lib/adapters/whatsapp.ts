@@ -104,6 +104,17 @@ export const whatsappAdapter = {
     return { provider: "mock", to, text, metadata };
   },
 
+  // Send a single image (public URL) with a caption. Used to show product photos in
+  // the delivery flow. Falls back to a plain text message if media can't be sent, so
+  // the customer always sees the caption.
+  async sendMedia(to: string, text: string, mediaUrl: string) {
+    if (!isPublicMediaUrl(mediaUrl)) return this.sendMessage(to, text);
+    if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaImage(to, text, mediaUrl);
+    if (process.env.WHATSAPP_PROVIDER === "twilio") return sendTwilioMedia(to, text, mediaUrl);
+    console.log("[whatsapp:mock:media]", { to, text, mediaUrl });
+    return { provider: "mock", to, text, mediaUrl };
+  },
+
   async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
     if (!reply.options?.length) return null;
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
@@ -292,6 +303,47 @@ async function sendTwilioWhatsAppMessage(to: string, text: string, metadata?: un
     sid: message.sid,
     status: message.status
   };
+}
+
+async function sendTwilioMedia(to: string, text: string, mediaUrl: string) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_WHATSAPP_FROM;
+  if (!accountSid || !authToken || !from) {
+    return { provider: "twilio", mocked: true, to, text, mediaUrl };
+  }
+  const client = twilio(accountSid, authToken);
+  try {
+    const message = await client.messages.create({
+      from: normalizeTwilioWhatsAppAddress(from),
+      to: normalizeTwilioWhatsAppAddress(to),
+      body: text.slice(0, 1500),
+      mediaUrl: [mediaUrl]
+    });
+    return { provider: "twilio", to, sid: message.sid, status: message.status };
+  } catch (error) {
+    // If WhatsApp/Twilio rejects the image, still deliver the caption as text.
+    console.warn("[whatsapp:twilio:media:fallback-text]", error instanceof Error ? error.message : error);
+    return sendTwilioWhatsAppMessage(to, text);
+  }
+}
+
+async function sendMetaImage(to: string, text: string, mediaUrl: string) {
+  const token = process.env.WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  if (!token || !phoneNumberId) return sendMetaMessage(to, text);
+  try {
+    return await sendMetaPayload(phoneNumberId, token, {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: normalizeWhatsAppPhone(to),
+      type: "image",
+      image: { link: mediaUrl, caption: text.slice(0, 1024) }
+    });
+  } catch (error) {
+    console.warn("[whatsapp:meta:media:fallback-text]", error instanceof Error ? error.message : error);
+    return sendMetaMessage(to, text);
+  }
 }
 
 async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply) {
