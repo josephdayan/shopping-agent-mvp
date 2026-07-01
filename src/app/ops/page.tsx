@@ -9,6 +9,11 @@ export default function OpsPage() {
       <p style={{ color: "#667085", marginTop: 6 }}>
         Fila de pedidos pagos — comprar no Carrefour (clique-e-retire) e despachar o motoboy.
       </p>
+      <p style={{ marginTop: 4 }}>
+        <a href="/ops/catalogo" style={{ color: "#e4002b", fontSize: 14, textDecoration: "none" }}>
+          📚 Ver catálogo de produtos →
+        </a>
+      </p>
       <OpsBoard />
     </main>
   );
