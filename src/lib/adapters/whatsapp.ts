@@ -115,6 +115,13 @@ export const whatsappAdapter = {
     return { provider: "mock", to, text, mediaUrl };
   },
 
+  // True only if this image URL can actually be delivered as WhatsApp media (https +
+  // not an anti-bot-locked host like Petz's Akamai CDN). Lets callers pick the photo
+  // layout vs. the single numbered-text list instead of sending broken/degraded media.
+  canSendImage(url?: string) {
+    return Boolean(url) && isPublicMediaUrl(url as string);
+  },
+
   async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
     if (!reply.options?.length) return null;
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
@@ -554,8 +561,29 @@ async function delayBetweenProductMessages(index: number, total: number) {
   await new Promise((resolve) => setTimeout(resolve, Math.min(delayMs, 4000)));
 }
 
+// Hosts that block server-side fetches (Akamai/anti-bot) — WhatsApp/Twilio can't load
+// them, so we skip media and fall back to text (never ship a broken image). Petz
+// self-hosts product photos behind Akamai: only a real browser that solved the JS sensor
+// can fetch them, so their URLs 403 for Twilio (Carrefour's VTEX CDN is permissive and
+// works). The Petz imageUrls stay in the catalog for the /ops dashboard and for a future
+// re-host to a public CDN — once re-hosted, drop the host here. Override via
+// LIA_MEDIA_BLOCK_HOSTS (comma-separated hostnames; empty string disables the blocklist).
+const MEDIA_BLOCK_HOSTS = (process.env.LIA_MEDIA_BLOCK_HOSTS ?? "images.petz.com.br")
+  .split(",")
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
+
 function isPublicMediaUrl(url: string) {
-  return /^https:\/\/.+/i.test(url);
+  if (!/^https:\/\/.+/i.test(url)) return false;
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    if (MEDIA_BLOCK_HOSTS.some((blocked) => host === blocked || host.endsWith("." + blocked))) {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+  return true;
 }
 
 function normalizeWhatsAppPhone(phone: string) {

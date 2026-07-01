@@ -194,3 +194,15 @@ model SearchCache {
 
   @@index([updatedAt])
 }
+
+// Re-hosted Petz product images. Petz self-hosts photos behind Akamai, so a server fetch
+// (Twilio, our app) 403s — WhatsApp can't load them. The browser (which passes Akamai's
+// JS sensor) fetches + resizes each image and POSTs it here; GET /api/petz-image/<id>
+// then serves it from our own domain, which Twilio CAN fetch. Small resized JPEGs.
+model PetzImage {
+  id          String   @id // Petz product id (matches catalog sku PETZ-<id>)
+  data        Bytes
+  contentType String   @default("image/jpeg")
+  bytes       Int      @default(0)
+  updatedAt   DateTime @updatedAt
+}

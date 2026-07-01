@@ -297,7 +297,10 @@ async function replyPhoto(phone: string, text: string, imageUrl?: string) {
 // then the numbered prompt. Falls back to the single numbered-text message when photos
 // are off (LIA_SEND_PHOTOS=false) or none of the options has an image.
 async function sendChoices(phone: string, p: PendingChoice) {
-  const withPhotos = process.env.LIA_SEND_PHOTOS !== "false" && p.options.some((o) => o.imageUrl);
+  // Only lay out photos if at least one image can ACTUALLY be delivered (Petz's Akamai
+  // CDN 403s Twilio, so those options use the clean single-list fallback, not per-item text).
+  const withPhotos =
+    process.env.LIA_SEND_PHOTOS !== "false" && p.options.some((o) => whatsappAdapter.canSendImage(o.imageUrl));
   if (!withPhotos) {
     await reply(phone, choicesText(p));
     return;
