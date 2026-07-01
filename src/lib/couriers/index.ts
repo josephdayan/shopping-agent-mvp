@@ -22,6 +22,7 @@ export function listCouriers(): CourierConnector[] {
   return Object.values(COURIERS);
 }
 
+// Redeploy marker: pick up LALAMOVE_* env (empty commits are deduped by Vercel).
 const QUOTE_TIMEOUT_MS = Number(process.env.LIA_COURIER_QUOTE_TIMEOUT_MS ?? 8000);
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
