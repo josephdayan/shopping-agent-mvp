@@ -111,6 +111,30 @@ export function queryTokens(query: string): string[] {
   return words(query).filter((token) => token.length > 1 && !STOPWORDS.has(token));
 }
 
+// Size-normalized form of a name/attr so "2 Litros", "2L", "2 lt" and "2l" all compare
+// equal, and decimals survive ("1,5L" -> "1,5l"). Used by attrMatchesItem only.
+function normSize(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/litros?|\blts?\b/g, "l")
+    .replace(/(\d)\s+(?=(kg|g|ml|l)\b)/g, "$1");
+}
+
+// Does a refinement attribute ("azul", "grande", "2kg", "1,5l") ACTUALLY apply to this
+// item? Sizes/weights use a digit-boundary substring on the size-normalized name (so
+// "5l" does NOT match "1,5l"); word attributes use the normal catalog scorer.
+export function attrMatchesItem(attr: string, item: CatalogItem): boolean {
+  const a = normSize(attr);
+  if (/\d/.test(a)) {
+    const hay = normSize(`${item.name} ${item.brand ?? ""}`);
+    const esc = a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^0-9,.])${esc}($|[^0-9a-z])`).test(hay);
+  }
+  return scoreCatalogMatch(a, item) > 0;
+}
+
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   const tokens = queryTokens(query);
   if (!tokens.length) return 0;

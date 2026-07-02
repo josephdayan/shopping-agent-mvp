@@ -138,13 +138,25 @@ export function choicesAsk(count: number): string {
     : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho pra você. 🙂`;
 }
 
-export function choicesText(query: string, options: { name: string; displayPrice: number }[]): string {
+export function choicesText(query: string, options: { name: string; displayPrice: number }[], header?: string): string {
   return [
-    choicesHeader(query),
+    header ?? choicesHeader(query),
     ...options.map((o, i) => choiceLine(i, o.name, o.displayPrice)),
     "",
     choicesAsk(options.length)
   ].join("\n");
+}
+
+export function moreChoicesHeader(query: string): string {
+  return `Claro! Mais opções de *${query}*:`;
+}
+
+export function noMoreOptions(query: string): string {
+  return `Essas são todas as opções de *${query}* que eu tenho por aqui 🙏 Se alguma servir, responde o número — ou *pula* que eu sigo sem esse item.`;
+}
+
+export function refineNoResult(refined: string): string {
+  return `Procurei *${refined}* e não achei por aqui 🙏 O que eu tenho são essas:`;
 }
 
 export function choiceConfirmed(name: string): string {

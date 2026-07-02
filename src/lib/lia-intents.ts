@@ -162,7 +162,7 @@ function isAffirm(n: string): boolean {
 }
 
 const REJECT_RE =
-  /\b(nao era isso|nao e isso|nada a ver|errado|errou|nao gostei|nenhum(a)?( dess[ea]s| del[ea]s)?|outras opcoes|tem outr[ao]s?|mostra outr[ao]s?)\b/;
+  /\b(nao era isso|nao e isso|nada a ver|errado|errou|nao gostei|nenhum(a)?( dess[ea]s| del[ea]s)?|outras opcoes|tem outr[ao]s?|acha outr[ao]s?|mostra outr[ao]s?)\b/;
 
 const REMOVE_START_RE = /^(tira|tirar|remove|remover|retira|retirar|exclui|excluir|apaga|apagar|sem|cancela|cancelar)\s+/;
 
@@ -260,6 +260,76 @@ function cleanItemPhrase(phrase: string): string {
     .trim();
 }
 
+// ---------- refinements while choosing ("tem essa em azul?", "tem de 2kg?", "quero uma maior") ----------
+
+const COLOR_ATTRS = new Set([
+  "azul", "preta", "preto", "branca", "branco", "rosa", "vermelha", "vermelho", "verde",
+  "amarela", "amarelo", "roxa", "roxo", "cinza", "bege", "marrom", "dourada", "dourado",
+  "prateada", "prateado", "lilas", "laranja"
+]);
+const SIZE_ATTRS = new Set(["grande", "pequena", "pequeno", "media", "medio", "gg", "pp", "xg", "mini", "gigante", "familia"]);
+// Comparatives map to a searchable size word.
+const SIZE_MAP: Record<string, string> = { maior: "grande", maiores: "grande", menor: "pequeno", menores: "pequeno" };
+const REFINE_FILLER = new Set(
+  "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez".split(" ")
+);
+
+// "acha outras", "tem mais?", "mostra outras opções" — the customer wants to SEE MORE
+// options for the SAME item (not pick, not skip). The tail after "mais/outras" must be
+// empty or pure filler: "manda mais 2 cocas" is ADDING an item, "tem mais barato?" is
+// picking the cheapest — neither is paging.
+export function wantsMoreOptions(text: string): boolean {
+  const n = normalizeMsg(text).replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim();
+  if (/\b(mais|outras) opcoes\b/.test(n)) return true;
+  const m = n.match(/\b(?:tem|acha|ache|mostra|procura|busca|manda|me ve|quero ver|ver)\s+(?:mais|outr[ao]s?)\b(.*)$/);
+  if (!m) return false;
+  const tail = m[1]
+    .replace(/\b(opcoes|opcao|delas|dessas|desses|deles|por|favor|pfv|ai|aqui|pra|mim|um|pouco|entao)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return !tail;
+}
+
+// Canonical form of a number+unit attribute: "2 litros"/"2 lt"/"2l" -> "2l"; decimals
+// survive ("1,5l"). Kept consistent with attrMatchesItem's name normalization.
+function canonSize(num: string, unit: string): string {
+  const u = unit.replace(/litros?|lts?$/, "l");
+  return `${num}${u}`;
+}
+
+// If the WHOLE message is just attribute words (color/size/weight) plus filler, it's a
+// refinement of the item being chosen — return the searchable attribute tokens.
+// "quero fralda azul" is NOT a refinement (a real product word remains) — that's a new item.
+export function parseRefinement(text: string): string[] | null {
+  // Protect decimal sizes ("1,5l" / "1.5kg") before stripping punctuation.
+  const n = normalizeMsg(text)
+    .replace(/(\d)[.,](\d)/g, "$1§$2")
+    .replace(/[?!.,]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!n) return null;
+  const tokens = n.split(" ");
+  const attrs: string[] = [];
+  const rest: string[] = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    const sizeMatch = t.match(/^(\d+(?:§\d+)?)(kg|g|ml|l|lt|litros?)$/);
+    if (SIZE_MAP[t]) {
+      attrs.push(SIZE_MAP[t]);
+    } else if (COLOR_ATTRS.has(t) || SIZE_ATTRS.has(t)) {
+      attrs.push(t);
+    } else if (sizeMatch) {
+      attrs.push(canonSize(sizeMatch[1].replace("§", ","), sizeMatch[2])); // "2kg", "1,5l"
+    } else if (/^\d+(?:§\d+)?$/.test(t) && /^(kg|g|ml|l|lt|litros?)$/.test(tokens[i + 1] ?? "")) {
+      attrs.push(canonSize(t.replace("§", ","), tokens[i + 1])); // "2 kg" -> "2kg", "2 litros" -> "2l"
+      i++;
+    } else if (!REFINE_FILLER.has(t)) {
+      rest.push(t);
+    }
+  }
+  return attrs.length > 0 && rest.length === 0 ? attrs : null;
+}
+
 // ---------- choice reply parsing (customer looking at up to 3 options) ----------
 
 export type ChoiceReply =
@@ -303,7 +373,7 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
 
   // Brand/name match BEFORE "qualquer": "pode ser a colgate" names an option, so the
   // "pode ser" must not degrade it to "any". Filler words don't count as name tokens.
-  const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela"]);
+  const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "dessa", "desse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela", "tem", "cor", "versao", "tamanho", "tipo", "ver", "acha", "ache", "mostra", "procura", "busca", "outra", "outro", "outras", "outros", "alguma", "algum", "opcoes", "opcao"]);
   const tokens = n.split(" ").filter((t) => t.length > 2 && !CHOICE_STOP.has(t));
   if (tokens.length) {
     const scores = options.map((o) => {
@@ -316,6 +386,17 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
     }
   }
 
-  if (/\b(qualquer|qualqer|tanto faz|qq um|pode ser|indiferente|voce escolhe|vc escolhe)\b/.test(n)) return { type: "any" };
+  // "qualquer"/"pode ser" only means "you pick" when NOTHING meaningful follows —
+  // "pode ser a de 2 litros" is a refinement, not a carte blanche (auto-buying option 1
+  // when the customer named an attribute would charge them for the wrong product).
+  if (/\b(qualquer|qualqer|tanto faz|qq um|pode ser|indiferente|voce escolhe|vc escolhe)\b/.test(n)) {
+    const leftover = n
+      .replace(/\b(qualquer|qualqer|tanto faz|qq um|pode ser|indiferente|voce escolhe|vc escolhe)\b/g, " ")
+      .replace(/\b(um|uma|o|a|os|as|de|do|da|entao|mesmo|mesma|ai|dai|por|favor|pfv|sim|ok|serve|qual|desses|dessas)\b/g, " ")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!leftover) return { type: "any" };
+  }
   return null;
 }

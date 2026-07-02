@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
-import { queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
+import { attrMatchesItem, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
@@ -13,6 +13,8 @@ import {
   normalizeMsg,
   parseBasketLines,
   parseChoiceReply,
+  parseRefinement,
+  wantsMoreOptions,
   type Intent
 } from "@/lib/lia-intents";
 import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
@@ -53,7 +55,18 @@ type BasketItem = {
 };
 
 type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string };
-type PendingChoice = { query: string; qty: number; options: ChoiceOption[] };
+type PendingChoice = {
+  query: string;
+  qty: number;
+  options: ChoiceOption[];
+  // Original query before a refinement ("coleira" when query became "coleira azul").
+  baseQuery?: string;
+  // Active refinement attributes ("azul", "2kg") — paging re-applies them.
+  attrs?: string[];
+  // Every sku already shown for this item, so "tem outras?" never repeats one — robust
+  // even if the underlying ranking shifts between turns (live scrape vs seed).
+  shownSkus?: string[];
+};
 
 // A frete option the customer can pick between (cheapest vs fastest courier).
 type CourierOption = { kind: "barato" | "rapido"; courierKey: string; quoteId: string; fee: number; etaMinutes: number };
@@ -272,11 +285,16 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
 }
 
 // Customer-facing options message (prices already marked up; no store name).
-function choicesTextFor(p: PendingChoice): string {
+function choicesTextFor(p: PendingChoice, header?: string): string {
   return copy.choicesText(
     p.query,
-    p.options.map((o) => ({ name: o.name, displayPrice: display(o.unitPrice) }))
+    p.options.map((o) => ({ name: o.name, displayPrice: display(o.unitPrice) })),
+    header
   );
+}
+
+function toChoiceOption(o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string }): ChoiceOption {
+  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl };
 }
 
 async function replyPhoto(phone: string, text: string, imageUrl?: string) {
@@ -291,18 +309,18 @@ function sleep(ms: number) {
 // Show the (up to 3) options with a product PHOTO each (one image message per option),
 // then the numbered prompt. Falls back to the single numbered-text message when photos
 // are off (LIA_SEND_PHOTOS=false) or none of the options has an image.
-async function sendChoices(phone: string, p: PendingChoice) {
+async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   // Only lay out photos if at least one image can ACTUALLY be delivered (Petz's Akamai
   // CDN 403s Twilio, so those options use the clean single-list fallback, not per-item text).
   const withPhotos =
     process.env.LIA_SEND_PHOTOS !== "false" && p.options.some((o) => whatsappAdapter.canSendImage(o.imageUrl));
   if (!withPhotos) {
-    await reply(phone, choicesTextFor(p));
+    await reply(phone, choicesTextFor(p, header));
     return;
   }
   // Small gap between media messages so WhatsApp keeps them in order.
   const gapMs = process.env.WHATSAPP_PROVIDER === "twilio" ? Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 600) : 0;
-  await reply(phone, copy.choicesHeader(p.query));
+  await reply(phone, header ?? copy.choicesHeader(p.query));
   for (let i = 0; i < p.options.length; i++) {
     const o = p.options[i];
     await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice)), o.imageUrl);
@@ -881,7 +899,15 @@ async function handleChoosing(
 ) {
   const store = orderStore(ctx);
   const current = ctx.pending![0];
-  const parsed = parseChoiceReply(text, current.options) ?? (intent.kind === "reject" ? ({ type: "skip" } as const) : null);
+  // "acha outras" pages; "tem essa em azul?"/"tem de 2kg?"/"quero uma maior" refine.
+  // Both are checked AFTER an explicit pick ("2", "a colgate", "mais barato") but
+  // BEFORE reject→skip — "não gostei, tem outras?" should show more, not drop the item.
+  const more = wantsMoreOptions(text);
+  const refineAttrs = more ? null : parseRefinement(text);
+  let parsed = parseChoiceReply(text, current.options);
+  // "nenhuma dessas, mostra outras" asks for MORE — don't let the skip pattern drop the item.
+  if (parsed?.type === "skip" && more) parsed = null;
+  if (!parsed && !more && !refineAttrs && intent.kind === "reject") parsed = { type: "skip" } as const;
 
   if (parsed) {
     if (parsed.type === "skip") {
@@ -909,6 +935,15 @@ async function handleChoosing(
     return;
   }
 
+  if (more) {
+    await pageMoreOptions(phone, convoId, ctx, store);
+    return;
+  }
+  if (refineAttrs) {
+    await refineOptions(phone, convoId, ctx, store, refineAttrs);
+    return;
+  }
+
   // Not a selection — maybe they're adding MORE items mid-choice ("ah, e 2 leites").
   // Questions about the shown options ("qual é a desnatada?") must NOT be searched
   // as new products — re-show the options instead.
@@ -928,6 +963,54 @@ async function handleChoosing(
     }
   }
   await reply(phone, `${copy.choiceNotUnderstood()}\n\n${choicesTextFor(current)}`);
+}
+
+// Ranked candidates for the item being chosen, with the active refinement attributes
+// re-applied — the single source pageMoreOptions and refineOptions share, so paging
+// after a refine keeps honoring the attribute filter.
+async function choiceCandidates(store: StoreConnector, p: PendingChoice, attrs?: string[]) {
+  const active = attrs ?? p.attrs ?? [];
+  const base = p.baseQuery ?? p.query;
+  const ranked = await store.searchItems(active.length ? base : p.query, 40);
+  return active.length ? ranked.filter((o) => active.every((a) => attrMatchesItem(a, o))) : ranked;
+}
+
+// "acha outras": show the NEXT 3 catalog matches for the same item — never repeat a
+// sku already shown. When the pool is exhausted, say so honestly.
+async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector) {
+  const p = ctx.pending![0];
+  const shown = p.shownSkus ?? p.options.map((o) => o.sku);
+  const next = (await choiceCandidates(store, p)).filter((o) => !shown.includes(o.sku)).slice(0, 3);
+  if (!next.length) {
+    await reply(phone, copy.noMoreOptions(p.query));
+    return;
+  }
+  p.options = next.map(toChoiceOption);
+  p.shownSkus = [...shown, ...next.map((o) => o.sku)];
+  await writeCtx(convoId, ctx);
+  await sendChoices(phone, p, copy.moreChoicesHeader(p.query));
+}
+
+// "tem essa em azul?" / "tem de 2kg?" / "quero uma maior": re-search the item with the
+// attribute. Only results where the attribute ACTUALLY applies count (attrMatchesItem)
+// — otherwise the search degrades to the base tokens and we'd re-show the same list
+// under a dishonest header. No match → say so and re-show what exists.
+async function refineOptions(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector, attrs: string[]) {
+  const p = ctx.pending![0];
+  const base = p.baseQuery ?? p.query;
+  const refined = `${base} ${attrs.join(" ")}`;
+  const matches = (await choiceCandidates(store, p, attrs)).slice(0, 3);
+  if (!matches.length) {
+    await reply(phone, choicesTextFor(p, copy.refineNoResult(refined)));
+    return;
+  }
+  p.baseQuery = base;
+  p.attrs = attrs;
+  p.query = refined;
+  p.options = matches.map(toChoiceOption);
+  p.shownSkus = matches.map((m) => m.sku);
+  await writeCtx(convoId, ctx);
+  await sendChoices(phone, p);
 }
 
 // Move to the next pending choice, or quote the finished basket (keeping the

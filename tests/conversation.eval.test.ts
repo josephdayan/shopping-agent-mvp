@@ -10,6 +10,7 @@ import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage } from "../src/lib/delivery-service";
 import { getStore } from "../src/lib/stores";
+import { scoreCatalogMatch } from "../src/lib/stores/types";
 
 const PREFIX = "+5500991";
 // Unique per run so a crashed/killed previous run can't collide (phones) nor trip
@@ -296,6 +297,75 @@ test("trocar endereço: pede o novo CEP e atualiza", async (t) => {
   assert.match(updated, /atualizado|salvo/i);
   const user = await prisma.user.findUnique({ where: { phone: c.phone } });
   assert.equal(user?.cep, "04538-132");
+});
+
+function optionNames(transcript: string): string[] {
+  return [...transcript.matchAll(/\*\d\)\* (.+?) — R\$/g)].map((m) => m[1]);
+}
+
+test("escolhendo: 'tem outras?' mostra as PRÓXIMAS opções, nunca as mesmas", async (t) => {
+  if (!dbOk) return t.skip();
+  const store = getStore("carrefour");
+  let query: string | undefined;
+  for (const q of ["leite", "arroz", "cafe", "sabonete", "refrigerante"]) {
+    if ((await store.searchItems(q, 9)).length >= 6) {
+      query = q;
+      break;
+    }
+  }
+  assert.ok(query, "nenhuma query com 6+ opções no catálogo?");
+  const c = await returningCustomer();
+  const first = await c.send(`quero ${query}`);
+  const firstNames = optionNames(first);
+  assert.ok(firstNames.length >= 2, `esperava opções: ${first.slice(0, 200)}`);
+  const more = await c.send("acha outras, por favor.");
+  assert.match(more, /Mais opções/);
+  const moreNames = optionNames(more);
+  assert.ok(moreNames.length > 0, `esperava novas opções: ${more.slice(0, 200)}`);
+  for (const name of moreNames) {
+    assert.ok(!firstNames.includes(name), `opção repetida na paginação: ${name}`);
+  }
+});
+
+test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t) => {
+  if (!dbOk) return t.skip();
+  const store = getStore("carrefour");
+  // Derive a (base, weight) pair from the catalog so the test adapts to catalog changes.
+  let pair: { base: string; attr: string } | undefined;
+  for (const item of store.listCatalog()) {
+    const m = item.name
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .match(/\b(\d+(?:kg|g|l|ml))\b/);
+    if (!m) continue;
+    const base = item.name.split(/\s+/)[0].toLowerCase();
+    if (base.length < 4 || /[^a-zà-ú]/i.test(base)) continue;
+    if ((await store.searchItems(base, 3)).length < 2) continue;
+    const refined = (await store.searchItems(`${base} ${m[1]}`, 6)).filter((o) => scoreCatalogMatch(m[1], o) > 0);
+    if (refined.length >= 1) {
+      pair = { base, attr: m[1] };
+      break;
+    }
+  }
+  assert.ok(pair, "nenhum par base+peso no catálogo?");
+  const c = await returningCustomer();
+  const first = await c.send(`quero ${pair.base}`);
+  assert.ok(optionNames(first).length >= 2, `esperava opções: ${first.slice(0, 200)}`);
+  const refinedReply = await c.send(`tem de ${pair.attr}?`);
+  // The refined list must actually contain the attribute — never the same list re-sent.
+  assert.match(refinedReply.toLowerCase(), new RegExp(pair.attr), `refino não trouxe ${pair.attr}: ${refinedReply.slice(0, 300)}`);
+  assert.doesNotMatch(refinedReply, /Não peguei/);
+
+  // And an attribute that doesn't exist gets an HONEST answer (not a fake refresh).
+  const azul = (await store.searchItems(`${pair.base} azul`, 6)).filter((o) => scoreCatalogMatch("azul", o) > 0);
+  const colorReply = await c.send("tem essa em azul?");
+  if (azul.length) {
+    assert.match(colorReply.toLowerCase(), /azul/);
+  } else {
+    assert.match(colorReply, /não achei/i);
+    assert.match(colorReply, /\*1\)\*/); // re-shows what exists
+  }
 });
 
 test("webhook duplicado (retry do Twilio): mesma mensagem não processa duas vezes", async (t) => {

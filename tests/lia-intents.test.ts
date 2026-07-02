@@ -6,7 +6,9 @@ import {
   isBareCep,
   looksLikeMedicine,
   parseBasketLines,
-  parseChoiceReply
+  parseChoiceReply,
+  parseRefinement,
+  wantsMoreOptions
 } from "../src/lib/lia-intents";
 
 function kind(text: string) {
@@ -189,6 +191,61 @@ test("regressões do review: 'o mesmo' e 'igual da última vez' repetem", () => 
   assert.equal(kind("igual da última vez"), "repeat_last");
 });
 
+test("escolhendo: 'acha outras' pede MAIS opções (não repete as mesmas)", () => {
+  assert.equal(wantsMoreOptions("acha outras, por favor."), true);
+  assert.equal(wantsMoreOptions("tem mais?"), true);
+  assert.equal(wantsMoreOptions("tem outras opções?"), true);
+  assert.equal(wantsMoreOptions("mostra outras"), true);
+  assert.equal(wantsMoreOptions("quero ver mais"), true);
+  assert.equal(wantsMoreOptions("nenhuma dessas, mostra outras"), true);
+  // "mais barato" é escolha da mais barata, não paginação
+  assert.equal(wantsMoreOptions("tem mais barato?"), false);
+  assert.equal(wantsMoreOptions("quero o 2"), false);
+  // review: ADICIONAR item não é paginação
+  assert.equal(wantsMoreOptions("manda mais 2 cocas"), false);
+  assert.equal(wantsMoreOptions("me manda mais um leite"), false);
+  assert.equal(wantsMoreOptions("tem mais alguma marca de café?"), false);
+  assert.equal(wantsMoreOptions("busca outro arroz"), false);
+});
+
+test("escolhendo: refinamento por cor/tamanho/peso", () => {
+  assert.deepEqual(parseRefinement("tem essa em azul?"), ["azul"]);
+  assert.deepEqual(parseRefinement("tem de 2kg?"), ["2kg"]);
+  assert.deepEqual(parseRefinement("tem de 2 kg?"), ["2kg"]);
+  assert.deepEqual(parseRefinement("quero uma maior"), ["grande"]);
+  assert.deepEqual(parseRefinement("tem menor?"), ["pequeno"]);
+  assert.deepEqual(parseRefinement("na cor rosa"), ["rosa"]);
+  // um produto novo NÃO é refinamento
+  assert.equal(parseRefinement("quero fralda azul"), null);
+  assert.equal(parseRefinement("adiciona 2 leites"), null);
+  assert.equal(parseRefinement("1"), null);
+  // review: artigos, feminino e decimais
+  assert.deepEqual(parseRefinement("quero a azul"), ["azul"]);
+  assert.deepEqual(parseRefinement("prefiro a pequena"), ["pequena"]);
+  assert.deepEqual(parseRefinement("a mesma mas grande"), ["grande"]);
+  assert.deepEqual(parseRefinement("tem de 1,5l?"), ["1,5l"]);
+  assert.deepEqual(parseRefinement("tem a de 2 litros?"), ["2l"]);
+  assert.deepEqual(parseRefinement("pode ser a de 2 litros"), ["2l"]);
+});
+
+test("attrMatchesItem: pesos/volumes casam com nomes reais (espaçado, decimal)", async () => {
+  const { attrMatchesItem } = await import("../src/lib/stores/types");
+  const item = (name: string) => ({ sku: "x", name, unitPrice: 1 });
+  assert.equal(attrMatchesItem("2kg", item("Arroz Tio João 2Kg")), true);
+  assert.equal(attrMatchesItem("2kg", item("Arroz Tio João 2 Kg")), true);
+  assert.equal(attrMatchesItem("2l", item("Coca-Cola Zero 2 Litros")), true);
+  assert.equal(attrMatchesItem("2l", item("Coca-Cola 2L")), true);
+  assert.equal(attrMatchesItem("1,5l", item("Guaraná Antarctica 1,5L")), true);
+  // "5l" NÃO pode casar com "1,5L" nem "2l" com "12L"
+  assert.equal(attrMatchesItem("5l", item("Guaraná Antarctica 1,5L")), false);
+  assert.equal(attrMatchesItem("2l", item("Galão 12L")), false);
+  assert.equal(attrMatchesItem("2kg", item("Ração Golden 15Kg")), false);
+  // cor/tamanho usam o matcher de palavras
+  assert.equal(attrMatchesItem("azul", item("Esponja Azul Scotch Brite")), true);
+  assert.equal(attrMatchesItem("azul", item("Esponja Verde Scotch Brite")), false);
+  assert.equal(attrMatchesItem("grande", item("Coleira Grande para Cães")), true);
+});
+
 test("escolha de opções: número, ordinal, qualquer, mais barato, marca, nenhuma", () => {
   const options = [
     { name: "Leite Integral Piracanjuba 1L", unitPrice: 5.99 },
@@ -210,5 +267,13 @@ test("escolha de opções: número, ordinal, qualquer, mais barato, marca, nenhu
   assert.deepEqual(parseChoiceReply("pode ser a 2", options), { type: "pick", index: 1 });
   assert.deepEqual(parseChoiceReply("quero o 2 por favor", options), { type: "pick", index: 1 });
   assert.deepEqual(parseChoiceReply("pode ser", options), { type: "any" });
+  assert.deepEqual(parseChoiceReply("qualquer um", options), { type: "any" });
   assert.equal(parseChoiceReply("2 cocas", options), null);
+  // review: "pode ser <atributo>" NÃO é carta branca — vira refinamento, nunca compra a 1
+  assert.equal(parseChoiceReply("pode ser a de 2 litros", options), null);
+  assert.equal(parseChoiceReply("pode ser em azul", options), null);
+  assert.equal(parseChoiceReply("pode ser a grande", options), null);
+  // review: "quero ver mais" não pode virar match de nome ("ver" não é token de produto)
+  assert.equal(parseChoiceReply("quero ver mais", options), null);
+  assert.equal(parseChoiceReply("acha outras", options), null);
 });
