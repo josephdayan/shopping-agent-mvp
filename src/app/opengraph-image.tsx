@@ -84,7 +84,7 @@ export default async function OgImage() {
           }}
         >
           <span style={{ color: "#28FEE5" }}>liadelivery.com.br</span>
-          <span style={{ color: "rgba(255,255,255,0.55)" }}>São Paulo · entrega no mesmo dia</span>
+          <span style={{ color: "rgba(255,255,255,0.55)" }}>Estado de São Paulo · entrega no mesmo dia</span>
         </div>
       </div>
     ),
