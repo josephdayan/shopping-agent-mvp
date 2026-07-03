@@ -1,4 +1,5 @@
 import { createHmac, randomUUID } from "crypto";
+import { geocode as sharedGeocode } from "@/lib/geo";
 import type {
   CourierConnector,
   CourierDispatch,
@@ -70,44 +71,11 @@ export const lalamoveCourier: CourierConnector = {
 };
 
 // --- Geocoding (Lalamove requires lat/lng on each stop; we only have CEP/address) ---
-const geoCache = new Map<string, { lat: number; lng: number }>();
-
+// Uses the shared geocoder (src/lib/geo.ts). Lalamove's real-quote path REQUIRES coords,
+// so a null here must throw — quoteAll already filters a rejected quote out.
 async function geocode(cep?: string, address?: string): Promise<{ lat: number; lng: number }> {
-  const cacheKey = (cep ?? address ?? "").trim();
-  if (!cacheKey) throw new Error("lalamove geocode: no cep/address");
-  const cached = geoCache.get(cacheKey);
-  if (cached) return cached;
-
-  let coords: { lat: number; lng: number } | null = null;
-  const digits = (cep ?? "").replace(/\D/g, "");
-  if (digits.length === 8) {
-    try {
-      const r = await fetch(`https://brasilapi.com.br/api/cep/v2/${digits}`, { cache: "no-store" });
-      if (r.ok) {
-        const d = (await r.json()) as { location?: { coordinates?: { latitude?: string | number; longitude?: string | number } } };
-        const c = d.location?.coordinates;
-        if (c?.latitude && c?.longitude) coords = { lat: Number(c.latitude), lng: Number(c.longitude) };
-      }
-    } catch {
-      /* fall through to Nominatim */
-    }
-  }
-  if (!coords && address) {
-    try {
-      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`, {
-        headers: { "User-Agent": "Lia/1.0 (delivery)" },
-        cache: "no-store"
-      });
-      if (r.ok) {
-        const arr = (await r.json()) as Array<{ lat?: string; lon?: string }>;
-        if (arr[0]?.lat && arr[0]?.lon) coords = { lat: Number(arr[0].lat), lng: Number(arr[0].lon) };
-      }
-    } catch {
-      /* no-op */
-    }
-  }
+  const coords = await sharedGeocode(cep, address);
   if (!coords) throw new Error("lalamove geocode: could not resolve coordinates");
-  geoCache.set(cacheKey, coords);
   return coords;
 }
 

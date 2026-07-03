@@ -11,6 +11,10 @@ export type CatalogItem = {
   unit?: string; // "un", "kg", "pacote", "L"
   category?: string;
   imageUrl?: string;
+  // Real deep link to the product page on the store, when the scrape captured it
+  // (Boticário has these; Carrefour SKUs are synthetic). Lets /ops open the exact
+  // item instead of a name search.
+  productUrl?: string;
 };
 
 export type StoreUnit = {
@@ -18,6 +22,11 @@ export type StoreUnit = {
   label: string; // e.g. "Carrefour Pinheiros"
   address: string;
   cep?: string;
+  // Coordenadas reais da loja (pino do Google Maps). Quando presentes, a escolha da
+  // unidade mais próxima usa distância geográfica de verdade (haversine) em vez da
+  // proximidade numérica de CEP. Opcional: sem elas, cai no proxy de CEP (nearest.ts).
+  lat?: number;
+  lng?: number;
 };
 
 export type StoreConnector = {
@@ -28,8 +37,9 @@ export type StoreConnector = {
   minOrder?: number;
   // Best catalog matches for one free-text basket line ("pasta de dente colgate").
   searchItems(query: string, limit?: number): Promise<CatalogItem[]>;
-  // Store unit nearest to the buyer's CEP (mock returns a sensible default).
-  nearestUnit(cep?: string): Promise<StoreUnit>;
+  // All clique-e-retire units of this store. Choosing the nearest to a CEP is done by
+  // the shared pickNearestUnit() helper (stores/nearest.ts), not per-connector.
+  listUnits(): StoreUnit[];
   // Counter-pickup instructions for the click-e-retire order (operator + courier).
   pickupInstructions(orderNumber: string): string;
   // Full catalog (used by the AI matcher; real stores return a fetched/cached list).
@@ -95,13 +105,40 @@ function tokenMatchesWord(token: string, word: string): boolean {
   // Prefix match only — "refrigerante" matches "refri", but "restauração" must NOT
   // match "ração" (it's a suffix), and "bombril" must NOT match "bom" (too short).
   if (token.length >= 4 && word.startsWith(token)) return true;
-  if (word.length >= 4 && token.startsWith(word)) return true;
+  // Reverse prefix covers inflections ("refrigerantes" ~ "refrigerante"), so cap the
+  // length gap — otherwise "galactica" matches the name word "Gala" and gibberish
+  // requests surface random products instead of an honest "não achei".
+  if (word.length >= 4 && token.startsWith(word) && token.length - word.length <= 3) return true;
   return false;
 }
 
 // The meaningful product tokens in a request (greetings/fillers removed).
 export function queryTokens(query: string): string[] {
   return words(query).filter((token) => token.length > 1 && !STOPWORDS.has(token));
+}
+
+// Size-normalized form of a name/attr so "2 Litros", "2L", "2 lt" and "2l" all compare
+// equal, and decimals survive ("1,5L" -> "1,5l"). Used by attrMatchesItem only.
+function normSize(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/litros?|\blts?\b/g, "l")
+    .replace(/(\d)\s+(?=(kg|g|ml|l)\b)/g, "$1");
+}
+
+// Does a refinement attribute ("azul", "grande", "2kg", "1,5l") ACTUALLY apply to this
+// item? Sizes/weights use a digit-boundary substring on the size-normalized name (so
+// "5l" does NOT match "1,5l"); word attributes use the normal catalog scorer.
+export function attrMatchesItem(attr: string, item: CatalogItem): boolean {
+  const a = normSize(attr);
+  if (/\d/.test(a)) {
+    const hay = normSize(`${item.name} ${item.brand ?? ""}`);
+    const esc = a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^0-9,.])${esc}($|[^0-9a-z])`).test(hay);
+  }
+  return scoreCatalogMatch(a, item) > 0;
 }
 
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {

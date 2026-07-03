@@ -57,7 +57,8 @@ export async function GET(request: Request) {
     category: r.item.category,
     store: r.store,
     storeLabel: labelOf[r.store] ?? r.store,
-    imageUrl: r.item.imageUrl ?? null
+    imageUrl: r.item.imageUrl ?? null,
+    productUrl: r.item.productUrl ?? null
   }));
 
   return NextResponse.json({

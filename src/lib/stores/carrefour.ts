@@ -11,31 +11,45 @@ import { CARREFOUR_CATALOG } from "./carrefour-catalog";
 const SEED_CATALOG: CatalogItem[] = CARREFOUR_CATALOG;
 
 // Real Carrefour Hipermercado units in the São Paulo metro (these are the stores that
-// do Clique e Retire). Names/addresses/CEPs copied from carrefour.com.br/localizador-de-lojas
-// on 2026-06-30. `nearestUnit` picks the one whose CEP is numerically closest to the
-// customer's (a good proxy in SP, where CEP ranges map to regions). Add rows here as
-// coverage grows; swap to true geo-distance later if needed.
+// do Clique e Retire). Names/addresses/CEPs from carrefour.com.br/localizador-de-lojas
+// (2026-06-30); lat/lng geocoded 2026-07-02 (Grande SP expansion) so pickNearestUnit
+// (stores/nearest.ts) uses real distance. Add Grande SP rows here as coverage grows.
 const UNITS: StoreUnit[] = [
-  { id: "crf-washington-luis", label: "Carrefour Hiper Washington Luís", address: "Av. Washington Luiz, 1415 - São Paulo - SP", cep: "04662-002" },
-  { id: "crf-imigrantes", label: "Carrefour Hiper Imigrantes", address: "Rua Ribeiro Lacerda, 940 - São Paulo - SP", cep: "04150-000" },
-  { id: "crf-brooklin", label: "Carrefour Hiper Brooklin", address: "Av. Santo Amaro, 4815 - São Paulo - SP", cep: "04702-000" }, // CEP corrigido (o site trazia 47001-000, da BA)
-  { id: "crf-pinheiros", label: "Carrefour Hiper Pinheiros", address: "Av. das Nações Unidas, 15187 - São Paulo - SP", cep: "04794-000" },
-  { id: "crf-giovanni-gronchi", label: "Carrefour Hiper Giovanni Gronchi", address: "Av. Alberto Augusto Alves, 50 - São Paulo - SP", cep: "05724-030" },
-  { id: "crf-butanta", label: "Carrefour Hiper Butantã", address: "Av. Prof. Francisco Morato, 2718 - São Paulo - SP", cep: "05512-300" },
-  { id: "crf-raposo-tavares", label: "Carrefour Hiper Raposo Tavares", address: "Rod. Raposo Tavares, s/n - São Paulo - SP", cep: "05577-901" },
-  { id: "crf-aricanduva", label: "Carrefour Hiper Aricanduva", address: "Av. Rio das Pedras, 555 - São Paulo - SP", cep: "03453-000" },
-  { id: "crf-analia-franco", label: "Carrefour Hiper Anália Franco", address: "Av. Regente Feijó, 1759 - São Paulo - SP", cep: "03550-100" },
-  { id: "crf-limao", label: "Carrefour Hiper Limão", address: "Av. Otaviano Alves de Lima, 1824 - São Paulo - SP", cep: "02701-000" },
-  { id: "crf-tambore", label: "Carrefour Hiper Tamboré", address: "Av. Piracema, 669 - Barueri - SP", cep: "06460-930" },
-  { id: "crf-taboao", label: "Carrefour Hiper Taboão da Serra", address: "Rod. Régis Bittencourt, 1835 - Taboão da Serra - SP", cep: "06768-200" }
+  { id: "crf-washington-luis", label: "Carrefour Hiper Washington Luís", address: "Av. Washington Luiz, 1415 - São Paulo - SP", cep: "04662-002", lat: -23.6345, lng: -46.66828 },
+  { id: "crf-imigrantes", label: "Carrefour Hiper Imigrantes", address: "Rua Ribeiro Lacerda, 940 - São Paulo - SP", cep: "04150-000", lat: -23.62079, lng: -46.61952 },
+  { id: "crf-brooklin", label: "Carrefour Hiper Brooklin", address: "Av. Santo Amaro, 4815 - São Paulo - SP", cep: "04702-000", lat: -23.62524, lng: -46.68638 }, // CEP corrigido (o site trazia 47001-000, da BA)
+  { id: "crf-pinheiros", label: "Carrefour Hiper Pinheiros", address: "Av. das Nações Unidas, 15187 - São Paulo - SP", cep: "04794-000", lat: -23.62863, lng: -46.71202 },
+  { id: "crf-giovanni-gronchi", label: "Carrefour Hiper Giovanni Gronchi", address: "Av. Alberto Augusto Alves, 50 - São Paulo - SP", cep: "05724-030", lat: -23.64202, lng: -46.73446 },
+  { id: "crf-butanta", label: "Carrefour Hiper Butantã", address: "Av. Prof. Francisco Morato, 2718 - São Paulo - SP", cep: "05512-300", lat: -23.58662, lng: -46.72499 },
+  { id: "crf-raposo-tavares", label: "Carrefour Hiper Raposo Tavares", address: "Rod. Raposo Tavares, s/n - São Paulo - SP", cep: "05577-901", lat: -23.59175, lng: -46.80054 },
+  { id: "crf-aricanduva", label: "Carrefour Hiper Aricanduva", address: "Av. Rio das Pedras, 555 - São Paulo - SP", cep: "03453-000", lat: -23.55956, lng: -46.51593 },
+  { id: "crf-analia-franco", label: "Carrefour Hiper Anália Franco", address: "Av. Regente Feijó, 1759 - São Paulo - SP", cep: "03550-100", lat: -23.56032, lng: -46.56009 },
+  { id: "crf-limao", label: "Carrefour Hiper Limão", address: "Av. Otaviano Alves de Lima, 1824 - São Paulo - SP", cep: "02701-000", lat: -23.50761, lng: -46.71001 },
+  { id: "crf-tambore", label: "Carrefour Hiper Tamboré", address: "Av. Piracema, 669 - Barueri - SP", cep: "06460-930", lat: -23.50469, lng: -46.83449 },
+  { id: "crf-taboao", label: "Carrefour Hiper Taboão da Serra", address: "Rod. Régis Bittencourt, 1835 - Taboão da Serra - SP", cep: "06768-200", lat: -23.62112, lng: -46.78751 },
+  // — Grande SP (pesquisa web 2026-07-02, confiança média): CONFIRMAR clique-e-retire +
+  //   retirada por terceiro AO VIVO antes do primeiro pedido real em cada uma.
+  { id: "crf-osasco", label: "Carrefour Hiper Osasco", address: "Av. dos Autonomistas, 1542 - Osasco - SP", cep: "06020-015", lat: -23.54686, lng: -46.76091 },
+  { id: "crf-guarulhos-dutra", label: "Carrefour Hiper Guarulhos Dutra", address: "Av. Paulo Faccini, 240 - Guarulhos - SP", cep: "07111-000", lat: -23.45406, lng: -46.53432 },
+  { id: "crf-guarulhos-vila-rio", label: "Carrefour Hiper Guarulhos Vila Rio", address: "Av. Benjamin Harris Hunnicutt, 361 - Guarulhos - SP", cep: "07124-000", lat: -23.42974, lng: -46.53793 },
+  { id: "crf-sbc", label: "Carrefour Hiper São Bernardo", address: "Av. Senador Vergueiro, 2000 - São Bernardo do Campo - SP", cep: "09750-001", lat: -23.67632, lng: -46.55469 },
+  { id: "crf-santo-andre", label: "Carrefour Hiper Santo André", address: "Av. Pedro Américo - Santo André - SP", cep: "09110-100", lat: -23.67027, lng: -46.49892 },
+  // — Interior SP (pesquisa web 2026-07-02, confiança média): CONFIRMAR que a unidade
+  //   segue aberta + clique-e-retire + retirada por terceiro antes do 1º pedido real.
+  { id: "crf-campinas-dom-pedro", label: "Carrefour Hiper Campinas Dom Pedro", address: "Rod. Dom Pedro I, km 127, Campinas - SP", cep: "13097-670", lat: -22.85329, lng: -47.02742 },
+  { id: "crf-campinas-valinhos", label: "Carrefour Hiper Campinas Valinhos", address: "Av. Eng. Antônio Francisco de Paula Souza, 3900, Jd. Anton von Zuben, Campinas - SP", cep: "13044-370", lat: -22.947, lng: -47.037 },
+  { id: "crf-jundiai", label: "Carrefour Hiper Jundiaí", address: "Av. Nove de Julho, 3600, Anhangabaú, Jundiaí - SP", cep: "13208-056", lat: -23.18837, lng: -46.89095 },
+  { id: "crf-sorocaba-norte", label: "Carrefour Hiper Sorocaba Norte", address: "Av. Ipanema, 376, Terra Vermelha, Sorocaba - SP", cep: "18065-100", lat: -23.48648, lng: -47.47117 },
+  { id: "crf-sorocaba-esplanada", label: "Carrefour Hiper Sorocaba Campolim", address: "Av. Prof. Izoraida Marques Peres, 401, Parque Campolim, Sorocaba - SP", cep: "18052-780", lat: -23.53361, lng: -47.46505 },
+  { id: "crf-santos-praiamar", label: "Carrefour Hiper Santos Praiamar", address: "Rua Alexandre Martins, 80, Aparecida, Santos - SP", cep: "11025-905", lat: -23.97746, lng: -46.30933 },
+  { id: "crf-sao-vicente", label: "Carrefour Hiper São Vicente", address: "Av. Prefeito José Monteiro, 1045, Jd. Independência, São Vicente - SP", cep: "11380-900", lat: -23.955, lng: -46.385 },
+  { id: "crf-sjc-matarazzo", label: "Carrefour Hiper São José dos Campos", address: "Av. Deputado Benedito Matarazzo, 5701, São José dos Campos - SP", cep: "12215-900", lat: -23.22309, lng: -45.90679 },
+  { id: "crf-taubate", label: "Carrefour Hiper Taubaté", address: "Av. Charles Schnneider, 1201, Barranco, Taubaté - SP", cep: "12041-078", lat: -23.04943, lng: -45.56675 },
+  { id: "crf-ribeirao-shopping", label: "Carrefour Hiper Ribeirão Preto", address: "Av. Cel. Fernando Ferreira Leite, 1540, Jd. Califórnia, Ribeirão Preto - SP", cep: "14026-900", lat: -21.21188, lng: -47.81579 },
+  { id: "crf-piracicaba", label: "Carrefour Hiper Piracicaba", address: "Av. Rui Teixeira Mendes, 300, Nova Piracicaba, Piracicaba - SP", cep: "13403-130", lat: -22.72437, lng: -47.67048 },
+  { id: "crf-rio-preto-shopping", label: "Carrefour Hiper São José do Rio Preto", address: "Av. Brigadeiro Faria Lima, 6363, São José do Rio Preto - SP", cep: "15090-900", lat: -20.83515, lng: -49.39866 },
+  { id: "crf-prudente-prudenshopping", label: "Carrefour Hiper Presidente Prudente", address: "Av. Manoel Goulart, 2400, Jd. das Rosas, Presidente Prudente - SP", cep: "19060-000", lat: -22.11929, lng: -51.41452 }
 ];
-
-// CEP -> comparable 8-digit number (zero-padded). Returns null if unusable.
-function cepToNumber(cep?: string | null): number | null {
-  const digits = (cep ?? "").replace(/\D/g, "");
-  if (digits.length < 5) return null;
-  return Number(digits.padEnd(8, "0").slice(0, 8));
-}
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
@@ -189,22 +203,8 @@ export const carrefourStore: StoreConnector = {
     return SEED_CATALOG;
   },
 
-  async nearestUnit(cep?: string): Promise<StoreUnit> {
-    const target = cepToNumber(cep);
-    if (target == null) return UNITS[0];
-    // Pick the unit whose CEP is numerically closest to the customer's.
-    let best = UNITS[0];
-    let bestDiff = Number.POSITIVE_INFINITY;
-    for (const unit of UNITS) {
-      const unitNum = cepToNumber(unit.cep);
-      if (unitNum == null) continue;
-      const diff = Math.abs(unitNum - target);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        best = unit;
-      }
-    }
-    return best;
+  listUnits(): StoreUnit[] {
+    return UNITS;
   },
 
   pickupInstructions(orderNumber: string): string {

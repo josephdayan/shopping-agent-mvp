@@ -61,6 +61,17 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   e lendo o DOM (a API VTEX/legada dá 403/503 mesmo same-origin; só páginas renderizadas passam,
   por isso o actor Apify da comunidade falha — anti-bot Akamai). Pra regenerar: re-raspar as
   categorias e rodar o gerador.
+- **Catálogo Boticário:** **1.409 itens reais** (nome + marca + preço + **foto** + **URL real
+  do produto**) em `src/lib/stores/boticario-catalog.ts` — perfumaria, maquiagem, corpo & banho,
+  cabelos. Vertical de **beleza** (presente / "acabou minha base"), margem alta, sem sobrepor
+  mercado/pet. Boticário faz "Entrega Rápida" **e** "Retire em loja" (clique-e-retire). Raspado
+  de `boticario.com.br` em 2026-07-01 (SSR: fetch+parse `?page=N`; server-side puro dá 403).
+  `productUrl` = deep-link real (o `/ops` abre o item exato). **Fotos (98%, Cloudinary)**
+  raspadas do DOM renderizado (navigate+extract síncrono → localStorage, porque a Boticário
+  limita fetch em massa) e **forçadas pra JPG** (`f_jpg`) porque a origem é AVIF (WhatsApp
+  rejeita); Cloudinary é permissivo → sem re-host (diferente do Akamai da Petz). Lojas = 10
+  shoppings reais de SP (confirmar a unidade + política de retirada por terceiro antes do
+  piloto). Liga/desliga por `LIA_ENABLE_BOTICARIO`.
 - **Catálogo Petz:** **2.822 itens reais** (nome + preço + foto) em `src/lib/stores/petz-catalog.ts`,
   raspados de `petz.com.br` (48 subcategorias, 6 deptos; sem remédio/antipulga — ANVISA). Mesmo
   método DOM (Petz também é VTEX+Akamai). **Imagens re-hospedadas** em `/api/petz-image/<id>`
@@ -73,6 +84,29 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
 - **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
   pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
+- **Entregabilidade em 2 camadas (dado, não código).** O cérebro NUNCA aceita um pedido pago
+  que a operação não entrega. Duas travas, ambas gravam `WaitlistLead` (dedupe phone+cep, `hits`,
+  `reason`) e o `/ops` vira **mapa de demanda** (cidade → nº de pedidos, tag `fora`/`longe`):
+  - **Cobertura por cidade** (`src/lib/coverage.ts`, puro+testado): a cidade (ViaCEP; fallback
+    prefixo de CEP) está na área? Fora → `copy.outsideCoverage`, lead `outside_coverage`.
+    **Presets** (`LIA_COVERAGE_PRESET`): `capital` (default), `grande-sp` (39 municípios da RMSP)
+    e `estado-sp` (**SP inteiro por UF** — quem decide entregabilidade é a guarda de frete).
+    Sobrepõe campo-a-campo: `LIA_COVERAGE_CITIES` / `_UFS` / `_CEP_PREFIXES` / `_LABEL` / `_OFF`.
+  - **Guarda de frete** (`src/lib/freight-guard.ts`, puro+testado): cidade coberta, mas o endereço
+    pode estar longe de QUALQUER loja (metrópole é grande). `pickNearestUnit(allUnits(), cep)` dá a
+    distância real (haversine); > `LIA_MAX_DELIVERY_KM` (12) → `copy.tooFarForDelivery`, lead `too_far`.
+    Guarda secundária de fee real (`LIA_MAX_DELIVERY_FEE` 35, só cotação real) no `quoteBasket`.
+    Distância é primária (mock é fake-barato). `LIA_FREIGHT_GUARD_OFF` = kill-switch.
+- **Geo compartilhado** (`src/lib/geo.ts`): `haversineKm` + `geocode` (BrasilAPI→Nominatim, timeout,
+  nunca-lança, cache; `LIA_GEOCODE_TIMEOUT_MS`). `StoreUnit` tem `lat/lng`; `nearestUnit` virou
+  `listUnits()` + `pickNearestUnit` (stores/nearest.ts): haversine quando há coords, senão proxy
+  numérico de CEP. **107 unidades geocodadas** (2026-07-02): capital (37) + Grande SP (16, incl.
+  Alphaville) + interior (54: Campinas, Santos/SV/PG, SJC/Taubaté, Sorocaba, Ribeirão, Piracicaba,
+  Bauru*, SJRP, Jundiaí, Franca*, Marília*, Araçatuba*, Prudente, Araraquara, S.Carlos, Limeira,
+  Americana/SBO, Indaiatuba, Rio Claro, Mogi Guaçu — *sem hiper Carrefour: pet/beleza atendem,
+  mercado recusa educado). Unidades novas = pesquisa web, confiança média: CONFIRMAR aberta +
+  clique-e-retire + retirada por terceiro antes do 1º pedido real em cada. Somar unidade = 1 linha
+  com lat/lng. Ligar tudo = `LIA_COVERAGE_PRESET=estado-sp` na Vercel (sem deploy).
 
 ### Riscos honestos a validar num piloto real
 1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:
@@ -96,12 +130,20 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 | Pedido (cesta) | `prisma DeliveryOrder` | itens (Json), loja, motoboy, taxas, ciclo de status |
 | Lojas (plugável) | `src/lib/stores/` | `StoreConnector` + Carrefour (ao vivo Apify + seed). **Somar loja = 1 arquivo** |
 | Motoboys (plugável) | `src/lib/couriers/` | `CourierConnector` + Uber Direct (cota + despacha; real inerte até credenciais) |
-| Pix | `src/lib/payments/mercadopago.ts` | createPix + webhook `/api/mercadopago/webhook` (mock copia-e-cola até token) |
+| Pix + cartão | `src/lib/payments/mercadopago.ts` | createPix (copia-e-cola) + Checkout Pro (link de cartão, taxa da maquininha repassada) + webhook `/api/mercadopago/webhook` (mock até token) |
 | Busca por IA | `ai.ts` `extractShoppingList` | limpa o pedido (sinônimos, saudação, remédio, qty); fallback determinístico |
-| Cérebro | `src/lib/delivery-service.ts` | máquina de conversa (onboarding CEP → cesta → cotação → Pix → fila) + ciclo do pedido + notificações + "repete o de sempre" |
-| Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | fila de pagos → nº do pedido Carrefour → despachar motoboy → entregue/cancelar |
+| Intenções (NLU puro) | `src/lib/lia-intents.ts` | `detectIntent` (status/paguei/cancelar/trocar endereço/"tira X"/"troca X por Y"/pagar/pix/cartão/repete…), parse de resposta a opções, guarda determinística de remédio. Sem DB — unit-testado |
+| Copy | `src/lib/lia-copy.ts` | TODAS as mensagens enviadas ao cliente num lugar só (tom/emoji/formatação consistentes) |
+| Cérebro | `src/lib/delivery-service.ts` | máquina de conversa (onboarding CEP → cesta → cotação → Pix/cartão → fila) + ciclo do pedido + notificações + dedupe de retry do Twilio por MessageSid |
+| Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | fila de pagos → nº do pedido → despachar motoboy → entregue/cancelar; caixa "avisar cliente" (substituição/atraso); destaque vermelho quando o cliente pediu cancelamento |
+| Testes/evals | `tests/` | `npm test` = unitários (intents/copy, sem DB) + evals E2E de conversa (DB real + mocks, telefones de teste auto-limpos) |
 
 **Ciclo de status:** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered` (+ canceled/refunded).
+
+Decisões de comportamento do cérebro (não são bugs):
+- **"paguei" só aprova no sandbox/mock.** Com Pix real, a Lia consulta o status no Mercado Pago antes de acreditar; cartão nunca aprova por texto (o webhook decide).
+- **"cancelar" é contextual:** cesta em montagem → limpa; aguardando pagamento → cancela o pedido; já pago → grava `⚠️ CLIENTE PEDIU CANCELAMENTO` nas notes (destaque no /ops; estorno é manual); despachado → explica que não dá mais.
+- Endereço é trocável a qualquer momento ("trocar endereço" ou mandar um CEP puro).
 
 ### Env pra virar real (cada um tem fallback sandbox)
 - `APIFY_API_TOKEN` (+ `APIFY_CARREFOUR_ACTOR`, default `gio21~carrefour-br-scraper`) — catálogo real

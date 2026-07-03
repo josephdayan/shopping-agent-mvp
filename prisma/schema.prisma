@@ -195,6 +195,27 @@ model SearchCache {
   @@index([updatedAt])
 }
 
+// Demand from outside the current delivery area. When a customer sends a CEP we don't
+// cover yet, the brain saves the lead here instead of taking a paid order it can't
+// fulfil — and the /ops "lista de espera" turns these into a demand map (expand where
+// people are already asking). Deduped by (phone, cep); hits counts repeat asks.
+model WaitlistLead {
+  id        String   @id @default(cuid())
+  phone     String
+  cep       String
+  city      String?
+  uf        String?
+  // Por que virou lead: "outside_coverage" (cidade não atendida) ou "too_far" (cidade
+  // atendida, mas longe de qualquer loja). Ajuda o /ops a priorizar o que abrir.
+  reason    String   @default("outside_coverage")
+  hits      Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([phone, cep])
+  @@index([updatedAt])
+}
+
 // Re-hosted Petz product images. Petz self-hosts photos behind Akamai, so a server fetch
 // (Twilio, our app) 403s — WhatsApp can't load them. The browser (which passes Akamai's
 // JS sensor) fetches + resizes each image and POSTs it here; GET /api/petz-image/<id>

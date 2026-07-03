@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { opsCancelRefund, opsDispatchCourier, opsMarkBought, opsMarkDelivered } from "@/lib/delivery-service";
+import { opsCancelRefund, opsDispatchCourier, opsMarkBought, opsMarkDelivered, opsNotifyCustomer } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ function authed(request: Request) {
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   if (!authed(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const body = (await request.json().catch(() => ({}))) as { action?: string; storeOrderNumber?: string };
+  const body = (await request.json().catch(() => ({}))) as { action?: string; storeOrderNumber?: string; text?: string };
   const id = params.id;
   try {
     switch (body.action) {
@@ -32,6 +32,13 @@ export async function POST(request: Request, { params }: { params: { id: string 
       case "cancel":
         await opsCancelRefund(id);
         break;
+      case "notify": {
+        const text = String(body.text ?? "").trim();
+        // Client-input problem, not a server failure — answer 400, not 500.
+        if (!text) return NextResponse.json({ error: "empty text" }, { status: 400 });
+        await opsNotifyCustomer(id, text);
+        break;
+      }
       default:
         return NextResponse.json({ error: "unknown action" }, { status: 400 });
     }
