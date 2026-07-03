@@ -4,7 +4,15 @@ const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        body: ["var(--font-instrument)", "system-ui", "sans-serif"]
+      },
       colors: {
+        poster: "rgb(var(--c-poster) / <alpha-value>)",
+        tinta: "rgb(var(--c-tinta) / <alpha-value>)",
+        papel: "rgb(var(--c-papel) / <alpha-value>)",
+        acento: "rgb(var(--c-acento) / <alpha-value>)",
         ink: "#0A2E2B",
         mist: "#E6F5F1",
         leaf: "#28FEE5",

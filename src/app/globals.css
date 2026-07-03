@@ -6,24 +6,103 @@
 
 :root {
   color-scheme: light;
-  background: #e6f5f1;
+  /* paleta Petróleo */
+  --c-poster: 11 42 51;
+  --c-tinta: 11 33 40;
+  --c-papel: 243 242 237;
+  --c-acento: 45 212 191;
+  background: rgb(var(--c-papel));
 }
 
 ::selection {
-  background: #28fee5;
-  color: #0f3d3a;
+  background: rgb(var(--c-acento));
+  color: rgb(var(--c-poster));
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.bubble {
+  opacity: 0;
+  animation: bubble-in 0.45s ease-out forwards;
+}
+
+/* ——— landing ——— */
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 48s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.caret {
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .bubble {
+    animation: none;
+    opacity: 1;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .caret {
+    animation: none;
+  }
+}
+
 body {
   margin: 0;
-  color: #0a2e2b;
-  background:
-    linear-gradient(180deg, rgba(230, 245, 241, 0.97), rgba(255, 255, 255, 0.94) 420px),
-    #e6f5f1;
+  color: rgb(var(--c-tinta));
+  background: rgb(var(--c-papel));
   font-family: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
