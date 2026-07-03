@@ -1,6 +1,6 @@
 # Lia — Status do Projeto
 
-_Última atualização: 2026-07-01. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-07-02. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md)._
 
 ---
@@ -54,7 +54,9 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Testes/evals** | ✅ `npm test` — unitários (NLU + copy) + evals de conversa E2E |
 | **Motoboy (Uber Direct)** | ✅ **REAL** — OAuth + cotação testados com as credenciais |
-| **Lojas Carrefour** | ✅ 12 unidades Hiper reais de SP + escolha da mais próxima por CEP |
+| **Cobertura: TODO o estado de SP** | ✅ **no ar** (`LIA_COVERAGE_PRESET=estado-sp` na Vercel). Trava dupla: cidade coberta **+** loja a ≤12km. CEP fora → recusa educada + **lead no mapa de demanda** do /ops |
+| **Lojas (107 unidades reais)** | ✅ Carrefour Hiper + Petz + Boticário: capital (37) + Grande SP (16) + **interior (54)** — Campinas, Santos, Ribeirão, SJC, Sorocaba, Jundiaí, Piracicaba, SJRP, Prudente etc. Escolha da mais próxima por **distância geográfica real** (haversine, `stores/nearest.ts`) |
+| **Landing + domínio** | ✅ **liadelivery.com.br no ar** (HTTPS) — site novo (pôster Petróleo), domínio **verificado na Meta** |
 | **Opções pra escolher** | ✅ até 3 opções (lista numerada) quando o item é ambíguo |
 | **Pedido mínimo** | ✅ por loja (Carrefour = R$30); avisa o cliente p/ completar |
 | **Painel do operador `/ops`** | ✅ fila → comprar → despachar → entregue, com endereço da loja + link "ver no Carrefour" |
@@ -74,9 +76,14 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
   começo (CPF pré-cadastrado), não o aleatório do Uber.
 
 ### 🟡 Pra operar de verdade
+- **Verificação do negócio na Meta** (WhatsApp oficial): domínio já verificado; falta a
+  verificação da empresa (o contato do CNPJ é um fixo sem acesso — resolver via e-mail do
+  domínio `contato@liadelivery.com.br`, já configurado no ImprovMX). Aprovada → migração
+  Cloud API (código pronto, env-flip: `WHATSAPP_PROVIDER=meta`).
 - **Mercado Pago PJ + nota fiscal** (hoje o Pix está no nome pessoal).
-- **Lojas Petz reais** (endereço + mínimo + política de retirada por terceiro) antes de um
-  pedido Petz real — hoje são placeholder.
+- **Confirmar as 70 lojas novas ao vivo** (Grande SP + interior são pesquisa web, confiança
+  média): aberta + clique-e-retire + retirada por terceiro, antes do 1º pedido em cada
+  (marcadas no código). Cotação real do Uber Direct num CEP do interior antes de pedir lá.
 
 ### 🟢 Pra escalar (pós-piloto)
 - **Mais lojas** (a largura = moat): **Cobasi** (mesma receita, já confirmado raspável),
@@ -128,6 +135,7 @@ O documento do **cliente nunca é necessário** — quem compra na loja é sempr
 | `MERCADO_PAGO_ACCESS_TOKEN` + webhook | `MERCADO_PAGO_WEBHOOK_SECRET` (assinatura é só aviso) |
 | `UBER_DIRECT_CUSTOMER_ID/CLIENT_ID/CLIENT_SECRET` | `LIA_PETZ_MIN_ORDER`, `LIA_CARREFOUR_MIN_ORDER` (default 30) |
 | `OPENAI_API_KEY`, `DATABASE_URL`, `API_TOKEN`, Twilio | Scraper pago (estoque ao vivo) — futuro |
+| `LIA_COVERAGE_PRESET=estado-sp` (SP inteiro) | `LIA_MAX_DELIVERY_KM` (12), `LIA_MAX_DELIVERY_FEE` (35) — ajuste da guarda |
 
 > 🔒 Recomendado: **regenerar** o Access Token do MP e o Client Secret da Uber (passaram no
 > chat) e atualizar no Vercel depois dos testes.
@@ -143,6 +151,9 @@ O documento do **cliente nunca é necessário** — quem compra na loja é sempr
 | Copy — todas as mensagens enviadas ao cliente | `src/lib/lia-copy.ts` |
 | Testes/evals de conversa | `tests/` (`npm test`) |
 | Lojas (plugável) | `src/lib/stores/` (`carrefour.ts`, `petz.ts`, `*-catalog.ts`, `index.ts`) |
+| Cobertura + entregabilidade | `src/lib/coverage.ts` (presets/UF) + `src/lib/freight-guard.ts` (guarda km/fee) + `WaitlistLead` (mapa de demanda no /ops) |
+| Geo + loja mais próxima | `src/lib/geo.ts` (haversine + geocode) + `src/lib/stores/nearest.ts` (`pickNearestUnit`) |
+| Landing (site público) | `src/app/page.tsx` + `src/components/landing/` (demo de chat em `/chat`) |
 | Motoboys (plugável) | `src/lib/couriers/` (Uber Direct) |
 | Pix | `src/lib/payments/mercadopago.ts` + `/api/mercadopago/webhook` |
 | Busca por IA | `src/lib/adapters/ai.ts` (`extractShoppingList`) |

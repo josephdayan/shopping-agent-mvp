@@ -20,7 +20,7 @@ const instrument = Instrument_Sans({
 export const metadata: Metadata = {
   title: "Lia — compras do dia a dia sem sair do WhatsApp",
   description:
-    "Lista, preço fechado, Pix e entrega no mesmo dia — tudo sem sair do WhatsApp. A Lia resolve suas compras do dia a dia em São Paulo."
+    "Lista, preço fechado, Pix e entrega no mesmo dia — tudo sem sair do WhatsApp. A Lia resolve suas compras do dia a dia no estado de São Paulo."
 };
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_LIA_WHATSAPP_NUMBER ?? "14155238886";
@@ -167,7 +167,7 @@ const BUBBLES_RIGHT = [
 const FAQ = [
   {
     q: "Onde a Lia entrega?",
-    a: "Na cidade de São Paulo, com motoboy parceiro, no mesmo dia."
+    a: "Na capital, na Grande São Paulo e nas principais cidades do interior — Campinas, Santos, Ribeirão Preto, São José dos Campos, Sorocaba e mais, com motoboy parceiro no mesmo dia. Manda seu CEP no WhatsApp que eu confirmo na hora se já chego aí. 📍"
   },
   {
     q: "Quanto custa?",
@@ -237,7 +237,7 @@ export default function Home() {
             <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/75 lg:text-[18px]">
               Você manda a lista, a Lia responde com o preço fechado e você paga no
               Pix{"\u00A0"}— <strong className="font-semibold text-white">tudo <span className="whitespace-nowrap">sem sair do WhatsApp</span></strong>. Motoboy
-              entrega hoje, em São Paulo.
+              entrega hoje, no estado de São Paulo.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
               <a
@@ -261,7 +261,7 @@ export default function Home() {
             <PhoneMock />
           </div>
           <p className="border-t border-white/15 pt-4 text-[15px] text-white/55 lg:col-span-12">
-            <span className="whitespace-nowrap">São Paulo · entrega no mesmo dia</span> ·{" "}
+            <span className="whitespace-nowrap">Estado de São Paulo · entrega no mesmo dia</span> ·{" "}
             <span className="whitespace-nowrap">tudo pelo WhatsApp</span>
           </p>
         </div>
