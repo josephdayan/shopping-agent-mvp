@@ -24,6 +24,7 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
 const cleanEnv = {
   LIA_COVERAGE_PRESET: undefined,
   LIA_COVERAGE_CITIES: undefined,
+  LIA_COVERAGE_UFS: undefined,
   LIA_COVERAGE_CEP_PREFIXES: undefined,
   LIA_COVERAGE_OFF: undefined,
   LIA_COVERAGE_LABEL: undefined
@@ -139,6 +140,35 @@ test("env LIA_COVERAGE_CITIES sobrepõe o preset", () => {
   withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "grande-sp", LIA_COVERAGE_CITIES: "São Paulo" }, () => {
     assert.equal(checkCoverage({ city: "Osasco" }).covered, false); // preset ignorado
     assert.equal(checkCoverage({ city: "São Paulo" }).covered, true);
+  });
+});
+
+test("preset estado-sp: qualquer cidade de SP cobre, outros estados não", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "estado-sp" }, () => {
+    for (const c of ["São Paulo", "Campinas", "Santos", "Ribeirão Preto", "Bauru", "Presidente Prudente"]) {
+      assert.equal(checkCoverage({ city: c, uf: "SP" }).covered, true, `deveria cobrir ${c}/SP`);
+    }
+    assert.equal(checkCoverage({ city: "Rio de Janeiro", uf: "RJ" }).covered, false);
+    assert.equal(checkCoverage({ city: "Recife", uf: "PE" }).covered, false);
+    assert.equal(coverageLabel(), "o estado de São Paulo");
+  });
+});
+
+test("preset estado-sp: prefixos 0 e 1 quando ViaCEP cai", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "estado-sp" }, () => {
+    assert.equal(checkCoverage({ cep: "13010-000" }).covered, true); // Campinas
+    assert.equal(checkCoverage({ cep: "11010-000" }).covered, true); // Santos
+    assert.equal(checkCoverage({ cep: "01310-100" }).covered, true); // capital
+    assert.equal(checkCoverage({ cep: "20040-000" }).covered, false); // Rio (2xxxx)
+  });
+});
+
+test("LIA_COVERAGE_UFS cobre por UF mesmo sem preset", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_UFS: "SP" }, () => {
+    assert.equal(checkCoverage({ city: "Campinas", uf: "SP" }).covered, true);
+    assert.equal(checkCoverage({ city: "Rio de Janeiro", uf: "RJ" }).covered, false);
+    // cidade da lista default (capital) continua cobrindo por cidade
+    assert.equal(checkCoverage({ city: "São Paulo", uf: "SP" }).covered, true);
   });
 });
 

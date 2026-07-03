@@ -33,7 +33,22 @@ const UNITS: StoreUnit[] = [
   { id: "crf-guarulhos-dutra", label: "Carrefour Hiper Guarulhos Dutra", address: "Av. Paulo Faccini, 240 - Guarulhos - SP", cep: "07111-000", lat: -23.45406, lng: -46.53432 },
   { id: "crf-guarulhos-vila-rio", label: "Carrefour Hiper Guarulhos Vila Rio", address: "Av. Benjamin Harris Hunnicutt, 361 - Guarulhos - SP", cep: "07124-000", lat: -23.42974, lng: -46.53793 },
   { id: "crf-sbc", label: "Carrefour Hiper São Bernardo", address: "Av. Senador Vergueiro, 2000 - São Bernardo do Campo - SP", cep: "09750-001", lat: -23.67632, lng: -46.55469 },
-  { id: "crf-santo-andre", label: "Carrefour Hiper Santo André", address: "Av. Pedro Américo - Santo André - SP", cep: "09110-100", lat: -23.67027, lng: -46.49892 }
+  { id: "crf-santo-andre", label: "Carrefour Hiper Santo André", address: "Av. Pedro Américo - Santo André - SP", cep: "09110-100", lat: -23.67027, lng: -46.49892 },
+  // — Interior SP (pesquisa web 2026-07-02, confiança média): CONFIRMAR que a unidade
+  //   segue aberta + clique-e-retire + retirada por terceiro antes do 1º pedido real.
+  { id: "crf-campinas-dom-pedro", label: "Carrefour Hiper Campinas Dom Pedro", address: "Rod. Dom Pedro I, km 127, Campinas - SP", cep: "13097-670", lat: -22.85329, lng: -47.02742 },
+  { id: "crf-campinas-valinhos", label: "Carrefour Hiper Campinas Valinhos", address: "Av. Eng. Antônio Francisco de Paula Souza, 3900, Jd. Anton von Zuben, Campinas - SP", cep: "13044-370", lat: -22.947, lng: -47.037 },
+  { id: "crf-jundiai", label: "Carrefour Hiper Jundiaí", address: "Av. Nove de Julho, 3600, Anhangabaú, Jundiaí - SP", cep: "13208-056", lat: -23.18837, lng: -46.89095 },
+  { id: "crf-sorocaba-norte", label: "Carrefour Hiper Sorocaba Norte", address: "Av. Ipanema, 376, Terra Vermelha, Sorocaba - SP", cep: "18065-100", lat: -23.48648, lng: -47.47117 },
+  { id: "crf-sorocaba-esplanada", label: "Carrefour Hiper Sorocaba Campolim", address: "Av. Prof. Izoraida Marques Peres, 401, Parque Campolim, Sorocaba - SP", cep: "18052-780", lat: -23.53361, lng: -47.46505 },
+  { id: "crf-santos-praiamar", label: "Carrefour Hiper Santos Praiamar", address: "Rua Alexandre Martins, 80, Aparecida, Santos - SP", cep: "11025-905", lat: -23.97746, lng: -46.30933 },
+  { id: "crf-sao-vicente", label: "Carrefour Hiper São Vicente", address: "Av. Prefeito José Monteiro, 1045, Jd. Independência, São Vicente - SP", cep: "11380-900", lat: -23.955, lng: -46.385 },
+  { id: "crf-sjc-matarazzo", label: "Carrefour Hiper São José dos Campos", address: "Av. Deputado Benedito Matarazzo, 5701, São José dos Campos - SP", cep: "12215-900", lat: -23.22309, lng: -45.90679 },
+  { id: "crf-taubate", label: "Carrefour Hiper Taubaté", address: "Av. Charles Schnneider, 1201, Barranco, Taubaté - SP", cep: "12041-078", lat: -23.04943, lng: -45.56675 },
+  { id: "crf-ribeirao-shopping", label: "Carrefour Hiper Ribeirão Preto", address: "Av. Cel. Fernando Ferreira Leite, 1540, Jd. Califórnia, Ribeirão Preto - SP", cep: "14026-900", lat: -21.21188, lng: -47.81579 },
+  { id: "crf-piracicaba", label: "Carrefour Hiper Piracicaba", address: "Av. Rui Teixeira Mendes, 300, Nova Piracicaba, Piracicaba - SP", cep: "13403-130", lat: -22.72437, lng: -47.67048 },
+  { id: "crf-rio-preto-shopping", label: "Carrefour Hiper São José do Rio Preto", address: "Av. Brigadeiro Faria Lima, 6363, São José do Rio Preto - SP", cep: "15090-900", lat: -20.83515, lng: -49.39866 },
+  { id: "crf-prudente-prudenshopping", label: "Carrefour Hiper Presidente Prudente", address: "Av. Manoel Goulart, 2400, Jd. das Rosas, Presidente Prudente - SP", cep: "19060-000", lat: -22.11929, lng: -51.41452 }
 ];
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";

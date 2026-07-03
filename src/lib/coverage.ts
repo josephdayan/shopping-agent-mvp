@@ -5,12 +5,14 @@
 // pedido pago que não consegue entregar.
 //
 // Config por env (todas opcionais):
-//   LIA_COVERAGE_PRESET        — fase de cobertura: "capital" (default) | "grande-sp".
-//                                Escolhe cidades+prefixos+label de uma vez; as envs abaixo
-//                                sobrepõem campo a campo.
+//   LIA_COVERAGE_PRESET        — fase de cobertura: "capital" (default) | "grande-sp" |
+//                                "estado-sp". Escolhe cidades/UFs+prefixos+label de uma vez;
+//                                as envs abaixo sobrepõem campo a campo.
 //   LIA_COVERAGE_CITIES        — cidades atendidas, separadas por vírgula (acento/caixa
 //                                ignorados). Ex.: "São Paulo, Osasco, Santo André".
 //                                Default: "São Paulo".
+//   LIA_COVERAGE_UFS           — estados inteiros atendidos ("SP" ou "SP,RJ"). Cidade OU UF
+//                                cobre; a guarda de frete decide a entregabilidade real.
 //   LIA_COVERAGE_CEP_PREFIXES  — prefixos de CEP usados SÓ como rede de segurança quando
 //                                a cidade não pôde ser resolvida (ViaCEP fora do ar).
 //                                Default: "01,02,03,04,05,08" (SP capital).
@@ -32,8 +34,8 @@ export function normalizeCity(s?: string): string {
 
 // Presets de cobertura em código: escolher a fase inteira por UMA env (LIA_COVERAGE_PRESET)
 // em vez de colar uma lista gigante de cidades. Precedência campo-a-campo: env explícita
-// (LIA_COVERAGE_CITIES/CEP_PREFIXES/LABEL) > preset > default. Interior depois = +1 preset.
-type CoveragePreset = { cities: string[]; cepPrefixes: string[]; label: string };
+// (LIA_COVERAGE_CITIES/UFS/CEP_PREFIXES/LABEL) > preset > default.
+type CoveragePreset = { cities: string[]; ufs?: string[]; cepPrefixes: string[]; label: string };
 
 const PRESETS: Record<string, CoveragePreset> = {
   capital: {
@@ -56,6 +58,14 @@ const PRESETS: Record<string, CoveragePreset> = {
     // quando o ViaCEP cai; a guarda de frete (freight-guard.ts) é quem decide entregabilidade.
     cepPrefixes: ["0"],
     label: "São Paulo e região (Grande SP)"
+  },
+  // Estado inteiro: cobertura por UF (645 municípios não cabem numa lista). Quem decide se
+  // uma cidade é ENTREGÁVEL é a guarda de frete: sem loja a ≤12km, recusa educada + lead.
+  "estado-sp": {
+    cities: [],
+    ufs: ["SP"],
+    cepPrefixes: ["0", "1"], // CEPs de SP: 01000-000 a 19999-999
+    label: "o estado de São Paulo"
   }
 };
 
@@ -75,6 +85,11 @@ function coveredCities(): Set<string> {
   return new Set(cities.map((c) => normalizeCity(c.split("/")[0])).filter(Boolean));
 }
 
+function coveredUfs(): Set<string> {
+  const ufs = process.env.LIA_COVERAGE_UFS ? process.env.LIA_COVERAGE_UFS.split(",") : (activePreset().ufs ?? []);
+  return new Set(ufs.map((u) => u.trim().toUpperCase()).filter(Boolean));
+}
+
 function coveredPrefixes(): string[] {
   const list = process.env.LIA_COVERAGE_CEP_PREFIXES ? process.env.LIA_COVERAGE_CEP_PREFIXES.split(",") : activePreset().cepPrefixes;
   return list.map((p) => p.replace(/\D/g, "")).filter(Boolean);
@@ -90,8 +105,11 @@ export function checkCoverage(input: CoverageInput): CoverageResult {
 
   const city = normalizeCity(input.city);
   if (city) {
-    // Cidade conhecida (ViaCEP respondeu) = sinal autoritativo.
-    return { covered: coveredCities().has(city), city: input.city, uf };
+    // Cidade conhecida (ViaCEP respondeu) = sinal autoritativo. Cobre por cidade OU por UF
+    // (preset estado-sp cobre "SP" inteiro; a guarda de frete decide a entregabilidade).
+    const byCity = coveredCities().has(city);
+    const byUf = uf ? coveredUfs().has(uf) : false;
+    return { covered: byCity || byUf, city: input.city, uf };
   }
 
   // Cidade desconhecida (ViaCEP fora do ar) → rede de segurança por prefixo de CEP.

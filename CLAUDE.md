@@ -89,19 +89,24 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   `reason`) e o `/ops` vira **mapa de demanda** (cidade → nº de pedidos, tag `fora`/`longe`):
   - **Cobertura por cidade** (`src/lib/coverage.ts`, puro+testado): a cidade (ViaCEP; fallback
     prefixo de CEP) está na área? Fora → `copy.outsideCoverage`, lead `outside_coverage`.
-    **Presets** (`LIA_COVERAGE_PRESET`): `capital` (default) e `grande-sp` (39 municípios da RMSP).
-    Sobrepõe campo-a-campo: `LIA_COVERAGE_CITIES` / `_CEP_PREFIXES` / `_LABEL` / `_OFF`.
+    **Presets** (`LIA_COVERAGE_PRESET`): `capital` (default), `grande-sp` (39 municípios da RMSP)
+    e `estado-sp` (**SP inteiro por UF** — quem decide entregabilidade é a guarda de frete).
+    Sobrepõe campo-a-campo: `LIA_COVERAGE_CITIES` / `_UFS` / `_CEP_PREFIXES` / `_LABEL` / `_OFF`.
   - **Guarda de frete** (`src/lib/freight-guard.ts`, puro+testado): cidade coberta, mas o endereço
     pode estar longe de QUALQUER loja (metrópole é grande). `pickNearestUnit(allUnits(), cep)` dá a
     distância real (haversine); > `LIA_MAX_DELIVERY_KM` (12) → `copy.tooFarForDelivery`, lead `too_far`.
     Guarda secundária de fee real (`LIA_MAX_DELIVERY_FEE` 35, só cotação real) no `quoteBasket`.
     Distância é primária (mock é fake-barato). `LIA_FREIGHT_GUARD_OFF` = kill-switch.
 - **Geo compartilhado** (`src/lib/geo.ts`): `haversineKm` + `geocode` (BrasilAPI→Nominatim, timeout,
-  nunca-lança, cache; `LIA_GEOCODE_TIMEOUT_MS`). `StoreUnit` tem `lat/lng` (37 unidades atuais
-  geocodadas 2026-07-02); `nearestUnit` virou `listUnits()` + `pickNearestUnit` (stores/nearest.ts):
-  haversine quando há coords, senão proxy numérico de CEP. **Somar unidade Grande SP = 1 linha com
-  lat/lng.** Ligar a Grande SP = `LIA_COVERAGE_PRESET=grande-sp` (sem deploy) — mas só depois de ter
-  loja+motoboy cobrindo os CEPs (a guarda recusa o resto e o lead `too_far` prioriza onde abrir).
+  nunca-lança, cache; `LIA_GEOCODE_TIMEOUT_MS`). `StoreUnit` tem `lat/lng`; `nearestUnit` virou
+  `listUnits()` + `pickNearestUnit` (stores/nearest.ts): haversine quando há coords, senão proxy
+  numérico de CEP. **107 unidades geocodadas** (2026-07-02): capital (37) + Grande SP (16, incl.
+  Alphaville) + interior (54: Campinas, Santos/SV/PG, SJC/Taubaté, Sorocaba, Ribeirão, Piracicaba,
+  Bauru*, SJRP, Jundiaí, Franca*, Marília*, Araçatuba*, Prudente, Araraquara, S.Carlos, Limeira,
+  Americana/SBO, Indaiatuba, Rio Claro, Mogi Guaçu — *sem hiper Carrefour: pet/beleza atendem,
+  mercado recusa educado). Unidades novas = pesquisa web, confiança média: CONFIRMAR aberta +
+  clique-e-retire + retirada por terceiro antes do 1º pedido real em cada. Somar unidade = 1 linha
+  com lat/lng. Ligar tudo = `LIA_COVERAGE_PRESET=estado-sp` na Vercel (sem deploy).
 
 ### Riscos honestos a validar num piloto real
 1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:

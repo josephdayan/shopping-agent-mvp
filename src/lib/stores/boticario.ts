@@ -34,7 +34,29 @@ const UNITS: StoreUnit[] = [
   { id: "boti-grand-plaza", label: "O Boticário Grand Plaza Shopping", address: "Av. Industrial, 600, Santo André - SP", cep: "09080-500", lat: -23.64872, lng: -46.53192 },
   { id: "boti-golden-square", label: "O Boticário Golden Square Shopping", address: "Av. Kennedy, 700, São Bernardo do Campo - SP", cep: "09726-263", lat: -23.68363, lng: -46.55717 },
   { id: "boti-uniao-osasco", label: "O Boticário Shopping União de Osasco", address: "Av. dos Autonomistas, 1400, Osasco - SP", cep: "06020-010", lat: -23.53898, lng: -46.76534 },
-  { id: "boti-iguatemi-alphaville", label: "O Boticário Iguatemi Alphaville", address: "Alameda Rio Negro, 111, Alphaville, Barueri - SP", cep: "06454-000", lat: -23.50457, lng: -46.84823 }
+  { id: "boti-iguatemi-alphaville", label: "O Boticário Iguatemi Alphaville", address: "Alameda Rio Negro, 111, Alphaville, Barueri - SP", cep: "06454-000", lat: -23.50457, lng: -46.84823 },
+  // — Interior SP (shoppings-âncora, 2026-07-02): 6 com loja verificada no diretório;
+  //   nos demais CONFIRMAR a loja + política de retirada antes do 1º pedido real.
+  { id: "boti-iguatemi-campinas", label: "O Boticário Iguatemi Campinas", address: "Av. Iguatemi, 777, Vila Brandina, Campinas - SP", cep: "13092-902", lat: -22.8924, lng: -47.02721 },
+  { id: "boti-maxi-jundiai", label: "O Boticário Maxi Shopping Jundiaí", address: "Av. Antônio Frederico Ozanam, 6000, Vila Rio Branco, Jundiaí - SP", cep: "13215-900", lat: -23.16946, lng: -46.89209 },
+  { id: "boti-iguatemi-esplanada", label: "O Boticário Iguatemi Esplanada", address: "Av. Izoraida Marques Peres, 401, Parque Campolim, Sorocaba - SP", cep: "18047-900", lat: -23.53361, lng: -47.46505 },
+  { id: "boti-praiamar-santos", label: "O Boticário Praiamar Shopping", address: "Rua Alexandre Martins, 80, Aparecida, Santos - SP", cep: "11025-905", lat: -23.97746, lng: -46.30933 },
+  { id: "boti-centervale-sjc", label: "O Boticário CenterVale Shopping", address: "Av. Deputado Benedito Matarazzo, 9403, Jardim Oswaldo Cruz, São José dos Campos - SP", cep: "12215-900", lat: -23.1991, lng: -45.88307 },
+  { id: "boti-viavale-taubate", label: "O Boticário Via Vale Garden Shopping", address: "Av. Dom Pedro I, 7181, Jardim Baronesa, Taubaté - SP", cep: "12091-000", lat: -23.04093, lng: -45.56679 },
+  { id: "boti-ribeirao-shopping", label: "O Boticário RibeirãoShopping", address: "Av. Coronel Fernando Ferreira Leite, 1540, Jardim Califórnia, Ribeirão Preto - SP", cep: "14026-900", lat: -21.21239, lng: -47.81677 },
+  { id: "boti-shopping-piracicaba", label: "O Boticário Shopping Piracicaba", address: "Av. Limeira, 722, Areião, Piracicaba - SP", cep: "13414-900", lat: -22.7036, lng: -47.64911 },
+  { id: "boti-boulevard-bauru", label: "O Boticário Boulevard Shopping Bauru", address: "Rua General Marcondes Salgado, 11-39, Chácara das Flores, Bauru - SP", cep: "17013-904", lat: -22.31396, lng: -49.05874 },
+  { id: "boti-riopreto-shopping", label: "O Boticário Riopreto Shopping", address: "Av. Brigadeiro Faria Lima, 6363, Jardim Morumbi, São José do Rio Preto - SP", cep: "15090-900", lat: -20.83505, lng: -49.39788 },
+  { id: "boti-patio-limeira", label: "O Boticário Pátio Limeira Shopping", address: "Rua Carlos Gomes, 1321, Centro, Limeira - SP", cep: "13480-013", lat: -22.56864, lng: -47.40625 },
+  { id: "boti-tivoli-sbo", label: "O Boticário Tivoli Shopping", address: "Av. Santa Bárbara, 777, Vila Mollon IV, Santa Bárbara d'Oeste - SP", cep: "13456-080", lat: -22.74603, lng: -47.41544 },
+  { id: "boti-jaragua-araraquara", label: "O Boticário Shopping Jaraguá", address: "Av. Alberto Benassi, 2270, Jardim dos Manacás, Araraquara - SP", cep: "14804-300", lat: -21.7825, lng: -48.20148 },
+  { id: "boti-iguatemi-sao-carlos", label: "O Boticário Iguatemi São Carlos", address: "Passeio dos Flamboyants, 200, Parque Faber Castell II, São Carlos - SP", cep: "13561-352", lat: -22.01804, lng: -47.91556 },
+  { id: "boti-franca-shopping", label: "O Boticário Franca Shopping", address: "Av. Rio Negro, 1100, Estação, Franca - SP", cep: "14406-901", lat: -20.54721, lng: -47.416 },
+  { id: "boti-esmeralda-marilia", label: "O Boticário Esmeralda Shopping", address: "Av. das Esmeraldas, 701, Jardim Tangará, Marília - SP", cep: "17516-000", lat: -22.22434, lng: -49.93276 },
+  { id: "boti-prudenshopping", label: "O Boticário Prudenshopping", address: "Av. Manoel Goulart, 2400, Jardim das Rosas, Presidente Prudente - SP", cep: "19060-000", lat: -22.11835, lng: -51.40387 },
+  { id: "boti-praca-nova-aracatuba", label: "O Boticário Shopping Praça Nova", address: "Rua Carlos Pereira da Silva, 6000, Jardim Guanabara, Araçatuba - SP", cep: "16026-037", lat: -21.19863, lng: -50.45485 },
+  { id: "boti-polo-indaiatuba", label: "O Boticário Polo Shopping Indaiatuba", address: "Alameda Filtros Mann, 670, Jardim Tropical, Indaiatuba - SP", cep: "13344-580", lat: -23.11691, lng: -47.21964 },
+  { id: "boti-shopping-rio-claro", label: "O Boticário Shopping Rio Claro", address: "Av. Conde Francisco Matarazzo Jr., 205, Vila Paulista, Rio Claro - SP", cep: "13506-845", lat: -22.4132, lng: -47.55359 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {

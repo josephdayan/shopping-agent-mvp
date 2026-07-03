@@ -37,7 +37,30 @@ const UNITS: StoreUnit[] = [
   { id: "petz-santo-andre", label: "Petz Santo André", address: "Av. Dom Pedro II, 933, Jardim, Santo André - SP", cep: "09080-110", lat: -23.6477, lng: -46.53695 },
   { id: "petz-sbc", label: "Petz São Bernardo", address: "Av. Rotary, 825, Centro, São Bernardo do Campo - SP", cep: "09721-000", lat: -23.72139, lng: -46.5406 },
   { id: "petz-alphaville", label: "Petz Alphaville", address: "Av. Alphaville, 580, Alphaville, Barueri - SP", cep: "06472-010", lat: -23.48985, lng: -46.85399 },
-  { id: "petz-tambore", label: "Petz Tamboré", address: "Alameda Araguaia, 2179, Tamboré, Barueri - SP", cep: "06455-000", lat: -23.49981, lng: -46.84096 }
+  { id: "petz-tambore", label: "Petz Tamboré", address: "Alameda Araguaia, 2179, Tamboré, Barueri - SP", cep: "06455-000", lat: -23.49981, lng: -46.84096 },
+  // — Interior SP (petz.com.br/loja/*, 2026-07-02): CONFIRMAR "Retire na Loja" +
+  //   retirada por terceiro antes do 1º pedido real.
+  { id: "petz-campinas-dom-pedro", label: "Petz Campinas Dom Pedro", address: "Av. Guilherme Campos, 500, Shopping Parque Dom Pedro, Campinas, SP", cep: "13087-901", lat: -22.90112, lng: -47.02863 },
+  { id: "petz-campinas-cambui", label: "Petz Campinas Cambuí", address: "Av. Doutor Moraes Sales, 2326, Nova Campinas, Campinas, SP", cep: "13100-201", lat: -22.90704, lng: -47.04254 },
+  { id: "petz-jundiai", label: "Petz Jundiaí", address: "Av. Antonio Frederico Ozanan, 3003, Vila de Vito, Jundiaí, SP", cep: "13215-010", lat: -23.19036, lng: -46.87506 },
+  { id: "petz-sorocaba", label: "Petz Sorocaba", address: "Av. Dom Aguirre, 2121, Santa Rosália, Sorocaba, SP", cep: "18035-095", lat: -23.49227, lng: -47.44565 },
+  { id: "petz-santos-ana-costa", label: "Petz Santos Gonzaga", address: "Av. Ana Costa, 215, Gonzaga, Santos, SP", cep: "11060-001", lat: -23.95908, lng: -46.33177 },
+  { id: "petz-praia-grande-litoral-plaza", label: "Petz Praia Grande Litoral Plaza", address: "Av. Ayrton Senna da Silva, 1511, Litoral Plaza, Tude Bastos, Praia Grande, SP", cep: "11726-000", lat: -23.9983, lng: -46.40646 },
+  { id: "petz-sjc-centervale", label: "Petz São José dos Campos CenterVale", address: "Av. Deputado Benedito Matarazzo, 9403, Jardim Oswaldo Cruz, São José dos Campos, SP", cep: "12215-900", lat: -23.1991, lng: -45.88307 },
+  { id: "petz-ribeirao-independencia", label: "Petz Ribeirão Preto Independência", address: "Av. Independência, 1810, Jardim Sumaré, Ribeirão Preto, SP", cep: "14025-393", lat: -21.19226, lng: -47.81077 },
+  { id: "petz-ribeirao-shopping", label: "Petz Ribeirão Preto RibeirãoShopping", address: "Av. Coronel Fernando Ferreira Leite, 1540, Jardim Califórnia, Ribeirão Preto, SP", cep: "14026-020", lat: -21.21239, lng: -47.81677 },
+  { id: "petz-piracicaba", label: "Petz Piracicaba", address: "Av. Centenário, 780, São Dimas, Piracicaba, SP", cep: "13416-000", lat: -22.71043, lng: -47.64057 },
+  { id: "petz-bauru", label: "Petz Bauru", address: "Rua Rubens Pagani, 444, Jardim Estoril, Bauru, SP", cep: "17016-210", lat: -22.33811, lng: -49.07104 },
+  { id: "petz-sao-jose-do-rio-preto", label: "Petz São José do Rio Preto", address: "Av. Pres. Juscelino K. Oliveira, 400, Jardim Maracanã, São José do Rio Preto, SP", cep: "15092-175", lat: -20.82756, lng: -49.40493 },
+  { id: "petz-americana", label: "Petz Americana", address: "Av. Paulista, 985, Vila Nossa Sra. de Fátima, Americana, SP", cep: "13478-580", lat: -22.71679, lng: -47.29414 },
+  { id: "petz-araraquara", label: "Petz Araraquara", address: "Av. Padre Francisco Salles Culturato, 1272, Centro, Araraquara, SP", cep: "14802-000", lat: -21.78036, lng: -48.18586 },
+  { id: "petz-sao-carlos", label: "Petz São Carlos", address: "Av. Francisco Pereira Lopes, 1701, Parque Santa Mônica, São Carlos, SP", cep: "13561-250", lat: -22.00475, lng: -47.90513 },
+  { id: "petz-franca", label: "Petz Franca", address: "Av. Dr. Ismael Alonso Y Alonso, 450, Jardim Veneza, Franca, SP", cep: "14400-190", lat: -20.54367, lng: -47.39695 },
+  { id: "petz-presidente-prudente", label: "Petz Presidente Prudente", address: "Av. Manoel Goulart, 2671, Centro Educacional, Presidente Prudente, SP", cep: "19010-000", lat: -22.12554, lng: -51.38398 },
+  { id: "petz-aracatuba", label: "Petz Araçatuba", address: "Av. Brasília, 2737, Vila São Paulo, Araçatuba, SP", cep: "16018-000", lat: -21.21846, lng: -50.43775 },
+  { id: "petz-indaiatuba", label: "Petz Indaiatuba", address: "Alameda Filtros Mann, 670, Polo Shopping Indaiatuba, Jardim Tropical, Indaiatuba, SP", cep: "13344-580", lat: -23.11691, lng: -47.21964 },
+  { id: "petz-rio-claro", label: "Petz Rio Claro", address: "Av. Presidente Kennedy, 414, Estádio, Rio Claro, SP", cep: "13501-270", lat: -22.42558, lng: -47.5627 },
+  { id: "petz-mogi-guacu", label: "Petz Mogi Guaçu", address: "Av. Mogi Mirim, 970, Areião, Mogi Guaçu, SP", cep: "13844-110", lat: -22.36936, lng: -46.97044 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {

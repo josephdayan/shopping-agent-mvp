@@ -19,6 +19,7 @@ seedGeoCache("01310100", { lat: -23.5614, lng: -46.6559 }); // Av. Paulista (SP 
 seedGeoCache("04538132", { lat: -23.586, lng: -46.679 }); // Itaim Bibi (SP capital)
 seedGeoCache("06233030", { lat: -23.5329, lng: -46.792 }); // Osasco (~5km de Tamboré)
 seedGeoCache("07500000", { lat: -23.317, lng: -46.221 }); // Santa Isabel (~40km, longe demais)
+seedGeoCache("13015000", { lat: -22.9056, lng: -47.0608 }); // Campinas centro (interior servido)
 
 const PREFIX = "+5500991";
 // Unique per run so a crashed/killed previous run can't collide (phones) nor trip
@@ -349,6 +350,17 @@ test("Grande SP: Osasco é aceito (cobre + guarda de distância passa)", async (
     assert.ok(!/longe demais|não chega/i.test(r), `recusou Osasco indevidamente: ${r.slice(0, 160)}`);
     const user = await prisma.user.findUnique({ where: { phone } });
     assert.equal(user?.cep, "06233-030"); // CEP salvo = passou nas duas travas
+  });
+});
+
+test("estado-sp: Campinas é aceita (interior com loja perto)", async (t) => {
+  if (!dbOk) return t.skip();
+  await withPreset("estado-sp", async () => {
+    const c = await returningCustomer();
+    const r = await c.send("13015-000"); // Campinas centro — Petz/Boticário/Carrefour a <6km
+    assert.match(r, /atualizado|salvo/i);
+    const user = await prisma.user.findUnique({ where: { phone: c.phone } });
+    assert.equal(user?.cep, "13015-000");
   });
 });
 
