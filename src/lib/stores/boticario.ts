@@ -27,7 +27,13 @@ const UNITS: StoreUnit[] = [
   { id: "boti-analia-franco", label: "O Boticário Shopping Anália Franco", address: "Av. Regente Feijó, 1739, Vila Regente Feijó, São Paulo - SP", cep: "03342-000", lat: -23.56146, lng: -46.56016 },
   { id: "boti-aricanduva", label: "O Boticário Shopping Aricanduva", address: "Av. Aricanduva, 5555, Vila Matilde, São Paulo - SP", cep: "03527-000", lat: -23.56599, lng: -46.50401 },
   { id: "boti-tucuruvi", label: "O Boticário Shopping Tucuruvi", address: "Av. Dr. Antônio Maria Laet, 566, Tucuruvi, São Paulo - SP", cep: "02409-901", lat: -23.47963, lng: -46.6024 },
-  { id: "boti-sp-market", label: "O Boticário Shopping SP Market", address: "Av. das Nações Unidas, 22540, Santo Amaro, São Paulo - SP", cep: "04795-100", lat: -23.62045, lng: -46.70063 }
+  { id: "boti-sp-market", label: "O Boticário Shopping SP Market", address: "Av. das Nações Unidas, 22540, Santo Amaro, São Paulo - SP", cep: "04795-100", lat: -23.62045, lng: -46.70063 },
+  // — Grande SP (shoppings âncora, 2026-07-02): CONFIRMAR a loja exata no shopping +
+  //   política de retirada por terceiro AO VIVO antes do primeiro pedido real.
+  { id: "boti-internacional-gru", label: "O Boticário Internacional Shopping", address: "Rod. Presidente Dutra, km 230, Guarulhos - SP", cep: "07034-911", lat: -23.48831, lng: -46.54898 },
+  { id: "boti-grand-plaza", label: "O Boticário Grand Plaza Shopping", address: "Av. Industrial, 600, Santo André - SP", cep: "09080-500", lat: -23.64872, lng: -46.53192 },
+  { id: "boti-golden-square", label: "O Boticário Golden Square Shopping", address: "Av. Kennedy, 700, São Bernardo do Campo - SP", cep: "09726-263", lat: -23.68363, lng: -46.55717 },
+  { id: "boti-uniao-osasco", label: "O Boticário Shopping União de Osasco", address: "Av. dos Autonomistas, 1400, Osasco - SP", cep: "06020-010", lat: -23.53898, lng: -46.76534 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {

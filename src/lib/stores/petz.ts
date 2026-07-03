@@ -29,7 +29,13 @@ const UNITS: StoreUnit[] = [
   { id: "petz-mooca", label: "Petz Mooca", address: "Av. Paes de Barros, 1654, Mooca, São Paulo - SP", cep: "03114-001", lat: -23.56721, lng: -46.59189 },
   { id: "petz-belenzinho", label: "Petz Radial Leste (Belenzinho)", address: "Av. Radial Leste, 3300, Belenzinho, São Paulo - SP", cep: "03101-005", lat: -23.5405, lng: -46.582 },
   { id: "petz-tatuape", label: "Petz Tatuapé", address: "Av. Conde de Frontin, 2416, Tatuapé, São Paulo - SP", cep: "03501-000", lat: -23.53668, lng: -46.5573 },
-  { id: "petz-analia-franco", label: "Petz Anália Franco", address: "Av. Regente Feijó, 677, Vila Regente Feijó, São Paulo - SP", cep: "03342-000", lat: -23.56032, lng: -46.56009 }
+  { id: "petz-analia-franco", label: "Petz Anália Franco", address: "Av. Regente Feijó, 677, Vila Regente Feijó, São Paulo - SP", cep: "03342-000", lat: -23.56032, lng: -46.56009 },
+  // — Grande SP (petz.com.br/nossas-lojas, 2026-07-02): CONFIRMAR "Retire na Loja" +
+  //   retirada por terceiro AO VIVO antes do primeiro pedido real em cada uma.
+  { id: "petz-guarulhos", label: "Petz Guarulhos", address: "Av. Paulo Faccini, 1385, Macedo, Guarulhos - SP", cep: "07111-000", lat: -23.45406, lng: -46.53432 },
+  { id: "petz-osasco", label: "Petz Osasco", address: "Av. dos Autonomistas, 1473, Vila Yara, Osasco - SP", cep: "06090-010", lat: -23.54147, lng: -46.76773 },
+  { id: "petz-santo-andre", label: "Petz Santo André", address: "Av. Dom Pedro II, 933, Jardim, Santo André - SP", cep: "09080-110", lat: -23.6477, lng: -46.53695 },
+  { id: "petz-sbc", label: "Petz São Bernardo", address: "Av. Rotary, 825, Centro, São Bernardo do Campo - SP", cep: "09721-000", lat: -23.72139, lng: -46.5406 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {
