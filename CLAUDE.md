@@ -84,14 +84,24 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
 - **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
   pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
-- **Cobertura = dado, não código** (`src/lib/coverage.ts`, puro+testado). Piloto = **SP capital**.
-  Quando o cliente manda um CEP fora da área, o cérebro NÃO aceita o pedido: grava um
-  `WaitlistLead` (dedupe por phone+cep, conta `hits`) e responde com carinho (`copy.outsideCoverage`).
-  O `/ops` mostra isso como **mapa de demanda** (cidade → nº de pedidos) pra expandir onde já
-  tem gente pedindo. Cidade vem do ViaCEP (autoritativo); se o ViaCEP cai, usa prefixo de CEP.
-  **Expandir = env, sem deploy:** `LIA_COVERAGE_CITIES` ("São Paulo, Osasco, Santo André…"),
-  `LIA_COVERAGE_CEP_PREFIXES` (fallback), `LIA_COVERAGE_LABEL` (nome na msg), `LIA_COVERAGE_OFF=true`
-  (kill-switch). Próximo passo combinado: ampliar pro **resto de SP** (Grande SP) por essa env.
+- **Entregabilidade em 2 camadas (dado, não código).** O cérebro NUNCA aceita um pedido pago
+  que a operação não entrega. Duas travas, ambas gravam `WaitlistLead` (dedupe phone+cep, `hits`,
+  `reason`) e o `/ops` vira **mapa de demanda** (cidade → nº de pedidos, tag `fora`/`longe`):
+  - **Cobertura por cidade** (`src/lib/coverage.ts`, puro+testado): a cidade (ViaCEP; fallback
+    prefixo de CEP) está na área? Fora → `copy.outsideCoverage`, lead `outside_coverage`.
+    **Presets** (`LIA_COVERAGE_PRESET`): `capital` (default) e `grande-sp` (39 municípios da RMSP).
+    Sobrepõe campo-a-campo: `LIA_COVERAGE_CITIES` / `_CEP_PREFIXES` / `_LABEL` / `_OFF`.
+  - **Guarda de frete** (`src/lib/freight-guard.ts`, puro+testado): cidade coberta, mas o endereço
+    pode estar longe de QUALQUER loja (metrópole é grande). `pickNearestUnit(allUnits(), cep)` dá a
+    distância real (haversine); > `LIA_MAX_DELIVERY_KM` (12) → `copy.tooFarForDelivery`, lead `too_far`.
+    Guarda secundária de fee real (`LIA_MAX_DELIVERY_FEE` 35, só cotação real) no `quoteBasket`.
+    Distância é primária (mock é fake-barato). `LIA_FREIGHT_GUARD_OFF` = kill-switch.
+- **Geo compartilhado** (`src/lib/geo.ts`): `haversineKm` + `geocode` (BrasilAPI→Nominatim, timeout,
+  nunca-lança, cache; `LIA_GEOCODE_TIMEOUT_MS`). `StoreUnit` tem `lat/lng` (37 unidades atuais
+  geocodadas 2026-07-02); `nearestUnit` virou `listUnits()` + `pickNearestUnit` (stores/nearest.ts):
+  haversine quando há coords, senão proxy numérico de CEP. **Somar unidade Grande SP = 1 linha com
+  lat/lng.** Ligar a Grande SP = `LIA_COVERAGE_PRESET=grande-sp` (sem deploy) — mas só depois de ter
+  loja+motoboy cobrindo os CEPs (a guarda recusa o resto e o lead `too_far` prioriza onde abrir).
 
 ### Riscos honestos a validar num piloto real
 1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:

@@ -205,6 +205,9 @@ model WaitlistLead {
   cep       String
   city      String?
   uf        String?
+  // Por que virou lead: "outside_coverage" (cidade não atendida) ou "too_far" (cidade
+  // atendida, mas longe de qualquer loja). Ajuda o /ops a priorizar o que abrir.
+  reason    String   @default("outside_coverage")
   hits      Int      @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

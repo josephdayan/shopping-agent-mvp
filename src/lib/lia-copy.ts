@@ -81,6 +81,18 @@ export function outsideCoverage(city: string | undefined, areaLabel: string): st
   ].join("\n");
 }
 
+// Cidade É atendida, mas o endereço ficou longe demais de qualquer loja parceira hoje.
+// Cuidado: NÃO dizer "não atendo sua cidade" (atendo!) — é questão de loja perto ainda.
+export function tooFarForDelivery(city: string | undefined, areaLabel: string): string {
+  const onde = city ? `em ${city}` : "no seu endereço";
+  return [
+    `Eu até atendo ${onde}, mas ele ficou longe demais das lojas parceiras que eu tenho por perto 😔.`,
+    "Assim eu não conseguiria te entregar hoje sem te cobrar um frete que não vale a pena.",
+    "",
+    "Já anotei seu contato 📍 — assim que abrir uma loja mais pertinho de você, te chamo na hora! 💚"
+  ].join("\n");
+}
+
 // ---------- search / basket ----------
 
 export function searching(): string {

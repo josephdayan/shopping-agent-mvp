@@ -18,16 +18,16 @@ import { BOTICARIO_CATALOG } from "./boticario-catalog";
 const SEED_CATALOG: CatalogItem[] = BOTICARIO_CATALOG;
 
 const UNITS: StoreUnit[] = [
-  { id: "boti-paulista", label: "O Boticário Shopping Pátio Paulista", address: "Rua Treze de Maio, 1947, Bela Vista, São Paulo - SP", cep: "01327-001" },
-  { id: "boti-ibirapuera", label: "O Boticário Shopping Ibirapuera", address: "Av. Ibirapuera, 3103, Moema, São Paulo - SP", cep: "04029-902" },
-  { id: "boti-morumbi", label: "O Boticário Shopping Morumbi", address: "Av. Roque Petroni Jr., 1089, Jardim das Acácias, São Paulo - SP", cep: "04707-900" },
-  { id: "boti-eldorado", label: "O Boticário Shopping Eldorado", address: "Av. Rebouças, 3970, Pinheiros, São Paulo - SP", cep: "05402-918" },
-  { id: "boti-villa-lobos", label: "O Boticário Shopping Villa-Lobos", address: "Av. das Nações Unidas, 4777, Alto de Pinheiros, São Paulo - SP", cep: "05477-000" },
-  { id: "boti-center-norte", label: "O Boticário Shopping Center Norte", address: "Travessa Casalbuono, 120, Vila Guilherme, São Paulo - SP", cep: "02089-900" },
-  { id: "boti-analia-franco", label: "O Boticário Shopping Anália Franco", address: "Av. Regente Feijó, 1739, Vila Regente Feijó, São Paulo - SP", cep: "03342-000" },
-  { id: "boti-aricanduva", label: "O Boticário Shopping Aricanduva", address: "Av. Aricanduva, 5555, Vila Matilde, São Paulo - SP", cep: "03527-000" },
-  { id: "boti-tucuruvi", label: "O Boticário Shopping Tucuruvi", address: "Av. Dr. Antônio Maria Laet, 566, Tucuruvi, São Paulo - SP", cep: "02409-901" },
-  { id: "boti-sp-market", label: "O Boticário Shopping SP Market", address: "Av. das Nações Unidas, 22540, Santo Amaro, São Paulo - SP", cep: "04795-100" }
+  { id: "boti-paulista", label: "O Boticário Shopping Pátio Paulista", address: "Rua Treze de Maio, 1947, Bela Vista, São Paulo - SP", cep: "01327-001", lat: -23.55433, lng: -46.64683 },
+  { id: "boti-ibirapuera", label: "O Boticário Shopping Ibirapuera", address: "Av. Ibirapuera, 3103, Moema, São Paulo - SP", cep: "04029-902", lat: -23.61019, lng: -46.66687 },
+  { id: "boti-morumbi", label: "O Boticário Shopping Morumbi", address: "Av. Roque Petroni Jr., 1089, Jardim das Acácias, São Paulo - SP", cep: "04707-900", lat: -23.6228, lng: -46.6997 },
+  { id: "boti-eldorado", label: "O Boticário Shopping Eldorado", address: "Av. Rebouças, 3970, Pinheiros, São Paulo - SP", cep: "05402-918", lat: -23.5737, lng: -46.69589 },
+  { id: "boti-villa-lobos", label: "O Boticário Shopping Villa-Lobos", address: "Av. das Nações Unidas, 4777, Alto de Pinheiros, São Paulo - SP", cep: "05477-000", lat: -23.55108, lng: -46.72214 },
+  { id: "boti-center-norte", label: "O Boticário Shopping Center Norte", address: "Travessa Casalbuono, 120, Vila Guilherme, São Paulo - SP", cep: "02089-900", lat: -23.51581, lng: -46.61822 },
+  { id: "boti-analia-franco", label: "O Boticário Shopping Anália Franco", address: "Av. Regente Feijó, 1739, Vila Regente Feijó, São Paulo - SP", cep: "03342-000", lat: -23.56146, lng: -46.56016 },
+  { id: "boti-aricanduva", label: "O Boticário Shopping Aricanduva", address: "Av. Aricanduva, 5555, Vila Matilde, São Paulo - SP", cep: "03527-000", lat: -23.56599, lng: -46.50401 },
+  { id: "boti-tucuruvi", label: "O Boticário Shopping Tucuruvi", address: "Av. Dr. Antônio Maria Laet, 566, Tucuruvi, São Paulo - SP", cep: "02409-901", lat: -23.47963, lng: -46.6024 },
+  { id: "boti-sp-market", label: "O Boticário Shopping SP Market", address: "Av. das Nações Unidas, 22540, Santo Amaro, São Paulo - SP", cep: "04795-100", lat: -23.62045, lng: -46.70063 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {

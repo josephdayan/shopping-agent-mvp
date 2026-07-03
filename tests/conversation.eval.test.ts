@@ -11,6 +11,14 @@ import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage } from "../src/lib/delivery-service";
 import { getStore } from "../src/lib/stores";
 import { scoreCatalogMatch } from "../src/lib/stores/types";
+import { seedGeoCache } from "../src/lib/geo";
+
+// Geo é semeado (sem rede) pros CEPs que os evals usam, senão pickNearestUnit geocodificaria
+// via BrasilAPI/Nominatim a cada turno — lento e flaky. Coords aproximadas bastam (guarda 12km).
+seedGeoCache("01310100", { lat: -23.5614, lng: -46.6559 }); // Av. Paulista (SP capital)
+seedGeoCache("04538132", { lat: -23.586, lng: -46.679 }); // Itaim Bibi (SP capital)
+seedGeoCache("06233030", { lat: -23.5329, lng: -46.792 }); // Osasco (~5km de Tamboré)
+seedGeoCache("07500000", { lat: -23.317, lng: -46.221 }); // Santa Isabel (~40km, longe demais)
 
 const PREFIX = "+5500991";
 // Unique per run so a crashed/killed previous run can't collide (phones) nor trip
@@ -320,6 +328,41 @@ test("cobertura: CEP de SP capital passa normal", async (t) => {
   assert.match(updated, /atualizado|salvo/i);
   const user = await prisma.user.findUnique({ where: { phone: c.phone } });
   assert.equal(user?.cep, "04538-132");
+});
+
+function withPreset(preset: string, fn: () => Promise<void>): Promise<void> {
+  const prev = process.env.LIA_COVERAGE_PRESET;
+  process.env.LIA_COVERAGE_PRESET = preset;
+  return fn().finally(() => {
+    if (prev === undefined) delete process.env.LIA_COVERAGE_PRESET;
+    else process.env.LIA_COVERAGE_PRESET = prev;
+  });
+}
+
+test("Grande SP: Osasco é aceito (cobre + guarda de distância passa)", async (t) => {
+  if (!dbOk) return t.skip();
+  await withPreset("grande-sp", async () => {
+    const phone = newPhone();
+    const d = driver(phone);
+    await d.send("oi, quero arroz"); // onboarding → pede CEP
+    const r = await d.sendAndResolve("06233-030"); // Osasco (~5km de Tamboré)
+    assert.ok(!/longe demais|não chega/i.test(r), `recusou Osasco indevidamente: ${r.slice(0, 160)}`);
+    const user = await prisma.user.findUnique({ where: { phone } });
+    assert.equal(user?.cep, "06233-030"); // CEP salvo = passou nas duas travas
+  });
+});
+
+test("guarda de frete: cidade coberta mas longe demais → recusa + lead too_far", async (t) => {
+  if (!dbOk) return t.skip();
+  await withPreset("grande-sp", async () => {
+    const c = await returningCustomer(); // tem 01310-100
+    const r = await c.send("07500-000"); // Santa Isabel: coberta na RMSP, ~40km de qualquer loja
+    assert.match(r, /longe demais|lojas parceiras|anotei/i);
+    const user = await prisma.user.findUnique({ where: { phone: c.phone } });
+    assert.equal(user?.cep, "01310-100"); // NÃO trocou pro CEP longe
+    const lead = await prisma.waitlistLead.findFirst({ where: { phone: c.phone, cep: "07500-000" } });
+    assert.equal(lead?.reason, "too_far");
+  });
 });
 
 function optionNames(transcript: string): string[] {

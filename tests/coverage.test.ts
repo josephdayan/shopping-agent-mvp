@@ -22,6 +22,7 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
 }
 
 const cleanEnv = {
+  LIA_COVERAGE_PRESET: undefined,
   LIA_COVERAGE_CITIES: undefined,
   LIA_COVERAGE_CEP_PREFIXES: undefined,
   LIA_COVERAGE_OFF: undefined,
@@ -103,4 +104,47 @@ test("LIA_COVERAGE_OFF disables the gate entirely", () => {
 test("coverageLabel reads env with a sane default", () => {
   withEnv(cleanEnv, () => assert.equal(coverageLabel(), "São Paulo capital"));
   withEnv({ ...cleanEnv, LIA_COVERAGE_LABEL: "Grande São Paulo" }, () => assert.equal(coverageLabel(), "Grande São Paulo"));
+});
+
+test("preset default = capital (Grande SP blocked)", () => {
+  withEnv(cleanEnv, () => {
+    assert.equal(checkCoverage({ city: "São Paulo" }).covered, true);
+    assert.equal(checkCoverage({ city: "Osasco" }).covered, false);
+    assert.equal(coverageLabel(), "São Paulo capital");
+  });
+});
+
+test("preset grande-sp covers the whole RMSP, still blocks interior", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "grande-sp" }, () => {
+    for (const c of ["São Paulo", "Osasco", "Guarulhos", "Santo André", "São Bernardo do Campo", "Barueri", "Mogi das Cruzes", "Salesópolis"]) {
+      assert.equal(checkCoverage({ city: c, uf: "SP" }).covered, true, `deveria cobrir ${c}`);
+    }
+    // interior fora da RMSP
+    assert.equal(checkCoverage({ city: "Campinas", uf: "SP" }).covered, false);
+    assert.equal(checkCoverage({ city: "Santos", uf: "SP" }).covered, false);
+    assert.equal(checkCoverage({ city: "Recife", uf: "PE" }).covered, false);
+    assert.equal(coverageLabel(), "São Paulo e região (Grande SP)");
+  });
+});
+
+test("preset grande-sp: prefixo '0' cobre metro quando cidade desconhecida (ViaCEP down)", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "grande-sp" }, () => {
+    assert.equal(checkCoverage({ cep: "06233-030" }).covered, true); // Osasco
+    assert.equal(checkCoverage({ cep: "09015-000" }).covered, true); // Santo André
+    assert.equal(checkCoverage({ cep: "13010-000" }).covered, false); // Campinas (1xxxx)
+  });
+});
+
+test("env LIA_COVERAGE_CITIES sobrepõe o preset", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "grande-sp", LIA_COVERAGE_CITIES: "São Paulo" }, () => {
+    assert.equal(checkCoverage({ city: "Osasco" }).covered, false); // preset ignorado
+    assert.equal(checkCoverage({ city: "São Paulo" }).covered, true);
+  });
+});
+
+test("preset desconhecido cai em capital", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_PRESET: "brasil-inteiro" }, () => {
+    assert.equal(checkCoverage({ city: "São Paulo" }).covered, true);
+    assert.equal(checkCoverage({ city: "Osasco" }).covered, false);
+  });
 });

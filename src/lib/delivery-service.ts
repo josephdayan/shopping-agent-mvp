@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
-import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
+import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, allUnits, type StoreConnector } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
+import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import { attrMatchesItem, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
@@ -82,7 +83,10 @@ type DeliveryContext = {
   storeKey?: string;
   notFound?: string[];
   cep?: string;
+  city?: string;
+  uf?: string;
   deliveryAddress?: string;
+  guardBlock?: FreightBlock;
   storeUnitId?: string;
   storeUnitLabel?: string;
   storeUnitAddress?: string;
@@ -377,6 +381,15 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   const cheapest = quotes.reduce((best, q) => (q.fee < best.fee ? q : best));
   const fastest = quotes.reduce((best, q) => (q.etaMinutes < best.etaMinutes ? q : best));
 
+  // Guarda de frete (fee): a distância já foi checada sobre TODAS as lojas no handleNewCep;
+  // aqui, com a cotação REAL da loja escolhida, barra um frete absurdo (loja distante pra
+  // esta cesta). Só morde cotação real (mock é fake-barato). respondAfterQuote trata primeiro.
+  const feeBlock = checkFreightGuard({ distanceKm: null, fee: cheapest.fee, feeIsMock: cheapest.mock });
+  if (feeBlock) {
+    ctx.guardBlock = feeBlock;
+    return;
+  }
+
   // itemsSubtotal = real store cost (what the operator pays). serviceFee = the
   // 10% markup margin (yours; NOT shown to the customer as a line). The customer is
   // charged the marked-up products + the pass-through frete.
@@ -446,6 +459,17 @@ function summaryText(ctx: DeliveryContext): string {
 // order summary — whichever applies. `prefix` is prepended (e.g. "Endereço salvo").
 async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector, prefix?: string) {
   const pre = prefix ? `${prefix}\n\n` : "";
+  // Guarda de frete disparou na cotação (fee real absurdo) → recusa educada + lead, sem
+  // prefixo "endereço salvo" (seria contraditório). Mantém o CEP; deixa ajustar a cesta.
+  if (ctx.guardBlock) {
+    const reason = ctx.guardBlock.reason;
+    ctx.guardBlock = undefined;
+    ctx.step = "collecting";
+    await writeCtx(convoId, ctx);
+    if (ctx.cep) await recordWaitlistLead({ phone, cep: ctx.cep, city: ctx.city, uf: ctx.uf, reason });
+    await reply(phone, copy.tooFarForDelivery(ctx.city, coverageLabel()));
+    return;
+  }
   if (belowMinimum(ctx, store)) {
     ctx.step = "collecting";
     await writeCtx(convoId, ctx);
@@ -881,14 +905,28 @@ async function handleNewCep(
   // área → grava o lead (vira mapa de demanda no /ops) e NÃO persiste o CEP nem cota.
   const area = checkCoverage({ cep, city, uf });
   if (!area.covered) {
-    await recordWaitlistLead({ phone, cep, city, uf });
+    await recordWaitlistLead({ phone, cep, city, uf, reason: "outside_coverage" });
     ctx.step = "need_cep";
     await writeCtx(convoId, ctx);
     await reply(phone, copy.outsideCoverage(city, coverageLabel()));
     return;
   }
 
+  // Guarda de frete (distância): a cidade é atendida, mas o endereço pode estar longe de
+  // QUALQUER loja parceira (metrópole é grande). Recusa educada + lead too_far, sem persistir.
+  const near = await pickNearestUnit(allUnits(), cep);
+  const farBlock = checkFreightGuard({ distanceKm: near.distanceKm });
+  if (farBlock) {
+    await recordWaitlistLead({ phone, cep, city, uf, reason: "too_far" });
+    ctx.step = "need_cep";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.tooFarForDelivery(city, coverageLabel()));
+    return;
+  }
+
   ctx.cep = cep;
+  ctx.city = city ?? ctx.city;
+  ctx.uf = uf ?? ctx.uf;
   ctx.deliveryAddress = address ?? ctx.deliveryAddress;
   ctx.flow = "delivery";
   await prisma.user.update({ where: { id: userId }, data: { cep } });
@@ -1519,13 +1557,20 @@ export async function getOperatorQueue() {
 
 // Someone asked from outside the delivery area. Deduped by (phone, cep); repeats bump
 // `hits` so the /ops demand map reflects real intensity. Never throws into the chat flow.
-export async function recordWaitlistLead(input: { phone: string; cep: string; city?: string; uf?: string }) {
+export async function recordWaitlistLead(input: {
+  phone: string;
+  cep: string;
+  city?: string;
+  uf?: string;
+  reason?: "outside_coverage" | "too_far" | "fee_too_high";
+}) {
   const phone = normalizePhone(input.phone);
+  const reason = input.reason ?? "outside_coverage";
   try {
     await prisma.waitlistLead.upsert({
       where: { phone_cep: { phone, cep: input.cep } },
-      create: { phone, cep: input.cep, city: input.city ?? null, uf: input.uf ?? null },
-      update: { hits: { increment: 1 }, city: input.city ?? undefined, uf: input.uf ?? undefined }
+      create: { phone, cep: input.cep, city: input.city ?? null, uf: input.uf ?? null, reason },
+      update: { hits: { increment: 1 }, city: input.city ?? undefined, uf: input.uf ?? undefined, reason }
     });
   } catch (err) {
     console.error("[waitlist] failed to record lead", err);

@@ -31,7 +31,7 @@ type DeliveryOrder = {
 };
 
 type WaitlistRegion = { city: string; uf?: string | null; leads: number; hits: number; lastAt: string };
-type WaitlistLead = { id: string; phone: string; cep: string; city?: string | null; uf?: string | null; hits: number; updatedAt: string };
+type WaitlistLead = { id: string; phone: string; cep: string; city?: string | null; uf?: string | null; reason?: string | null; hits: number; updatedAt: string };
 type WaitlistData = { total: number; regions: WaitlistRegion[]; recent: WaitlistLead[] };
 
 const COURIER_LABEL: Record<string, string> = {
@@ -373,6 +373,9 @@ export default function OpsBoard() {
                 <div style={{ display: "grid", gap: 4 }}>
                   {waitlist.recent.map((l) => (
                     <div key={l.id} style={{ fontSize: 13, color: "#475467" }}>
+                      <span style={l.reason === "too_far" ? reasonFar : reasonOut}>
+                        {l.reason === "too_far" ? "longe" : "fora"}
+                      </span>{" "}
                       {l.city ?? "cidade?"}
                       {l.uf ? `/${l.uf}` : ""} · {l.cep} ·{" "}
                       <a href={`https://wa.me/${l.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" style={{ color: "#0f3d3a" }}>
@@ -411,4 +414,6 @@ const waitCard: React.CSSProperties = { border: "1px dashed #d0d5dd", borderRadi
 const waitHeader: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, width: "100%", background: "none", border: "none", padding: 0, fontSize: 14, color: "#344054", cursor: "pointer", textAlign: "left" };
 const waitSubtitle: React.CSSProperties = { fontSize: 12, color: "#98a2b3", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.04em" };
 const regionChip: React.CSSProperties = { fontSize: 13, color: "#0f3d3a", background: "#eef2f1", border: "1px solid #e4e7ec", borderRadius: 999, padding: "3px 10px" };
+const reasonOut: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#93370d", background: "#fef0c7", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
+const reasonFar: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#5925dc", background: "#ebe9fe", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
 const ghost: React.CSSProperties = { padding: "8px 12px", background: "transparent", color: "#b42318", border: "1px solid #fda29b", borderRadius: 8, fontSize: 13, cursor: "pointer" };
