@@ -33,7 +33,8 @@ const UNITS: StoreUnit[] = [
   { id: "boti-internacional-gru", label: "O Boticário Internacional Shopping", address: "Rod. Presidente Dutra, km 230, Guarulhos - SP", cep: "07034-911", lat: -23.48831, lng: -46.54898 },
   { id: "boti-grand-plaza", label: "O Boticário Grand Plaza Shopping", address: "Av. Industrial, 600, Santo André - SP", cep: "09080-500", lat: -23.64872, lng: -46.53192 },
   { id: "boti-golden-square", label: "O Boticário Golden Square Shopping", address: "Av. Kennedy, 700, São Bernardo do Campo - SP", cep: "09726-263", lat: -23.68363, lng: -46.55717 },
-  { id: "boti-uniao-osasco", label: "O Boticário Shopping União de Osasco", address: "Av. dos Autonomistas, 1400, Osasco - SP", cep: "06020-010", lat: -23.53898, lng: -46.76534 }
+  { id: "boti-uniao-osasco", label: "O Boticário Shopping União de Osasco", address: "Av. dos Autonomistas, 1400, Osasco - SP", cep: "06020-010", lat: -23.53898, lng: -46.76534 },
+  { id: "boti-iguatemi-alphaville", label: "O Boticário Iguatemi Alphaville", address: "Alameda Rio Negro, 111, Alphaville, Barueri - SP", cep: "06454-000", lat: -23.50457, lng: -46.84823 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {

@@ -367,6 +367,14 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   const near = await pickNearestUnit(store.listUnits(), ctx.cep);
   const unit = near.unit;
   ctx.storeUnitDistanceKm = near.distanceKm ?? undefined;
+  // Guarda de distância POR LOJA: o handleNewCep validou "existe ALGUMA loja perto", mas a
+  // loja desta cesta pode ser outra (ex.: cesta pet em Cotia → Petz longe, mesmo com um
+  // Carrefour do lado). Barra antes de gastar cotação de courier.
+  const distBlock = checkFreightGuard({ distanceKm: near.distanceKm });
+  if (distBlock) {
+    ctx.guardBlock = distBlock;
+    return;
+  }
   // Quote every registered courier in parallel. Default to the CHEAPEST; if the FASTEST
   // is a different courier that costs more, offer the customer the choice (barato vs rápido).
   const pool = await quoteAll({

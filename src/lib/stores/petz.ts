@@ -35,7 +35,9 @@ const UNITS: StoreUnit[] = [
   { id: "petz-guarulhos", label: "Petz Guarulhos", address: "Av. Paulo Faccini, 1385, Macedo, Guarulhos - SP", cep: "07111-000", lat: -23.45406, lng: -46.53432 },
   { id: "petz-osasco", label: "Petz Osasco", address: "Av. dos Autonomistas, 1473, Vila Yara, Osasco - SP", cep: "06090-010", lat: -23.54147, lng: -46.76773 },
   { id: "petz-santo-andre", label: "Petz Santo André", address: "Av. Dom Pedro II, 933, Jardim, Santo André - SP", cep: "09080-110", lat: -23.6477, lng: -46.53695 },
-  { id: "petz-sbc", label: "Petz São Bernardo", address: "Av. Rotary, 825, Centro, São Bernardo do Campo - SP", cep: "09721-000", lat: -23.72139, lng: -46.5406 }
+  { id: "petz-sbc", label: "Petz São Bernardo", address: "Av. Rotary, 825, Centro, São Bernardo do Campo - SP", cep: "09721-000", lat: -23.72139, lng: -46.5406 },
+  { id: "petz-alphaville", label: "Petz Alphaville", address: "Av. Alphaville, 580, Alphaville, Barueri - SP", cep: "06472-010", lat: -23.48985, lng: -46.85399 },
+  { id: "petz-tambore", label: "Petz Tamboré", address: "Alameda Araguaia, 2179, Tamboré, Barueri - SP", cep: "06455-000", lat: -23.49981, lng: -46.84096 }
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {
