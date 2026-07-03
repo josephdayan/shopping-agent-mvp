@@ -66,6 +66,13 @@ export function listStores(): StoreConnector[] {
   return Object.values(STORES);
 }
 
+// Todas as unidades de todas as lojas habilitadas. A guarda de frete usa isto para
+// perguntar "existe QUALQUER loja perto o suficiente deste CEP?" independente da loja
+// que vai atender a cesta.
+export function allUnits(): StoreUnit[] {
+  return listStores().flatMap((s) => s.listUnits());
+}
+
 // Search EVERY registered store and tag each hit with the store that carries it.
 // This is the foundation of the "qualquer coisa, de qualquer loja, num WhatsApp só"
 // moat — today it's just Carrefour; as stores are added it spreads automatically.

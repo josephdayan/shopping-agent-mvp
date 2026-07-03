@@ -22,6 +22,11 @@ export type StoreUnit = {
   label: string; // e.g. "Carrefour Pinheiros"
   address: string;
   cep?: string;
+  // Coordenadas reais da loja (pino do Google Maps). Quando presentes, a escolha da
+  // unidade mais próxima usa distância geográfica de verdade (haversine) em vez da
+  // proximidade numérica de CEP. Opcional: sem elas, cai no proxy de CEP (nearest.ts).
+  lat?: number;
+  lng?: number;
 };
 
 export type StoreConnector = {
@@ -32,8 +37,9 @@ export type StoreConnector = {
   minOrder?: number;
   // Best catalog matches for one free-text basket line ("pasta de dente colgate").
   searchItems(query: string, limit?: number): Promise<CatalogItem[]>;
-  // Store unit nearest to the buyer's CEP (mock returns a sensible default).
-  nearestUnit(cep?: string): Promise<StoreUnit>;
+  // All clique-e-retire units of this store. Choosing the nearest to a CEP is done by
+  // the shared pickNearestUnit() helper (stores/nearest.ts), not per-connector.
+  listUnits(): StoreUnit[];
   // Counter-pickup instructions for the click-e-retire order (operator + courier).
   pickupInstructions(orderNumber: string): string;
   // Full catalog (used by the AI matcher; real stores return a fetched/cached list).

@@ -69,6 +69,18 @@ export function cepNotFound(cep: string): string {
   return `Hmm, não achei o CEP ${cep} 🤔. Confere se está certinho (ex.: 01310-100) e me manda de novo?`;
 }
 
+// Fora da área que a Lia atende hoje: nunca aceita um pedido que não consegue entregar —
+// guarda o contato e promete avisar. `areaLabel` vem da config de cobertura (coverage.ts).
+export function outsideCoverage(city: string | undefined, areaLabel: string): string {
+  const onde = city ? `em ${city}` : "aí ainda";
+  return [
+    `Ah, que pena — a Lia ainda não chega ${onde} 😔.`,
+    `Por enquanto eu entrego só em *${areaLabel}*.`,
+    "",
+    "Mas já anotei seu contato aqui 📍 — assim que a gente chegar na sua região, te chamo na hora! 💚"
+  ].join("\n");
+}
+
 // ---------- search / basket ----------
 
 export function searching(): string {

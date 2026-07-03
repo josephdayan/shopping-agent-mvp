@@ -1,0 +1,106 @@
+import "./helpers/load-env";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { checkCoverage, normalizeCity, coverageLabel } from "../src/lib/coverage";
+
+// Guard the env we toggle so tests don't leak into each other.
+function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
+  const prev: Record<string, string | undefined> = {};
+  for (const k of Object.keys(vars)) {
+    prev[k] = process.env[k];
+    if (vars[k] === undefined) delete process.env[k];
+    else process.env[k] = vars[k];
+  }
+  try {
+    fn();
+  } finally {
+    for (const k of Object.keys(prev)) {
+      if (prev[k] === undefined) delete process.env[k];
+      else process.env[k] = prev[k];
+    }
+  }
+}
+
+const cleanEnv = {
+  LIA_COVERAGE_CITIES: undefined,
+  LIA_COVERAGE_CEP_PREFIXES: undefined,
+  LIA_COVERAGE_OFF: undefined,
+  LIA_COVERAGE_LABEL: undefined
+};
+
+test("normalizeCity strips accents and case", () => {
+  assert.equal(normalizeCity("São Paulo"), "sao paulo");
+  assert.equal(normalizeCity("  SANTO   ANDRÉ "), "santo andre");
+});
+
+test("default coverage = São Paulo capital (city known)", () => {
+  withEnv(cleanEnv, () => {
+    assert.equal(checkCoverage({ city: "São Paulo", uf: "SP", cep: "01310100" }).covered, true);
+    assert.equal(checkCoverage({ city: "SAO PAULO", uf: "SP" }).covered, true);
+  });
+});
+
+test("known city outside area is blocked (even with a weird CEP prefix)", () => {
+  withEnv(cleanEnv, () => {
+    // Recife
+    assert.equal(checkCoverage({ city: "Recife", uf: "PE", cep: "50030000" }).covered, false);
+    // Guarulhos is Grande SP, NOT capital → blocked by default
+    assert.equal(checkCoverage({ city: "Guarulhos", uf: "SP", cep: "07010000" }).covered, false);
+    // Osasco → blocked by default
+    assert.equal(checkCoverage({ city: "Osasco", uf: "SP" }).covered, false);
+  });
+});
+
+test("city unknown (ViaCEP down) falls back to CEP prefix", () => {
+  withEnv(cleanEnv, () => {
+    // SP capital prefix → covered
+    assert.equal(checkCoverage({ cep: "01310100" }).covered, true);
+    assert.equal(checkCoverage({ cep: "05409000" }).covered, true);
+    // Recife prefix → blocked
+    assert.equal(checkCoverage({ cep: "50030000" }).covered, false);
+    // Campinas (13xxx) → blocked
+    assert.equal(checkCoverage({ cep: "13010000" }).covered, false);
+  });
+});
+
+test("no city and no usable CEP → fail open (operator catches it)", () => {
+  withEnv(cleanEnv, () => {
+    assert.equal(checkCoverage({}).covered, true);
+    assert.equal(checkCoverage({ cep: "123" }).covered, true);
+  });
+});
+
+test("LIA_COVERAGE_CITIES widens coverage without code (rest-of-SP step)", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_CITIES: "São Paulo, Osasco, Santo André, Guarulhos" }, () => {
+    assert.equal(checkCoverage({ city: "Osasco", uf: "SP" }).covered, true);
+    assert.equal(checkCoverage({ city: "Santo André", uf: "SP" }).covered, true);
+    assert.equal(checkCoverage({ city: "Guarulhos", uf: "SP" }).covered, true);
+    // still blocks a city not on the list
+    assert.equal(checkCoverage({ city: "Campinas", uf: "SP" }).covered, false);
+  });
+});
+
+test("LIA_COVERAGE_CITIES accepts Cidade/UF form", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_CITIES: "São Paulo/SP, Osasco/SP" }, () => {
+    assert.equal(checkCoverage({ city: "Osasco", uf: "SP" }).covered, true);
+  });
+});
+
+test("LIA_COVERAGE_CEP_PREFIXES override changes the fallback net", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_CEP_PREFIXES: "06,07" }, () => {
+    // now 06/07 (Grande SP) pass the unknown-city fallback, 01 no longer does
+    assert.equal(checkCoverage({ cep: "06233000" }).covered, true);
+    assert.equal(checkCoverage({ cep: "01310100" }).covered, false);
+  });
+});
+
+test("LIA_COVERAGE_OFF disables the gate entirely", () => {
+  withEnv({ ...cleanEnv, LIA_COVERAGE_OFF: "true" }, () => {
+    assert.equal(checkCoverage({ city: "Recife", uf: "PE", cep: "50030000" }).covered, true);
+  });
+});
+
+test("coverageLabel reads env with a sane default", () => {
+  withEnv(cleanEnv, () => assert.equal(coverageLabel(), "São Paulo capital"));
+  withEnv({ ...cleanEnv, LIA_COVERAGE_LABEL: "Grande São Paulo" }, () => assert.equal(coverageLabel(), "Grande São Paulo"));
+});

@@ -32,13 +32,6 @@ const UNITS: StoreUnit[] = [
   { id: "petz-analia-franco", label: "Petz Anália Franco", address: "Av. Regente Feijó, 677, Vila Regente Feijó, São Paulo - SP", cep: "03342-000" }
 ];
 
-// CEP -> comparable 8-digit number (zero-padded). Returns null if unusable.
-function cepToNumber(cep?: string | null): number | null {
-  const digits = (cep ?? "").replace(/\D/g, "");
-  if (digits.length < 5) return null;
-  return Number(digits.padEnd(8, "0").slice(0, 8));
-}
-
 function seedSearch(query: string, limit: number): CatalogItem[] {
   const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter((e) => e.score > 0);
   scored.sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice);
@@ -59,21 +52,8 @@ export const petzStore: StoreConnector = {
     return SEED_CATALOG;
   },
 
-  async nearestUnit(cep?: string): Promise<StoreUnit> {
-    const target = cepToNumber(cep);
-    if (target == null) return UNITS[0];
-    let best = UNITS[0];
-    let bestDiff = Number.POSITIVE_INFINITY;
-    for (const unit of UNITS) {
-      const unitNum = cepToNumber(unit.cep);
-      if (unitNum == null) continue;
-      const diff = Math.abs(unitNum - target);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        best = unit;
-      }
-    }
-    return best;
+  listUnits(): StoreUnit[] {
+    return UNITS;
   },
 
   pickupInstructions(orderNumber: string): string {

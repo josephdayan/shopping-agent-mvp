@@ -84,6 +84,14 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
 - **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
   pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
+- **Cobertura = dado, não código** (`src/lib/coverage.ts`, puro+testado). Piloto = **SP capital**.
+  Quando o cliente manda um CEP fora da área, o cérebro NÃO aceita o pedido: grava um
+  `WaitlistLead` (dedupe por phone+cep, conta `hits`) e responde com carinho (`copy.outsideCoverage`).
+  O `/ops` mostra isso como **mapa de demanda** (cidade → nº de pedidos) pra expandir onde já
+  tem gente pedindo. Cidade vem do ViaCEP (autoritativo); se o ViaCEP cai, usa prefixo de CEP.
+  **Expandir = env, sem deploy:** `LIA_COVERAGE_CITIES` ("São Paulo, Osasco, Santo André…"),
+  `LIA_COVERAGE_CEP_PREFIXES` (fallback), `LIA_COVERAGE_LABEL` (nome na msg), `LIA_COVERAGE_OFF=true`
+  (kill-switch). Próximo passo combinado: ampliar pro **resto de SP** (Grande SP) por essa env.
 
 ### Riscos honestos a validar num piloto real
 1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:

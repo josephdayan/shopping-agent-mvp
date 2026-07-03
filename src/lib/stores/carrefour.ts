@@ -30,13 +30,6 @@ const UNITS: StoreUnit[] = [
   { id: "crf-taboao", label: "Carrefour Hiper Taboão da Serra", address: "Rod. Régis Bittencourt, 1835 - Taboão da Serra - SP", cep: "06768-200" }
 ];
 
-// CEP -> comparable 8-digit number (zero-padded). Returns null if unusable.
-function cepToNumber(cep?: string | null): number | null {
-  const digits = (cep ?? "").replace(/\D/g, "");
-  if (digits.length < 5) return null;
-  return Number(digits.padEnd(8, "0").slice(0, 8));
-}
-
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
 // Hard cap so a slow Carrefour scrape never hangs the WhatsApp turn — past this we
@@ -189,22 +182,8 @@ export const carrefourStore: StoreConnector = {
     return SEED_CATALOG;
   },
 
-  async nearestUnit(cep?: string): Promise<StoreUnit> {
-    const target = cepToNumber(cep);
-    if (target == null) return UNITS[0];
-    // Pick the unit whose CEP is numerically closest to the customer's.
-    let best = UNITS[0];
-    let bestDiff = Number.POSITIVE_INFINITY;
-    for (const unit of UNITS) {
-      const unitNum = cepToNumber(unit.cep);
-      if (unitNum == null) continue;
-      const diff = Math.abs(unitNum - target);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        best = unit;
-      }
-    }
-    return best;
+  listUnits(): StoreUnit[] {
+    return UNITS;
   },
 
   pickupInstructions(orderNumber: string): string {

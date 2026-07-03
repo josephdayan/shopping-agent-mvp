@@ -89,6 +89,7 @@ function cheapItemQuery(): string {
 }
 
 async function wipeTestData() {
+  await prisma.waitlistLead.deleteMany({ where: { phone: { startsWith: PREFIX } } });
   const users = await prisma.user.findMany({ where: { phone: { startsWith: PREFIX } }, select: { id: true } });
   const ids = users.map((u) => u.id);
   if (!ids.length) return;
@@ -294,6 +295,28 @@ test("trocar endereço: pede o novo CEP e atualiza", async (t) => {
   const ask = await c.send("quero trocar meu endereço");
   assert.match(ask, /CEP/);
   const updated = await c.send("04538-132");
+  assert.match(updated, /atualizado|salvo/i);
+  const user = await prisma.user.findUnique({ where: { phone: c.phone } });
+  assert.equal(user?.cep, "04538-132");
+});
+
+test("cobertura: CEP fora da área não vira pedido — entra na lista de espera", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer(); // já tem 01310-100 (SP capital)
+  const reply = await c.send("50030-000"); // Recife — CEP puro = troca de endereço
+  assert.match(reply, /não chega|anotei|espera/i);
+  // não sobrescreveu o CEP coberto que ele já tinha
+  const user = await prisma.user.findUnique({ where: { phone: c.phone } });
+  assert.equal(user?.cep, "01310-100");
+  // gravou o lead pra virar demanda no /ops
+  const lead = await prisma.waitlistLead.findFirst({ where: { phone: c.phone, cep: "50030-000" } });
+  assert.ok(lead, "esperava um lead na lista de espera");
+});
+
+test("cobertura: CEP de SP capital passa normal", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const updated = await c.send("04538-132"); // Itaim Bibi, SP capital
   assert.match(updated, /atualizado|salvo/i);
   const user = await prisma.user.findUnique({ where: { phone: c.phone } });
   assert.equal(user?.cep, "04538-132");

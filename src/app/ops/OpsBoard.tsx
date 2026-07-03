@@ -30,6 +30,10 @@ type DeliveryOrder = {
   paidAt?: string | null;
 };
 
+type WaitlistRegion = { city: string; uf?: string | null; leads: number; hits: number; lastAt: string };
+type WaitlistLead = { id: string; phone: string; cep: string; city?: string | null; uf?: string | null; hits: number; updatedAt: string };
+type WaitlistData = { total: number; regions: WaitlistRegion[]; recent: WaitlistLead[] };
+
 const COURIER_LABEL: Record<string, string> = {
   uber_direct: "Uber Direct",
   lalamove: "Lalamove",
@@ -88,6 +92,8 @@ function ageLabel(iso?: string | null): string {
 
 export default function OpsBoard() {
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
+  const [waitlist, setWaitlist] = useState<WaitlistData | null>(null);
+  const [showWaitlist, setShowWaitlist] = useState(false);
   const [ready, setReady] = useState(false);
   const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -131,6 +137,13 @@ export default function OpsBoard() {
         const data = (await res.json()) as { orders?: DeliveryOrder[] };
         setOrders(data.orders ?? []);
         setDenied(false);
+      }
+      // Waitlist is best-effort: a failure here must never blank the order queue.
+      try {
+        const wr = await fetch(`/api/ops/waitlist`, { cache: "no-store" });
+        if (wr.ok) setWaitlist((await wr.json()) as WaitlistData);
+      } catch {
+        /* ignore */
       }
     } finally {
       setLoading(false);
@@ -330,6 +343,50 @@ export default function OpsBoard() {
           </div>
         );
       })}
+
+      {waitlist && waitlist.total > 0 && (
+        <div style={waitCard}>
+          <button style={waitHeader} onClick={() => setShowWaitlist((v) => !v)}>
+            <span>
+              📍 Lista de espera — <strong>{waitlist.total}</strong> fora da área
+              {waitlist.regions[0] && waitlist.regions[0].city !== "—" ? ` · +pedida: ${waitlist.regions[0].city} (${waitlist.regions[0].leads})` : ""}
+            </span>
+            <span style={{ color: "#98a2b3" }}>{showWaitlist ? "▲ ocultar" : "▼ ver demanda"}</span>
+          </button>
+
+          {showWaitlist && (
+            <div style={{ marginTop: 12, display: "grid", gap: 14 }}>
+              <div>
+                <div style={waitSubtitle}>Onde tem gente pedindo (expanda por aqui)</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {waitlist.regions.map((r, i) => (
+                    <span key={i} style={regionChip}>
+                      {r.city === "—" ? "cidade?" : r.city}
+                      {r.uf ? `/${r.uf}` : ""} · <strong>{r.leads}</strong>
+                      {r.hits > r.leads ? ` (${r.hits} pedidos)` : ""}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div style={waitSubtitle}>Últimos contatos</div>
+                <div style={{ display: "grid", gap: 4 }}>
+                  {waitlist.recent.map((l) => (
+                    <div key={l.id} style={{ fontSize: 13, color: "#475467" }}>
+                      {l.city ?? "cidade?"}
+                      {l.uf ? `/${l.uf}` : ""} · {l.cep} ·{" "}
+                      <a href={`https://wa.me/${l.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" style={{ color: "#0f3d3a" }}>
+                        💬 {l.phone}
+                      </a>
+                      {l.hits > 1 ? ` · ${l.hits}×` : ""} · {ageLabel(l.updatedAt)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -350,4 +407,8 @@ const payBadge: React.CSSProperties = { fontSize: 12, color: "#475467", backgrou
 const input: React.CSSProperties = { padding: "8px 10px", border: "1px solid #d0d5dd", borderRadius: 8, fontSize: 14, minWidth: 180 };
 const primary: React.CSSProperties = { padding: "8px 14px", background: "#0f3d3a", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, cursor: "pointer" };
 const secondary: React.CSSProperties = { padding: "8px 14px", background: "#eef2f1", color: "#0f3d3a", border: "1px solid #d0d5dd", borderRadius: 8, fontSize: 14, cursor: "pointer" };
+const waitCard: React.CSSProperties = { border: "1px dashed #d0d5dd", borderRadius: 12, padding: 16, background: "#fcfcfd" };
+const waitHeader: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, width: "100%", background: "none", border: "none", padding: 0, fontSize: 14, color: "#344054", cursor: "pointer", textAlign: "left" };
+const waitSubtitle: React.CSSProperties = { fontSize: 12, color: "#98a2b3", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.04em" };
+const regionChip: React.CSSProperties = { fontSize: 13, color: "#0f3d3a", background: "#eef2f1", border: "1px solid #e4e7ec", borderRadius: 999, padding: "3px 10px" };
 const ghost: React.CSSProperties = { padding: "8px 12px", background: "transparent", color: "#b42318", border: "1px solid #fda29b", borderRadius: 8, fontSize: 13, cursor: "pointer" };

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, type StoreConnector } from "@/lib/stores";
+import { pickNearestUnit } from "@/lib/stores/nearest";
 import { attrMatchesItem, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
@@ -18,6 +19,7 @@ import {
   type Intent
 } from "@/lib/lia-intents";
 import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
+import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
 import * as copy from "@/lib/lia-copy";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -84,6 +86,7 @@ type DeliveryContext = {
   storeUnitId?: string;
   storeUnitLabel?: string;
   storeUnitAddress?: string;
+  storeUnitDistanceKm?: number;
   deliveryFee?: number;
   etaMinutes?: number;
   courierQuoteId?: string;
@@ -332,7 +335,7 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
 // CEP -> human address via ViaCEP. invalid=true means the CEP definitely doesn't
 // exist; a network failure keeps invalid=false (we save the CEP and move on). Hard
 // 4s timeout — a WhatsApp turn must never hang on a slow ViaCEP.
-async function expandCep(cep: string): Promise<{ address?: string; invalid: boolean }> {
+async function expandCep(cep: string): Promise<{ address?: string; city?: string; uf?: string; invalid: boolean }> {
   const digits = cep.replace(/\D/g, "");
   if (digits.length !== 8) return { invalid: true };
   try {
@@ -343,7 +346,12 @@ async function expandCep(cep: string): Promise<{ address?: string; invalid: bool
     if (!res.ok) return { invalid: false };
     const data = (await res.json()) as { logradouro?: string; bairro?: string; localidade?: string; uf?: string; erro?: boolean };
     if (data.erro) return { invalid: true };
-    return { address: [data.logradouro, data.bairro, data.localidade, data.uf].filter(Boolean).join(", "), invalid: false };
+    return {
+      address: [data.logradouro, data.bairro, data.localidade, data.uf].filter(Boolean).join(", "),
+      city: data.localidade,
+      uf: data.uf,
+      invalid: false
+    };
   } catch {
     return { invalid: false };
   }
@@ -352,7 +360,9 @@ async function expandCep(cep: string): Promise<{ address?: string; invalid: bool
 // ---------- quote + summary ----------
 
 async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
-  const unit = await store.nearestUnit(ctx.cep);
+  const near = await pickNearestUnit(store.listUnits(), ctx.cep);
+  const unit = near.unit;
+  ctx.storeUnitDistanceKm = near.distanceKm ?? undefined;
   // Quote every registered courier in parallel. Default to the CHEAPEST; if the FASTEST
   // is a different courier that costs more, offer the customer the choice (barato vs rápido).
   const pool = await quoteAll({
@@ -859,13 +869,25 @@ async function handleNewCep(
   cep: string,
   hadCepBefore: boolean
 ) {
-  const { address, invalid } = await expandCep(cep);
+  const { address, city, uf, invalid } = await expandCep(cep);
   if (invalid) {
     ctx.step = "need_cep";
     await writeCtx(convoId, ctx);
     await reply(phone, copy.cepNotFound(cep));
     return;
   }
+
+  // Trava de cobertura: nunca aceita um pedido pago que a operação não entrega. Fora da
+  // área → grava o lead (vira mapa de demanda no /ops) e NÃO persiste o CEP nem cota.
+  const area = checkCoverage({ cep, city, uf });
+  if (!area.covered) {
+    await recordWaitlistLead({ phone, cep, city, uf });
+    ctx.step = "need_cep";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.outsideCoverage(city, coverageLabel()));
+    return;
+  }
+
   ctx.cep = cep;
   ctx.deliveryAddress = address ?? ctx.deliveryAddress;
   ctx.flow = "delivery";
@@ -1426,7 +1448,7 @@ export async function opsDispatchCourier(orderId: string) {
   const courier = getCourier(order.courierKey);
   // Re-derive the pickup unit so the connector can re-quote at dispatch (the order-time
   // quote has expired). dropoff CEP is the customer's.
-  const unit = await store.nearestUnit(order.cep ?? undefined);
+  const unit = (await pickNearestUnit(store.listUnits(), order.cep ?? undefined)).unit;
   const dispatch = await courier.dispatch({
     orderId: order.id,
     pickupAddress: order.storeAddress ?? unit.address,
@@ -1493,4 +1515,38 @@ export async function getOperatorQueue() {
     where: { status: { in: ["paid", "operator_buying", "ready_for_pickup", "dispatched"] } },
     orderBy: { createdAt: "asc" }
   });
+}
+
+// Someone asked from outside the delivery area. Deduped by (phone, cep); repeats bump
+// `hits` so the /ops demand map reflects real intensity. Never throws into the chat flow.
+export async function recordWaitlistLead(input: { phone: string; cep: string; city?: string; uf?: string }) {
+  const phone = normalizePhone(input.phone);
+  try {
+    await prisma.waitlistLead.upsert({
+      where: { phone_cep: { phone, cep: input.cep } },
+      create: { phone, cep: input.cep, city: input.city ?? null, uf: input.uf ?? null },
+      update: { hits: { increment: 1 }, city: input.city ?? undefined, uf: input.uf ?? undefined }
+    });
+  } catch (err) {
+    console.error("[waitlist] failed to record lead", err);
+  }
+}
+
+// Demand map for /ops: leads grouped by city (most-wanted first) + the latest raw entries.
+export async function getWaitlist() {
+  const leads = await prisma.waitlistLead.findMany({ orderBy: { updatedAt: "desc" }, take: 300 });
+  const byRegion = new Map<string, { city: string; uf?: string; leads: number; hits: number; lastAt: Date }>();
+  for (const l of leads) {
+    const key = `${normalizeCity(l.city ?? "")}|${l.uf ?? ""}`;
+    const cur = byRegion.get(key);
+    if (cur) {
+      cur.leads += 1;
+      cur.hits += l.hits;
+      if (l.updatedAt > cur.lastAt) cur.lastAt = l.updatedAt;
+    } else {
+      byRegion.set(key, { city: l.city ?? "—", uf: l.uf ?? undefined, leads: 1, hits: l.hits, lastAt: l.updatedAt });
+    }
+  }
+  const regions = [...byRegion.values()].sort((a, b) => b.leads - a.leads || b.hits - a.hits);
+  return { total: leads.length, regions, recent: leads.slice(0, 40) };
 }
