@@ -50,6 +50,11 @@ export function askCepAgain(): string {
   return "Só preciso do seu *CEP* pra continuar (ex.: 01310-100) 📍 — com ele eu calculo a entrega certinha.";
 }
 
+// Itens anotados quando a Lia JÁ se apresentou — confirma curto e pede só o CEP.
+export function notedAskCep(notedItems: string[]): string {
+  return `✅ Anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\nAgora só falta seu *CEP* (ex.: 01310-100) 📍 que eu busco tudo.`;
+}
+
 export function addressSavedAskItems(address: string): string {
   return `📍 Endereço salvo: ${address}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
 }
@@ -415,6 +420,11 @@ export function finishChoiceFirst(): string {
 // "coca" com Fanta+2 Cocas na mesa → estreitou pras que batem.
 export function narrowedChoices(query: string): string {
   return `Boa, ficou entre essas de *${query}*:`;
+}
+
+// "vai mudar o frete?" com pedido já cotado → o número real, não a explicação genérica.
+export function currentFee(fee: number): string {
+  return `No seu pedido atual a entrega tá em *${brl(fee)}* 🛵 Se mudar o endereço ou a cesta, eu recalculo e te mostro de novo.`;
 }
 
 // "quanto deu?" com cobrança aberta → total fechado + caminho pro código.

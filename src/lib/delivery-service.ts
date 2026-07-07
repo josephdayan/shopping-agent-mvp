@@ -591,6 +591,15 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // ---- perguntas de serviço / atendimento (funcionam em QUALQUER step) ----
   if (intent.kind === "service_question") {
+    // "vai mudar o frete?"/"quanto ta o frete?" com pedido já cotado → o valor REAL.
+    if (
+      intent.topic === "fee" &&
+      ctx.deliveryFee != null &&
+      (ctx.step === "quoted" || ctx.step === "choosing_payment" || ctx.step === "awaiting_payment")
+    ) {
+      await reply(phone, copy.currentFee(ctx.deliveryFee));
+      return;
+    }
     await reply(
       phone,
       copy.serviceAnswer(intent.topic, coverageLabel(), {
@@ -691,6 +700,16 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await reply(phone, copy.thanks());
       return;
     }
+    // Pergunta ("o que vc consegue comprar?") se responde — NUNCA vira item anotado.
+    const asking = intent.kind === "free_text" && isQuestion(text);
+    if (asking) {
+      await reply(phone, copy.serviceAnswer("generic", coverageLabel()));
+      ctx.flow = "delivery";
+      ctx.step = "need_cep";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.askCepAgain());
+      return;
+    }
     const lines = intent.kind === "free_text" ? parseBasketLines(text) : [];
     if (lines.length) {
       ctx.pendingRequest = ctx.pendingRequest ? `${ctx.pendingRequest}, ${text}` : text;
@@ -699,7 +718,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     ctx.step = "need_cep";
     await writeCtx(convo.id, ctx);
     const noted = ctx.pendingRequest ? parseBasketLines(ctx.pendingRequest).map((l) => `${l.qty}x ${l.phrase}`) : [];
-    await reply(phone, alreadyAsked && !lines.length ? copy.askCepAgain() : copy.welcomeAskCep(noted));
+    await reply(
+      phone,
+      alreadyAsked
+        ? lines.length
+          ? copy.notedAskCep(noted)
+          : copy.askCepAgain()
+        : copy.welcomeAskCep(noted)
+    );
     return;
   }
 

@@ -75,7 +75,7 @@ const MAX_QTY = 50;
 
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
-  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais)[\s:!.?]*$/;
+  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
 
 export function parseBasketLines(text: string): ParsedLine[] {
   let source = text;
@@ -106,9 +106,11 @@ export function parseBasketLines(text: string): ParsedLine[] {
       raw
         .replace(/§/g, ",")
         .replace(/¤/g, ".")
+        .trim()
         .replace(/^((oi+|ola+|opa+|bom dia|boa tarde|boa noite|e ?ai)( lia)?[\s,!.?]*)+/i, "")
         .replace(/^(tudo (bem|bom)|td bem|como vai)[\s,!.?]*/i, "")
-        .replace(/^(ah+|hm+|hmm+|dai|tipo|ne)\s+/i, "")
+        .replace(/^(ah+|hm+|hmm+|dai|tipo|ne|entao|ok+|okay|blz|beleza|ta|certo)\s+/i, "")
+        .replace(/\s+/g, " ")
         .trim()
     )
     .filter(

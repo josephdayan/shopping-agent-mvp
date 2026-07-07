@@ -61,7 +61,7 @@ export function normalizeText(input: string): string {
 // Greetings / fillers / articles that must NOT drive product matching, otherwise
 // "Bom dia" matches "Bombril" and "quero um X" leaks "um".
 const STOPWORDS = new Set(
-  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada nao ne ta cade onde quando quanto custa vou meu minha seu sua pelo pela mim ainda ja so nada mais".split(
+  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada nao ne ta cade onde quando quanto custa vou meu minha seu sua pelo pela mim ainda ja so nada mais que sei entao".split(
     " "
   )
 );
