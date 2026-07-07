@@ -141,8 +141,9 @@ const PET_ANY_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|pet|aquario|
 const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada"]);
 const PROCESSED_BIGRAM_RE = /\bem po\b|\bde soja\b|\bde amendoas\b/;
 // Produto infantil/baby é variante: só rankeia bem se a query pedir criança.
+// Vale pra fase de vida pet também: "ração" sem falar idade = adulto (não filhote/sênior).
 // Exceção: categorias inerentemente infantis (fralda tem "Baby" no nome de fábrica).
-const CHILD_VARIANT_RE = /\b(infantil|infantis|baby|boti baby|kids|junior|crianca|criancas|menino|menina|bebe|bebes)\b/;
+const CHILD_VARIANT_RE = /\b(infantil|infantis|baby|boti baby|kids|junior|crianca|criancas|menino|menina|bebe|bebes|filhote|filhotes|senior)\b/;
 const CHILD_NATIVE_RE = /\b(fraldas?|papinhas?|chupetas?|mamadeiras?|lenco(s)? umedecido(s)?)\b/;
 // Substantivos de categoria que valem como "head" em qualquer posição do nome —
 // beleza/higiene escondem o produto no meio do nome comercial.
@@ -162,14 +163,17 @@ function isDrinkPack(nameNorm: string): boolean {
   return /\b\d+\s+(un|unidades|garrafas|latas)\b/.test(nameNorm) && /\b(ml|l|litros?)\b|\d(l|ml)\b/.test(nameNorm);
 }
 // Variantes "de dieta/estilo" usadas só como DESEMPATE (quem pede "arroz" quer o comum;
-// quem pede "leite" aceita integral/desnatado — ambos são leite).
-const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semidesnatado", "zero", "diet", "light", "organico", "organica", "vegano", "vegana"]);
+// quem pede "leite" aceita integral/desnatado — ambos são leite). Termos veterinários
+// entram aqui: "ração" genérica não deve dar Veterinary Diets/Hipoalergênica primeiro.
+const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semidesnatado", "zero", "diet", "light", "organico", "organica", "vegano", "vegana", "hipoalergenica", "hipoalergenico", "veterinary", "vet", "terapeutica", "terapeutico", "castrados", "castrado", "castradas"]);
 
 // Nº de palavras de variante no nome que o cliente NÃO pediu — usado como desempate
-// (menos variantes = mais "produto básico").
+// (menos variantes = mais "produto básico"). O que vem depois de "sabor" é descrição
+// de sabor, não variante ("Sabor Frango e Arroz Integral" não é ração integral).
 export function variantCount(query: string, item: CatalogItem): number {
   const qTokens = new Set(queryTokens(query));
-  return words(item.name).filter((w) => TIEBREAK_VARIANTS.has(w) && !qTokens.has(w)).length;
+  const beforeSabor = normalizeText(item.name).split(/\bsabor\b/)[0];
+  return words(beforeSabor).filter((w) => TIEBREAK_VARIANTS.has(w) && !qTokens.has(w)).length;
 }
 
 // Size-normalized form of a name/attr so "2 Litros", "2L", "2 lt" and "2l" all compare
@@ -287,7 +291,8 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   if (score > 0) {
     // Staple-first: quem não pediu sachê/úmida/cápsula/fardo quer o produto básico.
     const wantsWet = effTokens.some((token) => WET_WORDS.has(token));
-    if (itemAnimal && nameWords.some((word) => WET_WORDS.has(word)) && !wantsWet) score -= 2;
+    // (PET_ANY_RE cobre "para Cães e Gatos", que deixa itemAnimal ambíguo)
+    if ((itemAnimal || PET_ANY_RE.test(nameNorm)) && nameWords.some((word) => WET_WORDS.has(word)) && !wantsWet) score -= 2;
     const queryNorm = normalizeText(query);
     const wantsProcessed = effTokens.some((t) => PROCESSED_VARIANTS.has(t)) || PROCESSED_BIGRAM_RE.test(queryNorm);
     if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(nameNorm))) score -= 2;
