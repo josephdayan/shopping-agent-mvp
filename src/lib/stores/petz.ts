@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch } from "./types";
+import { scoreCatalogMatch, rankCatalog } from "./types";
 import { PETZ_CATALOG } from "./petz-catalog";
 
 // Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same shape as Carrefour
@@ -64,9 +64,7 @@ const UNITS: StoreUnit[] = [
 ];
 
 function seedSearch(query: string, limit: number): CatalogItem[] {
-  const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter((e) => e.score > 0);
-  scored.sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice);
-  return scored.slice(0, limit).map((e) => e.item);
+  return rankCatalog(query, SEED_CATALOG, limit);
 }
 
 export const petzStore: StoreConnector = {

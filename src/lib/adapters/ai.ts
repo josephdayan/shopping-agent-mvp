@@ -372,7 +372,7 @@ export async function matchCatalog(
       items: (parsed.items ?? []).map((item) => ({
         sku: item.sku && valid.has(item.sku) ? item.sku : null,
         query: item.query ?? "",
-        qty: item.qty && item.qty > 0 ? Math.floor(item.qty) : 1
+        qty: item.qty && item.qty > 0 ? Math.min(50, Math.max(1, Math.round(item.qty))) : 1
       }))
     };
   } catch (error) {
@@ -406,7 +406,7 @@ export async function extractShoppingList(text: string): Promise<ShoppingExtract
           {
             role: "system",
             content:
-              "Você é a Lia, assistente de compras do dia a dia no WhatsApp. Extraia a LISTA DE COMPRAS da mensagem. Para CADA produto: 'query' = termo curto e buscável para procurar no catálogo do Carrefour (inclua marca e tamanho se a pessoa disse), normalizando sinônimos e linguagem natural — 'pasta de dente'->'creme dental', 'refri'->'refrigerante', 'sabão em pó'->'sabão em pó', 'lenço de bebê'->'lenço umedecido', 'ração do cachorro'->'ração cachorro'. 'qty' = quantidade pedida (padrão 1). Regras: (1) Se a mensagem for só saudação/conversa sem produto ('bom dia', 'tudo bem?'), 'greetingOnly'=true e 'items'=[]. (2) Se pedir REMÉDIO/medicamento (dipirona, tylenol, antibiótico, tarja, controlado), 'containsMedicine'=true e NÃO inclua esse item. (3) Não invente produtos que a pessoa não pediu. Responda apenas JSON válido."
+              "Você é a Lia, assistente de compras do dia a dia no WhatsApp. Extraia a LISTA DE COMPRAS da mensagem. Para CADA produto: 'query' = termo curto e buscável no catálogo da loja (inclua marca e tamanho se a pessoa disse), normalizando sinônimos — 'pasta de dente'->'creme dental', 'refri'->'refrigerante', 'lenço de bebê'->'lenço umedecido', 'ração do cachorro'->'ração cachorro'. 'qty' = quantidade de UNIDADES pedidas (padrão 1, número inteiro). REGRAS CRÍTICAS: (1) PESO/VOLUME NÃO É QUANTIDADE: '2kg de arroz' => query 'arroz 2kg', qty 1 (o tamanho vai na query, nunca em qty). '1,5l de leite' => query 'leite 1,5l', qty 1. (2) Número por extenso É quantidade: 'dois pães' => qty 2; 'meia dúzia de ovos' => qty 6. (3) Lista enumerada ('1 arroz, 2 feijão, 3 óleo' em linhas) usa os números como ÍNDICE, não quantidade => qty 1 em todos. (4) Atributo 'sem X'/'zero X' fica na query ('café sem açúcar' => query 'café sem açúcar'). (5) Se a mensagem for só saudação/conversa sem produto ('bom dia', 'tudo bem?', 'obrigado'), 'greetingOnly'=true e 'items'=[]. (6) Se pedir REMÉDIO/medicamento (dipirona, tylenol, antibiótico, tarja, controlado), 'containsMedicine'=true e NÃO inclua esse item. (7) Não invente produtos que a pessoa não pediu; interjeições ('ah', 'tipo') não são produto. EXEMPLOS: 'bom dia! me ve 2 leites e 1kg de açúcar' => items [{query:'leite',qty:2},{query:'açúcar 1kg',qty:1}]. 'coloca tres cervejas ai' => [{query:'cerveja',qty:3}]. 'arroz + feijão' => [{query:'arroz',qty:1},{query:'feijão',qty:1}]. Responda apenas JSON válido."
           },
           { role: "user", content: text }
         ],
@@ -450,7 +450,7 @@ export async function extractShoppingList(text: string): Promise<ShoppingExtract
       containsMedicine: Boolean(parsed.containsMedicine),
       items: (parsed.items ?? [])
         .filter((item) => item.query?.trim())
-        .map((item) => ({ query: item.query.trim(), qty: item.qty && item.qty > 0 ? Math.floor(item.qty) : 1 }))
+        .map((item) => ({ query: item.query.trim(), qty: item.qty && item.qty > 0 ? Math.min(50, Math.max(1, Math.round(item.qty))) : 1 }))
     };
   } catch (error) {
     console.warn("[ai:extractShoppingList:error]", error);

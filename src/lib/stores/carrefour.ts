@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch, normalizeText } from "./types";
+import { scoreCatalogMatch, rankCatalog, normalizeText } from "./types";
 import { prisma } from "@/lib/prisma";
 import { runApifyActor } from "@/lib/adapters/suppliers";
 import { CARREFOUR_CATALOG } from "./carrefour-catalog";
@@ -58,9 +58,7 @@ const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 *
 const CARREFOUR_MAX_WAIT_MS = Number(process.env.LIA_CARREFOUR_TIMEOUT_MS ?? 22000);
 
 function seedSearch(query: string, limit: number): CatalogItem[] {
-  const scored = SEED_CATALOG.map((item) => ({ item, score: scoreCatalogMatch(query, item) })).filter((entry) => entry.score > 0);
-  scored.sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice);
-  return scored.slice(0, limit).map((entry) => entry.item);
+  return rankCatalog(query, SEED_CATALOG, limit);
 }
 
 // The community actor's exact field names vary — pull from the likely candidates.

@@ -61,10 +61,14 @@ export function normalizeText(input: string): string {
 // Greetings / fillers / articles that must NOT drive product matching, otherwise
 // "Bom dia" matches "Bombril" and "quero um X" leaks "um".
 const STOPWORDS = new Set(
-  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada".split(
+  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada nao ne ta cade onde quando quanto custa vou meu minha seu sua pelo pela mim ainda ja so nada mais".split(
     " "
   )
 );
+
+// Tamanhos de vestuário/fralda de 1-2 letras que DEVEM sobreviver ao filtro de tokens
+// ("fralda pampers G" — o G é a informação mais importante da mensagem).
+const SIZE_LETTER_RE = /^(p|m|g|gg|xg|xxg|rn)$/;
 
 function words(text: string): string[] {
   return normalizeText(text).split(" ").filter(Boolean);
@@ -90,11 +94,13 @@ function animalOf(wordList: string[]): "dog" | "cat" | null {
   return dog ? "dog" : "cat";
 }
 
-// tokenMatchesWord plus pet-synonym equivalence (cachorro≈cães≈cão, gato≈felino).
+// tokenMatchesWord plus synonym equivalences: pet (cachorro≈cães≈cão, gato≈felino) e
+// beleza (perfume≈colônia — no Boticário os perfumes se chamam "Desodorante Colônia").
 function tokenMatchesWordSyn(token: string, word: string): boolean {
   if (tokenMatchesWord(token, word)) return true;
   if (DOG_WORDS.has(token) && DOG_WORDS.has(word)) return true;
   if (CAT_WORDS.has(token) && CAT_WORDS.has(word)) return true;
+  if ((token === "perfume" || token === "perfumes") && (word === "colonia" || word === "colonias")) return true;
   return false;
 }
 
@@ -114,7 +120,42 @@ function tokenMatchesWord(token: string, word: string): boolean {
 
 // The meaningful product tokens in a request (greetings/fillers removed).
 export function queryTokens(query: string): string[] {
-  return words(query).filter((token) => token.length > 1 && !STOPWORDS.has(token));
+  return words(query).filter((token) => (token.length > 1 || SIZE_LETTER_RE.test(token)) && !STOPWORDS.has(token));
+}
+
+// "café SEM açúcar", "água SEM gás" — o que vem depois do "sem" é EXCLUSÃO, não busca.
+function negatedWords(query: string): string[] {
+  return [...normalizeText(query).matchAll(/\bsem\s+(\w{3,})\b/g)].map((m) => m[1]);
+}
+
+// Produtos de higiene/beleza HUMANOS que também existem em versão pet — quando o
+// cliente não falou de bicho, a versão pet não pode nem pontuar ("shampoo" não é
+// shampoo de cachorro; "perfume" não é colônia de gato).
+const HUMAN_PRODUCT_WORDS = new Set(["shampoo", "xampu", "condicionador", "perfume", "colonia", "sabonete", "desodorante", "escova"]);
+// Qualquer marca de "é produto pet" no nome (inclui itens "para Cães E Gatos", que o
+// species-guard deixa passar por servirem as duas espécies).
+const PET_ANY_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|pet|aquario|peixes?|roedores?|passaros?)\b/;
+
+// Variantes "processadas" que só devem vencer quando pedidas ("café" = torrado/moído,
+// não sachê; "leite" nunca é condensado/fermentado/vegetal).
+const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada"]);
+const PROCESSED_BIGRAM_RE = /\bem po\b|\bde soja\b|\bde amendoas\b/;
+// Fardo/pack de BEBIDA só quando pedido ("coca 2l" = 1 garrafa, não 6un) — a regra exige
+// marcador de volume no nome pra não punir fraldas/papel ("60 Unidades" é o normal lá).
+const PACK_ASK_RE = /\b(fardo|pack|caixa|kit|engradado)\b/;
+function isDrinkPack(nameNorm: string): boolean {
+  if (/\b(fardo|pack|engradado)\b/.test(nameNorm)) return true;
+  return /\b\d+\s+(un|unidades|garrafas|latas)\b/.test(nameNorm) && /\b(ml|l|litros?)\b|\d(l|ml)\b/.test(nameNorm);
+}
+// Variantes "de dieta/estilo" usadas só como DESEMPATE (quem pede "arroz" quer o comum;
+// quem pede "leite" aceita integral/desnatado — ambos são leite).
+const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semidesnatado", "zero", "diet", "light", "organico", "organica", "vegano", "vegana"]);
+
+// Nº de palavras de variante no nome que o cliente NÃO pediu — usado como desempate
+// (menos variantes = mais "produto básico").
+export function variantCount(query: string, item: CatalogItem): number {
+  const qTokens = new Set(queryTokens(query));
+  return words(item.name).filter((w) => TIEBREAK_VARIANTS.has(w) && !qTokens.has(w)).length;
 }
 
 // Size-normalized form of a name/attr so "2 Litros", "2L", "2 lt" and "2l" all compare
@@ -138,7 +179,11 @@ export function attrMatchesItem(attr: string, item: CatalogItem): boolean {
     const esc = a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return new RegExp(`(^|[^0-9,.])${esc}($|[^0-9a-z])`).test(hay);
   }
-  return scoreCatalogMatch(a, item) > 0;
+  // Atributo-palavra ("azul", "grande", "desnatado", "sem lactose"): match direto nas
+  // palavras do nome — atributos vivem no MEIO do nome, então o funil de busca
+  // (piso/head) não se aplica aqui.
+  const nameWords = words(`${item.name} ${item.brand ?? ""}`);
+  return words(a).every((t) => nameWords.some((w) => tokenMatchesWordSyn(t, w)));
 }
 
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {
@@ -148,39 +193,92 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   const brandWords = words(item.brand ?? "");
   const categoryWords = words(item.category ?? "");
 
-  // Species guard: a dog request must NEVER surface cat food (or vice versa). Both
-  // exist in the catalog and "ração" matches both, so without this Whiskas leaks into
-  // "ração pro cachorro". Items for both species (animal=null) pass.
-  const queryAnimal = animalOf(tokens);
-  const itemAnimal = animalOf(nameWords);
-  if (queryAnimal && itemAnimal && queryAnimal !== itemAnimal) return 0;
-
-  let score = 0;
-  for (const token of tokens) {
-    if (brandWords.some((word) => tokenMatchesWord(token, word))) {
-      score += 4; // explicit brand match is the strongest signal
-    } else if (nameWords.some((word) => tokenMatchesWordSyn(token, word))) {
-      score += token.length >= 4 ? 2 : 1;
-    } else if (categoryWords.some((word) => tokenMatchesWord(token, word))) {
-      score += 1;
+  // "café SEM açúcar": açúcar é exclusão. Item cujo nome carrega a palavra negada só
+  // sobrevive se for a versão "sem X" de verdade.
+  const negs = negatedWords(query);
+  const negTokens = new Set(negs);
+  const effTokens = tokens.filter((t) => !negTokens.has(t));
+  if (!effTokens.length) return 0;
+  const nameNorm = normalizeText(item.name);
+  for (const neg of negs) {
+    if (new RegExp(`\\b${neg}\\b`).test(nameNorm) && !new RegExp(`\\b(sem|zero)\\s+${neg}\\b`).test(nameNorm)) {
+      return 0;
     }
   }
-  // Head-noun bonus: the product whose name STARTS with what was asked is the literal
-  // match. Without this, "leite" ties "Leite Integral" with "Creme de Leite" / "Leite
-  // Condensado" (all contain "leite") and price alone breaks the tie — surfacing the
-  // wrong product. Rewarding the head word makes "Leite ..." win for "leite".
-  const headWord = nameWords[0];
-  if (score > 0 && headWord && tokens.some((token) => tokenMatchesWordSyn(token, headWord))) {
-    score += 2;
+
+  // Species guard: a dog request must NEVER surface cat food (or vice versa).
+  const queryAnimal = animalOf(effTokens);
+  const itemAnimal = animalOf(nameWords);
+  if (queryAnimal && itemAnimal && queryAnimal !== itemAnimal) return 0;
+  // Produto humano vs versão pet: quem pede "shampoo"/"perfume" sem falar de bicho
+  // NUNCA quer a versão de cachorro/gato/aquário (nem a "para Cães e Gatos").
+  if (!queryAnimal && PET_ANY_RE.test(nameNorm) && effTokens.some((t) => HUMAN_PRODUCT_WORDS.has(t))) return 0;
+
+  let score = 0;
+  let strongHit = false;
+  for (const token of effTokens) {
+    if (brandWords.some((word) => tokenMatchesWord(token, word))) {
+      score += 4; // explicit brand match is the strongest signal
+      strongHit = true;
+    } else if (nameWords.some((word) => tokenMatchesWordSyn(token, word))) {
+      score += token.length >= 4 ? 2 : 1;
+      // Forte = token de 4+ letras, OU palavra curta que casa EXATA ("pão", "sal", "chá").
+      if (token.length >= 4 || (token.length >= 3 && nameWords.includes(token))) strongHit = true;
+    } else if (categoryWords.some((word) => tokenMatchesWord(token, word))) {
+      // Categoria é sinal legítimo pra tokens específicos ("perfume" → "perfumaria").
+      score += 1;
+      if (token.length >= 5) strongHit = true;
+    }
   }
-  // Staple-first: when the request didn't ask for wet food, de-prioritize "Ração Úmida
-  // ... Sachê 100g" so the dry pack (what "ração" means to most people) outranks it.
-  // The seedSearch tie-breaker is cheapest-first, which otherwise floats the tiny
-  // sachês to the top. Only applies to pet-food items.
-  if (score > 0 && itemAnimal) {
-    const wantsWet = tokens.some((token) => WET_WORDS.has(token));
-    const itemIsWet = nameWords.some((word) => WET_WORDS.has(word));
-    if (itemIsWet && !wantsWet) score -= 2;
+  // Piso de relevância: sem pelo menos UM token forte, é ruído conversacional —
+  // devolver vazio honesto em vez de "Esponja Não Risca".
+  if (!strongHit) return 0;
+
+  // Tamanho pedido ("coca 2 litros", "arroz 5kg") é sinal forte: item com o tamanho
+  // certo sobe; item com OUTRO tamanho explícito perde força.
+  const sizeAsks = [...normalizeText(query).matchAll(/(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|lt|litros?)\b/g)];
+  for (const m of sizeAsks) {
+    const attr = `${m[1]}${m[2].replace(/litros?|lts?$/, "l")}`;
+    if (attrMatchesItem(attr, item)) score += 3;
+    else score -= 1;
+  }
+
+  // Head-noun bonus: o head EFETIVO pula as palavras da marca ("Quem Disse, Berenice?
+  // BASE Líquida" → head = "base"), senão nome com marca na frente nunca ganha o bônus.
+  const brandSet = new Set(brandWords);
+  const headWord = nameWords.find((w) => !brandSet.has(w)) ?? nameWords[0];
+  const headHit = Boolean(headWord && effTokens.some((token) => tokenMatchesWordSyn(token, headWord)));
+  if (score > 0 && headHit) score += 2;
+  // Pedido de UMA palavra ("ovos", "frango"): se ela não é o head nem a marca, o item é
+  // outra coisa que só CONTÉM a palavra (Macarrão com Ovos, Petisco de Frango) — zera.
+  if (effTokens.length === 1 && !headHit && !brandWords.some((w) => tokenMatchesWord(effTokens[0], w))) {
+    return 0;
+  }
+
+  if (score > 0) {
+    // Staple-first: quem não pediu sachê/úmida/cápsula/fardo quer o produto básico.
+    const wantsWet = effTokens.some((token) => WET_WORDS.has(token));
+    if (itemAnimal && nameWords.some((word) => WET_WORDS.has(word)) && !wantsWet) score -= 2;
+    const queryNorm = normalizeText(query);
+    const wantsProcessed = effTokens.some((t) => PROCESSED_VARIANTS.has(t)) || PROCESSED_BIGRAM_RE.test(queryNorm);
+    if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(nameNorm))) score -= 2;
+    if (!PACK_ASK_RE.test(queryNorm) && isDrinkPack(nameNorm)) score -= 2;
   }
   return score;
+}
+
+// Ranking compartilhado dos catálogos-seed (os 3 conectores usam): score desc →
+// menos variantes não pedidas (integral/diet/zero…) → mais barato.
+export function rankCatalog(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
+  return items
+    .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
+    .filter((e) => e.score > 0)
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        variantCount(query, a.item) - variantCount(query, b.item) ||
+        a.item.unitPrice - b.item.unitPrice
+    )
+    .slice(0, limit)
+    .map((e) => e.item);
 }

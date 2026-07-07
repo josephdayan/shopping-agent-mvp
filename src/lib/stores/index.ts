@@ -27,6 +27,11 @@ const STORES: Record<string, StoreConnector> = {
 // pet-specific item like "ração premier" goes to Petz even though Carrefour has a
 // generic ração); the store winning the most queries gets the order. Ties go to the
 // default (broadest) store, which is listed first.
+// Dicas de vertical pra desempate do roteador: "base"/"perfume" empatando entre
+// Carrefour e Boticário devem ir pra loja de beleza; "ração" empatada vai pra Petz.
+const BEAUTY_HINT_RE = /\b(perfume|colonia|maquiagem|batom|base|rimel|gloss|hidratante|corretivo|blush|serum)\b/;
+const PET_HINT_RE = /\b(racao|petisco|cachorro|gato|caes|pet|aquario|areia (de|pro|para) gato)\b/;
+
 export async function pickStoreForQueries(queries: string[]): Promise<StoreConnector> {
   const stores = listStores();
   if (stores.length <= 1 || queries.length === 0) return stores[0] ?? getStore();
@@ -36,7 +41,12 @@ export async function pickStoreForQueries(queries: string[]): Promise<StoreConne
     let bestScore = 0;
     for (const store of stores) {
       const top = (await store.searchItems(q, 1))[0];
-      const score = top ? scoreCatalogMatch(q, top) : 0;
+      let score = top ? scoreCatalogMatch(q, top) : 0;
+      if (score > 0) {
+        // desempate por vocação da loja
+        if (store.key === "boticario" && BEAUTY_HINT_RE.test(q.toLowerCase())) score += 1;
+        if (store.key === "petz" && PET_HINT_RE.test(q.toLowerCase())) score += 1;
+      }
       if (score > bestScore) {
         bestScore = score;
         winner = store;
