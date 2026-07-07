@@ -3,7 +3,7 @@
 import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { detectIntent, parseBasketLines, parseRefinement, parseChoiceReply, wantsMoreOptions } from "../src/lib/lia-intents";
+import { detectIntent, parseBasketLines, parseRefinement, parseChoiceReply, wantsMoreOptions, narrowChoiceByName, asksRunningTotal } from "../src/lib/lia-intents";
 import { scoreCatalogMatch, rankCatalog } from "../src/lib/stores/types";
 
 const kind = (s: string) => detectIntent(s).kind;
@@ -36,9 +36,11 @@ test("perguntas operacionais são service_question (antes: sabonete)", () => {
 });
 
 test("status cobre as frases de ansiedade da entrega", () => {
-  for (const s of ["que horas chega?", "chega hoje?", "meu pedido nao chegou", "ta chegando?", "cade meu pedido", "caiu?"]) {
+  for (const s of ["que horas chega?", "chega hoje?", "meu pedido nao chegou", "ta chegando?", "cade meu pedido", "caiu?", "e meu pedido?", "como ta minha entrega?"]) {
     assert.equal(kind(s), "status", s);
   }
+  // frase inteira é status; "meu pedido" no meio de frase continua pedido de produto
+  assert.equal(kind("adiciona um leite no meu pedido"), "free_text");
 });
 
 test("confirmações brasileiras são affirm", () => {
@@ -84,6 +86,34 @@ test("parser: peso não é quantidade; extenso e enumeração funcionam", () => 
   assert.equal(parseBasketLines("999 cocas")[0].qty, 50); // teto de sanidade
   assert.deepEqual(parseBasketLines("arroz + feijao").map((x) => x.phrase), ["arroz", "feijao"]);
   assert.deepEqual(parseBasketLines("ah e um papel toalha").map((x) => x.phrase), ["papel toalha"]);
+});
+
+test("parser: saudação e introdução com dois-pontos não viram produto", () => {
+  const messy = parseBasketLines("oi lia tudo bem? preciso de umas coisas pra casa: papel higienico, detergente e sabao em po. ah e um refri tbm");
+  assert.deepEqual(messy.map((x) => x.phrase), ["papel higienico", "detergente", "sabao em po", "refri"]);
+  assert.deepEqual(parseBasketLines("oi lia, me ve um arroz").map((x) => x.phrase), ["arroz"]);
+  // decimais sobrevivem ao split por ponto/vírgula
+  assert.deepEqual(parseBasketLines("1,5l de leite"), [{ phrase: "leite 1,5l", qty: 1 }]);
+});
+
+test("escolhendo: texto que discrimina entre as opções estreita (não vira item novo)", () => {
+  const ops = [
+    { name: "Refrigerante Fanta Laranja 200ML" },
+    { name: "Refrigerante Coca-Cola Sem Açúcar Pet 200 ml" },
+    { name: "Refrigerante Coca-Cola Original Pet 200 ml" }
+  ];
+  assert.deepEqual(narrowChoiceByName("coca", ops), [1, 2]);
+  assert.deepEqual(narrowChoiceByName("a fanta", ops), [0]);
+  assert.deepEqual(narrowChoiceByName("e um leite", ops), []); // item novo de verdade
+  assert.deepEqual(narrowChoiceByName("coca não", ops), []); // negação não discrimina
+});
+
+test("'quanto deu tudo?' é pergunta de total, não busca", () => {
+  for (const s of ["quanto deu tudo?", "qual o total?", "resumo", "quanto ficou?", "meu carrinho"]) {
+    assert.ok(asksRunningTotal(s), s);
+  }
+  assert.ok(!asksRunningTotal("quanto custa o frete?")); // essa é service_question
+  assert.ok(!asksRunningTotal("quero coca"));
 });
 
 test("refinamento de mercado: desnatado/zero/sem lactose refinam, não viram item novo", () => {

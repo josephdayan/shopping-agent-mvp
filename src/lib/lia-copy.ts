@@ -412,15 +412,48 @@ export function finishChoiceFirst(): string {
   return "Só me confirma esse item primeiro que aí eu fecho tudo. 🙂";
 }
 
+// "coca" com Fanta+2 Cocas na mesa → estreitou pras que batem.
+export function narrowedChoices(query: string): string {
+  return `Boa, ficou entre essas de *${query}*:`;
+}
+
+// "quanto deu?" com cobrança aberta → total fechado + caminho pro código.
+export function totalAwaitingPayment(total: number): string {
+  return `O total ficou em *${brl(total)}* — só falta o pagamento 🙂 Quer o código de novo? Responde *pix* (ou *cartão*, se preferir o link).`;
+}
+
+// "quanto deu tudo?" no meio das escolhas/coleta → parcial honesto, sem inventar frete.
+export function partialTotal(items: CopyBasketItem[], produtos: number, pendingCount: number): string {
+  if (!items.length) {
+    return "Ainda não fechamos nenhum item 🙂 Me responde as opções que eu te passo o total certinho, com a entrega.";
+  }
+  const lines = items.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`);
+  const tail =
+    pendingCount > 0
+      ? `_Falta escolher ${pendingCount === 1 ? "1 item" : `${pendingCount} itens`} — aí te passo o total com a entrega._`
+      : '_Te passo o total com a entrega quando você fechar — é só dizer *"só isso"*._';
+  return ["🛒 *Até agora:*", ...lines, "", `Produtos: ${brl(produtos)}`, tail].join("\n");
+}
+
 // ---------- perguntas de serviço / atendimento ----------
 
 // Resposta direta a "vocês entregam em X?", "quanto custa o frete?", "demora quanto?",
 // "como pago?" — NUNCA cair em busca de produto com pergunta operacional.
-export function serviceAnswer(topic: "area" | "fee" | "eta" | "payment" | "generic", areaLabel: string): string {
+export function serviceAnswer(
+  topic: "area" | "fee" | "eta" | "payment" | "generic",
+  areaLabel: string,
+  ctx?: { hasCep?: boolean; hasBasket?: boolean }
+): string {
   switch (topic) {
     case "area":
-      return `A Lia atende ${areaLabel} 📍 Me manda seu *CEP* que eu confirmo na hora se chego até você!`;
+      return ctx?.hasCep
+        ? `A Lia atende ${areaLabel} 📍 Seu endereço já tá salvo e coberto — e se quiser conferir outro lugar, me manda o CEP que eu confirmo na hora!`
+        : `A Lia atende ${areaLabel} 📍 Me manda seu *CEP* que eu confirmo na hora se chego até você!`;
     case "fee":
+      if (ctx?.hasBasket)
+        return "A entrega é por motoboy e o frete sai pela distância até você 🛵 Te mostro o valor certinho junto com o total, assim que a gente fechar a cesta — sem surpresa.";
+      if (ctx?.hasCep)
+        return "A entrega é por motoboy e o frete sai pela distância até você 🛵 Me diz o que precisa que eu já te mostro o total certinho, sem surpresa.";
       return "A entrega é feita por motoboy e o frete é calculado na hora, pela distância até você 🛵 Me diz o que precisa + seu CEP que eu já te mostro o total certinho, sem surpresa.";
     case "eta":
       return "A entrega é no mesmo dia — normalmente em 1 a 2 horas depois do pagamento, dependendo da distância 🛵 Quando você fizer o pedido eu te mostro a previsão certinha.";

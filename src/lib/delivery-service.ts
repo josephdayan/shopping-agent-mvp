@@ -11,7 +11,9 @@ import {
   detectIntent,
   detectPaymentMethod,
   isQuestion,
+  asksRunningTotal,
   looksLikeMedicine,
+  narrowChoiceByName,
   normalizeMsg,
   parseBasketLines,
   parseChoiceReply,
@@ -589,7 +591,13 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // ---- perguntas de serviço / atendimento (funcionam em QUALQUER step) ----
   if (intent.kind === "service_question") {
-    await reply(phone, copy.serviceAnswer(intent.topic, coverageLabel()));
+    await reply(
+      phone,
+      copy.serviceAnswer(intent.topic, coverageLabel(), {
+        hasCep: Boolean(user.cep),
+        hasBasket: (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0
+      })
+    );
     return;
   }
   if (intent.kind === "human") {
@@ -890,6 +898,24 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
+  // ---- "quanto deu tudo?"/"resumo" → responde pelo estado, nunca vira busca ----
+  if (asksRunningTotal(text)) {
+    if (ctx.step === "awaiting_payment" && ctx.total) {
+      await reply(phone, copy.totalAwaitingPayment(ctx.total));
+      return;
+    }
+    if (ctx.step === "quoted" && ctx.total) {
+      await reply(phone, summaryText(ctx));
+      return;
+    }
+    if ((ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
+      const items = basketForCopy(ctx);
+      const produtos = Math.round(items.reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
+      await reply(phone, copy.partialTotal(items, produtos, ctx.pending?.length ?? 0));
+      return;
+    }
+  }
+
   // ---- awaiting_payment + item novo: REABRE o pedido em vez de criar cesta fantasma ----
   // "ah, e adiciona um leite" com cobrança aberta: cancela a cobrança antiga (não paga),
   // avisa o cliente e segue o fluxo normal de busca com a cesta restaurada.
@@ -1160,6 +1186,37 @@ async function handleChoosing(
   }
   if (refineAttrs) {
     await refineOptions(phone, convoId, ctx, store, refineAttrs);
+    return;
+  }
+
+  // "quanto deu tudo?" no meio das escolhas → parcial honesto e volta pras opções.
+  if (asksRunningTotal(text)) {
+    const items = basketForCopy(ctx);
+    const produtos = Math.round(items.reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
+    await reply(phone, `${copy.partialTotal(items, produtos, ctx.pending!.length)}\n\n${choicesTextFor(current)}`);
+    return;
+  }
+
+  // "coca" com [Fanta, Coca Lata, Coca Pet] na mesa: o cliente está discriminando
+  // entre as opções, não pedindo item novo. Uma só bate → escolhe; várias → estreita.
+  const narrowed = narrowChoiceByName(text, current.options);
+  if (narrowed.length === 1) {
+    const chosen = current.options[narrowed[0]];
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
+    ctx.pending = ctx.pending!.slice(1);
+    if (ctx.pending.length) {
+      await writeCtx(convoId, ctx);
+      await reply(phone, copy.choiceConfirmed(chosen.name));
+      await sendChoices(phone, ctx.pending[0]);
+      return;
+    }
+    await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
+    return;
+  }
+  if (narrowed.length > 1 && narrowed.length < current.options.length) {
+    current.options = narrowed.map((i) => current.options[i]);
+    await writeCtx(convoId, ctx);
+    await sendChoices(phone, current, copy.narrowedChoices(current.query));
     return;
   }
 

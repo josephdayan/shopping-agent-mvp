@@ -75,7 +75,7 @@ const MAX_QTY = 50;
 
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
-  /^(oi+|ola+|bom dia+|boa tarde+|boa noite+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais)[\s:!.]*$/;
+  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais)[\s:!.?]*$/;
 
 export function parseBasketLines(text: string): ParsedLine[] {
   let source = text;
@@ -88,12 +88,29 @@ export function parseBasketLines(text: string): ParsedLine[] {
     if (sequential) source = lines.map((l) => l.replace(/^\d{1,2}[\s.)\-]+/, "")).join("\n");
   }
 
+  // Introdução com dois-pontos ("oi! preciso de umas coisas pra casa: X, Y") — o que
+  // vem antes do ":" é conversa quando tem cara de pedido/lista; só os itens ficam.
+  source = source
+    .split("\n")
+    .map((l) => l.replace(/^[^:\n]*\b(preciso|precisava|quero|queria|lista|coisas|compras?|mercado|casa|segue|anota|manda|ve)\b[^:\n]*:\s*/i, ""))
+    .join("\n");
+
   return source
     .replace(/\bvou querer\b|\bquero\b|\bqueria\b|\bme manda\b|\bme ve\b|\bmanda\b|\bpreciso de\b|\bpode ser\b|\bcoloca\b|\bpoe\b|\bbota\b|\btraz\b|\badiciona\b|\binclui\b|\bcompra\b|\btambem\b|\btbm?\b/gi, "")
-    // protege decimais ("1,5l") do split por vírgula
+    // protege decimais ("1,5l" / "1.5l") do split por vírgula/ponto
     .replace(/(\d),(\d)/g, "$1§$2")
-    .split(/[,\n;]|\s+e\s+|\s*\+\s*/i)
-    .map((raw) => raw.replace(/§/g, ",").replace(/^(ah+|hm+|hmm+|dai|tipo|ne)\s+/i, "").trim())
+    .replace(/(\d)\.(\d)/g, "$1¤$2")
+    // ponto/interrogação separam sentenças ("sabao em po. ah e um refri" = 2 segmentos)
+    .split(/[,\n;.?]|\s+e\s+|\s*\+\s*/i)
+    .map((raw) =>
+      raw
+        .replace(/§/g, ",")
+        .replace(/¤/g, ".")
+        .replace(/^((oi+|ola+|opa+|bom dia|boa tarde|boa noite|e ?ai)( lia)?[\s,!.?]*)+/i, "")
+        .replace(/^(tudo (bem|bom)|td bem|como vai)[\s,!.?]*/i, "")
+        .replace(/^(ah+|hm+|hmm+|dai|tipo|ne)\s+/i, "")
+        .trim()
+    )
     .filter(
       (raw) =>
         raw.length > 1 &&
@@ -176,9 +193,10 @@ const THANKS_RE =
 const HELP_RE = /^(ajuda|help|menu|como funciona\??|o que (voce|vc) faz\??|como (te )?uso\??|comandos)[\s!?.]*$/;
 
 // NOTE: no bare "meu pedido"/"minha entrega" here — "adiciona um leite no meu pedido"
-// must stay a product request, not a status check.
+// must stay a product request, not a status check. A pergunta INTEIRA "e meu pedido?"
+// é status — por isso as alternativas ancoradas (^…$) no fim.
 const STATUS_RE =
-  /\b(status|cade|rastreio|rastrear|rastreamento|acompanhar|previsao( de entrega)?|quando chega|chega quando|que horas? chega|vai chegar|chega hoje|(ainda )?nao chegou|ta (vindo|chegando|a caminho)|onde (ta|esta|anda)( o| meu)? ?(pedido|entregador|motoboy)?|falta muito|ja saiu|saiu pra entrega|andamento)\b|^chegou\?+$/;
+  /\b(status|cade|rastreio|rastrear|rastreamento|acompanhar|previsao( de entrega)?|quando chega|chega quando|que horas? chega|vai chegar|chega hoje|(ainda )?nao chegou|ta (vindo|chegando|a caminho)|onde (ta|esta|anda)( o| meu)? ?(pedido|entregador|motoboy)?|falta muito|ja saiu|saiu pra entrega|andamento)\b|^chegou\?+$|^e? ?(o |a )?(meu|minha) (pedido|entrega|compra)[\s!?.]*$|^como (ta|esta|anda|ficou) (o |a )?(meu |minha )?(pedido|entrega|compra)[\s!?.]*$/;
 
 const PAID_RE =
   /\b(paguei|ja paguei|acabei de pagar|pagamento (feito|realizado|efetuado)|pix (feito|enviado|pago)|fiz o pix|mandei o pix|transferi|ta pago|esta pago|caiu( o pix)?)\b|^pago[\s!.]*$/;
@@ -506,6 +524,8 @@ export type ChoiceReply =
   | { type: "skip" }
   | null;
 
+const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "dessa", "desse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela", "tem", "cor", "versao", "tamanho", "tipo", "ver", "acha", "ache", "mostra", "procura", "busca", "outra", "outro", "outras", "outros", "alguma", "algum", "opcoes", "opcao"]);
+
 export function parseChoiceReply(text: string, options: { name: string; unitPrice: number }[]): ChoiceReply {
   const n = normalizeMsg(text);
   if (!n || !options.length) return null;
@@ -554,7 +574,6 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
 
   // Brand/name match BEFORE "qualquer": "pode ser a colgate" names an option, so the
   // "pode ser" must not degrade it to "any". Filler words don't count as name tokens.
-  const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "dessa", "desse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela", "tem", "cor", "versao", "tamanho", "tipo", "ver", "acha", "ache", "mostra", "procura", "busca", "outra", "outro", "outras", "outros", "alguma", "algum", "opcoes", "opcao"]);
   const tokens = n.split(" ").filter((t) => t.length > 2 && !CHOICE_STOP.has(t));
   if (tokens.length) {
     const scores = options.map((o) => {
@@ -580,4 +599,32 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
     if (!leftover) return { type: "any" };
   }
   return null;
+}
+
+// "coca" quando as opções são [Fanta, Coca Lata, Coca Pet]: não é escolha única
+// (parseChoiceReply exige match único) nem item novo — DISCRIMINA entre as opções.
+// Devolve os índices das opções cujo nome contém TODAS as palavras significativas
+// do texto (com tolerância a plural). Vazio = o texto não fala das opções.
+export function narrowChoiceByName(text: string, options: { name: string }[]): number[] {
+  const n = normalizeMsg(text);
+  if (!n || !options.length) return [];
+  // "coca não"/"não quero coca" é negação — não é discriminação entre opções.
+  if (/\bnao\b/.test(n)) return [];
+  const tokens = n.split(" ").filter((t) => t.length > 2 && !CHOICE_STOP.has(t) && !/^\d+$/.test(t));
+  if (!tokens.length) return [];
+  const hits: number[] = [];
+  options.forEach((o, i) => {
+    const name = normalizeMsg(o.name);
+    const all = tokens.every((t) => name.includes(t) || (t.endsWith("s") && name.includes(t.slice(0, -1))));
+    if (all) hits.push(i);
+  });
+  return hits;
+}
+
+// "quanto deu tudo?", "qual o total?", "resumo" — pergunta pelo PARCIAL da cesta,
+// não é produto nem escolha. Usada nos steps de escolha/coleta.
+const RUNNING_TOTAL_RE =
+  /\b(quanto (deu|da|ta|esta|fica|ficou|foi|custou) ?(tudo|o total|o pedido|a compra)?|qual( e| o)? total|total (ate agora|parcial|do pedido)|resumo (do pedido|da compra|do carrinho)?|(o que|q) tem no (carrinho|pedido)|meu carrinho)\b|^total[\s?!.]*$|^resumo[\s?!.]*$/;
+export function asksRunningTotal(text: string): boolean {
+  return RUNNING_TOTAL_RE.test(normalizeMsg(text));
 }

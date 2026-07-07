@@ -7,7 +7,7 @@
 //   OPENAI_API_KEY="" npx tsx scripts/talk-lia.mts …   # força o NLU determinístico (sem LLM)
 //
 // Por padrão usa a OPENAI_API_KEY do .env (paridade com produção).
-import "../tests/helpers/load-env";
+import "./talk-env.mts";
 import { createInterface } from "node:readline/promises";
 import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
