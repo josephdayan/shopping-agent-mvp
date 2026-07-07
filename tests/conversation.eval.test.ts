@@ -10,7 +10,7 @@ import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage } from "../src/lib/delivery-service";
 import { getStore } from "../src/lib/stores";
-import { scoreCatalogMatch } from "../src/lib/stores/types";
+import { attrMatchesItem } from "../src/lib/stores/types";
 import { seedGeoCache } from "../src/lib/geo";
 
 // Geo é semeado (sem rede) pros CEPs que os evals usam, senão pickNearestUnit geocodificaria
@@ -420,7 +420,7 @@ test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t
     const base = item.name.split(/\s+/)[0].toLowerCase();
     if (base.length < 4 || /[^a-zà-ú]/i.test(base)) continue;
     if ((await store.searchItems(base, 3)).length < 2) continue;
-    const refined = (await store.searchItems(`${base} ${m[1]}`, 6)).filter((o) => scoreCatalogMatch(m[1], o) > 0);
+    const refined = (await store.searchItems(`${base} ${m[1]}`, 6)).filter((o) => attrMatchesItem(m[1], o));
     if (refined.length >= 1) {
       pair = { base, attr: m[1] };
       break;
@@ -436,7 +436,7 @@ test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t
   assert.doesNotMatch(refinedReply, /Não peguei/);
 
   // And an attribute that doesn't exist gets an HONEST answer (not a fake refresh).
-  const azul = (await store.searchItems(`${pair.base} azul`, 6)).filter((o) => scoreCatalogMatch("azul", o) > 0);
+  const azul = (await store.searchItems(`${pair.base} azul`, 6)).filter((o) => attrMatchesItem("azul", o));
   const colorReply = await c.send("tem essa em azul?");
   if (azul.length) {
     assert.match(colorReply.toLowerCase(), /azul/);
