@@ -167,3 +167,24 @@ test("matcher: 'sem açúcar' exclui açúcar; marca no head efetivo", () => {
   const base = { sku: "b", name: "Quem Disse, Berenice? Base Líquida Mate", brand: "Quem Disse, Berenice?", unitPrice: 40 };
   assert.ok(scoreCatalogMatch("base", base) > 0);
 });
+
+test("matcher: 'Sem Perfume' no NOME não responde por 'perfume'", () => {
+  const semPerfume = { sku: "s", name: "Cuide-se bem Antitranspirante Em Creme Sem Perfume", unitPrice: 20 };
+  assert.equal(scoreCatalogMatch("perfume", semPerfume), 0);
+});
+
+test("matcher: substantivo de categoria vale no meio do nome (beleza)", () => {
+  const colonia = { sku: "c", name: "Celebre Agora Feminino Desodorante Colônia 100ml", brand: "Celebre", unitPrice: 90 };
+  assert.ok(scoreCatalogMatch("perfume", colonia) > 0);
+});
+
+test("matcher: infantil/baby só quando pedido; fralda é isenta", () => {
+  const baby = { sku: "b", name: "Boti Baby Colônia Lua 100ml", brand: "Boti Baby", unitPrice: 74 };
+  const adulto = { sku: "a", name: "Celebre Agora Masculino Desodorante Colônia 10ml", brand: "Celebre", unitPrice: 90 };
+  assert.equal(rankCatalog("perfume", [baby, adulto], 2)[0].sku, "a");
+  assert.equal(rankCatalog("colonia infantil", [baby, adulto], 2)[0].sku, "b");
+  // fralda tem "Baby" de fábrica no nome — não pode ser rebaixada
+  const fralda = { sku: "f", name: "Fralda Capricho Baby Willy Mega G 34un", unitPrice: 30 };
+  assert.ok(scoreCatalogMatch("fralda G", fralda) > 0);
+  assert.equal(rankCatalog("fralda G", [fralda], 1)[0].sku, "f");
+});

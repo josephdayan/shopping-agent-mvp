@@ -140,6 +140,20 @@ const PET_ANY_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|pet|aquario|
 // não sachê; "leite" nunca é condensado/fermentado/vegetal).
 const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada"]);
 const PROCESSED_BIGRAM_RE = /\bem po\b|\bde soja\b|\bde amendoas\b/;
+// Produto infantil/baby é variante: só rankeia bem se a query pedir criança.
+// Exceção: categorias inerentemente infantis (fralda tem "Baby" no nome de fábrica).
+const CHILD_VARIANT_RE = /\b(infantil|infantis|baby|boti baby|kids|junior|crianca|criancas|menino|menina|bebe|bebes)\b/;
+const CHILD_NATIVE_RE = /\b(fraldas?|papinhas?|chupetas?|mamadeiras?|lenco(s)? umedecido(s)?)\b/;
+// Substantivos de categoria que valem como "head" em qualquer posição do nome —
+// beleza/higiene escondem o produto no meio do nome comercial.
+const CATEGORY_NOUNS = new Set([
+  "colonia", "perfume", "desodorante", "shampoo", "condicionador", "sabonete",
+  "hidratante", "batom", "gloss", "rimel", "corretivo", "blush", "serum",
+  "esmalte", "locao", "balm", "mascara", "protetor", "demaquilante", "esfoliante"
+]);
+function isChildVariant(nameNorm: string): boolean {
+  return CHILD_VARIANT_RE.test(nameNorm) && !CHILD_NATIVE_RE.test(nameNorm);
+}
 // Fardo/pack de BEBIDA só quando pedido ("coca 2l" = 1 garrafa, não 6un) — a regra exige
 // marcador de volume no nome pra não punir fraldas/papel ("60 Unidades" é o normal lá).
 const PACK_ASK_RE = /\b(fardo|pack|caixa|kit|engradado)\b/;
@@ -189,7 +203,13 @@ export function attrMatchesItem(attr: string, item: CatalogItem): boolean {
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   const tokens = queryTokens(query);
   if (!tokens.length) return 0;
-  const nameWords = words(item.name);
+  const nameNorm = normalizeText(item.name);
+  // "Sem Perfume"/"Zero Açúcar" no NOME: a palavra negada não é o produto — pedir
+  // "perfume" jamais deve trazer "Antitranspirante Sem Perfume". Ela sai do match
+  // de score (attrMatchesItem continua vendo o nome inteiro pra "sem lactose").
+  // ("zero 2 litros" não nega o "2" — só palavra, nunca número/tamanho)
+  const nameNegated = new Set([...nameNorm.matchAll(/\b(?:sem|zero)\s+([a-z]\S*)/g)].map((m) => m[1]));
+  const nameWords = words(item.name).filter((w) => !nameNegated.has(w));
   const brandWords = words(item.brand ?? "");
   const categoryWords = words(item.category ?? "");
 
@@ -199,7 +219,6 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   const negTokens = new Set(negs);
   const effTokens = tokens.filter((t) => !negTokens.has(t));
   if (!effTokens.length) return 0;
-  const nameNorm = normalizeText(item.name);
   for (const neg of negs) {
     if (new RegExp(`\\b${neg}\\b`).test(nameNorm) && !new RegExp(`\\b(sem|zero)\\s+${neg}\\b`).test(nameNorm)) {
       return 0;
@@ -251,7 +270,17 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   if (score > 0 && headHit) score += 2;
   // Pedido de UMA palavra ("ovos", "frango"): se ela não é o head nem a marca, o item é
   // outra coisa que só CONTÉM a palavra (Macarrão com Ovos, Petisco de Frango) — zera.
-  if (effTokens.length === 1 && !headHit && !brandWords.some((w) => tokenMatchesWord(effTokens[0], w))) {
+  // Exceção: substantivo de categoria vale em qualquer posição, porque beleza enterra
+  // o nome no meio ("Celebre Agora Feminino Desodorante COLÔNIA 100ml" é um perfume).
+  const categoryHit = effTokens.some((token) =>
+    nameWords.some((w) => CATEGORY_NOUNS.has(w) && tokenMatchesWordSyn(token, w))
+  );
+  if (
+    effTokens.length === 1 &&
+    !headHit &&
+    !categoryHit &&
+    !brandWords.some((w) => tokenMatchesWord(effTokens[0], w))
+  ) {
     return 0;
   }
 
@@ -263,19 +292,28 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     const wantsProcessed = effTokens.some((t) => PROCESSED_VARIANTS.has(t)) || PROCESSED_BIGRAM_RE.test(queryNorm);
     if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(nameNorm))) score -= 2;
     if (!PACK_ASK_RE.test(queryNorm) && isDrinkPack(nameNorm)) score -= 2;
+    // Versão infantil/baby só quando pedida ("perfume" pra adulto não pode virar
+    // Boti Baby; "shampoo" não pode virar Johnson's Baby). Pedir "infantil" inverte.
+    if (!CHILD_VARIANT_RE.test(queryNorm) && isChildVariant(nameNorm)) score -= 2;
   }
   return score;
 }
 
 // Ranking compartilhado dos catálogos-seed (os 3 conectores usam): score desc →
-// menos variantes não pedidas (integral/diet/zero…) → mais barato.
+// adulto antes de infantil (quando não pedido) → menos variantes não pedidas
+// (integral/diet/zero…) → mais barato. O desempate infantil existe porque nomes de
+// perfumaria escondem o substantivo no meio ("Celebre Agora Feminino … Colônia") e
+// o empate de score cairia no preço — onde o baby, mais barato, venceria.
 export function rankCatalog(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
+  const childAsked = CHILD_VARIANT_RE.test(normalizeText(query));
+  const childRank = (item: CatalogItem) => (!childAsked && isChildVariant(normalizeText(item.name)) ? 1 : 0);
   return items
     .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
     .filter((e) => e.score > 0)
     .sort(
       (a, b) =>
         b.score - a.score ||
+        childRank(a.item) - childRank(b.item) ||
         variantCount(query, a.item) - variantCount(query, b.item) ||
         a.item.unitPrice - b.item.unitPrice
     )
