@@ -1,0 +1,139 @@
+// Regressão do review profundo de conversa (2026-07-06): 115 achados → correções de
+// NLU, parser de lista e matcher. Cada bloco cita o sintoma original.
+import "./helpers/load-env";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { detectIntent, parseBasketLines, parseRefinement, parseChoiceReply, wantsMoreOptions } from "../src/lib/lia-intents";
+import { scoreCatalogMatch, rankCatalog } from "../src/lib/stores/types";
+
+const kind = (s: string) => detectIntent(s).kind;
+
+test("negação seca é reject (antes: busca → 'Esponja Não Risca')", () => {
+  for (const s of ["não", "nao", "não, obrigado", "nao quero", "deixa pra lá", "esquece", "nao precisa mais", "melhor não", "hoje nao", "nn"]) {
+    assert.equal(kind(s), "reject", s);
+  }
+});
+
+test("fechamento de lista é done (antes: 'só isso' virava produto)", () => {
+  for (const s of ["só isso", "so isso mesmo", "é só", "mais nada", "nada mais", "por hoje é isso", "não quero mais nada"]) {
+    assert.equal(kind(s), "done", s);
+  }
+});
+
+test("multi-intenção tira+coloca separa remove e add", () => {
+  const i = detectIntent("tira o arroz e coloca feijão");
+  assert.deepEqual(i, { kind: "remove_item", target: "arroz", andAdd: "feijao" });
+  const j = detectIntent("cancela o guarana e manda uma coca");
+  assert.equal(j.kind, "remove_item");
+  assert.equal((j as { target: string }).target, "guarana");
+  assert.match((j as { andAdd?: string }).andAdd ?? "", /coca/);
+});
+
+test("perguntas operacionais são service_question (antes: sabonete)", () => {
+  assert.deepEqual(detectIntent("vc entrega em osasco?"), { kind: "service_question", topic: "area" });
+  assert.deepEqual(detectIntent("quanto custa o frete?"), { kind: "service_question", topic: "fee" });
+  assert.equal(kind("vcs aceitam vale refeição?"), "service_question");
+});
+
+test("status cobre as frases de ansiedade da entrega", () => {
+  for (const s of ["que horas chega?", "chega hoje?", "meu pedido nao chegou", "ta chegando?", "cade meu pedido", "caiu?"]) {
+    assert.equal(kind(s), "status", s);
+  }
+});
+
+test("confirmações brasileiras são affirm", () => {
+  for (const s of ["tá bom", "pode mandar", "confirmado", "é isso", "isso ai", "manda ai", "ss", "👍👍"]) {
+    assert.equal(kind(s), "affirm", s);
+  }
+});
+
+test("pagamento: reenviar código / expirado / trocar forma / recusa", () => {
+  assert.deepEqual(detectIntent("não recebi o código"), { kind: "resend_code", expired: false });
+  assert.equal((detectIntent("o pix expirou") as { expired: boolean }).expired, true);
+  assert.equal(kind("quero mudar a forma de pagamento"), "switch_payment");
+  assert.equal(kind("não vou pagar"), "cancel");
+  assert.equal(kind("cancela o pagamento"), "cancel");
+});
+
+test("posso cancelar? é pergunta, não execução", () => {
+  assert.equal(kind("posso cancelar?"), "cancel_question");
+  assert.equal(kind("cancela o pedido"), "cancel");
+});
+
+test("humano e reclamação têm intent próprio", () => {
+  assert.equal(kind("quero falar com atendente"), "human");
+  assert.equal(kind("meu pedido veio errado"), "complaint");
+});
+
+test("CEP + itens juntos não descarta os itens", () => {
+  const i = detectIntent("meu cep é 01310-100, quero arroz e leite");
+  assert.equal(i.kind, "cep");
+  assert.match((i as { rest?: string }).rest ?? "", /arroz/);
+});
+
+test("número com zero à esquerda não é escolha de opção", () => {
+  assert.equal(kind("08"), "free_text");
+  assert.equal(kind("8"), "number");
+});
+
+test("parser: peso não é quantidade; extenso e enumeração funcionam", () => {
+  assert.deepEqual(parseBasketLines("2kg de arroz"), [{ phrase: "arroz 2kg", qty: 1 }]);
+  assert.deepEqual(parseBasketLines("dois pães"), [{ phrase: "pães", qty: 2 }]);
+  assert.deepEqual(parseBasketLines("meia dúzia de ovo"), [{ phrase: "ovo", qty: 6 }]);
+  assert.deepEqual(parseBasketLines("1 arroz\n2 feijao\n3 oleo").map((x) => x.qty), [1, 1, 1]);
+  assert.equal(parseBasketLines("999 cocas")[0].qty, 50); // teto de sanidade
+  assert.deepEqual(parseBasketLines("arroz + feijao").map((x) => x.phrase), ["arroz", "feijao"]);
+  assert.deepEqual(parseBasketLines("ah e um papel toalha").map((x) => x.phrase), ["papel toalha"]);
+});
+
+test("refinamento de mercado: desnatado/zero/sem lactose refinam, não viram item novo", () => {
+  assert.deepEqual(parseRefinement("desnatado"), ["desnatado"]);
+  assert.deepEqual(parseRefinement("tem sem lactose?"), ["sem lactose"]);
+  assert.deepEqual(parseRefinement("zero"), ["zero"]);
+});
+
+test("escolha: último / mais caro / recomenda", () => {
+  const ops = [{ name: "A", unitPrice: 5 }, { name: "B", unitPrice: 9 }, { name: "C", unitPrice: 7 }];
+  assert.deepEqual(parseChoiceReply("o ultimo", ops), { type: "pick", index: 2 });
+  assert.deepEqual(parseChoiceReply("o mais caro", ops), { type: "pick", index: 1 });
+  assert.deepEqual(parseChoiceReply("qual voce recomenda?", ops), { type: "any" });
+  assert.ok(wantsMoreOptions("tem outras marcas?"));
+});
+
+test("matcher: piso de relevância mata ruído conversacional", () => {
+  const esponja = { sku: "x", name: "Esponja Multiuso Não Risca Carrefour", unitPrice: 2 };
+  assert.equal(scoreCatalogMatch("não, obrigado", esponja), 0);
+  assert.equal(scoreCatalogMatch("vc entrega em osasco", esponja), 0);
+});
+
+test("matcher: ingrediente não responde por produto ('ovos' ≠ Macarrão com Ovos)", () => {
+  const macarrao = { sku: "m", name: "Macarrão com Ovos Adria 500g", unitPrice: 5 };
+  assert.equal(scoreCatalogMatch("ovos", macarrao), 0);
+  const petisco = { sku: "p", name: "Petisco para Cachorro Purina Frango", unitPrice: 10 };
+  assert.equal(scoreCatalogMatch("frango", petisco), 0);
+});
+
+test("matcher: pet nunca responde por produto humano", () => {
+  const dogShampoo = { sku: "d", name: "Shampoo para Cães e Gatos Sanol", unitPrice: 12 };
+  assert.equal(scoreCatalogMatch("shampoo", dogShampoo), 0);
+});
+
+test("matcher: fardo perde pra unidade; variante processada perde pro básico", () => {
+  const items = [
+    { sku: "fardo", name: "Coca-Cola Zero 2 Litros 6 Unidades", unitPrice: 65.94 },
+    { sku: "un", name: "Coca-Cola Sem Açúcar Pet 2 L", unitPrice: 10.99 }
+  ];
+  assert.equal(rankCatalog("coca zero 2l", items, 2)[0].sku, "un");
+  const leites = [
+    { sku: "cond", name: "Leite Condensado Piracanjuba 395g", unitPrice: 6 },
+    { sku: "uht", name: "Leite UHT Integral Piracanjuba 1L", unitPrice: 5 }
+  ];
+  assert.equal(rankCatalog("leite", leites, 2)[0].sku, "uht");
+});
+
+test("matcher: 'sem açúcar' exclui açúcar; marca no head efetivo", () => {
+  const acucar = { sku: "a", name: "Açúcar Refinado União 1kg", unitPrice: 5 };
+  assert.equal(scoreCatalogMatch("café sem açúcar", acucar), 0);
+  const base = { sku: "b", name: "Quem Disse, Berenice? Base Líquida Mate", brand: "Quem Disse, Berenice?", unitPrice: 40 };
+  assert.ok(scoreCatalogMatch("base", base) > 0);
+});

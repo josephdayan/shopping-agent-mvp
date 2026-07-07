@@ -46,10 +46,12 @@ test("pagamento: pix sem taxa, cartão com taxa, totais distintos", () => {
   const text = copy.paymentMethod(100, 105.25);
   assert.match(text, /Pix — R\$ 100,00/);
   assert.match(text, /Cartão — R\$ 105,25/);
-  const pix = copy.pixInstructions(100, "00020126CODE", true);
+  // O código Pix vai em mensagem SEPARADA (copiável) — a intro não o contém.
+  const pix = copy.pixInstructions(100, true);
   assert.match(pix, /copia e cola/);
   assert.match(pix, /paguei/); // sandbox hint
-  const pixReal = copy.pixInstructions(100, "00020126CODE", false);
+  assert.doesNotMatch(pix, /00020126/);
+  const pixReal = copy.pixInstructions(100, false);
   assert.doesNotMatch(pixReal, /sandbox/);
   const card = copy.cardInstructions(105.25, "https://mp.com/x", false);
   assert.match(card, /https:\/\/mp\.com\/x/);

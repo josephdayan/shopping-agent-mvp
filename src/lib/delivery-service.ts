@@ -82,6 +82,8 @@ type DeliveryContext = {
   courierOptions?: CourierOption[];
   storeKey?: string;
   notFound?: string[];
+  // Pedido em texto cru aguardando o CEP do onboarding — vira busca COM OPÇÕES depois.
+  pendingRequest?: string;
   cep?: string;
   city?: string;
   uf?: string;
@@ -541,13 +543,21 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // (keep only the saved address) so a leftover basket from a previous session doesn't
   // bleed into a new order — the reported "old items still there" problem.
   const CART_TTL_MS = Number(process.env.LIA_CART_TTL_MS ?? 30 * 60 * 1000);
-  if (ctx.basket?.length && convo.updatedAt && Date.now() - new Date(convo.updatedAt).getTime() > CART_TTL_MS) {
+  const stale = Boolean(
+    (ctx.basket?.length || ctx.pending?.length) &&
+      convo.updatedAt &&
+      Date.now() - new Date(convo.updatedAt).getTime() > CART_TTL_MS
+  );
+  if (stale) {
     const keptCep = ctx.cep;
     const keptAddr = ctx.deliveryAddress;
     for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
     ctx.flow = "delivery";
     ctx.cep = keptCep;
     ctx.deliveryAddress = keptAddr;
+    // Nunca expira em silêncio: sem isto o cliente responde "2" às opções de ontem e
+    // ganha um "não entendi" sem contexto nenhum.
+    await reply(phone, copy.cartExpired());
   }
 
   const intent = detectIntent(text);
@@ -568,15 +578,62 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
       await reply(phone, copy.welcomeAskCep());
+    } else if (ctx.step === "awaiting_payment" || (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
+      // "oi" no meio de um pedido em andamento não reapresenta a Lia do zero.
+      await reply(phone, copy.greetingMidOrder(ctx.step ?? "collecting", ctx.basket?.length ?? 0));
     } else {
       await reply(phone, copy.greeting());
     }
     return;
   }
 
+  // ---- perguntas de serviço / atendimento (funcionam em QUALQUER step) ----
+  if (intent.kind === "service_question") {
+    await reply(phone, copy.serviceAnswer(intent.topic, coverageLabel()));
+    return;
+  }
+  if (intent.kind === "human") {
+    await flagLatestOrder(user.id, `🙋 CLIENTE PEDIU ATENDIMENTO HUMANO: "${text.slice(0, 140)}"`);
+    await reply(phone, copy.humanHandoff());
+    return;
+  }
+  if (intent.kind === "complaint") {
+    await flagLatestOrder(user.id, `⚠️ RECLAMAÇÃO DO CLIENTE: "${text.slice(0, 140)}"`);
+    await reply(phone, copy.complaintAck());
+    return;
+  }
+  if (intent.kind === "cancel_question") {
+    const active = await prisma.deliveryOrder.findFirst({
+      where: { userId: user.id, status: { in: ["awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
+    });
+    await reply(phone, copy.cancelHowTo(Boolean(active) || (ctx.basket?.length ?? 0) > 0));
+    return;
+  }
+  if (intent.kind === "resend_code" || intent.kind === "switch_payment") {
+    const order = await prisma.deliveryOrder.findFirst({
+      where: { userId: user.id, status: "awaiting_payment" },
+      orderBy: { createdAt: "desc" }
+    });
+    if (!order) {
+      await reply(phone, (ctx.basket?.length ?? 0) > 0 ? copy.finishOrderFirst() : copy.noOrdersYet());
+      return;
+    }
+    if (intent.kind === "switch_payment") {
+      // "quero mudar a forma de pagamento" sem dizer qual → oferece as duas de novo.
+      const method = isCardCharge(order) ? "pix" : "card";
+      await switchPaymentMethod(phone, order, method);
+    } else if (intent.expired) {
+      // Pix expirado: reemitir uma cobrança NOVA em vez de reenviar o código morto.
+      await switchPaymentMethod(phone, order, isCardCharge(order) ? "card" : "pix");
+    } else {
+      await resendCharge(phone, order);
+    }
+    return;
+  }
+
   // ---- order-level commands (work in ANY step) ----
   if (intent.kind === "status") {
-    await handleStatus(phone, user.id);
+    await handleStatus(phone, user.id, text);
     return;
   }
   if (intent.kind === "paid_claim") {
@@ -601,27 +658,50 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // ---- CEP (onboarding, requested change, or spontaneously sent) ----
   if (intent.kind === "cep") {
-    await handleNewCep(phone, user.id, convo.id, ctx, intent.cep, Boolean(savedCep));
+    await handleNewCep(phone, user.id, convo.id, ctx, intent.cep, Boolean(savedCep), intent.rest);
     return;
   }
 
-  // ---- onboarding: no saved address yet — capture items, then ask the CEP first ----
+  // ---- step need_cep: um número curto ("1", "08") é tentativa de CEP, não escolha ----
+  if (ctx.step === "need_cep" && intent.kind === "number") {
+    await reply(phone, copy.cepNotFound(text.trim()));
+    return;
+  }
+
+  // ---- onboarding: no saved address yet — stash the request, ask the CEP first ----
+  // O pedido NÃO é resolvido agora (senão o 1º pedido do cliente seria auto-escolhido
+  // sem opções nem preço): guarda o texto cru e roda a busca normal depois do CEP.
   if (!savedCep) {
-    const built = await buildBasket(text, getStore(DEFAULT_STORE_KEY));
-    if (built.containsMedicine && !built.basket.length) {
+    if (looksLikeMedicine(text)) {
       await reply(phone, copy.noMedicine());
       return;
     }
-    if (built.basket.length) ctx.basket = mergeBaskets(ctx.basket ?? [], built.basket);
+    const alreadyAsked = ctx.step === "need_cep";
+    if (intent.kind === "reject") {
+      // "não"/"deixa" durante o pedido de CEP: estaciona sem insistir.
+      await writeCtx(convo.id, addressOnlyCtx(ctx, null));
+      await reply(phone, copy.thanks());
+      return;
+    }
+    const lines = intent.kind === "free_text" ? parseBasketLines(text) : [];
+    if (lines.length) {
+      ctx.pendingRequest = ctx.pendingRequest ? `${ctx.pendingRequest}, ${text}` : text;
+    }
     ctx.flow = "delivery";
     ctx.step = "need_cep";
     await writeCtx(convo.id, ctx);
-    await reply(phone, copy.welcomeAskCep((ctx.basket ?? []).map((i) => `${i.qty}x ${i.name}`)));
+    const noted = ctx.pendingRequest ? parseBasketLines(ctx.pendingRequest).map((l) => `${l.qty}x ${l.phrase}`) : [];
+    await reply(phone, alreadyAsked && !lines.length ? copy.askCepAgain() : copy.welcomeAskCep(noted));
     return;
   }
 
   // ---- step: customer choosing the frete (cheapest vs fastest) ----
-  if (ctx.step === "choosing_courier" && (ctx.courierOptions?.length ?? 0) >= 2) {
+  if (
+    ctx.step === "choosing_courier" &&
+    (ctx.courierOptions?.length ?? 0) >= 2 &&
+    intent.kind !== "remove_item" &&
+    intent.kind !== "swap_item"
+  ) {
     const n = normalizeMsg(text); // accent-stripped: "mais rápido" must match
     let chosen: CourierOption | undefined;
     if ((intent.kind === "number" && intent.value === 1) || /\bbarat|em conta|econom/.test(n)) {
@@ -645,7 +725,15 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // ---- step: customer choosing one of the (max 3) options for an ambiguous item ----
   // "tira X"/"troca X por Y" fall through to the basket-editing handlers below.
-  if (ctx.step === "choosing" && ctx.pending?.length && intent.kind !== "remove_item" && intent.kind !== "swap_item") {
+  if (
+    ctx.step === "choosing" &&
+    ctx.pending?.length &&
+    intent.kind !== "remove_item" &&
+    intent.kind !== "swap_item" &&
+    intent.kind !== "pay" &&
+    intent.kind !== "choose_payment" &&
+    intent.kind !== "done"
+  ) {
     await handleChoosing(phone, user.cep, convo.id, ctx, text, intent);
     return;
   }
@@ -694,11 +782,15 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     await reply(phone, paymentMethodText(ctx));
     return;
   }
-  const wantsToPay = intent.kind === "pay" || (ctx.step === "quoted" && intent.kind === "affirm");
+  const wantsToPay =
+    intent.kind === "pay" ||
+    intent.kind === "done" ||
+    (ctx.step === "quoted" && intent.kind === "affirm") ||
+    (intent.kind === "choose_payment" && (ctx.basket?.length ?? 0) > 0);
   const directMethod =
     intent.kind === "pay" && intent.method
       ? intent.method
-      : ctx.step === "quoted" && intent.kind === "choose_payment"
+      : intent.kind === "choose_payment" && (ctx.basket?.length ?? 0) > 0
         ? intent.method
         : undefined;
   if (wantsToPay || directMethod) {
@@ -723,7 +815,21 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     const payStore = orderStore(ctx);
     if (belowMinimum(ctx, payStore)) {
       await writeCtx(convo.id, ctx);
-      await reply(phone, minimumOrderText(ctx, payStore));
+      // "só isso"/"mais nada" abaixo do mínimo NÃO pode repetir o mesmo nudge em loop.
+      if (intent.kind === "done") {
+        const min = Math.round((payStore.minOrder ?? 0) * MARKUP * 100) / 100;
+        const produtos = (ctx.basket ?? []).reduce((sum, i) => sum + Math.round(i.unitPrice * MARKUP * i.qty * 100) / 100, 0);
+        await reply(phone, copy.minimumDeadEnd(min, Math.max(0, Math.round((min - produtos) * 100) / 100)));
+      } else {
+        await reply(phone, minimumOrderText(ctx, payStore));
+      }
+      return;
+    }
+    // "só isso"/"mais nada" ANTES da cotação = fechar a LISTA: mostra o total primeiro
+    // (o cliente ainda nem viu o frete); a partir do resumo, "pagar" segue normal.
+    if (intent.kind === "done" && ctx.step !== "quoted") {
+      await quoteBasket(ctx, payStore);
+      await respondAfterQuote(phone, convo.id, ctx, payStore);
       return;
     }
     if (directMethod) {
@@ -758,7 +864,11 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
   if (intent.kind === "remove_item") {
-    await handleRemove(phone, convo.id, user.cep, ctx, intent.target);
+    await handleRemove(phone, convo.id, user.cep, ctx, intent.target, { silentIfFound: Boolean(intent.andAdd) });
+    // Multi-intenção "tira o arroz E coloca feijão": o remove acima, o add agora.
+    if (intent.andAdd) {
+      await handleSearch(phone, convo.id, user.cep, ctx, intent.andAdd);
+    }
     return;
   }
 
@@ -780,16 +890,39 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
+  // ---- awaiting_payment + item novo: REABRE o pedido em vez de criar cesta fantasma ----
+  // "ah, e adiciona um leite" com cobrança aberta: cancela a cobrança antiga (não paga),
+  // avisa o cliente e segue o fluxo normal de busca com a cesta restaurada.
+  if (ctx.step === "awaiting_payment" && ctx.deliveryOrderId && intent.kind === "free_text" && !isQuestion(text)) {
+    const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+    if (order && order.status === "awaiting_payment") {
+      await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { status: "canceled", notes: [order.notes, "reaberto pelo cliente (item novo)"].filter(Boolean).join("\n") }
+      });
+      if (!ctx.basket?.length) ctx.basket = ((order.items as unknown) as BasketItem[]) ?? [];
+      ctx.deliveryOrderId = undefined;
+      ctx.step = "collecting";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.orderReopened());
+    }
+  }
+
   // ---- default: treat as a product request ----
   await handleSearch(phone, convo.id, user.cep, ctx, text);
 }
 
 // ---------- intent handlers ----------
 
-async function handleStatus(phone: string, userId: string) {
+async function handleStatus(phone: string, userId: string, text?: string) {
   const order = await prisma.deliveryOrder.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } });
   if (!order) {
-    await reply(phone, copy.noOrdersYet());
+    // "que horas chega?" sem pedido = pergunta de PRAZO, não de status.
+    if (text && /\b(chega|demora|horas|prazo|falta)\b/.test(normalizeMsg(text))) {
+      await reply(phone, copy.serviceAnswer("eta", coverageLabel()));
+    } else {
+      await reply(phone, copy.noOrdersYet());
+    }
     return;
   }
   await reply(
@@ -899,7 +1032,10 @@ async function handleNewCep(
   convoId: string,
   ctx: DeliveryContext,
   cep: string,
-  hadCepBefore: boolean
+  hadCepBefore: boolean,
+  // Itens que vieram JUNTO do CEP ("meu cep é X, quero arroz e leite") — processados
+  // depois de salvar o endereço, nunca descartados.
+  restItems?: string
 ) {
   const { address, city, uf, invalid } = await expandCep(cep);
   if (invalid) {
@@ -939,17 +1075,32 @@ async function handleNewCep(
   ctx.flow = "delivery";
   await prisma.user.update({ where: { id: userId }, data: { cep } });
   const shownAddress = ctx.deliveryAddress ?? cep;
+  const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress);
+
+  // Itens enviados na MESMA mensagem do CEP — ou guardados no onboarding — entram no
+  // fluxo NORMAL de busca (com opções e preço), nunca auto-escolhidos.
+  const queued = [restItems, ctx.pendingRequest].filter(Boolean).join(", ").trim();
+  ctx.pendingRequest = undefined;
+  if (queued) {
+    await reply(phone, savedMsg);
+    await handleSearch(phone, convoId, null, ctx, queued);
+    return;
+  }
+
+  // CEP no MEIO de uma escolha ("choosing"): endereço atualiza, mas a pergunta pendente
+  // não pode virar órfã — reapresenta a escolha em vez de resetar o passo.
+  if (ctx.pending?.length) {
+    ctx.step = "choosing";
+    await writeCtx(convoId, ctx);
+    await reply(phone, savedMsg);
+    await sendChoices(phone, ctx.pending[0]);
+    return;
+  }
 
   if (ctx.basket?.length) {
     const store = orderStore(ctx);
     await quoteBasket(ctx, store);
-    await respondAfterQuote(
-      phone,
-      convoId,
-      ctx,
-      store,
-      hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress)
-    );
+    await respondAfterQuote(phone, convoId, ctx, store, savedMsg);
     return;
   }
   ctx.step = "collecting";
@@ -1117,7 +1268,14 @@ function itemMatchesPhrase(phrase: string, item: { sku: string; name: string; un
   return scoreCatalogMatch(phrase, item) > 0;
 }
 
-async function handleRemove(phone: string, convoId: string, userCep: string | null | undefined, ctx: DeliveryContext, target: string) {
+async function handleRemove(
+  phone: string,
+  convoId: string,
+  userCep: string | null | undefined,
+  ctx: DeliveryContext,
+  target: string,
+  opts?: { silentIfFound?: boolean }
+) {
   const basket = ctx.basket ?? [];
   const pending = ctx.pending ?? [];
   if (!basket.length && !pending.length) {
@@ -1145,7 +1303,13 @@ async function handleRemove(phone: string, convoId: string, userCep: string | nu
   }
   if (!keep.length) {
     await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
-    await reply(phone, copy.removedItems(names, true));
+    await reply(phone, copy.removedItems(names, !opts?.silentIfFound));
+    return;
+  }
+  // remove+add ("tira X e coloca Y"): não cota agora — o add que vem em seguida cota.
+  if (opts?.silentIfFound) {
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.removedItems(names, false));
     return;
   }
   const store = orderStore(ctx);
@@ -1290,10 +1454,28 @@ function methodFromIntent(intent: Intent): "pix" | "card" | undefined {
 
 // Re-send the open charge (card link or Pix code) for an awaiting_payment order.
 async function resendCharge(phone: string, order: { notes?: string | null; pixCopiaECola?: string | null }) {
-  await reply(
-    phone,
-    isCardCharge(order) ? copy.resendCard(order.pixCopiaECola ?? "") : copy.resendPix(order.pixCopiaECola ?? "")
-  );
+  if (isCardCharge(order)) {
+    await reply(phone, copy.resendCard(order.pixCopiaECola ?? ""));
+    return;
+  }
+  // Pix: intro + código em mensagem SEPARADA — copiar a mensagem inteira tem que colar.
+  await reply(phone, copy.resendPix());
+  if (order.pixCopiaECola) await reply(phone, order.pixCopiaECola);
+}
+
+// Anota um aviso do cliente (reclamação / pedido de humano) no pedido mais recente,
+// pra aparecer no /ops. Nunca lança — é acessório da conversa.
+async function flagLatestOrder(userId: string, note: string) {
+  try {
+    const order = await prisma.deliveryOrder.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } });
+    if (!order) return;
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { notes: order.notes ? `${order.notes}\n${note}` : note }
+    });
+  } catch (err) {
+    console.error("[flagLatestOrder]", err);
+  }
 }
 
 function mergeBaskets(existing: BasketItem[], incoming: BasketItem[]): BasketItem[] {
@@ -1408,7 +1590,10 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     where: { id: order.id },
     data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
   });
-  await reply(phone, copy.pixInstructions(total, charge.copiaECola, charge.mock));
+  // Intro + código em mensagens SEPARADAS: no WhatsApp copia-se a mensagem inteira —
+  // com prosa junto, o copia-e-cola não cola no banco.
+  await reply(phone, copy.pixInstructions(total, charge.mock));
+  await reply(phone, charge.copiaECola);
 }
 
 // The customer changed their mind about how to pay while the charge is still open:

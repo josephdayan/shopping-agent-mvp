@@ -45,6 +45,11 @@ export function welcomeAskCep(notedItems?: string[]): string {
   return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Pra começar, me manda seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`;
 }
 
+// Re-pedido de CEP (2ª+ vez) — curto, sem repetir a apresentação inteira.
+export function askCepAgain(): string {
+  return "Só preciso do seu *CEP* pra continuar (ex.: 01310-100) 📍 — com ele eu calculo a entrega certinha.";
+}
+
 export function addressSavedAskItems(address: string): string {
   return `📍 Endereço salvo: ${address}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
 }
@@ -137,6 +142,19 @@ export function swappedFor(from: string, to: string): string {
   return `Troquei ${from} por ${to}. ✅`;
 }
 
+// "só isso" com a cesta ABAIXO do mínimo da loja: sem loop — explica e dá saída.
+export function minimumDeadEnd(displayMin: number, falta: number): string {
+  return [
+    `Entendi! Só que a loja não fecha pedido abaixo de *${brl(displayMin)}* em produtos — falta *${brl(falta)}* 😕`,
+    "",
+    "Me manda mais um itenzinho barato (um sal, um fósforo, um biscoito…) que eu fecho — ou responde *cancelar* se preferir deixar pra depois. 🙂"
+  ].join("\n");
+}
+
+export function finishOrderFirst(): string {
+  return "Você ainda não fechou esse pedido 🙂 Responde *pagar* que eu te passo o código na hora.";
+}
+
 export function emptyCartPay(): string {
   return `Sua cesta ainda está vazia 🙂. Me diz o que você quer — ex.: ${EXAMPLES} — e eu já te passo o total.`;
 }
@@ -158,8 +176,8 @@ export function choiceLine(index: number, name: string, displayPrice: number): s
 export function choicesAsk(count: number): string {
   const nums = Array.from({ length: count }, (_, i) => i + 1);
   return count <= 1
-    ? "Responde *1* pra confirmar (ou *qualquer* que eu escolho pra você). 🙂"
-    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho pra você. 🙂`;
+    ? "Responde *1* pra confirmar — ou *qualquer* que eu escolho, ou *pula* pra deixar de fora. 🙂"
+    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho, ou *pula* pra deixar de fora. 🙂`;
 }
 
 export function choicesText(query: string, options: { name: string; displayPrice: number }[], header?: string): string {
@@ -227,7 +245,11 @@ export function summary(input: SummaryInput): string {
   if (input.notFound?.length) {
     out.push("", notFoundNote(input.notFound));
   }
-  out.push("", "Posso fechar? Responde *pagar* que eu te passo o Pix ou o link do cartão. 💚");
+  out.push(
+    "",
+    "Posso fechar? Responde *pagar* que eu te passo o Pix ou o link do cartão. 💚",
+    "_Quer mudar algo? \"tira o arroz\", \"troca X por Y\" ou manda mais itens._"
+  );
   return out.join("\n");
 }
 
@@ -263,12 +285,13 @@ export function paymentMethod(totalPix: number, totalCard: number): string {
   ].join("\n");
 }
 
-export function pixInstructions(total: number, copiaECola: string, mock: boolean): string {
+// O CÓDIGO vai numa mensagem SEPARADA (enviada logo após esta): no WhatsApp o cliente
+// copia a mensagem inteira — se tiver prosa junto, o Pix não cola no banco.
+export function pixInstructions(total: number, mock: boolean): string {
   return [
     `Fechado! Total *${brl(total)}* no Pix.`,
     "",
-    "Copia o código abaixo e cola no *Pix copia e cola* do seu banco 👇",
-    copiaECola,
+    "Vou te mandar o código na próxima mensagem — é só segurar nela, copiar e colar no *Pix copia e cola* do seu banco. 👇",
     "",
     mock ? sandboxHint() : "Assim que o Pix cair eu já começo a separar tudo e te aviso por aqui. 💚"
   ].join("\n");
@@ -301,8 +324,9 @@ export function alreadyPaid(): string {
   return "Pode ficar tranquilo, seu pagamento já está confirmado por aqui! ✅ Estou cuidando do seu pedido — quer saber como está, é só perguntar *status*.";
 }
 
-export function resendPix(copiaECola: string): string {
-  return ["Claro! Seu Pix é este 👇", copiaECola, "", "É só colar no *Pix copia e cola* do banco. 💚"].join("\n");
+// Intro do reenvio — o código em si vai na mensagem seguinte, sozinho (copiável).
+export function resendPix(): string {
+  return "Claro! Segue seu código Pix na próxima mensagem 👇 É só copiar ela inteira e colar no *Pix copia e cola* do banco. 💚";
 }
 
 export function resendCard(link: string): string {
@@ -386,6 +410,54 @@ export function canceledRefunded(): string {
 
 export function finishChoiceFirst(): string {
   return "Só me confirma esse item primeiro que aí eu fecho tudo. 🙂";
+}
+
+// ---------- perguntas de serviço / atendimento ----------
+
+// Resposta direta a "vocês entregam em X?", "quanto custa o frete?", "demora quanto?",
+// "como pago?" — NUNCA cair em busca de produto com pergunta operacional.
+export function serviceAnswer(topic: "area" | "fee" | "eta" | "payment" | "generic", areaLabel: string): string {
+  switch (topic) {
+    case "area":
+      return `A Lia atende ${areaLabel} 📍 Me manda seu *CEP* que eu confirmo na hora se chego até você!`;
+    case "fee":
+      return "A entrega é feita por motoboy e o frete é calculado na hora, pela distância até você 🛵 Me diz o que precisa + seu CEP que eu já te mostro o total certinho, sem surpresa.";
+    case "eta":
+      return "A entrega é no mesmo dia — normalmente em 1 a 2 horas depois do pagamento, dependendo da distância 🛵 Quando você fizer o pedido eu te mostro a previsão certinha.";
+    case "payment":
+      return "Você paga *Pix* (copia-e-cola, sem taxa) ou *cartão* (link seguro do Mercado Pago) — tudo aqui pelo chat mesmo. 💳 Vale-refeição por enquanto não consigo aceitar. 🙏";
+    default:
+      return "Boa pergunta! Eu faço suas compras do dia a dia e entrego no mesmo dia por motoboy — você paga por Pix ou cartão aqui no chat. Me diz o que você precisa que eu resolvo. 💚";
+  }
+}
+
+export function humanHandoff(): string {
+  return "Claro! Já chamei alguém da equipe pra falar com você por aqui mesmo — pode escrever o que precisa que a mensagem chega. 💚 Enquanto isso, se for sobre um pedido, me pergunta *status* que eu te adianto.";
+}
+
+export function complaintAck(): string {
+  return "Poxa, sinto muito por isso 😔 Já passei sua mensagem pra equipe — vamos resolver. Me conta o que aconteceu (ou manda uma foto) que a gente dá um jeito: troca ou estorno, o que preferir.";
+}
+
+export function cancelHowTo(hasActiveOrder: boolean): string {
+  return hasActiveOrder
+    ? 'Consegue sim! É só responder *cancelar* que eu cancelo pra você. Se o pedido já saiu pra entrega aí não dá mais, tá? 🙂'
+    : 'Consegue sim — quando tiver um pedido em andamento, é só dizer *cancelar*. Agora mesmo você não tem nenhum aberto. 🙂';
+}
+
+export function cartExpired(): string {
+  return "_(seu carrinho anterior ficou parado um tempão, então comecei um novo pra evitar erro — seu endereço continua salvo!)_";
+}
+
+export function orderReopened(): string {
+  return "Deixa comigo! Atualizei seu pedido com o item novo — o total anterior não vale mais, segue o novo resumo 👇";
+}
+
+export function greetingMidOrder(step: string, itemCount: number): string {
+  const base = "Oi de novo! 💚";
+  if (step === "awaiting_payment") return `${base} Seu pedido está só esperando o pagamento — responde *pagar* se precisar do código de novo.`;
+  if (itemCount > 0) return `${base} Sua cesta tem ${itemCount} ${itemCount === 1 ? "item" : "itens"} — me diz o que mais precisa, ou responde *pagar* pra fechar.`;
+  return `${base} Me diz o que você precisa hoje — ex.: ${EXAMPLES}.`;
 }
 
 export function genericError(): string {
