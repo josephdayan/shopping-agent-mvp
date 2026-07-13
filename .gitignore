@@ -8,6 +8,10 @@ prisma/dev.db-journal
 dist
 coverage
 
+# Browser sessions contain retailer authentication cookies and must never be committed.
+playwright/.auth/
+.browserbase/
+
 # TypeScript incremental build info
 tsconfig.tsbuildinfo
 
