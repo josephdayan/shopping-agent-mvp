@@ -46,6 +46,14 @@ export type StoreConnector = {
   listCatalog(): CatalogItem[];
 };
 
+// WhatsApp product cards require an https image. Incomplete scrape rows remain in
+// their generated source files for later enrichment, but they are quarantined from
+// the active/sellable catalog so the conversation can never degrade to a text-only
+// option. Store-specific blocked-CDN checks are covered by the global catalog test.
+export function catalogWithImages(items: CatalogItem[]): CatalogItem[] {
+  return items.filter((item) => Boolean(item.imageUrl && /^https:\/\//i.test(item.imageUrl)));
+}
+
 // Shared helper: accent-insensitive, lowercase token match scoring so a store's
 // searchItems can rank a free-text request against its catalog.
 export function normalizeText(input: string): string {
@@ -61,7 +69,7 @@ export function normalizeText(input: string): string {
 // Greetings / fillers / articles that must NOT drive product matching, otherwise
 // "Bom dia" matches "Bombril" and "quero um X" leaks "um".
 const STOPWORDS = new Set(
-  "bom boa dia tarde noite oi ola ei eai opa quero queria gostaria manda me te lhe por favor pf um uma uns umas de do da dos das e o a os as pra para preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas algum alguma tem voce vc obrigado obrigada nao ne ta cade onde quando quanto custa vou meu minha seu sua pelo pela mim ainda ja so nada mais que sei entao".split(
+  "bom boa dia tarde noite oi ola ei eai opa quero queria qro qr qero qria gostaria manda me te lhe por favor pf pff pfv um uma uns umas de do da dos das e o a os as pra para pro pros preciso pode poderia ser com sem no na nos nas ai hoje agora la aqui isso esse essa esses essas outro outra outros outras algum alguma tem voce vc obrigado obrigada nao ne ta cade onde quando quanto custa vou meu minha seu sua pelo pela mim ainda ja so nada mais tambem tb tbm tmb que sei entao".split(
     " "
   )
 );
@@ -115,6 +123,28 @@ function tokenMatchesWord(token: string, word: string): boolean {
   // length gap — otherwise "galactica" matches the name word "Gala" and gibberish
   // requests surface random products instead of an honest "não achei".
   if (word.length >= 4 && token.startsWith(word) && token.length - word.length <= 3) return true;
+  // Um erro de digitação em palavras específicas é muito comum no celular
+  // ("detergnte", "bananna", "escva"). Só habilitamos para palavras de 5+
+  // letras e mesma faixa de tamanho, para não transformar ruído curto em produto.
+  if (token.length >= 5 && word.length >= 5 && Math.abs(token.length - word.length) <= 1) {
+    let previous = Array.from({ length: word.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= token.length; i++) {
+      const current = [i];
+      let rowMin = current[0];
+      for (let j = 1; j <= word.length; j++) {
+        const value = Math.min(
+          previous[j] + 1,
+          current[j - 1] + 1,
+          previous[j - 1] + (token[i - 1] === word[j - 1] ? 0 : 1)
+        );
+        current[j] = value;
+        rowMin = Math.min(rowMin, value);
+      }
+      if (rowMin > 1) return false;
+      previous = current;
+    }
+    if (previous[word.length] <= 1) return true;
+  }
   return false;
 }
 
@@ -173,7 +203,33 @@ const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semide
 export function variantCount(query: string, item: CatalogItem): number {
   const qTokens = new Set(queryTokens(query));
   const beforeSabor = normalizeText(item.name).split(/\bsabor\b/)[0];
-  return words(beforeSabor).filter((w) => TIEBREAK_VARIANTS.has(w) && !qTokens.has(w)).length;
+  let count = words(beforeSabor).filter((w) => TIEBREAK_VARIANTS.has(w) && !qTokens.has(w)).length;
+  // "Sem Açúcar"/"Sem Lactose" no NOME é variante não pedida — "coca" genérica prefere
+  // a original. Pedir "sem açúcar" (ou o equivalente "zero"/"diet"/"light") desliga.
+  for (const m of beforeSabor.matchAll(/\bsem\s+([a-z]\S*)/g)) {
+    const negated = m[1];
+    const asked =
+      qTokens.has(negated) ||
+      (negated === "acucar" && ["zero", "diet", "light"].some((t) => qTokens.has(t)));
+    if (!asked) count += 1;
+  }
+  return count;
+}
+
+// A bare "coca" means a normal individual drink or a familiar family bottle, not
+// the cheapest 200 ml mini bottle. Explicit sizes still win through scoreCatalogMatch.
+// This is a tie-break only, so brand/relevance guards remain authoritative.
+export function commonPackageRank(query: string, item: CatalogItem): number {
+  const queryNorm = normalizeText(query);
+  if (!/\bcocas?(?: colas?)?\b/.test(queryNorm) || /\d+(?:[.,]\d+)?\s*(?:ml|l|lt|litros?)\b/.test(queryNorm)) return 0;
+  const name = normalizeText(item.name);
+  if (/\b(?:310|350)\s*ml\b/.test(name)) return 0;
+  if (/\b600\s*ml\b/.test(name)) return 1;
+  if (/\b2\s*(?:l|litros?)\b/.test(name)) return 2;
+  if (/\b1[,.]5\s*(?:l|litros?)\b/.test(name)) return 3;
+  if (/\b1\s*(?:l|litros?)\b/.test(name)) return 4;
+  if (/\b(?:200|220)\s*ml\b/.test(name)) return 9;
+  return 5;
 }
 
 // Size-normalized form of a name/attr so "2 Litros", "2L", "2 lt" and "2l" all compare
@@ -202,6 +258,16 @@ export function attrMatchesItem(attr: string, item: CatalogItem): boolean {
   // (piso/head) não se aplica aqui.
   const nameWords = words(`${item.name} ${item.brand ?? ""}`);
   return words(a).every((t) => nameWords.some((w) => tokenMatchesWordSyn(t, w)));
+}
+
+// Descobre refinamentos diretamente no catálogo, sem uma lista específica por produto.
+// "sabor morango", "cor azul", "tamanho 42", "lavanda" e uma marca nova funcionam
+// desde que a característica exista em algum candidato da busca que já está na tela.
+export function inferCatalogRefinement(text: string, candidates: CatalogItem[]): string[] | null {
+  const labels = new Set(["cor", "tamanho", "sabor", "gosto", "cheiro", "aroma", "fragrancia", "modelo", "versao", "marca", "tipo"]);
+  const attrs = queryTokens(text).filter((token) => !labels.has(token));
+  if (!attrs.length || attrs.length > 4) return null;
+  return candidates.some((item) => attrs.every((attr) => attrMatchesItem(attr, item))) ? attrs : null;
 }
 
 export function scoreCatalogMatch(query: string, item: CatalogItem): number {
@@ -295,7 +361,10 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     if ((itemAnimal || PET_ANY_RE.test(nameNorm)) && nameWords.some((word) => WET_WORDS.has(word)) && !wantsWet) score -= 2;
     const queryNorm = normalizeText(query);
     const wantsProcessed = effTokens.some((t) => PROCESSED_VARIANTS.has(t)) || PROCESSED_BIGRAM_RE.test(queryNorm);
-    if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(nameNorm))) score -= 2;
+    // "em pó" é a forma BÁSICA do achocolatado (Nescau/Toddy) — só é variante
+    // processada nos outros produtos ("leite em pó" continua perdendo pro leite).
+    const processedHay = /\bachocolatado\b/.test(nameNorm) ? nameNorm.replace(/\bem po\b/g, " ") : nameNorm;
+    if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(processedHay))) score -= 2;
     if (!PACK_ASK_RE.test(queryNorm) && isDrinkPack(nameNorm)) score -= 2;
     // Versão infantil/baby só quando pedida ("perfume" pra adulto não pode virar
     // Boti Baby; "shampoo" não pode virar Johnson's Baby). Pedir "infantil" inverte.
@@ -319,6 +388,7 @@ export function rankCatalog(query: string, items: CatalogItem[], limit: number):
       (a, b) =>
         b.score - a.score ||
         childRank(a.item) - childRank(b.item) ||
+        commonPackageRank(query, a.item) - commonPackageRank(query, b.item) ||
         variantCount(query, a.item) - variantCount(query, b.item) ||
         a.item.unitPrice - b.item.unitPrice
     )

@@ -73,12 +73,24 @@ const WORD_QTY: Record<string, number> = {
 // Teto de sanidade: "999 cocas" é typo/abuso, não pedido — o total iria direto pro Pix.
 const MAX_QTY = 50;
 
+// WhatsApp real vem cheio de abreviações. Expandir só as formas inequívocas antes
+// de separar a lista evita que "qro", "tb" e "pf" virem palavras do produto.
+// Mantemos isto conservador: gíria ambígua não é alterada.
+function expandShoppingShorthand(text: string): string {
+  return text
+    .replace(/\b(qro|qr|qero)\b/gi, "quero")
+    .replace(/\b(qria|keria)\b/gi, "queria")
+    .replace(/\b(pf|pff+|pfvr|pfr|pls)\b/gi, "por favor")
+    .replace(/\b(tb|tbm|tmb|tambem)\b/gi, "tambem")
+    .replace(/\b(me ve|m ve)\b/gi, "me ve");
+}
+
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
   /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
 
 export function parseBasketLines(text: string): ParsedLine[] {
-  let source = text;
+  let source = expandShoppingShorthand(text);
   // Lista enumerada ("1 arroz\n2 feijão\n3 óleo"): índices sequenciais a partir de 1 em
   // 3+ linhas são NUMERAÇÃO, não quantidade — remove os índices antes de parsear.
   const lines = source.split(/\n/).map((l) => l.trim()).filter(Boolean);
@@ -95,8 +107,8 @@ export function parseBasketLines(text: string): ParsedLine[] {
     .map((l) => l.replace(/^[^:\n]*\b(preciso|precisava|quero|queria|lista|coisas|compras?|mercado|casa|segue|anota|manda|ve)\b[^:\n]*:\s*/i, ""))
     .join("\n");
 
-  return source
-    .replace(/\bvou querer\b|\bquero\b|\bqueria\b|\bme manda\b|\bme ve\b|\bmanda\b|\bpreciso de\b|\bpode ser\b|\bcoloca\b|\bpoe\b|\bbota\b|\btraz\b|\badiciona\b|\binclui\b|\bcompra\b|\btambem\b|\btbm?\b/gi, "")
+  const parsedLines = source
+    .replace(/\bvou querer\b|\bquero\b|\bqueria\b|\bme manda\b|\bme ve\b|\bmanda\b|\b(?:preciso|presiso)(?: de| d)?\b|\bpode ser\b|\bcoloca\b|\bpoe\b|\bbota\b|\btraz\b|\badiciona\b|\binclui\b|\bcompra\b|\btambem\b|\btbm?\b|\bpor favor\b/gi, "")
     // protege decimais ("1,5l" / "1.5l") do split por vírgula/ponto
     .replace(/(\d),(\d)/g, "$1§$2")
     .replace(/(\d)\.(\d)/g, "$1¤$2")
@@ -110,6 +122,10 @@ export function parseBasketLines(text: string): ParsedLine[] {
         .replace(/^((oi+|ola+|opa+|bom dia|boa tarde|boa noite|e ?ai)( lia)?[\s,!.?]*)+/i, "")
         .replace(/^(tudo (bem|bom)|td bem|como vai)[\s,!.?]*/i, "")
         .replace(/^(ah+|hm+|hmm+|dai|tipo|ne|entao|ok+|okay|blz|beleza|ta|certo)\s+/i, "")
+        // vocativo ("minha filha, quero…", "amiga, me vê…", "lia,…") não é produto
+        .replace(/^((minha|meu)\s+(filha?|filho|querid[ao]|amor|anjo|bem)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|lia)[\s,!.]+/i, "")
+        // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri")
+        .replace(/^(e|mais)\s+/i, "")
         .replace(/\s+/g, " ")
         .trim()
     )
@@ -138,6 +154,85 @@ export function parseBasketLines(text: string): ParsedLine[] {
       }
       return { phrase: raw, qty: 1 };
     });
+
+  // "ração pro meu dog, ele é filhote": cláusula com pronome DESCREVE o item anterior
+  // (vira atributo do nome), nunca um item novo. Sem item anterior, descrição solta
+  // não é produto.
+  const merged: ParsedLine[] = [];
+  for (const line of parsedLines) {
+    const pron = line.phrase.match(/^(?:ele|ela)s?\s+(?:é|e|eh|sao|são|esta|está|ta|tá)\s+(?:um\s+|uma\s+)?(.+)$/i);
+    if (pron) {
+      const prev = merged[merged.length - 1];
+      if (prev) prev.phrase = `${prev.phrase} ${pron[1].trim()}`.replace(/\s+/g, " ");
+      continue;
+    }
+    merged.push(line);
+  }
+  return merged;
+}
+
+// Quantidade respondida no passo imediatamente posterior à escolha do produto.
+// Aceita o jeito que as pessoas realmente escrevem: "2", "quero 2", "mais duas",
+// "me vê 4". O contexto já diz que a mensagem é quantidade, então não precisamos
+// obrigar a pessoa a usar um comando rígido.
+export function parseContextualQuantity(text: string): number | null {
+  const n = normalizeMsg(text)
+    .replace(/[?!.,]/g, " ")
+    .replace(/\b(qro|qr|qero)\b/g, "quero")
+    .replace(/\s+/g, " ")
+    .trim();
+  const button = n.match(/^qty:(\d{1,2})$/)?.[1];
+  if (button) {
+    const qty = Number(button);
+    return qty >= 1 && qty <= MAX_QTY ? qty : null;
+  }
+
+  const digit = n.match(/(?:^|\b)(\d{1,2})(?:\s*(?:x|un|unidades?))?(?:\b|$)/)?.[1];
+  if (digit) {
+    const qty = Number(digit);
+    return qty >= 1 && qty <= MAX_QTY ? qty : null;
+  }
+
+  if (/\bmeia\s+duzia\b/.test(n)) return 6;
+  if (/\b(?:uma\s+)?duzia\b/.test(n)) return 12;
+  for (const [word, qty] of Object.entries(WORD_QTY)) {
+    if (new RegExp(`\\b${word}\\b`).test(n)) return qty;
+  }
+  return null;
+}
+
+// A extração por IA melhora sinônimos, mas uma lista nunca pode perder itens por uma
+// omissão do modelo. Confere o resultado com o parser determinístico e acrescenta só
+// as linhas realmente ausentes. Sinônimos comuns são canonizados para não duplicar
+// "pasta de dente" quando a IA devolve "creme dental".
+export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]): ParsedLine[] {
+  if (!ai.length) return deterministic;
+  if (deterministic.length <= ai.length) return ai;
+  const aliases: Record<string, string> = {
+    pasta: "creme",
+    dente: "dental",
+    refri: "refrigerante",
+    refrigerantes: "refrigerante",
+    coca: "coca",
+    lenco: "lenco",
+    bebe: "umedecido"
+  };
+  const meaningful = (phrase: string) =>
+    normalizeMsg(phrase)
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .map((token) => aliases[token] ?? token)
+      .filter((token) => token.length >= 4 && !["para", "umas", "mais"].includes(token));
+  const sameProduct = (a: string, b: string) => {
+    const aTokens = meaningful(a);
+    const bTokens = new Set(meaningful(b));
+    return aTokens.some((token) => bTokens.has(token));
+  };
+  const merged = [...ai];
+  for (const line of deterministic) {
+    if (!merged.some((candidate) => sameProduct(line.phrase, candidate.phrase))) merged.push(line);
+  }
+  return merged;
 }
 
 // ---------- medicine guard (deterministic — works even with OpenAI off) ----------
@@ -253,7 +348,7 @@ const REPEAT_RE =
   /\b(repete|repetir|(o )?de sempre|mesmo pedido|pedido anterior|ultimo pedido|mesma coisa( de sempre)?|manda o mesmo|(igual|mesmo|mesma) (ao?|d[oa]) (ultim[oa]|anterior|sempre)( vez)?)\b|^o mesmo$/;
 
 const PAY_RE =
-  /\b(pagar|pagamento|finaliza|finalizar|fecha o pedido|fechar( o pedido)?|fechamos|checkout|manda o pix|me manda o pix|manda o link|gera o pix)\b/;
+  /\b(pagar|pagamento|finaliza|finalizar|fecha( o pedido)?|fechar( o pedido)?|fechamos|checkout|manda o pix|me manda o pix|manda o link|gera o pix)\b/;
 
 const AFFIRM_RE =
   /^(sim+|s|ss+|ok+|okay|pode( ser)?( mandar)?|pode sim|isso( ai)?|issa|(e|é|eh) isso( ai)?( mesmo)?|fechado|fechou|beleza|blz|confirmo|confirmar|confirma|confirmado|bora|dale|vai|manda( ai| ver)?|ta bom|ta otimo|ta certo|perfeito|certo|claro|aham|uhum|yes|👍)[\s!.]*$/;
@@ -450,10 +545,21 @@ const GROCERY_ATTRS = new Set([
   "light", "lata", "vidro", "retornavel", "congelado", "congelada", "organico", "organica",
   "sem lactose", "sem acucar", "sem gluten", "descafeinado", "gelada", "gelado"
 ]);
+// Público/fase de vida vale para QUALQUER categoria (perfume, roupa, higiene, pet...),
+// não apenas para um caso como Arbo. Formas coloquiais são canonizadas para a palavra
+// que costuma existir no catálogo.
+const AUDIENCE_ATTR_MAP: Record<string, string> = {
+  masculino: "masculino", masculina: "masculino", masc: "masculino", homem: "masculino", homens: "masculino",
+  feminino: "feminino", feminina: "feminino", fem: "feminino", mulher: "feminino", mulheres: "feminino",
+  unissex: "unissex", unisex: "unissex",
+  infantil: "infantil", crianca: "infantil", criancas: "infantil", kids: "infantil",
+  bebe: "bebe", baby: "bebe", adulto: "adulto", adulta: "adulto",
+  filhote: "filhote", filhotes: "filhote", senior: "senior", castrado: "castrado", castrada: "castrado"
+};
 // Comparatives map to a searchable size word.
 const SIZE_MAP: Record<string, string> = { maior: "grande", maiores: "grande", menor: "pequeno", menores: "pequeno" };
 const REFINE_FILLER = new Set(
-  "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez".split(" ")
+  "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no pra para cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez".split(" ")
 );
 
 // "acha outras", "tem mais?", "mostra outras opções" — the customer wants to SEE MORE
@@ -503,6 +609,8 @@ export function parseRefinement(text: string): string[] | null {
     const sizeMatch = t.match(/^(\d+(?:§\d+)?)(kg|g|ml|l|lt|litros?)$/);
     if (SIZE_MAP[t]) {
       attrs.push(SIZE_MAP[t]);
+    } else if (AUDIENCE_ATTR_MAP[t]) {
+      attrs.push(AUDIENCE_ATTR_MAP[t]);
     } else if (COLOR_ATTRS.has(t) || SIZE_ATTRS.has(t) || GROCERY_ATTRS.has(t)) {
       attrs.push(t);
     } else if (sizeMatch) {
@@ -621,6 +729,20 @@ export function narrowChoiceByName(text: string, options: { name: string }[]): n
     if (all) hits.push(i);
   });
   return hits;
+}
+
+// "algum até 150 reais?", "tem por menos de R$ 50?" — teto de PREÇO durante a escolha.
+// Exige marcador de dinheiro (r$ / reais / conto / pila), senão "até 2" viraria preço.
+export function parsePriceCap(text: string): number | null {
+  const n = normalizeMsg(text);
+  const m = n.match(
+    /\b(?:ate|abaixo de|menos de|no maximo|max(?:imo)?)\s*(?:uns\s+)?(?:r\$\s*)?(\d+(?:[.,]\d{1,2})?)\s*(reais|real|conto|contos|pila|pilas)?\b/
+  );
+  if (!m) return null;
+  const hasCurrency = Boolean(m[2]) || /r\$/.test(n);
+  if (!hasCurrency) return null;
+  const value = Number(m[1].replace(",", "."));
+  return Number.isFinite(value) && value > 0 ? value : null;
 }
 
 // "quanto deu tudo?", "qual o total?", "resumo" — pergunta pelo PARCIAL da cesta,
