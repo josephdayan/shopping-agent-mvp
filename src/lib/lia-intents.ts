@@ -85,7 +85,7 @@ function expandShoppingShorthand(text: string): string {
   return text
     .replace(/\b(qro|qr|qero)\b/gi, "quero")
     .replace(/\b(qria|keria)\b/gi, "queria")
-    .replace(/\b(pf|pff+|pfvr|pfr|pls)\b/gi, "por favor")
+    .replace(/\b(pf|pff+|pf+v+r?|pfr|pls)\b/gi, "por favor")
     .replace(/\b(tb|tbm|tmb|tambem)\b/gi, "tambem")
     .replace(/\b(me ve|m ve)\b/gi, "me ve");
 }
@@ -93,6 +93,11 @@ function expandShoppingShorthand(text: string): string {
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
   /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
+
+// Desabafo sobre o próprio estado ("to com dor de cabeça", "estou gripada", "to com
+// fome") — conversa, nunca item de compra. "to sem X" NÃO entra aqui: é pedido de X.
+const STATE_SEGMENT_RE =
+  /^(eu )?(to|tou|estou|ando) ((com|meio|toda?|todo) )?(dor(es)?|febre|fome|sede|gripe|enxaqueca|preguica|pressa|frio|calor|sono|correria|doente|gripad\w*|resfriad\w*|cansad\w*|exaust\w*|passando mal|mal|pessim\w*|apertad\w*|atrasad\w*)\b/;
 
 export function parseBasketLines(text: string): ParsedLine[] {
   let source = expandShoppingShorthand(text);
@@ -131,6 +136,8 @@ export function parseBasketLines(text: string): ParsedLine[] {
         .replace(/^((minha|meu)\s+(filha?|filho|querid[ao]|amor|anjo|bem)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|lia)[\s,!.]+/i, "")
         // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri")
         .replace(/^(e|mais)\s+/i, "")
+        // "to sem café" é jeito real de PEDIR café — o item é o que falta
+        .replace(/^(?:eu\s+)?(?:t[oô]|tou|estou)\s+sem\s+/i, "")
         .replace(/\s+/g, " ")
         .trim()
     )
@@ -138,6 +145,7 @@ export function parseBasketLines(text: string): ParsedLine[] {
       (raw) =>
         raw.length > 1 &&
         !NOISE_SEGMENT_RE.test(normalizeMsg(raw)) &&
+        !STATE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !/^(ah+|hm+|hmm+|aa+|eh+|dai|tipo|ne)$/i.test(normalizeMsg(raw))
     )
     .map((raw) => {
@@ -191,6 +199,9 @@ export function parseContextualQuantity(text: string): number | null {
     const qty = Number(button);
     return qty >= 1 && qty <= MAX_QTY ? qty : null;
   }
+  // "tira a coca e coloca um guarana" tem um "um" no meio, mas NÃO é resposta de
+  // quantidade — frase longa ou com verbo de edição segue pro roteador de intenção.
+  if (n.split(" ").length > 6 || REMOVE_START_RE.test(n) || SWAP_RE.test(n)) return null;
 
   const digit = n.match(/(?:^|\b)(\d{1,2})(?:\s*(?:x|un|unidades?))?(?:\b|$)/)?.[1];
   if (digit) {
@@ -212,7 +223,6 @@ export function parseContextualQuantity(text: string): number | null {
 // "pasta de dente" quando a IA devolve "creme dental".
 export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]): ParsedLine[] {
   if (!ai.length) return deterministic;
-  if (deterministic.length <= ai.length) return ai;
   const aliases: Record<string, string> = {
     pasta: "creme",
     dente: "dental",
@@ -233,8 +243,33 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
     const bTokens = new Set(meaningful(b));
     return aTokens.some((token) => bTokens.has(token));
   };
-  const merged = [...ai];
+  // "um presente pra minha namorada, tipo um perfume": o LLM já transformou a
+  // intenção em produto ("perfume feminino"); o segmento meta (presente + pessoa)
+  // não pode ser "resgatado" como segundo item.
+  const GIFT_META = new Set([
+    "presente", "presentinho", "lembrancinha", "lembranca", "aniversario", "surpresa",
+    "namorada", "namorado", "esposa", "esposo", "marido", "mulher", "amiga", "amigo",
+    "filha", "filho", "sogra", "sogro", "cunhada", "cunhado", "madrinha", "padrinho",
+    "professora", "professor", "chefe", "colega", "minha", "meu"
+  ]);
+  const giftMetaOnly = (phrase: string) => {
+    const tokens = meaningful(phrase);
+    return tokens.length > 0 && tokens.every((token) => GIFT_META.has(token));
+  };
+  // O LLM não devolve "quantidade foi DITA" — sem propagar o qtyExplicit do parser
+  // determinístico, "1 coca" volta a re-perguntar "Quantas unidades?". qty>1 do LLM
+  // é sempre dito (ninguém ganha 2 sem pedir); qty=1 herda a flag do determinístico.
+  const flagged = ai.map((line) => {
+    if (line.qtyExplicit) return line;
+    if (line.qty > 1) return { ...line, qtyExplicit: true };
+    const det = deterministic.find((d) => d.qtyExplicit && sameProduct(d.phrase, line.phrase));
+    if (det) return { ...line, qty: Math.max(line.qty, det.qty), qtyExplicit: true };
+    return line;
+  });
+  if (deterministic.length <= flagged.length) return flagged;
+  const merged = [...flagged];
   for (const line of deterministic) {
+    if (giftMetaOnly(line.phrase)) continue;
     if (!merged.some((candidate) => sameProduct(line.phrase, candidate.phrase))) merged.push(line);
   }
   return merged;
@@ -390,7 +425,7 @@ const EMOJI_ONLY_RE = /^[\p{Extended_Pictographic}️‍\s]+$/u;
 // "quero", "queria comprar", "quero fazer um pedido", "preciso de umas coisas" —
 // intenção de comprar SEM item nenhum. Não pode virar busca (dá "não entendi").
 const WANT_ITEMS_RE =
-  /^(?:oi[,!\s]+)?(?:eu )?(?:vou querer|quero|queria|gostaria|preciso|to precisando|estou precisando)(?: (?:de )?(?:comprar|pedir|encomendar|fazer (?:um |uma )?(?:pedido|compra|encomenda)|umas? coisas?|algumas coisas))?[\s!.,…]*$/;
+  /^(?:oi[,!\s]+)?(?:eu )?(?:vou querer|quero|queria|gostaria|preciso|to precisando|estou precisando)(?: (?:de )?(?:comprar|pedir|encomendar|fazer (?:um |uma )?(?:pedido|compra|encomenda)|umas? coisas?|algumas coisas)| de)?[\s!.,…]*$/;
 
 export function detectIntent(text: string): Intent {
   const n = normalizeMsg(text);
@@ -568,12 +603,16 @@ const AUDIENCE_ATTR_MAP: Record<string, string> = {
   unissex: "unissex", unisex: "unissex",
   infantil: "infantil", crianca: "infantil", criancas: "infantil", kids: "infantil",
   bebe: "bebe", baby: "bebe", adulto: "adulto", adulta: "adulto",
-  filhote: "filhote", filhotes: "filhote", senior: "senior", castrado: "castrado", castrada: "castrado"
+  filhote: "filhote", filhotes: "filhote", senior: "senior", castrado: "castrado", castrada: "castrado",
+  // espécie durante a escolha de ração/petisco ("pra cachorro, ele é adulto") é
+  // refinamento do item atual, nunca um item novo
+  cachorro: "cachorro", cachorra: "cachorro", cao: "cachorro", dog: "cachorro",
+  gato: "gato", gata: "gato", felino: "gato"
 };
 // Comparatives map to a searchable size word.
 const SIZE_MAP: Record<string, string> = { maior: "grande", maiores: "grande", menor: "pequeno", menores: "pequeno" };
 const REFINE_FILLER = new Set(
-  "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no pra para cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez".split(" ")
+  "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no pra para pro cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez ele ela eles elas meu minha nosso nossa eh".split(" ")
 );
 
 // "acha outras", "tem mais?", "mostra outras opções" — the customer wants to SEE MORE
@@ -757,6 +796,18 @@ export function parsePriceCap(text: string): number | null {
   if (!hasCurrency) return null;
   const value = Number(m[1].replace(",", "."));
   return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+// "vinho até 40 reais" no PEDIDO inicial: o teto sai da frase de busca (senão "ate 40
+// reais" vira token de busca) e vira filtro de preço aplicado ao preço EXIBIDO.
+export function splitPriceCap(phrase: string): { phrase: string; cap: number | null } {
+  const cap = parsePriceCap(phrase);
+  if (cap == null) return { phrase, cap: null };
+  const cleaned = phrase
+    .replace(/\b(?:de\s+)?(?:ate|até|abaixo de|menos de|no m[aá]ximo|max(?:imo)?)\s*(?:uns\s+)?(?:r\$\s*)?\d+(?:[.,]\d{1,2})?\s*(?:reais|real|conto|contos|pila|pilas)?\b/i, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return { phrase: cleaned || phrase, cap };
 }
 
 // "quanto deu tudo?", "qual o total?", "resumo" — pergunta pelo PARCIAL da cesta,

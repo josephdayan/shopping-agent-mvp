@@ -109,6 +109,9 @@ function tokenMatchesWordSyn(token: string, word: string): boolean {
   if (DOG_WORDS.has(token) && DOG_WORDS.has(word)) return true;
   if (CAT_WORDS.has(token) && CAT_WORDS.has(word)) return true;
   if ((token === "perfume" || token === "perfumes") && (word === "colonia" || word === "colonias")) return true;
+  // "miojo" ≈ "lámen": o cliente fala miojo; o catálogo esconde "Miojo"/"Lámen" no
+  // meio do nome ("Pack Macarrão Instantâneo Lámen … Nissin Miojo 510g").
+  if ((token === "miojo" || token === "miojos" || token === "lamen") && (word === "lamen" || word === "miojo")) return true;
   return false;
 }
 
@@ -126,7 +129,9 @@ function tokenMatchesWord(token: string, word: string): boolean {
   // Um erro de digitação em palavras específicas é muito comum no celular
   // ("detergnte", "bananna", "escva"). Só habilitamos para palavras de 5+
   // letras e mesma faixa de tamanho, para não transformar ruído curto em produto.
-  if (token.length >= 5 && word.length >= 5 && Math.abs(token.length - word.length) <= 1) {
+  // A 1ª letra tem que bater: typo raramente erra ela, e sem essa trava "vinho"
+  // vira "Ninho" (distância 1, produto completamente diferente).
+  if (token.length >= 5 && word.length >= 5 && Math.abs(token.length - word.length) <= 1 && token[0] === word[0]) {
     let previous = Array.from({ length: word.length + 1 }, (_, i) => i);
     for (let i = 1; i <= token.length; i++) {
       const current = [i];
@@ -180,7 +185,13 @@ const CHILD_NATIVE_RE = /\b(fraldas?|papinhas?|chupetas?|mamadeiras?|lenco(s)? u
 const CATEGORY_NOUNS = new Set([
   "colonia", "perfume", "desodorante", "shampoo", "condicionador", "sabonete",
   "hidratante", "batom", "gloss", "rimel", "corretivo", "blush", "serum",
-  "esmalte", "locao", "balm", "mascara", "protetor", "demaquilante", "esfoliante"
+  "esmalte", "locao", "balm", "mascara", "protetor", "demaquilante", "esfoliante",
+  // mercearia: substantivos que DEFINEM o produto mesmo enterrados no meio do nome
+  // ("Pack Macarrão Instantâneo Lámen … Nissin MIOJO 510g" é um miojo)
+  "miojo", "lamen",
+  // apelidos de refrigerante ("Refrigerante GUARANÁ Antarctica 2L", "Refrigerante
+  // FANTA Laranja") — o apelido identifica o produto em qualquer posição do nome
+  "coca", "guarana", "fanta", "sprite", "pepsi", "tonica"
 ]);
 function isChildVariant(nameNorm: string): boolean {
   return CHILD_VARIANT_RE.test(nameNorm) && !CHILD_NATIVE_RE.test(nameNorm);
@@ -189,8 +200,11 @@ function isChildVariant(nameNorm: string): boolean {
 // marcador de volume no nome pra não punir fraldas/papel ("60 Unidades" é o normal lá).
 const PACK_ASK_RE = /\b(fardo|pack|caixa|kit|engradado)\b/;
 function isDrinkPack(nameNorm: string): boolean {
-  if (/\b(fardo|pack|engradado)\b/.test(nameNorm)) return true;
-  return /\b\d+\s+(un|unidades|garrafas|latas)\b/.test(nameNorm) && /\b(ml|l|litros?)\b|\d(l|ml)\b/.test(nameNorm);
+  // Só é fardo de BEBIDA com marcador de volume no nome — "Pack Macarrão Instantâneo
+  // Lámen … Miojo 510g 6 Unidades" é o produto normal, não um engradado de refri.
+  const drinkVolume = /\b(ml|l|litros?)\b|\d(l|ml)\b/.test(nameNorm);
+  if (/\b(fardo|pack|engradado)\b/.test(nameNorm)) return drinkVolume;
+  return /\b\d+\s+(un|unidades|garrafas|latas)\b/.test(nameNorm) && drinkVolume;
 }
 // Variantes "de dieta/estilo" usadas só como DESEMPATE (quem pede "arroz" quer o comum;
 // quem pede "leite" aceita integral/desnatado — ambos são leite). Termos veterinários
@@ -306,13 +320,17 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   let score = 0;
   let strongHit = false;
   for (const token of effTokens) {
+    // Token de TAMANHO ("2kg", "350ml") nunca segura a relevância sozinho — senão
+    // "arroz 2kg" traz "Areia Higiênica 2Kg" (só o peso em comum). Ele soma score,
+    // mas o produto precisa de um token de PALAVRA forte pra passar do piso.
+    const isSizeToken = /^\d+(?:[.,]\d+)?(?:kg|g|ml|l|lt|un)$/.test(token);
     if (brandWords.some((word) => tokenMatchesWord(token, word))) {
       score += 4; // explicit brand match is the strongest signal
-      strongHit = true;
+      if (!isSizeToken) strongHit = true;
     } else if (nameWords.some((word) => tokenMatchesWordSyn(token, word))) {
       score += token.length >= 4 ? 2 : 1;
       // Forte = token de 4+ letras, OU palavra curta que casa EXATA ("pão", "sal", "chá").
-      if (token.length >= 4 || (token.length >= 3 && nameWords.includes(token))) strongHit = true;
+      if (!isSizeToken && (token.length >= 4 || (token.length >= 3 && nameWords.includes(token)))) strongHit = true;
     } else if (categoryWords.some((word) => tokenMatchesWord(token, word))) {
       // Categoria é sinal legítimo pra tokens específicos ("perfume" → "perfumaria").
       score += 1;

@@ -357,6 +357,29 @@ test("pedido mínimo: 'pix' abaixo do mínimo recebe a saída honesta, não o nu
   assert.match(pix, /cancelar/);
 });
 
+test("pergunta de quantidade não prende 'só isso' nem 'cancelar' (ciclo 2)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const opts = await c.send("arroz");
+  assert.match(opts, /Responde \*1\*/);
+  const qtyAsk = await c.send("1");
+  assert.match(qtyAsk, /Quantas unidades/);
+  // "só isso" na pergunta de quantidade = 1 unidade e segue o fluxo
+  const done = await c.send("so isso");
+  assert.doesNotMatch(done, /quantidade entre 1 e 50/);
+  assert.match(done, /1x/);
+  await c.send("limpar carrinho");
+
+  const d = await returningCustomer();
+  await d.send("arroz");
+  const qa = await d.send("1");
+  assert.match(qa, /Quantas unidades/);
+  // "cancelar" na pergunta de quantidade não pode ficar em loop de re-pergunta
+  const cancel = await d.send("cancelar");
+  assert.doesNotMatch(cancel, /quantidade entre 1 e 50/);
+  assert.match(cancel, /limpei|cancel/i);
+});
+
 test("'quero' sozinho recebe convite caloroso, não 'não entendi'", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

@@ -3,7 +3,7 @@
 import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { detectIntent, mergeShoppingLines, parseBasketLines, parseContextualQuantity, parseRefinement, parseChoiceReply, wantsMoreOptions, narrowChoiceByName, asksRunningTotal, parsePriceCap } from "../src/lib/lia-intents";
+import { detectIntent, mergeShoppingLines, parseBasketLines, parseContextualQuantity, parseRefinement, parseChoiceReply, wantsMoreOptions, narrowChoiceByName, asksRunningTotal, parsePriceCap, splitPriceCap } from "../src/lib/lia-intents";
 import { inferCatalogRefinement, scoreCatalogMatch, rankCatalog } from "../src/lib/stores/types";
 
 const kind = (s: string) => detectIntent(s).kind;
@@ -346,4 +346,112 @@ test("'quero' sozinho é want_items — convite, não 'não entendi' (ciclo 2)",
   assert.equal(kind("quero falar com um atendente"), "human");
   assert.equal(kind("quero mudar a forma de pagamento"), "switch_payment");
   assert.equal(kind("quero sim"), "affirm");
+});
+
+test("desabafo 'to com dor de cabeça' não vira item de busca (ciclo 2: virou 'Caneca Dosadora p/ Cães')", () => {
+  const lines = parseBasketLines("to com dor de cabeça, me manda uma dipirona e um suco de laranja");
+  assert.ok(!lines.some((l) => /dor de cabec/i.test(l.phrase)), JSON.stringify(lines));
+  assert.ok(lines.some((l) => /suco de laranja/i.test(l.phrase)), JSON.stringify(lines));
+  // "estou gripada" sozinho não é produto
+  assert.equal(parseBasketLines("estou gripada").length, 0);
+  assert.equal(parseBasketLines("to com fome").length, 0);
+  // "to sem café" é jeito real de PEDIR café — extrai o item
+  const sem = parseBasketLines("to sem café");
+  assert.equal(sem.length, 1);
+  assert.match(sem[0].phrase, /caf/i);
+});
+
+test("matcher: 'miojo' acha o lámen mesmo com 'Miojo' enterrado no meio do nome (ciclo 2)", () => {
+  const pack = { sku: "p", name: "Pack Macarrão Instantâneo Lámen com Tempero Galinha Caipira Nissin Miojo 510g 6 Unidades", brand: "Nissin", unitPrice: 20 };
+  const espaguete = { sku: "e", name: "Macarrão Espaguete com Ovos Adria 500g", unitPrice: 6 };
+  assert.ok(scoreCatalogMatch("miojo", pack) > 0, "miojo deve casar com o pack de lámen");
+  assert.ok(scoreCatalogMatch("lamen", pack) > 0, "lamen idem");
+  assert.equal(scoreCatalogMatch("miojo", espaguete), 0, "espaguete não é miojo");
+  assert.equal(rankCatalog("miojo", [pack, espaguete], 2)[0]?.sku, "p");
+});
+
+test("refinamento: 'pra cachorro, ele é adulto' refina a ração — não vira item novo (ciclo 2)", () => {
+  const attrs = parseRefinement("pra cachorro, ele é adulto");
+  assert.ok(attrs, "deveria ser refinamento, não item novo");
+  assert.ok(attrs!.includes("cachorro"), JSON.stringify(attrs));
+  assert.ok(attrs!.includes("adulto"), JSON.stringify(attrs));
+  const gato = parseRefinement("é pro meu gato");
+  assert.ok(gato && gato.includes("gato"), JSON.stringify(gato));
+  // com substantivo de produto continua item novo
+  assert.equal(parseRefinement("ração pra gato"), null);
+});
+
+test("merge LLM+determinístico: 'presente pra minha namorada, tipo um perfume' é UM item (ciclo 2)", () => {
+  const det = parseBasketLines("um presente pra minha namorada, tipo um perfume");
+  const merged = mergeShoppingLines([{ phrase: "perfume feminino", qty: 1 }], det);
+  assert.equal(merged.length, 1, JSON.stringify(merged));
+  assert.equal(merged[0].phrase, "perfume feminino");
+  // o resgate de item que o LLM derrubou continua funcionando
+  const rescued = mergeShoppingLines(
+    [{ phrase: "arroz", qty: 1 }],
+    [{ phrase: "arroz", qty: 1 }, { phrase: "feijao carioca", qty: 1 }]
+  );
+  assert.equal(rescued.length, 2);
+});
+
+test("matcher: tamanho sozinho não é relevância — 'arroz 2kg' não traz Areia Higiênica 2Kg (ciclo 2)", () => {
+  const areia = { sku: "a", name: "Areia Higiênica Carrefour 2Kg", unitPrice: 16 };
+  const arroz = { sku: "r", name: "Arroz Branco Longo-fino Tipo 1 Tio João 2Kg", brand: "Tio João", unitPrice: 13 };
+  assert.equal(scoreCatalogMatch("arroz 2kg", areia), 0, "areia só casa no 2kg — ruído");
+  assert.ok(scoreCatalogMatch("arroz 2kg", arroz) > 0);
+  assert.equal(rankCatalog("arroz 2kg", [areia, arroz], 3).find((i) => i.sku === "a"), undefined);
+});
+
+test("mensagem picada: 'preciso de' (sem o item ainda) é want_items, não re-apresentação (ciclo 2)", () => {
+  assert.equal(kind("preciso de"), "want_items");
+  assert.equal(kind("preciso de arroz"), "free_text");
+});
+
+test("'pfv' no fim do item é cortesia, não parte do produto (ciclo 2)", () => {
+  const lines = parseBasketLines("me ve 1 sabao em po pfv");
+  assert.equal(lines.length, 1);
+  assert.equal(lines[0].phrase, "sabao em po");
+});
+
+test("merge LLM não perde a quantidade dita — qtyExplicit propaga (ciclo 2: re-perguntava 'Quantas unidades?')", () => {
+  const det = parseBasketLines("2 arroz e 1 coca");
+  const merged = mergeShoppingLines([{ phrase: "arroz", qty: 2 }, { phrase: "coca-cola", qty: 1 }], det);
+  assert.equal(merged.length, 2);
+  assert.ok(merged.every((l) => l.qtyExplicit), JSON.stringify(merged));
+});
+
+test("resposta de quantidade não engole 'tira a coca e coloca um guarana' (ciclo 2)", () => {
+  assert.equal(parseContextualQuantity("tira a coca e coloca um guarana"), null);
+  assert.equal(parseContextualQuantity("quero 2"), 2);
+  assert.equal(parseContextualQuantity("um"), 1);
+  assert.equal(parseContextualQuantity("pode ser 3 unidades"), 3);
+});
+
+test("matcher: apelido de refri no meio do nome — 'guarana'/'fanta' acham; 'coca' casa a variante 'Refrigerante Coca-Cola…' (ciclo 2)", () => {
+  const guarana = { sku: "g", name: "Refrigerante Guaraná Antarctica Garrafa 2L", unitPrice: 9 };
+  const fanta = { sku: "f", name: "Refrigerante Fanta Laranja 2L", unitPrice: 8 };
+  const cocaMeio = { sku: "c", name: "Refrigerante Coca-Cola Sem Açúcar 350ML", unitPrice: 4 };
+  assert.ok(scoreCatalogMatch("guarana", guarana) > 0, "guarana");
+  assert.ok(scoreCatalogMatch("fanta", fanta) > 0, "fanta");
+  assert.ok(scoreCatalogMatch("coca", cocaMeio) > 0, "tira a coca precisa casar a Coca da cesta");
+  assert.equal(rankCatalog("guarana", [guarana, fanta, cocaMeio], 3)[0]?.sku, "g");
+});
+
+test("typo-tolerância não troca a 1ª letra: 'vinho' não casa 'Ninho' (ciclo 2)", () => {
+  const ninho = { sku: "n", name: "Ninho NutriAdvance - Mix Leite Ninho, Arroz e Aveia 350G", unitPrice: 32 };
+  const vinho = { sku: "v", name: "Vinho Tinto Chileno Cabernet Sauvignon Siete Soles - 750 ml", unitPrice: 27 };
+  assert.equal(scoreCatalogMatch("vinho", ninho), 0, "ninho não é vinho");
+  assert.ok(scoreCatalogMatch("vinho", vinho) > 0);
+  // typo real no MEIO da palavra continua aceito
+  const detergente = { sku: "d", name: "Detergente Ypê Neutro 500ml", unitPrice: 3 };
+  assert.ok(scoreCatalogMatch("detergnte", detergente) > 0);
+});
+
+test("teto de preço no pedido inicial: 'vinho até 40 reais' separa busca e filtro (ciclo 2)", () => {
+  const { phrase, cap } = splitPriceCap("vinho até 40 reais");
+  assert.equal(phrase, "vinho");
+  assert.equal(cap, 40);
+  const none = splitPriceCap("vinho tinto seco");
+  assert.equal(none.cap, null);
+  assert.equal(none.phrase, "vinho tinto seco");
 });

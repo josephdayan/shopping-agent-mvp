@@ -18,6 +18,7 @@ import {
   parseBasketLines,
   parseContextualQuantity,
   parsePriceCap,
+  splitPriceCap,
   mergeShoppingLines,
   parseChoiceReply,
   parseRefinement,
@@ -273,10 +274,14 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
   // stay on it; otherwise pick the store that best covers this basket.
   const results = await Promise.all(
     lines.map(async (line) => {
-      const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([line.phrase]);
-      const options = await lineStore.searchItems(line.phrase, 12);
+      // "vinho até 40 reais": o teto NÃO é termo de busca — vira filtro sobre o
+      // preço exibido (com markup), senão a lista mostra item acima do que pediram.
+      const { phrase: searchPhrase, cap } = splitPriceCap(line.phrase);
+      const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
+      const found = await lineStore.searchItems(searchPhrase, 12);
+      const options = cap != null ? found.filter((o) => display(o.unitPrice) <= cap) : found;
       options.sort((a, b) => (preferredSkus?.get(b.sku) ?? 0) - (preferredSkus?.get(a.sku) ?? 0));
-      return { line, store: lineStore, options: options.slice(0, 3) };
+      return { line: { ...line, phrase: searchPhrase }, store: lineStore, options: options.slice(0, 3) };
     })
   );
   const autoAdded: BasketItem[] = [];
@@ -656,10 +661,19 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     const typedQty = parseContextualQuantity(text);
     if (typedQty != null) {
       await finishQuantityChoice(phone, user.cep, convo.id, ctx, typedQty);
-    } else {
-      await reply(phone, "Me diz uma quantidade entre 1 e 50 🙂");
+      return;
     }
-    return;
+    // "só isso"/"fechado"/"pode ser" na pergunta de quantidade = 1 unidade e segue.
+    if (intent.kind === "done" || intent.kind === "affirm") {
+      await finishQuantityChoice(phone, user.cep, convo.id, ctx, 1);
+      return;
+    }
+    // Só o que realmente não faz sentido re-pergunta; "cancelar"/"status"/"pagar"
+    // etc. seguem pro roteador normal — a pergunta de quantidade não é uma prisão.
+    if (intent.kind === "free_text" || intent.kind === "number") {
+      await reply(phone, "Me diz uma quantidade entre 1 e 50 🙂");
+      return;
+    }
   }
 
   // ---- social / meta (work in ANY step) ----
@@ -1163,7 +1177,13 @@ async function handleCancel(
   // Mid-cart (not charged yet): "cancelar" just clears the basket — UNLESS the
   // customer said "cancela o PEDIDO", which targets the committed order even when a
   // new basket is being assembled on top of it.
-  if ((ctx.basket?.length ?? 0) > 0 && ctx.step !== "awaiting_payment" && !explicitOrder) {
+  // Escolha aberta (opções na tela / pergunta de quantidade) também é "carrinho em
+  // montagem": "cancelar" limpa, em vez de "não achei pedido" deixando a escolha viva.
+  if (
+    ((ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0 || ctx.quantityChoice) &&
+    ctx.step !== "awaiting_payment" &&
+    !explicitOrder
+  ) {
     await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
     await reply(phone, copy.cartCleared());
     return;
