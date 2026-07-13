@@ -1,14 +1,15 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch, rankCatalog, normalizeText } from "./types";
+import { catalogWithImages, rankCatalog, normalizeText } from "./types";
 import { prisma } from "@/lib/prisma";
 import { runApifyActor } from "@/lib/adapters/suppliers";
 import { CARREFOUR_CATALOG } from "./carrefour-catalog";
+import { CARREFOUR_FRESH_CATALOG } from "./carrefour-fresh-catalog";
 
 // Carrefour (hipermercado) — the broad everyday base. The catalog now lives in
 // carrefour-catalog.ts (~1094 REAL items scraped from mercado.carrefour.com.br on
 // 2026-06-30). `unitPrice` is the real Carrefour cost; the 10% markup is applied
 // downstream in delivery-service. Grow it by regenerating that file — this stays put.
-const SEED_CATALOG: CatalogItem[] = CARREFOUR_CATALOG;
+const SEED_CATALOG: CatalogItem[] = catalogWithImages([...CARREFOUR_CATALOG, ...CARREFOUR_FRESH_CATALOG]);
 
 // Real Carrefour Hipermercado units in the São Paulo metro (these are the stores that
 // do Clique e Retire). Names/addresses/CEPs from carrefour.com.br/localizador-de-lojas
@@ -110,13 +111,10 @@ async function searchCarrefourLive(query: string, limit: number, maxWaitMs = CAR
   }
 
   const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 }, maxWaitMs);
-  const items = (raw ?? [])
+  const items = catalogWithImages((raw ?? [])
     .map((entry) => mapCarrefourItem(entry as Record<string, unknown>))
-    .filter((item): item is CatalogItem => Boolean(item));
-  const ranked = items
-    .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
-    .sort((a, b) => b.score - a.score || a.item.unitPrice - b.item.unitPrice)
-    .map((entry) => entry.item);
+    .filter((item): item is CatalogItem => Boolean(item)));
+  const ranked = rankCatalog(query, items, items.length);
 
   if (ranked.length) {
     try {

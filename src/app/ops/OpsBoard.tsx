@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { hasCancelRequest, isCardCharge } from "@/lib/order-flags";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
+type Fulfillment = { storeKey: string; storeLabel: string; unitLabel: string; unitAddress: string; deliveryFee: number };
 
 type DeliveryOrder = {
   id: string;
@@ -17,6 +18,7 @@ type DeliveryOrder = {
   storeAddress?: string | null;
   storeOrderNumber?: string | null;
   items: BasketItem[];
+  fulfillments?: Fulfillment[] | null;
   itemsSubtotal: number;
   deliveryFee: number;
   serviceFee: number;
@@ -54,6 +56,7 @@ function storeItemUrl(it: BasketItem, orderStoreKey?: string | null): string {
   const storeKey = it.storeKey ?? orderStoreKey ?? undefined;
   if (storeKey === "petz") return `https://www.petz.com.br/busca?q=${encodeURIComponent(it.name)}`;
   if (storeKey === "boticario") return `https://www.boticario.com.br/busca/?q=${encodeURIComponent(it.name)}`;
+  if (storeKey === "decathlon") return `https://www.decathlon.com.br/search?query=${encodeURIComponent(it.name)}`;
   return `https://mercado.carrefour.com.br/busca/${encodeURIComponent(it.name)}`;
 }
 
@@ -255,10 +258,18 @@ export default function OpsBoard() {
               {o.courierKey ? ` (${COURIER_LABEL[o.courierKey] ?? o.courierKey})` : ""} · Margem {brl(o.serviceFee)} ·{" "}
               <strong>Cliente pagou {brl(o.total)}</strong>
             </div>
-            <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
-              🏬 Retirar em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
-              {o.storeAddress ? ` — ${o.storeAddress}` : ""}
-            </div>
+            {(o.fulfillments?.length ?? 0) > 1 ? (
+              <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
+                {o.fulfillments!.map((f) => (
+                  <div key={f.storeKey}>🏬 <strong>{f.storeLabel}</strong>: {f.unitLabel} — {f.unitAddress} · frete {brl(f.deliveryFee)}</div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
+                🏬 Retirar em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
+                {o.storeAddress ? ` — ${o.storeAddress}` : ""}
+              </div>
+            )}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>

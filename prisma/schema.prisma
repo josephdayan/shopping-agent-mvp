@@ -42,6 +42,8 @@ model DeliveryOrder {
   storeAddress        String?
   storeOrderNumber    String?
   items               Json
+  // One entry per pickup/store for baskets spanning multiple stores.
+  fulfillments        Json?
   itemsSubtotal       Float     @default(0)
   // Courier is also pluggable via the courier registry.
   courierKey          String    @default("uber_direct")

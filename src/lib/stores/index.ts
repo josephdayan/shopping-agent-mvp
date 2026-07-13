@@ -3,6 +3,7 @@ import { scoreCatalogMatch } from "./types";
 import { carrefourStore } from "./carrefour";
 import { petzStore } from "./petz";
 import { boticarioStore } from "./boticario";
+import { decathlonStore } from "./decathlon";
 
 // Store registry. Adding a supply source = write one connector file and register it
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
@@ -18,7 +19,10 @@ const STORES: Record<string, StoreConnector> = {
   // Boticário is ON (real catalog: perfumaria/maquiagem/corpo/cabelos; "Retire em loja"
   // clique-e-retire). Set LIA_ENABLE_BOTICARIO=false to disable the beauty vertical.
   // Units are major SP malls (verify the exact store + third-party-pickup policy live).
-  ...(process.env.LIA_ENABLE_BOTICARIO !== "false" ? { [boticarioStore.key]: boticarioStore } : {})
+  ...(process.env.LIA_ENABLE_BOTICARIO !== "false" ? { [boticarioStore.key]: boticarioStore } : {}),
+  // Sports nutrition with official same-day pickup. Disable independently if an
+  // operational pickup test finds a store-specific restriction.
+  ...(process.env.LIA_ENABLE_DECATHLON !== "false" ? { [decathlonStore.key]: decathlonStore } : {})
   // [cobasiStore.key]: cobasiStore,  // same recipe — one file
 };
 

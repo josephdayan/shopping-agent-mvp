@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch, rankCatalog } from "./types";
+import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { PETZ_CATALOG } from "./petz-catalog";
 
 // Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same shape as Carrefour
@@ -12,7 +12,7 @@ import { PETZ_CATALOG } from "./petz-catalog";
 // Confirmed: Petz does "Retire na Loja" + third-party (motoboy) pickup — but the counter
 // enforces the TITULAR's document + (often) a signed authorization and only releases
 // after a "liberado para retirada" notice; the operator buys online and picks the store.
-const SEED_CATALOG: CatalogItem[] = PETZ_CATALOG;
+const SEED_CATALOG: CatalogItem[] = catalogWithImages(PETZ_CATALOG);
 
 const UNITS: StoreUnit[] = [
   { id: "petz-augusta", label: "Petz Augusta", address: "Rua Augusta, 215, Bela Vista, São Paulo - SP", cep: "01305-000", lat: -23.5528, lng: -46.6605 },

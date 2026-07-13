@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch, rankCatalog } from "./types";
+import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { BOTICARIO_CATALOG } from "./boticario-catalog";
 
 // O Boticário — beauty vertical (perfumaria, maquiagem, corpo & banho, cabelos). Same
@@ -15,7 +15,7 @@ import { BOTICARIO_CATALOG } from "./boticario-catalog";
 // UNITS: major São Paulo shopping malls where Boticário operates (public, stable mall
 // CEPs). Medium confidence on the exact in-mall unit — like Petz, CONFIRM the specific
 // store + its third-party-pickup policy live before leaning on it for a real order.
-const SEED_CATALOG: CatalogItem[] = BOTICARIO_CATALOG;
+const SEED_CATALOG: CatalogItem[] = catalogWithImages(BOTICARIO_CATALOG);
 
 const UNITS: StoreUnit[] = [
   { id: "boti-paulista", label: "O Boticário Shopping Pátio Paulista", address: "Rua Treze de Maio, 1947, Bela Vista, São Paulo - SP", cep: "01327-001", lat: -23.55433, lng: -46.64683 },
