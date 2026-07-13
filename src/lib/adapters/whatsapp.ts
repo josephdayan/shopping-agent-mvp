@@ -6,6 +6,7 @@ type RawInbound = {
     changes?: Array<{
       value?: {
         contacts?: Array<{ profile?: { name?: string }; wa_id?: string }>;
+        statuses?: Array<{ id?: string; status?: string; timestamp?: string; recipient_id?: string }>;
         messages?: Array<{
           from?: string;
           id?: string;
@@ -46,6 +47,13 @@ export type WhatsAppRichReply = {
   actions?: Array<{ id: string; title: string }>;
 };
 
+export type WhatsAppDeliveryChoice = {
+  id: string;
+  name: string;
+  displayPrice: number;
+  imageUrl?: string;
+};
+
 export const whatsappAdapter = {
   parseInbound(payload: RawInbound) {
     const metaChange = payload.entry?.[0]?.changes?.[0]?.value;
@@ -82,7 +90,8 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id ?? stringFromPayload(payload.MessageSid),
-      provider: metaMessage ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
+      eventType: metaMessage ? "message" : metaChange?.statuses?.length ? "status" : metaChange ? "meta_event" : "message",
+      provider: metaChange ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
     };
   },
 
@@ -122,6 +131,45 @@ export const whatsappAdapter = {
     return Boolean(url) && isPublicMediaUrl(url as string);
   },
 
+  // Product choices used by the current delivery flow. On Meta each option becomes
+  // its own card with a "Escolher este" reply button, so the button is visually tied
+  // to the right photo/product. Other providers return null and keep the numbered
+  // text fallback owned by delivery-service.
+  async sendDeliveryChoices(to: string, options: WhatsAppDeliveryChoice[]) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta" || !options.length) return null;
+    return sendMetaDeliveryChoices(to, options.slice(0, 3));
+  },
+
+  async sendQuantityChoices(to: string, productName: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, `Quantas unidades de *${productName}*?`, [
+      { id: "qty:1", title: "1 unidade" },
+      { id: "qty:2", title: "2 unidades" },
+      { id: "qty:3", title: "3 unidades" }
+    ], "Para outra quantidade, digite o número.");
+  },
+
+  async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, "Escolha como prefere pagar:", [
+      { id: "pix", title: "Pagar com Pix" },
+      { id: "cartao", title: "Pagar com cartão" }
+    ], `Pix ${formatBRL(pixTotal)} · Cartão ${formatBRL(cardTotal)}`);
+  },
+
+  async sendCartActions(to: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, "Quer ajustar o pedido antes de pagar?", [
+      { id: "adicionar_mais", title: "Adicionar mais" },
+      { id: "cancelar", title: "Cancelar pedido" }
+    ]);
+  },
+
+  async sendAddressSetup(to: string, text: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, text, [{ id: "cadastrar_endereco", title: "Cadastrar endereço" }]);
+  },
+
   async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
     if (!reply.options?.length) return null;
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
@@ -137,6 +185,72 @@ export const whatsappAdapter = {
     return sendTwilioRichReplyMessages(to, reply);
   }
 };
+
+async function sendMetaSimpleButtons(
+  to: string,
+  body: string,
+  buttons: Array<{ id: string; title: string }>,
+  footer?: string
+) {
+  const token = process.env.WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+  return sendMetaPayload(phoneNumberId, token, {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "button",
+      body: { text: body.slice(0, 1024) },
+      ...(footer ? { footer: { text: footer.slice(0, 60) } } : {}),
+      action: {
+        buttons: buttons.slice(0, 3).map((button) => ({
+          type: "reply",
+          reply: { id: button.id.slice(0, 256), title: button.title.slice(0, 20) }
+        }))
+      }
+    }
+  });
+}
+
+async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoice[]) {
+  const token = process.env.WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  if (!token || !phoneNumberId) {
+    throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+  }
+  if (options.some((option) => !isPublicMediaUrl(option.imageUrl ?? ""))) {
+    throw new Error("Refusing to send a WhatsApp product card without a deliverable image");
+  }
+
+  const normalizedTo = normalizeWhatsAppPhone(to);
+  const messages = [];
+  // Each option is its own interactive card. The image header, product details and
+  // reply button live in the SAME WhatsApp message, so there is no ambiguity about
+  // which product "Escolher esse" selects.
+  for (const option of options) {
+    const interactive: Record<string, unknown> = {
+      type: "button",
+      body: { text: `${option.name}\n*${formatBRL(option.displayPrice)}*`.slice(0, 1024) },
+      action: {
+        buttons: [{
+          type: "reply",
+          reply: { id: option.id.slice(0, 256), title: "Escolher esse" }
+        }]
+      }
+    };
+    interactive.header = { type: "image", image: { link: option.imageUrl } };
+    messages.push(await sendMetaPayload(phoneNumberId, token, {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: normalizedTo,
+      type: "interactive",
+      interactive
+    }));
+  }
+  return { provider: "meta", mode: "delivery_choice_cards", to, messages };
+}
 
 async function sendMetaMessage(to: string, text: string) {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
@@ -167,7 +281,7 @@ async function sendMetaMessage(to: string, text: string) {
   const payload = await response.json();
   if (!response.ok) {
     console.error("[whatsapp:meta:error]", payload);
-    throw new Error("Failed to send WhatsApp message");
+    throw new Error(`Failed to send WhatsApp message (${response.status}): ${JSON.stringify(payload).slice(0, 500)}`);
   }
 
   return { provider: "meta", to, payload };
@@ -271,7 +385,7 @@ async function sendMetaPayload(phoneNumberId: string, token: string, body: Recor
   const payload = await response.json();
   if (!response.ok) {
     console.error("[whatsapp:meta:error]", payload);
-    throw new Error("Failed to send WhatsApp message");
+    throw new Error(`Failed to send WhatsApp message (${response.status}): ${JSON.stringify(payload).slice(0, 500)}`);
   }
 
   return payload;
