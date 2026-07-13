@@ -23,7 +23,8 @@ import {
   parseChoiceReply,
   parseRefinement,
   wantsMoreOptions,
-  type Intent
+  type Intent,
+  type ParsedLine
 } from "@/lib/lia-intents";
 import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
 import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
@@ -185,7 +186,7 @@ async function reply(phone: string, text: string) {
 
 // ---------- basket parsing + catalog matching ----------
 
-type ExtractedLines = { lines: { phrase: string; qty: number }[]; greetingOnly: boolean; containsMedicine: boolean };
+type ExtractedLines = { lines: ParsedLine[]; greetingOnly: boolean; containsMedicine: boolean };
 
 // Clean the request into a shopping list. The LLM handles greetings, synonyms
 // ("pasta de dente"->creme dental), medicines and quantities; the deterministic
