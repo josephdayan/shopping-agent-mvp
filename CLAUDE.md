@@ -78,9 +78,9 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   (tabela `PetzImage`, ~60MB) porque o CDN da Petz é Akamai e barra o Twilio no WhatsApp;
   `LIA_MEDIA_BLOCK_HOSTS` evita imagem quebrada. Ver/buscar tudo em **`/ops/catalogo`** (foto +
   custo/margem). ⚠️ prod: setar `OPS_TOKEN` forte (default cai no `API_TOKEN` fraco).
-- **Lojas:** **12 Carrefour Hiper reais de SP** (clique-e-retire) em `carrefour.ts`; `nearestUnit`
-  escolhe a mais próxima por **proximidade de CEP** (heurística boa no grosso de SP; bordas/leste
-  podem errar — geo-distância real é upgrade futuro).
+- **Lojas:** **107 unidades reais geocodadas** de Carrefour, Petz e Boticário em SP. A escolha
+  usa distância geográfica real quando há coordenadas (`pickNearestUnit`); o proxy de CEP é
+  apenas o fallback quando não há geo disponível. Ver o detalhamento de cobertura abaixo.
 - **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
   pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
@@ -132,7 +132,8 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 | Motoboys (plugável) | `src/lib/couriers/` | `CourierConnector` + Uber Direct (cota + despacha; real inerte até credenciais) |
 | Pix + cartão | `src/lib/payments/mercadopago.ts` | createPix (copia-e-cola) + Checkout Pro (link de cartão, taxa da maquininha repassada) + webhook `/api/mercadopago/webhook` (mock até token) |
 | Busca por IA | `ai.ts` `extractShoppingList` | limpa o pedido (sinônimos, saudação, remédio, qty); fallback determinístico |
-| Intenções (NLU puro) | `src/lib/lia-intents.ts` | `detectIntent` (status/paguei/cancelar/trocar endereço/"tira X"/"troca X por Y"/pagar/pix/cartão/repete…), parse de resposta a opções, guarda determinística de remédio. Sem DB — unit-testado |
+| Intenções (NLU puro) | `src/lib/lia-intents.ts` | `detectIntent`, parser de lista, escolha e refinamento: serviço, status, pagamento, atendimento, reclamação, cancelamento contextual, CEP + itens, total parcial e opções. Sem DB — unit-testado |
+| Matcher comum | `src/lib/stores/types.ts` | score/ranking dos três catálogos: piso de relevância, exclusões, guarda humano/pet e espécie, tamanhos e preferência pelo produto básico |
 | Copy | `src/lib/lia-copy.ts` | TODAS as mensagens enviadas ao cliente num lugar só (tom/emoji/formatação consistentes) |
 | Cérebro | `src/lib/delivery-service.ts` | máquina de conversa (onboarding CEP → cesta → cotação → Pix/cartão → fila) + ciclo do pedido + notificações + dedupe de retry do Twilio por MessageSid |
 | Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | fila de pagos → nº do pedido → despachar motoboy → entregue/cancelar; caixa "avisar cliente" (substituição/atraso); destaque vermelho quando o cliente pediu cancelamento |
@@ -155,10 +156,40 @@ Decisões de comportamento do cérebro (não são bugs):
 > Histórico técnico anterior (busca no Mercado Livre via Apify + cache + cron de prewarm)
 > está **dormente** — o caminho do WhatsApp agora é o fluxo de entrega. Ver `src/lib/adapters/suppliers.ts` (reusamos `runApifyActor` dele).
 
+## 4. Reconstrução da conversa (2026-07-07)
+
+O review profundo de conversa (115 achados) levou a um ciclo concentrado de NLU, matcher,
+copy e máquina de estados. A Lia agora identifica recusas/encerramento de lista, perguntas
+operacionais, atendimento humano, reclamações, reenvio de Pix, troca de pagamento e
+cancelamento contextual antes de considerar uma busca de produto. O onboarding preserva o
+pedido bruto até o CEP; a escolha aceita preço, marca, recomendação e refinamento; e o
+matcher só devolve itens com relevância real, priorizando a variante mais comum quando o
+cliente não especifica outra.
+
+O processo completo, a linha do tempo, os casos cobertos e as ferramentas de validação
+estão em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md). Os evals
+E2E rodam em `npm test`; `npx tsx scripts/talk-lia.mts` permite inspecionar uma conversa
+sem enviar mensagem real.
+
 ---
 
-## 4. Próximos passos
+## 5. Operação, canais e formalização (2026-07)
+
+O domínio `liadelivery.com.br` está no ar e foi verificado na Meta. A entrada na Meta foi
+iniciada para obter o canal WhatsApp oficial, mas a verificação do negócio e o sender ainda
+precisam ser aprovados; até lá, o canal de teste permanece no Twilio Sandbox. O e-mail
+`contato@liadelivery.com.br` foi configurado no ImprovMX para concluir essa verificação.
+
+Pix real (Mercado Pago), cartão por Checkout Pro, cotação Uber Direct, painel `/ops`, MEI/CNPJ
+e cobertura de SP já sustentam o piloto, com a ressalva de que Pix está em conta pessoal e a
+retirada por terceiro precisa ser validada em campo. O checklist completo de operação está em
+[docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
+
+---
+
+## 6. Próximos passos
 - Rodar o **piloto manual** (10-20 pedidos reais) pra validar os 3 riscos acima.
 - Afinar o mapeamento do catálogo do Carrefour com os primeiros runs reais do actor.
 - Somar mais lojas (farmácia não-remédio, Petz) = a largura/moat.
-- Botões tocáveis (precisa de sender WhatsApp Business aprovado), memória/perfil mais rica.
+- Memória/perfil mais rica. Botões tocáveis nas opções já estão ativos no canal Meta
+  (cards com foto + **Escolher este**; lista numerada permanece como fallback).

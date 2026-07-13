@@ -1,7 +1,9 @@
 # Lia — Status do Projeto
 
-_Última atualização: 2026-07-02. Doc de leitura rápida do estado atual. O histórico de
-decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md)._
+_Última atualização: 2026-07-10. Doc de leitura rápida do estado atual. O histórico de
+decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
+em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
+[docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md)._
 
 ---
 
@@ -52,19 +54,23 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
-| **Testes/evals** | ✅ `npm test` — unitários (NLU + copy) + evals de conversa E2E |
+| **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
+| **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
+| **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
+| **Testes/evals** | ✅ `npm test` — unitários (NLU, copy e matcher) + evals E2E; `scripts/talk-lia.mts` para conversar no terminal com envio mockado |
 | **Motoboy (Uber Direct)** | ✅ **REAL** — OAuth + cotação testados com as credenciais |
 | **Cobertura: TODO o estado de SP** | ✅ **no ar** (`LIA_COVERAGE_PRESET=estado-sp` na Vercel). Trava dupla: cidade coberta **+** loja a ≤12km. CEP fora → recusa educada + **lead no mapa de demanda** do /ops |
 | **Lojas (107 unidades reais)** | ✅ Carrefour Hiper + Petz + Boticário: capital (37) + Grande SP (16) + **interior (54)** — Campinas, Santos, Ribeirão, SJC, Sorocaba, Jundiaí, Piracicaba, SJRP, Prudente etc. Escolha da mais próxima por **distância geográfica real** (haversine, `stores/nearest.ts`) |
 | **Landing + domínio** | ✅ **liadelivery.com.br no ar** (HTTPS) — site novo (pôster Petróleo), domínio **verificado na Meta** |
-| **Opções pra escolher** | ✅ até 3 opções (lista numerada) quando o item é ambíguo |
+| **Meta / WhatsApp oficial** | ✅ número aprovado, Cloud API ativa em produção e webhook assinado validado |
+| **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
 | **Pedido mínimo** | ✅ por loja (Carrefour = R$30); avisa o cliente p/ completar |
 | **Painel do operador `/ops`** | ✅ fila → comprar → despachar → entregue, com endereço da loja + link "ver no Carrefour" |
 | **Onboarding de CEP** | ✅ uma vez só, reusado em todo pedido |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
 | **Privacidade da loja** | ✅ a Lia não fala "Carrefour" pro cliente ("Procurando…") |
-| **Canal** | ✅ WhatsApp via Twilio (sandbox) |
-| **MEI / CNPJ** | ✅ aberto (do seu lado) |
+| **Canal** | ✅ WhatsApp via Twilio (sandbox); Meta Cloud API é o próximo canal após aprovação |
+| **MEI / CNPJ + e-mail** | ✅ aberto (do seu lado); `contato@liadelivery.com.br` configurado no ImprovMX |
 
 ---
 
@@ -76,10 +82,9 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
   começo (CPF pré-cadastrado), não o aleatório do Uber.
 
 ### 🟡 Pra operar de verdade
-- **Verificação do negócio na Meta** (WhatsApp oficial): domínio já verificado; falta a
-  verificação da empresa (o contato do CNPJ é um fixo sem acesso — resolver via e-mail do
-  domínio `contato@liadelivery.com.br`, já configurado no ImprovMX). Aprovada → migração
-  Cloud API (código pronto, env-flip: `WHATSAPP_PROVIDER=meta`).
+- **WhatsApp oficial da Meta**: ✅ o número `+55 11 97844-4813` foi aprovado como
+  `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, registrado na Cloud API e ativado em
+  produção (`WHATSAPP_PROVIDER=meta`). O webhook assinado foi validado em produção.
 - **Mercado Pago PJ + nota fiscal** (hoje o Pix está no nome pessoal).
 - **Confirmar as 70 lojas novas ao vivo** (Grande SP + interior são pesquisa web, confiança
   média): aberta + clique-e-retire + retirada por terceiro, antes do 1º pedido em cada
@@ -91,8 +96,6 @@ você paga a loja e a Uber desse saldo → **sobra a margem de 10%**.
 - **Check de estoque/preço ao vivo** por pedido pago — precisa de um **serviço de scraping
   com anti-bot** (ScrapingBee/Zyte/Bright Data). Custo ~R$0,10/pedido + cache. Hoje o
   catálogo é estático (resposta instantânea, mas pode desatualizar).
-- **Botões tocáveis no WhatsApp** — precisa de **sender WhatsApp Business aprovado** (o
-  sandbox só faz lista numerada).
 - **Cesta multi-loja** (juntar Carrefour + Petz num pedido) — decidimos deixar pra depois
   (= 2 retiradas/fretes).
 - **Expandir catálogos** (re-coletar Carrefour/Petz periodicamente).
@@ -140,6 +143,9 @@ O documento do **cliente nunca é necessário** — quem compra na loja é sempr
 > 🔒 Recomendado: **regenerar** o Access Token do MP e o Client Secret da Uber (passaram no
 > chat) e atualizar no Vercel depois dos testes.
 
+O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
+centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
+
 ---
 
 ## 8. Arquitetura (onde está cada coisa)
@@ -157,8 +163,15 @@ O documento do **cliente nunca é necessário** — quem compra na loja é sempr
 | Motoboys (plugável) | `src/lib/couriers/` (Uber Direct) |
 | Pix | `src/lib/payments/mercadopago.ts` + `/api/mercadopago/webhook` |
 | Busca por IA | `src/lib/adapters/ai.ts` (`extractShoppingList`) |
+| Matcher / ranking comum | `src/lib/stores/types.ts` (`scoreCatalogMatch`, `rankCatalog`, `attrMatchesItem`) |
 | Painel do operador | `/ops` + `/api/ops/...` |
 | Pedido (cesta, ciclo de status) | `prisma DeliveryOrder` |
 
 **Somar loja = 1 arquivo** (conector + catálogo) + registrar em `stores/index.ts`.
 **Ciclo:** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered`.
+
+### Atualização de conversa — 2026-07-07
+
+O review profundo de conversa (115 achados) resultou em uma reconstrução de NLU, matcher,
+copy e máquina de estados. A documentação completa, com sequência do trabalho e comandos
+de validação, está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).

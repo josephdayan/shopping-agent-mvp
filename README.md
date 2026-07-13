@@ -1,10 +1,14 @@
 # Lia
 
-> **⚠️ Estado atual (2026-07):** o produto vigente é a **concierge de entregas same-day no
+> **⚠️ Estado atual (2026-07-07):** o produto vigente é a **concierge de entregas same-day no
 > WhatsApp** (Carrefour/Petz clique-e-retire + motoboy + Pix/cartão), descrito em
 > [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
 > (intenções em `src/lib/lia-intents.ts`, copy em `src/lib/lia-copy.ts`), painel do operador
 > em `/ops`, e os testes rodam com `npm test` (só unitários: `npm run test:unit`).
+> A reconstrução recente de conversa, matcher e testes está registrada em
+> [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
+> A situação de Meta, domínio, canais, pagamentos e piloto está em
+> [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
 > O fluxo abaixo (busca no Mercado Livre com 3 opções) é o caminho **legado/dormente**.
 
 Lia funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
@@ -145,6 +149,21 @@ O status da Lia tambem mostra preparo para Twilio Agent Connect.
 
 Na Lia, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`, `mais rapida`, nome da marca), confirme com `sim` e use `Simular pagamento aprovado`. O dashboard fica em `/admin` e permite aprovar pagamento e avancar fulfillment.
 
+### Conversa vigente (entrega)
+
+O fluxo que atende WhatsApp hoje é `CEP → cesta → cotação → Pix/cartão → /ops`, e não o
+checkout mockado acima. Para validar as correções recentes de conversa:
+
+```bash
+npm test
+npx tsx scripts/talk-lia.mts
+OPENAI_API_KEY="" npx tsx scripts/talk-lia.mts "oi" "quero arroz e leite" "01310-100"
+```
+
+O `talk-lia` usa o mesmo serviço do webhook, porém força mensageria mockada, desliga busca
+Carrefour ao vivo e limpa os dados de teste ao sair. O detalhe dos comportamentos cobertos
+está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
+
 ## Estrutura do projeto
 
 - `src/app`: rotas do Next.js, tela de chat, admin e APIs.
@@ -166,6 +185,7 @@ Na Lia, escolha uma opcao por clique ou por texto (`1`, `2`, `3`, `mais barata`,
 - `WHATSAPP_PROVIDER`: `twilio`, `meta`, `mock` ou `zapi`.
 - `WHATSAPP_WEBHOOK_SECRET`: segredo exigido no header `x-webhook-secret`.
 - `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.
+- `WHATSAPP_APP_SECRET`: App Secret da Meta. Quando preenchido, a Lia valida o header `X-Hub-Signature-256` de cada webhook antes de processar a mensagem.
 - `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
 - `WHATSAPP_PHONE_NUMBER_ID`: ID do numero remetente na WhatsApp Cloud API.
 - `TWILIO_ACCOUNT_SID`: Account SID da Twilio.
@@ -312,6 +332,7 @@ Para usar a Meta WhatsApp Cloud API depois, configure:
 ```env
 WHATSAPP_PROVIDER="meta"
 WHATSAPP_VERIFY_TOKEN="um-token-que-voce-escolhe"
+WHATSAPP_APP_SECRET="app-secret-da-meta"
 WHATSAPP_ACCESS_TOKEN="token-da-meta"
 WHATSAPP_PHONE_NUMBER_ID="id-do-numero"
 ```
