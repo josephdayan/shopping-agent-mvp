@@ -334,3 +334,16 @@ test("matcher: infantil/baby só quando pedido; fralda é isenta", () => {
   assert.ok(scoreCatalogMatch("fralda G", fralda) > 0);
   assert.equal(rankCatalog("fralda G", [fralda], 1)[0].sku, "f");
 });
+
+test("'quero' sozinho é want_items — convite, não 'não entendi' (ciclo 2)", () => {
+  for (const s of ["quero", "queria", "eu quero", "quero comprar", "queria pedir", "quero fazer um pedido", "preciso de umas coisas", "oi, quero comprar"]) {
+    assert.equal(kind(s), "want_items", s);
+  }
+  // com produto continua lista normal; e não rouba intents existentes
+  assert.equal(kind("quero 2 cocas"), "free_text");
+  assert.equal(kind("quero arroz"), "free_text");
+  assert.equal(kind("quero cancelar o pedido"), "cancel");
+  assert.equal(kind("quero falar com um atendente"), "human");
+  assert.equal(kind("quero mudar a forma de pagamento"), "switch_payment");
+  assert.equal(kind("quero sim"), "affirm");
+});

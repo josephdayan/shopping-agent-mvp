@@ -347,6 +347,24 @@ test("pedido mínimo: item barato + 'pagar' avisa quanto falta", async (t) => {
   assert.match(pay, /Falta|falta/);
 });
 
+test("pedido mínimo: 'pix' abaixo do mínimo recebe a saída honesta, não o nudge em loop", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.sendAndResolve(cheapItemQuery());
+  await c.send("so isso");
+  const pix = await c.send("pix");
+  assert.match(pix, /não fecha pedido abaixo/);
+  assert.match(pix, /cancelar/);
+});
+
+test("'quero' sozinho recebe convite caloroso, não 'não entendi'", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const resp = await c.send("quero");
+  assert.match(resp, /Me diz o que você precisa/);
+  assert.doesNotMatch(resp, /Não entendi/);
+});
+
 // ---- cadeia de pagamento (mesmo cliente do início ao fim) ----
 let payer: { phone: string; send: (t: string) => Promise<string>; sendAndResolve: (t: string) => Promise<string> };
 

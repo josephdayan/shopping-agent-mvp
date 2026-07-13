@@ -40,6 +40,9 @@ export type Intent =
   | { kind: "human" }
   // "veio errado", "faltou item", "produto estragado" — reclamação pós-pedido.
   | { kind: "complaint" }
+  // "quero" / "queria comprar" / "quero fazer um pedido" SEM dizer o quê — perguntar
+  // o item com carinho, nunca "não entendi seu pedido" nem disparar busca.
+  | { kind: "want_items" }
   | { kind: "number"; value: number }
   | { kind: "free_text" };
 
@@ -384,6 +387,11 @@ const SWAP_RE =
 // Emoji-only message ("🙏", "👍👍", "😊") — never product search.
 const EMOJI_ONLY_RE = /^[\p{Extended_Pictographic}️‍\s]+$/u;
 
+// "quero", "queria comprar", "quero fazer um pedido", "preciso de umas coisas" —
+// intenção de comprar SEM item nenhum. Não pode virar busca (dá "não entendi").
+const WANT_ITEMS_RE =
+  /^(?:oi[,!\s]+)?(?:eu )?(?:vou querer|quero|queria|gostaria|preciso|to precisando|estou precisando)(?: (?:de )?(?:comprar|pedir|encomendar|fazer (?:um |uma )?(?:pedido|compra|encomenda)|umas? coisas?|algumas coisas))?[\s!.,…]*$/;
+
 export function detectIntent(text: string): Intent {
   const n = normalizeMsg(text);
   if (!n) return { kind: "free_text" };
@@ -476,6 +484,10 @@ export function detectIntent(text: string): Intent {
   if (DONE_RE.test(n)) return { kind: "done" };
   if (REJECT_BARE_RE.test(n)) return { kind: "reject" };
   if (REJECT_RE.test(n)) return { kind: "reject" };
+
+  // "quero" / "queria comprar" / "quero fazer um pedido" sozinho: vontade de comprar
+  // sem dizer O QUÊ. Buscar isso vira "Não entendi seu pedido" — frio. Perguntamos.
+  if (WANT_ITEMS_RE.test(n)) return { kind: "want_items" };
 
   // Pergunta operacional (frete/prazo/área/pagamento) SEM cara de produto — responder
   // com copy de serviço; cair em busca aqui gera "sabonete pra quem pergunta de frete".

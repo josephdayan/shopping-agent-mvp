@@ -827,6 +827,18 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
+  // ---- "quero" / "queria comprar" sozinho: vontade de comprar sem dizer o quê ----
+  // Buscar isso viraria "Não entendi seu pedido" (frio). Perguntamos o item; se havia
+  // uma escolha aberta, reapresentamos as opções.
+  if (intent.kind === "want_items") {
+    if (ctx.pending?.length) {
+      await sendChoices(phone, ctx.pending[0]);
+    } else {
+      await reply(phone, copy.askWhatYouWant());
+    }
+    return;
+  }
+
   // ---- step: customer choosing the frete (cheapest vs fastest) ----
   if (
     ctx.step === "choosing_courier" &&
@@ -956,7 +968,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     if (belowMinimum(ctx, payStore)) {
       await writeCtx(convo.id, ctx);
       // "só isso"/"mais nada" abaixo do mínimo NÃO pode repetir o mesmo nudge em loop.
-      if (intent.kind === "done") {
+      // "pix"/"fecha no cartão" idem: o cliente já escolheu ATÉ a forma de pagamento —
+      // repetir o nudge genérico vira loop; a saída honesta (minimumDeadEnd) explica e
+      // dá opção. "pagar" seco continua no nudge (mostra a cesta + quanto falta).
+      if (intent.kind === "done" || intent.kind === "choose_payment" || (intent.kind === "pay" && intent.method)) {
         const min = Math.round((payStore.minOrder ?? 0) * MARKUP * 100) / 100;
         const produtos = (ctx.basket ?? []).reduce((sum, i) => sum + Math.round(i.unitPrice * MARKUP * i.qty * 100) / 100, 0);
         await reply(phone, copy.minimumDeadEnd(min, Math.max(0, Math.round((min - produtos) * 100) / 100)));

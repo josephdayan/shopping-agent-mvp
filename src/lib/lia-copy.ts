@@ -38,6 +38,11 @@ export function didNotUnderstand(): string {
   return `Não entendi seu pedido 🤔. Me diz os itens que você quer, ex.: ${EXAMPLES}.`;
 }
 
+// "quero" / "queria comprar" sem dizer o quê — convite caloroso, não "não entendi".
+export function askWhatYouWant(): string {
+  return `Opa, deixa comigo! 🙂 Me diz o que você precisa — ex.: ${EXAMPLES}.`;
+}
+
 // ---------- onboarding / address ----------
 
 export function welcomeAskCep(notedItems?: string[]): string {
