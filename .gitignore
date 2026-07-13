@@ -15,4 +15,8 @@ tsconfig.tsbuildinfo
 .DS_Store
 **/.DS_Store
 .Rhistory
-.claude/
+.claude/*
+!.claude/agents/
+LIA_WHATSAPP.md
+# Vault do Obsidian (config de editor, não é doc do projeto)
+docs/obsidian/.obsidian/
