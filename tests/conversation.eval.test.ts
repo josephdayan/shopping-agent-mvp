@@ -21,10 +21,12 @@ seedGeoCache("06233030", { lat: -23.5329, lng: -46.792 }); // Osasco (~5km de Ta
 seedGeoCache("07500000", { lat: -23.317, lng: -46.221 }); // Santa Isabel (~40km, longe demais)
 seedGeoCache("13015000", { lat: -22.9056, lng: -47.0608 }); // Campinas centro (interior servido)
 
-const PREFIX = "+5500991";
 // Unique per run so a crashed/killed previous run can't collide (phones) nor trip
 // the webhook dedupe (messageIds).
 const RUN = `${Date.now().toString(36)}${process.pid}`;
+// Keep cleanup isolated too. A fixed prefix let a second test process delete a
+// conversation while the first one was still writing messages into it.
+const PREFIX = `+5500${String(Date.now()).slice(-6)}${String(process.pid).slice(-2)}`;
 let phoneSeq = 0;
 let msgSeq = 0;
 let dbOk = false;
@@ -56,11 +58,15 @@ function driver(phone: string) {
       .join("\n---\n");
   }
   // Sends a message and auto-answers "1" while Lia is offering numbered options,
-  // so scenarios that don't care about the choice reach the summary.
+  // so scenarios that don't care about the choice reach the summary. Olha só a
+  // ÚLTIMA resposta (não o transcript acumulado): senão o loop continua mandando
+  // "1" depois do menu de pagamento e escolhe Pix sem querer.
   async function sendAndResolve(text: string): Promise<string> {
-    let transcript = await send(text);
-    for (let i = 0; i < 6 && /Responde \*1\*/.test(transcript); i++) {
-      transcript += "\n---\n" + (await send("1"));
+    let last = await send(text);
+    let transcript = last;
+    for (let i = 0; i < 6 && /Responde \*1\*/.test(last); i++) {
+      last = await send("1");
+      transcript += "\n---\n" + last;
     }
     return transcript;
   }
@@ -104,7 +110,13 @@ async function wipeTestData() {
   if (!ids.length) return;
   const convos = await prisma.conversation.findMany({ where: { userId: { in: ids } }, select: { id: true } });
   const convoIds = convos.map((c) => c.id);
-  await prisma.message.deleteMany({ where: { conversationId: { in: convoIds } } });
+  // Use the parent relation too: this remains correct if another test created a
+  // conversation between the id snapshot above and the cleanup statements.
+  await prisma.message.deleteMany({ where: { conversation: { userId: { in: ids } } } });
+  await prisma.productOption.deleteMany({ where: { conversation: { userId: { in: ids } } } });
+  const legacyOrders = await prisma.order.findMany({ where: { userId: { in: ids } }, select: { id: true } });
+  await prisma.opsTask.deleteMany({ where: { orderId: { in: legacyOrders.map((o) => o.id) } } });
+  await prisma.order.deleteMany({ where: { userId: { in: ids } } });
   await prisma.deliveryOrder.deleteMany({ where: { userId: { in: ids } } });
   await prisma.conversation.deleteMany({ where: { id: { in: convoIds } } });
   await prisma.user.deleteMany({ where: { id: { in: ids } } });
@@ -160,6 +172,50 @@ test("multi-item com quantidade: '2 X e 1 Y' vira cesta com 2x", async (t) => {
   assert.match(transcript, /Total: R\$|mínimo/);
 });
 
+test("multi-item ambíguo avisa que vai escolher um de cada vez e preserva o segundo", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const first = await c.send("quero uma coca e uma escova de dente");
+  assert.match(first, /Encontrei os 2 itens/i);
+  assert.match(first, /primeiro[\s\S]*coca[\s\S]*depois[\s\S]*escova/i);
+  assert.match(first, /opções de \*coca\*/i);
+  const second = await c.send("1");
+  assert.match(second, /Agora vamos escolher \*escova de dente\*/i);
+  assert.match(second, /Escova de Dente/i);
+});
+
+test("opções antigas somem em silêncio no oi e a limpeza fica persistida", async (t) => {
+  if (!dbOk) return t.skip();
+  const phone = newPhone();
+  const user = await prisma.user.create({ data: { phone, cep: "01310-100" } });
+  const convo = await prisma.conversation.create({
+    data: {
+      userId: user.id,
+      status: "active",
+      currentStep: "choosing",
+      updatedAt: new Date(Date.now() - 60 * 60 * 1000),
+      context: JSON.stringify({
+        flow: "delivery",
+        step: "choosing",
+        cep: "01310-100",
+        pending: [{ query: "coca", qty: 1, options: [
+          { sku: "a", name: "Coca A", unitPrice: 4 },
+          { sku: "b", name: "Coca B", unitPrice: 5 }
+        ] }]
+      })
+    }
+  });
+  const hello = await driver(phone).send("oi");
+  assert.doesNotMatch(hello, /lista anterior|carrinho anterior|expirou/i);
+  const saved = await prisma.conversation.findUniqueOrThrow({ where: { id: convo.id } });
+  const ctx = JSON.parse(saved.context ?? "{}") as { pending?: unknown[]; cep?: string };
+  assert.equal(ctx.pending, undefined);
+  assert.equal(ctx.cep, "01310-100");
+  const next = await driver(phone).send("quero coca");
+  assert.doesNotMatch(next, /lista anterior|carrinho anterior|expirou/i);
+  assert.match(next, /Procurando/);
+});
+
 test("produto ambíguo: mostra opções numeradas; 'mais barato' escolhe a mais barata", async (t) => {
   if (!dbOk) return t.skip();
   const store = getStore("carrefour");
@@ -182,6 +238,86 @@ test("produto ambíguo: mostra opções numeradas; 'mais barato' escolhe a mais 
   const cheapest = options.reduce((best, o) => (o.unitPrice < best.unitPrice ? o : best));
   const picked = await c.send("o mais barato");
   assert.ok(picked.includes(cheapest.name), `esperava ${cheapest.name} em: ${picked.slice(0, 200)}`);
+});
+
+test("quantidade: depois de escolher o produto aceita 3 unidades e recalcula", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const offer = await c.send("quero coca");
+  assert.match(offer, /opções/i);
+  const quantity = await c.send("1");
+  assert.match(quantity, /Quantas unidades/i);
+  const after = await c.send("3");
+  assert.match(after, /3x /i);
+});
+
+test("fluxo preguiçoso completo: oi → CEP → qro produto → duas → pix msm", async (t) => {
+  if (!dbOk) return t.skip();
+  const d = driver(newPhone());
+  assert.match(await d.send("oi"), /CEP/i);
+  assert.match(await d.send("01310-100"), /Endereço salvo/i);
+  const offer = await d.send("qro creatina pf");
+  assert.match(offer, /opções[\s\S]*creatina/i);
+  assert.match(await d.send("1"), /Quantas unidades/i);
+  let quoted = await d.send("duas");
+  assert.match(quoted, /2x /i);
+  if (/mais barata|mais rápida/i.test(quoted)) quoted += `\n---\n${await d.send("mais barata")}`;
+  assert.match(quoted, /Pix/i);
+  const charge = await d.send("pix msm");
+  assert.match(charge, /copia e cola/i);
+  assert.match(charge, /MOCKPIX/);
+});
+
+test("multi-loja: creatina e perfume convivem na mesma cesta com duas retiradas", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  let response = await c.send("2 creatina e 2 perfume");
+  let transcript = response;
+  for (let i = 0; i < 4 && /Responde \*1\*/.test(response); i++) {
+    response = await c.send("1");
+    transcript += `\n---\n${response}`;
+  }
+  const user = await prisma.user.findUniqueOrThrow({ where: { phone: c.phone } });
+  const convo = await prisma.conversation.findFirstOrThrow({ where: { userId: user.id, status: "active" } });
+  const ctx = JSON.parse(convo.context ?? "{}") as { basket?: Array<{ storeKey: string }>; fulfillments?: Array<{ storeKey: string }> };
+  assert.deepEqual(new Set(ctx.basket?.map((item) => item.storeKey)), new Set(["decathlon", "boticario"]), `${transcript}\nCTX=${convo.context}`);
+  assert.equal(ctx.fulfillments?.length, 2);
+});
+
+test("ação adicionar mais reabre a coleta sem perder a cesta", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("2 creatina");
+  await c.send("1");
+  const prompt = await c.send("adicionar_mais");
+  assert.match(prompt, /cesta continua salva|mais você quer/i);
+  const user = await prisma.user.findUniqueOrThrow({ where: { phone: c.phone } });
+  const convo = await prisma.conversation.findFirstOrThrow({ where: { userId: user.id, status: "active" } });
+  const ctx = JSON.parse(convo.context ?? "{}") as { step?: string; basket?: unknown[] };
+  assert.equal(ctx.step, "collecting");
+  assert.equal(ctx.basket?.length, 1);
+});
+
+test("memória: produto comprado antes sobe para a primeira opção", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const user = await prisma.user.findUniqueOrThrow({ where: { phone: c.phone } });
+  const candidates = await getStore("carrefour").searchItems("coca", 6);
+  assert.ok(candidates.length >= 3);
+  const preferred = candidates[2];
+  await prisma.deliveryOrder.create({
+    data: {
+      userId: user.id,
+      phone: c.phone,
+      storeKey: "carrefour",
+      storeLabel: "Carrefour",
+      items: [{ sku: preferred.sku, name: preferred.name, qty: 4, unitPrice: preferred.unitPrice, lineTotal: preferred.unitPrice * 4, storeKey: "carrefour", storeLabel: "Carrefour" }],
+      status: "delivered"
+    }
+  });
+  const offer = await c.send("coca");
+  const firstOption = offer.match(/\*1\)\* ([^—\n]+)/)?.[1]?.trim();
+  assert.equal(firstOption, preferred.name);
 });
 
 test("remover item: 'tira o X' recalcula a cesta; cesta vazia é comunicada", async (t) => {
@@ -446,6 +582,17 @@ test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t
   }
 });
 
+test("escolhendo perfume: 'masculino' refina Arbo em vez de virar nova busca", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const first = await c.send("perfume da marca Arbo");
+  assert.match(first, /Arbo/i);
+  const refined = await c.send("masculino");
+  assert.doesNotMatch(refined, /Procurando aqui/i);
+  assert.match(refined, /Masculino/i);
+  assert.doesNotMatch(refined, /Não peguei/i);
+});
+
 test("webhook duplicado (retry do Twilio): mesma mensagem não processa duas vezes", async (t) => {
   if (!dbOk) return t.skip();
   const phone = newPhone();
@@ -467,4 +614,53 @@ test("social: obrigado e 'não era isso' têm respostas humanas, sem busca", asy
   const reject = await c.send("não era isso");
   assert.doesNotMatch(reject, /Procurando/);
   assert.match(reject, /outro jeito|marca/i);
+});
+
+// ---- ciclo conversation-improver 2026-07-12 ----
+
+test("'só isso' no menu de pagamento não responde 'não peguei qual você quer'", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const { query, qty } = expensiveItemQuery();
+  await c.sendAndResolve(`${qty} ${query}`);
+  await c.send("pagar");
+  const done = await c.send("só isso");
+  assert.doesNotMatch(done, /Não peguei qual/);
+  assert.match(done, /Como prefere pagar/);
+});
+
+test("'quanto ficou?' no menu de pagamento mostra o total com entrega, não o parcial", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const { query, qty } = expensiveItemQuery();
+  await c.sendAndResolve(`${qty} ${query}`);
+  await c.send("pagar");
+  const total = await c.send("quanto ficou?");
+  assert.match(total, /Total: R\$/);
+  assert.match(total, /Entrega/);
+  assert.doesNotMatch(total, /quando você fechar/);
+});
+
+test("item novo no meio de uma escolha é reconhecido, não entra mudo na fila", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const first = await c.send("arroz");
+  assert.match(first, /opções de \*arroz\*/);
+  const add = await c.send("e feijao tambem");
+  assert.match(add, /Anotei \*feijao\*/);
+  assert.match(add, /opções de \*arroz\*/); // continua na escolha atual
+});
+
+test("teto de preço na escolha: 'até X reais' filtra as opções pelo preço exibido", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const first = await c.send("arroz");
+  assert.match(first, /opções de \*arroz\*/);
+  const prices = [...first.matchAll(/R\$ (\d+,\d{2})/g)].map((m) => Number(m[1].replace(",", ".")));
+  assert.ok(prices.length >= 2, "precisa de 2+ opções pra filtrar");
+  const cap = Math.floor((prices[0] + prices[prices.length - 1]) / 2); // entre a mais barata e a mais cara
+  const capped = await c.send(`algum até ${cap} reais?`);
+  const kept = [...capped.matchAll(/R\$ (\d+,\d{2})/g)].map((m) => Number(m[1].replace(",", ".")));
+  assert.ok(kept.length >= 1, "alguma opção dentro do teto");
+  assert.ok(kept.every((p) => p <= cap), `todas as opções devem caber no teto ${cap}: ${kept}`);
 });

@@ -45,6 +45,18 @@ export function welcomeAskCep(notedItems?: string[]): string {
   return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Pra começar, me manda seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`;
 }
 
+export function welcomeAddressButton(): string {
+  return "Oi! 💚 Sou a Lia. Eu busco suas compras e entrego hoje mesmo. Pra começar, vamos cadastrar e verificar seu endereço — você só faz isso uma vez.";
+}
+
+export function quantityAsk(name: string): string {
+  return `Quantas unidades de *${name}*? Responde *1*, *2*, *3* ou digita outra quantidade.`;
+}
+
+export function askMoreItems(): string {
+  return "Claro! Sua cesta continua salva. Me diz o que mais você quer adicionar. 🙂";
+}
+
 // Re-pedido de CEP (2ª+ vez) — curto, sem repetir a apresentação inteira.
 export function askCepAgain(): string {
   return "Só preciso do seu *CEP* pra continuar (ex.: 01310-100) 📍 — com ele eu calculo a entrega certinha.";
@@ -109,8 +121,12 @@ export function searching(): string {
   return "🔎 Procurando aqui, um instante…";
 }
 
+export function deliveryQuoteUnavailable(): string {
+  return "Não consegui confirmar o valor da entrega agora 🙏. Não vou te mostrar um frete estimado. Tenta de novo em instantes que eu faço uma nova cotação em tempo real.";
+}
+
 export function itemsNotFound(items: string[]): string {
-  return `Não achei ${items.join(", ")} por aqui 🤔. Me diz de outro jeito (ex.: "pasta de dente Colgate", "fralda Pampers M") que eu procuro de novo.`;
+  return `Não achei ${items.join(", ")} no catálogo de hoje 🤔. Se quiser, me manda uma marca, tamanho ou versão específica que eu tento de novo.`;
 }
 
 export function noMedicine(): string {
@@ -174,6 +190,18 @@ export function choicesHeader(query: string): string {
   return `Achei essas opções de *${query}*:`;
 }
 
+export function choiceSequence(queries: string[]): string {
+  return `Encontrei os ${queries.length} itens. Vou te mostrar um de cada vez pra ficar fácil — primeiro *${queries[0]}* e depois ${queries
+    .slice(1)
+    .map((q) => `*${q}*`)
+    .join(", ")}.`;
+}
+
+export function nextChoiceHeader(query: string, remaining: number): string {
+  const tail = remaining > 1 ? ` Depois ainda falta escolher ${remaining - 1}.` : "";
+  return `Agora vamos escolher *${query}*.${tail}`;
+}
+
 export function choiceLine(index: number, name: string, displayPrice: number): string {
   return `*${index + 1})* ${name} — ${brl(displayPrice)}`;
 }
@@ -235,6 +263,7 @@ export type SummaryInput = {
   etaMinutes: number;
   total: number;
   notFound?: string[];
+  pickupCount?: number;
 };
 
 export function summary(input: SummaryInput): string {
@@ -250,10 +279,13 @@ export function summary(input: SummaryInput): string {
   if (input.notFound?.length) {
     out.push("", notFoundNote(input.notFound));
   }
+  if ((input.pickupCount ?? 1) > 1) {
+    out.push("", `_Este pedido usa ${input.pickupCount} lojas. O frete acima já soma as ${input.pickupCount} retiradas._`);
+  }
   out.push(
     "",
-    "Posso fechar? Responde *pagar* que eu te passo o Pix ou o link do cartão. 💚",
-    "_Quer mudar algo? \"tira o arroz\", \"troca X por Y\" ou manda mais itens._"
+    "Escolha abaixo como prefere pagar. 💚",
+    "_Quer mudar algo antes? \"tira o arroz\", \"troca X por Y\" ou simplesmente manda mais itens._"
   );
   return out.join("\n");
 }
@@ -422,6 +454,23 @@ export function narrowedChoices(query: string): string {
   return `Boa, ficou entre essas de *${query}*:`;
 }
 
+// "só isso"/"fechado" quando o pedido já está fechado e só falta a forma de pagamento —
+// nunca responder "não peguei qual você quer" (copy de escolha de produto).
+export function donePickPayment(): string {
+  return "Fechado, pedido completo! 🙌";
+}
+
+// "algum até X reais?" e nenhuma das opções na mesa cabe no teto.
+export function nonePriceCap(cap: number): string {
+  return `Dessas aqui, nenhuma sai por até ${brl(cap)} 😕 Responde *mais barato* que eu pego a mais em conta, ou *mais opções* que eu procuro outras.`;
+}
+
+// Item novo anotado ENQUANTO o cliente ainda escolhe outro — sem isto o item entra
+// mudo na fila e o cliente acha que a Lia ignorou.
+export function queuedItemsNote(queries: string[]): string {
+  return `Anotei ${queries.map((q) => `*${q}*`).join(", ")} pra gente escolher já já 😉`;
+}
+
 // "vai mudar o frete?" com pedido já cotado → o número real, não a explicação genérica.
 export function currentFee(fee: number): string {
   return `No seu pedido atual a entrega tá em *${brl(fee)}* 🛵 Se mudar o endereço ou a cesta, eu recalculo e te mostro de novo.`;
@@ -489,7 +538,7 @@ export function cancelHowTo(hasActiveOrder: boolean): string {
 }
 
 export function cartExpired(): string {
-  return "_(seu carrinho anterior ficou parado um tempão, então comecei um novo pra evitar erro — seu endereço continua salvo!)_";
+  return "_Sua lista anterior expirou, então comecei uma nova pra evitar erro. Seu endereço continua salvo._";
 }
 
 export function orderReopened(): string {

@@ -83,8 +83,8 @@ test("número com zero à esquerda não é escolha de opção", () => {
 
 test("parser: peso não é quantidade; extenso e enumeração funcionam", () => {
   assert.deepEqual(parseBasketLines("2kg de arroz"), [{ phrase: "arroz 2kg", qty: 1 }]);
-  assert.deepEqual(parseBasketLines("dois pães"), [{ phrase: "pães", qty: 2 }]);
-  assert.deepEqual(parseBasketLines("meia dúzia de ovo"), [{ phrase: "ovo", qty: 6 }]);
+  assert.deepEqual(parseBasketLines("dois pães"), [{ phrase: "pães", qty: 2, qtyExplicit: true }]);
+  assert.deepEqual(parseBasketLines("meia dúzia de ovo"), [{ phrase: "ovo", qty: 6, qtyExplicit: true }]);
   assert.deepEqual(parseBasketLines("1 arroz\n2 feijao\n3 oleo").map((x) => x.qty), [1, 1, 1]);
   assert.equal(parseBasketLines("999 cocas")[0].qty, 50); // teto de sanidade
   assert.deepEqual(parseBasketLines("arroz + feijao").map((x) => x.phrase), ["arroz", "feijao"]);
@@ -267,7 +267,7 @@ test("parser: 'preciso d'/'presiso de' não contaminam o item (antes: opção '*
 
 test("parser: vocativo não vira produto ('minha filha', 'amiga')", () => {
   assert.deepEqual(parseBasketLines("boa tarde minha filha quero arroz e cafe por favor").map((x) => x.phrase), ["arroz", "cafe"]);
-  assert.deepEqual(parseBasketLines("amiga me ve um leite"), [{ phrase: "leite", qty: 1 }]);
+  assert.deepEqual(parseBasketLines("amiga me ve um leite"), [{ phrase: "leite", qty: 1, qtyExplicit: true }]);
 });
 
 test("parser: conjunção no começo não fica no nome ('e areia pro gato tb' → 'areia pro gato')", () => {

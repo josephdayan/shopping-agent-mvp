@@ -3,7 +3,9 @@
 // is unit-testable without a database. The delivery-service consumes this and
 // decides what each intent means given the conversation step.
 
-export type ParsedLine = { phrase: string; qty: number };
+// qtyExplicit: o cliente DISSE a quantidade ("uma coca", "2 leites") — o fluxo não
+// deve re-perguntar "quantas unidades?" depois da escolha. Ausente = qty implícito.
+export type ParsedLine = { phrase: string; qty: number; qtyExplicit?: boolean };
 
 export type Intent =
   | { kind: "thanks" }
@@ -142,15 +144,15 @@ export function parseBasketLines(text: string): ParsedLine[] {
       if (weight) return { phrase: `${weight[3].trim()} ${weight[1]}${weight[2].toLowerCase()}`, qty: 1 };
 
       const m = raw.match(/^(\d+)\s*(?:x|un|unidades?)?\s+(.*)$/i);
-      if (m) return { phrase: m[2].trim(), qty: Math.min(MAX_QTY, Math.max(1, Number(m[1]))) };
+      if (m) return { phrase: m[2].trim(), qty: Math.min(MAX_QTY, Math.max(1, Number(m[1]))), qtyExplicit: true };
 
       // "dois pães", "meia dúzia de ovo", "uma dúzia de banana"
       const word = raw.match(/^(?:(meia)\s+d[uú]zia|(uma\s+)?d[uú]zia|(\w+))\s+(?:de\s+)?(.+)$/i);
       if (word) {
         const n = normalizeMsg(word[3] ?? "");
-        if (word[1]) return { phrase: word[4].trim(), qty: 6 };
-        if (/d[uú]zia/i.test(raw) && !word[3]) return { phrase: word[4].trim(), qty: 12 };
-        if (n && WORD_QTY[n]) return { phrase: word[4].trim(), qty: WORD_QTY[n] };
+        if (word[1]) return { phrase: word[4].trim(), qty: 6, qtyExplicit: true };
+        if (/d[uú]zia/i.test(raw) && !word[3]) return { phrase: word[4].trim(), qty: 12, qtyExplicit: true };
+        if (n && WORD_QTY[n]) return { phrase: word[4].trim(), qty: WORD_QTY[n], qtyExplicit: true };
       }
       return { phrase: raw, qty: 1 };
     });

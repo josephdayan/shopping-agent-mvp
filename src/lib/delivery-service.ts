@@ -3,7 +3,7 @@ import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, allUnits, type StoreConnector } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
-import { attrMatchesItem, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
+import { attrMatchesItem, inferCatalogRefinement, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { extractShoppingList } from "@/lib/adapters/ai";
@@ -16,6 +16,9 @@ import {
   narrowChoiceByName,
   normalizeMsg,
   parseBasketLines,
+  parseContextualQuantity,
+  parsePriceCap,
+  mergeShoppingLines,
   parseChoiceReply,
   parseRefinement,
   wantsMoreOptions,
@@ -59,10 +62,27 @@ type BasketItem = {
   productUrl?: string;
 };
 
-type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string };
+type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; storeKey?: string; storeLabel?: string };
+type StoreFulfillment = {
+  storeKey: string;
+  storeLabel: string;
+  unitId: string;
+  unitLabel: string;
+  unitAddress: string;
+  unitCep?: string;
+  courierKey: string;
+  courierQuoteId: string;
+  deliveryFee: number;
+  etaMinutes: number;
+  itemsSubtotal: number;
+  serviceFee: number;
+};
 type PendingChoice = {
   query: string;
   qty: number;
+  // O cliente DISSE a quantidade ("uma coca", "2 leites") — não re-perguntar depois
+  // da escolha; a pergunta de quantidade é só pra pedido sem quantidade.
+  qtyExplicit?: boolean;
   options: ChoiceOption[];
   // Original query before a refinement ("coleira" when query became "coleira azul").
   baseQuery?: string;
@@ -78,9 +98,10 @@ type CourierOption = { kind: "barato" | "rapido"; courierKey: string; quoteId: s
 
 type DeliveryContext = {
   flow?: "delivery";
-  step?: "collecting" | "need_cep" | "choosing" | "quoted" | "choosing_courier" | "choosing_payment" | "awaiting_payment";
+  step?: "collecting" | "need_cep" | "choosing" | "choosing_quantity" | "quoted" | "choosing_courier" | "choosing_payment" | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
+  quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string };
   courierOptions?: CourierOption[];
   storeKey?: string;
   notFound?: string[];
@@ -102,6 +123,8 @@ type DeliveryContext = {
   serviceFee?: number;
   itemsSubtotal?: number;
   total?: number;
+  fulfillments?: StoreFulfillment[];
+  quoteUnavailable?: boolean;
   deliveryOrderId?: string;
 };
 
@@ -169,16 +192,19 @@ type ExtractedLines = { lines: { phrase: string; qty: number }[]; greetingOnly: 
 // never slips through as a plain search.
 async function extractLines(text: string): Promise<ExtractedLines> {
   const extraction = await extractShoppingList(text);
+  const deterministic = parseBasketLines(text)
+    .filter((line) => queryTokens(line.phrase).length)
+    .filter((line) => !looksLikeMedicine(line.phrase));
   if (extraction) {
     const items = extraction.items.filter((item) => !looksLikeMedicine(item.query));
     return {
-      lines: items.map((item) => ({ phrase: item.query, qty: item.qty })),
+      lines: mergeShoppingLines(items.map((item) => ({ phrase: item.query, qty: item.qty })), deterministic),
       greetingOnly: extraction.greetingOnly,
       containsMedicine: extraction.containsMedicine || looksLikeMedicine(text)
     };
   }
   const raw = parseBasketLines(text).filter((line) => queryTokens(line.phrase).length);
-  const safe = raw.filter((line) => !looksLikeMedicine(line.phrase));
+  const safe = deterministic;
   return {
     lines: safe,
     greetingOnly: false,
@@ -240,34 +266,36 @@ type ChoicesResult = {
 // Like buildBasket, but instead of auto-picking the top match it returns up to 3
 // OPTIONS per item so the customer chooses (numbered list — tappable buttons need an
 // approved WhatsApp Business sender). Items with a single match are auto-added.
-async function buildChoices(text: string, lockedStoreKey?: string): Promise<ChoicesResult> {
+async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus?: Map<string, number>): Promise<ChoicesResult> {
   const { lines, greetingOnly, containsMedicine } = await extractLines(text);
 
   // One order = one store. If the order already has a store (items added earlier),
   // stay on it; otherwise pick the store that best covers this basket.
-  const store = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries(lines.map((l) => l.phrase));
-
   const results = await Promise.all(
-    lines.map(async (line) => ({ line, options: await store.searchItems(line.phrase, 3) }))
+    lines.map(async (line) => {
+      const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([line.phrase]);
+      const options = await lineStore.searchItems(line.phrase, 12);
+      options.sort((a, b) => (preferredSkus?.get(b.sku) ?? 0) - (preferredSkus?.get(a.sku) ?? 0));
+      return { line, store: lineStore, options: options.slice(0, 3) };
+    })
   );
   const autoAdded: BasketItem[] = [];
   const pending: PendingChoice[] = [];
   const notFound: string[] = [];
-  for (const { line, options } of results) {
+  for (const { line, store, options } of results) {
     if (!options.length) {
       notFound.push(line.phrase);
-    } else if (options.length === 1) {
-      autoAdded.push(choiceToBasketItem(options[0], line.qty, store));
     } else {
       pending.push({
         query: line.phrase,
         qty: line.qty,
-        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl }))
+        ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
+        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, storeKey: store.key, storeLabel: store.label }))
       });
     }
   }
   return {
-    store,
+    store: results[0]?.store ?? getStore(lockedStoreKey),
     autoAdded: dedupeBasket(autoAdded),
     pending,
     notFound,
@@ -282,6 +310,7 @@ function orderStore(ctx: DeliveryContext): StoreConnector {
 }
 
 function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector): BasketItem {
+  const selectedStore = o.storeKey ? getStore(o.storeKey) : store;
   return {
     sku: o.sku,
     name: o.name,
@@ -289,8 +318,8 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
     qty,
     unitPrice: o.unitPrice,
     lineTotal: Math.round(o.unitPrice * qty * 100) / 100,
-    storeKey: store.key,
-    storeLabel: store.label,
+    storeKey: selectedStore.key,
+    storeLabel: o.storeLabel ?? selectedStore.label,
     ...(o.productUrl ? { productUrl: o.productUrl } : {})
   };
 }
@@ -299,13 +328,23 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
 function choicesTextFor(p: PendingChoice, header?: string): string {
   return copy.choicesText(
     p.query,
-    p.options.map((o) => ({ name: o.name, displayPrice: display(o.unitPrice) })),
+    p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice) })),
     header
   );
 }
 
-function toChoiceOption(o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string }): ChoiceOption {
-  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl };
+function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
+  if (option.storeKey === "boticario" && /\bperfume\b/i.test(p.baseQuery ?? p.query)) {
+    return option.name.replace(/desodorante col[oô]nia/gi, "Perfume");
+  }
+  return option.name;
+}
+
+function toChoiceOption(
+  o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string },
+  storeRef?: { storeKey?: string; storeLabel?: string }
+): ChoiceOption {
+  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, ...storeRef };
 }
 
 async function replyPhoto(phone: string, text: string, imageUrl?: string) {
@@ -321,6 +360,28 @@ function sleep(ms: number) {
 // then the numbered prompt. Falls back to the single numbered-text message when photos
 // are off (LIA_SEND_PHOTOS=false) or none of the options has an image.
 async function sendChoices(phone: string, p: PendingChoice, header?: string) {
+  // Meta supports reply buttons inside the 24h customer-service window. One card per
+  // option keeps each "Escolher este" button attached to the correct product.
+  if (process.env.WHATSAPP_PROVIDER === "meta") {
+    await reply(phone, header ?? copy.choicesHeader(p.query));
+    try {
+      const interactive = await whatsappAdapter.sendDeliveryChoices(
+        phone,
+        p.options.map((o, i) => ({
+          id: String(i + 1),
+          name: customerChoiceName(p, o),
+          displayPrice: display(o.unitPrice),
+          imageUrl: o.imageUrl
+        }))
+      );
+      if (interactive) return;
+    } catch (error) {
+      console.warn("[whatsapp:meta:choices:fallback-text]", error instanceof Error ? error.message : error);
+    }
+    await reply(phone, choicesTextFor(p));
+    return;
+  }
+
   // Only lay out photos if at least one image can ACTUALLY be delivered (Petz's Akamai
   // CDN 403s Twilio, so those options use the clean single-list fallback, not per-item text).
   const withPhotos =
@@ -368,74 +429,65 @@ async function expandCep(cep: string): Promise<{ address?: string; city?: string
 // ---------- quote + summary ----------
 
 async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
-  const near = await pickNearestUnit(store.listUnits(), ctx.cep);
-  const unit = near.unit;
-  ctx.storeUnitDistanceKm = near.distanceKm ?? undefined;
-  // Guarda de distância POR LOJA: o handleNewCep validou "existe ALGUMA loja perto", mas a
-  // loja desta cesta pode ser outra (ex.: cesta pet em Cotia → Petz longe, mesmo com um
-  // Carrefour do lado). Barra antes de gastar cotação de courier.
-  const distBlock = checkFreightGuard({ distanceKm: near.distanceKm });
-  if (distBlock) {
-    ctx.guardBlock = distBlock;
-    return;
+  const groups = new Map<string, BasketItem[]>();
+  for (const item of ctx.basket ?? []) groups.set(item.storeKey, [...(groups.get(item.storeKey) ?? []), item]);
+  if (!groups.size) groups.set(store.key, []);
+
+  const fulfillments: StoreFulfillment[] = [];
+  for (const [storeKey, items] of groups) {
+    const groupStore = getStore(storeKey);
+    const near = await pickNearestUnit(groupStore.listUnits(), ctx.cep);
+    const distBlock = checkFreightGuard({ distanceKm: near.distanceKm });
+    if (distBlock) {
+      ctx.guardBlock = distBlock;
+      return;
+    }
+    const unit = near.unit;
+    const pool = await quoteAll({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress });
+    const quotes = pool.length
+      ? pool
+      : [await getCourier().quote({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress })];
+    const cheapest = quotes.reduce((best, quote) => (quote.fee < best.fee ? quote : best));
+    const requireRealQuote = process.env.LIA_REQUIRE_REAL_COURIER_QUOTE !== "false" && process.env.WHATSAPP_PROVIDER === "meta";
+    if (requireRealQuote && cheapest.mock) {
+      ctx.quoteUnavailable = true;
+      return;
+    }
+    const feeBlock = checkFreightGuard({ distanceKm: null, fee: cheapest.fee, feeIsMock: cheapest.mock });
+    if (feeBlock) {
+      ctx.guardBlock = feeBlock;
+      return;
+    }
+    const itemsSubtotal = Math.round(items.reduce((sum, item) => sum + item.lineTotal, 0) * 100) / 100;
+    fulfillments.push({
+      storeKey,
+      storeLabel: groupStore.label,
+      unitId: unit.id,
+      unitLabel: unit.label,
+      unitAddress: unit.address,
+      unitCep: unit.cep,
+      courierKey: cheapest.courierKey,
+      courierQuoteId: cheapest.quoteId,
+      deliveryFee: cheapest.fee,
+      etaMinutes: cheapest.etaMinutes,
+      itemsSubtotal,
+      serviceFee: Math.round(itemsSubtotal * (MARKUP - 1) * 100) / 100
+    });
   }
-  // Quote every registered courier in parallel. Default to the CHEAPEST; if the FASTEST
-  // is a different courier that costs more, offer the customer the choice (barato vs rápido).
-  const pool = await quoteAll({
-    pickupCep: unit.cep,
-    dropoffCep: ctx.cep,
-    pickupAddress: unit.address,
-    dropoffAddress: ctx.deliveryAddress
-  });
-  const quotes = pool.length
-    ? pool
-    : [await getCourier(ctx.courierKey).quote({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress })];
-  const cheapest = quotes.reduce((best, q) => (q.fee < best.fee ? q : best));
-  const fastest = quotes.reduce((best, q) => (q.etaMinutes < best.etaMinutes ? q : best));
 
-  // Guarda de frete (fee): a distância já foi checada sobre TODAS as lojas no handleNewCep;
-  // aqui, com a cotação REAL da loja escolhida, barra um frete absurdo (loja distante pra
-  // esta cesta). Só morde cotação real (mock é fake-barato). respondAfterQuote trata primeiro.
-  const feeBlock = checkFreightGuard({ distanceKm: null, fee: cheapest.fee, feeIsMock: cheapest.mock });
-  if (feeBlock) {
-    ctx.guardBlock = feeBlock;
-    return;
-  }
-
-  // itemsSubtotal = real store cost (what the operator pays). serviceFee = the
-  // 10% markup margin (yours; NOT shown to the customer as a line). The customer is
-  // charged the marked-up products + the pass-through frete.
-  const realSubtotal = (ctx.basket ?? []).reduce((sum, item) => sum + item.lineTotal, 0);
-  const margin = Math.round(realSubtotal * (MARKUP - 1) * 100) / 100;
-  ctx.storeUnitId = unit.id;
-  ctx.storeUnitLabel = unit.label;
-  ctx.storeUnitAddress = unit.address;
-  ctx.serviceFee = margin;
-  ctx.itemsSubtotal = Math.round(realSubtotal * 100) / 100;
-
-  // Default: just use the CHEAPEST (the "fastest" option is only as trustworthy as each
-  // courier's ETA, and some — e.g. Lalamove — don't return one). The barato-vs-rápido
-  // choice is OFF unless LIA_OFFER_FRETE_CHOICE=true; flip it on once couriers expose a
-  // reliable ETA. When on, only offer it for a genuine tradeoff (different courier that's
-  // strictly quicker AND strictly pricier).
-  const worthChoosing =
-    process.env.LIA_OFFER_FRETE_CHOICE === "true" &&
-    fastest.courierKey !== cheapest.courierKey &&
-    fastest.etaMinutes < cheapest.etaMinutes &&
-    fastest.fee > cheapest.fee + 0.001;
-  ctx.courierOptions = worthChoosing
-    ? [
-        { kind: "barato", courierKey: cheapest.courierKey, quoteId: cheapest.quoteId, fee: cheapest.fee, etaMinutes: cheapest.etaMinutes },
-        { kind: "rapido", courierKey: fastest.courierKey, quoteId: fastest.quoteId, fee: fastest.fee, etaMinutes: fastest.etaMinutes }
-      ]
-    : undefined;
-
-  applyCourier(ctx, {
-    courierKey: cheapest.courierKey,
-    quoteId: cheapest.quoteId,
-    fee: cheapest.fee,
-    etaMinutes: cheapest.etaMinutes
-  });
+  ctx.fulfillments = fulfillments;
+  const first = fulfillments[0];
+  ctx.storeUnitId = first?.unitId;
+  ctx.storeUnitLabel = first?.unitLabel;
+  ctx.storeUnitAddress = first?.unitAddress;
+  ctx.courierKey = first?.courierKey;
+  ctx.courierQuoteId = first?.courierQuoteId;
+  ctx.itemsSubtotal = Math.round(fulfillments.reduce((sum, f) => sum + f.itemsSubtotal, 0) * 100) / 100;
+  ctx.serviceFee = Math.round(fulfillments.reduce((sum, f) => sum + f.serviceFee, 0) * 100) / 100;
+  ctx.deliveryFee = Math.round(fulfillments.reduce((sum, f) => sum + f.deliveryFee, 0) * 100) / 100;
+  ctx.etaMinutes = Math.max(...fulfillments.map((f) => f.etaMinutes));
+  ctx.total = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0) + (ctx.deliveryFee ?? 0)) * 100) / 100;
+  ctx.courierOptions = undefined;
 }
 
 // Apply a chosen courier quote to the context (fee/eta/key/quoteId + recompute total).
@@ -463,7 +515,8 @@ function summaryText(ctx: DeliveryContext): string {
     frete: ctx.deliveryFee ?? 0,
     etaMinutes: ctx.etaMinutes ?? 40,
     total: ctx.total ?? 0,
-    notFound: ctx.notFound
+    notFound: ctx.notFound,
+    pickupCount: ctx.fulfillments?.length ?? 1
   });
 }
 
@@ -471,6 +524,13 @@ function summaryText(ctx: DeliveryContext): string {
 // order summary — whichever applies. `prefix` is prepended (e.g. "Endereço salvo").
 async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector, prefix?: string) {
   const pre = prefix ? `${prefix}\n\n` : "";
+  if (ctx.quoteUnavailable) {
+    ctx.quoteUnavailable = undefined;
+    ctx.step = "collecting";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.deliveryQuoteUnavailable());
+    return;
+  }
   // Guarda de frete disparou na cotação (fee real absurdo) → recusa educada + lead, sem
   // prefixo "endereço salvo" (seria contraditório). Mantém o CEP; deixa ajustar a cesta.
   if (ctx.guardBlock) {
@@ -482,10 +542,13 @@ async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryCo
     await reply(phone, copy.tooFarForDelivery(ctx.city, coverageLabel()));
     return;
   }
-  if (belowMinimum(ctx, store)) {
+  const minimumStore = [...new Set((ctx.basket ?? []).map((item) => item.storeKey))]
+    .map((key) => getStore(key))
+    .find((candidate) => belowMinimum(ctx, candidate));
+  if (minimumStore) {
     ctx.step = "collecting";
     await writeCtx(convoId, ctx);
-    await reply(phone, pre + minimumOrderText(ctx, store));
+    await reply(phone, pre + minimumOrderText(ctx, minimumStore));
     return;
   }
   if ((ctx.courierOptions?.length ?? 0) >= 2) {
@@ -496,9 +559,11 @@ async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryCo
     await reply(phone, pre + copy.freteChoice(barato, rapido));
     return;
   }
-  ctx.step = "quoted";
+  ctx.step = "choosing_payment";
   await writeCtx(convoId, ctx);
   await reply(phone, pre + summaryText(ctx));
+  await sendPaymentButtons(phone, ctx);
+  await sendCartActionButtons(phone);
 }
 
 // Minimum order is a PER-STORE rule (e.g., Carrefour clique-e-retire ≈ R$30 of
@@ -510,13 +575,16 @@ function storeMinReal(store: StoreConnector): number {
 }
 function belowMinimum(ctx: DeliveryContext, store: StoreConnector): boolean {
   const min = storeMinReal(store);
-  return min > 0 && (ctx.itemsSubtotal ?? 0) < min;
+  const subtotal = (ctx.basket ?? []).filter((item) => item.storeKey === store.key).reduce((sum, item) => sum + item.lineTotal, 0);
+  return min > 0 && subtotal < min;
 }
 function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
   const displayMin = display(storeMinReal(store));
-  const produtos = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0)) * 100) / 100;
+  const real = (ctx.basket ?? []).filter((item) => item.storeKey === store.key).reduce((sum, item) => sum + item.lineTotal, 0);
+  const produtos = Math.round(real * MARKUP * 100) / 100;
   const falta = Math.max(0, Math.round((displayMin - produtos) * 100) / 100);
-  return copy.minimumOrder({ items: basketForCopy(ctx), produtos, displayMin, falta });
+  const scoped = { ...ctx, basket: (ctx.basket ?? []).filter((item) => item.storeKey === store.key) };
+  return copy.minimumOrder({ items: basketForCopy(scoped), produtos, displayMin, falta });
 }
 
 // ---------- the WhatsApp conversation state machine ----------
@@ -540,6 +608,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   });
 
   const ctx = readCtx(convo.context);
+  const intent = detectIntent(text);
 
   // Auto-expire a stale cart: if the last activity was over 30 min ago, start fresh
   // (keep only the saved address) so a leftover basket from a previous session doesn't
@@ -551,19 +620,47 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       Date.now() - new Date(convo.updatedAt).getTime() > CART_TTL_MS
   );
   if (stale) {
+    const hadBasket = (ctx.basket?.length ?? 0) > 0;
     const keptCep = ctx.cep;
     const keptAddr = ctx.deliveryAddress;
     for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
     ctx.flow = "delivery";
     ctx.cep = keptCep;
     ctx.deliveryAddress = keptAddr;
-    // Nunca expira em silêncio: sem isto o cliente responde "2" às opções de ontem e
-    // ganha um "não entendi" sem contexto nenhum.
-    await reply(phone, copy.cartExpired());
+    // Persist before any early return (especially greeting). Previously the clear
+    // lived only in memory, so the same stale warning repeated on every new message.
+    await writeCtx(convo.id, ctx);
+    // A stale product search is not a "cart" and should disappear silently. A real
+    // basket gets context only when the customer is trying to continue, never before
+    // a fresh greeting.
+    if (hadBasket && intent.kind !== "greeting") await reply(phone, copy.cartExpired());
+  }
+  const savedCep = user.cep ?? ctx.cep;
+
+  if (normalizeMsg(text) === "cadastrar_endereco") {
+    ctx.flow = "delivery";
+    ctx.step = "need_cep";
+    await writeCtx(convo.id, ctx);
+    await reply(phone, copy.askCepAgain());
+    return;
   }
 
-  const intent = detectIntent(text);
-  const savedCep = user.cep ?? ctx.cep;
+  if (normalizeMsg(text) === "adicionar_mais") {
+    ctx.step = "collecting";
+    await writeCtx(convo.id, ctx);
+    await reply(phone, copy.askMoreItems());
+    return;
+  }
+
+  if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
+    const typedQty = parseContextualQuantity(text);
+    if (typedQty != null) {
+      await finishQuantityChoice(phone, user.cep, convo.id, ctx, typedQty);
+    } else {
+      await reply(phone, "Me diz uma quantidade entre 1 e 50 🙂");
+    }
+    return;
+  }
 
   // ---- social / meta (work in ANY step) ----
   if (intent.kind === "thanks") {
@@ -579,7 +676,8 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.flow = "delivery";
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
-      await reply(phone, copy.welcomeAskCep());
+      const interactive = await whatsappAdapter.sendAddressSetup(phone, copy.welcomeAddressButton());
+      if (!interactive) await reply(phone, copy.welcomeAskCep());
     } else if (ctx.step === "awaiting_payment" || (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
       // "oi" no meio de um pedido em andamento não reapresenta a Lia do zero.
       await reply(phone, copy.greetingMidOrder(ctx.step ?? "collecting", ctx.basket?.length ?? 0));
@@ -788,6 +886,12 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await createOrderAndCharge(phone, user.id, convo.id, ctx, method);
       return;
     }
+    // "só isso"/"fechado"/"pagar" aqui = pedido confirmado — só falta a forma de
+    // pagamento. "Não peguei qual você quer" é copy de escolha de PRODUTO e soava perdida.
+    if (intent.kind === "done" || intent.kind === "affirm" || intent.kind === "pay") {
+      await reply(phone, `${copy.donePickPayment()} ${paymentMethodText(ctx)}`);
+      return;
+    }
     if (intent.kind !== "free_text") {
       await reply(phone, `${copy.choiceNotUnderstood()} ${paymentMethodText(ctx)}`);
       return;
@@ -846,7 +950,9 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       }
       return;
     }
-    const payStore = orderStore(ctx);
+    const payStore = [...new Set((ctx.basket ?? []).map((item) => item.storeKey))]
+      .map((key) => getStore(key))
+      .find((candidate) => belowMinimum(ctx, candidate)) ?? orderStore(ctx);
     if (belowMinimum(ctx, payStore)) {
       await writeCtx(convo.id, ctx);
       // "só isso"/"mais nada" abaixo do mínimo NÃO pode repetir o mesmo nudge em loop.
@@ -901,7 +1007,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     await handleRemove(phone, convo.id, user.cep, ctx, intent.target, { silentIfFound: Boolean(intent.andAdd) });
     // Multi-intenção "tira o arroz E coloca feijão": o remove acima, o add agora.
     if (intent.andAdd) {
-      await handleSearch(phone, convo.id, user.cep, ctx, intent.andAdd);
+      await handleSearch(phone, convo.id, user.cep, ctx, intent.andAdd, user.id);
     }
     return;
   }
@@ -930,7 +1036,9 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await reply(phone, copy.totalAwaitingPayment(ctx.total));
       return;
     }
-    if (ctx.step === "quoted" && ctx.total) {
+    // No menu de pagamento o pedido JÁ está cotado — mostrar o resumo com frete e
+    // total, nunca o parcial "te passo o total quando você fechar".
+    if ((ctx.step === "quoted" || ctx.step === "choosing_payment") && ctx.total) {
       await reply(phone, summaryText(ctx));
       return;
     }
@@ -961,7 +1069,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
 
   // ---- default: treat as a product request ----
-  await handleSearch(phone, convo.id, user.cep, ctx, text);
+  await handleSearch(phone, convo.id, user.cep, ctx, text, user.id);
 }
 
 // ---------- intent handlers ----------
@@ -1168,8 +1276,8 @@ async function handleChoosing(
   text: string,
   intent: Intent
 ) {
-  const store = orderStore(ctx);
   const current = ctx.pending![0];
+  const store = getStore(current.options[0]?.storeKey ?? ctx.storeKey ?? orderStore(ctx).key);
   // "acha outras" pages; "tem essa em azul?"/"tem de 2kg?"/"quero uma maior" refine.
   // Both are checked AFTER an explicit pick ("2", "a colgate", "mais barato") but
   // BEFORE reject→skip — "não gostei, tem outras?" should show more, not drop the item.
@@ -1194,12 +1302,16 @@ async function handleChoosing(
           ? current.options.reduce((best, o, i, arr) => (o.unitPrice < arr[best].unitPrice ? i : best), 0)
           : 0;
     const chosen = current.options[index];
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
     ctx.pending = ctx.pending!.slice(1);
+    if (current.qty === 1 && !current.qtyExplicit) {
+      await beginQuantityChoice(phone, convoId, ctx, store, chosen);
+      return;
+    }
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
     if (ctx.pending.length) {
       await writeCtx(convoId, ctx);
       await reply(phone, copy.choiceConfirmed(chosen.name));
-      await sendChoices(phone, ctx.pending[0]);
+      await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
       return;
     }
     await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
@@ -1219,7 +1331,29 @@ async function handleChoosing(
   if (asksRunningTotal(text)) {
     const items = basketForCopy(ctx);
     const produtos = Math.round(items.reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
-    await reply(phone, `${copy.partialTotal(items, produtos, ctx.pending!.length)}\n\n${choicesTextFor(current)}`);
+    await reply(phone, copy.partialTotal(items, produtos, ctx.pending!.length));
+    await sendChoices(phone, current);
+    return;
+  }
+
+  // "algum até 150 reais?" — teto de preço filtra as opções na mesa (preço exibido,
+  // com markup). Nenhuma dentro do teto → resposta honesta + caminhos (barato/opções).
+  const priceCap = parsePriceCap(text);
+  if (priceCap != null) {
+    const within = current.options.filter((o) => display(o.unitPrice) <= priceCap);
+    if (!within.length) {
+      await reply(phone, copy.nonePriceCap(priceCap));
+      await sendChoices(phone, current);
+      return;
+    }
+    if (within.length < current.options.length) {
+      current.options = within;
+      await writeCtx(convoId, ctx);
+      await sendChoices(phone, current, copy.narrowedChoices(current.query));
+      return;
+    }
+    // todas cabem no teto → só reapresenta confirmando
+    await sendChoices(phone, current, copy.narrowedChoices(current.query));
     return;
   }
 
@@ -1228,12 +1362,16 @@ async function handleChoosing(
   const narrowed = narrowChoiceByName(text, current.options);
   if (narrowed.length === 1) {
     const chosen = current.options[narrowed[0]];
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
     ctx.pending = ctx.pending!.slice(1);
+    if (current.qty === 1 && !current.qtyExplicit) {
+      await beginQuantityChoice(phone, convoId, ctx, store, chosen);
+      return;
+    }
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
     if (ctx.pending.length) {
       await writeCtx(convoId, ctx);
       await reply(phone, copy.choiceConfirmed(chosen.name));
-      await sendChoices(phone, ctx.pending[0]);
+      await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
       return;
     }
     await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
@@ -1246,11 +1384,22 @@ async function handleChoosing(
     return;
   }
 
+  // Refinamento aberto e sistêmico: se a resposta curta discrimina itens do catálogo
+  // da busca atual, ela é atributo — mesmo que nunca tenha sido cadastrada numa lista
+  // fixa. Isso cobre marca, sabor, aroma, material, número de roupa/calçado e futuras
+  // características do catálogo. Se não combinar com a busca atual (ex.: "leite"
+  // enquanto escolhe Coca), continua sendo tratado como um NOVO produto.
+  const catalogAttrs = await contextualCatalogAttrs(store, current, text);
+  if (catalogAttrs) {
+    await refineOptions(phone, convoId, ctx, store, catalogAttrs);
+    return;
+  }
+
   // Not a selection — maybe they're adding MORE items mid-choice ("ah, e 2 leites").
   // Questions about the shown options ("qual é a desnatada?") must NOT be searched
   // as new products — re-show the options instead.
   if (intent.kind === "free_text" && !isQuestion(text)) {
-    const added = await buildChoices(text, ctx.storeKey ?? store.key);
+    const added = await buildChoices(text);
     if (added.autoAdded.length || added.pending.length) {
       ctx.basket = mergeBaskets(ctx.basket ?? [], added.autoAdded);
       ctx.pending = [...(ctx.pending ?? []), ...added.pending];
@@ -1258,13 +1407,50 @@ async function handleChoosing(
       await writeCtx(convoId, ctx);
       const notes: string[] = [];
       if (added.autoAdded.length) notes.push(copy.autoAddedNote(added.autoAdded.map((i) => `${i.qty}x ${i.name}`)));
+      // Item novo no meio de uma escolha entra na FILA — avisar, senão parece ignorado.
+      if (added.pending.length) notes.push(copy.queuedItemsNote(added.pending.map((p) => p.query)));
       if (added.notFound.length) notes.push(copy.notFoundNote(added.notFound));
       if (notes.length) await reply(phone, notes.join("\n"));
       await sendChoices(phone, ctx.pending![0]);
       return;
     }
   }
-  await reply(phone, `${copy.choiceNotUnderstood()}\n\n${choicesTextFor(current)}`);
+  await reply(phone, copy.choiceNotUnderstood());
+  await sendChoices(phone, current);
+}
+
+async function contextualCatalogAttrs(store: StoreConnector, current: PendingChoice, text: string): Promise<string[] | null> {
+  const candidates = await choiceCandidates(store, current);
+  return inferCatalogRefinement(text, candidates);
+}
+
+async function beginQuantityChoice(
+  phone: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  store: StoreConnector,
+  chosen: ChoiceOption
+) {
+  ctx.step = "choosing_quantity";
+  ctx.quantityChoice = { option: chosen, storeKey: store.key, storeLabel: store.label };
+  await writeCtx(convoId, ctx);
+  const interactive = await whatsappAdapter.sendQuantityChoices(phone, chosen.name);
+  if (!interactive) await reply(phone, copy.quantityAsk(chosen.name));
+}
+
+async function finishQuantityChoice(
+  phone: string,
+  userCep: string | null | undefined,
+  convoId: string,
+  ctx: DeliveryContext,
+  qty: number
+) {
+  const selected = ctx.quantityChoice!;
+  const store = getStore(selected.storeKey);
+  ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(selected.option, qty, store)]);
+  ctx.quantityChoice = undefined;
+  ctx.step = ctx.pending?.length ? "choosing" : "collecting";
+  await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(`${qty}x ${selected.option.name}`));
 }
 
 // Ranked candidates for the item being chosen, with the active refinement attributes
@@ -1287,7 +1473,8 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
     await reply(phone, copy.noMoreOptions(p.query));
     return;
   }
-  p.options = next.map(toChoiceOption);
+  const storeRef = { storeKey: p.options[0]?.storeKey, storeLabel: p.options[0]?.storeLabel };
+  p.options = next.map((option) => toChoiceOption(option, storeRef));
   p.shownSkus = [...shown, ...next.map((o) => o.sku)];
   await writeCtx(convoId, ctx);
   await sendChoices(phone, p, copy.moreChoicesHeader(p.query));
@@ -1303,13 +1490,15 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   const refined = `${base} ${attrs.join(" ")}`;
   const matches = (await choiceCandidates(store, p, attrs)).slice(0, 3);
   if (!matches.length) {
-    await reply(phone, choicesTextFor(p, copy.refineNoResult(refined)));
+    await reply(phone, copy.refineNoResult(refined));
+    await sendChoices(phone, p);
     return;
   }
   p.baseQuery = base;
   p.attrs = attrs;
   p.query = refined;
-  p.options = matches.map(toChoiceOption);
+  const storeRef = { storeKey: p.options[0]?.storeKey, storeLabel: p.options[0]?.storeLabel };
+  p.options = matches.map((option) => toChoiceOption(option, storeRef));
   p.shownSkus = matches.map((m) => m.sku);
   await writeCtx(convoId, ctx);
   await sendChoices(phone, p);
@@ -1327,7 +1516,7 @@ async function advancePending(
   if (ctx.pending?.length) {
     await writeCtx(convoId, ctx);
     if (prefix) await reply(phone, prefix);
-    await sendChoices(phone, ctx.pending[0]);
+    await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
     return;
   }
   ctx.pending = undefined;
@@ -1465,10 +1654,18 @@ async function handleSwap(
   await sendChoices(phone, ctx.pending[0]);
 }
 
-async function handleSearch(phone: string, convoId: string, userCep: string | null | undefined, ctx: DeliveryContext, text: string) {
+async function handleSearch(
+  phone: string,
+  convoId: string,
+  userCep: string | null | undefined,
+  ctx: DeliveryContext,
+  text: string,
+  userId?: string
+) {
   // The search can take a couple seconds — acknowledge first so there's no silence.
   await reply(phone, copy.searching());
-  const { store, autoAdded, pending, notFound, greetingOnly, containsMedicine } = await buildChoices(text, ctx.storeKey);
+  const preferences = userId ? await preferredSkuCounts(userId) : undefined;
+  const { store, autoAdded, pending, notFound, greetingOnly, containsMedicine } = await buildChoices(text, undefined, preferences);
 
   if (greetingOnly && !autoAdded.length && !pending.length) {
     await reply(phone, copy.greeting());
@@ -1502,6 +1699,7 @@ async function handleSearch(phone: string, convoId: string, userCep: string | nu
     if (autoAdded.length) notes.push(copy.autoAddedNote(autoAdded.map((i) => `${i.qty}x ${i.name}`)));
     if (notFound.length) notes.push(copy.notFoundNote(notFound));
     if (notes.length) await reply(phone, notes.join("\n"));
+    if (pending.length > 1) await reply(phone, copy.choiceSequence(pending.map((p) => p.query)));
     await sendChoices(phone, pending[0]);
     return;
   }
@@ -1517,6 +1715,22 @@ async function handleSearch(phone: string, convoId: string, userCep: string | nu
   await continueAfterBasket(phone, convoId, next, userCep, medicineNote);
 }
 
+async function preferredSkuCounts(userId: string): Promise<Map<string, number>> {
+  const orders = await prisma.deliveryOrder.findMany({
+    where: { userId, status: { in: ["paid", "operator_buying", "ready_for_pickup", "dispatched", "delivered"] } },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+    select: { items: true }
+  });
+  const counts = new Map<string, number>();
+  for (const order of orders) {
+    for (const item of (order.items as unknown as BasketItem[]) ?? []) {
+      counts.set(item.sku, (counts.get(item.sku) ?? 0) + Math.max(1, item.qty));
+    }
+  }
+  return counts;
+}
+
 // Keep the store locked once the order has items from it.
 function pickedStoreKey(ctx: DeliveryContext, store: StoreConnector): string {
   return ctx.basket?.length ? ctx.storeKey ?? ctx.basket[0].storeKey : store.key;
@@ -1525,6 +1739,17 @@ function pickedStoreKey(ctx: DeliveryContext, store: StoreConnector): string {
 function paymentMethodText(ctx: DeliveryContext): string {
   const base = ctx.total ?? 0;
   return copy.paymentMethod(base, cardTotal(base));
+}
+
+async function sendPaymentButtons(phone: string, ctx: DeliveryContext) {
+  const base = ctx.total ?? 0;
+  const interactive = await whatsappAdapter.sendPaymentChoices(phone, base, cardTotal(base));
+  if (!interactive) await reply(phone, paymentMethodText(ctx));
+}
+
+async function sendCartActionButtons(phone: string) {
+  const interactive = await whatsappAdapter.sendCartActions(phone);
+  if (!interactive) await reply(phone, 'Quer ajustar? Manda mais itens ou responde *cancelar*.');
 }
 
 // Which payment method (if any) an intent unambiguously names.
@@ -1603,7 +1828,9 @@ async function continueAfterBasket(
 
 async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext, method: "pix" | "card" = "pix") {
   // Hard guard: never charge an order below the store's minimum (un-fulfillable).
-  const store = orderStore(ctx);
+  const store = [...new Set((ctx.basket ?? []).map((item) => item.storeKey))]
+    .map((key) => getStore(key))
+    .find((candidate) => belowMinimum(ctx, candidate)) ?? orderStore(ctx);
   if (belowMinimum(ctx, store)) {
     await reply(phone, minimumOrderText(ctx, store));
     return;
@@ -1621,11 +1848,12 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
       phone,
       cep: ctx.cep,
       deliveryAddress: ctx.deliveryAddress,
-      storeKey: ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY,
-      storeLabel: ctx.basket?.[0]?.storeLabel ?? "Carrefour",
+      storeKey: (ctx.fulfillments?.length ?? 0) > 1 ? "multi" : ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY,
+      storeLabel: (ctx.fulfillments?.length ?? 0) > 1 ? `${ctx.fulfillments!.length} lojas` : ctx.basket?.[0]?.storeLabel ?? "Carrefour",
       storeUnit: ctx.storeUnitLabel,
       storeAddress: ctx.storeUnitAddress,
       items: (ctx.basket ?? []) as unknown as object,
+      fulfillments: ctx.fulfillments as unknown as object,
       itemsSubtotal: ctx.itemsSubtotal ?? 0,
       courierKey: ctx.courierKey ?? "uber_direct",
       courierQuoteId: ctx.courierQuoteId,
@@ -1758,6 +1986,32 @@ export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
 export async function opsDispatchCourier(orderId: string) {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order) throw new Error("Order not found");
+  const fulfillments = (order.fulfillments as unknown as StoreFulfillment[] | null) ?? [];
+  if (fulfillments.length > 1) {
+    const dispatches = [];
+    for (const fulfillment of fulfillments) {
+      const store = getStore(fulfillment.storeKey);
+      const courier = getCourier(fulfillment.courierKey);
+      dispatches.push(await courier.dispatch({
+        orderId: `${order.id}-${fulfillment.storeKey}`,
+        pickupAddress: fulfillment.unitAddress,
+        dropoffAddress: order.deliveryAddress ?? "",
+        pickupCep: fulfillment.unitCep,
+        dropoffCep: order.cep ?? undefined,
+        instructions: store.pickupInstructions(order.storeOrderNumber?.trim() || "—"),
+        quoteId: fulfillment.courierQuoteId,
+        dropoffName: order.customerName ?? undefined,
+        dropoffPhone: order.phone
+      }));
+    }
+    const tracking = dispatches.map((dispatch, index) => `${fulfillments[index].storeLabel}: ${dispatch.trackingUrl}`).join("\n");
+    const updated = await prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: { status: "dispatched", courierTrackingUrl: tracking, courierDispatchedAt: new Date() }
+    });
+    await reply(order.phone, copy.dispatched(tracking));
+    return updated;
+  }
   const store = getStore(order.storeKey);
   const courier = getCourier(order.courierKey);
   // Re-derive the pickup unit so the connector can re-quote at dispatch (the order-time
