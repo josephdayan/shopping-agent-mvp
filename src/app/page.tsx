@@ -442,7 +442,9 @@ export default function Home() {
             >
               falar com a Lia no WhatsApp
             </a>
-            <span className="text-[14px] text-white/50 sm:justify-self-end">© 2026 Lia Delivery · São Paulo, SP</span>
+            <span className="text-[14px] text-white/50 sm:justify-self-end">
+              © 2026 Lia Delivery · operação de 67.742.955 JOSEPH CARLOS DAYAN · CNPJ 67.742.955/0001-95
+            </span>
           </footer>
         </div>
       </section>

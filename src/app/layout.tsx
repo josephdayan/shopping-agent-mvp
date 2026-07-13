@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://liadelivery.com.br",
-    siteName: "Lia",
+    siteName: "Lia Delivery",
     title: "Lia — compras do dia a dia pelo WhatsApp",
     description:
       "Manda a lista, a Lia monta a cesta, você paga no Pix e recebe em casa no mesmo dia, no estado de São Paulo."
