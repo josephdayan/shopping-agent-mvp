@@ -61,7 +61,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Validar recuperação segura quando a sessão Browserbase expirar.
 - [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
   os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
-  em saída de diagnóstico; rotacionar antes do próximo teste ao vivo.
+  em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
+  Ainda falta regenerar a chave Browserbase, atualizar os ambientes e reautenticar o Context
+  Carrefour antes do próximo teste ao vivo.
 
 ### Financeiro, fiscal e jurídico
 

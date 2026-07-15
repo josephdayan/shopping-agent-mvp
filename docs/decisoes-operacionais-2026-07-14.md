@@ -183,3 +183,9 @@ Isto ainda não é validação completa do checkout: a tentativa de preflight en
 Context Carrefour sem login antes de limpar/adicionar o SKU de teste. Nenhuma sacola,
 checkout ou cobrança foi criada. Continua obrigatório reautenticar o Context e validar com
 endereço real frete, prazo, cartão salvo/CVV/3DS e antifraude.
+
+Na contenção posterior à exposição de diagnóstico, o token OIDC local da Vercel foi
+renovado em 15/07 sem imprimir valores. A chave Browserbase continua pendente de
+regeneração e atualização dos ambientes que a consomem; o acesso ao painel autenticado não
+estava disponível neste ambiente. A reautenticação Carrefour continua uma etapa humana de
+login/OTP/CAPTCHA, sem contorno automatizado.

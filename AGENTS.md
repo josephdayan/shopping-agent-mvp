@@ -145,7 +145,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   seguro do provedor/varejista.
 - Credenciais já expostas em chats ou em diagnósticos locais devem ser rotacionadas e
   atualizadas na Vercel. Em 15/07, uma saída de diagnóstico incluiu credenciais de
-  Browserbase/Vercel: tratá-las como expostas e rotacioná-las antes do piloto.
+  Browserbase/Vercel: tratá-las como expostas e rotacioná-las antes do piloto. O token OIDC
+  local da Vercel foi renovado em 15/07 sem expor valores; ainda falta regenerar a chave
+  Browserbase, atualizar os ambientes que a consomem e reautenticar o Context Carrefour.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

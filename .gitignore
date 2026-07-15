@@ -25,3 +25,4 @@ LIA_WHATSAPP.md
 # Vault do Obsidian (config de editor, não é doc do projeto)
 docs/obsidian/.obsidian/
 /.swc
+.env*
