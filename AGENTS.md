@@ -143,7 +143,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   registro de consentimento necessários para a recompra.
 - Não pedir cartão pelo chat. O usuário digita dados financeiros diretamente no checkout
   seguro do provedor/varejista.
-- Credenciais já expostas em chats devem ser rotacionadas e atualizadas na Vercel.
+- Credenciais já expostas em chats ou em diagnósticos locais devem ser rotacionadas e
+  atualizadas na Vercel. Em 15/07, uma saída de diagnóstico incluiu credenciais de
+  Browserbase/Vercel: tratá-las como expostas e rotacioná-las antes do piloto.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

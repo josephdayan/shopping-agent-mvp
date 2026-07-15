@@ -163,7 +163,8 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 | `LIA_COVERAGE_PRESET=estado-sp` (SP inteiro) | `LIA_MAX_DELIVERY_KM` (12), `LIA_MAX_DELIVERY_FEE` (35) — ajuste da guarda |
 
 > 🔒 Recomendado: **regenerar** o Access Token do MP e o Client Secret da Uber (passaram no
-> chat) e atualizar no Vercel depois dos testes.
+> chat) e atualizar no Vercel depois dos testes. Em 15/07, credenciais Browserbase/Vercel
+> também apareceram em saída de diagnóstico; devem ser rotacionadas antes do piloto.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

@@ -60,7 +60,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   concorrentes.
 - [ ] Validar recuperação segura quando a sessão Browserbase expirar.
 - [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
-  os ambientes de produção.
+  os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
+  em saída de diagnóstico; rotacionar antes do próximo teste ao vivo.
 
 ### Financeiro, fiscal e jurídico
 
