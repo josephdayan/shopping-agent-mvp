@@ -8,6 +8,10 @@ prisma/dev.db-journal
 dist
 coverage
 
+# Browser sessions contain retailer authentication cookies and must never be committed.
+playwright/.auth/
+.browserbase/
+
 # TypeScript incremental build info
 tsconfig.tsbuildinfo
 
@@ -20,3 +24,4 @@ tsconfig.tsbuildinfo
 LIA_WHATSAPP.md
 # Vault do Obsidian (config de editor, não é doc do projeto)
 docs/obsidian/.obsidian/
+/.swc

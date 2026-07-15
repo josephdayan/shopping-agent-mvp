@@ -1,9 +1,18 @@
 # Lia — projeto, decisões e arquitetura
 
+> Memória canônica vigente: [AGENTS.md](AGENTS.md). Este arquivo também contém histórico;
+> em caso de conflito, prevalecem `AGENTS.md` e a decisão mais recente datada.
+
 Lia é uma **concierge de compras do dia a dia no WhatsApp**: o cliente pede itens em
-linguagem natural, paga por Pix, e a Lia compra numa loja local via **clique-e-retire**
-e entrega no mesmo dia por **motoboy** (Uber Direct). Este doc registra **por que** o
-produto é assim (a jornada e os becos sem saída) e **como** ele funciona.
+linguagem natural, recebe uma cotação do checkout real, paga por Pix/cartão, e a Lia compra
+para o varejista entregar diretamente. Este doc registra **por que** o produto é assim
+(a jornada e os becos sem saída) e **como** ele funciona.
+
+> **Decisão de 14/07/2026:** a conclusão histórica `clique-e-retire + qualquer motoboy`
+> foi invalidada pelas políticas oficiais da Petz e do Carrefour. “Entrega hoje” exige
+> entrega same-day da própria loja ou parceiro formal que autorize courier. O registro
+> completo está em
+> [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md).
 
 ---
 
@@ -33,22 +42,23 @@ Exploramos a fundo (com pesquisa real, fontes citadas) e descartamos, em ordem:
   murado). **Zapia** é cross-seller mas não paga no chat. **Meta** entra com pagamento nativo
   no WhatsApp em 2026.
 
-**Conclusão:** o único modelo **operacional + legal + sem parceria/BD + same-day** para um
-time pequeno é: **clique-e-retire (você é só cliente) + motoboy self-serve + WhatsApp + Pix.**
+**Conclusão revisada em 14/07/2026:** o fluxo sem parceria que foi realmente validado é
+**checkout automatizado + entrega do próprio varejista + WhatsApp + Mercado Pago**.
+`Clique-e-retire + motoboy self-serve` não é base escalável porque Petz e Carrefour exigem
+documentos do titular e outras autorizações para retirada por terceiro.
 
 ---
 
 ## 2. O modelo escolhido (o que a Lia É hoje)
 
 ```
-Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% embutido)
-  →  cota o motoboy em tempo real (frete repassado)  →  total  →  Pix
-  →  cai na FILA DO OPERADOR  →  operador faz o clique-e-retire no Carrefour e despacha o motoboy
-  →  motoboy retira na loja (com documento) e entrega same-day  →  Lia avisa o cliente
+Cliente pede no WhatsApp  →  Lia busca o item ao vivo e monta sacola no varejista
+  →  checkout calcula preço + frete + prazo  →  Lia mostra total  →  Pix/cartão
+  →  revalida a sacola  →  compra controlada  →  varejista entrega  →  Lia acompanha
 ```
 
 - **Loja-base:** Carrefour (hipermercado = tem tudo: comidinha, higiene, pet, limpeza,
-  bebida), com **clique-e-retire** e **retirada por terceiro** (motoboy com documento). Aberto
+  bebida), usando entrega do varejista. Aberto
   pra somar farmácia (não-remédio), Petz, etc. → o moat é a **largura** ("qualquer coisa, num
   WhatsApp só").
 - **Economia:** produto e frete são **pass-through**; sua receita = **markup de 10%** embutido
@@ -72,19 +82,21 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   rejeita); Cloudinary é permissivo → sem re-host (diferente do Akamai da Petz). Lojas = 10
   shoppings reais de SP (confirmar a unidade + política de retirada por terceiro antes do
   piloto). Liga/desliga por `LIA_ENABLE_BOTICARIO`.
-- **Catálogo Petz:** **2.822 itens reais** (nome + preço + foto) em `src/lib/stores/petz-catalog.ts`,
+- **Busca Petz:** busca ao vivo por Browserbase com cache de 15 minutos e falha fechada em
+  produção; só exibe opção com preço e URL reais. O catálogo histórico de **2.822 itens**
+  permanece em `src/lib/stores/petz-catalog.ts` como seed/referência,
   raspados de `petz.com.br` (48 subcategorias, 6 deptos; sem remédio/antipulga — ANVISA). Mesmo
   método DOM (Petz também é VTEX+Akamai). **Imagens re-hospedadas** em `/api/petz-image/<id>`
   (tabela `PetzImage`, ~60MB) porque o CDN da Petz é Akamai e barra o Twilio no WhatsApp;
   `LIA_MEDIA_BLOCK_HOSTS` evita imagem quebrada. Ver/buscar tudo em **`/ops/catalogo`** (foto +
   custo/margem). ⚠️ prod: setar `OPS_TOKEN` forte (default cai no `API_TOKEN` fraco).
-- **Lojas:** **107 unidades reais geocodadas** de Carrefour, Petz e Boticário em SP. A escolha
-  usa distância geográfica real quando há coordenadas (`pickNearestUnit`); o proxy de CEP é
-  apenas o fallback quando não há geo disponível. Ver o detalhamento de cobertura abaixo.
-- **Pagamento/motoboy:** **Pix (Mercado Pago) e Uber Direct estão REAIS e testados** — Pix com
-  pagamento de verdade confirmado; Uber Direct OAuth + cotação validados. Ver §3 envs.
+- **Lojas:** **107 unidades reais geocodadas** de Carrefour, Petz e Boticário em SP. Esse
+  dado continua útil para parceiros/same-day, mas não prova cobertura de entrega direta;
+  o checkout do varejista é a autoridade por CEP.
+- **Pagamento/courier:** **Pix (Mercado Pago) e a integração técnica do Uber Direct estão
+  testados**. Uber só pode ser usado com ponto de retirada que autorize formalmente courier.
 - **Sem remédio** (ANVISA). Saudações e itens fora do catálogo são tratados sem chutar produto.
-- **Entregabilidade em 2 camadas (dado, não código).** O cérebro NUNCA aceita um pedido pago
+- **Entregabilidade em 2 camadas (legado do motoboy).** O cérebro NUNCA aceita um pedido pago
   que a operação não entrega. Duas travas, ambas gravam `WaitlistLead` (dedupe phone+cep, `hits`,
   `reason`) e o `/ops` vira **mapa de demanda** (cidade → nº de pedidos, tag `fora`/`longe`):
   - **Cobertura por cidade** (`src/lib/coverage.ts`, puro+testado): a cidade (ViaCEP; fallback
@@ -97,6 +109,8 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
     distância real (haversine); > `LIA_MAX_DELIVERY_KM` (12) → `copy.tooFarForDelivery`, lead `too_far`.
     Guarda secundária de fee real (`LIA_MAX_DELIVERY_FEE` 35, só cotação real) no `quoteBasket`.
     Distância é primária (mock é fake-barato). `LIA_FREIGHT_GUARD_OFF` = kill-switch.
+  Para entrega direta, essas travas são apenas filtro comercial; a resposta do checkout
+  substitui a distância até loja como autoridade de cobertura, frete e prazo.
 - **Geo compartilhado** (`src/lib/geo.ts`): `haversineKm` + `geocode` (BrasilAPI→Nominatim, timeout,
   nunca-lança, cache; `LIA_GEOCODE_TIMEOUT_MS`). `StoreUnit` tem `lat/lng`; `nearestUnit` virou
   `listUnits()` + `pickNearestUnit` (stores/nearest.ts): haversine quando há coords, senão proxy
@@ -109,11 +123,11 @@ Cliente pede no WhatsApp  →  Lia acha no Carrefour, mostra preço (com 10% emb
   com lat/lng. Ligar tudo = `LIA_COVERAGE_PRESET=estado-sp` na Vercel (sem deploy).
 
 ### Riscos honestos a validar num piloto real
-1. O motoboy fazer a **retirada no balcão com documento** (o maior risco operacional). Tensão:
-   Uber Direct é on-demand (motoboy aleatório), mas o Carrefour quer retirante conhecido →
-   pro 1º piloto, usar **motoboy fixo conhecido**, não o on-demand.
-2. O cliente **pagar o total** (produto+frete) pela conveniência vs. usar o Daki.
-3. **Preço/estoque desatualizados** (catálogo estático). Desenho da solução: (a) grátis hoje =
+1. **Titularidade e pós-venda:** conta central, nota fiscal, múltiplos destinatários,
+   troca/devolução e chargeback.
+2. **Checkout e antifraude:** cartão salvo, CVV, 3DS, CAPTCHA e prevenção de duplicidade.
+3. O cliente **pagar o total** (produto+frete) pela conveniência vs. comprar diretamente.
+4. **Preço/estoque desatualizados.** Desenho da solução: (a) grátis hoje =
    link "ver no Carrefour" por item no `/ops` (operador confere na hora de comprar); (b) auto =
    **1 scrape por pedido PAGO** (background, antes de comprar) — precisa de **serviço de scraping
    com anti-bot** (ScrapingBee/Zyte/Bright Data/Apify-residencial), ~R$0,10/pedido + cache/prewarm.
@@ -129,7 +143,7 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 |---|---|---|
 | Pedido (cesta) | `prisma DeliveryOrder` | itens (Json), loja, motoboy, taxas, ciclo de status |
 | Lojas (plugável) | `src/lib/stores/` | `StoreConnector` + Carrefour (ao vivo Apify + seed). **Somar loja = 1 arquivo** |
-| Motoboys (plugável) | `src/lib/couriers/` | `CourierConnector` + Uber Direct (cota + despacha; real inerte até credenciais) |
+| Couriers (opcional) | `src/lib/couriers/` | `CourierConnector` + Uber Direct; só para parceiros que autorizem retirada |
 | Pix + cartão | `src/lib/payments/mercadopago.ts` | createPix (copia-e-cola) + Checkout Pro (link de cartão, taxa da maquininha repassada) + webhook `/api/mercadopago/webhook` (mock até token) |
 | Busca por IA | `ai.ts` `extractShoppingList` | limpa o pedido (sinônimos, saudação, remédio, qty); fallback determinístico |
 | Intenções (NLU puro) | `src/lib/lia-intents.ts` | `detectIntent`, parser de lista, escolha e refinamento: serviço, status, pagamento, atendimento, reclamação, cancelamento contextual, CEP + itens, total parcial e opções. Sem DB — unit-testado |
@@ -139,7 +153,7 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 | Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | fila de pagos → nº do pedido → despachar motoboy → entregue/cancelar; caixa "avisar cliente" (substituição/atraso); destaque vermelho quando o cliente pediu cancelamento |
 | Testes/evals | `tests/` | `npm test` = unitários (intents/copy, sem DB) + evals E2E de conversa (DB real + mocks, telefones de teste auto-limpos) |
 
-**Ciclo de status:** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered` (+ canceled/refunded).
+**Ciclo de status atual (legado):** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered` (+ canceled/refunded). O fluxo direto precisa de estados de pedido/rastreio do varejista.
 
 Decisões de comportamento do cérebro (não são bugs):
 - **"paguei" só aprova no sandbox/mock.** Com Pix real, a Lia consulta o status no Mercado Pago antes de acreditar; cartão nunca aprova por texto (o webhook decide).
@@ -148,7 +162,7 @@ Decisões de comportamento do cérebro (não são bugs):
 
 ### Env pra virar real (cada um tem fallback sandbox)
 - `APIFY_API_TOKEN` (+ `APIFY_CARREFOUR_ACTOR`, default `gio21~carrefour-br-scraper`) — catálogo real
-- `UBER_DIRECT_CUSTOMER_ID` / `UBER_DIRECT_TOKEN` — motoboy real
+- `UBER_DIRECT_CUSTOMER_ID` / `UBER_DIRECT_TOKEN` — courier opcional para parceiro compatível
 - `MERCADO_PAGO_ACCESS_TOKEN` — Pix real
 - `LIA_PRICE_MARKUP` (1.1), `OPS_TOKEN` (acesso ao painel)
 - Lado do dono: **MEI** (pra emitir nota / conta Mercado Pago PJ)
@@ -180,16 +194,38 @@ iniciada para obter o canal WhatsApp oficial, mas a verificação do negócio e 
 precisam ser aprovados; até lá, o canal de teste permanece no Twilio Sandbox. O e-mail
 `contato@liadelivery.com.br` foi configurado no ImprovMX para concluir essa verificação.
 
-Pix real (Mercado Pago), cartão por Checkout Pro, cotação Uber Direct, painel `/ops`, MEI/CNPJ
-e cobertura de SP já sustentam o piloto, com a ressalva de que Pix está em conta pessoal e a
-retirada por terceiro precisa ser validada em campo. O checklist completo de operação está em
+Pix real (Mercado Pago), cartão por Checkout Pro, painel `/ops`, MEI/CNPJ e cobertura de SP
+já sustentam o piloto, com a ressalva de que Pix está em conta pessoal e o `/ops` ainda precisa
+ser adaptado da retirada/motoboy para a entrega do varejista. O checklist completo está em
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
 
 ---
 
 ## 6. Próximos passos
-- Rodar o **piloto manual** (10-20 pedidos reais) pra validar os 3 riscos acima.
-- Afinar o mapeamento do catálogo do Carrefour com os primeiros runs reais do actor.
-- Somar mais lojas (farmácia não-remédio, Petz) = a largura/moat.
+- Rodar o **piloto controlado de entrega direta** (5–10 pedidos reais).
+- Validar titularidade, NF, termos, troca/devolução e conta com múltiplos destinatários.
+- Mapear checkout e cartão salvo sem liberar o clique final automático.
+- Adaptar conversa e `/ops` para preço/frete/prazo/rastreio do varejista.
+- Para same-day, buscar parceiro local/merchant que autorize courier.
 - Memória/perfil mais rica. Botões tocáveis nas opções já estão ativos no canal Meta
   (cards com foto + **Escolher este**; lista numerada permanece como fallback).
+
+---
+
+## 7. Adendo de pagamentos — 14/07/2026
+
+O cartão sem sair da conversa foi mapeado e implementado como **WhatsApp Payments API BR
+(One-Click) pela Cloud API direta da Meta + Pagar.me V5**. O 360dialog não é dependência de
+runtime: não envia a mensagem, não recebe o webhook e não processa a cobrança.
+
+- A primeira compra abre uma página de uso único que usa `tokenizecard.js`; a Lia não recebe
+  PAN nem CVV e armazena só referências tokenizadas, últimos quatro dígitos e consentimento.
+- Nas recompras, a Lia envia `order_details` nativo. O `credential_id` é interno/opaco; o
+  `card_id` Pagar.me fica no backend.
+- `PaymentAttempt.id` é ao mesmo tempo o `reference_id` Meta e a chave de idempotência
+  Pagar.me. Workflows e reconciliação por webhook cobrem toque duplicado e resposta perdida.
+- Código, migrations, documentação e testes focados estão prontos; a flag continua desligada.
+
+Para ativar faltam: migrations em produção, allowlist Payments API BR da Meta, domínio/chaves
+e webhook Pagar.me, depois teste sandbox de primeira compra, recompra, recusa e recuperação.
+O guia canônico é [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).

@@ -5,6 +5,18 @@ import { hasCancelRequest, isCardCharge } from "@/lib/order-flags";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
 type Fulfillment = { storeKey: string; storeLabel: string; unitLabel: string; unitAddress: string; deliveryFee: number };
+type PurchaseJob = {
+  id: string;
+  storeLabel: string;
+  status: string;
+  actualTotal?: number | null;
+  cartHash?: string | null;
+  storeOrderNumber?: string | null;
+  browserSessionId?: string | null;
+  lastErrorCode?: string | null;
+  lastErrorMessage?: string | null;
+  items: Array<{ requestedName: string; requestedQty: number; status: string }>;
+};
 
 type DeliveryOrder = {
   id: string;
@@ -28,6 +40,7 @@ type DeliveryOrder = {
   pixCopiaECola?: string | null;
   courierKey?: string | null;
   courierTrackingUrl?: string | null;
+  purchaseJobs?: PurchaseJob[];
   createdAt: string;
   paidAt?: string | null;
 };
@@ -43,10 +56,26 @@ const COURIER_LABEL: Record<string, string> = {
 };
 
 const STATUS_LABEL: Record<string, string> = {
+  awaiting_supplier_validation: "🔎 Confirmando carrinho na loja",
+  payment_issuing: "💳 Gerando pagamento para cliente",
   paid: "💳 Pago — comprar na loja",
   operator_buying: "🛒 Comprado — aguardando pronto",
   ready_for_pickup: "📦 Pronto — despachar motoboy",
   dispatched: "🛵 Saiu pra entrega"
+};
+
+const PURCHASE_STATUS_LABEL: Record<string, string> = {
+  preflight_queued: "⏳ carrinho na fila",
+  preflighting: "🔎 validando loja",
+  cart_ready: "🛒 carrinho pronto",
+  awaiting_approval: "✋ aguardando aprovação",
+  approved: "💳 compra aprovada",
+  purchasing: "🛍️ finalizando",
+  ordered: "✅ pedido na loja criado",
+  ready_for_pickup: "📦 pronto para retirada",
+  needs_human: "⚠️ precisa de humano",
+  failed: "❌ falhou",
+  canceled: "cancelado"
 };
 
 // Where the operator double-checks the live price/stock before buying, per store.
@@ -184,6 +213,38 @@ export default function OpsBoard() {
     }
   }
 
+  async function purchaseAct(job: PurchaseJob, action: "preflight" | "retry" | "request_approval" | "approve"): Promise<boolean> {
+    if (
+      action === "approve" &&
+      !window.confirm(
+        `Aprovar compra de ${brl(job.actualTotal ?? 0)} na ${job.storeLabel}? O fluxo fará uma última validação antes de tentar finalizar.`
+      )
+    ) {
+      return false;
+    }
+    const key = `${job.id}:${action}`;
+    setBusy(key);
+    try {
+      const res = await fetch(`/api/ops/purchases/${job.id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action })
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        alert(data.error ?? `A ação de compra falhou (${res.status}).`);
+        return false;
+      }
+      await load();
+      return true;
+    } catch {
+      alert("A ação de compra falhou (sem conexão?). Tente de novo.");
+      return false;
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function sendNotify(id: string) {
     const text = (notify[id] ?? "").trim();
     if (!text) return;
@@ -272,9 +333,64 @@ export default function OpsBoard() {
             )}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
+            {(o.purchaseJobs?.length ?? 0) > 0 && (
+              <div style={{ display: "grid", gap: 7, marginTop: 10 }}>
+                {o.purchaseJobs!.map((job) => (
+                  <div key={job.id} style={{ border: "1px solid #d0d5dd", borderRadius: 8, padding: 9, background: "#fcfcfd" }}>
+                    <div style={{ display: "flex", gap: 8, justifyContent: "space-between", flexWrap: "wrap", alignItems: "center" }}>
+                      <strong style={{ fontSize: 13 }}>{job.storeLabel}</strong>
+                      <span style={{ fontSize: 12, color: "#475467" }}>{PURCHASE_STATUS_LABEL[job.status] ?? job.status}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: "#667085", marginTop: 4 }}>
+                      {job.items.map((item) => `${item.requestedQty}x ${item.requestedName} (${item.status})`).join(" · ")}
+                      {job.actualTotal != null ? ` · loja: ${brl(job.actualTotal)}` : ""}
+                    </div>
+                    {job.lastErrorCode && (
+                      <div style={{ fontSize: 12, color: "#b42318", marginTop: 4 }}>
+                        {job.lastErrorCode}: {job.lastErrorMessage}
+                      </div>
+                    )}
+                    <div style={{ display: "flex", gap: 7, marginTop: 8, flexWrap: "wrap", alignItems: "center" }}>
+                      {(job.status === "preflight_queued" || job.status === "needs_human" || job.status === "failed") && (
+                        <button style={secondary} disabled={busy === `${job.id}:preflight` || busy === `${job.id}:retry`} onClick={() => void purchaseAct(job, job.status === "preflight_queued" ? "preflight" : "retry")}>
+                          🔎 Montar carrinho
+                        </button>
+                      )}
+                      {o.status === "paid" && job.status === "cart_ready" && (
+                        <button style={primary} disabled={busy === `${job.id}:request_approval`} onClick={() => void purchaseAct(job, "request_approval")}>
+                          Pedir aprovação
+                        </button>
+                      )}
+                      {o.status === "paid" && job.status === "awaiting_approval" && (
+                        <button style={primary} disabled={busy === `${job.id}:approve`} onClick={() => void purchaseAct(job, "approve")}>
+                          Aprovar compra
+                        </button>
+                      )}
+                      {job.browserSessionId && (
+                        <a href={`https://www.browserbase.com/sessions/${job.browserSessionId}`} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: "#0f3d3a" }}>
+                          Abrir sessão da loja
+                        </a>
+                      )}
+                      {job.storeOrderNumber && <span style={{ fontSize: 12 }}>Pedido loja: <strong>{job.storeOrderNumber}</strong></span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>
               {o.status === "paid" && (
                 <>
+                  {(o.purchaseJobs?.length ?? 0) === 0 && (
+                    <button
+                      style={primary}
+                      disabled={busy === `${o.id}:prepare_purchase`}
+                      onClick={() => act(o.id, "prepare_purchase")}
+                      title="Abre uma sessão segura, confere os itens reais e monta o carrinho. No modo inicial, nunca finaliza a compra."
+                    >
+                      🤖 Montar carrinho automático
+                    </button>
+                  )}
                   <button
                     style={secondary}
                     onClick={() => openAllItems(o)}

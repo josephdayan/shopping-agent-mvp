@@ -35,6 +35,41 @@ type RawInbound = {
   [key: string]: unknown;
 };
 
+export type PaymentConfirmation = {
+  referenceId: string;
+  credentialId?: string;
+  last4?: string;
+  status: string;
+  phone?: string;
+};
+
+export type WhatsAppOrderDetailItem = {
+  retailerId: string;
+  name: string;
+  quantity: number;
+  unitAmount: number;
+};
+
+export type WhatsAppOrderDetailsInput = {
+  referenceId: string;
+  body: string;
+  credentialId: string;
+  last4: string;
+  total: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  items: WhatsAppOrderDetailItem[];
+};
+
+export type WhatsAppOrderStatusInput = {
+  referenceId: string;
+  body: string;
+  orderStatus?: "processing" | "canceled";
+  paymentStatus: "captured" | "failed";
+  timestamp?: number;
+};
+
 export type WhatsAppProductOption = {
   rank: number;
   reason: string;
@@ -54,11 +89,162 @@ export type WhatsAppDeliveryChoice = {
   imageUrl?: string;
 };
 
+function minorAmount(value: number) {
+  return Math.round(Number(value.toFixed(2)) * 100);
+}
+
+function metaMessagesUrl(phoneNumberId: string) {
+  const version = process.env.WHATSAPP_GRAPH_API_VERSION ?? "v21.0";
+  return `https://graph.facebook.com/${version}/${phoneNumberId}/messages`;
+}
+
+function money(value: number) {
+  return { value: minorAmount(value), offset: 100 };
+}
+
+// Pure payload builder: the result can be tested without Meta credentials. The
+// WhatsApp Payments API expects integer minor units plus an explicit offset.
+export function buildOrderDetailsPayload(to: string, input: WhatsAppOrderDetailsInput) {
+  const itemsTotal = input.items.reduce((sum, item) => sum + minorAmount(item.unitAmount) * item.quantity, 0);
+  const subtotal = minorAmount(input.subtotal);
+  const shipping = minorAmount(input.shipping);
+  const tax = minorAmount(input.tax);
+  const total = minorAmount(input.total);
+  if (itemsTotal !== subtotal || subtotal + shipping + tax !== total) {
+    throw new Error("WhatsApp order details must balance item subtotal, shipping, tax and total");
+  }
+
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "order_details",
+      body: { text: input.body.slice(0, 1024) },
+      action: {
+        name: "review_and_pay",
+        parameters: {
+          reference_id: input.referenceId,
+          type: "physical-goods",
+          payment_type: "br",
+          payment_settings: [{
+            type: "offsite_card_pay",
+            offsite_card_pay: {
+              last_four_digits: input.last4,
+              credential_id: input.credentialId
+            }
+          }],
+          currency: "BRL",
+          total_amount: money(input.total),
+          order: {
+            status: "pending",
+            tax: { ...money(input.tax), description: "Taxa do cartão" },
+            shipping: { ...money(input.shipping), description: "Entrega" },
+            items: input.items.map((item) => ({
+              retailer_id: item.retailerId,
+              name: item.name.slice(0, 100),
+              amount: money(item.unitAmount),
+              quantity: item.quantity
+            })),
+            subtotal: money(input.subtotal)
+          }
+        }
+      }
+    }
+  };
+}
+
+export function buildOrderStatusPayload(to: string, input: WhatsAppOrderStatusInput) {
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "order_status",
+      body: { text: input.body.slice(0, 1024) },
+      action: {
+        name: "review_order",
+        parameters: {
+          reference_id: input.referenceId,
+          ...(input.orderStatus ? { order: { status: input.orderStatus } } : {}),
+          payment: {
+            status: input.paymentStatus,
+            timestamp: input.timestamp ?? Math.floor(Date.now() / 1000)
+          }
+        }
+      }
+    }
+  };
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
+}
+
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value : undefined;
+}
+
+function paymentConfirmationFrom(value: unknown): PaymentConfirmation | null {
+  const outer = asRecord(value);
+  if (!outer) return null;
+  const payment = asRecord(outer.payment_method) ?? asRecord(outer.payment) ?? outer;
+  const referenceId = optionalString(payment.reference_id) ?? optionalString(outer.reference_id);
+  if (!referenceId) return null;
+  const paymentMethod = optionalString(payment.payment_method) ?? optionalString(outer.payment_method);
+  if (paymentMethod && paymentMethod !== "offsite_card_pay") return null;
+  return {
+    referenceId,
+    credentialId: optionalString(payment.credential_id) ?? optionalString(outer.credential_id),
+    last4: optionalString(payment.last_four_digits) ?? optionalString(outer.last_four_digits),
+    status: optionalString(payment.status) ?? optionalString(outer.status) ?? "confirmed"
+  };
+}
+
+// Meta's One-Click webhook is an inbound interactive payment_method message. The
+// parser also accepts the earlier/status-shaped payloads seen in partner examples so
+// a harmless shape change cannot make the provider retry this event in a burst.
+export function parsePaymentConfirmation(payload: RawInbound): PaymentConfirmation | null {
+  const value = payload.entry?.[0]?.changes?.[0]?.value;
+  if (!value) return null;
+  const rawValue = value as Record<string, unknown>;
+  const messages = Array.isArray(rawValue.messages) ? rawValue.messages : [];
+  for (const message of messages) {
+    const record = asRecord(message);
+    if (!record) continue;
+    const interactive = asRecord(record.interactive);
+    const interactiveType = optionalString(interactive?.type);
+    if (record.type === "payment" || interactiveType === "payment_method") {
+      const confirmed = paymentConfirmationFrom(interactive ?? record);
+      if (confirmed) return confirmed;
+    }
+  }
+  const statuses = Array.isArray(rawValue.statuses) ? rawValue.statuses : [];
+  for (const status of statuses) {
+    const record = asRecord(status);
+    if (!record) continue;
+    if (record.type === "payment" || record.type === "payment_method" || record.payment || record.payment_method) {
+      const confirmed = paymentConfirmationFrom(record);
+      if (confirmed) return confirmed;
+    }
+  }
+  return null;
+}
+
 export const whatsappAdapter = {
   parseInbound(payload: RawInbound) {
     const metaChange = payload.entry?.[0]?.changes?.[0]?.value;
     const metaMessage = metaChange?.messages?.[0];
     const metaContact = metaChange?.contacts?.[0];
+    const parsedPaymentConfirmation = parsePaymentConfirmation(payload);
+    // Bind the confirmation to the WhatsApp sender as well as to the opaque
+    // reference id. Meta signs the webhook, but this prevents an implementation
+    // mistake from ever charging an attempt for a different conversation.
+    const paymentConfirmation = parsedPaymentConfirmation && metaMessage?.from
+      ? { ...parsedPaymentConfirmation, phone: metaMessage.from }
+      : parsedPaymentConfirmation;
 
     return {
       phone:
@@ -90,7 +276,8 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id ?? stringFromPayload(payload.MessageSid),
-      eventType: metaMessage ? "message" : metaChange?.statuses?.length ? "status" : metaChange ? "meta_event" : "message",
+      eventType: paymentConfirmation ? "payment_confirmation" : metaMessage ? "message" : metaChange?.statuses?.length ? "status" : metaChange ? "meta_event" : "message",
+      paymentConfirmation,
       provider: metaChange ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
     };
   },
@@ -155,6 +342,22 @@ export const whatsappAdapter = {
       { id: "pix", title: "Pagar com Pix" },
       { id: "cartao", title: "Pagar com cartão" }
     ], `Pix ${formatBRL(pixTotal)} · Cartão ${formatBRL(cardTotal)}`);
+  },
+
+  async sendOrderDetailsCard(to: string, input: WhatsAppOrderDetailsInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") throw new Error("WhatsApp One-Click requires WHATSAPP_PROVIDER=meta");
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildOrderDetailsPayload(to, input));
+  },
+
+  async sendOrderStatus(to: string, input: WhatsAppOrderStatusInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildOrderStatusPayload(to, input));
   },
 
   async sendCartActions(to: string) {
@@ -260,7 +463,7 @@ async function sendMetaMessage(to: string, text: string) {
     throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
   }
 
-  const response = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
+  const response = await fetch(metaMessagesUrl(phoneNumberId), {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -373,7 +576,7 @@ async function sendMetaProductButtons(phoneNumberId: string, token: string, to: 
 }
 
 async function sendMetaPayload(phoneNumberId: string, token: string, body: Record<string, unknown>) {
-  const response = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
+  const response = await fetch(metaMessagesUrl(phoneNumberId), {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

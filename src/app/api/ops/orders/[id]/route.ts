@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { opsCancelRefund, opsDispatchCourier, opsMarkBought, opsMarkDelivered, opsNotifyCustomer } from "@/lib/delivery-service";
+import { createPurchaseJobsForOrder } from "@/lib/purchasing/service";
+import { startPreflightPurchaseWorkflow } from "@/lib/purchasing/workflow-dispatch";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +39,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
         // Client-input problem, not a server failure — answer 400, not 500.
         if (!text) return NextResponse.json({ error: "empty text" }, { status: 400 });
         await opsNotifyCustomer(id, text);
+        break;
+      }
+      case "prepare_purchase": {
+        const jobs = await createPurchaseJobsForOrder(id);
+        await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
         break;
       }
       default:

@@ -6,6 +6,8 @@ import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import { attrMatchesItem, inferCatalogRefinement, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
 import { getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
+import { createCardAttempt, expireOpenPaymentAttempts, getConfirmedPaymentAttempt, getOneClickCredential } from "@/lib/payments/whatsapp-pay";
+import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
 import { extractShoppingList } from "@/lib/adapters/ai";
 import {
   detectIntent,
@@ -28,6 +30,7 @@ import {
 } from "@/lib/lia-intents";
 import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
 import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
+import { getPurchasePolicy } from "@/lib/purchasing/policy";
 import * as copy from "@/lib/lia-copy";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -100,7 +103,18 @@ type CourierOption = { kind: "barato" | "rapido"; courierKey: string; quoteId: s
 
 type DeliveryContext = {
   flow?: "delivery";
-  step?: "collecting" | "need_cep" | "choosing" | "choosing_quantity" | "quoted" | "choosing_courier" | "choosing_payment" | "awaiting_payment";
+  step?:
+    | "collecting"
+    | "need_cep"
+    | "need_address"
+    | "choosing"
+    | "choosing_quantity"
+    | "quoted"
+    | "choosing_courier"
+    | "choosing_payment"
+    | "awaiting_supplier_validation"
+    | "payment_issuing"
+    | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
   quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string };
@@ -113,6 +127,9 @@ type DeliveryContext = {
   city?: string;
   uf?: string;
   deliveryAddress?: string;
+  // ViaCEP only identifies the street/area; a courier needs the customer's actual
+  // destination. This flips true only after the customer confirms a full address.
+  deliveryAddressVerified?: boolean;
   guardBlock?: FreightBlock;
   storeUnitId?: string;
   storeUnitLabel?: string;
@@ -130,7 +147,7 @@ type DeliveryContext = {
   deliveryOrderId?: string;
 };
 
-const ACTIVE_ORDER_STATUSES = ["awaiting_payment", "paid", "operator_buying", "ready_for_pickup", "dispatched"];
+const ACTIVE_ORDER_STATUSES = ["awaiting_supplier_validation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup", "dispatched"];
 
 // ---------- helpers: conversation + money + text ----------
 
@@ -177,7 +194,12 @@ async function writeCtx(convoId: string, ctx: DeliveryContext) {
 
 // A fresh context that keeps only the saved address (used after clear/cancel/paid).
 function addressOnlyCtx(ctx: DeliveryContext, userCep?: string | null): DeliveryContext {
-  return { flow: "delivery", cep: ctx.cep ?? userCep ?? undefined, deliveryAddress: ctx.deliveryAddress };
+  return {
+    flow: "delivery",
+    cep: ctx.cep ?? userCep ?? undefined,
+    deliveryAddress: ctx.deliveryAddress,
+    deliveryAddressVerified: ctx.deliveryAddressVerified
+  };
 }
 
 async function reply(phone: string, text: string) {
@@ -521,6 +543,7 @@ function summaryText(ctx: DeliveryContext): string {
     frete: ctx.deliveryFee ?? 0,
     etaMinutes: ctx.etaMinutes ?? 40,
     total: ctx.total ?? 0,
+    deliveryAddress: ctx.deliveryAddress,
     notFound: ctx.notFound,
     pickupCount: ctx.fulfillments?.length ?? 1
   });
@@ -614,6 +637,12 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   });
 
   const ctx = readCtx(convo.context);
+  // Addresses saved through the legacy checkout are customer-entered and can be
+  // reused safely by the delivery flow.
+  if (!ctx.deliveryAddress && user.defaultAddress) {
+    ctx.deliveryAddress = user.defaultAddress;
+    ctx.deliveryAddressVerified = true;
+  }
   const intent = detectIntent(text);
 
   // Auto-expire a stale cart: if the last activity was over 30 min ago, start fresh
@@ -629,10 +658,12 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     const hadBasket = (ctx.basket?.length ?? 0) > 0;
     const keptCep = ctx.cep;
     const keptAddr = ctx.deliveryAddress;
+    const keptAddrVerified = ctx.deliveryAddressVerified;
     for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
     ctx.flow = "delivery";
     ctx.cep = keptCep;
     ctx.deliveryAddress = keptAddr;
+    ctx.deliveryAddressVerified = keptAddrVerified;
     // Persist before any early return (especially greeting). Previously the clear
     // lived only in memory, so the same stale warning repeated on every new message.
     await writeCtx(convo.id, ctx);
@@ -687,13 +718,17 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
   if (intent.kind === "greeting") {
-    if (!savedCep) {
+    if (!user.defaultAddress) {
+      ctx.flow = "delivery";
+      ctx.step = "need_address";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.welcomeAskFullDeliveryAddress());
+    } else if (!savedCep) {
       ctx.flow = "delivery";
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
-      const interactive = await whatsappAdapter.sendAddressSetup(phone, copy.welcomeAddressButton());
-      if (!interactive) await reply(phone, copy.welcomeAskCep());
-    } else if (ctx.step === "awaiting_payment" || (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
+      await reply(phone, copy.welcomeAskCep());
+    } else if (ctx.step === "awaiting_supplier_validation" || ctx.step === "payment_issuing" || ctx.step === "awaiting_payment" || (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
       // "oi" no meio de um pedido em andamento não reapresenta a Lia do zero.
       await reply(phone, copy.greetingMidOrder(ctx.step ?? "collecting", ctx.basket?.length ?? 0));
     } else {
@@ -734,7 +769,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
   if (intent.kind === "cancel_question") {
     const active = await prisma.deliveryOrder.findFirst({
-      where: { userId: user.id, status: { in: ["awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
+      where: { userId: user.id, status: { in: ["awaiting_supplier_validation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
     });
     await reply(phone, copy.cancelHowTo(Boolean(active) || (ctx.basket?.length ?? 0) > 0));
     return;
@@ -745,6 +780,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       orderBy: { createdAt: "desc" }
     });
     if (!order) {
+      const validating = await prisma.deliveryOrder.findFirst({
+        where: { userId: user.id, status: { in: ["awaiting_supplier_validation", "payment_issuing"] } },
+        orderBy: { createdAt: "desc" }
+      });
+      if (validating) {
+        await reply(phone, copy.supplierValidationPending());
+        return;
+      }
       await reply(phone, (ctx.basket?.length ?? 0) > 0 ? copy.finishOrderFirst() : copy.noOrdersYet());
       return;
     }
@@ -774,12 +817,30 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     await handleCancel(phone, convo.id, user.id, user.cep, ctx, intent.explicitOrder ?? false);
     return;
   }
+  if (ctx.step === "awaiting_supplier_validation") {
+    // Orders created before the immediate-checkout change can be released on the
+    // customer's next message. The atomic state claim inside the helper prevents a
+    // duplicate link if the old preflight workflow completes simultaneously.
+    if (ctx.deliveryOrderId) {
+      const released = await issueDeferredOrderPayment(ctx.deliveryOrderId, { requireCartReady: false });
+      if (released?.status === "awaiting_payment") return;
+    }
+    await reply(phone, copy.supplierValidationPending());
+    return;
+  }
+  if (ctx.step === "payment_issuing") {
+    await reply(phone, "O carrinho já foi confirmado e estou gerando seu pagamento agora. Só um instante. 💳");
+    return;
+  }
   if (intent.kind === "clear_cart") {
     await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
     await reply(phone, copy.cartCleared());
     return;
   }
   if (intent.kind === "change_address") {
+    // A new CEP must never inherit the previous door number/address.
+    ctx.deliveryAddress = undefined;
+    ctx.deliveryAddressVerified = false;
     ctx.step = "need_cep";
     await writeCtx(convo.id, ctx);
     await reply(phone, copy.askNewCep());
@@ -792,13 +853,52 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
 
+  // A CEP identifies the neighbourhood, not the door. Do not send an address-like
+  // message to a courier until the customer confirms street + number.
+  if (ctx.step === "need_address") {
+    await handleDeliveryAddress(phone, user.id, convo.id, ctx, user.cep, text);
+    return;
+  }
+
   // ---- step need_cep: um número curto ("1", "08") é tentativa de CEP, não escolha ----
   if (ctx.step === "need_cep" && intent.kind === "number") {
     await reply(phone, copy.cepNotFound(text.trim()));
     return;
   }
 
-  // ---- onboarding: no saved address yet — stash the request, ask the CEP first ----
+  // ---- onboarding: save the complete delivery address once, before the first basket ----
+  if (!user.defaultAddress) {
+    if (looksLikeMedicine(text)) {
+      await reply(phone, copy.noMedicine());
+      return;
+    }
+    if (intent.kind === "reject") {
+      await writeCtx(convo.id, addressOnlyCtx(ctx, null));
+      await reply(phone, copy.thanks());
+      return;
+    }
+    const asking = intent.kind === "free_text" && isQuestion(text);
+    if (asking) {
+      await reply(phone, copy.serviceAnswer("generic", coverageLabel()));
+      ctx.flow = "delivery";
+      ctx.step = "need_address";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.askFullDeliveryAddress());
+      return;
+    }
+    const lines = intent.kind === "free_text" ? parseBasketLines(text) : [];
+    if (lines.length) {
+      ctx.pendingRequest = ctx.pendingRequest ? `${ctx.pendingRequest}, ${text}` : text;
+    }
+    ctx.flow = "delivery";
+    ctx.step = "need_address";
+    await writeCtx(convo.id, ctx);
+    const noted = ctx.pendingRequest ? parseBasketLines(ctx.pendingRequest).map((line) => `${line.qty}x ${line.phrase}`) : [];
+    await reply(phone, copy.welcomeAskFullDeliveryAddress(noted));
+    return;
+  }
+
+  // ---- onboarding: address saved, but no CEP yet — stash the request, ask the CEP ----
   // O pedido NÃO é resolvido agora (senão o 1º pedido do cliente seria auto-escolhido
   // sem opções nem preço): guarda o texto cru e roda a busca normal depois do CEP.
   if (!savedCep) {
@@ -998,8 +1098,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // "só isso"/"mais nada" ANTES da cotação = fechar a LISTA: mostra o total primeiro
     // (o cliente ainda nem viu o frete); a partir do resumo, "pagar" segue normal.
     if (intent.kind === "done" && ctx.step !== "quoted") {
-      await quoteBasket(ctx, payStore);
-      await respondAfterQuote(phone, convo.id, ctx, payStore);
+      await continueAfterBasket(phone, convo.id, ctx, user.cep);
       return;
     }
     if (directMethod) {
@@ -1023,7 +1122,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await reply(phone, copy.noPreviousOrder());
       return;
     }
-    const next: DeliveryContext = { flow: "delivery", basket: items, notFound: [], cep: user.cep ?? ctx.cep, deliveryAddress: ctx.deliveryAddress };
+    const next: DeliveryContext = {
+      flow: "delivery",
+      basket: items,
+      notFound: [],
+      cep: user.cep ?? ctx.cep,
+      deliveryAddress: ctx.deliveryAddress,
+      deliveryAddressVerified: ctx.deliveryAddressVerified
+    };
     await continueAfterBasket(phone, convo.id, next, user.cep);
     return;
   }
@@ -1233,6 +1339,9 @@ async function handleNewCep(
   // depois de salvar o endereço, nunca descartados.
   restItems?: string
 ) {
+  const normalizedCep = cep.replace(/\D/g, "");
+  const previousCep = ctx.cep?.replace(/\D/g, "");
+  const cepChanged = Boolean(previousCep && previousCep !== normalizedCep);
   const { address, city, uf, invalid } = await expandCep(cep);
   if (invalid) {
     ctx.step = "need_cep";
@@ -1267,15 +1376,27 @@ async function handleNewCep(
   ctx.cep = cep;
   ctx.city = city ?? ctx.city;
   ctx.uf = uf ?? ctx.uf;
-  ctx.deliveryAddress = address ?? ctx.deliveryAddress;
+  // ViaCEP's street fragment is useful context but cannot be sent as the final
+  // courier destination. A confirmed address remains valid only for the same CEP.
+  if (cepChanged || !ctx.deliveryAddressVerified) {
+    ctx.deliveryAddress = address;
+    ctx.deliveryAddressVerified = false;
+  }
   ctx.flow = "delivery";
   await prisma.user.update({ where: { id: userId }, data: { cep } });
-  const shownAddress = ctx.deliveryAddress ?? cep;
-  const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress);
-
   // Itens enviados na MESMA mensagem do CEP — ou guardados no onboarding — entram no
   // fluxo NORMAL de busca (com opções e preço), nunca auto-escolhidos.
   const queued = [restItems, ctx.pendingRequest].filter(Boolean).join(", ").trim();
+  ctx.pendingRequest = queued || undefined;
+  if (!ctx.deliveryAddressVerified) {
+    ctx.step = "need_address";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.askFullDeliveryAddress());
+    return;
+  }
+
+  const shownAddress = ctx.deliveryAddress ?? cep;
+  const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress);
   ctx.pendingRequest = undefined;
   if (queued) {
     await reply(phone, savedMsg);
@@ -1294,14 +1415,64 @@ async function handleNewCep(
   }
 
   if (ctx.basket?.length) {
-    const store = orderStore(ctx);
-    await quoteBasket(ctx, store);
-    await respondAfterQuote(phone, convoId, ctx, store, savedMsg);
+    await continueAfterBasket(phone, convoId, ctx, cep, savedMsg);
     return;
   }
   ctx.step = "collecting";
   await writeCtx(convoId, ctx);
   await reply(phone, hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedAskItems(shownAddress));
+}
+
+async function handleDeliveryAddress(
+  phone: string,
+  userId: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  userCep: string | null | undefined,
+  rawAddress: string
+) {
+  const address = rawAddress.trim();
+  // Avoid saving a product message such as "Coca 2L" as the delivery address while
+  // the customer is in the one-time address setup. A street marker plus number is
+  // the smallest reliable signal we can require without attempting fragile parsing.
+  const hasStreet = /\b(?:rua|r\.?|avenida|av\.?|alameda|travessa|estrada|rodovia|pra[çc]a|largo)\b/i.test(address);
+  const hasNumber = /(?:\d|\bs\/?n\b)/i.test(address);
+  if (address.length < 12 || !hasStreet || !hasNumber) {
+    ctx.step = "need_address";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.askFullDeliveryAddress());
+    return;
+  }
+
+  ctx.deliveryAddress = address;
+  ctx.deliveryAddressVerified = true;
+  await prisma.user.update({ where: { id: userId }, data: { defaultAddress: address } });
+
+  if (!ctx.cep && userCep) ctx.cep = userCep;
+  if (!ctx.cep) {
+    ctx.step = "need_cep";
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.addressSavedAskCep());
+    return;
+  }
+
+  ctx.step = "collecting";
+
+  const queued = ctx.pendingRequest;
+  ctx.pendingRequest = undefined;
+  if (queued) {
+    await reply(phone, copy.addressUpdated(address));
+    await handleSearch(phone, convoId, null, ctx, queued);
+    return;
+  }
+
+  if (ctx.basket?.length) {
+    await continueAfterBasket(phone, convoId, ctx, userCep, copy.addressUpdated(address));
+    return;
+  }
+
+  await writeCtx(convoId, ctx);
+  await reply(phone, copy.addressSavedAskItems(address));
 }
 
 async function handleChoosing(
@@ -1567,7 +1738,8 @@ async function advancePending(
     notFound: ctx.notFound ?? [],
     storeKey: ctx.storeKey,
     cep: ctx.cep ?? userCep ?? undefined,
-    deliveryAddress: ctx.deliveryAddress
+    deliveryAddress: ctx.deliveryAddress,
+    deliveryAddressVerified: ctx.deliveryAddressVerified
   };
   await continueAfterBasket(phone, convoId, next, userCep, prefix);
 }
@@ -1621,8 +1793,7 @@ async function handleRemove(
     return;
   }
   const store = orderStore(ctx);
-  await quoteBasket(ctx, store);
-  await respondAfterQuote(phone, convoId, ctx, store, copy.removedItems(names, false));
+  await continueAfterBasket(phone, convoId, ctx, userCep, copy.removedItems(names, false));
 }
 
 async function handleSwap(
@@ -1666,14 +1837,12 @@ async function handleSwap(
       await reply(phone, prefix);
       return;
     }
-    await quoteBasket(ctx, store);
-    await respondAfterQuote(phone, convoId, ctx, store, prefix);
+    await continueAfterBasket(phone, convoId, ctx, userCep, prefix);
     return;
   }
   if (options.length === 1 && !(ctx.pending?.length)) {
     ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(options[0], qty, store)]);
-    await quoteBasket(ctx, store);
-    await respondAfterQuote(phone, convoId, ctx, store, copy.swappedFor(removedNames, options[0].name));
+    await continueAfterBasket(phone, convoId, ctx, userCep, copy.swappedFor(removedNames, options[0].name));
     return;
   }
   ctx.pending = [
@@ -1746,7 +1915,8 @@ async function handleSearch(
     notFound,
     storeKey: pickedStoreKey(ctx, store),
     cep: ctx.cep ?? userCep ?? undefined,
-    deliveryAddress: ctx.deliveryAddress
+    deliveryAddress: ctx.deliveryAddress,
+    deliveryAddressVerified: ctx.deliveryAddressVerified
   };
   await continueAfterBasket(phone, convoId, next, userCep, medicineNote);
 }
@@ -1788,6 +1958,15 @@ async function sendCartActionButtons(phone: string) {
   if (!interactive) await reply(phone, 'Quer ajustar? Manda mais itens ou responde *cancelar*.');
 }
 
+// The card is entered exactly once in Pagar.me's tokenization form. Once stored,
+// every later card payment comes back to WhatsApp's native order_details UI.
+async function sendFirstCardEnrollment(order: { id: string; userId: string; phone: string; total: number }) {
+  if (!isCardEnrollmentAvailable()) return false;
+  const enrollment = await createCardEnrollmentSession({ orderId: order.id, userId: order.userId });
+  await reply(order.phone, copy.cardEnrollmentInstructions(order.total, enrollment.url, process.env.PAGARME_MOCK === "true"));
+  return true;
+}
+
 // Which payment method (if any) an intent unambiguously names.
 function methodFromIntent(intent: Intent): "pix" | "card" | undefined {
   if (intent.kind === "choose_payment") return intent.method;
@@ -1797,8 +1976,28 @@ function methodFromIntent(intent: Intent): "pix" | "card" | undefined {
 }
 
 // Re-send the open charge (card link or Pix code) for an awaiting_payment order.
-async function resendCharge(phone: string, order: { notes?: string | null; pixCopiaECola?: string | null }) {
+async function resendCharge(phone: string, order: {
+  id: string;
+  userId: string;
+  phone: string;
+  total: number;
+  deliveryFee: number;
+  items: unknown;
+  status: string;
+  notes?: string | null;
+  pixCopiaECola?: string | null;
+}) {
   if (isCardCharge(order)) {
+    if (await getConfirmedPaymentAttempt(order.id)) {
+      await reply(phone, copy.cardPaymentProcessing());
+      return;
+    }
+    const credential = await getOneClickCredential(order.userId);
+    if (credential) {
+      await createCardAttempt(order, credential);
+      return;
+    }
+    if (await sendFirstCardEnrollment(order)) return;
     await reply(phone, copy.resendCard(order.pixCopiaECola ?? ""));
     return;
   }
@@ -1856,7 +2055,15 @@ async function continueAfterBasket(
     // runs on every quote, so a saved address must not cost a network round-trip.
     if (!ctx.deliveryAddress) {
       ctx.deliveryAddress = (await expandCep(userCep)).address;
+      ctx.deliveryAddressVerified = false;
     }
+  }
+  if (!ctx.deliveryAddress || !ctx.deliveryAddressVerified) {
+    ctx.step = "need_address";
+    await writeCtx(convoId, ctx);
+    if (prefix) await reply(phone, prefix);
+    await reply(phone, copy.askFullDeliveryAddress());
+    return;
   }
   await quoteBasket(ctx, store);
   await respondAfterQuote(phone, convoId, ctx, store, prefix);
@@ -1897,6 +2104,8 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
       serviceFee: ctx.serviceFee ?? 0,
       total,
       notes: paymentNote(method, isCard ? copy.brl(cardFee) : undefined),
+      // Checkout must be immediate. Retailer validation begins only after payment,
+      // so a slow cart/browser session never delays the customer's payment link.
       status: "awaiting_payment"
     }
   });
@@ -1910,6 +2119,18 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
   });
 
   if (isCard) {
+    const credential = await getOneClickCredential(userId);
+    if (credential) {
+      try {
+        await createCardAttempt(order, credential);
+        return;
+      } catch (error) {
+        // The order itself is already durable. If Meta refuses the native payload,
+        // retain the well-tested Checkout Pro route instead of leaving it unpaid.
+        console.warn("[whatsapp-pay:create:fallback-checkout]", error instanceof Error ? error.message : error);
+      }
+    }
+    if (await sendFirstCardEnrollment(order)) return;
     // Card → a Checkout Pro link (MP-hosted card page). Reuse the nullable columns:
     // pixId = preference id, pixCopiaECola = the link. Webhook reconciles by order id.
     const link = await checkoutAdapter.createLink({
@@ -1943,12 +2164,127 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
   await reply(phone, charge.copiaECola);
 }
 
+// Called by the durable preflight workflow only after every retailer fulfillment has
+// produced the same validated cart. This makes the customer payment the LAST step
+// before a confirmed, purchasable basket — not a bet on stale catalog data.
+export async function issueDeferredOrderPayment(orderId: string, options: { requireCartReady?: boolean } = {}) {
+  const requireCartReady = options.requireCartReady ?? true;
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
+  if (!order || order.status !== "awaiting_supplier_validation") return order;
+  if (requireCartReady && (!order.purchaseJobs.length || order.purchaseJobs.some((job) => job.status !== "cart_ready"))) return order;
+
+  // The customer quote uses the catalog's raw store cost in itemsSubtotal (before
+  // Lia's markup/freight). Never send a charge when the live retailer cart drifted
+  // beyond the configured tolerance — that would turn a stock check into a margin bet.
+  if (requireCartReady) {
+    const liveStoreTotal = order.purchaseJobs.reduce((sum, job) => sum + (job.actualTotal ?? 0), 0);
+    const expectedStoreTotal = order.itemsSubtotal;
+    const policy = getPurchasePolicy();
+    const delta = Math.abs(liveStoreTotal - expectedStoreTotal);
+    if (
+      expectedStoreTotal > 0 &&
+      (delta > policy.maxPriceDelta || delta / expectedStoreTotal > policy.maxPriceDeltaPercent)
+    ) {
+      await prisma.purchaseJob.updateMany({
+        where: { deliveryOrderId: order.id, status: "cart_ready" },
+        data: {
+          status: "needs_human",
+          lastErrorCode: "PRICE_CHANGED",
+          lastErrorMessage: `Total Carrefour ${copy.brl(liveStoreTotal)} divergiu da cotação ${copy.brl(expectedStoreTotal)}.`
+        }
+      });
+      return order;
+    }
+  }
+
+  // Two preflight workflows may finish together. Only the caller that atomically
+  // claims this short issuing state may create the payment request.
+  const claimed = await prisma.deliveryOrder.updateMany({
+    where: { id: orderId, status: "awaiting_supplier_validation" },
+    data: { status: "payment_issuing" }
+  });
+  if (claimed.count !== 1) return prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+
+  const card = (order.notes ?? "").includes("Pagamento: cartão");
+  try {
+    if (card) {
+      const credential = await getOneClickCredential(order.userId);
+      if (credential) {
+        const awaitingPayment = await prisma.deliveryOrder.update({
+          where: { id: order.id },
+          data: { status: "awaiting_payment", pixId: null, pixCopiaECola: null }
+        });
+        await createCardAttempt(awaitingPayment, credential);
+      } else {
+        const awaitingPayment = await prisma.deliveryOrder.update({
+          where: { id: order.id },
+          data: { status: "awaiting_payment", pixId: null, pixCopiaECola: null }
+        });
+        if (await sendFirstCardEnrollment(awaitingPayment)) {
+          // The enrollment page creates the first charge after tokenizing the card.
+        } else {
+          const link = await checkoutAdapter.createLink({
+            orderId: order.id,
+            amount: order.total,
+            description: `Lia · pedido ${order.id.slice(-6)}`,
+            method: "card"
+          });
+          await prisma.deliveryOrder.update({
+            where: { id: order.id },
+            data: { status: "awaiting_payment", pixId: link.preferenceId, pixCopiaECola: link.initPoint }
+          });
+          await reply(order.phone, copy.cardInstructions(order.total, link.initPoint, link.mock));
+        }
+      }
+    } else {
+      const charge = await pixAdapter.createPix({
+        orderId: order.id,
+        amount: order.total,
+        description: `Lia · pedido ${order.id.slice(-6)}`
+      });
+      await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { status: "awaiting_payment", pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
+      });
+      await reply(order.phone, copy.pixInstructions(order.total, charge.mock));
+      await reply(order.phone, charge.copiaECola);
+    }
+    if (order.conversationId) {
+      const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+      if (convo) {
+        const ctx = readCtx(convo.context);
+        if (ctx.deliveryOrderId === order.id || !ctx.deliveryOrderId) {
+          await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
+        }
+      }
+    }
+    return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
+  } catch (error) {
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { status: "awaiting_supplier_validation", notes: [order.notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n") }
+    });
+    throw error;
+  }
+}
+
 // The customer changed their mind about how to pay while the charge is still open:
 // re-issue the charge with the other method (total re-derived from the order rows so
 // the fee pass-through stays honest) and keep reconciliation on the same order id.
 async function switchPaymentMethod(
   phone: string,
-  order: { id: string; itemsSubtotal: number; serviceFee: number; deliveryFee: number; notes?: string | null },
+  order: {
+    id: string;
+    userId: string;
+    phone: string;
+    total: number;
+    items: unknown;
+    status: string;
+    itemsSubtotal: number;
+    serviceFee: number;
+    deliveryFee: number;
+    notes?: string | null;
+  },
   method: "pix" | "card"
 ) {
   const base = Math.round((order.itemsSubtotal + order.serviceFee + order.deliveryFee) * 100) / 100;
@@ -1959,17 +2295,48 @@ async function switchPaymentMethod(
   // Replace ONLY the payment line — other notes (e.g. a cancel-request flag) survive.
   const notes = withPaymentNote(order.notes, paymentNote(method, isCard ? copy.brl(cardFee) : undefined));
 
-  const charge = isCard
-    ? await checkoutAdapter.createLink({ orderId: order.id, amount: total, description, method: "card" }).then((link) => ({
-        pixId: link.preferenceId,
-        payload: link.initPoint,
-        mock: link.mock
-      }))
-    : await pixAdapter.createPix({ orderId: order.id, amount: total, description }).then((pix) => ({
-        pixId: pix.pixId,
-        payload: pix.copiaECola,
-        mock: pix.mock
-      }));
+  if (isCard) {
+    if (await getConfirmedPaymentAttempt(order.id)) {
+      await reply(phone, copy.cardPaymentProcessing());
+      return;
+    }
+    await expireOpenPaymentAttempts(order.id);
+    const credential = await getOneClickCredential(order.userId);
+    if (credential) {
+      const updated = await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { total, notes, pixId: null, pixCopiaECola: null }
+      });
+      try {
+        await createCardAttempt(updated, credential);
+        return;
+      } catch (error) {
+        console.warn("[whatsapp-pay:switch:fallback-checkout]", error instanceof Error ? error.message : error);
+      }
+    }
+    const updated = await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { total, notes, pixId: null, pixCopiaECola: null }
+    });
+    if (await sendFirstCardEnrollment(updated)) {
+      await reply(phone, copy.paymentSwitched(method, total));
+      return;
+    }
+    const link = await checkoutAdapter.createLink({ orderId: order.id, amount: total, description, method: "card" });
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { total, notes, pixId: link.preferenceId, pixCopiaECola: link.initPoint }
+    });
+    await reply(phone, [copy.paymentSwitched(method, total), link.initPoint, link.mock ? `\n${copy.sandboxHint()}` : ""].filter(Boolean).join("\n"));
+    return;
+  }
+
+  await expireOpenPaymentAttempts(order.id);
+  const charge = await pixAdapter.createPix({ orderId: order.id, amount: total, description }).then((pix) => ({
+    pixId: pix.pixId,
+    payload: pix.copiaECola,
+    mock: pix.mock
+  }));
   await prisma.deliveryOrder.update({
     where: { id: order.id },
     data: { total, notes, pixId: charge.pixId, pixCopiaECola: charge.payload }
@@ -2007,7 +2374,21 @@ export async function markDeliveryOrderPaid(orderId: string) {
       console.warn("[delivery:paid:ctx-reset]", error instanceof Error ? error.message : error);
     }
   }
-  await reply(order.phone, copy.paymentConfirmed());
+  // The checkout is intentionally issued before this point. A Browserbase cart is a
+  // single shared resource, so creating one for every unpaid customer would block the
+  // queue; prepare it only after Mercado Pago confirms the money-in.
+  const purchasePolicy = getPurchasePolicy();
+  if (purchasePolicy.enabled && order.storeKey === "carrefour") {
+    const [{ createPurchaseJobsForOrder }, { startPreflightPurchaseWorkflow }] = await Promise.all([
+      import("@/lib/purchasing/service"),
+      import("@/lib/purchasing/workflow-dispatch")
+    ]);
+    const jobs = await createPurchaseJobsForOrder(order.id);
+    await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
+    await reply(order.phone, copy.paymentConfirmedSupplierCheck());
+  } else {
+    await reply(order.phone, copy.paymentConfirmed());
+  }
   return order;
 }
 
@@ -2116,8 +2497,9 @@ export async function opsNotifyCustomer(orderId: string, text: string) {
 
 export async function getOperatorQueue() {
   return prisma.deliveryOrder.findMany({
-    where: { status: { in: ["paid", "operator_buying", "ready_for_pickup", "dispatched"] } },
-    orderBy: { createdAt: "asc" }
+    where: { status: { in: ["awaiting_supplier_validation", "payment_issuing", "paid", "operator_buying", "ready_for_pickup", "dispatched"] } },
+    orderBy: { createdAt: "asc" },
+    include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } } }
   });
 }
 

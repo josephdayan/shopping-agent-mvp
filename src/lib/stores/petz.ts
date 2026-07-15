@@ -1,6 +1,7 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { PETZ_CATALOG } from "./petz-catalog";
+import { browserbaseLiveSearch } from "./browserbase-live-search";
 
 // Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same shape as Carrefour
 // but seed-only (no live scrape). Catalog is REAL data (petz-catalog.ts). The breadth of
@@ -67,6 +68,70 @@ function seedSearch(query: string, limit: number): CatalogItem[] {
   return rankCatalog(query, SEED_CATALOG, limit);
 }
 
+type PetzSearchCard = { href: string; text: string; imageUrl?: string; imageAlt?: string };
+
+function parsePetzPrice(text: string): number | null {
+  const match = text.replace(/\u00a0/g, " ").match(/R\$\s*([\d.]+,\d{2})/i);
+  if (!match) return null;
+  const value = Number(match[1].replace(/\./g, "").replace(",", "."));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+export function parsePetzSearchCards(cards: PetzSearchCard[]): CatalogItem[] {
+  const seen = new Set<string>();
+  const items: CatalogItem[] = [];
+  for (const card of cards) {
+    let url: URL;
+    try {
+      url = new URL(card.href);
+    } catch {
+      continue;
+    }
+    if (!url.hostname.endsWith("petz.com.br") || !url.pathname.startsWith("/produto/") || seen.has(url.toString())) continue;
+    const id = url.pathname.match(/-(\d+)(?:\/|$)/)?.[1];
+    const price = parsePetzPrice(card.text);
+    const fallbackName = card.text.replace(/\u00a0/g, " ").split(/R\$\s*/i)[0].replace(/\s+/g, " ").trim();
+    const name = card.imageAlt?.trim() || fallbackName;
+    if (!id || !price || !name) continue;
+    seen.add(url.toString());
+    items.push({
+      sku: `petz-live-${id}`,
+      name,
+      unitPrice: price,
+      unit: "un",
+      category: "petz",
+      imageUrl: card.imageUrl,
+      productUrl: url.toString()
+    });
+  }
+  return items;
+}
+
+async function liveSearch(query: string, limit: number): Promise<CatalogItem[]> {
+  return browserbaseLiveSearch({
+    cacheNamespace: "petz-browserbase-v1",
+    query,
+    limit,
+    domain: "petz.com.br",
+    contextId: process.env.PETZ_BROWSER_CONTEXT_ID,
+    searchUrl: (value) => `https://www.petz.com.br/busca?q=${encodeURIComponent(value)}`,
+    extract: async (page) => {
+      const cards = await page.locator('a[href*="/produto/"]').evaluateAll((anchors) =>
+        anchors.map((anchor) => {
+          const image = anchor.querySelector("img");
+          return {
+            href: (anchor as HTMLAnchorElement).href,
+            text: (anchor.textContent ?? "").replace(/\s+/g, " ").trim(),
+            imageUrl: image?.getAttribute("src") ?? undefined,
+            imageAlt: image?.getAttribute("alt") ?? undefined
+          };
+        })
+      );
+      return rankCatalog(query, parsePetzSearchCards(cards), 40).filter((item) => scoreCatalogMatch(query, item) > 0);
+    }
+  });
+}
+
 export const petzStore: StoreConnector = {
   key: "petz",
   label: "Petz",
@@ -74,7 +139,14 @@ export const petzStore: StoreConnector = {
   minOrder: Number(process.env.LIA_PETZ_MIN_ORDER ?? 0),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    return seedSearch(query, limit);
+    if (process.env.LIA_RETAILER_TEST_SEED === "true") return seedSearch(query, limit);
+    try {
+      const live = await liveSearch(query, limit);
+      return live;
+    } catch (error) {
+      console.warn("[petz:browserbase-search]", error instanceof Error ? error.message : error);
+      return [];
+    }
   },
 
   listCatalog(): CatalogItem[] {

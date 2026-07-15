@@ -3,6 +3,7 @@ import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
 import { requireMetaSignature, requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { handleDeliveryMessage } from "@/lib/delivery-service";
+import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 
@@ -76,6 +77,20 @@ export async function POST(request: Request) {
   if (inbound.provider === "meta" && rawBody !== null) {
     const unauthorized = requireMetaSignature(request, rawBody);
     if (unauthorized) return unauthorized;
+  }
+
+  // One-Click confirmation has no user text. It must be handled before the generic
+  // receipt/message gate below or the current webhook would either ignore it or 400.
+  if (inbound.provider === "meta" && inbound.eventType === "payment_confirmation" && inbound.paymentConfirmation) {
+    try {
+      const runId = await startWhatsAppCardChargeWorkflow(inbound.paymentConfirmation);
+      return NextResponse.json({ ok: true, provider: "meta", event: "payment_confirmation", runId });
+    } catch (error) {
+      // A non-2xx response asks Meta to retry. We have not called Pagar.me yet; the
+      // workflow's claim and provider idempotency then make a replay harmless.
+      console.error("[whatsapp:meta:payment-workflow-start]", error);
+      return NextResponse.json({ ok: false, error: "payment workflow unavailable" }, { status: 503 });
+    }
   }
 
   // Meta sends delivery/read receipts to the same webhook. They are not customer

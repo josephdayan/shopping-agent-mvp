@@ -1,6 +1,7 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { BOTICARIO_CATALOG } from "./boticario-catalog";
+import { browserbaseLiveSearch } from "./browserbase-live-search";
 
 // O Boticário — beauty vertical (perfumaria, maquiagem, corpo & banho, cabelos). Same
 // connector shape as Petz (seed-only, no live scrape). Catalog is REAL data
@@ -63,6 +64,82 @@ function seedSearch(query: string, limit: number): CatalogItem[] {
   return rankCatalog(query, SEED_CATALOG, limit);
 }
 
+type BoticarioSearchCard = { href: string; text: string; imageUrl?: string; sku?: string };
+
+function parseBoticarioPrice(text: string): number | null {
+  const sale = [...text.matchAll(/\bpor\s+R\$\s*([\d.]+,\d{2})/gi)].at(-1)?.[1];
+  const fallback = text.match(/R\$\s*([\d.]+,\d{2})/i)?.[1];
+  const raw = sale ?? fallback;
+  if (!raw) return null;
+  const value = Number(raw.replace(/\./g, "").replace(",", "."));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+export function parseBoticarioSearchCards(cards: BoticarioSearchCard[]): CatalogItem[] {
+  const seen = new Set<string>();
+  const items: CatalogItem[] = [];
+  for (const card of cards) {
+    let url: URL;
+    try {
+      url = new URL(card.href);
+    } catch {
+      continue;
+    }
+    if (!url.hostname.endsWith("boticario.com.br") || /\/(busca|sacola|minha-conta|categoria)(?:\/|$)/.test(url.pathname) || seen.has(url.toString())) continue;
+    const price = parseBoticarioPrice(card.text);
+    const beforePrice = card.text.split(/(?:,\s*)?(?:BOTI PROMO|🚨|de R\$|por R\$)/i)[0];
+    const name = beforePrice.replace(/\s*,\s*/g, " ").replace(/\s+/g, " ").trim();
+    const sku = card.sku?.trim() || `url-${Buffer.from(url.pathname).toString("base64url").slice(0, 24)}`;
+    if (!price || !name) continue;
+    seen.add(url.toString());
+    items.push({
+      sku,
+      name,
+      unitPrice: price,
+      unit: "un",
+      category: "boticario",
+      imageUrl: card.imageUrl,
+      productUrl: url.toString()
+    });
+  }
+  return items;
+}
+
+async function liveSearch(query: string, limit: number): Promise<CatalogItem[]> {
+  return browserbaseLiveSearch({
+    cacheNamespace: "boticario-browserbase-v1",
+    query,
+    limit,
+    domain: "boticario.com.br",
+    contextId: process.env.BOTICARIO_BROWSER_CONTEXT_ID,
+    searchUrl: (value) => `https://www.boticario.com.br/busca?q=${encodeURIComponent(value)}`,
+    extract: async (page) => {
+      const cards = await page.locator("a[href]").evaluateAll((anchors) =>
+        anchors
+          .filter((anchor) => /R\$\s*[\d.]+,\d{2}/i.test(anchor.textContent ?? ""))
+          .map((anchor) => {
+            let root: Element | null = anchor;
+            let bag: HTMLAnchorElement | null = null;
+            let image: HTMLImageElement | null = anchor.querySelector("img");
+            for (let depth = 0; depth < 7 && root; depth += 1, root = root.parentElement) {
+              bag = root.querySelector('a[href*="/sacola/?skus="]');
+              image = image ?? root.querySelector("img");
+              if (bag) break;
+            }
+            const bagUrl = bag ? new URL(bag.href) : null;
+            return {
+              href: (anchor as HTMLAnchorElement).href,
+              text: (anchor.textContent ?? "").replace(/\s+/g, " ").trim(),
+              imageUrl: image?.getAttribute("src") ?? undefined,
+              sku: bagUrl?.searchParams.get("skus") ?? undefined
+            };
+          })
+      );
+      return rankCatalog(query, parseBoticarioSearchCards(cards), 40).filter((item) => scoreCatalogMatch(query, item) > 0);
+    }
+  });
+}
+
 export const boticarioStore: StoreConnector = {
   key: "boticario",
   label: "O Boticário",
@@ -70,7 +147,14 @@ export const boticarioStore: StoreConnector = {
   minOrder: Number(process.env.LIA_BOTICARIO_MIN_ORDER ?? 0),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    return seedSearch(query, limit);
+    if (process.env.LIA_RETAILER_TEST_SEED === "true") return seedSearch(query, limit);
+    try {
+      const live = await liveSearch(query, limit);
+      return live;
+    } catch (error) {
+      console.warn("[boticario:browserbase-search]", error instanceof Error ? error.message : error);
+      return [];
+    }
   },
 
   listCatalog(): CatalogItem[] {

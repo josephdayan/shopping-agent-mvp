@@ -1,7 +1,12 @@
 # Lia
 
-> **⚠️ Estado atual (2026-07-07):** o produto vigente é a **concierge de entregas same-day no
-> WhatsApp** (Carrefour/Petz clique-e-retire + motoboy + Pix/cartão), descrito em
+> Contexto obrigatório para agentes: [AGENTS.md](AGENTS.md). Checklist de progresso:
+> [PENDENCIAS.md](PENDENCIAS.md).
+
+> **⚠️ Estado atual (2026-07-14):** o produto vigente é a **concierge de compras no
+> WhatsApp** com cotação no checkout real e entrega feita pelo varejista. A modalidade
+> same-day só é oferecida pela própria loja ou por parceiro que autorize courier;
+> `clique-e-retire + motoboy aleatório` foi descartado como fluxo escalável. O estado está em
 > [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
 > (intenções em `src/lib/lia-intents.ts`, copy em `src/lib/lia-copy.ts`), painel do operador
 > em `/ops`, e os testes rodam com `npm test` (só unitários: `npm run test:unit`).
@@ -9,6 +14,12 @@
 > [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 > A situação de Meta, domínio, canais, pagamentos e piloto está em
 > [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
+> A automação segura de carrinho/compra Carrefour e sua ativação por fases está em
+> [docs/automacao-compra-carrefour.md](docs/automacao-compra-carrefour.md).
+> As conclusões operacionais de hoje estão em
+> [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md).
+> O caminho de cartão One-Click (Meta direta + Pagar.me), seu estado e a ativação segura
+> estão em [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
 > O fluxo abaixo (busca no Mercado Livre com 3 opções) é o caminho **legado/dormente**.
 
 Lia funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
@@ -188,6 +199,11 @@ está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 - `WHATSAPP_APP_SECRET`: App Secret da Meta. Quando preenchido, a Lia valida o header `X-Hub-Signature-256` de cada webhook antes de processar a mensagem.
 - `WHATSAPP_ACCESS_TOKEN`: token da WhatsApp Cloud API.
 - `WHATSAPP_PHONE_NUMBER_ID`: ID do numero remetente na WhatsApp Cloud API.
+- `WHATSAPP_GRAPH_API_VERSION`: versão ativa da Graph API usada pelo canal Meta direto.
+- `LIA_ENABLE_WA_PAYMENTS`: habilita o fluxo One-Click da Payments API BR (padrao `false`). Exige WABA Meta habilitada e `WHATSAPP_PROVIDER=meta`.
+- `PAGARME_SECRET_KEY` e `PAGARME_PUBLIC_KEY`: chaves V5 do Pagar.me. A chave pública tokeniza apenas a primeira compra; a secreta nunca chega ao navegador.
+- `PAGARME_WEBHOOK_TOKEN`: segredo aleatório na URL do webhook Pagar.me. A Lia sempre busca o pedido de novo no Pagar.me antes de marcar o pedido como pago.
+- `PAGARME_BASE_URL`: URL V5 do Pagar.me; use a URL de sandbox no ambiente de testes.
 - `TWILIO_ACCOUNT_SID`: Account SID da Twilio.
 - `TWILIO_AUTH_TOKEN`: Auth Token da Twilio usado para validar `X-Twilio-Signature`.
 - `TWILIO_WHATSAPP_FROM`: remetente WhatsApp no formato `whatsapp:+14155238886` no sandbox, ou seu numero aprovado depois.

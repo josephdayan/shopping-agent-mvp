@@ -1,7 +1,9 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { catalogWithImages, rankCatalog, normalizeText } from "./types";
+import { catalogWithImages, rankCatalog, normalizeText, scoreCatalogMatch } from "./types";
 import { prisma } from "@/lib/prisma";
 import { runApifyActor } from "@/lib/adapters/suppliers";
+import { Browserbase } from "@browserbasehq/sdk";
+import { chromium } from "playwright-core";
 import { CARREFOUR_CATALOG } from "./carrefour-catalog";
 import { CARREFOUR_FRESH_CATALOG } from "./carrefour-fresh-catalog";
 
@@ -54,6 +56,7 @@ const UNITS: StoreUnit[] = [
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
+const BROWSERBASE_CACHE_TTL_MS = Number(process.env.LIA_CARREFOUR_LIVE_CACHE_TTL_MS ?? 15 * 60 * 1000);
 // Hard cap so a slow Carrefour scrape never hangs the WhatsApp turn — past this we
 // fall back to the seed and the user always gets a reply.
 const CARREFOUR_MAX_WAIT_MS = Number(process.env.LIA_CARREFOUR_TIMEOUT_MS ?? 22000);
@@ -89,8 +92,116 @@ function mapCarrefourItem(raw: Record<string, unknown>): CatalogItem | null {
     unitPrice,
     unit: "un",
     category: "carrefour",
-    imageUrl: toStr(pick(raw, ["image", "Image", "imageUrl", "img", "thumbnail", "imagem"])) || undefined
+    imageUrl: toStr(pick(raw, ["image", "Image", "imageUrl", "img", "thumbnail", "imagem"])) || undefined,
+    productUrl: toStr(pick(raw, ["productUrl", "url", "link", "productLink"])) || undefined
   };
+}
+
+type CarrefourSearchCard = { href: string; text: string; imageUrl?: string };
+
+function parsePrice(text: string): number | null {
+  const match = text.match(/R\$\s*([\d.]+,\d{2})/i);
+  if (!match) return null;
+  const value = Number(match[1].replace(/\./g, "").replace(",", "."));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+// Pure parser: only product cards with an exact Carrefour page are sellable.
+export function parseCarrefourSearchCards(cards: CarrefourSearchCard[]): CatalogItem[] {
+  const seen = new Set<string>();
+  const items: CatalogItem[] = [];
+  for (const card of cards) {
+    let url: URL;
+    try {
+      url = new URL(card.href);
+    } catch {
+      continue;
+    }
+    if (!url.hostname.endsWith("carrefour.com.br") || !/\/produto\//.test(url.pathname) || seen.has(url.toString())) continue;
+    const unitPrice = parsePrice(card.text);
+    const priceIndex = card.text.search(/R\$\s*/i);
+    const name = (priceIndex >= 0 ? card.text.slice(0, priceIndex) : card.text).replace(/\s+/g, " ").trim();
+    const sku = url.pathname.match(/-(\d+)(?:\/|$)/)?.[1];
+    if (!name || !unitPrice || !sku) continue;
+    seen.add(url.toString());
+    items.push({
+      sku: `crf-live-${sku}`,
+      name,
+      unitPrice,
+      unit: "un",
+      category: "carrefour",
+      imageUrl: card.imageUrl,
+      productUrl: url.toString()
+    });
+  }
+  return items;
+}
+
+async function readBrowserbaseCache(query: string): Promise<CatalogItem[]> {
+  const queryKey = `carrefour-browserbase-v2|${normalizeText(query)}`;
+  try {
+    const row = await prisma.searchCache.findUnique({ where: { queryKey }, select: { items: true, updatedAt: true } });
+    if (!row || Date.now() - new Date(row.updatedAt).getTime() >= BROWSERBASE_CACHE_TTL_MS) return [];
+    const cached = Array.isArray(row.items) ? (row.items as unknown as CatalogItem[]) : [];
+    return cached.filter((item) => Boolean(item.productUrl && /^https:\/\//i.test(item.productUrl)));
+  } catch (error) {
+    console.warn("[carrefour:browserbase-cache:read]", error instanceof Error ? error.message : error);
+    return [];
+  }
+}
+
+async function writeBrowserbaseCache(query: string, items: CatalogItem[]): Promise<void> {
+  const queryKey = `carrefour-browserbase-v2|${normalizeText(query)}`;
+  try {
+    await prisma.searchCache.upsert({
+      where: { queryKey },
+      create: { queryKey, query, items: items as unknown as object },
+      update: { query, items: items as unknown as object }
+    });
+  } catch (error) {
+    console.warn("[carrefour:browserbase-cache:write]", error instanceof Error ? error.message : error);
+  }
+}
+
+async function searchCarrefourBrowserbase(query: string, limit: number): Promise<CatalogItem[]> {
+  if (!process.env.BROWSERBASE_API_KEY || !process.env.CARREFOUR_BROWSER_CONTEXT_ID) return [];
+  const cached = await readBrowserbaseCache(query);
+  if (cached.length) return cached.slice(0, limit);
+
+  const country = process.env.CARREFOUR_BROWSER_PROXY_COUNTRY?.trim().toUpperCase();
+  const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
+  const session = await bb.sessions.create({
+    browserSettings: {
+      context: { id: process.env.CARREFOUR_BROWSER_CONTEXT_ID, persist: true },
+      allowedDomains: ["carrefour.com.br"]
+    },
+    ...(country && /^[A-Z]{2}$/.test(country)
+      ? { proxies: [{ type: "browserbase" as const, geolocation: { country } }] }
+      : {})
+  });
+  const browser = await chromium.connectOverCDP(session.connectUrl);
+  try {
+    const context = browser.contexts()[0];
+    const page = context.pages()[0] ?? (await context.newPage());
+    const searchSlug = normalizeText(query).replace(/\s+/g, "-");
+    await page.goto(`https://mercado.carrefour.com.br/busca/${encodeURIComponent(searchSlug)}`, {
+      waitUntil: "domcontentloaded",
+      timeout: 45_000
+    });
+    await page.waitForTimeout(1_200);
+    const cards = await page.locator('a[href*="/produto/"]').evaluateAll((anchors) =>
+      anchors.map((anchor) => ({
+        href: (anchor as HTMLAnchorElement).href,
+        text: (anchor.textContent ?? "").replace(/\s+/g, " ").trim(),
+        imageUrl: anchor.querySelector("img")?.getAttribute("src") ?? undefined
+      }))
+    );
+    const items = rankCatalog(query, parseCarrefourSearchCards(cards), Math.max(limit, 12)).filter((item) => scoreCatalogMatch(query, item) > 0);
+    if (items.length) await writeBrowserbaseCache(query, items);
+    return items.slice(0, limit);
+  } finally {
+    await browser.close();
+  }
 }
 
 // Live Carrefour catalog via Apify (keyword search), cached per query in SearchCache.
@@ -180,19 +291,29 @@ export const carrefourStore: StoreConnector = {
   minOrder: Number(process.env.LIA_CARREFOUR_MIN_ORDER ?? 30),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    // Live Carrefour via Apify is OPT-IN (LIA_CARREFOUR_LIVE=true). The community
-    // actor gio21~carrefour-br-scraper currently returns "No items scraped" (its
-    // anti-bot bypass is broken), so by default we use the reliable, instant seed.
-    // Flip the flag back on once a working Carrefour data source is wired.
+    if (process.env.LIA_RETAILER_TEST_SEED === "true") return seedSearch(query, limit);
+    // The chat must only display items that the purchase worker can actually open.
+    // Browserbase reads the current Carrefour page and yields real product deep links.
+    try {
+      const live = await searchCarrefourBrowserbase(query, limit);
+      if (live.length) return live;
+    } catch (error) {
+      console.warn("[carrefour:browserbase-search]", error instanceof Error ? error.message : error);
+    }
+
+    // Apify remains a secondary live source when explicitly enabled.
     if (process.env.LIA_CARREFOUR_LIVE === "true" && process.env.APIFY_API_TOKEN) {
       try {
         const live = await searchCarrefourLive(query, limit);
-        if (live.length) return live;
+        const sellable = live.filter((item) => Boolean(item.productUrl));
+        if (sellable.length) return sellable;
       } catch (error) {
         console.warn("[carrefour:live:fallback-seed]", error instanceof Error ? error.message : error);
       }
     }
-    return seedSearch(query, limit);
+    // Never sell a seed-only item in a real conversation: it may be stale and has
+    // no exact product URL.
+    return [];
   },
 
   listCatalog(): CatalogItem[] {

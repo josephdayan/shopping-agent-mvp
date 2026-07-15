@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -20,6 +20,8 @@ model User {
   orders         Order[]
   deliveryOrders DeliveryOrder[]
   preferences    Preference[]
+  paymentCredentials PaymentCredential[]
+  cardEnrollmentSessions CardEnrollmentSession[]
 }
 
 // The new operational model: a basket of everyday items the customer requests in
@@ -28,7 +30,7 @@ model User {
 // The whole same-day operation — pay, operator buys, dispatch, deliver — runs off
 // this row and the operator dashboard.
 model DeliveryOrder {
-  id                  String    @id @default(cuid())
+  id                  String        @id @default(cuid())
   userId              String
   conversationId      String?
   phone               String
@@ -36,24 +38,24 @@ model DeliveryOrder {
   cep                 String?
   deliveryAddress     String?
   // Pluggable supply: storeKey resolves to a StoreConnector in the registry.
-  storeKey            String    @default("carrefour")
-  storeLabel          String    @default("Carrefour")
+  storeKey            String        @default("carrefour")
+  storeLabel          String        @default("Carrefour")
   storeUnit           String?
   storeAddress        String?
   storeOrderNumber    String?
   items               Json
   // One entry per pickup/store for baskets spanning multiple stores.
   fulfillments        Json?
-  itemsSubtotal       Float     @default(0)
+  itemsSubtotal       Float         @default(0)
   // Courier is also pluggable via the courier registry.
-  courierKey          String    @default("uber_direct")
+  courierKey          String        @default("uber_direct")
   courierQuoteId      String?
-  deliveryFee         Float     @default(0)
-  serviceFee          Float     @default(0)
-  total               Float     @default(0)
+  deliveryFee         Float         @default(0)
+  serviceFee          Float         @default(0)
+  total               Float         @default(0)
   // Lifecycle: awaiting_payment -> paid -> operator_buying -> ready_for_pickup
   //            -> dispatched -> delivered ; (canceled / refunded)
-  status              String    @default("awaiting_payment")
+  status              String        @default("awaiting_payment")
   pixId               String?
   pixCopiaECola       String?
   paidAt              DateTime?
@@ -61,12 +63,189 @@ model DeliveryOrder {
   courierDispatchedAt DateTime?
   deliveredAt         DateTime?
   notes               String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  user                User      @relation(fields: [userId], references: [id])
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  user                User          @relation(fields: [userId], references: [id])
+  purchaseJobs        PurchaseJob[]
+  paymentAttempts     PaymentAttempt[]
+  cardEnrollmentSession CardEnrollmentSession?
 
   @@index([status])
   @@index([phone])
+}
+
+// A purchase job is deliberately separate from DeliveryOrder.status. The order status
+// remains customer-facing (paid, dispatched, delivered), while this model records the
+// operational state of each store fulfillment and makes retries/auditing safe.
+model PurchaseJob {
+  id                String            @id @default(cuid())
+  deliveryOrderId   String
+  // A multi-store DeliveryOrder creates one job per fulfillment.
+  fulfillmentKey    String            @default("primary")
+  storeKey          String
+  storeLabel        String
+  storeUnitId       String?
+  storeUnitLabel    String?
+  status            String            @default("preflight_queued")
+  workflowRunId     String?
+  browserSessionId  String?
+  cartHash          String?
+  cartSnapshot      Json?
+  expectedTotal     Float?
+  actualTotal       Float?
+  storeOrderNumber  String?
+  approvalStatus    String            @default("not_requested")
+  approvalMaxTotal  Float?
+  approvalCartHash  String?
+  approvedBy        String?
+  approvedAt        DateTime?
+  approvalExpiresAt DateTime?
+  lastErrorCode     String?
+  lastErrorMessage  String?
+  nextAttemptAt     DateTime?
+  lockedAt          DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  deliveryOrder     DeliveryOrder     @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+  items             PurchaseItem[]
+  attempts          PurchaseAttempt[]
+
+  @@unique([deliveryOrderId, fulfillmentKey])
+  @@index([status, nextAttemptAt])
+  @@index([storeKey, status])
+}
+
+// Maps the product chosen by the customer to the immutable live SKU used by a retailer.
+// A low-confidence or ambiguous match must be sent to /ops, never purchased.
+model PurchaseItem {
+  id                 String      @id @default(cuid())
+  purchaseJobId      String
+  requestedSku       String
+  requestedName      String
+  requestedQty       Int
+  requestedUnitPrice Float?
+  productUrl         String?
+  retailerSku        String?
+  retailerProductId  String?
+  retailerSellerId   String?
+  ean                String?
+  resolvedName       String?
+  expectedUnitPrice  Float?
+  actualUnitPrice    Float?
+  matchConfidence    Float?
+  status             String      @default("pending")
+  raw                Json?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  purchaseJob        PurchaseJob @relation(fields: [purchaseJobId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseJobId])
+  @@index([status])
+}
+
+// Append-only attempt log. Never persist card data, cookies, full browser state or
+// customer PII here; logs are only the safe operation metadata necessary to reconcile.
+model PurchaseAttempt {
+  id               String      @id @default(cuid())
+  purchaseJobId    String
+  step             String
+  status           String      @default("started")
+  idempotencyKey   String?
+  browserSessionId String?
+  details          Json?
+  errorCode        String?
+  errorMessage     String?
+  createdAt        DateTime    @default(now())
+  completedAt      DateTime?
+  purchaseJob      PurchaseJob @relation(fields: [purchaseJobId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseJobId, createdAt])
+  @@index([status])
+  // The same durable workflow step must never submit a second retailer order.
+  // PostgreSQL permits multiple NULL values, so non-idempotent audit attempts stay valid.
+  @@unique([purchaseJobId, idempotencyKey])
+}
+
+// One authenticated retailer context represents one physical shopping cart. Jobs may
+// scale across orders, but must use that cart sequentially or their items can mix.
+// This is a short-lived, database-backed lease rather than an in-memory mutex so it
+// survives Vercel function restarts and works across workflow workers.
+model PurchaseWorkerLease {
+  accountKey String   @id
+  token      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+
+// A Pagar.me card-on-file. Meta receives this row's opaque id as credential_id;
+// the provider card id never leaves the backend.
+model PaymentCredential {
+  id                 String   @id @default(cuid())
+  userId             String
+  provider           String   @default("pagarme")
+  providerCustomerId String
+  providerCardId     String
+  last4              String
+  brand              String?
+  consentAt          DateTime?
+  consentVersion     String?
+  // active | disabled (customer removed it or the provider started declining it)
+  status             String   @default("active")
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+  paymentAttempts    PaymentAttempt[]
+
+  @@index([userId, status])
+  @@unique([provider, providerCardId])
+}
+
+// One row per one-click charge PRESENTED to the customer. Its id doubles as the
+// reference_id echoed back by Meta's payment webhook, so retries/double-taps resolve
+// to the same row and can never double-charge; the PSP call reuses it as the
+// idempotency key. A resent order_details is a NEW attempt (stale ones expire).
+model PaymentAttempt {
+  id                String    @id @default(cuid())
+  deliveryOrderId   String
+  credentialId      String
+  amountCents       Int
+  // pending -> confirmed (customer tapped pay) -> charged | failed ; expired
+  status            String    @default("pending")
+  expiresAt         DateTime
+  confirmedAt       DateTime?
+  providerPaymentId String?
+  providerOrderId   String?
+  providerChargeId  String?
+  workflowRunId     String?
+  error             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deliveryOrder     DeliveryOrder     @relation(fields: [deliveryOrderId], references: [id])
+  credential        PaymentCredential @relation(fields: [credentialId], references: [id])
+
+  @@index([deliveryOrderId])
+  @@index([credentialId])
+  @@index([providerOrderId])
+}
+
+// A short-lived, one-use authorization for the only page that ever collects a
+// new card. The opaque secret travels in the URL; only its SHA-256 hash is kept
+// in the database, so a database read alone cannot open the form.
+model CardEnrollmentSession {
+  id              String        @id @default(cuid())
+  userId          String
+  deliveryOrderId String        @unique
+  secretHash      String
+  expiresAt       DateTime
+  consumedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  user            User          @relation(fields: [userId], references: [id])
+  deliveryOrder   DeliveryOrder @relation(fields: [deliveryOrderId], references: [id])
+
+  @@index([userId, expiresAt])
 }
 
 model Conversation {
@@ -156,15 +335,15 @@ model Order {
 }
 
 model OpsTask {
-  id          String   @id @default(cuid())
-  orderId     String
-  type        String
-  status      String   @default("open")
-  title       String
-  notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  order       Order    @relation(fields: [orderId], references: [id])
+  id        String   @id @default(cuid())
+  orderId   String
+  type      String
+  status    String   @default("open")
+  title     String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
 }
 
 model Preference {

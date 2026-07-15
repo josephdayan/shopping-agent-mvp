@@ -54,6 +54,11 @@ export function welcomeAddressButton(): string {
   return "Oi! 💚 Sou a Lia. Eu busco suas compras e entrego hoje mesmo. Pra começar, vamos cadastrar e verificar seu endereço — você só faz isso uma vez.";
 }
 
+export function welcomeAskFullDeliveryAddress(notedItems?: string[]): string {
+  const note = notedItems?.length ? `Já anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\n` : "";
+  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Antes do primeiro pedido, me manda seu *endereço completo* (rua, número, bairro e cidade). Eu salvo uma vez e só confirmo no resumo dos próximos pedidos. 📍`;
+}
+
 export function quantityAsk(name: string): string {
   return `Quantas unidades de *${name}*? Responde *1*, *2*, *3* ou digita outra quantidade.`;
 }
@@ -82,6 +87,14 @@ export function addressSavedPrefix(address: string): string {
 
 export function addressUpdated(address: string): string {
   return `📍 Prontinho, endereço atualizado: ${address}.`;
+}
+
+export function askFullDeliveryAddress(): string {
+  return "Pra calcular o frete certinho, me manda seu *endereço completo*: rua, número, bairro e cidade. 📍";
+}
+
+export function addressSavedAskCep(): string {
+  return "📍 Endereço salvo. Agora me manda seu *CEP* (ex.: 01310-100) para eu calcular o frete certinho. Depois não vou pedir o endereço de novo — só confirmo no resumo. 🙂";
 }
 
 export function askNewCep(): string {
@@ -267,6 +280,7 @@ export type SummaryInput = {
   frete: number;
   etaMinutes: number;
   total: number;
+  deliveryAddress?: string;
   notFound?: string[];
   pickupCount?: number;
 };
@@ -287,9 +301,12 @@ export function summary(input: SummaryInput): string {
   if ((input.pickupCount ?? 1) > 1) {
     out.push("", `_Este pedido usa ${input.pickupCount} lojas. O frete acima já soma as ${input.pickupCount} retiradas._`);
   }
+  if (input.deliveryAddress) {
+    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`, '_Confere este endereço? Para mudar, diga "trocar endereço"._');
+  }
   out.push(
     "",
-    "Escolha abaixo como prefere pagar. 💚",
+    "Se estiver tudo certo, escolha abaixo como prefere pagar. 💚",
     "_Quer mudar algo antes? \"tira o arroz\", \"troca X por Y\" ou simplesmente manda mais itens._"
   );
   return out.join("\n");
@@ -350,8 +367,51 @@ export function cardInstructions(total: number, link: string, mock: boolean): st
   ].join("\n");
 }
 
+// First card only: the fields are tokenized by Pagar.me in the customer's browser.
+// Reorders never use this link; they use WhatsApp's native payment confirmation.
+export function cardEnrollmentInstructions(total: number, link: string, mock: boolean): string {
+  return [
+    `Fechado! Total *${brl(total)}* no cartão _(taxa da maquininha já incluída)_.`,
+    "",
+    "Na primeira vez preciso cadastrar seu cartão num link seguro. Depois as próximas compras você confirma aqui mesmo no WhatsApp. 👇",
+    link,
+    "",
+    mock ? sandboxHint() : "O cartão é tokenizado pelo Pagar.me; a Lia não recebe número nem CVV."
+  ].join("\n");
+}
+
+export function cardPaymentProcessing(): string {
+  return "Seu pagamento por cartão já está sendo processado. Assim que confirmar eu te aviso aqui. 💚";
+}
+
+// Body rendered inside Meta's native order_details payment bubble. The card number
+// is never sent or stored here; WhatsApp only shows the last four digits we supply.
+export function orderDetailsBody(total: number, last4: string): string {
+  return `Confira seu pedido de *${brl(total)}*. Para pagar com o cartão final *${last4}*, toque em *Revisar e pagar* abaixo. 💳`;
+}
+
+export function cardChargeFailed(last4: string): string {
+  return `Não consegui aprovar o cartão final *${last4}* agora. Posso seguir por Pix ou te mandar um link seguro de cartão. 💳`;
+}
+
+export function cardAttemptExpired(): string {
+  return "Esse pedido de cartão venceu antes da confirmação. Me pede para pagar de novo que eu gero uma cobrança nova. 💳";
+}
+
 export function paymentConfirmed(): string {
   return "Pagamento confirmado! ✅ Já estou separando seu pedido — te aviso assim que sair pra entrega. 🛵";
+}
+
+export function paymentConfirmedSupplierCheck(): string {
+  return "Pagamento confirmado! ✅ Agora estou confirmando os itens na loja e preparando seu pedido. Te aviso assim que ele avançar. 🛒";
+}
+
+export function supplierValidationStarted(): string {
+  return "Perfeito — estou confirmando agora os itens e o total direto na loja. Assim que o carrinho estiver validado, te mando o pagamento por aqui. 🛒";
+}
+
+export function supplierValidationPending(): string {
+  return "Ainda estou confirmando o carrinho na loja. Não precisa pagar nada agora — te aviso assim que estiver pronto. 🛒";
 }
 
 export function pixNotSeenYet(): string {
@@ -396,6 +456,9 @@ export function orderStatusLine(input: {
 }): string {
   const id = `*#${input.shortId}*`;
   switch (input.status) {
+    case "awaiting_supplier_validation":
+    case "payment_issuing":
+      return `Seu pedido ${id} está sendo confirmado na loja antes do pagamento. 🛒 Te aviso assim que o carrinho estiver pronto.`;
     case "awaiting_payment":
       return `Seu pedido ${id} está só esperando o pagamento. 💳 Se precisar do código de novo, responde *pagar*.`;
     case "paid":

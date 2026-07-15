@@ -1,8 +1,13 @@
 # Operação, canais e formalização — julho de 2026
 
-Foto operacional da Lia em julho de 2026. Este documento separa o que já foi ativado do
+Foto operacional da Lia em julho de 2026, atualizada em 14/07/2026. Este documento separa o que já foi ativado do
 que ainda impede a operação pública em escala. Para o produto e arquitetura, veja
 [STATUS.md](../STATUS.md) e [CLAUDE.md](../CLAUDE.md).
+
+> Decisão vigente: entrega do próprio varejista é o fluxo principal. A premissa
+> `clique-e-retire + qualquer motoboy` foi invalidada pelas políticas oficiais da Petz e
+> do Carrefour. Detalhes em
+> [decisoes-operacionais-2026-07-14.md](decisoes-operacionais-2026-07-14.md).
 
 ## Já encaminhado ou ativo
 
@@ -15,9 +20,10 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 | Formalização | Encaminhada | MEI/CNPJ aberto; falta alinhar a conta Mercado Pago PJ e emissão de nota. |
 | Pix | Real e testado | Mercado Pago gera Pix copia-e-cola e recebe confirmação pelo webhook. |
 | Cartão | Real | Checkout Pro gera link hospedado; a taxa é repassada ao cliente. |
-| Motoboy | Real e testado | Uber Direct: OAuth e cotação com credenciais validados. O despacho depende do operador depois da compra. |
-| Operação interna | Ativa | `/ops` organiza pago → compra → retirada → despacho → entregue, com aviso ao cliente e sinalização de cancelamento. |
-| Área atendida | Configurada | Estado de SP por preset, com trava de cidade e distância até uma loja; CEP sem cobertura vira lead no mapa de demanda. |
+| Cartão One-Click | Código pronto, não ativado | Meta Cloud API direta + Pagar.me; depende de allowlist BR, migrations, domínio/chaves/webhook e sandbox. Não usa 360dialog. |
+| Motoboy | Técnica pronta, operação restrita | Uber Direct: OAuth e cotação validados. Só pode ser usado quando o ponto de retirada reconhecer formalmente o courier. |
+| Operação interna | Em adaptação | `/ops` ainda reflete pago → retirada → despacho; precisa suportar compra → entrega/rastreio do varejista. |
+| Área atendida | Em revisão | Estado de SP e guarda de 12 km são legado do motoboy. Na entrega direta, o checkout da loja decide cobertura por CEP. |
 
 ## Meta e WhatsApp: estado correto
 
@@ -28,18 +34,16 @@ da Meta antes de processar qualquer mensagem.
 
 ## Rotina operacional de um pedido
 
-1. Cliente fala com a Lia pelo WhatsApp, informa CEP e itens.
-2. A Lia escolhe uma única loja, cota o frete e recebe Pix ou cartão.
-3. Quando o pagamento confirma, o pedido aparece no `/ops`.
-4. Operador confere preço/estoque no link do item, compra no clique-e-retire e registra o
-   número do pedido.
-5. Operador despacha o motoboy; ele retira com o número do pedido, documento do titular e
-   autorização.
-6. Operador marca a entrega; a Lia comunica o cliente.
+1. Cliente fala com a Lia pelo WhatsApp, informa endereço e itens.
+2. A Lia escolhe uma loja e monta uma sacola temporária antes de cobrar.
+3. O checkout do varejista calcula preço, estoque, frete e prazo para aquele endereço.
+4. A Lia apresenta a cotação com validade curta e recebe Pix ou cartão.
+5. Após o pagamento, a Lia revalida a sacola e o operador aprova a compra no piloto.
+6. O varejista entrega diretamente; a Lia acompanha e comunica o cliente.
 
-No início, o motoboy deve ser conhecido e ter CPF previamente alinhado com a retirada. O
-Uber Direct já é a integração de cotação/despacho, mas não substitui a validação prática de
-retirada por terceiro no balcão.
+Para “entrega hoje”, a Lia pode usar a modalidade same-day do próprio varejista. Um motoboy
+externo só entra quando houver parceiro local/contrato que autorize a coleta. Não enviar
+documento do titular a entregador on-demand.
 
 ## Antes de abrir o piloto
 
@@ -47,13 +51,20 @@ retirada por terceiro no balcão.
   pessoal.
 - Regenerar token do Mercado Pago e segredo/credenciais da Uber que foram expostos em chat,
   depois atualizar a Vercel.
-- Confirmar presencialmente as novas unidades antes do primeiro pedido local: abertas,
-  clique-e-retire habilitado e retirada por terceiro aceita.
-- Fazer 5–10 pedidos controlados, começando com motoboy conhecido, para testar a retirada,
-  a aceitação do preço final e a divergência de estoque/preço.
+- Validar termos, nota fiscal, troca/devolução e uso de conta central para múltiplos
+  destinatários.
+- Mover a confirmação de preço/frete/prazo real para antes da cobrança do cliente.
+- Fazer 5–10 pedidos controlados com entrega do varejista, medindo cotação, aprovação,
+  prazo, divergência de preço/estoque e pós-venda.
+- Não pilotar retirada por terceiro na Petz/Carrefour como fluxo de escala.
+- Para One-Click, seguir integralmente
+  [whatsapp-one-click-pagarme.md](whatsapp-one-click-pagarme.md) antes de ligar a flag.
 
 ## Limites atuais
 
-O catálogo ainda é estático e uma cesta é limitada a uma loja. Preço e estoque devem ser
-conferidos pelo operador antes da compra; a checagem automática por pedido pago continua
-como evolução pós-piloto.
+Uma cesta continua limitada a uma loja. A busca ao vivo e o carrinho Browserbase reduzem
+desatualização, mas preço, estoque, frete e prazo ainda devem ser revalidados antes da
+cobrança e da compra. Cada pedido precisa de sessão/carrinho isolado ou fila por Context.
+
+O preset geográfico atual deve ser tratado apenas como filtro comercial. Para entrega do
+varejista, distância até uma unidade não substitui a resposta do checkout.

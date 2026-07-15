@@ -15,6 +15,13 @@ export type PixCharge = {
 
 export type PixStatus = "pending" | "approved" | "rejected" | "unknown";
 
+export type SavedCardCharge = {
+  status: "approved" | "declined" | "unavailable";
+  providerPaymentId?: string;
+  mock: boolean;
+  error?: string;
+};
+
 // Checkout Pro link: one hosted MP page per order where the customer pays with
 // CARD or Pix. We only create a "preference" and send the init_point URL — the card
 // never touches us (MP hosts everything; zero PCI on our side). Reconciliation is the
@@ -63,6 +70,43 @@ export const pixAdapter = {
       }
     }
     return "pending";
+  }
+};
+
+// The no-CVV credential-on-file product must be enabled by Mercado Pago before a
+// real charge can be made. Their public saved-card flow requires a fresh CVV token,
+// so a providerCardId must never be treated as a payment token here. In a local/mock
+// environment we approve deterministically so the WhatsApp state machine can be
+// tested end-to-end without a gateway account.
+export const savedCardAdapter = {
+  isAvailableForOneClick() {
+    return !hasCreds();
+  },
+
+  async chargeSavedCard(input: {
+    orderId: string;
+    attemptId: string;
+    amount: number;
+    customerId: string;
+    cardId: string;
+    description?: string;
+  }): Promise<SavedCardCharge> {
+    if (!hasCreds()) {
+      return {
+        status: "approved",
+        providerPaymentId: `mockcard_${randomUUID()}`,
+        mock: true
+      };
+    }
+
+    const requested = process.env.LIA_MP_SAVED_CARD_NO_CVV === "true";
+    return {
+      status: "unavailable",
+      mock: false,
+      error: requested
+        ? "Mercado Pago no-CVV charge is not implemented until its approved API contract is supplied"
+        : "Mercado Pago has not approved saved-card charging without a fresh CVV"
+    };
   }
 };
 
