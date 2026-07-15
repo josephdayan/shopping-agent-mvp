@@ -149,7 +149,8 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   local da Vercel foi renovado em 15/07 sem expor valores; ainda falta regenerar a chave
   Browserbase e atualizar os ambientes que a consomem. Em 15/07 foi aberta uma sessão
   persistente do Context Carrefour somente para reautenticação manual; não houve carrinho,
-  checkout ou cobrança.
+  checkout ou cobrança. Uma chave Browserbase de reposição foi colada em conversa em 15/07:
+  ela também é exposta, não deve ser configurada e precisa ser regenerada novamente.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

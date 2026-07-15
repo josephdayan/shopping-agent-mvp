@@ -167,7 +167,8 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > também apareceram em saída de diagnóstico. O token OIDC local da Vercel foi renovado em
 > 15/07; a chave Browserbase ainda precisa ser regenerada e atualizada nos ambientes antes
 > do piloto. Em 15/07 foi aberta uma sessão persistente do Context Carrefour, sem itens ou
-> cobrança, aguardando reautenticação manual por senha/OTP/CAPTCHA.
+> cobrança, aguardando reautenticação manual por senha/OTP/CAPTCHA. Uma chave de reposição
+> foi enviada por chat e, portanto, também deve ser descartada e regenerada antes do uso.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

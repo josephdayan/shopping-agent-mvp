@@ -64,7 +64,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
   Ainda falta regenerar a chave Browserbase e atualizar os ambientes. Uma sessão persistente
   do Context Carrefour foi aberta em 15/07 somente para a reautenticação manual; depois dela
-  será necessário validar o login antes do próximo teste ao vivo.
+  será necessário validar o login antes do próximo teste ao vivo. **Não usar a chave de
+  reposição enviada em chat em 15/07:** ela também foi exposta; regenerar outra diretamente
+  no painel e configurá-la na Vercel sem compartilhá-la em conversa.
 
 ### Financeiro, fiscal e jurídico
 
