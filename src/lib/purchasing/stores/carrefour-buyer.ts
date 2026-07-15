@@ -165,15 +165,14 @@ async function ensureCarrefourRegion(page: Page, deliveryCep?: string | null): P
     throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não exibiu o campo de CEP para selecionar a região.");
   }
   await cepField.fill(cep);
-  // This component uses a native submit button but omits the accessible button
-  // role on some renders. The visible label is stable across those renders.
-  const submit = page.getByText(/^enviar$/i);
-  await submit.click({ timeout: 10_000 }).catch(async () => {
-    const fallback = await firstButton(page, [/^continuar$/i, /^confirmar$/i]);
-    if (!fallback) throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não exibiu o botão para confirmar o CEP.");
-    await fallback.click({ timeout: 10_000 });
-  });
+  // The current regionalization modal submits the masked CEP with Enter; its
+  // visible "Enviar" belongs to an unrelated feedback widget in the page footer.
+  await cepField.press("Enter");
   await page.waitForTimeout(1_000);
+  const afterSubmit = await readCarrefourCartText(page);
+  if (/insira seu cep/.test(normalize(afterSubmit))) {
+    throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não aceitou o CEP para regionalizar a compra.");
+  }
   await page.goto(CARREFOUR_ORIGIN, { waitUntil: "domcontentloaded", timeout: 45_000 });
 }
 
