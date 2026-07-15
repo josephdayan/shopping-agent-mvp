@@ -103,9 +103,13 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - a cotação expira em 5 minutos por padrão, exige escolha explícita de Pix/cartão depois
   do resumo e libera o Context se vencer ou for cancelada;
 - o checkout falha fechado para `needs_human` se não expuser itens, total, frete ou prazo;
-- TypeScript, testes focados e build passaram. **Ainda não validado ao vivo no Carrefour e
-  não implantado.** Não tratar como evidência de cobertura, preço ou prazo reais até o
-  teste controlado.
+- migrations aplicadas e versão implantada em produção em 15/07/2026. A primeira
+  validação ao vivo confirmou que o modal de CEP usa Enter (correção também implantada),
+  mas o Context Carrefour estava sem login antes de limpar/adicionar o SKU de teste;
+  nenhuma sacola, checkout ou cobrança foi criada;
+- TypeScript, testes focados e build passaram. **A validação de estoque, frete, prazo,
+  cartão e 3DS ainda depende de reautenticar o Context e repetir o teste controlado.**
+  Não tratar como evidência de cobertura, preço ou prazo reais até então.
 
 ### Pagamentos e canal
 

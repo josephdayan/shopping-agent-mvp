@@ -69,7 +69,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
 | **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
 | **Testes focados da compra** | ✅ TypeScript + compradores/busca/política passam. ⚠️ O `npm test` completo ainda tem evals históricos que esperam CEP em vez de endereço completo. |
-| **Cotação Carrefour antes de cobrar** | 🟡 Implementada em código em 15/07: preflight `cart_only` monta a sacola; só libera Pix/cartão após total, frete e prazo do checkout; expira em 5 min e libera o Context quando expira/cancela. Build e testes focados passaram; falta validação ao vivo e deploy. |
+| **Cotação Carrefour antes de cobrar** | 🟡 Implementada e implantada em 15/07: preflight `cart_only` monta a sacola; só libera Pix/cartão após total, frete e prazo do checkout; expira em 5 min e libera o Context quando expira/cancela. Migrations aplicadas e build passou. A primeira tentativa ao vivo achou o Context sem login antes de tocar no carrinho; falta reautenticar e validar frete/prazo/cartão/3DS. |
 | **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em Petz/Carrefour. Só usar com parceiro compatível. |
 | **Cobertura** | ⚠️ O preset de SP e a guarda de 12 km continuam no código, mas são legado do motoboy. Para entrega direta, o checkout do varejista é a autoridade por CEP. |
 | **Lojas (107 unidades geocodadas)** | ✅ dado útil para parceiros/same-day; proximidade não prova estoque, entrega ou prazo do varejista. |

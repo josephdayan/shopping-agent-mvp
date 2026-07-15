@@ -37,6 +37,12 @@ O primeiro modo é obrigatoriamente `cart_only`: ele prepara o carrinho, mas é 
 clicar para pagar. Isso evita uma cobrança inesperada enquanto a conta, a entrega e o
 3DS ainda não foram validados ao vivo.
 
+**Estado da validação em 15/07/2026:** migrations aplicadas e versão implantada em
+produção. A inspeção ao vivo confirmou que a regionalização atual submete o CEP por Enter
+(o comprador foi ajustado e implantado), mas o Context persistente perdeu o login antes de
+limpar ou adicionar o produto de teste. Nenhuma sacola, checkout ou cobrança foi criada.
+Reautentique a conta Carrefour no Context antes de repetir o preflight.
+
 ## Ativação do primeiro piloto
 
 1. Crie uma conta Browserbase e gere `BROWSERBASE_API_KEY`.

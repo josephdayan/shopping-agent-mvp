@@ -175,6 +175,11 @@ cotação fica válida por cinco minutos por padrão; o cliente escolhe Pix/cart
 ver o resumo. Ao vencer ou ser cancelada, a reserva do Context é liberada para não bloquear
 o carrinho do cliente seguinte.
 
-Isto é **implementação verificada por TypeScript, testes focados e build**, não validação ao
-vivo. Continua obrigatório validar o checkout Carrefour com endereço real, frete, prazo,
-cartão salvo/CVV/3DS/antifraude e aplicar a migration antes de implantar.
+As migrations pendentes (One-Click e expiração) foram aplicadas em produção e a versão foi
+implantada em 15/07. A inspeção ao vivo também confirmou que a regionalização atual do
+Carrefour submete o CEP por Enter, e o seletor foi corrigido e implantado.
+
+Isto ainda não é validação completa do checkout: a tentativa de preflight encontrou o
+Context Carrefour sem login antes de limpar/adicionar o SKU de teste. Nenhuma sacola,
+checkout ou cobrança foi criada. Continua obrigatório reautenticar o Context e validar com
+endereço real frete, prazo, cartão salvo/CVV/3DS e antifraude.

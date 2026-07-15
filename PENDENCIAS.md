@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-07-14._
+_Última atualização: 2026-07-15._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -34,13 +34,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 - [ ] Montar a sacola real e calcular estoque, preço, frete e prazo **antes** de cobrar o
   cliente. **Implementado em código para Carrefour em 15/07** (preflight `cart_only`,
-  falha fechada sem total/frete/prazo); falta migration, deploy e validação ao vivo.
+  falha fechada sem total/frete/prazo); migrations e deploy concluídos. A validação ao
+  vivo aguarda novo login no Context Carrefour.
 - [ ] Mostrar no WhatsApp resumo da cotação, endereço, modalidade, prazo e validade.
   **Implementado em código para Carrefour em 15/07**; a cotação expira em 5 min por
-  padrão e ainda precisa de validação ao vivo.
+  padrão e ainda precisa de validação ao vivo após reautenticar o Context Carrefour.
 - [ ] Implementar expiração curta da cotação e impedir pagamento de cotação vencida.
   **Implementado em código para Carrefour em 15/07**; a expiração cancela a cotação e
-  libera o Context persistente. Falta validação em produção.
+  libera o Context persistente. Migrations e deploy concluídos; falta validação ao vivo.
 - [ ] Revalidar itens, quantidade, total, endereço, frete e prazo imediatamente antes da
   compra.
 - [ ] Definir a política para diferença de preço após pagamento: limite automático,
@@ -188,3 +189,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   cobrar: o carrinho `cart_only` precisa expor total, frete e prazo; o cliente confirma a
   forma de pagamento depois da cotação com validade curta. TypeScript, testes focados e
   build passaram; migration, deploy e validação ao vivo continuam pendentes.
+- **2026-07-15:** migrations pendentes (One-Click e expiração da cotação) foram aplicadas
+  em produção, e a cotação Carrefour foi implantada. A validação ao vivo corrigiu o gesto
+  de regionalização para Enter, mas parou em `LOGIN_REQUIRED` antes de limpar/adicionar
+  qualquer item; reautenticar o Context Carrefour é o próximo passo.
