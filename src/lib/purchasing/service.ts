@@ -93,6 +93,29 @@ async function withWorkerLease<T>(input: BuyerInput, work: () => Promise<T>): Pr
 }
 
 async function assertCartAvailable(jobId: string, input: BuyerInput): Promise<void> {
+  // Quotes are short-lived. If a customer never responds, release their persisted
+  // cart before deciding that the next customer must wait behind it.
+  const expiredQuotes = await prisma.deliveryOrder.findMany({
+    where: {
+      storeKey: input.storeKey,
+      status: "awaiting_quote_confirmation",
+      quoteExpiresAt: { lt: new Date() }
+    },
+    select: { id: true }
+  });
+  if (expiredQuotes.length) {
+    const orderIds = expiredQuotes.map((order) => order.id);
+    await prisma.$transaction([
+      prisma.purchaseJob.updateMany({
+        where: { deliveryOrderId: { in: orderIds }, status: { in: [PURCHASE_JOB_STATUS.PREFLIGHT_QUEUED, PURCHASE_JOB_STATUS.PREFLIGHTING, PURCHASE_JOB_STATUS.CART_READY] } },
+        data: { status: PURCHASE_JOB_STATUS.CANCELED, lastErrorCode: "QUOTE_EXPIRED", lastErrorMessage: "A cotação do varejista expirou antes do pagamento." }
+      }),
+      prisma.deliveryOrder.updateMany({
+        where: { id: { in: orderIds }, status: "awaiting_quote_confirmation" },
+        data: { status: "canceled" }
+      })
+    ]);
+  }
   // A persisted retailer context has exactly one cart. Do not clear or overwrite a
   // cart that is still waiting on an approval/checkout from another order.
   const conflict = await prisma.purchaseJob.findFirst({
@@ -202,7 +225,13 @@ async function loadBuyerInput(jobId: string): Promise<{ input: BuyerInput; job: 
 }
 
 async function recordSnapshot(jobId: string, snapshot: CartSnapshot, phase: "preflight" | "revalidate") {
-  const current = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  const current = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId }, include: { deliveryOrder: { select: { status: true } } } });
+  if (current.deliveryOrder.status === "canceled") {
+    return prisma.purchaseJob.update({
+      where: { id: jobId },
+      data: { status: PURCHASE_JOB_STATUS.CANCELED, lastErrorCode: "ORDER_CANCELED", lastErrorMessage: "Pedido cancelado antes da conclusão da cotação." }
+    });
+  }
   const ready = snapshot.status === "ready" && snapshot.items.every((item) => item.status === "resolved");
   const hash = ready ? cartHash(snapshot) : null;
   const nextStatus = ready ? PURCHASE_JOB_STATUS.CART_READY : PURCHASE_JOB_STATUS.NEEDS_HUMAN;

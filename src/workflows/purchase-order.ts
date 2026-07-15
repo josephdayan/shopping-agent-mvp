@@ -11,7 +11,7 @@ export async function preflightPurchaseWorkflow(jobId: string) {
   for (let queueAttempt = 0; queueAttempt < 60; queueAttempt += 1) {
     const result = await runPreflight(jobId);
     if (result.status !== PURCHASE_JOB_STATUS.PREFLIGHT_QUEUED || result.lastErrorCode !== "RETAILER_BUSY") {
-      if (result.status === PURCHASE_JOB_STATUS.CART_READY) await issueCustomerPaymentWhenOrderIsReady(jobId);
+      if (result.status === PURCHASE_JOB_STATUS.CART_READY) await publishCustomerQuoteWhenOrderIsReady(jobId);
       return result;
     }
     await sleep("1m");
@@ -19,15 +19,15 @@ export async function preflightPurchaseWorkflow(jobId: string) {
   return { status: PURCHASE_JOB_STATUS.PREFLIGHT_QUEUED, cartHash: null, lastErrorCode: "RETAILER_BUSY" };
 }
 
-async function issueCustomerPaymentWhenOrderIsReady(jobId: string) {
+async function publishCustomerQuoteWhenOrderIsReady(jobId: string) {
   "use step";
-  const [{ getPurchaseJobForOps }, { issueDeferredOrderPayment }] = await Promise.all([
+  const [{ getPurchaseJobForOps }, { publishValidatedRetailerQuote }] = await Promise.all([
     import("@/lib/purchasing/service"),
     import("@/lib/delivery-service")
   ]);
   const job = await getPurchaseJobForOps(jobId);
-  if (!job) throw new Error("Purchase job not found while issuing deferred payment.");
-  return issueDeferredOrderPayment(job.deliveryOrderId);
+  if (!job) throw new Error("Purchase job not found while publishing retailer quote.");
+  return publishValidatedRetailerQuote(job.deliveryOrderId);
 }
 
 async function runPreflight(jobId: string) {

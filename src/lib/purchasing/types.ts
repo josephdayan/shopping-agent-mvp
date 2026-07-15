@@ -49,6 +49,10 @@ export type CartSnapshot = {
   browserSessionId?: string;
   items: ResolvedPurchaseItem[];
   itemsSubtotal: number;
+  // The retailer's own delivery amount and promise, captured from checkout. Both
+  // are required before Lia may present a direct-delivery quote to the customer.
+  deliveryFee?: number;
+  deliveryPromise?: string;
   total: number;
   currency: "BRL";
   capturedAt: string;

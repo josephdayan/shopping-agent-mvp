@@ -278,7 +278,8 @@ export type SummaryInput = {
   items: CopyBasketItem[];
   produtos: number;
   frete: number;
-  etaMinutes: number;
+  etaMinutes?: number;
+  deliveryPromise?: string;
   total: number;
   deliveryAddress?: string;
   notFound?: string[];
@@ -292,7 +293,7 @@ export function summary(input: SummaryInput): string {
     ...lines,
     "",
     `Produtos: ${brl(input.produtos)}`,
-    `🛵 Entrega: ${brl(input.frete)} · chega em ~${input.etaMinutes} min`,
+    `📦 Entrega: ${brl(input.frete)}${input.deliveryPromise ? ` · ${input.deliveryPromise}` : ` · chega em ~${input.etaMinutes ?? 40} min`}`,
     `*Total: ${brl(input.total)}*`
   ];
   if (input.notFound?.length) {
@@ -407,11 +408,19 @@ export function paymentConfirmedSupplierCheck(): string {
 }
 
 export function supplierValidationStarted(): string {
-  return "Perfeito — estou confirmando agora os itens e o total direto na loja. Assim que o carrinho estiver validado, te mando o pagamento por aqui. 🛒";
+  return "Perfeito — estou confirmando agora itens, frete, prazo e total direto na loja. Assim que o carrinho estiver validado, te mostro a cotação final antes do pagamento. 🛒";
 }
 
 export function supplierValidationPending(): string {
   return "Ainda estou confirmando o carrinho na loja. Não precisa pagar nada agora — te aviso assim que estiver pronto. 🛒";
+}
+
+export function quoteExpired(): string {
+  return "Essa cotação venceu porque preço, estoque e prazo da loja podem mudar rápido. Vou montar uma nova antes de cobrar qualquer valor. 🙂";
+}
+
+export function quoteValidFor(minutes: number): string {
+  return `Essa cotação fica válida por ${minutes} min. Se estiver tudo certo, escolhe Pix ou cartão para eu gerar o pagamento. 💚`;
 }
 
 export function pixNotSeenYet(): string {

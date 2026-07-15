@@ -31,6 +31,7 @@ import {
 import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
 import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
 import { getPurchasePolicy } from "@/lib/purchasing/policy";
+import type { CartSnapshot } from "@/lib/purchasing/types";
 import * as copy from "@/lib/lia-copy";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -113,6 +114,7 @@ type DeliveryContext = {
     | "choosing_courier"
     | "choosing_payment"
     | "awaiting_supplier_validation"
+    | "awaiting_quote_confirmation"
     | "payment_issuing"
     | "awaiting_payment";
   basket?: BasketItem[];
@@ -147,7 +149,7 @@ type DeliveryContext = {
   deliveryOrderId?: string;
 };
 
-const ACTIVE_ORDER_STATUSES = ["awaiting_supplier_validation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup", "dispatched"];
+const ACTIVE_ORDER_STATUSES = ["awaiting_supplier_validation", "awaiting_quote_confirmation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup", "dispatched"];
 
 // ---------- helpers: conversation + money + text ----------
 
@@ -518,6 +520,12 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.courierOptions = undefined;
 }
 
+function usesCarrefourCheckoutQuote(ctx: DeliveryContext): boolean {
+  const policy = getPurchasePolicy();
+  const basket = ctx.basket ?? [];
+  return policy.enabled && policy.mode !== "off" && basket.length > 0 && basket.every((item) => item.storeKey === "carrefour");
+}
+
 // Apply a chosen courier quote to the context (fee/eta/key/quoteId + recompute total).
 function applyCourier(ctx: DeliveryContext, q: { courierKey: string; quoteId: string; fee: number; etaMinutes: number }) {
   ctx.deliveryFee = q.fee;
@@ -769,7 +777,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
   if (intent.kind === "cancel_question") {
     const active = await prisma.deliveryOrder.findFirst({
-      where: { userId: user.id, status: { in: ["awaiting_supplier_validation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
+      where: { userId: user.id, status: { in: ["awaiting_supplier_validation", "awaiting_quote_confirmation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
     });
     await reply(phone, copy.cancelHowTo(Boolean(active) || (ctx.basket?.length ?? 0) > 0));
     return;
@@ -818,19 +826,36 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
   if (ctx.step === "awaiting_supplier_validation") {
-    // Orders created before the immediate-checkout change can be released on the
-    // customer's next message. The atomic state claim inside the helper prevents a
-    // duplicate link if the old preflight workflow completes simultaneously.
-    if (ctx.deliveryOrderId) {
-      const released = await issueDeferredOrderPayment(ctx.deliveryOrderId, { requireCartReady: false });
-      if (released?.status === "awaiting_payment") return;
-    }
     await reply(phone, copy.supplierValidationPending());
     return;
   }
   if (ctx.step === "payment_issuing") {
     await reply(phone, "O carrinho já foi confirmado e estou gerando seu pagamento agora. Só um instante. 💳");
     return;
+  }
+  if (ctx.step === "awaiting_quote_confirmation" && ctx.deliveryOrderId) {
+    const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+    if (!order || order.status !== "awaiting_quote_confirmation") {
+      await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
+    } else {
+      const method = methodFromIntent(intent);
+      if (method) {
+        const issued = await issueValidatedRetailerQuotePayment(order.id, method);
+        if (issued.expired) {
+          await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
+          await reply(phone, copy.quoteExpired());
+        }
+        return;
+      }
+      if (order.quoteExpiresAt && order.quoteExpiresAt.getTime() <= Date.now()) {
+        await cancelPendingRetailerQuote(order.id);
+        await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
+        await reply(phone, copy.quoteExpired());
+        return;
+      }
+      await reply(phone, copy.paymentMethod(order.total, cardTotal(order.total)));
+      return;
+    }
   }
   if (intent.kind === "clear_cart") {
     await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
@@ -1102,6 +1127,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       return;
     }
     if (directMethod) {
+      if (ctx.step !== "quoted" && usesCarrefourCheckoutQuote(ctx)) {
+        await continueAfterBasket(phone, convo.id, ctx, user.cep);
+        return;
+      }
       await createOrderAndCharge(phone, user.id, convo.id, ctx, directMethod);
       return;
     }
@@ -1305,6 +1334,12 @@ async function handleCancel(
     }));
   if (!order || !ACTIVE_ORDER_STATUSES.includes(order.status)) {
     await reply(phone, copy.nothingToCancel());
+    return;
+  }
+  if (order.status === "awaiting_supplier_validation" || order.status === "awaiting_quote_confirmation") {
+    await cancelPendingRetailerQuote(order.id);
+    await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
+    await reply(phone, copy.canceledUnpaid());
     return;
   }
   if (order.status === "awaiting_payment") {
@@ -2065,8 +2100,230 @@ async function continueAfterBasket(
     await reply(phone, copy.askFullDeliveryAddress());
     return;
   }
+  if (usesCarrefourCheckoutQuote(ctx)) {
+    await beginCarrefourRetailerQuote(phone, convoId, ctx);
+    return;
+  }
   await quoteBasket(ctx, store);
   await respondAfterQuote(phone, convoId, ctx, store, prefix);
+}
+
+function roundMoney(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+function quoteTtlMinutes(): number {
+  const configured = Number(process.env.LIA_RETAILER_QUOTE_TTL_MINUTES ?? 5);
+  return Number.isFinite(configured) ? Math.max(1, Math.min(15, Math.floor(configured))) : 5;
+}
+
+async function cancelPendingRetailerQuote(orderId: string): Promise<boolean> {
+  const canceled = await prisma.deliveryOrder.updateMany({
+    where: { id: orderId, status: { in: ["awaiting_supplier_validation", "awaiting_quote_confirmation"] } },
+    data: { status: "canceled" }
+  });
+  if (!canceled.count) return false;
+  await prisma.purchaseJob.updateMany({
+    where: { deliveryOrderId: orderId, status: { in: ["preflight_queued", "preflighting", "cart_ready"] } },
+    data: { status: "canceled", lastErrorCode: "QUOTE_CANCELED", lastErrorMessage: "Cotação cancelada antes do pagamento." }
+  });
+  return true;
+}
+
+async function setQuoteConversationAwaitingPayment(order: { id: string; conversationId?: string | null }) {
+  if (!order.conversationId) return;
+  const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+  if (!convo) return;
+  const ctx = readCtx(convo.context);
+  if (ctx.deliveryOrderId === order.id) await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
+}
+
+async function beginCarrefourRetailerQuote(phone: string, convoId: string, ctx: DeliveryContext) {
+  const convo = await prisma.conversation.findUnique({ where: { id: convoId } });
+  if (!convo) throw new Error("Conversation not found while preparing Carrefour quote.");
+
+  const existing = await prisma.deliveryOrder.findFirst({
+    where: { conversationId: convoId, status: "awaiting_supplier_validation" },
+    orderBy: { createdAt: "desc" }
+  });
+  if (existing) {
+    await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: existing.id, step: "awaiting_supplier_validation" });
+    await reply(phone, copy.supplierValidationPending());
+    return;
+  }
+
+  const store = getStore("carrefour");
+  if (belowMinimum(ctx, store)) {
+    await reply(phone, minimumOrderText(ctx, store));
+    return;
+  }
+
+  const basket = ctx.basket ?? [];
+  const expectedItemsSubtotal = roundMoney(basket.reduce((sum, item) => sum + item.lineTotal, 0));
+  const order = await prisma.deliveryOrder.create({
+    data: {
+      userId: convo.userId,
+      conversationId: convoId,
+      phone,
+      cep: ctx.cep,
+      deliveryAddress: ctx.deliveryAddress,
+      storeKey: "carrefour",
+      storeLabel: store.label,
+      items: basket as unknown as object,
+      // Direct delivery is determined in the retailer checkout. No courier quote is
+      // carried forward from the legacy pickup flow.
+      fulfillments: [{ storeKey: "carrefour", storeLabel: store.label, deliveryMode: "retailer_delivery" }] as unknown as object,
+      itemsSubtotal: expectedItemsSubtotal,
+      courierKey: "retailer_delivery",
+      deliveryFee: 0,
+      serviceFee: 0,
+      total: 0,
+      notes: "Cotação Carrefour pendente de confirmação no checkout.",
+      status: "awaiting_supplier_validation"
+    }
+  });
+
+  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_supplier_validation" });
+  const [{ createPurchaseJobsForOrder }, { startPreflightPurchaseWorkflow }] = await Promise.all([
+    import("@/lib/purchasing/service"),
+    import("@/lib/purchasing/workflow-dispatch")
+  ]);
+  const jobs = await createPurchaseJobsForOrder(order.id);
+  await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
+  await reply(phone, copy.supplierValidationStarted());
+}
+
+// Called by the preflight workflow only after the retailer has exposed an exact
+// cart, freight and delivery promise. It publishes a quote; it never creates a
+// payment on its own, so the customer still explicitly chooses Pix or card.
+export async function publishValidatedRetailerQuote(orderId: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
+  if (!order || order.status !== "awaiting_supplier_validation") return order;
+  if (!order.purchaseJobs.length || order.purchaseJobs.some((job) => job.status !== "cart_ready" || !job.cartSnapshot || job.actualTotal == null)) return order;
+
+  const snapshots = order.purchaseJobs.map((job) => job.cartSnapshot as unknown as CartSnapshot);
+  if (snapshots.some((snapshot) => snapshot.deliveryFee === undefined || !snapshot.deliveryPromise)) return order;
+
+  const retailerTotal = roundMoney(order.purchaseJobs.reduce((sum, job) => sum + (job.actualTotal ?? 0), 0));
+  const deliveryFee = roundMoney(snapshots.reduce((sum, snapshot) => sum + (snapshot.deliveryFee ?? 0), 0));
+  const itemsSubtotal = roundMoney(Math.max(0, retailerTotal - deliveryFee));
+  const serviceFee = roundMoney(itemsSubtotal * (MARKUP - 1));
+  const total = roundMoney(itemsSubtotal + serviceFee + deliveryFee);
+  const quoteExpiresAt = new Date(Date.now() + quoteTtlMinutes() * 60_000);
+  const fulfillment = {
+    storeKey: "carrefour",
+    storeLabel: order.storeLabel,
+    deliveryMode: "retailer_delivery",
+    retailerTotal,
+    deliveryFee,
+    deliveryPromise: snapshots.map((snapshot) => snapshot.deliveryPromise).filter(Boolean).join(" · "),
+    browserSessionIds: snapshots.map((snapshot) => snapshot.browserSessionId).filter(Boolean)
+  };
+
+  const claimed = await prisma.deliveryOrder.updateMany({
+    where: { id: order.id, status: "awaiting_supplier_validation" },
+    data: {
+      status: "awaiting_quote_confirmation",
+      itemsSubtotal,
+      serviceFee,
+      deliveryFee,
+      total,
+      courierKey: "retailer_delivery",
+      fulfillments: [fulfillment] as unknown as object,
+      quoteExpiresAt
+    }
+  });
+  if (claimed.count !== 1) return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
+
+  if (order.conversationId) {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    if (convo) {
+      const ctx = readCtx(convo.context);
+      if (ctx.deliveryOrderId === order.id) {
+        await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_quote_confirmation" });
+      }
+    }
+  }
+
+  const quoteItems = snapshots.flatMap((snapshot) => snapshot.items).map((item) => ({
+    qty: item.requestedQty,
+    name: item.resolvedName ?? item.requestedName,
+    displayLineTotal: display((item.actualUnitPrice ?? item.requestedUnitPrice ?? 0) * item.requestedQty)
+  }));
+  await reply(order.phone, copy.summary({
+    items: quoteItems,
+    produtos: roundMoney(itemsSubtotal + serviceFee),
+    frete: deliveryFee,
+    deliveryPromise: fulfillment.deliveryPromise,
+    total,
+    deliveryAddress: order.deliveryAddress ?? undefined
+  }));
+  const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
+  if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
+  await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
+  return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
+}
+
+export async function issueValidatedRetailerQuotePayment(orderId: string, method: "pix" | "card"): Promise<{ expired: boolean }> {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order || order.status !== "awaiting_quote_confirmation") return { expired: false };
+  if (!order.quoteExpiresAt || order.quoteExpiresAt.getTime() <= Date.now()) {
+    await cancelPendingRetailerQuote(order.id);
+    return { expired: true };
+  }
+
+  const isCard = method === "card";
+  const base = order.total;
+  const total = isCard ? cardTotal(base) : base;
+  const cardFee = roundMoney(total - base);
+  const notes = withPaymentNote(order.notes, paymentNote(method, isCard ? copy.brl(cardFee) : undefined));
+  const claimed = await prisma.deliveryOrder.updateMany({
+    where: { id: order.id, status: "awaiting_quote_confirmation", quoteExpiresAt: { gt: new Date() } },
+    data: { status: "payment_issuing", total, notes }
+  });
+  if (claimed.count !== 1) {
+    const current = await prisma.deliveryOrder.findUnique({ where: { id: order.id }, select: { status: true } });
+    return { expired: current?.status === "canceled" };
+  }
+
+  try {
+    if (isCard) {
+      const credential = await getOneClickCredential(order.userId);
+      const awaitingPayment = await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { status: "awaiting_payment", pixId: null, pixCopiaECola: null, quoteExpiresAt: null }
+      });
+      await setQuoteConversationAwaitingPayment(order);
+      if (credential) {
+        try {
+          await createCardAttempt(awaitingPayment, credential);
+          return { expired: false };
+        } catch (error) {
+          console.warn("[retailer-quote:card:fallback-checkout]", error instanceof Error ? error.message : error);
+        }
+      }
+      if (await sendFirstCardEnrollment(awaitingPayment)) return { expired: false };
+      const link = await checkoutAdapter.createLink({ orderId: order.id, amount: total, description: `Lia · pedido ${order.id.slice(-6)}`, method: "card" });
+      await prisma.deliveryOrder.update({ where: { id: order.id }, data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint } });
+      await reply(order.phone, copy.cardInstructions(total, link.initPoint, link.mock));
+    } else {
+      const charge = await pixAdapter.createPix({ orderId: order.id, amount: total, description: `Lia · pedido ${order.id.slice(-6)}` });
+      await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { status: "awaiting_payment", pixId: charge.pixId, pixCopiaECola: charge.copiaECola, quoteExpiresAt: null }
+      });
+      await setQuoteConversationAwaitingPayment(order);
+      await reply(order.phone, copy.pixInstructions(total, charge.mock));
+      await reply(order.phone, charge.copiaECola);
+    }
+    return { expired: false };
+  } catch (error) {
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { status: "awaiting_quote_confirmation", notes: [notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n") }
+    });
+    throw error;
+  }
 }
 
 async function createOrderAndCharge(phone: string, userId: string, convoId: string, ctx: DeliveryContext, method: "pix" | "card" = "pix") {

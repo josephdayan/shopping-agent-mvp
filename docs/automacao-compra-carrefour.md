@@ -8,9 +8,12 @@
 
 ## O que já está implementado
 
-No código atual, a Lia emite a cobrança do cliente **assim que ele confirma o resumo**.
-Essa ordem é legado: o fluxo revisado deve montar/validar a sacola e cotar entrega antes
-da cobrança. Depois que o pagamento for aprovado, ela revalida o carrinho e
+Com `PURCHASE_AUTOMATION_ENABLED` ligado para Carrefour, a Lia agora cria uma cotação
+pendente, monta/valida a sacola em `cart_only` e só mostra Pix/cartão quando o checkout
+expõe itens, total, frete e promessa de entrega. A cotação expira em cinco minutos por
+padrão e exige que o cliente escolha a forma de pagamento após ver o resumo. O caminho
+legado de cobrança imediata permanece apenas como fallback quando a automação não está
+habilitada. Depois que o pagamento for aprovado, ela revalida o carrinho e
 o painel `/ops` permite aprovar a compra na loja. Cada pedido tem um **job de compra**
 que:
 

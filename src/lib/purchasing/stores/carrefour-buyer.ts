@@ -55,6 +55,31 @@ export function parseCarrefourCartTotal(text: string): number | undefined {
   return values.at(-1);
 }
 
+export function parseCarrefourDeliveryFee(text: string): number | undefined {
+  const lines = text.split(/\r?\n/).map((value) => value.trim());
+  for (const line of lines.reverse()) {
+    if (!/(frete|entrega)/i.test(line)) continue;
+    if (/(gratis|gr[aá]tis)/i.test(line)) return 0;
+    const amount = parseBrl(line);
+    if (amount !== undefined) return amount;
+  }
+  // Some checkout variants render a single line. Do not cross into a following
+  // "Total" label, otherwise we could accidentally treat the order total as freight.
+  const labelled = [...text.matchAll(/(?:frete|entrega)[^\nR$]{0,100}(R\$\s*[\d.]+,\d{2})/gi)];
+  return parseBrl(labelled.at(-1)?.[1]);
+}
+
+export function parseCarrefourDeliveryPromise(text: string): string | undefined {
+  const line = text
+    .split(/\r?\n/)
+    .map((value) => value.trim())
+    .find((value) => {
+      const normalized = normalize(value);
+      return /(entrega|receba|chega|prazo)/.test(normalized) && /(hoje|amanha|\d+\s*(min|hora|dia))/.test(normalized);
+    });
+  return line?.slice(0, 180);
+}
+
 async function firstVisible(locator: Locator): Promise<boolean> {
   try {
     return (await locator.count()) > 0 && (await locator.first().isVisible());
@@ -176,9 +201,6 @@ export class CarrefourBuyer implements BuyerConnector {
   key = "carrefour";
 
   async preflight(input: BuyerInput): Promise<CartSnapshot> {
-    if (!input.storeUnitId) {
-      throw new PurchaseError("CONFIGURATION_REQUIRED", "Selecione uma unidade Carrefour de retirada antes de automatizar a compra.");
-    }
     if (!process.env.BROWSERBASE_API_KEY || !process.env.CARREFOUR_BROWSER_CONTEXT_ID) {
       throw new PurchaseError(
         "CONFIGURATION_REQUIRED",
@@ -249,8 +271,10 @@ export class CarrefourBuyer implements BuyerConnector {
       const human = detectCarrefourHumanAction(cartText);
       if (human) throw human;
       const total = parseCarrefourCartTotal(cartText);
-      const itemsSubtotal = items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0);
-      const ready = !unresolved && total !== undefined;
+      const deliveryFee = parseCarrefourDeliveryFee(cartText);
+      const deliveryPromise = parseCarrefourDeliveryPromise(cartText);
+      const itemsSubtotal = total !== undefined && deliveryFee !== undefined ? Math.max(0, total - deliveryFee) : items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0);
+      const ready = !unresolved && total !== undefined && deliveryFee !== undefined && deliveryPromise !== undefined;
       return {
         storeKey: input.storeKey,
         storeLabel: input.storeLabel,
@@ -260,11 +284,13 @@ export class CarrefourBuyer implements BuyerConnector {
         browserSessionId: session.id,
         items,
         itemsSubtotal: money(itemsSubtotal),
+        deliveryFee,
+        deliveryPromise,
         total: total ?? money(itemsSubtotal),
         currency: "BRL",
         capturedAt: new Date().toISOString(),
         status: ready ? "ready" : "needs_human",
-        reason: ready ? undefined : "Não foi possível validar todos os itens e o total do carrinho Carrefour."
+        reason: ready ? undefined : "Não foi possível validar todos os itens, frete, prazo e total do carrinho Carrefour."
       };
     } finally {
       await browser.close();
@@ -286,6 +312,8 @@ export class CarrefourBuyer implements BuyerConnector {
       const human = detectCarrefourHumanAction(cartText);
       if (human) throw human;
       const total = parseCarrefourCartTotal(cartText);
+      const deliveryFee = parseCarrefourDeliveryFee(cartText);
+      const deliveryPromise = parseCarrefourDeliveryPromise(cartText);
       const items = input.items.map((item) => {
         const words = significantWords(item.requestedName);
         const matches = words.filter((word) => normalize(cartText).includes(word));
@@ -303,8 +331,8 @@ export class CarrefourBuyer implements BuyerConnector {
           raw: { revalidated: true }
         };
       });
-      const ready = total !== undefined && items.every((item) => item.status === "resolved");
-      const itemsSubtotal = items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0);
+      const ready = total !== undefined && deliveryFee !== undefined && deliveryPromise !== undefined && items.every((item) => item.status === "resolved");
+      const itemsSubtotal = total !== undefined && deliveryFee !== undefined ? Math.max(0, total - deliveryFee) : items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0);
       return {
         storeKey: input.storeKey,
         storeLabel: input.storeLabel,
@@ -313,11 +341,13 @@ export class CarrefourBuyer implements BuyerConnector {
         browserSessionId: session.id,
         items,
         itemsSubtotal: money(itemsSubtotal),
+        deliveryFee,
+        deliveryPromise,
         total: total ?? money(itemsSubtotal),
         currency: "BRL",
         capturedAt: new Date().toISOString(),
         status: ready ? "ready" : "needs_human",
-        reason: ready ? undefined : "O carrinho Carrefour mudou ou não expôs todos os itens para validação."
+        reason: ready ? undefined : "O carrinho Carrefour mudou ou não expôs todos os itens, frete e prazo para validação."
       };
     } finally {
       await browser.close();

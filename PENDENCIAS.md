@@ -33,9 +33,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 ### Cotação e cobrança
 
 - [ ] Montar a sacola real e calcular estoque, preço, frete e prazo **antes** de cobrar o
-  cliente.
+  cliente. **Implementado em código para Carrefour em 15/07** (preflight `cart_only`,
+  falha fechada sem total/frete/prazo); falta migration, deploy e validação ao vivo.
 - [ ] Mostrar no WhatsApp resumo da cotação, endereço, modalidade, prazo e validade.
+  **Implementado em código para Carrefour em 15/07**; a cotação expira em 5 min por
+  padrão e ainda precisa de validação ao vivo.
 - [ ] Implementar expiração curta da cotação e impedir pagamento de cotação vencida.
+  **Implementado em código para Carrefour em 15/07**; a expiração cancela a cotação e
+  libera o Context persistente. Falta validação em produção.
 - [ ] Revalidar itens, quantidade, total, endereço, frete e prazo imediatamente antes da
   compra.
 - [ ] Definir a política para diferença de preço após pagamento: limite automático,
@@ -179,3 +184,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - **2026-07-14:** One-Click BR foi implementado com Meta Cloud API direta e Pagar.me;
   360dialog não é dependência de runtime. Ativação permanece bloqueada por allowlist,
   configuração externa e validação sandbox.
+- **2026-07-15:** fluxo Carrefour foi alterado em código para cotar no checkout antes de
+  cobrar: o carrinho `cart_only` precisa expor total, frete e prazo; o cliente confirma a
+  forma de pagamento depois da cotação com validade curta. TypeScript, testes focados e
+  build passaram; migration, deploy e validação ao vivo continuam pendentes.

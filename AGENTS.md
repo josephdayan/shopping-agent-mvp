@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-07-14._
+_Última atualização: 2026-07-15._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -94,6 +94,18 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - carrinhos antigos são limpos pelos conectores antes de um novo preflight;
 - o job persiste o ID da sessão para revalidação, não credenciais/cartão;
 - uma conta/Context não pode atender carrinhos concorrentes sem fila ou isolamento.
+
+### Cotação Carrefour antes da cobrança
+
+- **Implementado em código em 15/07:** com a automação Carrefour habilitada, a Lia cria
+  a cotação pendente, monta o carrinho em `cart_only` e só mostra Pix/cartão após o
+  checkout expor total, frete e promessa de entrega do varejista;
+- a cotação expira em 5 minutos por padrão, exige escolha explícita de Pix/cartão depois
+  do resumo e libera o Context se vencer ou for cancelada;
+- o checkout falha fechado para `needs_human` se não expuser itens, total, frete ou prazo;
+- TypeScript, testes focados e build passaram. **Ainda não validado ao vivo no Carrefour e
+  não implantado.** Não tratar como evidência de cobertura, preço ou prazo reais até o
+  teste controlado.
 
 ### Pagamentos e canal
 

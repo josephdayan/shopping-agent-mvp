@@ -165,3 +165,16 @@ clientes.
 - Mercado Pago: continua sendo a cobrança do cliente.
 - Browserbase: continua sendo a infraestrutura de navegação persistente e auditável.
 - Uber Direct: integração técnica preservada para parceiros compatíveis.
+
+## Atualização de implementação — 15/07/2026
+
+O fluxo Carrefour passou a criar uma cotação pendente antes de qualquer cobrança quando
+`PURCHASE_AUTOMATION_ENABLED` está ligado. O preflight `cart_only` monta o carrinho e só
+publica Pix/cartão se o checkout expuser itens, total, frete e promessa de entrega. A
+cotação fica válida por cinco minutos por padrão; o cliente escolhe Pix/cartão depois de
+ver o resumo. Ao vencer ou ser cancelada, a reserva do Context é liberada para não bloquear
+o carrinho do cliente seguinte.
+
+Isto é **implementação verificada por TypeScript, testes focados e build**, não validação ao
+vivo. Continua obrigatório validar o checkout Carrefour com endereço real, frete, prazo,
+cartão salvo/CVV/3DS/antifraude e aplicar a migration antes de implantar.
