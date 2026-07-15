@@ -147,7 +147,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   atualizadas na Vercel. Em 15/07, uma saída de diagnóstico incluiu credenciais de
   Browserbase/Vercel: tratá-las como expostas e rotacioná-las antes do piloto. O token OIDC
   local da Vercel foi renovado em 15/07 sem expor valores; ainda falta regenerar a chave
-  Browserbase, atualizar os ambientes que a consomem e reautenticar o Context Carrefour.
+  Browserbase e atualizar os ambientes que a consomem. Em 15/07 foi aberta uma sessão
+  persistente do Context Carrefour somente para reautenticação manual; não houve carrinho,
+  checkout ou cobrança.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

@@ -62,8 +62,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
   os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
   em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
-  Ainda falta regenerar a chave Browserbase, atualizar os ambientes e reautenticar o Context
-  Carrefour antes do próximo teste ao vivo.
+  Ainda falta regenerar a chave Browserbase e atualizar os ambientes. Uma sessão persistente
+  do Context Carrefour foi aberta em 15/07 somente para a reautenticação manual; depois dela
+  será necessário validar o login antes do próximo teste ao vivo.
 
 ### Financeiro, fiscal e jurídico
 

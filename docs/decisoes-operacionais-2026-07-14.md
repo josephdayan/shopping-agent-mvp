@@ -189,3 +189,8 @@ renovado em 15/07 sem imprimir valores. A chave Browserbase continua pendente de
 regeneração e atualização dos ambientes que a consomem; o acesso ao painel autenticado não
 estava disponível neste ambiente. A reautenticação Carrefour continua uma etapa humana de
 login/OTP/CAPTCHA, sem contorno automatizado.
+
+Foi aberta em 15/07 uma sessão persistente do Context Carrefour apenas para essa
+reautenticação manual. Ela chegou à página inicial do varejista sem inserir itens, abrir
+checkout ou iniciar cobrança; antes do próximo preflight, a sessão deve ser conferida como
+autenticada e a chave Browserbase regenerada deve estar configurada nos ambientes.
