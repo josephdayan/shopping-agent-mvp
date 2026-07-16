@@ -161,7 +161,11 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   seguida um valor com prefixo `sk_live_`, que não é uma chave Browserbase (`bb_live_`):
   não implantar até substituir pelo segredo Browserbase correto e marcá-lo como Sensitive.
   Uma segunda leitura do Production após a alegada correção continuou sem a variável; o
-  deploy e o preflight Carrefour permanecem bloqueados.
+  deploy e o preflight Carrefour permanecem bloqueados. Posteriormente, o painel confirmou
+  `BROWSERBASE_API_KEY` como Sensitive, Production e "Updated just now"; um novo deploy de
+  produção ficou Ready em 15/07. A confirmação de autenticação Browserbase ainda não pode
+  ser feita localmente porque a variável Sensitive não é baixada pelo CLI; a sessão Carrefour
+  foi reaberta para login humano antes de qualquer preflight.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

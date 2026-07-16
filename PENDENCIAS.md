@@ -75,7 +75,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   confirmar no painel que a edição foi efetivamente salva antes do deploy. A edição exibida
   tinha prefixo `sk_live_`, não compatível com Browserbase: substituir por chave nova
   `bb_live_`, marcar Sensitive e só então implantar. A segunda leitura de Production após a
-  alegada correção também não trouxe a variável; não implantar nem reabrir o preflight.
+  alegada correção também não trouxe a variável; não implantar nem reabrir o preflight. O
+  painel depois confirmou a variável Sensitive atualizada em Production e o novo deploy
+  ficou Ready em 15/07; a chave não é baixada localmente pelo CLI por ser Sensitive. Falta
+  concluir a reautenticação humana do Context Carrefour e validar o preflight implantado.
 
 ### Financeiro, fiscal e jurídico
 

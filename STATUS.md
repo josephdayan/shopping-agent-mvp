@@ -178,7 +178,11 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > de disparar outro deploy. A tela posterior mostrou valor `sk_live_` no campo, prefixo que
 > não pertence ao Browserbase; substituir por uma nova chave `bb_live_` e marcar Sensitive
 > antes de implantar. Uma segunda leitura do Production depois da alegada correção ainda não
-> recebeu a variável, portanto o deploy e o reteste Carrefour continuam bloqueados.
+> recebeu a variável, portanto o deploy e o reteste Carrefour continuam bloqueados. Depois,
+> o painel confirmou a variável como Sensitive, em Production e atualizada; o deploy de
+> produção subsequente ficou Ready em 15/07. A CLI local não baixa esse segredo Sensitive,
+> portanto a autenticação será confirmada pelo fluxo implantado após a reautenticação manual
+> do Context Carrefour, que foi reaberto sem itens, checkout ou cobrança.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

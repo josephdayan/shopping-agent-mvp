@@ -224,3 +224,10 @@ Uma segunda leitura independente do ambiente Production após a alegada correç�
 recebeu `BROWSERBASE_API_KEY`. Até o painel apresentar a chave Browserbase correta e uma
 nova leitura conseguir autenticar uma chamada mínima, permanecem vedados o Redeploy e o
 preflight Carrefour.
+
+Em seguida, o painel confirmou visualmente `BROWSERBASE_API_KEY` como Sensitive, no escopo
+Production e atualizada naquele momento. Foi feito um novo deploy de produção, que ficou
+Ready em 15/07 e mantém `PURCHASE_AUTOMATION_MODE=cart_only`. A chave Sensitive não foi
+baixada pelo CLI local; por isso, a autenticação Browserbase será comprovada pelo fluxo em
+produção, depois da reautenticação manual do Context Carrefour. A sessão persistente foi
+reaberta para essa ação humana, sem inserir itens, abrir checkout ou iniciar cobrança.
