@@ -66,7 +66,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   do Context Carrefour foi aberta em 15/07 somente para a reautenticação manual; depois dela
   será necessário validar o login antes do próximo teste ao vivo. **Não usar a chave de
   reposição enviada em chat em 15/07:** ela também foi exposta; regenerar outra diretamente
-  no painel e configurá-la na Vercel sem compartilhá-la em conversa.
+  no painel e configurá-la na Vercel sem compartilhá-la em conversa. A validação da variável
+  puxada de produção retornou `401 Missing x-bb-api-key`; após salvar a nova chave, implantar
+  antes de abrir novo preflight.
 
 ### Financeiro, fiscal e jurídico
 
