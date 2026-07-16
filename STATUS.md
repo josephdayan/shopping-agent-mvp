@@ -63,12 +63,12 @@ quando existir uma rota urgente formalmente compatível.
 | **Multi-loja + roteamento** | ✅ Carrefour + Petz + Boticário; **1 loja por pedido**, escolhida por match |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
-| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Falta allowlist Meta, configuração Pagar.me, migration e sandbox. Não usa 360dialog. |
+| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Não usa 360dialog. |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
 | **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
-| **Testes focados da compra** | ✅ TypeScript + compradores/busca/política passam. ⚠️ O `npm test` completo ainda tem evals históricos que esperam CEP em vez de endereço completo. |
+| **Testes de compra e conversa** | ✅ TypeScript, compradores/busca/política e a suíte integral passaram em 15/07 (201 testes). Os evals agora cobrem o onboarding de endereço completo. Build local de produção aprovado; checkout ao vivo continua um gate separado. |
 | **Cotação Carrefour antes de cobrar** | 🟡 Implementada e implantada em 15/07: preflight `cart_only` monta a sacola; só libera Pix/cartão após total, frete e prazo do checkout; expira em 5 min e libera o Context quando expira/cancela. Migrations aplicadas e build passou. A primeira tentativa ao vivo achou o Context sem login antes de tocar no carrinho; falta reautenticar e validar frete/prazo/cartão/3DS. |
 | **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em Petz/Carrefour. Só usar com parceiro compatível. |
 | **Cobertura** | ⚠️ O preset de SP e a guarda de 12 km continuam no código, mas são legado do motoboy. Para entrega direta, o checkout do varejista é a autoridade por CEP. |
@@ -78,7 +78,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
 | **Pedido mínimo** | ✅ por loja (Carrefour = R$30); avisa o cliente p/ completar |
 | **Painel do operador `/ops`** | ✅ existe; o fluxo legado de retirada/despacho precisa ser adaptado para entrega do varejista |
-| **Onboarding de endereço** | ⚠️ CEP já é persistido; o fluxo novo precisa guardar endereço completo de forma segura e confirmar no resumo. |
+| **Onboarding de endereço** | 🟡 o endereço completo é pedido e persistido uma vez no fluxo e está coberto pelos evals; falta validar o resumo/cotação em checkout real. |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
 | **Privacidade da loja** | ✅ a Lia não fala "Carrefour" pro cliente ("Procurando…") |
 | **Canal** | ✅ Meta Cloud API em produção; Twilio Sandbox é legado de teste. |
@@ -95,8 +95,8 @@ quando existir uma rota urgente formalmente compatível.
 - **Testar checkout e cartão salvo** em `cart_only`, incluindo CVV, 3DS, CAPTCHA e antifraude.
 - **Revisar a conversa e o `/ops`** para frete/prazo do varejista em vez de cotação Uber
   obrigatória.
-- **Antes de habilitar One-Click:** aplicar migrations de pagamento, obter a allowlist
-  Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
+- **Antes de habilitar One-Click:** confirmar as migrations de pagamento aplicadas, obter a
+  allowlist Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
   sandbox de primeira compra, recompra, recusa e resposta perdida. Guia:
   [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
 
@@ -186,6 +186,11 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > O operador informou que a reautenticação foi concluída na tela em 15/07; ainda falta
 > escolher endereço salvo e item de teste para executar o preflight de carrinho, frete e
 > prazo. Nenhum pagamento ou compra foi iniciado.
+
+Em 15/07, o hash de aprovação do carrinho passou a incluir frete e promessa de entrega,
+além de itens e total. Falhas Browserbase 401/503, sessão Carrefour expirada e página de
+varejista indisponível passaram a ser classificadas explicitamente e testadas sem abrir
+checkout; `cart_only` também é testado como bloqueio anterior ao acesso ao Browserbase.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

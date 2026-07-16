@@ -236,3 +236,21 @@ O operador informou em 15/07 que concluiu o login Carrefour nessa sessão. A pr�
 um preflight de cotação em `cart_only`, limitado a um item e ao endereço salvo que o operador
 indicar, para conferir carrinho, frete e prazo. Não há autorização nem necessidade de emitir
 pagamento ou finalizar compra nessa etapa.
+
+## Qualidade autônoma — 15/07
+
+Foi alinhada a suíte de evals ao onboarding vigente: o primeiro atendimento pede endereço
+completo e só então CEP; cenários de cliente recorrente agora trazem ambos os dados salvos.
+Esse ajuste é de teste e não altera o fluxo de produção.
+
+O hash de aprovação do carrinho passou a incluir frete e promessa de entrega, de modo que
+uma alteração de modalidade/prazo invalida a aprovação mesmo se o total coincidir. Foram
+adicionados testes para `cart_only`, preço/itens ambíguos já protegidos pela política e para
+falhas Browserbase: credencial recusada, indisponibilidade temporária, sessão expirada e
+página Carrefour indisponível. Esses caminhos falham fechados, sem abrir checkout nem
+acionar compra.
+
+Verificação local concluída em 15/07: `npx tsc --noEmit`, `npm test` (201 testes) e
+`npm run build` passaram. O build emitiu somente o aviso não bloqueante existente de uso de
+`<img>` em `src/components/chat-app.tsx`. Não houve deploy, teste ao vivo, carrinho,
+cobrança ou compra durante essa verificação.

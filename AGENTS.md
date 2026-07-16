@@ -128,9 +128,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - produção foi implantada e estava `Ready` após as mudanças de busca/carrinho;
 - `npx tsc --noEmit` passou;
 - testes focados de compra/busca/política passaram;
-- o `npm test` completo ainda contém evals históricos que esperam coleta de CEP, enquanto
-  o comportamento atual pede endereço completo. Não declarar a suíte inteira verde até
-  alinhar esses contratos.
+- em 15/07, os evals foram alinhados ao onboarding de endereço completo e `npm test` passou
+  integralmente (201 testes). O build local de produção também passou; isso não substitui
+  validação ao vivo de checkout ou piloto.
 
 ## Segurança e limites financeiros
 
@@ -138,6 +138,8 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - Nunca clicar no botão final de compra sem confirmação explícita no momento da ação.
 - Nunca repetir automaticamente um clique financeiro quando o resultado for incerto.
 - CAPTCHA, OTP, login, CVV e 3DS viram `needs_human`; não burlar desafios.
+- O hash que protege uma aprovação deve incluir itens, total, frete e promessa de entrega;
+  uma mudança em qualquer um deles invalida a aprovação anterior.
 - Não guardar número de cartão ou CVV. O Pagar.me recebe os dados diretamente pelo
   `tokenizecard.js`; a Lia persiste somente IDs tokenizados, últimos quatro dígitos e o
   registro de consentimento necessários para a recompra.
@@ -192,9 +194,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 6. Pilotar 5–10 pedidos controlados com entrega direta.
 7. Para same-day, obter parceiro local ou contrato merchant/courier antes de desenvolver
    nova automação de retirada.
-8. Alinhar os evals históricos de CEP com o contrato atual de endereço completo.
-9. Antes de ativar One-Click: aplicar migrations de pagamento, liberar Payments API BR na
-   WABA, liberar o domínio no Pagar.me e configurar as chaves/webhooks em produção.
+8. Antes de ativar One-Click: confirmar as migrations de pagamento já aplicadas, liberar
+   Payments API BR na WABA, liberar o domínio no Pagar.me e configurar as chaves/webhooks
+   em produção.
 
 ## Estado dos conectores
 
@@ -207,6 +209,8 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - **Pagar.me + Meta One-Click:** código pronto, flag desligada; depende da habilitação
   externa e de validação sandbox.
 - **Browserbase:** navegação persistente e auditável nos varejistas.
+  Falhas de credencial, indisponibilidade e sessão expirada devem ser classificadas de forma
+  explícita e falhar fechadas; não transformá-las em tentativa de checkout.
 - **Uber Direct:** opcional para parceiro que autorize courier.
 
 ## Mapa rápido do código

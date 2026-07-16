@@ -39,6 +39,8 @@ function snapshot(total = 45): CartSnapshot {
       }
     ],
     itemsSubtotal: total,
+    deliveryFee: 4.99,
+    deliveryPromise: "Entrega amanhã",
     total,
     currency: "BRL",
     capturedAt: "2026-07-13T12:00:00.000Z",
@@ -50,6 +52,14 @@ test("cartHash is stable despite item order and capture timestamp", () => {
   const first = snapshot();
   const second = { ...snapshot(), capturedAt: "2026-07-13T14:00:00.000Z" };
   assert.equal(cartHash(first), cartHash(second));
+});
+
+test("cartHash changes when retailer freight or delivery promise changes", () => {
+  const first = snapshot();
+  const freightChanged = { ...snapshot(), deliveryFee: 7.99 };
+  const promiseChanged = { ...snapshot(), deliveryPromise: "Entrega em dois dias" };
+  assert.notEqual(cartHash(first), cartHash(freightChanged));
+  assert.notEqual(cartHash(first), cartHash(promiseChanged));
 });
 
 test("policy never auto-buys while disabled or in cart_only", () => {
@@ -73,6 +83,8 @@ test("policy auto-buy guard rejects price deltas and unresolved products", () =>
     () => {
       assert.equal(canAutoPurchase({ snapshot: snapshot(45), expectedTotal: 45 }).allowed, true);
       assert.equal(canAutoPurchase({ snapshot: snapshot(49), expectedTotal: 45 }).reason, "price_delta_above_policy");
+      const cartNotReady = { ...snapshot(), status: "needs_human" as const };
+      assert.equal(canAutoPurchase({ snapshot: cartNotReady, expectedTotal: 45 }).reason, "cart_not_ready");
       const unresolved = snapshot();
       unresolved.items[0].status = "ambiguous";
       assert.equal(canAutoPurchase({ snapshot: unresolved, expectedTotal: 45 }).reason, "item_not_resolved");

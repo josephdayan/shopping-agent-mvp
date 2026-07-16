@@ -55,7 +55,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Manter produção com `PURCHASE_AUTOMATION_MODE=cart_only`.
 - [x] Não armazenar cartão, CVV, senha ou credenciais do varejista no banco/documentação.
 - [ ] Exigir confirmação explícita no momento de qualquer compra final durante o piloto.
-- [ ] Tratar login, OTP, CAPTCHA, CVV e 3DS como `needs_human`.
+- [x] Tratar login, OTP, CAPTCHA, CVV e 3DS como `needs_human`. A detecção Carrefour
+  cobre login/sessão expirada, CAPTCHA e 3DS; os testes unitários confirmam a classificação.
 - [ ] Implementar fila ou isolamento por conta/Context Browserbase para impedir carrinhos
   concorrentes.
 - [ ] Validar recuperação segura quando a sessão Browserbase expirar.
@@ -96,8 +97,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 ### Cartão One-Click no WhatsApp
 
-- [ ] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
-  `20260714123000_pagarme_one_click` no ambiente de produção.
+- [x] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
+  `20260714123000_pagarme_one_click` no ambiente de produção. Aplicadas em 15/07;
+  a ativação do One-Click continua bloqueada pelas dependências externas abaixo.
 - [ ] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
   shape definitivo do webhook de confirmação.
 - [ ] Configurar Pagar.me V5: chaves, domínio liberado para `tokenizecard.js`, webhook e
@@ -165,13 +167,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 - [x] `npx tsc --noEmit` aprovado após as mudanças atuais.
 - [x] Testes focados de busca, compra e política aprovados.
-- [ ] Alinhar os evals históricos que esperam apenas CEP ao contrato atual de endereço
-  completo.
-- [ ] Deixar a suíte `npm test` inteira verde.
+- [x] Alinhar os evals históricos que esperam apenas CEP ao contrato atual de endereço
+  completo. Os cenários agora simulam endereço completo + CEP e clientes recorrentes.
+- [x] Deixar a suíte `npm test` inteira verde. A rodada de 15/07 passou com 201 testes;
+  `npx tsc --noEmit` e `npm run build` também passaram.
 - [ ] Criar testes de idempotência, cotação vencida, preço alterado e pagamento duplicado.
 - [x] Criar testes unitários do payload Meta, parser, idempotência Pagar.me e resposta
   ambígua do PSP. Os testes de banco aguardam as migrations em um Postgres de teste.
-- [ ] Criar testes de queda do Browserbase, varejista indisponível e sessão expirada.
+- [x] Criar testes de queda do Browserbase, varejista indisponível e sessão expirada.
+  `tests/carrefour-buyer.test.ts` cobre erro Browserbase 401/503, indisponibilidade exibida
+  pelo varejista e sessão expirada; os casos falham fechados sem checkout.
 - [ ] Medir latência p50/p95 por varejista; meta inicial de 15–30 s para cotação completa.
 - [ ] Configurar alertas para falha de webhook, cobrança, carrinho, compra e estorno.
 

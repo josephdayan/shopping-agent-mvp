@@ -97,6 +97,7 @@ export class PurchaseError extends Error {
       | "CAPTCHA_REQUIRED"
       | "PAYMENT_ACTION_REQUIRED"
       | "MANUAL_ACTION_REQUIRED"
+      | "RETAILER_UNAVAILABLE"
       | "RETAILER_BUSY"
       | "ORDER_STATUS_UNKNOWN"
       | "UNSUPPORTED_STORE",

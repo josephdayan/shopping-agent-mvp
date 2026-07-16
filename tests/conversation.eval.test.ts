@@ -27,6 +27,7 @@ const RUN = `${Date.now().toString(36)}${process.pid}`;
 // Keep cleanup isolated too. A fixed prefix let a second test process delete a
 // conversation while the first one was still writing messages into it.
 const PREFIX = `+5500${String(Date.now()).slice(-6)}${String(process.pid).slice(-2)}`;
+const TEST_ADDRESS = "Rua das Flores, 123, Bela Vista, São Paulo - SP";
 let phoneSeq = 0;
 let msgSeq = 0;
 let dbOk = false;
@@ -73,10 +74,10 @@ function driver(phone: string) {
   return { send, sendAndResolve };
 }
 
-// Creates a user that already finished onboarding (saved CEP), like a returning customer.
+// Creates a user that already finished onboarding (saved address + CEP), like a returning customer.
 async function returningCustomer() {
   const phone = newPhone();
-  await prisma.user.create({ data: { phone, cep: "01310-100" } });
+  await prisma.user.create({ data: { phone, cep: "01310-100", defaultAddress: TEST_ADDRESS } });
   return { phone, ...driver(phone) };
 }
 
@@ -139,24 +140,26 @@ after(async () => {
   await prisma.$disconnect();
 });
 
-test("saudação: sem CEP pede o CEP; com CEP se apresenta e pede itens", async (t) => {
+test("saudação: sem endereço pede endereço completo; cliente recorrente se apresenta e pede itens", async (t) => {
   if (!dbOk) return t.skip();
   const fresh = driver(newPhone());
   const hello = await fresh.send("oi");
-  assert.match(hello, /CEP/);
+  assert.match(hello, /endereço completo/i);
   const back = await returningCustomer();
   const hi = await back.send("bom dia");
   assert.match(hi, /Lia/);
   assert.doesNotMatch(hi, /Procurando/);
 });
 
-test("onboarding: pedido antes do CEP anota itens, CEP destrava a cotação", async (t) => {
+test("onboarding: pedido antes do endereço anota itens; endereço e CEP destravam a cotação", async (t) => {
   if (!dbOk) return t.skip();
   const { query, qty } = expensiveItemQuery();
   const d = driver(newPhone());
   const first = await d.send(`quero ${qty} ${query}`);
-  assert.match(first, /CEP/);
+  assert.match(first, /endereço completo/i);
   assert.match(first, /anotei/i);
+  const addressStep = await d.send(TEST_ADDRESS);
+  assert.match(addressStep, /CEP/);
   let quoted = await d.send("01310-100");
   assert.match(quoted, /Endereço salvo/);
   for (let i = 0; i < 6 && /Responde \*1\*/.test(quoted); i++) quoted += "\n---\n" + (await d.send("1"));
@@ -187,7 +190,7 @@ test("multi-item ambíguo avisa que vai escolher um de cada vez e preserva o seg
 test("opções antigas somem em silêncio no oi e a limpeza fica persistida", async (t) => {
   if (!dbOk) return t.skip();
   const phone = newPhone();
-  const user = await prisma.user.create({ data: { phone, cep: "01310-100" } });
+  const user = await prisma.user.create({ data: { phone, cep: "01310-100", defaultAddress: TEST_ADDRESS } });
   const convo = await prisma.conversation.create({
     data: {
       userId: user.id,
@@ -251,10 +254,11 @@ test("quantidade: depois de escolher o produto aceita 3 unidades e recalcula", a
   assert.match(after, /3x /i);
 });
 
-test("fluxo preguiçoso completo: oi → CEP → qro produto → duas → pix msm", async (t) => {
+test("fluxo preguiçoso completo: oi → endereço → CEP → produto → duas → pix msm", async (t) => {
   if (!dbOk) return t.skip();
   const d = driver(newPhone());
-  assert.match(await d.send("oi"), /CEP/i);
+  assert.match(await d.send("oi"), /endereço completo/i);
+  assert.match(await d.send(TEST_ADDRESS), /CEP/i);
   assert.match(await d.send("01310-100"), /Endereço salvo/i);
   const offer = await d.send("qro creatina pf");
   assert.match(offer, /opções[\s\S]*creatina/i);
@@ -522,7 +526,8 @@ test("Grande SP: Osasco é aceito (cobre + guarda de distância passa)", async (
   await withPreset("grande-sp", async () => {
     const phone = newPhone();
     const d = driver(phone);
-    await d.send("oi, quero arroz"); // onboarding → pede CEP
+    await d.send("oi, quero arroz"); // onboarding → pede endereço completo
+    assert.match(await d.send(TEST_ADDRESS), /CEP/i);
     const r = await d.sendAndResolve("06233-030"); // Osasco (~5km de Tamboré)
     assert.ok(!/longe demais|não chega/i.test(r), `recusou Osasco indevidamente: ${r.slice(0, 160)}`);
     const user = await prisma.user.findUnique({ where: { phone } });
@@ -637,7 +642,7 @@ test("escolhendo perfume: 'masculino' refina Arbo em vez de virar nova busca", a
 test("webhook duplicado (retry do Twilio): mesma mensagem não processa duas vezes", async (t) => {
   if (!dbOk) return t.skip();
   const phone = newPhone();
-  await prisma.user.create({ data: { phone, cep: "01310-100" } });
+  await prisma.user.create({ data: { phone, cep: "01310-100", defaultAddress: TEST_ADDRESS } });
   const before = outbox.length;
   await handleDeliveryMessage({ phone, text: "2 arroz", messageId: "dup_1" });
   const afterFirst = outbox.length;

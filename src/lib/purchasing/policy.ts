@@ -39,6 +39,10 @@ export function cartHash(snapshot: CartSnapshot): string {
     storeKey: snapshot.storeKey,
     storeUnitId: snapshot.storeUnitId ?? null,
     retailerCartId: snapshot.retailerCartId ?? null,
+    // A changed promise or freight must invalidate a prior approval even when a
+    // retailer happens to keep the order total unchanged.
+    deliveryFee: snapshot.deliveryFee == null ? null : money(snapshot.deliveryFee),
+    deliveryPromise: snapshot.deliveryPromise ?? null,
     total: money(snapshot.total),
     items: [...snapshot.items]
       .map((item) => ({

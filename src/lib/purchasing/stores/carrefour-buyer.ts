@@ -105,10 +105,37 @@ export function detectCarrefourHumanAction(text: string): PurchaseError | null {
   if (/codigo de seguranca|3d secure|3ds|autenticacao do banco|confirmar no aplicativo|confirme no aplicativo/.test(normalized)) {
     return new PurchaseError("PAYMENT_ACTION_REQUIRED", "O cartão pediu confirmação/3DS. Conclua a autenticação na sessão da loja.");
   }
-  if (/entrar na conta|faca login|acesse sua conta/.test(normalized)) {
+  if (/entrar na conta|faca login|acesse sua conta|sessao expirada|sessao terminou/.test(normalized)) {
     return new PurchaseError("LOGIN_REQUIRED", "A sessão Carrefour perdeu o login. Entre novamente no Context persistente.");
   }
+  if (/temporariamente indisponivel|em manutencao|tente novamente mais tarde/.test(normalized)) {
+    return new PurchaseError("RETAILER_UNAVAILABLE", "O Carrefour está indisponível no momento. Não continue o checkout; tente novamente mais tarde.");
+  }
   return null;
+}
+
+function errorStatus(error: unknown): number | undefined {
+  if (!error || typeof error !== "object") return undefined;
+  const value = (error as { status?: unknown }).status;
+  return typeof value === "number" ? value : undefined;
+}
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error ?? "");
+}
+
+// Browserbase errors must not be flattened into PURCHASE_WORKER_ERROR: operators
+// need to distinguish a bad credential from a temporary retailer/browser outage.
+export function classifyCarrefourBrowserbaseFailure(error: unknown): PurchaseError {
+  const status = errorStatus(error);
+  const text = normalize(errorText(error));
+  if (status === 401 || status === 403 || /api key|unauthori[sz]ed|forbidden/.test(text)) {
+    return new PurchaseError("CONFIGURATION_REQUIRED", "A credencial Browserbase do Carrefour não foi aceita. Atualize a configuração antes de retentar.");
+  }
+  if (status === 408 || status === 429 || (status != null && status >= 500) || /timeout|timed out|network|connection|unavailable|temporar/.test(text)) {
+    return new PurchaseError("RETAILER_UNAVAILABLE", "Não foi possível abrir a sessão Carrefour agora. Não continue o checkout; tente novamente mais tarde.");
+  }
+  return new PurchaseError("MANUAL_ACTION_REQUIRED", "Não foi possível abrir a sessão Carrefour com segurança. Confira o Context antes de tentar novamente.");
 }
 
 async function readCarrefourCartText(page: Page): Promise<string> {
@@ -196,6 +223,14 @@ function browserSessionOptions() {
   };
 }
 
+async function createCarrefourSession(bb: Browserbase) {
+  try {
+    return await bb.sessions.create(browserSessionOptions());
+  } catch (error) {
+    throw classifyCarrefourBrowserbaseFailure(error);
+  }
+}
+
 export class CarrefourBuyer implements BuyerConnector {
   key = "carrefour";
 
@@ -208,7 +243,7 @@ export class CarrefourBuyer implements BuyerConnector {
     }
 
     const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
-    const session = await bb.sessions.create(browserSessionOptions());
+    const session = await createCarrefourSession(bb);
     const browser = await chromium.connectOverCDP(session.connectUrl);
     const context = browser.contexts()[0];
     const page = context.pages()[0] ?? (await context.newPage());
@@ -301,7 +336,7 @@ export class CarrefourBuyer implements BuyerConnector {
       throw new PurchaseError("CONFIGURATION_REQUIRED", "Faltam BROWSERBASE_API_KEY e CARREFOUR_BROWSER_CONTEXT_ID para revalidar o carrinho.");
     }
     const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
-    const session = await bb.sessions.create(browserSessionOptions());
+    const session = await createCarrefourSession(bb);
     const browser = await chromium.connectOverCDP(session.connectUrl);
     const context = browser.contexts()[0];
     const page = context.pages()[0] ?? (await context.newPage());
@@ -363,7 +398,7 @@ export class CarrefourBuyer implements BuyerConnector {
     }
 
     const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
-    const session = await bb.sessions.create(browserSessionOptions());
+    const session = await createCarrefourSession(bb);
     const browser = await chromium.connectOverCDP(session.connectUrl);
     const context = browser.contexts()[0];
     const page = context.pages()[0] ?? (await context.newPage());
