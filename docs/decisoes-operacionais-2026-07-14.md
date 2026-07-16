@@ -196,9 +196,9 @@ checkout ou iniciar cobrança; antes do próximo preflight, a sessão deve ser c
 autenticada e a chave Browserbase regenerada deve estar configurada nos ambientes.
 
 Uma chave Browserbase de reposição foi enviada por chat durante essa operação. Ela também
-deve ser considerada exposta e não pode ser instalada na Vercel: é necessário regenerar
-outra chave diretamente no painel, copiá-la somente para o campo secreto da Vercel e então
-remover a chave anterior de todos os ambientes.
+deve ser considerada exposta e não pode ser instalada na Vercel, mesmo com autorização
+posterior: é necessário regenerar outra chave diretamente no painel, copiá-la somente para o
+campo secreto da Vercel e então remover a chave anterior de todos os ambientes.
 
 Ao conferir a variável trazida do ambiente de produção em 15/07, o Browserbase respondeu
 `401 Missing x-bb-api-key`. Portanto, a Vercel ainda não tem uma chave Browserbase utilizável

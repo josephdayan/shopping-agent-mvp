@@ -150,9 +150,10 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   Browserbase e atualizar os ambientes que a consomem. Em 15/07 foi aberta uma sessão
   persistente do Context Carrefour somente para reautenticação manual; não houve carrinho,
   checkout ou cobrança. Uma chave Browserbase de reposição foi colada em conversa em 15/07:
-  ela também é exposta, não deve ser configurada e precisa ser regenerada novamente. A
-  validação da variável puxada de produção retornou `401 Missing x-bb-api-key`; não abrir
-  novo preflight antes de configurar chave válida na Vercel e implantar.
+  ela também é exposta, não deve ser configurada mesmo com autorização posterior e precisa
+  ser regenerada novamente. A validação da variável puxada de produção retornou
+  `401 Missing x-bb-api-key`; não abrir novo preflight antes de configurar chave válida na
+  Vercel e implantar.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

@@ -168,9 +168,10 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > 15/07; a chave Browserbase ainda precisa ser regenerada e atualizada nos ambientes antes
 > do piloto. Em 15/07 foi aberta uma sessão persistente do Context Carrefour, sem itens ou
 > cobrança, aguardando reautenticação manual por senha/OTP/CAPTCHA. Uma chave de reposição
-> foi enviada por chat e, portanto, também deve ser descartada e regenerada antes do uso.
-> A variável atual de produção não autenticou no Browserbase em 15/07 (`401` por chave
-> ausente); configurar a nova chave na Vercel e implantar é pré-requisito para retestar.
+> foi enviada por chat e, portanto, também deve ser descartada e regenerada antes do uso,
+> mesmo com autorização posterior para instalá-la. A variável atual de produção não autenticou
+> no Browserbase em 15/07 (`401` por chave ausente); configurar a nova chave na Vercel e
+> implantar é pré-requisito para retestar.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
