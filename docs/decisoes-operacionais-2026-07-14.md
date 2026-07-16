@@ -207,3 +207,9 @@ nova versão é condição obrigatória antes de reabrir qualquer preflight.
 
 Em 15/07 a URL direta de Environment Variables do projeto Vercel foi aberta no navegador
 embutido, mas a página exigiu login manual antes de permitir a edição da variável.
+
+Após o operador tentar salvar a nova chave apenas no escopo Production em 15/07, uma nova
+leitura do ambiente de produção pelo CLI (`vercel env pull`) continuou sem valor para
+`BROWSERBASE_API_KEY`. Production é escopo suficiente para o deploy e para a validação ao
+vivo; o bloqueio atual é confirmar no painel que a edição contém um valor não vazio e foi
+realmente salva. Não houve deploy nem novo preflight após essa tentativa.

@@ -154,7 +154,10 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   ser regenerada novamente. A validação da variável puxada de produção retornou
   `401 Missing x-bb-api-key`; não abrir novo preflight antes de configurar chave válida na
   Vercel e implantar. Em 15/07 a URL de Environment Variables da Vercel foi aberta no
-  navegador embutido, mas exigiu login manual na conta Vercel antes da configuração.
+  navegador embutido, mas exigiu login manual na conta Vercel antes da configuração. Após
+  uma tentativa de salvar somente em Production, uma nova leitura de `vercel env pull`
+  ainda não trouxe valor para `BROWSERBASE_API_KEY`; conferir no painel que a edição foi
+  realmente salva com um valor não vazio antes de implantar.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

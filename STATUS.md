@@ -172,7 +172,10 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > mesmo com autorização posterior para instalá-la. A variável atual de produção não autenticou
 > no Browserbase em 15/07 (`401` por chave ausente); configurar a nova chave na Vercel e
 > implantar é pré-requisito para retestar. A URL correta de Environment Variables foi aberta
-> no navegador embutido em 15/07, mas a Vercel pediu login manual antes da edição.
+> no navegador embutido em 15/07, mas a Vercel pediu login manual antes da edição. Após o
+> operador tentar salvar apenas em Production, uma leitura nova por `vercel env pull` ainda
+> encontrou `BROWSERBASE_API_KEY` sem valor; confirmar o salvamento efetivo no painel antes
+> de disparar outro deploy.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

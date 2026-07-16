@@ -70,7 +70,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   em conversa. A validação da variável puxada de produção retornou
   `401 Missing x-bb-api-key`; após salvar a nova chave, implantar antes de abrir novo
   preflight. A URL correta de Environment Variables já foi aberta no navegador embutido,
-  mas a Vercel pediu login manual antes da edição.
+  mas a Vercel pediu login manual antes da edição. Após tentar salvar somente em Production,
+  a leitura atual via `vercel env pull` ainda retornou `BROWSERBASE_API_KEY` sem valor;
+  confirmar no painel que a edição foi efetivamente salva antes do deploy.
 
 ### Financeiro, fiscal e jurídico
 
