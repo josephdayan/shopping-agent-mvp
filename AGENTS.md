@@ -157,7 +157,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   navegador embutido, mas exigiu login manual na conta Vercel antes da configuração. Após
   uma tentativa de salvar somente em Production, uma nova leitura de `vercel env pull`
   ainda não trouxe valor para `BROWSERBASE_API_KEY`; conferir no painel que a edição foi
-  realmente salva com um valor não vazio antes de implantar.
+  realmente salva com um valor não vazio antes de implantar. A tela de edição revelou em
+  seguida um valor com prefixo `sk_live_`, que não é uma chave Browserbase (`bb_live_`):
+  não implantar até substituir pelo segredo Browserbase correto e marcá-lo como Sensitive.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

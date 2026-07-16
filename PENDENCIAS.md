@@ -72,7 +72,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   preflight. A URL correta de Environment Variables já foi aberta no navegador embutido,
   mas a Vercel pediu login manual antes da edição. Após tentar salvar somente em Production,
   a leitura atual via `vercel env pull` ainda retornou `BROWSERBASE_API_KEY` sem valor;
-  confirmar no painel que a edição foi efetivamente salva antes do deploy.
+  confirmar no painel que a edição foi efetivamente salva antes do deploy. A edição exibida
+  tinha prefixo `sk_live_`, não compatível com Browserbase: substituir por chave nova
+  `bb_live_`, marcar Sensitive e só então implantar.
 
 ### Financeiro, fiscal e jurídico
 

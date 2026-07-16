@@ -175,7 +175,9 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > no navegador embutido em 15/07, mas a Vercel pediu login manual antes da edição. Após o
 > operador tentar salvar apenas em Production, uma leitura nova por `vercel env pull` ainda
 > encontrou `BROWSERBASE_API_KEY` sem valor; confirmar o salvamento efetivo no painel antes
-> de disparar outro deploy.
+> de disparar outro deploy. A tela posterior mostrou valor `sk_live_` no campo, prefixo que
+> não pertence ao Browserbase; substituir por uma nova chave `bb_live_` e marcar Sensitive
+> antes de implantar.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

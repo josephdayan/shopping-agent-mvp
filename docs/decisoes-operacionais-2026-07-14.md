@@ -213,3 +213,9 @@ leitura do ambiente de produção pelo CLI (`vercel env pull`) continuou sem val
 `BROWSERBASE_API_KEY`. Production é escopo suficiente para o deploy e para a validação ao
 vivo; o bloqueio atual é confirmar no painel que a edição contém um valor não vazio e foi
 realmente salva. Não houve deploy nem novo preflight após essa tentativa.
+
+A inspeção visual do formulário salvo mostrou que o valor começava por `sk_live_`, prefixo
+incompatível com uma chave Browserbase, que deve começar por `bb_live_`. Não acionar
+Redeploy: o operador precisa substituir o campo por uma chave Browserbase recém-regenerada,
+marcar a variável como Sensitive e salvar em Production. O valor não foi copiado, registrado
+nem usado na operação.
