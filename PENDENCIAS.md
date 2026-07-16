@@ -74,7 +74,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   a leitura atual via `vercel env pull` ainda retornou `BROWSERBASE_API_KEY` sem valor;
   confirmar no painel que a edição foi efetivamente salva antes do deploy. A edição exibida
   tinha prefixo `sk_live_`, não compatível com Browserbase: substituir por chave nova
-  `bb_live_`, marcar Sensitive e só então implantar.
+  `bb_live_`, marcar Sensitive e só então implantar. A segunda leitura de Production após a
+  alegada correção também não trouxe a variável; não implantar nem reabrir o preflight.
 
 ### Financeiro, fiscal e jurídico
 

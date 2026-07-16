@@ -219,3 +219,8 @@ incompatível com uma chave Browserbase, que deve começar por `bb_live_`. Não 
 Redeploy: o operador precisa substituir o campo por uma chave Browserbase recém-regenerada,
 marcar a variável como Sensitive e salvar em Production. O valor não foi copiado, registrado
 nem usado na operação.
+
+Uma segunda leitura independente do ambiente Production após a alegada correção ainda não
+recebeu `BROWSERBASE_API_KEY`. Até o painel apresentar a chave Browserbase correta e uma
+nova leitura conseguir autenticar uma chamada mínima, permanecem vedados o Redeploy e o
+preflight Carrefour.

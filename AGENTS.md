@@ -160,6 +160,8 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   realmente salva com um valor não vazio antes de implantar. A tela de edição revelou em
   seguida um valor com prefixo `sk_live_`, que não é uma chave Browserbase (`bb_live_`):
   não implantar até substituir pelo segredo Browserbase correto e marcá-lo como Sensitive.
+  Uma segunda leitura do Production após a alegada correção continuou sem a variável; o
+  deploy e o preflight Carrefour permanecem bloqueados.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 
