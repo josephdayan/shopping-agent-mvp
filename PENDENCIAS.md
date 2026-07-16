@@ -69,7 +69,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   exposta; regenerar outra diretamente no painel e configurá-la na Vercel sem compartilhá-la
   em conversa. A validação da variável puxada de produção retornou
   `401 Missing x-bb-api-key`; após salvar a nova chave, implantar antes de abrir novo
-  preflight.
+  preflight. A URL correta de Environment Variables já foi aberta no navegador embutido,
+  mas a Vercel pediu login manual antes da edição.
 
 ### Financeiro, fiscal e jurídico
 

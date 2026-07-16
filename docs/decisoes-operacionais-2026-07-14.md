@@ -204,3 +204,6 @@ Ao conferir a variável trazida do ambiente de produção em 15/07, o Browserbas
 `401 Missing x-bb-api-key`. Portanto, a Vercel ainda não tem uma chave Browserbase utilizável
 para o projeto: salvar a chave recém-regenerada em Production e Development e implantar uma
 nova versão é condição obrigatória antes de reabrir qualquer preflight.
+
+Em 15/07 a URL direta de Environment Variables do projeto Vercel foi aberta no navegador
+embutido, mas a página exigiu login manual antes de permitir a edição da variável.
