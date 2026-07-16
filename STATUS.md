@@ -183,6 +183,9 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > produção subsequente ficou Ready em 15/07. A CLI local não baixa esse segredo Sensitive,
 > portanto a autenticação será confirmada pelo fluxo implantado após a reautenticação manual
 > do Context Carrefour, que foi reaberto sem itens, checkout ou cobrança.
+> O operador informou que a reautenticação foi concluída na tela em 15/07; ainda falta
+> escolher endereço salvo e item de teste para executar o preflight de carrinho, frete e
+> prazo. Nenhum pagamento ou compra foi iniciado.
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).

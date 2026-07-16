@@ -165,7 +165,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   `BROWSERBASE_API_KEY` como Sensitive, Production e "Updated just now"; um novo deploy de
   produção ficou Ready em 15/07. A confirmação de autenticação Browserbase ainda não pode
   ser feita localmente porque a variável Sensitive não é baixada pelo CLI; a sessão Carrefour
-  foi reaberta para login humano antes de qualquer preflight.
+  foi reaberta para login humano antes de qualquer preflight. Em seguida, o operador informou
+  que concluiu o login na tela; falta escolher o endereço salvo e o item de teste antes do
+  preflight de carrinho, frete e prazo. Não houve item, checkout ou cobrança neste ciclo.
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 

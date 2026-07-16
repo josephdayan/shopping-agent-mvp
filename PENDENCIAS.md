@@ -78,7 +78,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   alegada correção também não trouxe a variável; não implantar nem reabrir o preflight. O
   painel depois confirmou a variável Sensitive atualizada em Production e o novo deploy
   ficou Ready em 15/07; a chave não é baixada localmente pelo CLI por ser Sensitive. Falta
-  concluir a reautenticação humana do Context Carrefour e validar o preflight implantado.
+  validar o preflight implantado. O operador informou que concluiu a reautenticação humana;
+  falta definir endereço salvo e item de teste para a cotação, sem cobrar nem comprar.
 
 ### Financeiro, fiscal e jurídico
 

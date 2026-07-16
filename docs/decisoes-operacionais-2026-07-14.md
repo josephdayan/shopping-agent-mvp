@@ -231,3 +231,8 @@ Ready em 15/07 e mantém `PURCHASE_AUTOMATION_MODE=cart_only`. A chave Sensitive
 baixada pelo CLI local; por isso, a autenticação Browserbase será comprovada pelo fluxo em
 produção, depois da reautenticação manual do Context Carrefour. A sessão persistente foi
 reaberta para essa ação humana, sem inserir itens, abrir checkout ou iniciar cobrança.
+
+O operador informou em 15/07 que concluiu o login Carrefour nessa sessão. A próxima etapa é
+um preflight de cotação em `cart_only`, limitado a um item e ao endereço salvo que o operador
+indicar, para conferir carrinho, frete e prazo. Não há autorização nem necessidade de emitir
+pagamento ou finalizar compra nessa etapa.
