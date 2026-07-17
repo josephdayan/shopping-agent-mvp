@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -24,11 +25,10 @@ model User {
   cardEnrollmentSessions CardEnrollmentSession[]
 }
 
-// The new operational model: a basket of everyday items the customer requests in
-// WhatsApp, fulfilled from a pluggable STORE (Carrefour first; add more via the
-// store registry) through clique-e-retire + a courier (Uber Direct/Lalamove).
-// The whole same-day operation — pay, operator buys, dispatch, deliver — runs off
-// this row and the operator dashboard.
+// The operational model: a basket of everyday items requested in WhatsApp and
+// fulfilled by a pluggable store. Retailer delivery is the default; pickup + courier
+// is retained only for formally-authorized partners. Quote, payment, purchase and
+// delivery are coordinated from this row and the operator dashboard.
 model DeliveryOrder {
   id                  String        @id @default(cuid())
   userId              String
@@ -44,22 +44,26 @@ model DeliveryOrder {
   storeAddress        String?
   storeOrderNumber    String?
   items               Json
-  // One entry per pickup/store for baskets spanning multiple stores.
+  // One entry per store fulfillment, including delivery mode and live promise.
   fulfillments        Json?
   itemsSubtotal       Float         @default(0)
-  // Courier is also pluggable via the courier registry.
+  // "retailer_delivery" is the default; courier keys require an authorized partner.
   courierKey          String        @default("uber_direct")
   courierQuoteId      String?
   deliveryFee         Float         @default(0)
   serviceFee          Float         @default(0)
   total               Float         @default(0)
-  // Lifecycle: awaiting_payment -> paid -> operator_buying -> ready_for_pickup
-  //            -> dispatched -> delivered ; (canceled / refunded)
+  // Direct lifecycle: awaiting_payment -> paid -> retailer_preparing
+  //                   -> retailer_out_for_delivery -> delivered.
+  // Legacy/partner courier: paid -> operator_buying -> ready_for_pickup
+  //                         -> dispatched -> delivered.
+  // Paid cancellation: refund_pending -> refunded. Unpaid cancellation -> canceled.
   status              String        @default("awaiting_payment")
   pixId               String?
   pixCopiaECola       String?
   paidAt              DateTime?
   quoteExpiresAt      DateTime?
+  // Generic tracking URL. The historic column name is kept to avoid a risky pilot migration.
   courierTrackingUrl  String?
   courierDispatchedAt DateTime?
   deliveredAt         DateTime?

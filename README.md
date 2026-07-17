@@ -16,6 +16,8 @@
 > [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
 > A automação segura de carrinho/compra Carrefour e sua ativação por fases está em
 > [docs/automacao-compra-carrefour.md](docs/automacao-compra-carrefour.md).
+> O procedimento do piloto para `needs_human`, cancelamento e estorno está em
+> [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
 > As conclusões operacionais de hoje estão em
 > [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md).
 > O caminho de cartão One-Click (Meta direta + Pagar.me), seu estado e a ativação segura
@@ -193,6 +195,7 @@ está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 - `OPENAI_API_KEY`: opcional. Sem ela, o adapter de IA usa heuristicas locais.
 - `OPENAI_MODEL`: modelo de interpretacao de intencao. Padrao: `gpt-5.4-mini`.
 - `API_TOKEN`: token bearer para endpoints `/api/v1/*`.
+- `OPS_TOKEN`: segredo dedicado do painel `/ops`; não reutilize `API_TOKEN` em produção.
 - `WHATSAPP_PROVIDER`: `twilio`, `meta`, `mock` ou `zapi`.
 - `WHATSAPP_WEBHOOK_SECRET`: segredo exigido no header `x-webhook-secret`.
 - `WHATSAPP_VERIFY_TOKEN`: token que voce define na Meta para validar o webhook.

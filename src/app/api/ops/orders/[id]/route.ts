@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
-import { opsCancelRefund, opsDispatchCourier, opsMarkBought, opsMarkDelivered, opsNotifyCustomer } from "@/lib/delivery-service";
+import {
+  opsCancelRefund,
+  opsConfirmRefund,
+  opsDispatchCourier,
+  opsMarkBought,
+  opsMarkDelivered,
+  opsMarkRetailerOutForDelivery,
+  opsNotifyCustomer
+} from "@/lib/delivery-service";
 import { createPurchaseJobsForOrder } from "@/lib/purchasing/service";
 import { startPreflightPurchaseWorkflow } from "@/lib/purchasing/workflow-dispatch";
 
@@ -18,7 +26,13 @@ function authed(request: Request) {
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   if (!authed(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const body = (await request.json().catch(() => ({}))) as { action?: string; storeOrderNumber?: string; text?: string };
+  const body = (await request.json().catch(() => ({}))) as {
+    action?: string;
+    storeOrderNumber?: string;
+    text?: string;
+    trackingUrl?: string;
+    refundReference?: string;
+  };
   const id = params.id;
   try {
     switch (body.action) {
@@ -28,11 +42,17 @@ export async function POST(request: Request, { params }: { params: { id: string 
       case "dispatch":
         await opsDispatchCourier(id);
         break;
+      case "retailer_out_for_delivery":
+        await opsMarkRetailerOutForDelivery(id, body.trackingUrl);
+        break;
       case "delivered":
         await opsMarkDelivered(id);
         break;
       case "cancel":
         await opsCancelRefund(id);
+        break;
+      case "confirm_refund":
+        await opsConfirmRefund(id, String(body.refundReference ?? ""));
         break;
       case "notify": {
         const text = String(body.text ?? "").trim();

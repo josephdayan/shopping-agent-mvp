@@ -28,17 +28,34 @@ import {
   type Intent,
   type ParsedLine
 } from "@/lib/lia-intents";
-import { CANCEL_REQUEST_FLAG, isCardCharge, paymentNote, withPaymentNote } from "@/lib/order-flags";
+import {
+  ACTIVE_DELIVERY_ORDER_STATUSES,
+  CANCEL_REQUEST_FLAG,
+  OPS_QUEUE_STATUSES,
+  PAID_OR_IN_FULFILLMENT_STATUSES,
+  REFUND_CONFIRMED_PREFIX,
+  REFUND_PENDING_FLAG,
+  REPEATABLE_DELIVERY_ORDER_STATUSES,
+  RETAILER_OUT_FOR_DELIVERY_STATUS,
+  appendOrderNote,
+  isCardCharge,
+  isOrderOutForDelivery,
+  isRetailerDeliveryOrder,
+  paymentNote,
+  statusAfterStorePurchase,
+  withPaymentNote
+} from "@/lib/order-flags";
 import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
 import { getPurchasePolicy } from "@/lib/purchasing/policy";
 import type { CartSnapshot } from "@/lib/purchasing/types";
 import * as copy from "@/lib/lia-copy";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
-// everyday items, fulfilled from a pluggable store via clique-e-retire + courier.
-// This module owns the WhatsApp conversation state machine AND the order lifecycle
-// the operator dashboard drives. Intent detection lives in lia-intents (pure,
-// unit-tested) and every customer-facing string lives in lia-copy.
+// everyday items, fulfilled by a pluggable store. Retailer delivery is the default;
+// pickup + courier remains only for formally-authorized partners. This module owns
+// the WhatsApp conversation state machine AND the order lifecycle the operator
+// dashboard drives. Intent detection lives in lia-intents (pure, unit-tested) and
+// every customer-facing string lives in lia-copy.
 
 // Your margin is baked into the product price (no separate fee line). Customer sees
 // each item already +10%; you pay Carrefour the real price, the markup is yours.
@@ -78,6 +95,9 @@ type StoreFulfillment = {
   unitCep?: string;
   courierKey: string;
   courierQuoteId: string;
+  deliveryMode?: "retailer_delivery" | "authorized_courier";
+  deliveryPromise?: string;
+  retailerTotal?: number;
   deliveryFee: number;
   etaMinutes: number;
   itemsSubtotal: number;
@@ -149,7 +169,7 @@ type DeliveryContext = {
   deliveryOrderId?: string;
 };
 
-const ACTIVE_ORDER_STATUSES = ["awaiting_supplier_validation", "awaiting_quote_confirmation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup", "dispatched"];
+const ACTIVE_ORDER_STATUSES = ACTIVE_DELIVERY_ORDER_STATUSES;
 
 // ---------- helpers: conversation + money + text ----------
 
@@ -736,7 +756,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
       await reply(phone, copy.welcomeAskCep());
-    } else if (ctx.step === "awaiting_supplier_validation" || ctx.step === "payment_issuing" || ctx.step === "awaiting_payment" || (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) {
+    } else if (
+      ctx.step === "awaiting_supplier_validation" ||
+      ctx.step === "awaiting_quote_confirmation" ||
+      ctx.step === "payment_issuing" ||
+      ctx.step === "awaiting_payment" ||
+      (ctx.basket?.length ?? 0) > 0 ||
+      (ctx.pending?.length ?? 0) > 0
+    ) {
       // "oi" no meio de um pedido em andamento não reapresenta a Lia do zero.
       await reply(phone, copy.greetingMidOrder(ctx.step ?? "collecting", ctx.basket?.length ?? 0));
     } else {
@@ -777,7 +804,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
   if (intent.kind === "cancel_question") {
     const active = await prisma.deliveryOrder.findFirst({
-      where: { userId: user.id, status: { in: ["awaiting_supplier_validation", "awaiting_quote_confirmation", "payment_issuing", "awaiting_payment", "paid", "operator_buying", "ready_for_pickup"] } }
+      where: {
+        userId: user.id,
+        status: { in: ACTIVE_ORDER_STATUSES.filter((status) => !isOrderOutForDelivery(status)) }
+      }
     });
     await reply(phone, copy.cancelHowTo(Boolean(active) || (ctx.basket?.length ?? 0) > 0));
     return;
@@ -1143,7 +1173,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // ---- "repete o de sempre" — reorder the last basket (memory) ----
   if (intent.kind === "repeat_last") {
     const last = await prisma.deliveryOrder.findFirst({
-      where: { userId: user.id, status: { in: ["delivered", "dispatched", "ready_for_pickup", "operator_buying", "paid"] } },
+      where: { userId: user.id, status: { in: REPEATABLE_DELIVERY_ORDER_STATUSES } },
       orderBy: { createdAt: "desc" }
     });
     const items = (last?.items as unknown as BasketItem[]) ?? [];
@@ -1273,7 +1303,7 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
     return;
   }
   if (order.status !== "awaiting_payment") {
-    if (["paid", "operator_buying", "ready_for_pickup", "dispatched"].includes(order.status)) {
+    if (PAID_OR_IN_FULFILLMENT_STATUSES.includes(order.status)) {
       await reply(phone, copy.alreadyPaid());
     } else {
       await reply(
@@ -1348,12 +1378,12 @@ async function handleCancel(
     await reply(phone, copy.canceledUnpaid());
     return;
   }
-  if (order.status === "dispatched") {
+  if (isOrderOutForDelivery(order.status)) {
     await reply(phone, copy.cancelTooLate());
     return;
   }
-  // paid / operator_buying / ready_for_pickup: flag it loudly for the operator (the
-  // refund is manual) and reassure the customer.
+  // Paid or already being prepared: flag it loudly for the operator (the refund is
+  // manual) and reassure the customer.
   if (!(order.notes ?? "").includes(CANCEL_REQUEST_FLAG)) {
     await prisma.deliveryOrder.update({
       where: { id: order.id },
@@ -1958,7 +1988,7 @@ async function handleSearch(
 
 async function preferredSkuCounts(userId: string): Promise<Map<string, number>> {
   const orders = await prisma.deliveryOrder.findMany({
-    where: { userId, status: { in: ["paid", "operator_buying", "ready_for_pickup", "dispatched", "delivered"] } },
+    where: { userId, status: { in: REPEATABLE_DELIVERY_ORDER_STATUSES } },
     orderBy: { createdAt: "desc" },
     take: 20,
     select: { items: true }
@@ -2650,16 +2680,26 @@ export async function markDeliveryOrderPaid(orderId: string) {
 }
 
 export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (current.status !== "paid") throw new Error("Somente um pedido pago pode ser marcado como comprado.");
   return prisma.deliveryOrder.update({
     where: { id: orderId },
-    // Blank input stays null so pickupInstructions' "—" fallback works at dispatch.
-    data: { status: "operator_buying", storeOrderNumber: storeOrderNumber.trim() || null }
+    // Blank input stays null so legacy pickupInstructions' "—" fallback works if
+    // this is an authorized-courier order.
+    data: {
+      status: statusAfterStorePurchase(current),
+      storeOrderNumber: storeOrderNumber.trim() || null
+    }
   });
 }
 
 export async function opsDispatchCourier(orderId: string) {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order) throw new Error("Order not found");
+  if (isRetailerDeliveryOrder(order)) {
+    throw new Error("Pedidos com entrega do varejista não podem despachar courier externo.");
+  }
   const fulfillments = (order.fulfillments as unknown as StoreFulfillment[] | null) ?? [];
   if (fulfillments.length > 1) {
     const dispatches = [];
@@ -2714,7 +2754,39 @@ export async function opsDispatchCourier(orderId: string) {
   return updated;
 }
 
+export async function opsMarkRetailerOutForDelivery(orderId: string, trackingUrl?: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order) throw new Error("Order not found");
+  if (!isRetailerDeliveryOrder(order)) {
+    throw new Error("Esta ação é exclusiva de pedidos entregues pelo varejista.");
+  }
+  if (!["retailer_preparing", "operator_buying"].includes(order.status)) {
+    throw new Error("O pedido precisa estar comprado e em preparação antes de sair para entrega.");
+  }
+  const safeTrackingUrl = (trackingUrl ?? "").trim();
+  if (safeTrackingUrl && !/^https:\/\//i.test(safeTrackingUrl)) {
+    throw new Error("O rastreio precisa ser uma URL https.");
+  }
+  const updated = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: {
+      status: RETAILER_OUT_FOR_DELIVERY_STATUS,
+      // This legacy column is now the generic customer-facing tracking URL. Keeping
+      // it avoids a risky production migration during the controlled pilot.
+      courierTrackingUrl: safeTrackingUrl || null,
+      courierDispatchedAt: new Date()
+    }
+  });
+  await reply(order.phone, copy.retailerOutForDelivery(safeTrackingUrl || null));
+  return updated;
+}
+
 export async function opsMarkDelivered(orderId: string) {
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (!isOrderOutForDelivery(current.status)) {
+    throw new Error("O pedido precisa estar em rota antes de ser marcado como entregue.");
+  }
   const order = await prisma.deliveryOrder.update({
     where: { id: orderId },
     data: { status: "delivered", deliveredAt: new Date() }
@@ -2724,11 +2796,55 @@ export async function opsMarkDelivered(orderId: string) {
 }
 
 export async function opsCancelRefund(orderId: string) {
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (current.status === "refund_pending") return current;
+  const paymentReceived = Boolean(current.paidAt) || PAID_OR_IN_FULFILLMENT_STATUSES.includes(current.status);
+  const [order] = await prisma.$transaction([
+    prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: paymentReceived
+        ? { status: "refund_pending", notes: appendOrderNote(current.notes, REFUND_PENDING_FLAG) }
+        : { status: "canceled" }
+    }),
+    // Cancel every pre-purchase step so a released/abandoned cart never blocks the
+    // next customer. A job already in purchasing/ordered is intentionally preserved
+    // for reconciliation; the late store result cannot resurrect the DeliveryOrder.
+    prisma.purchaseJob.updateMany({
+      where: {
+        deliveryOrderId: orderId,
+        status: { in: ["preflight_queued", "preflighting", "cart_ready", "awaiting_approval", "approved"] }
+      },
+      data: {
+        status: "canceled",
+        lastErrorCode: "ORDER_CANCELED",
+        lastErrorMessage: "Pedido cancelado antes da finalização na loja.",
+        nextAttemptAt: null
+      }
+    })
+  ]);
+  await reply(order.phone, paymentReceived ? copy.refundRequested() : copy.canceledUnpaid());
+  return order;
+}
+
+export async function opsConfirmRefund(orderId: string, reference: string) {
+  const safeReference = reference.replace(/[\r\n]/g, " ").trim().slice(0, 120);
+  if (!safeReference) throw new Error("Informe a referência do estorno para auditoria.");
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (current.status !== "refund_pending") throw new Error("O pedido não está aguardando estorno.");
+  const notesWithoutPending = (current.notes ?? "")
+    .split("\n")
+    .filter((line) => line !== REFUND_PENDING_FLAG)
+    .join("\n");
   const order = await prisma.deliveryOrder.update({
     where: { id: orderId },
-    data: { status: "canceled" }
+    data: {
+      status: "refunded",
+      notes: appendOrderNote(notesWithoutPending, `${REFUND_CONFIRMED_PREFIX} ${safeReference}`)
+    }
   });
-  await reply(order.phone, copy.canceledRefunded());
+  await reply(order.phone, copy.refundConfirmed());
   return order;
 }
 
@@ -2754,7 +2870,7 @@ export async function opsNotifyCustomer(orderId: string, text: string) {
 
 export async function getOperatorQueue() {
   return prisma.deliveryOrder.findMany({
-    where: { status: { in: ["awaiting_supplier_validation", "payment_issuing", "paid", "operator_buying", "ready_for_pickup", "dispatched"] } },
+    where: { status: { in: OPS_QUEUE_STATUSES } },
     orderBy: { createdAt: "asc" },
     include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } } }
   });

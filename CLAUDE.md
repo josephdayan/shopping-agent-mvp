@@ -141,7 +141,7 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 
 | Peça | Arquivo | O que faz |
 |---|---|---|
-| Pedido (cesta) | `prisma DeliveryOrder` | itens (Json), loja, motoboy, taxas, ciclo de status |
+| Pedido (cesta) | `prisma DeliveryOrder` | itens (Json), loja, entrega, taxas e ciclo de status |
 | Lojas (plugável) | `src/lib/stores/` | `StoreConnector` + Carrefour (ao vivo Apify + seed). **Somar loja = 1 arquivo** |
 | Couriers (opcional) | `src/lib/couriers/` | `CourierConnector` + Uber Direct; só para parceiros que autorizem retirada |
 | Pix + cartão | `src/lib/payments/mercadopago.ts` | createPix (copia-e-cola) + Checkout Pro (link de cartão, taxa da maquininha repassada) + webhook `/api/mercadopago/webhook` (mock até token) |
@@ -150,10 +150,10 @@ Tudo roda em **sandbox/mock** até as credenciais reais entrarem por env (sem me
 | Matcher comum | `src/lib/stores/types.ts` | score/ranking dos três catálogos: piso de relevância, exclusões, guarda humano/pet e espécie, tamanhos e preferência pelo produto básico |
 | Copy | `src/lib/lia-copy.ts` | TODAS as mensagens enviadas ao cliente num lugar só (tom/emoji/formatação consistentes) |
 | Cérebro | `src/lib/delivery-service.ts` | máquina de conversa (onboarding CEP → cesta → cotação → Pix/cartão → fila) + ciclo do pedido + notificações + dedupe de retry do Twilio por MessageSid |
-| Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | fila de pagos → nº do pedido → despachar motoboy → entregue/cancelar; caixa "avisar cliente" (substituição/atraso); destaque vermelho quando o cliente pediu cancelamento |
+| Painel do operador | `/ops?key=<OPS_TOKEN>` + `/api/ops/...` | cotação → compra → preparação/rastreio do varejista → entrega; courier somente para parceiro autorizado; estorno pendente e confirmado são etapas distintas |
 | Testes/evals | `tests/` | `npm test` = unitários (intents/copy, sem DB) + evals E2E de conversa (DB real + mocks, telefones de teste auto-limpos) |
 
-**Ciclo de status atual (legado):** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered` (+ canceled/refunded). O fluxo direto precisa de estados de pedido/rastreio do varejista.
+**Ciclo direto implementado localmente:** `awaiting_payment → paid → retailer_preparing → retailer_out_for_delivery → delivered`. O ciclo legado `operator_buying → ready_for_pickup → dispatched` permanece apenas para parceiro courier autorizado. Cancelamento pago usa `refund_pending → refunded`.
 
 Decisões de comportamento do cérebro (não são bugs):
 - **"paguei" só aprova no sandbox/mock.** Com Pix real, a Lia consulta o status no Mercado Pago antes de acreditar; cartão nunca aprova por texto (o webhook decide).
@@ -189,15 +189,17 @@ sem enviar mensagem real.
 
 ## 5. Operação, canais e formalização (2026-07)
 
-O domínio `liadelivery.com.br` está no ar e foi verificado na Meta. A entrada na Meta foi
-iniciada para obter o canal WhatsApp oficial, mas a verificação do negócio e o sender ainda
-precisam ser aprovados; até lá, o canal de teste permanece no Twilio Sandbox. O e-mail
-`contato@liadelivery.com.br` foi configurado no ImprovMX para concluir essa verificação.
+O domínio `liadelivery.com.br` está no ar e foi verificado na Meta. O número oficial foi
+aprovado, registrado na Cloud API direta e está ativo em produção com webhook assinado.
+Twilio Sandbox é apenas legado de teste. O e-mail `contato@liadelivery.com.br` está
+configurado no ImprovMX.
 
 Pix real (Mercado Pago), cartão por Checkout Pro, painel `/ops`, MEI/CNPJ e cobertura de SP
-já sustentam o piloto, com a ressalva de que Pix está em conta pessoal e o `/ops` ainda precisa
-ser adaptado da retirada/motoboy para a entrega do varejista. O checklist completo está em
-[docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
+sustentam a preparação do piloto, com a ressalva de que Pix está em conta pessoal. A adaptação
+do `/ops` para entrega direta e estorno auditável passou localmente em 16/07, mas ainda precisa
+de deploy e validação ao vivo. O checklist completo está em
+[docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md); o runbook de incidentes está
+em [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
 
 ---
 
@@ -205,7 +207,7 @@ ser adaptado da retirada/motoboy para a entrega do varejista. O checklist comple
 - Rodar o **piloto controlado de entrega direta** (5–10 pedidos reais).
 - Validar titularidade, NF, termos, troca/devolução e conta com múltiplos destinatários.
 - Mapear checkout e cartão salvo sem liberar o clique final automático.
-- Adaptar conversa e `/ops` para preço/frete/prazo/rastreio do varejista.
+- Implantar e validar a adaptação local do `/ops` para preço/frete/prazo/rastreio do varejista.
 - Para same-day, buscar parceiro local/merchant que autorize courier.
 - Memória/perfil mais rica. Botões tocáveis nas opções já estão ativos no canal Meta
   (cards com foto + **Escolher este**; lista numerada permanece como fallback).

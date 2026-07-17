@@ -2,9 +2,10 @@
 
 Este documento registra o ciclo de reconstrução da conversa feito em 7 de julho. Ele
 complementa o estado do produto em [STATUS.md](../STATUS.md): descreve **o que mudou no
-cérebro da Lia**, por qual problema e como foi validado. Não altera o modelo operacional
-(clique-e-retire, pagamento, operação no `/ops` e entrega); torna o atendimento no
-WhatsApp mais seguro e natural.
+cérebro da Lia**, por qual problema e como foi validado. Este é um registro histórico da
+conversa; a decisão operacional posterior de 14/07 substituiu clique-e-retire por entrega
+direta do varejista como fluxo padrão. O ciclo tornou o atendimento no WhatsApp mais seguro
+e natural.
 
 ## Ponto de partida
 
@@ -124,7 +125,7 @@ OPENAI_API_KEY="" npx tsx scripts/talk-lia.mts "oi" "quero arroz e leite" "01310
 
 ## Limites que continuam os mesmos
 
-Este ciclo não substitui a validação operacional do piloto: retirada por terceiro,
-estoque/preço vivo e aceitação do total pelo cliente ainda exigem pedidos reais. O
-catálogo continua estático, uma cesta continua limitada a uma loja e a confirmação real
-de pagamento continua sendo responsabilidade do Mercado Pago/webhook.
+Este ciclo não substitui a validação operacional do piloto: checkout/entrega do varejista,
+estoque/preço vivo e aceitação do total pelo cliente ainda exigem pedidos reais. Uma cesta
+continua limitada a uma loja e a confirmação real de pagamento continua sendo
+responsabilidade do Mercado Pago/webhook.

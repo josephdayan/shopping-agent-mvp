@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { randomUUID } from "node:crypto";
+import { isRetailerDeliveryOrder, statusAfterStorePurchase } from "@/lib/order-flags";
+import { withContextLease } from "./context-lease";
 import { cartHash, getPurchasePolicy, money } from "./policy";
 import { getBuyer } from "./index";
 import { PURCHASE_JOB_STATUS, PurchaseError, type BuyerInput, type CartSnapshot, type PurchaseItemInput, type StoreOrderResult } from "./types";
@@ -65,31 +67,29 @@ function workerAccountKey(input: BuyerInput): string {
 async function withWorkerLease<T>(input: BuyerInput, work: () => Promise<T>): Promise<T> {
   const accountKey = workerAccountKey(input);
   const token = randomUUID();
-  const now = new Date();
-  const expiresAt = new Date(now.getTime() + 15 * 60_000);
-  let acquired = false;
-
-  try {
-    try {
-      await prisma.purchaseWorkerLease.create({ data: { accountKey, token, expiresAt } });
-      acquired = true;
-    } catch (error) {
-      // A crashed worker leaves an expiring lease; only a genuinely expired lease
-      // may be taken over. This prevents two browser sessions mixing carts.
-      const reclaimed = await prisma.purchaseWorkerLease.updateMany({
-        where: { accountKey, expiresAt: { lt: now } },
-        data: { token, expiresAt }
-      });
-      if (reclaimed.count === 1) acquired = true;
-      else if (!(error instanceof Error)) throw error;
-    }
-    if (!acquired) {
-      throw new PurchaseError("RETAILER_BUSY", "A conta da loja está ocupada com outro carrinho. O job será refeito assim que ela ficar livre.");
-    }
-    return await work();
-  } finally {
-    if (acquired) await prisma.purchaseWorkerLease.deleteMany({ where: { accountKey, token } });
-  }
+  return withContextLease({
+    accountKey,
+    token,
+    store: {
+      async create(lease) {
+        await prisma.purchaseWorkerLease.create({ data: lease });
+      },
+      async replaceExpired(lease, now) {
+        // A crashed worker leaves an expiring lease; only a genuinely expired lease
+        // may be taken over. This prevents two browser sessions mixing carts.
+        const reclaimed = await prisma.purchaseWorkerLease.updateMany({
+          where: { accountKey: lease.accountKey, expiresAt: { lt: now } },
+          data: { token: lease.token, expiresAt: lease.expiresAt }
+        });
+        return reclaimed.count === 1;
+      },
+      async release(lease) {
+        await prisma.purchaseWorkerLease.deleteMany({ where: lease });
+      }
+    },
+    work,
+    onBusy: () => new PurchaseError("RETAILER_BUSY", "A conta da loja está ocupada com outro carrinho. O job será refeito assim que ela ficar livre.")
+  });
 }
 
 async function assertCartAvailable(jobId: string, input: BuyerInput): Promise<void> {
@@ -141,7 +141,7 @@ async function assertCartAvailable(jobId: string, input: BuyerInput): Promise<vo
 export async function createPurchaseJobsForOrder(deliveryOrderId: string) {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: deliveryOrderId } });
   if (!order) throw new Error("Delivery order not found");
-  if (!["awaiting_supplier_validation", "paid", "operator_buying", "ready_for_pickup"].includes(order.status)) {
+  if (!["awaiting_supplier_validation", "paid", "retailer_preparing", "operator_buying", "ready_for_pickup"].includes(order.status)) {
     throw new Error("Só é permitido preparar compras de pedidos pagos ou em validação da loja.");
   }
   const basket = asBasket(order.items);
@@ -387,7 +387,10 @@ export async function autoApprovePurchaseJob(jobId: string) {
 export async function placeApprovedPurchaseJob(jobId: string, idempotencyKey: string) {
   const { input, job } = await loadBuyerInput(jobId);
   if (job.status === PURCHASE_JOB_STATUS.ORDERED || job.status === PURCHASE_JOB_STATUS.READY_FOR_PICKUP) return job;
-  const deliveryOrder = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: job.deliveryOrderId }, select: { status: true } });
+  const deliveryOrder = await prisma.deliveryOrder.findUniqueOrThrow({
+    where: { id: job.deliveryOrderId },
+    select: { status: true, courierKey: true, fulfillments: true }
+  });
   if (deliveryOrder.status !== "paid") throw new Error("A compra na loja só pode ser finalizada após o pagamento do cliente.");
   if (job.status !== PURCHASE_JOB_STATUS.APPROVED || !job.cartSnapshot || !job.cartHash || job.approvalCartHash !== job.cartHash) {
     throw new Error("A compra não está aprovada para o carrinho atual.");
@@ -420,10 +423,14 @@ export async function placeApprovedPurchaseJob(jobId: string, idempotencyKey: st
       return getBuyer(input.storeKey).placeOrder(input, snapshot, idempotencyKey);
     });
     if (isAlreadyCompletedPurchase(result)) return prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+    const retailerDelivery = isRetailerDeliveryOrder(deliveryOrder);
     const updated = await prisma.purchaseJob.update({
       where: { id: jobId },
       data: {
-        status: result.status === "ready_for_pickup" ? PURCHASE_JOB_STATUS.READY_FOR_PICKUP : PURCHASE_JOB_STATUS.ORDERED,
+        status:
+          !retailerDelivery && result.status === "ready_for_pickup"
+            ? PURCHASE_JOB_STATUS.READY_FOR_PICKUP
+            : PURCHASE_JOB_STATUS.ORDERED,
         storeOrderNumber: result.storeOrderNumber,
         browserSessionId: result.browserSessionId ?? job.browserSessionId,
         completedAt: new Date(),
@@ -431,11 +438,15 @@ export async function placeApprovedPurchaseJob(jobId: string, idempotencyKey: st
         lastErrorMessage: null
       }
     });
-    await prisma.deliveryOrder.update({
-      where: { id: job.deliveryOrderId },
+    // The customer/operator may cancel while the retailer request is in flight.
+    // Preserve refund_pending/canceled instead of letting a late store response
+    // resurrect the order as preparing; the ordered PurchaseJob remains the audit
+    // evidence that the retailer order must be canceled manually.
+    await prisma.deliveryOrder.updateMany({
+      where: { id: job.deliveryOrderId, status: "paid" },
       data: {
         storeOrderNumber: result.storeOrderNumber,
-        status: result.status === "ready_for_pickup" ? "ready_for_pickup" : "operator_buying"
+        status: !retailerDelivery && result.status === "ready_for_pickup" ? "ready_for_pickup" : statusAfterStorePurchase(deliveryOrder)
       }
     });
     if (attemptId) {

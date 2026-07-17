@@ -1,10 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { hasCancelRequest, isCardCharge } from "@/lib/order-flags";
+import { hasCancelRequest, hasPendingRefund, isCardCharge, isRetailerDeliveryOrder } from "@/lib/order-flags";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
-type Fulfillment = { storeKey: string; storeLabel: string; unitLabel: string; unitAddress: string; deliveryFee: number };
+type Fulfillment = {
+  storeKey: string;
+  storeLabel: string;
+  unitLabel?: string;
+  unitAddress?: string;
+  deliveryFee: number;
+  deliveryMode?: string;
+  deliveryPromise?: string;
+  retailerTotal?: number;
+};
 type PurchaseJob = {
   id: string;
   storeLabel: string;
@@ -43,6 +52,7 @@ type DeliveryOrder = {
   purchaseJobs?: PurchaseJob[];
   createdAt: string;
   paidAt?: string | null;
+  quoteExpiresAt?: string | null;
 };
 
 type WaitlistRegion = { city: string; uf?: string | null; leads: number; hits: number; lastAt: string };
@@ -50,6 +60,7 @@ type WaitlistLead = { id: string; phone: string; cep: string; city?: string | nu
 type WaitlistData = { total: number; regions: WaitlistRegion[]; recent: WaitlistLead[] };
 
 const COURIER_LABEL: Record<string, string> = {
+  retailer_delivery: "entrega do varejista",
   uber_direct: "Uber Direct",
   lalamove: "Lalamove",
   loggi: "Loggi"
@@ -57,11 +68,15 @@ const COURIER_LABEL: Record<string, string> = {
 
 const STATUS_LABEL: Record<string, string> = {
   awaiting_supplier_validation: "🔎 Confirmando carrinho na loja",
+  awaiting_quote_confirmation: "⏱️ Cotação enviada — aguardando pagamento",
   payment_issuing: "💳 Gerando pagamento para cliente",
   paid: "💳 Pago — comprar na loja",
-  operator_buying: "🛒 Comprado — aguardando pronto",
-  ready_for_pickup: "📦 Pronto — despachar motoboy",
-  dispatched: "🛵 Saiu pra entrega"
+  retailer_preparing: "📦 Loja preparando a entrega",
+  retailer_out_for_delivery: "🚚 Saiu para entrega pela loja",
+  operator_buying: "🛒 Comprado — em preparação",
+  ready_for_pickup: "📦 Pronto — courier autorizado",
+  dispatched: "🛵 Saiu pra entrega",
+  refund_pending: "↩️ Estorno pendente"
 };
 
 const PURCHASE_STATUS_LABEL: Record<string, string> = {
@@ -71,8 +86,8 @@ const PURCHASE_STATUS_LABEL: Record<string, string> = {
   awaiting_approval: "✋ aguardando aprovação",
   approved: "💳 compra aprovada",
   purchasing: "🛍️ finalizando",
-  ordered: "✅ pedido na loja criado",
-  ready_for_pickup: "📦 pronto para retirada",
+  ordered: "✅ pedido confirmado no varejista",
+  ready_for_pickup: "📦 pronto para retirada autorizada",
   needs_human: "⚠️ precisa de humano",
   failed: "❌ falhou",
   canceled: "cancelado"
@@ -130,6 +145,8 @@ export default function OpsBoard() {
   const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [numbers, setNumbers] = useState<Record<string, string>>({});
+  const [tracking, setTracking] = useState<Record<string, string>>({});
+  const [refundReferences, setRefundReferences] = useState<Record<string, string>>({});
   const [notify, setNotify] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
@@ -189,7 +206,11 @@ export default function OpsBoard() {
     return () => clearInterval(t);
   }, [ready, load]);
 
-  async function act(id: string, action: string, extra?: { storeOrderNumber?: string; text?: string }): Promise<boolean> {
+  async function act(
+    id: string,
+    action: string,
+    extra?: { storeOrderNumber?: string; text?: string; trackingUrl?: string; refundReference?: string }
+  ): Promise<boolean> {
     setBusy(`${id}:${action}`);
     try {
       const res = await fetch(`/api/ops/orders/${id}`, {
@@ -245,6 +266,46 @@ export default function OpsBoard() {
     }
   }
 
+  async function runInternalPreflight(): Promise<void> {
+    const key = "internal-preflight";
+    setBusy(key);
+    try {
+      const res = await fetch("/api/ops/internal-preflight", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ retry: true })
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        reused?: boolean;
+        retried?: boolean;
+        status?: string;
+        actualTotal?: number | null;
+        errorCode?: string | null;
+        errorMessage?: string | null;
+      };
+      if (!res.ok) {
+        alert(data.error ?? `O preflight interno falhou (${res.status}).`);
+        return;
+      }
+      if (data.retried) {
+        alert("O último preflight interno foi reiniciado em cart_only.");
+      } else if (data.reused) {
+        const outcome = data.errorCode
+          ? `${data.status ?? "needs_human"}: ${data.errorCode} — ${data.errorMessage ?? "sem detalhe"}`
+          : `${data.status ?? "em andamento"}${data.actualTotal != null ? ` · total R$ ${data.actualTotal.toFixed(2).replace(".", ",")}` : ""}`;
+        alert(`Resultado do último preflight interno: ${outcome}`);
+      } else {
+        alert("Preflight interno iniciado em cart_only.");
+      }
+      await load();
+    } catch {
+      alert("O preflight interno falhou (sem conexão?). Tente de novo.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function sendNotify(id: string) {
     const text = (notify[id] ?? "").trim();
     if (!text) return;
@@ -265,16 +326,34 @@ export default function OpsBoard() {
 
   return (
     <div style={{ marginTop: 20, display: "grid", gap: 14 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+        <button
+          style={secondary}
+          disabled={busy === "internal-preflight"}
+          onClick={() => void runInternalPreflight()}
+          title="Cria um pedido técnico de um SKU Carrefour e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
+        >
+          {busy === "internal-preflight" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Carrefour"}
+        </button>
+        <span style={{ fontSize: 12, color: "#667085" }}>Teste interno em cart_only: sem cobrança ou compra.</span>
+      </div>
       {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
       {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
       {orders.map((o) => {
         const cancelRequested = hasCancelRequest(o.notes);
+        const refundPending = hasPendingRefund(o.notes) || o.status === "refund_pending";
         const isCard = isCardCharge(o);
+        const retailerDelivery = isRetailerDeliveryOrder(o);
+        const primaryFulfillment = o.fulfillments?.[0];
+        const paymentReceived =
+          Boolean(o.paidAt) ||
+          ["paid", "retailer_preparing", "retailer_out_for_delivery", "operator_buying", "ready_for_pickup", "dispatched"].includes(o.status);
         return (
           <div key={o.id} style={{ ...card, ...(cancelRequested ? cancelCard : {}) }}>
             {cancelRequested && (
               <div style={cancelBanner}>⚠️ O cliente pediu CANCELAMENTO — falar com ele antes de comprar/despachar.</div>
             )}
+            {refundPending && <div style={refundBanner}>↩️ ESTORNO PENDENTE — só confirmar ao cliente após registrar a referência.</div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
               <strong>
                 #{o.id.slice(-6).toUpperCase()}{" "}
@@ -319,18 +398,33 @@ export default function OpsBoard() {
               {o.courierKey ? ` (${COURIER_LABEL[o.courierKey] ?? o.courierKey})` : ""} · Margem {brl(o.serviceFee)} ·{" "}
               <strong>Cliente pagou {brl(o.total)}</strong>
             </div>
+            {retailerDelivery && (
+              <div style={{ fontSize: 13, color: "#475467", marginTop: 4 }}>
+                🚚 <strong>{o.storeLabel} entrega diretamente ao cliente</strong>
+                {primaryFulfillment?.deliveryPromise ? ` · ${primaryFulfillment.deliveryPromise}` : " · prazo pendente"}
+                {o.quoteExpiresAt && o.status === "awaiting_quote_confirmation"
+                  ? ` · cotação válida até ${new Date(o.quoteExpiresAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`
+                  : ""}
+              </div>
+            )}
             {(o.fulfillments?.length ?? 0) > 1 ? (
               <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
                 {o.fulfillments!.map((f) => (
-                  <div key={f.storeKey}>🏬 <strong>{f.storeLabel}</strong>: {f.unitLabel} — {f.unitAddress} · frete {brl(f.deliveryFee)}</div>
+                  <div key={`${f.storeKey}:${f.unitLabel ?? f.deliveryMode ?? "primary"}`}>
+                    🏬 <strong>{f.storeLabel}</strong>
+                    {f.deliveryMode === "retailer_delivery"
+                      ? ` entrega · ${f.deliveryPromise ?? "prazo pendente"}`
+                      : `: ${f.unitLabel ?? "unidade pendente"}${f.unitAddress ? ` — ${f.unitAddress}` : ""}`}
+                    {` · frete ${brl(f.deliveryFee)}`}
+                  </div>
                 ))}
               </div>
-            ) : (
+            ) : !retailerDelivery ? (
               <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
-                🏬 Retirar em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
+                🏬 Retirada autorizada em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
                 {o.storeAddress ? ` — ${o.storeAddress}` : ""}
               </div>
-            )}
+            ) : null}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
             {(o.purchaseJobs?.length ?? 0) > 0 && (
@@ -427,16 +521,35 @@ export default function OpsBoard() {
                     disabled={busy === `${o.id}:bought`}
                     onClick={() => act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "" })}
                   >
-                    Marquei como comprado
+                    {retailerDelivery ? "Confirmar compra no varejista" : "Marquei como comprado"}
                   </button>
                 </>
               )}
-              {(o.status === "operator_buying" || o.status === "ready_for_pickup") && (
+              {retailerDelivery && (o.status === "retailer_preparing" || o.status === "operator_buying") && (
+                <>
+                  <input
+                    placeholder="link https de rastreio (se houver)"
+                    value={tracking[o.id] ?? ""}
+                    onChange={(e) => setTracking((current) => ({ ...current, [o.id]: e.target.value }))}
+                    style={{ ...input, minWidth: 240 }}
+                  />
+                  <button
+                    style={primary}
+                    disabled={busy === `${o.id}:retailer_out_for_delivery`}
+                    onClick={() =>
+                      act(o.id, "retailer_out_for_delivery", { trackingUrl: tracking[o.id] ?? "" })
+                    }
+                  >
+                    🚚 Loja saiu para entrega
+                  </button>
+                </>
+              )}
+              {!retailerDelivery && (o.status === "operator_buying" || o.status === "ready_for_pickup") && (
                 <button style={primary} disabled={busy === `${o.id}:dispatch`} onClick={() => act(o.id, "dispatch")}>
-                  🛵 Despachar motoboy
+                  🛵 Despachar courier autorizado
                 </button>
               )}
-              {o.status === "dispatched" && (
+              {(o.status === "retailer_out_for_delivery" || o.status === "dispatched") && (
                 <>
                   {o.courierTrackingUrl && (
                     <a href={o.courierTrackingUrl} target="_blank" rel="noreferrer" style={{ fontSize: 13 }}>
@@ -448,9 +561,48 @@ export default function OpsBoard() {
                   </button>
                 </>
               )}
-              <button style={ghost} disabled={busy === `${o.id}:cancel`} onClick={() => act(o.id, "cancel")}>
-                Cancelar/estornar
-              </button>
+              {o.status === "refund_pending" ? (
+                <>
+                  <input
+                    placeholder="referência do estorno no provedor"
+                    value={refundReferences[o.id] ?? ""}
+                    onChange={(e) =>
+                      setRefundReferences((current) => ({ ...current, [o.id]: e.target.value }))
+                    }
+                    style={{ ...input, minWidth: 240 }}
+                  />
+                  <button
+                    style={primary}
+                    disabled={busy === `${o.id}:confirm_refund` || !(refundReferences[o.id] ?? "").trim()}
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "O provedor já confirmou o estorno? Esta ação avisará o cliente."
+                        )
+                      ) {
+                        void act(o.id, "confirm_refund", {
+                          refundReference: refundReferences[o.id] ?? ""
+                        });
+                      }
+                    }}
+                  >
+                    ✅ Confirmar estorno concluído
+                  </button>
+                </>
+              ) : (
+                <button
+                  style={ghost}
+                  disabled={busy === `${o.id}:cancel`}
+                  onClick={() => {
+                    const prompt = paymentReceived
+                      ? "Cancelar este pedido e registrar o estorno como PENDENTE? Isso ainda não executa o estorno no provedor."
+                      : "Cancelar este pedido sem pagamento?";
+                    if (window.confirm(prompt)) void act(o.id, "cancel");
+                  }}
+                >
+                  {paymentReceived ? "Cancelar e solicitar estorno" : "Cancelar pedido"}
+                </button>
+              )}
             </div>
 
             <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", alignItems: "center" }}>
@@ -526,6 +678,15 @@ const cancelCard: React.CSSProperties = { border: "2px solid #f04438", backgroun
 const cancelBanner: React.CSSProperties = {
   background: "#fee4e2",
   color: "#b42318",
+  borderRadius: 8,
+  padding: "6px 10px",
+  fontSize: 13,
+  marginBottom: 10,
+  fontWeight: 600
+};
+const refundBanner: React.CSSProperties = {
+  background: "#fff4e5",
+  color: "#93370d",
   borderRadius: 8,
   padding: "6px 10px",
   fontSize: 13,

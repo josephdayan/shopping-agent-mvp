@@ -472,13 +472,22 @@ export function orderStatusLine(input: {
       return `Seu pedido ${id} está só esperando o pagamento. 💳 Se precisar do código de novo, responde *pagar*.`;
     case "paid":
       return `Seu pedido ${id} está confirmado e já estou separando os itens. 🛒 Te aviso quando sair pra entrega!`;
+    case "retailer_preparing":
+      return `Seu pedido ${id} já foi comprado e está sendo preparado pela loja. 📦 Te aviso quando sair pra entrega!`;
+    case "retailer_out_for_delivery":
+      return `Seu pedido ${id} saiu para entrega pela loja! 🚚${input.trackingUrl ? `\nAcompanha por aqui: ${input.trackingUrl}` : ""}`;
     case "operator_buying":
+      return `Seu pedido ${id} já foi comprado e está sendo preparado. 📦 Te aviso quando sair pra entrega!`;
     case "ready_for_pickup":
-      return `Seu pedido ${id} já foi comprado e está sendo preparado. 📦 O motoboy sai em breve — te aviso!`;
+      return `Seu pedido ${id} está pronto para retirada pelo parceiro autorizado. 📦`;
     case "dispatched":
       return `Seu pedido ${id} saiu pra entrega! 🛵${input.trackingUrl ? `\nAcompanha por aqui: ${input.trackingUrl}` : ""}`;
     case "delivered":
       return `Seu pedido ${id} foi entregue! 🎉 Se precisar de mais alguma coisa é só chamar.`;
+    case "refund_pending":
+      return `Seu pedido ${id} foi cancelado e o estorno ainda está pendente de confirmação. Te aviso assim que for concluído.`;
+    case "refunded":
+      return `Seu pedido ${id} foi cancelado e o estorno já foi confirmado. ✅`;
     case "canceled":
       return `Seu pedido ${id} foi cancelado. Se pagou algo, o estorno já está a caminho. Quer pedir de novo? 💚`;
     default:
@@ -514,12 +523,20 @@ export function dispatched(trackingUrl?: string | null): string {
   return `🛵 Saiu pra entrega!${trackingUrl ? `\nAcompanha em tempo real: ${trackingUrl}` : ""} Te aviso quando chegar.`;
 }
 
+export function retailerOutForDelivery(trackingUrl?: string | null): string {
+  return `🚚 Seu pedido saiu para entrega pela loja!${trackingUrl ? `\nAcompanha por aqui: ${trackingUrl}` : ""} Te aviso quando chegar.`;
+}
+
 export function delivered(): string {
   return "Entregue! 🎉 Espero que esteja tudo certinho. Da próxima é só mandar *repete o de sempre*. 💚";
 }
 
-export function canceledRefunded(): string {
-  return "Seu pedido foi cancelado e o valor está sendo estornado. Desculpa o transtorno! 🙏";
+export function refundRequested(): string {
+  return "Seu pedido foi cancelado. O estorno ficou pendente de processamento pela equipe — eu te aviso quando for confirmado. 🙏";
+}
+
+export function refundConfirmed(): string {
+  return "Seu estorno foi confirmado. ✅ Se precisar de ajuda com o prazo do banco, me chama por aqui.";
 }
 
 export function finishChoiceFirst(): string {

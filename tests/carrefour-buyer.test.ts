@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   CarrefourBuyer,
   classifyCarrefourBrowserbaseFailure,
+  describeCarrefourCartGap,
   detectCarrefourHumanAction,
   parseCarrefourDeliveryFee,
   parseCarrefourDeliveryPromise,
@@ -44,10 +45,37 @@ test("Carrefour: só aceita frete e prazo que o checkout exibiu", () => {
   assert.equal(parseCarrefourDeliveryPromise("Total do pedido R$ 33,89"), undefined);
 });
 
+test("Carrefour: lê frete, prazo e total quando o checkout separa rótulos e valores em linhas", () => {
+  const text = [
+    "Total (sem frete)",
+    "R$ 1,99",
+    "Resumo do pedido",
+    "1 Produto",
+    "R$ 1,99",
+    "Frete",
+    "A partir de R$ 9,90",
+    "Prazo estimado",
+    "A partir de sábado",
+    "Total",
+    "R$ 11,89"
+  ].join("\n");
+  assert.equal(parseCarrefourDeliveryFee(text), 9.9);
+  assert.equal(parseCarrefourDeliveryPromise(text), "Prazo estimado — A partir de sábado");
+  assert.equal(parseCarrefourCartTotal(text), 11.89);
+});
+
+test("Carrefour: diagnóstico informa exatamente o campo ausente", () => {
+  assert.equal(
+    describeCarrefourCartGap({ itemsResolved: true, total: 1.99 }),
+    "Carrinho Carrefour incompleto (itens=ok, total=ok, frete=ausente, prazo=ausente)."
+  );
+});
+
 test("Carrefour: identifica desafios que precisam de humano", () => {
   assert.equal(detectCarrefourHumanAction("Confirme no aplicativo do banco para concluir")?.code, "PAYMENT_ACTION_REQUIRED");
   assert.equal(detectCarrefourHumanAction("Verifique que você é humano para continuar")?.code, "CAPTCHA_REQUIRED");
   assert.equal(detectCarrefourHumanAction("Sua sessão expirou, faça login novamente")?.code, "LOGIN_REQUIRED");
+  assert.equal(detectCarrefourHumanAction("Entrar na conta")?.code, undefined);
   assert.equal(detectCarrefourHumanAction("Estamos temporariamente indisponíveis. Tente novamente mais tarde.")?.code, "RETAILER_UNAVAILABLE");
   assert.equal(detectCarrefourHumanAction("Pedido pronto")?.code, undefined);
 });

@@ -34,7 +34,9 @@ async function runPreflight(jobId: string) {
   "use step";
   console.log(`[purchase:preflight] start job=${jobId}`);
   const result = await preflightPurchaseJob(jobId);
-  console.log(`[purchase:preflight] done job=${jobId} status=${result.status}`);
+  console.log(
+    `[purchase:preflight] done job=${jobId} status=${result.status} code=${result.lastErrorCode ?? "-"} message=${result.lastErrorMessage ?? "-"}`
+  );
   return { status: result.status, cartHash: result.cartHash, lastErrorCode: result.lastErrorCode };
 }
 

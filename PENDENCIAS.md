@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-07-15._
+_Última atualização: 2026-07-16._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -34,8 +34,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 - [ ] Montar a sacola real e calcular estoque, preço, frete e prazo **antes** de cobrar o
   cliente. **Implementado em código para Carrefour em 15/07** (preflight `cart_only`,
-  falha fechada sem total/frete/prazo); migrations e deploy concluídos. A validação ao
-  vivo aguarda novo login no Context Carrefour.
+  falha fechada sem total/frete/prazo); migrations e deploy concluídos. Em 16/07, o carrinho
+  completo e seus campos foram mapeados e o conector corrigido, mas o retry Browserbase
+  terminou em `LOGIN_REQUIRED`. Após a reautenticação humana, o login passou, porém o
+  minicarrinho omitiu o CTA do carrinho completo. O fallback seguro para `/checkout/cart`
+  foi publicado em 16/07; a publicação corrigida também inclui o binário Prisma para Linux ARM
+  e o endpoint voltou a responder 200. A nova sessão aberta em 16/07 não concluiu o login
+  humano; repetir em outro momento, de forma coordenada, para provar carrinho, frete e prazo
+  no checkout, sempre sem cobrar ou comprar.
 - [ ] Mostrar no WhatsApp resumo da cotação, endereço, modalidade, prazo e validade.
   **Implementado em código para Carrefour em 15/07**; a cotação expira em 5 min por
   padrão e ainda precisa de validação ao vivo após reautenticar o Context Carrefour.
@@ -57,9 +63,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Exigir confirmação explícita no momento de qualquer compra final durante o piloto.
 - [x] Tratar login, OTP, CAPTCHA, CVV e 3DS como `needs_human`. A detecção Carrefour
   cobre login/sessão expirada, CAPTCHA e 3DS; os testes unitários confirmam a classificação.
-- [ ] Implementar fila ou isolamento por conta/Context Browserbase para impedir carrinhos
-  concorrentes.
-- [ ] Validar recuperação segura quando a sessão Browserbase expirar.
+- [x] Implementar fila ou isolamento por conta/Context Browserbase para impedir carrinhos
+  concorrentes. O lease persistente por Context bloqueia mistura de carrinhos entre workers;
+  `RETAILER_BUSY` volta a `preflight_queued` e o workflow tenta de novo a cada minuto por até
+  uma hora. Leases vencidos só podem ser retomados após 15 min, e testes unitários cobrem
+  concorrência, expiração e falha de infraestrutura.
+- [ ] Validar recuperação segura quando a sessão Browserbase expirar. Em 16/07 foi
+  implantada uma rota autenticada e página operacional que criam uma sessão viva do mesmo
+  Context para login humano; a tentativa mais recente não concluiu o login e foi adiada.
+  Retomar apenas em uma nova tentativa coordenada e comprovar o retry `cart_ready`.
 - [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
   os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
   em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
@@ -79,8 +91,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   alegada correção também não trouxe a variável; não implantar nem reabrir o preflight. O
   painel depois confirmou a variável Sensitive atualizada em Production e o novo deploy
   ficou Ready em 15/07; a chave não é baixada localmente pelo CLI por ser Sensitive. Falta
-  validar o preflight implantado. O operador informou que concluiu a reautenticação humana;
-  falta definir endereço salvo e item de teste para a cotação, sem cobrar nem comprar.
+  validar o preflight implantado. A reautenticação informada em 15/07 não permaneceu válida:
+  o retry de 16/07 chegou a `LOGIN_REQUIRED`. Uma nova sessão viva foi aberta; falta o login
+  humano e repetir a cotação, sem cobrar nem comprar.
+- [ ] Rotacionar a senha Carrefour exposta no chat em 16/07. Não persistir o valor em
+  código, banco, `.env`, documentação ou memória operacional; concluir o login somente na
+  sessão viva e trocar a senha antes do piloto.
+- [ ] Rotacionar o PIN de registro do WhatsApp que estava salvo em um Markdown local
+  ignorado pelo Git. O valor foi removido em 16/07; guardar o novo somente no cofre de
+  segredos, nunca em Markdown, chat ou logs.
 
 ### Financeiro, fiscal e jurídico
 
@@ -100,21 +119,44 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
   `20260714123000_pagarme_one_click` no ambiente de produção. Aplicadas em 15/07;
   a ativação do One-Click continua bloqueada pelas dependências externas abaixo.
+- [ ] Responder à qualificação comercial de Samuel Santana/Infobip recebida em 16/07 sobre
+  `order_details` / `offsite_card_pay`: informar volume projetado, predominância Utility,
+  Brasil e WhatsApp; exigir preservação da WABA, número, Graph API, webhook e Cloud API
+  direta, sem migração/compartilhamento do sender para a Infobip sem autorização separada.
+  A mensagem é encaminhamento comercial, não aprovação técnica.
 - [ ] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
   shape definitivo do webhook de confirmação.
+- [ ] Confirmar por escrito se Mercado Pago PJ é suportado nesse desenho, quem gera o
+  `credential_id`, custos/mínimos, prazo de onboarding e se algum BSP precisa assumir a
+  WABA ou o número. Não substituir o desenho Pagar.me já implementado sem essa evidência.
 - [ ] Configurar Pagar.me V5: chaves, domínio liberado para `tokenizecard.js`, webhook e
   os eventos de pedido/cobrança/cartão descritos no guia.
+- [ ] Confirmar com o Pagar.me, antes do sandbox real, se a primeira cobrança e as recompras
+  avulsas confirmadas no WhatsApp devem usar `recurrence_cycle=first|subsequent`, quando
+  CVV/3DS é exigido e se a conta operará como PSP ou Gateway. O adaptador atual envia
+  `card_id` sem `recurrence_cycle`; ajustar código e testes somente com essa resposta.
 - [ ] Executar primeira compra e recompra reais em sandbox; verificar CVV/3DS, recusa,
   resposta perdida e reconciliação antes de ativar `LIA_ENABLE_WA_PAYMENTS=true`.
 
 ### Operação mínima
 
-- [ ] Adaptar os estados do pedido para entrega direta do varejista, removendo a premissa
-  obrigatória de retirada/motoboy.
-- [ ] Adaptar `/ops` para exibir cotação, varejista, modalidade, prazo, rastreio e exceções.
-- [ ] Criar procedimento humano para `needs_human`, com responsável e tempo máximo de
-  resposta.
-- [ ] Criar procedimento de estorno quando a compra não puder ser concluída.
+- [x] Garantir acesso segregado ao painel `/ops` sem reutilizar o segredo da API pública.
+  `OPS_TOKEN` foi criado como Sensitive em Production e Preview em 16/07 e o redeploy de
+  produção ficou `Ready`; o painel foi autenticado sem expor o valor.
+- [x] Adaptar os estados do pedido para entrega direta do varejista, removendo a premissa
+  obrigatória de retirada/motoboy. Implementado localmente em 16/07 com
+  `retailer_preparing → retailer_out_for_delivery → delivered`; estados de retirada/courier
+  permanecem apenas para pedidos legados ou parceiros formalmente autorizados.
+- [x] Adaptar `/ops` para exibir cotação, varejista, modalidade, prazo, rastreio e exceções.
+  Implementado e coberto por build/testes em 16/07; falta implantar e validar ao vivo.
+- [x] Criar procedimento humano para `needs_human`, com responsável e tempo máximo de
+  resposta. Runbook: `docs/operacao-piloto-needs-human-estorno.md` (operador de plantão,
+  reconhecimento em até 10 min e decisão em até 30 min na janela do piloto).
+- [x] Criar procedimento de estorno quando a compra não puder ser concluída. O `/ops` agora
+  separa `refund_pending` de `refunded`, exige referência do provedor antes de confirmar ao
+  cliente e o runbook documenta a sequência segura.
+- [ ] Implantar e validar ao vivo os novos estados de entrega direta e o fluxo de estorno
+  no `/ops`, sem usar pedidos legados como massa de teste.
 - [ ] Registrar eventos suficientes para auditar cada transição sem expor dados sensíveis.
 
 ## P0 — validação por varejista
@@ -169,9 +211,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Testes focados de busca, compra e política aprovados.
 - [x] Alinhar os evals históricos que esperam apenas CEP ao contrato atual de endereço
   completo. Os cenários agora simulam endereço completo + CEP e clientes recorrentes.
-- [x] Deixar a suíte `npm test` inteira verde. A rodada de 15/07 passou com 201 testes;
-  `npx tsc --noEmit` e `npm run build` também passaram.
+- [x] Deixar a suíte `npm test` inteira verde. A rodada de 16/07 passou com 210 testes
+  (168 aprovados e 42 integrações puladas por banco indisponível); `npx tsc --noEmit`, lint
+  e `npm run build` também passaram.
 - [ ] Criar testes de idempotência, cotação vencida, preço alterado e pagamento duplicado.
+  Já existem coberturas de hash/preço, duplicidade One-Click e expiração da tentativa de
+  pagamento; ainda faltam regressões de banco para expiração da cotação do varejista e
+  idempotência de `place_order`.
 - [x] Criar testes unitários do payload Meta, parser, idempotência Pagar.me e resposta
   ambígua do PSP. Os testes de banco aguardam as migrations em um Postgres de teste.
 - [x] Criar testes de queda do Browserbase, varejista indisponível e sessão expirada.
@@ -194,7 +240,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Obter parceiro local ou contrato merchant/courier que autorize retirada por terceiro
   para oferecer same-day fora da entrega do varejista.
 - [ ] Reavaliar Uber Direct somente para parceiros com autorização operacional formal.
-- [ ] Criar isolamento de contas/sessões para aumentar concorrência por varejista.
+- [ ] Criar pool de contas/Contexts isolados para aumentar concorrência por varejista.
 - [ ] Avaliar novas lojas usando o mesmo gate: busca real, carrinho, entrega, termos,
   pagamento, pós-venda e piloto.
 - [ ] Automatizar conciliação financeira e cálculo de margem por pedido.
@@ -217,3 +263,36 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   em produção, e a cotação Carrefour foi implantada. A validação ao vivo corrigiu o gesto
   de regionalização para Enter, mas parou em `LOGIN_REQUIRED` antes de limpar/adicionar
   qualquer item; reautenticar o Context Carrefour é o próximo passo.
+- **2026-07-16:** `OPS_TOKEN` dedicado foi criado como segredo Sensitive em Production e
+  Preview; o redeploy de produção ficou `Ready` e o painel `/ops` foi autenticado. A fila
+  existente contém pedidos legados e cancelados, que não devem ser usados no preflight. Um
+  pedido técnico isolado foi criado em `cart_only`, usando SKU exato e a região já salva no
+  Context, sem endereço real, cobrança ou compra. Ele terminou em `PREFLIGHT_NEEDS_HUMAN`;
+  não validou conjuntamente item, total, frete e prazo. Retomar somente para diagnosticar e
+  fazer o checkout expor esses dados.
+- **2026-07-16:** diagnóstico concluído em etapas. A UI atual usa o submit do formulário de
+  CEP e o carrinho completo expõe item R$ 1,99, frete a partir de R$ 9,90, prazo a partir de
+  sábado e total R$ 11,89. O conector foi corrigido para essa tela, recebeu parsers por linha,
+  `orderFormId`, limpeza segura e mensagens por campo. O job técnico foi tornado reutilizável,
+  ganhou GET de status, página `/ops/teste-carrefour` e logs finais. Após corrigir CEP, espera,
+  falso login e carrinho antigo, o bloqueio atual é `LOGIN_REQUIRED`; sessão viva aberta para
+  login humano. Nenhuma mensagem, cobrança ou compra ocorreu.
+- **2026-07-16:** após o login humano, o preflight chegou ao minicarrinho e falhou fechado
+  porque o CTA do carrinho completo não foi exposto. Foi implementado fallback para a rota de
+  resumo, sem ação financeira. A primeira publicação pré-construída falhou em runtime porque o
+  Prisma do macOS não continha o binário Linux ARM; o schema foi corrigido, o artefato
+  reconstruído e o novo deploy de produção ficou `Ready`. O POST voltou a responder 200, mas o
+  workflow atual retornou `LOGIN_REQUIRED`; uma sessão viva nova aguarda login humano.
+- **2026-07-16:** o painel Browserbase autenticado foi confirmado e uma sessão Carrefour nova
+  foi aberta. A reautenticação humana não foi concluída, sem causa confirmada; o operador pediu
+  nova tentativa em outro momento. Não houve preflight adicional, mensagem, cobrança ou compra.
+- **2026-07-16:** a fila já presente por Context Browserbase foi extraída para um coordenador
+  testável e recebeu cobertura de concorrência, lease vencido e falha de banco. O comportamento
+  operacional permanece: `RETAILER_BUSY` reprograma o preflight, sem abrir checkout nem executar
+  ação financeira. Não houve teste ao vivo, cobrança ou compra nesta alteração.
+- **2026-07-16:** a operação de entrega direta foi implementada localmente com estados próprios,
+  painel de promessa/rastreio e bloqueio de courier externo. Cancelamento pago passou a exigir
+  `refund_pending`, execução no provedor e referência antes de `refunded`; foi criado o runbook
+  de `needs_human`/estorno. Um PIN salvo em Markdown local foi removido e permanece pendente de
+  rotação. TypeScript, lint, 210 testes e build passaram; não houve deploy, navegador, cobrança,
+  compra ou mensagem real.

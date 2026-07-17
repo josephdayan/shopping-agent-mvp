@@ -37,11 +37,13 @@ O primeiro modo é obrigatoriamente `cart_only`: ele prepara o carrinho, mas é 
 clicar para pagar. Isso evita uma cobrança inesperada enquanto a conta, a entrega e o
 3DS ainda não foram validados ao vivo.
 
-**Estado da validação em 15/07/2026:** migrations aplicadas e versão implantada em
-produção. A inspeção ao vivo confirmou que a regionalização atual submete o CEP por Enter
-(o comprador foi ajustado e implantado), mas o Context persistente perdeu o login antes de
-limpar ou adicionar o produto de teste. Nenhuma sacola, checkout ou cobrança foi criada.
-Reautentique a conta Carrefour no Context antes de repetir o preflight.
+**Estado da validação em 16/07/2026:** migrations e correções de UI foram implantadas. A
+regionalização atual fecha pelo botão submit do formulário; Enter é apenas fallback. Frete,
+prazo e total aparecem no carrinho completo, e o conector usa a rota de resumo segura quando
+o minicarrinho não expõe seu CTA. O workflow voltou a falhar fechado em `LOGIN_REQUIRED`.
+Uma nova sessão foi aberta, mas a reautenticação humana não foi concluída e o operador adiou
+a tentativa. Não abrir outra sessão ou repetir o preflight até a próxima tentativa coordenada.
+Nenhuma cobrança ou compra foi executada; a cotação Browserbase continua pendente.
 
 ## Ativação do primeiro piloto
 
@@ -58,9 +60,9 @@ Reautentique a conta Carrefour no Context antes de repetir o preflight.
    PURCHASE_AUTOMATION_MODE="cart_only"
    ```
 
-5. Faça um pedido interno de **um produto, uma unidade**, com link exato do Carrefour.
-   No comportamento legado, a Lia envia o Pix/link e prepara o carrinho após o pagamento.
-   O piloto novo deve inverter essa ordem: preparar/cotar, cobrar e então revalidar.
+5. Faça um pedido interno com o menor número de itens possível, links exatos e valor que
+   respeite o mínimo vigente exposto pelo checkout. O piloto novo prepara/cota primeiro,
+   cobra depois da confirmação e então revalida.
 6. Confira preço, endereço, frete, prazo e carrinho na sessão remota. O painel mostra o ID
    da sessão para investigação. Finalize esse primeiro pedido manualmente no Carrefour e
    use a entrega do próprio varejista.
@@ -104,7 +106,11 @@ uma amostra de pedidos reais com taxa de conferência e preço monitorados.
 - `needs_human`: item sem link, preço não exposto, login/CAPTCHA ou divergência; abra a
   sessão indicada e conclua/corrija manualmente.
 - `ordered`: a loja confirmou o pedido; acompanhe a entrega do Carrefour.
+- `retailer_preparing`: compra confirmada e loja preparando a entrega direta.
+- `retailer_out_for_delivery`: varejista despachou; registrar o rastreio quando existir.
 - `ready_for_pickup`: status legado; só usar em parceiro que autorize formalmente o courier.
+- `refund_pending` / `refunded`: solicitação e confirmação de estorno são etapas distintas;
+  veja [operacao-piloto-needs-human-estorno.md](operacao-piloto-needs-human-estorno.md).
 
 Nunca habilite `policy` com `PURCHASE_AUTO_APPROVE_MAX_TOTAL` acima de zero antes de
 concluir e auditar os pilotos de `cart_only` e `approval_required`.

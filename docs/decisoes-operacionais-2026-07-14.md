@@ -176,8 +176,9 @@ ver o resumo. Ao vencer ou ser cancelada, a reserva do Context é liberada para 
 o carrinho do cliente seguinte.
 
 As migrations pendentes (One-Click e expiração) foram aplicadas em produção e a versão foi
-implantada em 15/07. A inspeção ao vivo também confirmou que a regionalização atual do
-Carrefour submete o CEP por Enter, e o seletor foi corrigido e implantado.
+implantada em 15/07. Nova inspeção da UI em 16/07 substituiu a conclusão anterior: Enter não
+fechou o modal atual; o botão submit do formulário fechou. O conector agora usa esse botão e
+espera o campo visível desaparecer, com Enter apenas como fallback.
 
 Isto ainda não é validação completa do checkout: a tentativa de preflight encontrou o
 Context Carrefour sem login antes de limpar/adicionar o SKU de teste. Nenhuma sacola,
@@ -254,3 +255,78 @@ Verificação local concluída em 15/07: `npx tsc --noEmit`, `npm test` (201 tes
 `npm run build` passaram. O build emitiu somente o aviso não bloqueante existente de uso de
 `<img>` em `src/components/chat-app.tsx`. Não houve deploy, teste ao vivo, carrinho,
 cobrança ou compra durante essa verificação.
+
+## Atualização operacional — 16/07/2026
+
+Para recuperar o acesso administrativo sem reutilizar ou expor `API_TOKEN`, foi criado
+`OPS_TOKEN` dedicado, Sensitive em Production e Preview. O redeploy de produção posterior ficou
+`Ready`, e o painel `/ops` foi autenticado. A inspeção da fila encontrou somente pedidos legados
+pagos e alguns cancelados; eles não são massa segura para a validação. O preflight Carrefour
+foi executado em um pedido técnico novo, com SKU exato e apenas a região persistida no Context;
+nenhum endereço real foi copiado. Em `cart_only`, o workflow terminou em
+`PREFLIGHT_NEEDS_HUMAN`, porque não confirmou conjuntamente item, total, frete e prazo. O valor
+interno de R$ 1,99 não é evidência de cotação. Não houve WhatsApp, cobrança ou compra. A decisão
+permanece: não liberar pagamento nem compra até a confirmação completa do checkout.
+
+Na continuação de 16/07, o carrinho completo foi mapeado ao vivo e mostrou o SKU técnico por
+R$ 1,99, frete a partir de R$ 9,90, prazo a partir de sábado e total R$ 11,89, com pedido
+mínimo de R$ 30. O minicarrinho não contém frete/prazo. O conector foi implantado com
+navegação ao carrinho completo, `orderFormId`, parsers de rótulos em linhas separadas,
+limpeza de carrinho antigo e diagnóstico por campo. Retries controlados corrigiram CEP ausente,
+tempo do modal, falso positivo de login e item residual. O bloqueio final verdadeiro é
+`LOGIN_REQUIRED` no Context Browserbase. Foi implantada `/ops/teste-carrefour` e aberta uma
+sessão viva do mesmo Context para reautenticação humana. Não houve WhatsApp, cobrança, avanço
+ao pagamento ou compra; os valores acima são mapeamento da UI, não cotação operacional validada.
+
+Ainda em 16/07, credenciais Carrefour foram enviadas pelo chat. Elas não foram salvas no
+projeto nem reproduzidas nesta documentação. Como o inspetor remoto não expôs os campos de
+login de forma segura para automação, uma nova sessão viva foi deixada para autenticação
+humana. A senha deve ser rotacionada antes do piloto e nunca migrada para `.env` ou banco.
+
+Após essa autenticação humana em 16/07, o preflight avançou além do login e falhou fechado
+no minicarrinho: o CTA para o carrinho completo não foi exposto. O conector passou a usar a
+rota de resumo `/checkout/cart` como fallback somente de leitura, sem avançar ao pagamento.
+Na publicação desse fallback, a primeira versão pré-construída respondeu erro de runtime porque
+o Prisma havia sido gerado para macOS e o ambiente de produção usa Linux ARM. O schema passou a
+incluir o binário `linux-arm64-openssl-3.0.x`, o artefato foi reconstruído e o deploy seguinte
+ficou `Ready`; o POST do preflight voltou a responder 200. O workflow ainda falhou fechado em
+`LOGIN_REQUIRED`, por expiração da sessão Carrefour, e uma sessão viva nova foi aberta para
+login humano. Isso não altera a política: não houve pagamento, compra ou envio de mensagem, e
+a cotação operacional continua pendente.
+
+Na sequência de 16/07, o painel Browserbase autenticado foi confirmado e uma sessão Carrefour
+nova foi aberta para retomar o login humano. A reautenticação não foi concluída, sem causa
+confirmada, e o operador decidiu adiar o teste. Não criar novas sessões nem repetir o preflight
+até uma próxima tentativa coordenada; não houve cobrança, compra ou mensagem.
+
+Ainda em 16/07, a proteção de concorrência por Context Browserbase foi confirmada e ganhou
+testes de regressão. O lease é persistente no banco, impede dois workers de usar o mesmo carrinho
+e, em conflito, mantém o segundo job em `preflight_queued` para retry controlado a cada minuto.
+Um lease abandonado só pode ser retomado após 15 minutos; erro de banco/configuração não é
+interpretado como Context ocupado. Não houve sessão nova, checkout, cobrança ou compra nessa
+alteração local.
+
+## Qualidade autônoma — entrega direta e estorno (16/07/2026)
+
+O ciclo do pedido foi adaptado localmente à decisão operacional deste documento. Pedidos com
+`retailer_delivery` passam por `retailer_preparing` e `retailer_out_for_delivery`; o backend
+recusa despacho de courier externo para essa modalidade. Os estados antigos
+`operator_buying`, `ready_for_pickup` e `dispatched` continuam disponíveis apenas para pedidos
+legados ou parceiros que autorizem formalmente o courier.
+
+O `/ops` passou a mostrar quem entrega, promessa do checkout, validade da cotação e rastreio do
+varejista. A compra manual ou confirmada pelo job entra no estado correto conforme a modalidade.
+Marcar como entregue exige que o pedido já esteja em rota.
+
+Também foi corrigida uma ambiguidade financeira: o antigo comando de cancelar/estornar apenas
+mudava o status local, mas a mensagem podia sugerir que o estorno já estava em andamento. Agora,
+pedido pago entra em `refund_pending`, a equipe executa a devolução no provedor original e o
+`/ops` exige a referência antes de mudar para `refunded` e confirmar ao cliente. O procedimento
+de `needs_human`, incidentes e estorno foi registrado em
+[operacao-piloto-needs-human-estorno.md](operacao-piloto-needs-human-estorno.md).
+
+Um PIN de registro do WhatsApp encontrado em Markdown local ignorado pelo Git foi removido; ele
+deve ser rotacionado antes do piloto e guardado somente no cofre de segredos. A verificação local
+passou em TypeScript, lint, 210 testes (168 aprovados e 42 integrações puladas por banco remoto
+indisponível) e build. Esta alteração não foi implantada ou validada ao vivo e não abriu navegador,
+checkout, cobrança, compra ou mensagem real.

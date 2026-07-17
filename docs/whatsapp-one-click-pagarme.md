@@ -28,5 +28,12 @@ participa do envio, recebimento ou da cobrança.
 4. Aplique as migrations, configure `LIA_PUBLIC_URL`, ative
    `LIA_ENABLE_WA_PAYMENTS=true` e valide primeiro com uma conta sandbox.
 
+Antes do sandbox real, confirme com o Pagar.me como classificar este fluxo de recompra
+avulsa confirmada pelo cliente: a documentação V5 distingue
+`recurrence_cycle=first|subsequent` e orienta CVV apenas na primeira transação de
+recorrência externa. O adaptador atual envia `card_id` sem `recurrence_cycle`; ajuste esse
+payload e os testes conforme a orientação formal do PSP, incluindo a diferença entre conta
+PSP e Gateway. Não presuma que o mock comprova aceitação do adquirente ou do antifraude.
+
 Não ative a flag antes da allowlist da Meta. Sem ela, a Lia mantém o fallback de
 Checkout Pro para cartão e Pix segue independente.

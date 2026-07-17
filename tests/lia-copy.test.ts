@@ -59,13 +59,32 @@ test("pagamento: pix sem taxa, cartão com taxa, totais distintos", () => {
 });
 
 test("status: uma linha humana por estado do pedido", () => {
-  for (const status of ["awaiting_payment", "paid", "operator_buying", "dispatched", "delivered", "canceled"]) {
+  for (const status of [
+    "awaiting_payment",
+    "paid",
+    "retailer_preparing",
+    "retailer_out_for_delivery",
+    "operator_buying",
+    "dispatched",
+    "delivered",
+    "refund_pending",
+    "refunded",
+    "canceled"
+  ]) {
     const line = copy.orderStatusLine({ shortId: "ABC123", status });
     assert.ok(line.includes("#ABC123"), `${status} deve citar o pedido`);
     assert.doesNotMatch(line, /undefined/);
   }
   const tracked = copy.orderStatusLine({ shortId: "ABC123", status: "dispatched", trackingUrl: "https://t.co/x" });
   assert.match(tracked, /https:\/\/t\.co\/x/);
+  const retailerTracked = copy.orderStatusLine({
+    shortId: "ABC123",
+    status: "retailer_out_for_delivery",
+    trackingUrl: "https://loja.example/rastreio"
+  });
+  assert.match(retailerTracked, /pela loja/);
+  assert.match(retailerTracked, /https:\/\/loja\.example\/rastreio/);
+  assert.doesNotMatch(copy.orderStatusLine({ shortId: "ABC123", status: "retailer_preparing" }), /motoboy/i);
 });
 
 test("todas as mensagens simples são não-vazias e sem placeholders", () => {
@@ -93,6 +112,8 @@ test("todas as mensagens simples são não-vazias e sem placeholders", () => {
     copy.cancelTooLate(),
     copy.nothingToCancel(),
     copy.noPreviousOrder(),
+    copy.refundRequested(),
+    copy.refundConfirmed(),
     copy.delivered(),
     copy.genericError()
   ];

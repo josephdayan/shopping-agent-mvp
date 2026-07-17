@@ -5,6 +5,7 @@ import type { BuyerConnector, BuyerInput, CartSnapshot, ResolvedPurchaseItem, St
 import { PurchaseError } from "../types";
 
 const CARREFOUR_ORIGIN = "https://mercado.carrefour.com.br";
+const CARREFOUR_CART_ORIGIN = "https://carrinho.mercado.carrefour.com.br";
 
 function normalize(input: string): string {
   return input
@@ -56,11 +57,19 @@ export function parseCarrefourCartTotal(text: string): number | undefined {
 }
 
 export function parseCarrefourDeliveryFee(text: string): number | undefined {
-  const lines = text.split(/\r?\n/).map((value) => value.trim());
-  for (const line of lines.reverse()) {
-    if (!/(frete|entrega)/i.test(line)) continue;
-    if (/(gratis|gr[aá]tis)/i.test(line)) return 0;
-    const amount = parseBrl(line);
+  const lines = text.split(/\r?\n/).map((value) => value.trim()).filter(Boolean);
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const line = lines[index];
+    if (!/^(frete|entrega)\b/i.test(line)) continue;
+    const candidates = [line];
+    for (let offset = 1; offset <= 2 && index + offset < lines.length; offset += 1) {
+      const next = lines[index + offset];
+      if (/^(total|prazo|pagamento|produto|cupom|resumo)\b/i.test(next)) break;
+      candidates.push(next);
+    }
+    const value = candidates.join(" — ");
+    if (/(gratis|gr[aá]tis)/i.test(value)) return 0;
+    const amount = parseBrl(value);
     if (amount !== undefined) return amount;
   }
   // Some checkout variants render a single line. Do not cross into a following
@@ -70,14 +79,32 @@ export function parseCarrefourDeliveryFee(text: string): number | undefined {
 }
 
 export function parseCarrefourDeliveryPromise(text: string): string | undefined {
-  const line = text
-    .split(/\r?\n/)
-    .map((value) => value.trim())
-    .find((value) => {
-      const normalized = normalize(value);
-      return /(entrega|receba|chega|prazo)/.test(normalized) && /(hoje|amanha|\d+\s*(min|hora|dia))/.test(normalized);
-    });
-  return line?.slice(0, 180);
+  const lines = text.split(/\r?\n/).map((value) => value.trim()).filter(Boolean);
+  for (let index = 0; index < lines.length; index += 1) {
+    if (!/^(entrega|receba|chega|prazo)\b/i.test(lines[index])) continue;
+    const candidates = [lines[index]];
+    for (let offset = 1; offset <= 2 && index + offset < lines.length; offset += 1) {
+      const next = lines[index + offset];
+      if (/^(total|frete|pagamento|produto|cupom|resumo)\b/i.test(next)) break;
+      candidates.push(next);
+    }
+    const value = candidates.join(" — ");
+    const normalized = normalize(value);
+    if (/(hoje|amanha|segunda|terca|quarta|quinta|sexta|sabado|domingo|\d+\s*(min|hora|dia)|\d{1,2}[/-]\d{1,2})/.test(normalized)) {
+      return value.slice(0, 180);
+    }
+  }
+  return undefined;
+}
+
+export function describeCarrefourCartGap(input: {
+  itemsResolved: boolean;
+  total?: number;
+  deliveryFee?: number;
+  deliveryPromise?: string;
+}): string {
+  const mark = (ok: boolean) => (ok ? "ok" : "ausente");
+  return `Carrinho Carrefour incompleto (itens=${mark(input.itemsResolved)}, total=${mark(input.total !== undefined)}, frete=${mark(input.deliveryFee !== undefined)}, prazo=${mark(Boolean(input.deliveryPromise))}).`;
 }
 
 async function firstVisible(locator: Locator): Promise<boolean> {
@@ -105,7 +132,10 @@ export function detectCarrefourHumanAction(text: string): PurchaseError | null {
   if (/codigo de seguranca|3d secure|3ds|autenticacao do banco|confirmar no aplicativo|confirme no aplicativo/.test(normalized)) {
     return new PurchaseError("PAYMENT_ACTION_REQUIRED", "O cartão pediu confirmação/3DS. Conclua a autenticação na sessão da loja.");
   }
-  if (/entrar na conta|faca login|acesse sua conta|sessao expirada|sessao terminou/.test(normalized)) {
+  if (
+    /faca login|acesse sua conta|sessao expirada|sessao terminou/.test(normalized) ||
+    /entrar na conta.{0,80}(para continuar|para finalizar|checkout)/.test(normalized)
+  ) {
     return new PurchaseError("LOGIN_REQUIRED", "A sessão Carrefour perdeu o login. Entre novamente no Context persistente.");
   }
   if (/temporariamente indisponivel|em manutencao|tente novamente mais tarde/.test(normalized)) {
@@ -152,7 +182,7 @@ async function readCarrefourCartText(page: Page): Promise<string> {
   return text;
 }
 
-async function openCarrefourCart(page: Page, navigateToStorefront = false): Promise<string> {
+async function openCarrefourMiniCart(page: Page, navigateToStorefront = false): Promise<string> {
   if (navigateToStorefront) {
     await page.goto(CARREFOUR_ORIGIN, { waitUntil: "domcontentloaded", timeout: 45_000 });
   }
@@ -172,32 +202,59 @@ async function openCarrefourCart(page: Page, navigateToStorefront = false): Prom
   return readCarrefourCartText(page);
 }
 
+async function openCarrefourCheckoutCart(page: Page): Promise<{ text: string; retailerCartId?: string }> {
+  if (!page.url().startsWith(`${CARREFOUR_CART_ORIGIN}/checkout/cart`)) {
+    let goToCart = await firstButton(page, [/^ir para o carrinho$/i, /^ver carrinho$/i]);
+    if (!goToCart) {
+      await openCarrefourMiniCart(page);
+      goToCart = await firstButton(page, [/^ir para o carrinho$/i, /^ver carrinho$/i]);
+    }
+    if (goToCart) {
+      await goToCart.first().click({ timeout: 10_000 });
+      await page.waitForURL(new RegExp(`^${CARREFOUR_CART_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/checkout/cart`), { timeout: 30_000 });
+      await page.waitForLoadState("domcontentloaded", { timeout: 15_000 }).catch(() => undefined);
+    } else {
+      // The mini-cart drawer occasionally loses its visible CTA although the same
+      // persisted session already has an order form. Going to the read-only cart
+      // route is safe: it cannot submit or advance a checkout and lets us fail
+      // closed unless the full summary exposes items, freight and delivery.
+      await page.goto(`${CARREFOUR_CART_ORIGIN}/checkout/cart`, { waitUntil: "domcontentloaded", timeout: 45_000 });
+    }
+  }
+  const text = await readCarrefourCartText(page);
+  const url = new URL(page.url());
+  if (url.hostname !== "carrinho.mercado.carrefour.com.br" || url.pathname !== "/checkout/cart") {
+    throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não abriu o carrinho completo para validar frete, prazo e total.");
+  }
+  return { text, retailerCartId: url.searchParams.get("orderFormId") ?? undefined };
+}
+
 async function ensureCarrefourRegion(page: Page, deliveryCep?: string | null): Promise<void> {
   await page.goto(CARREFOUR_ORIGIN, { waitUntil: "domcontentloaded", timeout: 45_000 });
-  const text = await readCarrefourCartText(page);
-  if (!/insira seu cep/.test(normalize(text))) return;
+  const regionButton = page.getByText(/insira seu cep/i).locator("xpath=ancestor::button");
+  if (!(await firstVisible(regionButton))) return;
 
   const cep = deliveryCep?.replace(/\D/g, "");
   if (!cep || cep.length !== 8) {
     throw new PurchaseError("CONFIGURATION_REQUIRED", "Falta o CEP de entrega para preparar o carrinho Carrefour.");
   }
-  const regionButton = page.getByText(/insira seu cep/i).locator("xpath=ancestor::button");
-  if (!(await firstVisible(regionButton))) {
-    throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour pediu o CEP, mas não expôs o seletor de região.");
-  }
   await regionButton.click({ timeout: 10_000 });
   await page.waitForTimeout(500);
-  const cepField = page.locator("input[name=CEP]");
+  const cepField = page.locator('input[name="CEP"]:visible').first();
   if (!(await firstVisible(cepField))) {
     throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não exibiu o campo de CEP para selecionar a região.");
   }
   await cepField.fill(cep);
-  // The current regionalization modal submits the masked CEP with Enter; its
-  // visible "Enviar" belongs to an unrelated feedback widget in the page footer.
-  await cepField.press("Enter");
-  await page.waitForTimeout(1_000);
-  const afterSubmit = await readCarrefourCartText(page);
-  if (/insira seu cep/.test(normalize(afterSubmit))) {
+  const form = cepField.locator("xpath=ancestor::form");
+  const submit = form.locator('button[type="submit"]');
+  if (await firstVisible(submit)) await submit.first().click({ timeout: 10_000 });
+  else await cepField.press("Enter");
+  await cepField.waitFor({ state: "hidden", timeout: 10_000 }).catch(() => undefined);
+  if (await firstVisible(cepField)) {
+    await cepField.press("Enter").catch(() => undefined);
+    await cepField.waitFor({ state: "hidden", timeout: 5_000 }).catch(() => undefined);
+  }
+  if (await firstVisible(cepField)) {
     throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não aceitou o CEP para regionalizar a compra.");
   }
   await page.goto(CARREFOUR_ORIGIN, { waitUntil: "domcontentloaded", timeout: 45_000 });
@@ -214,7 +271,7 @@ function browserSessionOptions() {
     keepAlive: true,
     browserSettings: {
       context: { id: process.env.CARREFOUR_BROWSER_CONTEXT_ID as string, persist: true },
-      allowedDomains: ["carrefour.com.br"],
+      allowedDomains: ["carrefour.com.br", "mercado.carrefour.com.br", "carrinho.mercado.carrefour.com.br"],
       recordSession: true
     },
     ...(country && /^[A-Z]{2}$/.test(country)
@@ -301,7 +358,8 @@ export class CarrefourBuyer implements BuyerConnector {
       const unresolved = items.some((item) => item.status !== "resolved");
       // The cart view is used only to confirm that the adds were accepted. Do not infer
       // a total when Carrefour's UI did not expose one; that must become an exception.
-      const cartText = await openCarrefourCart(page);
+      const cart = await openCarrefourCheckoutCart(page);
+      const cartText = cart.text;
       const human = detectCarrefourHumanAction(cartText);
       if (human) throw human;
       const total = parseCarrefourCartTotal(cartText);
@@ -314,7 +372,7 @@ export class CarrefourBuyer implements BuyerConnector {
         storeLabel: input.storeLabel,
         storeUnitId: input.storeUnitId,
         storeUnitLabel: input.storeUnitLabel,
-        retailerCartId: undefined,
+        retailerCartId: cart.retailerCartId,
         browserSessionId: session.id,
         items,
         itemsSubtotal: money(itemsSubtotal),
@@ -324,7 +382,7 @@ export class CarrefourBuyer implements BuyerConnector {
         currency: "BRL",
         capturedAt: new Date().toISOString(),
         status: ready ? "ready" : "needs_human",
-        reason: ready ? undefined : "Não foi possível validar todos os itens, frete, prazo e total do carrinho Carrefour."
+        reason: ready ? undefined : describeCarrefourCartGap({ itemsResolved: !unresolved, total, deliveryFee, deliveryPromise })
       };
     } finally {
       await browser.close();
@@ -342,7 +400,8 @@ export class CarrefourBuyer implements BuyerConnector {
     const page = context.pages()[0] ?? (await context.newPage());
     try {
       await ensureCarrefourRegion(page, input.deliveryCep);
-      const cartText = await openCarrefourCart(page);
+      const cart = await openCarrefourCheckoutCart(page);
+      const cartText = cart.text;
       const human = detectCarrefourHumanAction(cartText);
       if (human) throw human;
       const total = parseCarrefourCartTotal(cartText);
@@ -372,6 +431,7 @@ export class CarrefourBuyer implements BuyerConnector {
         storeLabel: input.storeLabel,
         storeUnitId: input.storeUnitId,
         storeUnitLabel: input.storeUnitLabel,
+        retailerCartId: cart.retailerCartId,
         browserSessionId: session.id,
         items,
         itemsSubtotal: money(itemsSubtotal),
@@ -381,7 +441,7 @@ export class CarrefourBuyer implements BuyerConnector {
         currency: "BRL",
         capturedAt: new Date().toISOString(),
         status: ready ? "ready" : "needs_human",
-        reason: ready ? undefined : "O carrinho Carrefour mudou ou não expôs todos os itens, frete e prazo para validação."
+        reason: ready ? undefined : describeCarrefourCartGap({ itemsResolved: items.every((item) => item.status === "resolved"), total, deliveryFee, deliveryPromise })
       };
     } finally {
       await browser.close();
@@ -404,7 +464,7 @@ export class CarrefourBuyer implements BuyerConnector {
     const page = context.pages()[0] ?? (await context.newPage());
     try {
       await ensureCarrefourRegion(page, input.deliveryCep);
-      const cartText = await openCarrefourCart(page);
+      const { text: cartText } = await openCarrefourCheckoutCart(page);
       const human = detectCarrefourHumanAction(cartText);
       if (human) throw human;
       const liveTotal = parseCarrefourCartTotal(cartText);
@@ -463,7 +523,7 @@ export class CarrefourBuyer implements BuyerConnector {
   }
 
   private async emptyCart(page: Page): Promise<void> {
-    let text = await openCarrefourCart(page);
+    let text = await openCarrefourMiniCart(page);
     for (let removed = 0; removed < 100; removed += 1) {
       const human = detectCarrefourHumanAction(text);
       if (human) throw human;
@@ -471,10 +531,24 @@ export class CarrefourBuyer implements BuyerConnector {
       if (/seu carrinho esta vazio|carrinho vazio|nenhum produto no carrinho/.test(normalized)) return;
       const remove = await firstButton(page, [/remover/i, /excluir/i]);
       if (!remove) {
-        throw new PurchaseError(
-          "MANUAL_ACTION_REQUIRED",
-          "O carrinho Carrefour já tinha itens e a automação não encontrou como removê-los com segurança. Limpe a sessão e tente de novo."
-        );
+        await openCarrefourCheckoutCart(page);
+        const clear = await firstButton(page, [/^limpar carrinho$/i]);
+        if (!clear) {
+          throw new PurchaseError(
+            "MANUAL_ACTION_REQUIRED",
+            "O carrinho Carrefour já tinha itens e não expôs a ação segura de limpar. Confira a sessão antes de tentar de novo."
+          );
+        }
+        await clear.click({ timeout: 10_000 });
+        await page.waitForTimeout(400);
+        const confirm = await firstButton(page, [/^sim,? limpar/i, /^sim$/i, /^confirmar$/i, /^limpar$/i]);
+        if (confirm) {
+          await confirm.click({ timeout: 10_000 });
+          await page.waitForTimeout(400);
+        }
+        text = await readCarrefourCartText(page);
+        if (/seu carrinho esta vazio|carrinho vazio|nenhum produto no carrinho/.test(normalize(text))) return;
+        throw new PurchaseError("MANUAL_ACTION_REQUIRED", "O Carrefour não confirmou que o carrinho anterior foi limpo.");
       }
       await remove.first().click({ timeout: 10_000 });
       await page.waitForTimeout(350);

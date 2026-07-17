@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-07-15. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-07-16. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -63,13 +63,14 @@ quando existir uma rota urgente formalmente compatível.
 | **Multi-loja + roteamento** | ✅ Carrefour + Petz + Boticário; **1 loja por pedido**, escolhida por match |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
-| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Não usa 360dialog. |
+| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Antes do teste real, o Pagar.me deve confirmar a classificação `first/subsequent` e CVV para este fluxo; o payload atual usa `card_id` sem `recurrence_cycle`. Não usa 360dialog. |
+| **Qualificação externa de WhatsApp Payments** | 🟡 Samuel Santana, da Infobip, pediu em 16/07 projeção de volume, mix Utility/Marketing, países e canais para encaminhar `order_details` / `offsite_card_pay` com Mercado Pago. A Infobip documenta Payments no Brasil, mas isso ainda não é aprovação nem confirma `credential_id`, custos ou preservação da Cloud API direta. O onboarding padrão deles também admite migração do sender; não autorizar essa mudança implicitamente. |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
 | **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
-| **Testes de compra e conversa** | ✅ TypeScript, compradores/busca/política e a suíte integral passaram em 15/07 (201 testes). Os evals agora cobrem o onboarding de endereço completo. Build local de produção aprovado; checkout ao vivo continua um gate separado. |
-| **Cotação Carrefour antes de cobrar** | 🟡 Implementada e implantada em 15/07: preflight `cart_only` monta a sacola; só libera Pix/cartão após total, frete e prazo do checkout; expira em 5 min e libera o Context quando expira/cancela. Migrations aplicadas e build passou. A primeira tentativa ao vivo achou o Context sem login antes de tocar no carrinho; falta reautenticar e validar frete/prazo/cartão/3DS. |
+| **Testes de compra e conversa** | ✅ Em 16/07, TypeScript, lint, build e 210 testes passaram (168 aprovados; 42 integrações de banco puladas por indisponibilidade do Postgres remoto). Checkout ao vivo continua um gate separado. |
+| **Cotação Carrefour antes de cobrar** | 🟡 Implementada; a UI mapeada mostrou item R$ 1,99, frete a partir de R$ 9,90, prazo a partir de sábado e total R$ 11,89. O fallback seguro para a rota de resumo foi publicado em 16/07. A primeira publicação pré-construída expôs erro Prisma de plataforma, corrigido com binário Linux ARM e novo deploy `Ready`; o POST voltou a responder 200. O workflow segue falhando fechado em `LOGIN_REQUIRED`; uma nova sessão foi aberta, mas o login humano não foi concluído e o teste foi adiado. Sem cobrança ou compra; cartão/3DS seguem pendentes. |
 | **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em Petz/Carrefour. Só usar com parceiro compatível. |
 | **Cobertura** | ⚠️ O preset de SP e a guarda de 12 km continuam no código, mas são legado do motoboy. Para entrega direta, o checkout do varejista é a autoridade por CEP. |
 | **Lojas (107 unidades geocodadas)** | ✅ dado útil para parceiros/same-day; proximidade não prova estoque, entrega ou prazo do varejista. |
@@ -77,7 +78,8 @@ quando existir uma rota urgente formalmente compatível.
 | **Meta / WhatsApp oficial** | ✅ número aprovado, Cloud API ativa em produção e webhook assinado validado |
 | **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
 | **Pedido mínimo** | ✅ por loja (Carrefour = R$30); avisa o cliente p/ completar |
-| **Painel do operador `/ops`** | ✅ existe; o fluxo legado de retirada/despacho precisa ser adaptado para entrega do varejista |
+| **Painel do operador `/ops`** | 🟡 entrega direta implementada localmente: mostra promessa/modalidade/rastreio, usa `retailer_preparing → retailer_out_for_delivery`, bloqueia courier externo e separa solicitação de estorno da confirmação por referência. Testes/build passaram; falta implantar e validar ao vivo. |
+| **Acesso ao `/ops`** | ✅ `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN` e não foi exposto. |
 | **Onboarding de endereço** | 🟡 o endereço completo é pedido e persistido uma vez no fluxo e está coberto pelos evals; falta validar o resumo/cotação em checkout real. |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
 | **Privacidade da loja** | ✅ a Lia não fala "Carrefour" pro cliente ("Procurando…") |
@@ -93,12 +95,21 @@ quando existir uma rota urgente formalmente compatível.
   uma conta de varejista para múltiplos destinatários.
 - **Pilotar entrega direta** com 5–10 pedidos controlados, sem prometer motoboy.
 - **Testar checkout e cartão salvo** em `cart_only`, incluindo CVV, 3DS, CAPTCHA e antifraude.
-- **Revisar a conversa e o `/ops`** para frete/prazo do varejista em vez de cotação Uber
-  obrigatória.
+- **Implantar e validar a revisão do `/ops`** para frete/prazo/rastreio do varejista e
+  estorno auditável. O código e o runbook estão prontos localmente; a conversa Carrefour já
+  usa a cotação do varejista, mas Petz/Boticário e o checkout ao vivo continuam pendentes.
 - **Antes de habilitar One-Click:** confirmar as migrations de pagamento aplicadas, obter a
   allowlist Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
   sandbox de primeira compra, recompra, recusa e resposta perdida. Guia:
   [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
+- **Responder à qualificação comercial de Payments:** enviar projeções como estimativas de
+  MVP, informar predominância Utility/Brasil/WhatsApp e exigir por escrito a preservação da
+  WABA, número e Cloud API direta. Depois confirmar PSP suportado, custos, prazo, onboarding
+  e responsabilidade pela geração do `credential_id`.
+- **Fechar o payload Pagar.me com o PSP:** confirmar se a primeira cobrança após a
+  tokenização e as recompras confirmadas no WhatsApp devem usar
+  `recurrence_cycle=first|subsequent`, como fica o CVV/3DS e se o modelo é PSP ou Gateway.
+  Ajustar o adaptador e os testes conforme a resposta antes do sandbox real.
 
 ### 🟡 Pra operar de verdade
 - **WhatsApp oficial da Meta**: ✅ o número `+55 11 97844-4813` foi aprovado como
@@ -141,9 +152,11 @@ quando existir uma rota urgente formalmente compatível.
 **Cliente (pelo celular):** manda no WhatsApp da Lia → `oi` → CEP → itens → escolhe opções
 → `pagar` → paga o Pix. Recebe "Pagamento confirmado ✅".
 
-**Operador (piloto):** abre `shopping-agent-mvp.vercel.app/ops?key=<API_TOKEN>` → vê o pedido
+**Operador (piloto):** abre `liadelivery.com.br/ops?key=<OPS_TOKEN>` → vê o pedido
 pago → confere o carrinho/sessão → aprova a compra com entrega direta → registra o número
-do pedido e acompanha o fulfillment do varejista.
+do pedido e acompanha preparação, rastreio e entrega do varejista. Cancelamento pago entra
+em `refund_pending`; a confirmação só é enviada depois de registrar a referência real do
+provedor. Runbook: [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
 O card também permite **avisar o cliente** (substituição/atraso, vira mensagem da Lia) e
 destaca em vermelho pedidos em que o **cliente pediu cancelamento** pelo WhatsApp.
 
@@ -159,7 +172,7 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 | `MERCADO_PAGO_ACCESS_TOKEN` + webhook | `MERCADO_PAGO_WEBHOOK_SECRET` (assinatura é só aviso) |
 | `BROWSERBASE_API_KEY` + Contexts dos varejistas | `LIA_PETZ_MIN_ORDER`, `LIA_CARREFOUR_MIN_ORDER` (default 30) |
 | `UBER_DIRECT_CUSTOMER_ID/CLIENT_ID/CLIENT_SECRET` (opcional/parceiros) | Política e credenciais de rastreio dos varejistas |
-| `OPENAI_API_KEY`, `DATABASE_URL`, `API_TOKEN`, Twilio | Scraper pago (estoque ao vivo) — futuro |
+| `OPENAI_API_KEY`, `DATABASE_URL`, `API_TOKEN`, `OPS_TOKEN`, Meta Cloud API | Scraper pago (estoque ao vivo) — futuro |
 | `LIA_COVERAGE_PRESET=estado-sp` (SP inteiro) | `LIA_MAX_DELIVERY_KM` (12), `LIA_MAX_DELIVERY_FEE` (35) — ajuste da guarda |
 
 > 🔒 Recomendado: **regenerar** o Access Token do MP e o Client Secret da Uber (passaram no
@@ -186,6 +199,10 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 > O operador informou que a reautenticação foi concluída na tela em 15/07; ainda falta
 > escolher endereço salvo e item de teste para executar o preflight de carrinho, frete e
 > prazo. Nenhum pagamento ou compra foi iniciado.
+> Em 16/07, credenciais Carrefour foram expostas no chat. Os valores não foram persistidos
+> nem registrados no projeto; a senha deve ser rotacionada antes do piloto. O inspetor
+> remoto não expôs campos seguros para automação, portanto uma sessão nova ficou aberta
+> para autenticação humana.
 
 Em 15/07, o hash de aprovação do carrinho passou a incluir frete e promessa de entrega,
 além de itens e total. Falhas Browserbase 401/503, sessão Carrefour expirada e página de
@@ -194,6 +211,40 @@ checkout; `cart_only` também é testado como bloqueio anterior ao acesso ao Bro
 
 O estado de Meta, domínio, e-mail, cobrança, motoboy, painel e checklist do piloto está
 centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
+
+Em 16/07, a autenticação do `/ops` foi recuperada criando `OPS_TOKEN` separado e Sensitive
+em Production/Preview, seguido de redeploy que ficou `Ready`. A abertura do painel confirmou
+que há pedidos legados pagos e alguns cancelados; eles não são massa segura para este teste.
+Foi então criado um pedido interno isolado, em `cart_only`, com SKU Carrefour exato e CEP
+público de teste `01310-100` (sem endereço pessoal). O mapeamento no navegador comum confirmou
+que a UI atual submete o CEP pelo botão do formulário e só expõe frete/prazo no carrinho
+completo: item R$ 1,99, frete a partir de R$ 9,90, prazo a partir de sábado e total R$ 11,89.
+O conector, parsers, limpeza segura, diagnóstico e página `/ops/teste-carrefour` foram
+implantados. Os retries do workflow removeram bloqueios intermediários e chegaram ao bloqueio
+real `LOGIN_REQUIRED` no Context persistente; uma sessão viva foi aberta para login humano.
+Esses valores mapeiam a tela, mas ainda não são uma cotação Browserbase validada. Não houve
+WhatsApp, cobrança ou compra.
+
+Na continuação de 16/07, o painel Browserbase autenticado foi confirmado e outra sessão
+Carrefour foi aberta para login humano. A reautenticação não foi concluída, sem causa confirmada,
+e o operador decidiu repetir em outro momento. Não abrir novas sessões ou repetir o preflight
+até a próxima tentativa coordenada.
+
+Também em 16/07, foi confirmada e coberta por testes a serialização já aplicada por Context
+Browserbase: um lease persistente impede que dois workers usem o mesmo carrinho, conflitos entram
+em `preflight_queued` com retry de um minuto, e um lease abandonado só é recuperado após 15
+minutos. Falhas de banco/configuração não são classificadas como carrinho ocupado. Essa alteração
+foi somente local; não abriu sessão, checkout, cobrança ou compra.
+
+Ainda em 16/07, o ciclo operacional de entrega direta foi implementado localmente sem migration:
+pedidos novos passam por `retailer_preparing` e `retailer_out_for_delivery`, enquanto os estados
+de retirada/courier ficaram restritos a parceiros formalmente autorizados. O backend bloqueia
+despacho externo para `retailer_delivery`; o `/ops` mostra promessa e rastreio do varejista. O
+cancelamento de pedido pago não afirma mais que o estorno ocorreu: cria `refund_pending`, exige
+referência do provedor e só então muda para `refunded` e avisa o cliente. Foi criado o runbook de
+`needs_human` e estorno. Um PIN de registro encontrado em Markdown local foi removido e precisa
+ser rotacionado. TypeScript, lint, 210 testes (168 passaram, 42 foram pulados por dependência de
+banco) e build passaram. Nada foi implantado ou validado ao vivo nesta alteração.
 
 ---
 
@@ -215,12 +266,13 @@ centralizado em [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.m
 | Busca por IA | `src/lib/adapters/ai.ts` (`extractShoppingList`) |
 | Matcher / ranking comum | `src/lib/stores/types.ts` (`scoreCatalogMatch`, `rankCatalog`, `attrMatchesItem`) |
 | Painel do operador | `/ops` + `/api/ops/...` |
+| Estados e convenções operacionais | `src/lib/order-flags.ts` |
 | Pedido (cesta, ciclo de status) | `prisma DeliveryOrder` |
 
 **Somar loja = 1 arquivo** (conector + catálogo) + registrar em `stores/index.ts`.
-**Ciclo atual no código (legado):** `awaiting_payment → paid → operator_buying → ready_for_pickup → dispatched → delivered`.
-O fluxo de entrega direta precisa substituir `ready_for_pickup/dispatched` por estados de
-pedido/rastreio do varejista.
+**Ciclo direto implementado localmente:** `awaiting_payment → paid → retailer_preparing → retailer_out_for_delivery → delivered`.
+O ciclo antigo `operator_buying → ready_for_pickup → dispatched` permanece somente para pedidos
+legados ou parceiros courier autorizados. Cancelamento pago usa `refund_pending → refunded`.
 
 ### Atualização de conversa — 2026-07-07
 
