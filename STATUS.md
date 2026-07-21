@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-07-16. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-07-19. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -12,6 +12,15 @@ de hoje está em
 [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md)._
 
 ---
+
+> **Remodelagem 2026-07-20 — concierge manual (fluxo ativo).** O produto passou a ser um
+> concierge de WhatsApp com **largura** (pede qualquer coisa, de qualquer lugar), **cotação e
+> compra manuais pelo operador** e **entrega na hora por motoboy que sai da base do operador**.
+> A automação de checkout (Browserbase) saiu do caminho crítico (`LIA_MANUAL_CONCIERGE=true`,
+> default). Ao fechar a lista, cria-se `awaiting_operator_quote`; o operador cota no `/ops` e o
+> pedido reaproveita `awaiting_quote_confirmation` + a máquina de pagamento existente. Detalhes
+> e racional em [AGENTS.md](AGENTS.md) (topo) e no registro datado. A seção abaixo descreve o
+> fluxo legado de automação, mantido atrás da flag e ainda usado como referência/testes.
 
 ## 1. O que é a Lia
 
@@ -26,7 +35,9 @@ prometer o mesmo dia ou quando houver parceiro formal que libere retirada por co
 `Clique-e-retire + motoboy aleatório` não é mais considerado fluxo escalável.
 
 - **Receita:** markup de **10%** embutido no preço (produto e frete são pass-through).
-- **Sem remédio** (ANVISA). **Loja-base:** Carrefour; **+lojas:** Petz (pet), O Boticário (beleza).
+- **Sem remédio** (ANVISA). **Fontes ativas:** Oba Hortifruti (mercado/essenciais), Petz e O
+  Boticário. Carrefour foi removido do produto ativo após o bloqueio da sessão remota; Mambo
+  ficou apenas como candidato pesquisado. O primeiro preflight ao vivo deve ser Oba ou Petz.
 - **Moat:** a **largura** — "qualquer coisa, de qualquer loja, num WhatsApp só".
 
 ---
@@ -57,32 +68,32 @@ quando existir uma rota urgente formalmente compatível.
 
 | Componente | Status |
 |---|---|
-| **Busca Carrefour** | ✅ links/preços reais via busca ao vivo; cache curto e falha fechada em produção. O catálogo de 1.094 itens permanece como histórico/seed de teste. |
-| **Busca Petz** | ✅ busca ao vivo + cache de 15 min; só mostra opção com URL/preço reais. Catálogo histórico: 2.822 itens, sem remédio. |
-| **Busca Boticário** | ✅ busca ao vivo + cache de 15 min; SKU, preço e URL reais. Catálogo histórico: 1.409 itens. |
-| **Multi-loja + roteamento** | ✅ Carrefour + Petz + Boticário; **1 loja por pedido**, escolhida por match |
+| **Oba — mercado/essenciais** | ✅ Cotação Browserbase validada em Production em 19/07, ainda em `cart_only`: catálogo VTEX por SKU/vendedor, sacola isolada, simulação por CEP e estoque/frete/prazo obrigatórios. O job técnico chegou a `cart_ready` com arroz Camil 1 kg (R$ 5,99), frete R$ 9,90 e janela de entrega do varejista no CEP público `01310-100` (total R$ 15,89). A chave Browserbase e `OBA_BROWSER_CONTEXT_ID` são Sensitive; migration de defaults Oba aplicada e conferida. Não houve cobrança nem pedido. Falta validação comercial e piloto. |
+| **Busca Petz** | 🟡 busca ao vivo + cache de 15 min. O preflight novo de 20/07 confirmou SKU/preço/subtotal, alcançou `/checkout/cart/<id>`, mas não recebeu frete/prazo ou controles de entrega no Context; falhou fechada em `needs_human`. O `/ops` agora abre uma sessão viva isolada, sem sacola/pagamento, para o operador selecionar entrega no endereço na Petz; depois disso, o preflight deve ser repetido. |
+| **Busca Boticário** | 🟡 busca ao vivo + cache de 15 min; SKU, preço e URL reais. O novo preflight de 20/07 confirmou novamente SKU B88468, quantidade e subtotal de R$ 16,90, mas não recebeu prazo domiciliar. O link “Entrega Rápida” é informativo e o `postalCode` permanece bloqueado pelo varejista. O parser rejeita promoção de frete grátis e retirada como cotação. Permanece `needs_human`, sem cobrança ou compra. |
+| **Multi-loja + roteamento** | ✅ Oba + Petz + Boticário; **1 loja por pedido**, escolhida por match. |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
 | **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Antes do teste real, o Pagar.me deve confirmar a classificação `first/subsequent` e CVV para este fluxo; o payload atual usa `card_id` sem `recurrence_cycle`. Não usa 360dialog. |
-| **Qualificação externa de WhatsApp Payments** | 🟡 Samuel Santana, da Infobip, pediu em 16/07 projeção de volume, mix Utility/Marketing, países e canais para encaminhar `order_details` / `offsite_card_pay` com Mercado Pago. A Infobip documenta Payments no Brasil, mas isso ainda não é aprovação nem confirma `credential_id`, custos ou preservação da Cloud API direta. O onboarding padrão deles também admite migração do sender; não autorizar essa mudança implicitamente. |
+| **Qualificação externa de WhatsApp Payments** | 🟡 Em 18/07, Samuel classificou o volume de MVP (2.000–10.000 mensagens/mês) como Self-Service, encaminhou as dúvidas ao Customer Success e ofereceu uma conta de teste. O contato técnico foi enviado, com Samuel em cópia; aguarda resposta escrita. Isso não é aprovação nem confirma `credential_id`, Mercado Pago PJ, custos ou preservação da Cloud API direta. Não aceitar teste que migre/compartilhe o sender ou altere WABA, número, Graph API ou webhook. |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
 | **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
-| **Testes de compra e conversa** | ✅ Em 16/07, TypeScript, lint, build e 210 testes passaram (168 aprovados; 42 integrações de banco puladas por indisponibilidade do Postgres remoto). Checkout ao vivo continua um gate separado. |
-| **Cotação Carrefour antes de cobrar** | 🟡 Implementada; a UI mapeada mostrou item R$ 1,99, frete a partir de R$ 9,90, prazo a partir de sábado e total R$ 11,89. O fallback seguro para a rota de resumo foi publicado em 16/07. A primeira publicação pré-construída expôs erro Prisma de plataforma, corrigido com binário Linux ARM e novo deploy `Ready`; o POST voltou a responder 200. O workflow segue falhando fechado em `LOGIN_REQUIRED`; uma nova sessão foi aberta, mas o login humano não foi concluído e o teste foi adiado. Sem cobrança ou compra; cartão/3DS seguem pendentes. |
-| **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em Petz/Carrefour. Só usar com parceiro compatível. |
+| **Testes de compra e conversa** | ✅ Em 19/07, TypeScript, lint, build e 204 testes passaram (162 aprovados; 42 integrações de banco puladas por indisponibilidade do Postgres remoto). Checkout ao vivo continua um gate separado. |
+| **Cotação antes de cobrar** | 🟡 Implementada genericamente para Oba, Petz e Boticário: só libera pagamento depois de itens, total, frete e prazo. Oba e Boticário ainda precisam de preflight Browserbase ao vivo; Petz precisa validar o fluxo genérico atual. Compra final permanece bloqueada em `cart_only`. |
+| **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em varejistas de consumidor. Só usar com parceiro compatível. |
 | **Cobertura** | ⚠️ O preset de SP e a guarda de 12 km continuam no código, mas são legado do motoboy. Para entrega direta, o checkout do varejista é a autoridade por CEP. |
 | **Lojas (107 unidades geocodadas)** | ✅ dado útil para parceiros/same-day; proximidade não prova estoque, entrega ou prazo do varejista. |
 | **Landing + domínio** | ✅ **liadelivery.com.br no ar** (HTTPS) — site novo (pôster Petróleo), domínio **verificado na Meta** |
 | **Meta / WhatsApp oficial** | ✅ número aprovado, Cloud API ativa em produção e webhook assinado validado |
 | **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
-| **Pedido mínimo** | ✅ por loja (Carrefour = R$30); avisa o cliente p/ completar |
+| **Pedido mínimo** | ✅ por loja; avisa o cliente p/ completar. |
 | **Painel do operador `/ops`** | 🟡 entrega direta implementada localmente: mostra promessa/modalidade/rastreio, usa `retailer_preparing → retailer_out_for_delivery`, bloqueia courier externo e separa solicitação de estorno da confirmação por referência. Testes/build passaram; falta implantar e validar ao vivo. |
 | **Acesso ao `/ops`** | ✅ `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN` e não foi exposto. |
 | **Onboarding de endereço** | 🟡 o endereço completo é pedido e persistido uma vez no fluxo e está coberto pelos evals; falta validar o resumo/cotação em checkout real. |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
-| **Privacidade da loja** | ✅ a Lia não fala "Carrefour" pro cliente ("Procurando…") |
+| **Privacidade da loja** | ✅ a Lia não precisa expor o varejista ao cliente ("Procurando…"). |
 | **Canal** | ✅ Meta Cloud API em produção; Twilio Sandbox é legado de teste. |
 | **MEI / CNPJ + e-mail** | ✅ aberto (do seu lado); `contato@liadelivery.com.br` configurado no ImprovMX |
 
@@ -91,13 +102,52 @@ quando existir uma rota urgente formalmente compatível.
 ## 4. O que FALTA (por prioridade)
 
 ### 🔴 O que destrava o produto
+- **Prioridade atual (19/07):** o Context persistente, a configuração e o preflight técnico do
+  Oba já foram validados em Production em `cart_only`. Petz e Boticário chegaram a carrinhos reais,
+  mas ambos falharam fechados antes de preço de entrega/prazo: Petz não expôs os campos na sacola
+  completa; Boticário não liberou a confirmação de CEP. Resolver esses gates antes de repetir os
+  preflights e obter a validação comercial/termos. Nenhuma etapa cobra ou compra.
+- **Sessão de entrega Petz (20/07):** publicada e aberta pelo `/ops` para a seleção manual de
+  entrega no endereço dentro da Petz. Ela abre já na página inicial da loja, sem carrinho,
+  pagamento ou interação automática, e fica aberta por até uma hora. Não é validação de cotação: o próximo passo técnico é um
+  novo preflight, após o varejista expor frete e prazo reais. O visualizador Browserbase embutido
+  no Codex não se mostrou estável para o operador, então a sessão viva foi aberta no Safari.
+  Após encerrar a sessão pelo `/ops` para persistir a ação manual, um retry fresco ainda chegou
+  somente a `/checkout/cart/<id>` com SKU R$ 15,99; a etapa de entrega não apareceu. Permanece
+  `needs_human`, sem evidência de frete/prazo e sem cobrança ou compra.
+- **Handoff Carrefour rejeitado:** o cliente não receberá links para terminar a compra. A experiência
+  deve continuar integralmente na Lia. Para testes internos, resta operação humana invisível no
+  navegador comum; para um piloto operacional sem checkout web, avaliar shopper próprio em loja.
+  Nenhum desses caminhos é tratado como automação escalável.
+- **Carrefour de longo prazo:** negociar integração homologada de catálogo/cotação/pedido com o
+  varejista ou um app de delivery parceiro. Marketplace Seller e APIs públicas do iFood são fluxos
+  do lado da loja, não APIs para criar uma compra de consumidor.
+- **Supply ativo:** Oba é a fonte de mercado/essenciais; Petz e Boticário completam pet e beleza.
+  Mambo não integra o produto. Oba passou no teste público e no preflight Browserbase em
+  Production, com carrinho, estoque, total, frete e janela reais antes da cobrança. Boticário
+  passou a extrair frete e promessa, mas precisa validar ao vivo.
+- **Próximos candidatos (pesquisa, não validação):** Pão de Açúcar é a primeira substituição para
+  mercado em São Paulo; sua documentação oficial descreve seleção de entrega e frete/prazo por
+  CEP. Cobasi é a primeira substituição para pet; a política oficial exige calcular frete/prazo
+  no carrinho e oferece entrega própria. Savegnago é adequado apenas onde sua rede atende no
+  interior paulista. Nenhum dos três novos candidatos está integrado ou aprovado.
+- **Cobasi — pet (smoke ao vivo):** ✅ em 20/07, navegação anônima com CEP público `01310-100`
+  adicionou produto real à sacola e o checkout mostrou Cobasi Já, Econômica, frete, prazo e total
+  antes de pagamento; ao continuar, chegou ao login. O carrinho técnico foi limpo. **Leroy Merlin
+  — casa/manutenção (smoke ao vivo):** ✅ produto vendido e entregue pela Leroy, CEP público,
+  entrega domiciliar, frete, prazo e total reais; ao continuar, chegou ao login e a sacola foi
+  esvaziada. Para Leroy, um futuro conector deve aceitar exclusivamente itens vendidos e entregues
+  pela própria loja. 🟡 Nenhuma das duas tem conector, Context Browserbase, preflight de produção
+  ou validação comercial. **Sephora:** chegou a produto/CEP, mas a sessão ficou instável antes da
+  sacola; não é candidata. **Pão de Açúcar:** a rota pública foi bloqueada por `az-request-verify`
+  antes de produto/CEP; não é candidato automatizável agora.
 - **Definir titularidade e pós-venda:** comprador, nota fiscal, troca, devolução e uso de
   uma conta de varejista para múltiplos destinatários.
 - **Pilotar entrega direta** com 5–10 pedidos controlados, sem prometer motoboy.
 - **Testar checkout e cartão salvo** em `cart_only`, incluindo CVV, 3DS, CAPTCHA e antifraude.
-- **Implantar e validar a revisão do `/ops`** para frete/prazo/rastreio do varejista e
-  estorno auditável. O código e o runbook estão prontos localmente; a conversa Carrefour já
-  usa a cotação do varejista, mas Petz/Boticário e o checkout ao vivo continuam pendentes.
+- **Validar a revisão do `/ops`** para frete/prazo/rastreio do varejista e estorno auditável.
+  A revisão está implantada; falta massa técnica nova. A orquestração de cotação antes da
+  cobrança precisa ser levada para Petz antes do piloto.
 - **Antes de habilitar One-Click:** confirmar as migrations de pagamento aplicadas, obter a
   allowlist Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
   sandbox de primeira compra, recompra, recusa e resposta perdida. Guia:
@@ -116,7 +166,7 @@ quando existir uma rota urgente formalmente compatível.
   `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, registrado na Cloud API e ativado em
   produção (`WHATSAPP_PROVIDER=meta`). O webhook assinado foi validado em produção.
 - **Mercado Pago PJ + nota fiscal** (hoje o Pix está no nome pessoal).
-- **Confirmar cobertura real de entrega** por CEP em Petz, Carrefour e Boticário. Unidade
+- **Confirmar cobertura real de entrega** por CEP em Oba, Petz e Boticário. Unidade
   próxima não prova estoque, frete ou prazo.
 
 ### 🟢 Pra escalar (pós-piloto)
@@ -125,9 +175,9 @@ quando existir uma rota urgente formalmente compatível.
 - **Fortalecer busca/cotação ao vivo:** Browserbase + cache já existem; falta medir p95,
   concorrência por Context, falhas de anti-bot e custo por pedido. O checkout continua sendo
   a fonte final de preço, estoque, frete e prazo.
-- **Cesta multi-loja** (juntar Carrefour + Petz num pedido) — decidimos deixar pra depois
+- **Cesta multi-loja** (juntar Oba + Petz num pedido) — decidimos deixar pra depois
   (= 2 compras, fretes, entregas e pós-vendas).
-- **Expandir catálogos** (re-coletar Carrefour/Petz periodicamente).
+- **Expandir catálogos** e medir cobertura dos três varejistas periodicamente.
 - **Migração de schema (quando fizer sentido):** coluna `paymentMethod` no DeliveryOrder
   (hoje é inferido de `notes`/link — centralizado em `src/lib/order-flags.ts`) e índice
   único em `Message(conversationId, metadata)` pra fechar de vez a janela de corrida do
@@ -141,8 +191,8 @@ quando existir uma rota urgente formalmente compatível.
    e devolução precisam de validação jurídica e comercial.
 2. 💰 **Cliente pagar o total** (produto+frete) pela conveniência vs. comprar diretamente.
 3. 🛡️ **Checkout:** cartão salvo, CVV, 3DS, CAPTCHA, antifraude e duplicidade.
-4. 📦 **Preço/estoque desatualizados.** Mitigação: link
-   "ver no Carrefour" no /ops. Mitigação futura: o scrape por pedido pago.
+4. 📦 **Preço/estoque desatualizados.** Mitigação: cotação e revalidação no checkout do
+   varejista antes de cobrar/aprovar; sem link de handoff ao cliente.
 5. 🛵 **Same-day:** não prometer retirada por courier sem parceiro que a autorize.
 
 ---
@@ -160,7 +210,7 @@ provedor. Runbook: [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-p
 O card também permite **avisar o cliente** (substituição/atraso, vira mensagem da Lia) e
 destaca em vermelho pedidos em que o **cliente pediu cancelamento** pelo WhatsApp.
 
-**Motoboy:** não faz parte do fluxo padrão. Petz e Carrefour exigem documentação do titular
+**Motoboy:** não faz parte do fluxo padrão. Varejistas de consumidor podem exigir documentação do titular
 para retirada por terceiro; não enviar documentos pessoais a entregadores on-demand.
 
 ---
@@ -170,7 +220,7 @@ para retirada por terceiro; não enviar documentos pessoais a entregadores on-de
 | Configurado ✅ | Pendente / opcional |
 |---|---|
 | `MERCADO_PAGO_ACCESS_TOKEN` + webhook | `MERCADO_PAGO_WEBHOOK_SECRET` (assinatura é só aviso) |
-| `BROWSERBASE_API_KEY` + Contexts dos varejistas | `LIA_PETZ_MIN_ORDER`, `LIA_CARREFOUR_MIN_ORDER` (default 30) |
+| `BROWSERBASE_API_KEY` + Contexts dos varejistas | `OBA_BROWSER_CONTEXT_ID`, `LIA_OBA_MIN_ORDER`, `LIA_PETZ_MIN_ORDER`, `LIA_BOTICARIO_MIN_ORDER` |
 | `UBER_DIRECT_CUSTOMER_ID/CLIENT_ID/CLIENT_SECRET` (opcional/parceiros) | Política e credenciais de rastreio dos varejistas |
 | `OPENAI_API_KEY`, `DATABASE_URL`, `API_TOKEN`, `OPS_TOKEN`, Meta Cloud API | Scraper pago (estoque ao vivo) — futuro |
 | `LIA_COVERAGE_PRESET=estado-sp` (SP inteiro) | `LIA_MAX_DELIVERY_KM` (12), `LIA_MAX_DELIVERY_FEE` (35) — ajuste da guarda |
@@ -245,6 +295,20 @@ referência do provedor e só então muda para `refunded` e avisa o cliente. Foi
 `needs_human` e estorno. Um PIN de registro encontrado em Markdown local foi removido e precisa
 ser rotacionado. TypeScript, lint, 210 testes (168 passaram, 42 foram pulados por dependência de
 banco) e build passaram. Nada foi implantado ou validado ao vivo nesta alteração.
+
+Em 18/07, a chave Browserbase exposta foi regenerada no painel oficial e atualizada como
+`BROWSERBASE_API_KEY` Sensitive em Production. Um valor intermediário que foi exibido durante a
+rotação foi considerado exposto, invalidado imediatamente e substituído por uma chave limpa; nenhum
+valor foi salvo no repositório ou nesta documentação. O redeploy de produção da versão
+`ops-direct-retailer-delivery` / `9a06eab` ficou `Ready`. Isso valida a rotação e a configuração
+implantada, mas não a autenticação Browserbase no runtime nem o checkout Carrefour: não houve
+preflight, sessão nova, cobrança ou compra. A senha Carrefour, o PIN de registro WhatsApp e os
+segredos Mercado Pago/Uber expostos continuam pendentes de rotação.
+
+Em 18/07, a conta Carrefour foi aberta somente para confirmar a sessão; o operador optou por
+adiar a troca da senha exposta. Nenhuma credencial foi digitada, alterada ou registrada. A senha
+continua tratada como exposta e bloqueia qualquer uso do Context Carrefour ou piloto até a rotação
+feita pelo titular.
 
 ---
 
