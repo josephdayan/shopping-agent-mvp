@@ -6,7 +6,8 @@ import {
   opsMarkBought,
   opsMarkDelivered,
   opsMarkRetailerOutForDelivery,
-  opsNotifyCustomer
+  opsNotifyCustomer,
+  opsPublishManualQuote
 } from "@/lib/delivery-service";
 import { createPurchaseJobsForOrder } from "@/lib/purchasing/service";
 import { startPreflightPurchaseWorkflow } from "@/lib/purchasing/workflow-dispatch";
@@ -32,10 +33,24 @@ export async function POST(request: Request, { params }: { params: { id: string 
     text?: string;
     trackingUrl?: string;
     refundReference?: string;
+    itemsSubtotal?: number | string;
+    deliveryFee?: number | string;
+    deliveryMode?: "operator_courier" | "retailer_delivery";
+    deliveryPromise?: string;
+    etaMinutes?: number | string;
   };
   const id = params.id;
   try {
     switch (body.action) {
+      case "publish_quote":
+        await opsPublishManualQuote(id, {
+          itemsSubtotal: Number(body.itemsSubtotal),
+          deliveryFee: Number(body.deliveryFee),
+          deliveryMode: body.deliveryMode,
+          deliveryPromise: body.deliveryPromise?.toString().trim() || undefined,
+          etaMinutes: body.etaMinutes != null && body.etaMinutes !== "" ? Number(body.etaMinutes) : undefined
+        });
+        break;
       case "bought":
         await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim());
         break;

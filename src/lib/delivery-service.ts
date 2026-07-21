@@ -30,7 +30,10 @@ import {
 } from "@/lib/lia-intents";
 import {
   ACTIVE_DELIVERY_ORDER_STATUSES,
+  AWAITING_OPERATOR_QUOTE_STATUS,
   CANCEL_REQUEST_FLAG,
+  CONCIERGE_STORE_KEY,
+  CONCIERGE_STORE_LABEL,
   OPS_QUEUE_STATUSES,
   PAID_OR_IN_FULFILLMENT_STATUSES,
   REFUND_CONFIRMED_PREFIX,
@@ -39,6 +42,7 @@ import {
   RETAILER_OUT_FOR_DELIVERY_STATUS,
   appendOrderNote,
   isCardCharge,
+  isOperatorCourierOrder,
   isOrderOutForDelivery,
   isRetailerDeliveryOrder,
   paymentNote,
@@ -57,8 +61,28 @@ import * as copy from "@/lib/lia-copy";
 // dashboard drives. Intent detection lives in lia-intents (pure, unit-tested) and
 // every customer-facing string lives in lia-copy.
 
+// The pilot's default product: a WhatsApp concierge with breadth — the customer asks
+// for anything from anywhere, the operator sources, prices and buys it by hand, and a
+// courier (Uber Direct/Lalamove) delivers same-hour from the operator to the customer.
+// No live retailer automation (Browserbase) sits on the critical path here; the operator
+// is the source of truth for the quote. Flip LIA_MANUAL_CONCIERGE=false to fall back to
+// the legacy catalog auto-quote flow (still exercised by the conversation evals).
+function manualConciergeEnabled(): boolean {
+  return process.env.LIA_MANUAL_CONCIERGE !== "false";
+}
+
+// Where the operator hands the goods to the courier (their own base). Same-hour courier
+// pickup is from HERE, never a store counter — so the retailer third-party-pickup document
+// rules never apply. Configured once via env for the pilot.
+function operatorPickup(): { address: string; cep?: string } {
+  return {
+    address: process.env.LIA_OPERATOR_PICKUP_ADDRESS ?? "Base da Lia",
+    cep: process.env.LIA_OPERATOR_PICKUP_CEP ?? undefined
+  };
+}
+
 // Your margin is baked into the product price (no separate fee line). Customer sees
-// each item already +10%; you pay Carrefour the real price, the markup is yours.
+// each item already +10%; you pay the retailer's real price, the markup is yours.
 const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);
 
 // Card MDR (~4.99% à vista) passed through to the customer when they choose card, so the
@@ -133,6 +157,7 @@ type DeliveryContext = {
     | "quoted"
     | "choosing_courier"
     | "choosing_payment"
+    | "awaiting_operator_quote"
     | "awaiting_supplier_validation"
     | "awaiting_quote_confirmation"
     | "payment_issuing"
@@ -359,6 +384,22 @@ function orderStore(ctx: DeliveryContext): StoreConnector {
   return getStore(ctx.storeKey ?? ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
 }
 
+// A free-form concierge line: whatever the customer asked for, verbatim. No catalog
+// price yet — the operator sets the real price at quote time. The name-based sku lets
+// mergeBaskets fold duplicates ("mais 2 pães").
+function conciergeItem(phrase: string, qty: number): BasketItem {
+  const name = phrase.trim().replace(/\s+/g, " ");
+  return {
+    sku: `concierge:${normalizeMsg(name)}`,
+    name,
+    qty: Math.max(1, qty),
+    unitPrice: 0,
+    lineTotal: 0,
+    storeKey: CONCIERGE_STORE_KEY,
+    storeLabel: CONCIERGE_STORE_LABEL
+  };
+}
+
 function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector): BasketItem {
   const selectedStore = o.storeKey ? getStore(o.storeKey) : store;
   return {
@@ -540,10 +581,16 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.courierOptions = undefined;
 }
 
-function usesCarrefourCheckoutQuote(ctx: DeliveryContext): boolean {
+const BROWSERBASE_RETAILER_KEYS = new Set(["oba", "petz", "boticario"]);
+
+function usesRetailerCheckoutQuote(ctx: DeliveryContext): boolean {
+  // In the concierge pilot the operator quotes by hand; the live retailer checkout
+  // (Browserbase) is never on the critical path.
+  if (manualConciergeEnabled()) return false;
   const policy = getPurchasePolicy();
   const basket = ctx.basket ?? [];
-  return policy.enabled && policy.mode !== "off" && basket.length > 0 && basket.every((item) => item.storeKey === "carrefour");
+  const keys = new Set(basket.map((item) => item.storeKey));
+  return policy.enabled && policy.mode !== "off" && basket.length > 0 && keys.size === 1 && BROWSERBASE_RETAILER_KEYS.has(basket[0]?.storeKey ?? "");
 }
 
 // Apply a chosen courier quote to the context (fee/eta/key/quoteId + recompute total).
@@ -623,7 +670,7 @@ async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryCo
   await sendCartActionButtons(phone);
 }
 
-// Minimum order is a PER-STORE rule (e.g., Carrefour clique-e-retire ≈ R$30 of
+// Minimum order is a PER-STORE rule (in real R$ of
 // products), declared on the StoreConnector — NOT a global Lia rule. A store with no
 // minimum sets 0 and this never triggers. min is on the real cost (what we pay the
 // store); the customer is shown the marked-up equivalent.
@@ -757,6 +804,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       await writeCtx(convo.id, ctx);
       await reply(phone, copy.welcomeAskCep());
     } else if (
+      ctx.step === "awaiting_operator_quote" ||
       ctx.step === "awaiting_supplier_validation" ||
       ctx.step === "awaiting_quote_confirmation" ||
       ctx.step === "payment_issuing" ||
@@ -853,6 +901,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
   if (intent.kind === "cancel") {
     await handleCancel(phone, convo.id, user.id, user.cep, ctx, intent.explicitOrder ?? false);
+    return;
+  }
+  if (ctx.step === "awaiting_operator_quote") {
+    await reply(phone, copy.operatorQuoteStillWorking());
     return;
   }
   if (ctx.step === "awaiting_supplier_validation") {
@@ -1114,6 +1166,28 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
         ? intent.method
         : undefined;
   if (wantsToPay || directMethod) {
+    // Concierge: "só isso"/"pagar"/"pix" close the list and hand it to the operator to
+    // quote — there is no total to charge until the operator sends the quote.
+    if (manualConciergeEnabled()) {
+      if ((ctx.basket?.length ?? 0) > 0) {
+        await continueAfterBasket(phone, convo.id, ctx, user.cep);
+        return;
+      }
+      const openOrder = await prisma.deliveryOrder.findFirst({
+        where: { userId: user.id, status: { in: [AWAITING_OPERATOR_QUOTE_STATUS, "awaiting_payment"] } },
+        orderBy: { createdAt: "desc" }
+      });
+      if (openOrder?.status === AWAITING_OPERATOR_QUOTE_STATUS) {
+        await reply(phone, copy.operatorQuoteStillWorking());
+        return;
+      }
+      if (openOrder?.status === "awaiting_payment") {
+        await resendCharge(phone, openOrder);
+        return;
+      }
+      await reply(phone, copy.emptyCartPay());
+      return;
+    }
     if (ctx.pending?.length) {
       await reply(phone, copy.finishChoiceFirst());
       await sendChoices(phone, ctx.pending[0]);
@@ -1157,7 +1231,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       return;
     }
     if (directMethod) {
-      if (ctx.step !== "quoted" && usesCarrefourCheckoutQuote(ctx)) {
+      if (ctx.step !== "quoted" && usesRetailerCheckoutQuote(ctx)) {
         await continueAfterBasket(phone, convo.id, ctx, user.cep);
         return;
       }
@@ -1366,6 +1440,12 @@ async function handleCancel(
     await reply(phone, copy.nothingToCancel());
     return;
   }
+  if (order.status === AWAITING_OPERATOR_QUOTE_STATUS) {
+    await prisma.deliveryOrder.update({ where: { id: order.id }, data: { status: "canceled" } });
+    await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
+    await reply(phone, copy.canceledUnpaid());
+    return;
+  }
   if (order.status === "awaiting_supplier_validation" || order.status === "awaiting_quote_confirmation") {
     await cancelPendingRetailerQuote(order.id);
     await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
@@ -1426,16 +1506,19 @@ async function handleNewCep(
     return;
   }
 
-  // Guarda de frete (distância): a cidade é atendida, mas o endereço pode estar longe de
-  // QUALQUER loja parceira (metrópole é grande). Recusa educada + lead too_far, sem persistir.
-  const near = await pickNearestUnit(allUnits(), cep);
-  const farBlock = checkFreightGuard({ distanceKm: near.distanceKm });
-  if (farBlock) {
-    await recordWaitlistLead({ phone, cep, city, uf, reason: "too_far" });
-    ctx.step = "need_cep";
-    await writeCtx(convoId, ctx);
-    await reply(phone, copy.tooFarForDelivery(city, coverageLabel()));
-    return;
+  // Guarda de frete (distância até loja): legado do motoboy que retirava na loja. No
+  // concierge o operador compra onde for e o courier sai da base dele, então distância
+  // até uma unidade não prova nada — a guarda só roda no fluxo legado de catálogo.
+  if (!manualConciergeEnabled()) {
+    const near = await pickNearestUnit(allUnits(), cep);
+    const farBlock = checkFreightGuard({ distanceKm: near.distanceKm });
+    if (farBlock) {
+      await recordWaitlistLead({ phone, cep, city, uf, reason: "too_far" });
+      ctx.step = "need_cep";
+      await writeCtx(convoId, ctx);
+      await reply(phone, copy.tooFarForDelivery(city, coverageLabel()));
+      return;
+    }
   }
 
   ctx.cep = cep;
@@ -1924,6 +2007,40 @@ async function handleSwap(
   await sendChoices(phone, ctx.pending[0]);
 }
 
+// Concierge mode request: parse the message into free-form lines (medicine still
+// filtered by law), add them to the basket and confirm — no catalog, no options step.
+async function handleConciergeRequest(
+  phone: string,
+  convoId: string,
+  userCep: string | null | undefined,
+  ctx: DeliveryContext,
+  text: string
+) {
+  const { lines, greetingOnly, containsMedicine } = await extractLines(text);
+  if (greetingOnly && !lines.length) {
+    await reply(phone, copy.greeting());
+    return;
+  }
+  if (!lines.length) {
+    await reply(phone, containsMedicine ? copy.noMedicine() : copy.didNotUnderstand());
+    return;
+  }
+  const hadBasket = (ctx.basket?.length ?? 0) > 0;
+  const newItems = lines.map((line) => conciergeItem(line.phrase, line.qty));
+  ctx.flow = "delivery";
+  ctx.basket = mergeBaskets(ctx.basket ?? [], newItems);
+  ctx.storeKey = CONCIERGE_STORE_KEY;
+  ctx.step = "collecting";
+  ctx.cep = ctx.cep ?? userCep ?? undefined;
+  ctx.pending = undefined;
+  ctx.notFound = undefined;
+  await writeCtx(convoId, ctx);
+  const notes: string[] = [];
+  if (containsMedicine) notes.push(copy.medicineSkippedNote());
+  notes.push(copy.conciergeItemsNoted(newItems.map((i) => `${i.qty}x ${i.name}`), hadBasket));
+  await reply(phone, notes.join("\n"));
+}
+
 async function handleSearch(
   phone: string,
   convoId: string,
@@ -1932,6 +2049,13 @@ async function handleSearch(
   text: string,
   userId?: string
 ) {
+  // Concierge mode: no catalog gate. Whatever the customer asks for becomes a free-form
+  // line the operator will source and price. Breadth — "anything from anywhere" — is the
+  // moat, and a human buyer needs zero integration to honor it.
+  if (manualConciergeEnabled()) {
+    await handleConciergeRequest(phone, convoId, userCep, ctx, text);
+    return;
+  }
   // The search can take a couple seconds — acknowledge first so there's no silence.
   await reply(phone, copy.searching());
   const preferences = userId ? await preferredSkuCounts(userId) : undefined;
@@ -2130,12 +2254,67 @@ async function continueAfterBasket(
     await reply(phone, copy.askFullDeliveryAddress());
     return;
   }
-  if (usesCarrefourCheckoutQuote(ctx)) {
-    await beginCarrefourRetailerQuote(phone, convoId, ctx);
+  if (manualConciergeEnabled()) {
+    await createOperatorQuoteRequest(phone, convoId, ctx, prefix);
+    return;
+  }
+  if (usesRetailerCheckoutQuote(ctx)) {
+    await beginRetailerQuote(phone, convoId, ctx);
     return;
   }
   await quoteBasket(ctx, store);
   await respondAfterQuote(phone, convoId, ctx, store, prefix);
+}
+
+// Concierge finish: the list is closed, so create (or refresh) an order that waits for
+// the operator to quote by hand. No catalog price, no fake total — the customer sees the
+// real number only after the operator publishes the quote (opsPublishManualQuote).
+async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: DeliveryContext, prefix?: string) {
+  const convo = await prisma.conversation.findUnique({ where: { id: convoId } });
+  if (!convo) throw new Error("Conversation not found while creating concierge quote request.");
+  const basket = (ctx.basket ?? []) as unknown as object;
+  const itemNames = (ctx.basket ?? []).map((item) => `${item.qty}x ${item.name}`);
+
+  const existing = await prisma.deliveryOrder.findFirst({
+    where: { conversationId: convoId, status: AWAITING_OPERATOR_QUOTE_STATUS },
+    orderBy: { createdAt: "desc" }
+  });
+  if (existing) {
+    await prisma.deliveryOrder.update({
+      where: { id: existing.id },
+      data: { items: basket, cep: ctx.cep, deliveryAddress: ctx.deliveryAddress }
+    });
+    await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: existing.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
+    if (prefix) await reply(phone, prefix);
+    await reply(phone, copy.operatorQuoteStillWorking());
+    return;
+  }
+
+  const order = await prisma.deliveryOrder.create({
+    data: {
+      userId: convo.userId,
+      conversationId: convoId,
+      phone,
+      cep: ctx.cep,
+      deliveryAddress: ctx.deliveryAddress,
+      storeKey: CONCIERGE_STORE_KEY,
+      storeLabel: CONCIERGE_STORE_LABEL,
+      items: basket,
+      // Default to same-hour operator courier; the operator can switch to retailer
+      // delivery when quoting, per item availability.
+      fulfillments: [{ storeKey: CONCIERGE_STORE_KEY, storeLabel: CONCIERGE_STORE_LABEL, deliveryMode: "operator_courier" }] as unknown as object,
+      itemsSubtotal: 0,
+      courierKey: "uber_direct",
+      deliveryFee: 0,
+      serviceFee: 0,
+      total: 0,
+      notes: "Pedido concierge aguardando cotação do operador.",
+      status: AWAITING_OPERATOR_QUOTE_STATUS
+    }
+  });
+  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
+  if (prefix) await reply(phone, prefix);
+  await reply(phone, copy.operatorQuoteRequested(itemNames));
 }
 
 function roundMoney(value: number): number {
@@ -2168,9 +2347,9 @@ async function setQuoteConversationAwaitingPayment(order: { id: string; conversa
   if (ctx.deliveryOrderId === order.id) await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
 }
 
-async function beginCarrefourRetailerQuote(phone: string, convoId: string, ctx: DeliveryContext) {
+async function beginRetailerQuote(phone: string, convoId: string, ctx: DeliveryContext) {
   const convo = await prisma.conversation.findUnique({ where: { id: convoId } });
-  if (!convo) throw new Error("Conversation not found while preparing Carrefour quote.");
+  if (!convo) throw new Error("Conversation not found while preparing retailer quote.");
 
   const existing = await prisma.deliveryOrder.findFirst({
     where: { conversationId: convoId, status: "awaiting_supplier_validation" },
@@ -2182,7 +2361,7 @@ async function beginCarrefourRetailerQuote(phone: string, convoId: string, ctx: 
     return;
   }
 
-  const store = getStore("carrefour");
+  const store = orderStore(ctx);
   if (belowMinimum(ctx, store)) {
     await reply(phone, minimumOrderText(ctx, store));
     return;
@@ -2197,18 +2376,18 @@ async function beginCarrefourRetailerQuote(phone: string, convoId: string, ctx: 
       phone,
       cep: ctx.cep,
       deliveryAddress: ctx.deliveryAddress,
-      storeKey: "carrefour",
+      storeKey: store.key,
       storeLabel: store.label,
       items: basket as unknown as object,
       // Direct delivery is determined in the retailer checkout. No courier quote is
       // carried forward from the legacy pickup flow.
-      fulfillments: [{ storeKey: "carrefour", storeLabel: store.label, deliveryMode: "retailer_delivery" }] as unknown as object,
+      fulfillments: [{ storeKey: store.key, storeLabel: store.label, deliveryMode: "retailer_delivery" }] as unknown as object,
       itemsSubtotal: expectedItemsSubtotal,
       courierKey: "retailer_delivery",
       deliveryFee: 0,
       serviceFee: 0,
       total: 0,
-      notes: "Cotação Carrefour pendente de confirmação no checkout.",
+      notes: `Cotação ${store.label} pendente de confirmação no checkout.`,
       status: "awaiting_supplier_validation"
     }
   });
@@ -2241,7 +2420,7 @@ export async function publishValidatedRetailerQuote(orderId: string) {
   const total = roundMoney(itemsSubtotal + serviceFee + deliveryFee);
   const quoteExpiresAt = new Date(Date.now() + quoteTtlMinutes() * 60_000);
   const fulfillment = {
-    storeKey: "carrefour",
+    storeKey: order.storeKey,
     storeLabel: order.storeLabel,
     deliveryMode: "retailer_delivery",
     retailerTotal,
@@ -2379,7 +2558,7 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
       cep: ctx.cep,
       deliveryAddress: ctx.deliveryAddress,
       storeKey: (ctx.fulfillments?.length ?? 0) > 1 ? "multi" : ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY,
-      storeLabel: (ctx.fulfillments?.length ?? 0) > 1 ? `${ctx.fulfillments!.length} lojas` : ctx.basket?.[0]?.storeLabel ?? "Carrefour",
+      storeLabel: (ctx.fulfillments?.length ?? 0) > 1 ? `${ctx.fulfillments!.length} lojas` : ctx.basket?.[0]?.storeLabel ?? orderStore(ctx).label,
       storeUnit: ctx.storeUnitLabel,
       storeAddress: ctx.storeUnitAddress,
       items: (ctx.basket ?? []) as unknown as object,
@@ -2477,7 +2656,7 @@ export async function issueDeferredOrderPayment(orderId: string, options: { requ
         data: {
           status: "needs_human",
           lastErrorCode: "PRICE_CHANGED",
-          lastErrorMessage: `Total Carrefour ${copy.brl(liveStoreTotal)} divergiu da cotação ${copy.brl(expectedStoreTotal)}.`
+          lastErrorMessage: `Total ${order.storeLabel} ${copy.brl(liveStoreTotal)} divergiu da cotação ${copy.brl(expectedStoreTotal)}.`
         }
       });
       return order;
@@ -2661,22 +2840,127 @@ export async function markDeliveryOrderPaid(orderId: string) {
       console.warn("[delivery:paid:ctx-reset]", error instanceof Error ? error.message : error);
     }
   }
-  // The checkout is intentionally issued before this point. A Browserbase cart is a
-  // single shared resource, so creating one for every unpaid customer would block the
-  // queue; prepare it only after Mercado Pago confirms the money-in.
+  // Retailer checkout quotes are prepared before payment, so the customer sees a live
+  // total, freight and promise first. Do not reopen or clear that reserved cart after
+  // payment: the operator will explicitly request approval/revalidation from /ops.
   const purchasePolicy = getPurchasePolicy();
-  if (purchasePolicy.enabled && order.storeKey === "carrefour") {
-    const [{ createPurchaseJobsForOrder }, { startPreflightPurchaseWorkflow }] = await Promise.all([
-      import("@/lib/purchasing/service"),
-      import("@/lib/purchasing/workflow-dispatch")
-    ]);
-    const jobs = await createPurchaseJobsForOrder(order.id);
-    await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
+  if (purchasePolicy.enabled && BROWSERBASE_RETAILER_KEYS.has(order.storeKey)) {
+    const { listPurchaseJobsForOrder } = await import("@/lib/purchasing/service");
+    const jobs = await listPurchaseJobsForOrder(order.id);
+    // Older/exceptional orders may not have been quoted before payment. They are
+    // intentionally not sent into a fresh checkout here: fail visibly to /ops instead
+    // of changing a paid customer's basket behind their back.
+    if (!jobs.length) {
+      await prisma.deliveryOrder.update({
+        where: { id: order.id },
+        data: { status: "needs_human", notes: appendOrderNote(order.notes, "[PREPAYMENT_QUOTE_MISSING] Pedido pago sem cotação prévia do varejista.") }
+      });
+    }
     await reply(order.phone, copy.paymentConfirmedSupplierCheck());
   } else {
     await reply(order.phone, copy.paymentConfirmed());
   }
   return order;
+}
+
+// The operator publishes the hand-made quote from /ops. Concierge analogue of
+// publishValidatedRetailerQuote: it sets the real products cost + freight + delivery
+// mode, moves the order into awaiting_quote_confirmation and sends the customer the
+// summary + payment buttons — reusing issueValidatedRetailerQuotePayment for the charge.
+export async function opsPublishManualQuote(
+  orderId: string,
+  input: {
+    itemsSubtotal: number;
+    deliveryFee: number;
+    deliveryMode?: "operator_courier" | "retailer_delivery";
+    deliveryPromise?: string;
+    etaMinutes?: number;
+    items?: { qty: number; name: string; unitPrice?: number }[];
+  }
+) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order) throw new Error("Order not found");
+  if (order.status !== AWAITING_OPERATOR_QUOTE_STATUS) {
+    throw new Error("Só é possível cotar um pedido que está aguardando cotação do operador.");
+  }
+  const itemsSubtotal = roundMoney(Math.max(0, Number(input.itemsSubtotal) || 0));
+  const deliveryFee = roundMoney(Math.max(0, Number(input.deliveryFee) || 0));
+  if (itemsSubtotal <= 0) throw new Error("Informe o custo dos produtos (maior que zero).");
+  const serviceFee = roundMoney(itemsSubtotal * (MARKUP - 1));
+  // "produtos" shown to the customer already includes the markup.
+  const produtos = roundMoney(itemsSubtotal + serviceFee);
+  const total = roundMoney(produtos + deliveryFee);
+  const deliveryMode = input.deliveryMode === "retailer_delivery" ? "retailer_delivery" : "operator_courier";
+  const sameHour = deliveryMode === "operator_courier";
+  const courierKey = deliveryMode === "retailer_delivery" ? "retailer_delivery" : "uber_direct";
+
+  const items: BasketItem[] = input.items?.length
+    ? input.items.map((entry) => {
+        const qty = Math.max(1, Math.round(Number(entry.qty) || 1));
+        const unitPrice = Math.max(0, Number(entry.unitPrice) || 0);
+        return {
+          sku: `concierge:${normalizeMsg(entry.name)}`,
+          name: entry.name,
+          qty,
+          unitPrice,
+          lineTotal: roundMoney(unitPrice * qty),
+          storeKey: CONCIERGE_STORE_KEY,
+          storeLabel: CONCIERGE_STORE_LABEL
+        };
+      })
+    : ((order.items as unknown as BasketItem[]) ?? []);
+
+  const quoteExpiresAt = new Date(Date.now() + quoteTtlMinutes() * 60_000);
+  const fulfillment = {
+    storeKey: order.storeKey,
+    storeLabel: order.storeLabel,
+    deliveryMode,
+    deliveryPromise: input.deliveryPromise,
+    deliveryFee,
+    retailerTotal: produtos,
+    etaMinutes: input.etaMinutes
+  };
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: {
+      status: "awaiting_quote_confirmation",
+      items: items as unknown as object,
+      fulfillments: [fulfillment] as unknown as object,
+      itemsSubtotal,
+      serviceFee,
+      deliveryFee,
+      total,
+      courierKey,
+      quoteExpiresAt,
+      notes: appendOrderNote(order.notes, `Cotação manual enviada (${sameHour ? "motoboy na hora" : "entrega do varejista"}).`)
+    }
+  });
+
+  if (order.conversationId) {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    if (convo) {
+      const ctx = readCtx(convo.context);
+      await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_quote_confirmation" });
+    }
+  }
+
+  await reply(
+    order.phone,
+    copy.manualQuoteSummary({
+      items: items.map((item) => ({ qty: item.qty, name: item.name })),
+      produtos,
+      frete: deliveryFee,
+      deliveryPromise: input.deliveryPromise,
+      etaMinutes: input.etaMinutes,
+      total,
+      deliveryAddress: order.deliveryAddress ?? undefined,
+      sameHour
+    })
+  );
+  const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
+  if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
+  await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
+  return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }
 
 export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
@@ -2726,18 +3010,34 @@ export async function opsDispatchCourier(orderId: string) {
     await reply(order.phone, copy.dispatched(tracking));
     return updated;
   }
-  const store = getStore(order.storeKey);
   const courier = getCourier(order.courierKey);
-  // Re-derive the pickup unit so the connector can re-quote at dispatch (the order-time
-  // quote has expired). dropoff CEP is the customer's.
-  const unit = (await pickNearestUnit(store.listUnits(), order.cep ?? undefined)).unit;
+  let pickupAddress: string;
+  let pickupCep: string | undefined;
+  let instructions: string;
+  if (isOperatorCourierOrder(order)) {
+    // Same-hour concierge: the operator already holds the goods; the courier picks up at
+    // the operator's base and delivers to the customer — no store counter, no titleholder
+    // documents. This is the pilot's motoboy path.
+    const pickup = operatorPickup();
+    pickupAddress = pickup.address;
+    pickupCep = pickup.cep;
+    instructions = `Retirar com a Lia e entregar ao cliente${order.storeOrderNumber?.trim() ? ` (ref. ${order.storeOrderNumber.trim()})` : ""}.`;
+  } else {
+    // Legacy authorized-partner pickup: re-derive the store unit so the connector can
+    // re-quote at dispatch (the order-time quote has expired).
+    const store = getStore(order.storeKey);
+    const unit = (await pickNearestUnit(store.listUnits(), order.cep ?? undefined)).unit;
+    pickupAddress = order.storeAddress ?? unit.address;
+    pickupCep = unit.cep;
+    instructions = store.pickupInstructions(order.storeOrderNumber?.trim() || "—");
+  }
   const dispatch = await courier.dispatch({
     orderId: order.id,
-    pickupAddress: order.storeAddress ?? unit.address,
+    pickupAddress,
     dropoffAddress: order.deliveryAddress ?? "",
-    pickupCep: unit.cep,
+    pickupCep,
     dropoffCep: order.cep ?? undefined,
-    instructions: store.pickupInstructions(order.storeOrderNumber?.trim() || "—"),
+    instructions,
     quoteId: order.courierQuoteId ?? undefined,
     dropoffName: order.customerName ?? undefined,
     dropoffPhone: order.phone

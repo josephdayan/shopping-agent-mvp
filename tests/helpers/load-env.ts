@@ -18,5 +18,9 @@ try {
 
 process.env.WHATSAPP_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";
-process.env.LIA_CARREFOUR_LIVE = "false";
+process.env.LIA_RETAILER_TEST_SEED = "true";
 process.env.LIA_SEND_PHOTOS = "false";
+// The catalog-choice conversation evals exercise the legacy auto-quote flow. The manual
+// concierge flow (production default) is covered by tests/manual-concierge.test.ts, which
+// re-enables the flag after importing this helper.
+process.env.LIA_MANUAL_CONCIERGE = "false";

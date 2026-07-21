@@ -465,6 +465,8 @@ export function orderStatusLine(input: {
 }): string {
   const id = `*#${input.shortId}*`;
   switch (input.status) {
+    case "awaiting_operator_quote":
+      return `Seu pedido ${id} está sendo cotado agora. 🧮 Já te mando o total com a entrega pra você aprovar — sem cobrar nada antes.`;
     case "awaiting_supplier_validation":
     case "payment_issuing":
       return `Seu pedido ${id} está sendo confirmado na loja antes do pagamento. 🛒 Te aviso assim que o carrinho estiver pronto.`;
@@ -586,6 +588,74 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
       ? `_Falta escolher ${pendingCount === 1 ? "1 item" : `${pendingCount} itens`} — aí te passo o total com a entrega._`
       : '_Te passo o total com a entrega quando você fechar — é só dizer *"só isso"*._';
   return ["🛒 *Até agora:*", ...lines, "", `Produtos: ${brl(produtos)}`, tail].join("\n");
+}
+
+// ---------- concierge manual (largura + cotação do operador) ----------
+
+// Modo concierge: o cliente pede QUALQUER coisa (de qualquer lugar); a Lia anota,
+// confirma a lista e cota na sequência. Nada de "não achei no catálogo" — a graça é
+// justamente resolver o que os apps de loja única não resolvem.
+export function conciergeItemsNoted(items: string[], hadBasketBefore: boolean): string {
+  const list = items.map((i) => `• ${i}`).join("\n");
+  const abre = hadBasketBefore ? "Anotei mais:" : "Anotei! 📝";
+  return [
+    `${abre}\n${list}`,
+    "",
+    'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega. 🙂'
+  ].join("\n");
+}
+
+export function conciergeAskWhatYouWant(): string {
+  return `Deixa comigo! 🙂 Me diz o que você precisa — pode ser de qualquer lugar, junto numa mensagem só. Ex.: ${EXAMPLES}.`;
+}
+
+// "só isso" no concierge: o pedido foi para a fila de cotação do operador. A Lia NÃO
+// mostra um total inventado — ela volta com o valor real depois de cotar.
+export function operatorQuoteRequested(items: string[]): string {
+  const list = items.length ? `\n${items.map((i) => `• ${i}`).join("\n")}\n` : " ";
+  return [
+    `Fechado! Recebi seu pedido:${list}`,
+    "Vou cotar tudo agora — preço, entrega e prazo — e já te mando o total certinho por aqui pra você aprovar. Não cobro nada antes disso. 💚"
+  ].join("\n");
+}
+
+// Cliente escreve enquanto o operador ainda está cotando.
+export function operatorQuoteStillWorking(): string {
+  return "Ainda estou cotando seu pedido 🙂 Já te mando o total com a entrega e o prazo em instantes — segura aí!";
+}
+
+// Resumo da cotação manual: itens por nome (o operador informa o custo total dos
+// produtos e o frete), com prazo/entrega e endereço. É o gêmeo de `summary` para o
+// fluxo concierge, onde não há preço por linha.
+export function manualQuoteSummary(input: {
+  items: { qty: number; name: string }[];
+  produtos: number;
+  frete: number;
+  deliveryPromise?: string;
+  etaMinutes?: number;
+  total: number;
+  deliveryAddress?: string;
+  sameHour?: boolean;
+}): string {
+  const lines = input.items.map((item) => `• ${item.qty}x ${item.name}`);
+  const prazo = input.deliveryPromise
+    ? input.deliveryPromise
+    : input.sameHour
+      ? `chega em ~${input.etaMinutes ?? 90} min 🛵`
+      : `chega em ~${input.etaMinutes ?? 90} min`;
+  const out = [
+    "🛒 *Seu pedido:*",
+    ...lines,
+    "",
+    `Produtos: ${brl(input.produtos)}`,
+    `📦 Entrega: ${brl(input.frete)} · ${prazo}`,
+    `*Total: ${brl(input.total)}*`
+  ];
+  if (input.deliveryAddress) {
+    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`, '_Confere o endereço? Para mudar, diga "trocar endereço"._');
+  }
+  out.push("", "Se estiver tudo certo, escolha abaixo como prefere pagar. 💚");
+  return out.join("\n");
 }
 
 // ---------- perguntas de serviço / atendimento ----------

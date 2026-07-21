@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { hasCancelRequest, hasPendingRefund, isCardCharge, isRetailerDeliveryOrder } from "@/lib/order-flags";
+import { hasCancelRequest, hasPendingRefund, isCardCharge, isOperatorCourierOrder, isRetailerDeliveryOrder } from "@/lib/order-flags";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
 type Fulfillment = {
@@ -61,12 +61,14 @@ type WaitlistData = { total: number; regions: WaitlistRegion[]; recent: Waitlist
 
 const COURIER_LABEL: Record<string, string> = {
   retailer_delivery: "entrega do varejista",
+  concierge: "motoboy da Lia",
   uber_direct: "Uber Direct",
   lalamove: "Lalamove",
   loggi: "Loggi"
 };
 
 const STATUS_LABEL: Record<string, string> = {
+  awaiting_operator_quote: "🧮 Cotar (concierge)",
   awaiting_supplier_validation: "🔎 Confirmando carrinho na loja",
   awaiting_quote_confirmation: "⏱️ Cotação enviada — aguardando pagamento",
   payment_issuing: "💳 Gerando pagamento para cliente",
@@ -100,8 +102,7 @@ function storeItemUrl(it: BasketItem, orderStoreKey?: string | null): string {
   const storeKey = it.storeKey ?? orderStoreKey ?? undefined;
   if (storeKey === "petz") return `https://www.petz.com.br/busca?q=${encodeURIComponent(it.name)}`;
   if (storeKey === "boticario") return `https://www.boticario.com.br/busca/?q=${encodeURIComponent(it.name)}`;
-  if (storeKey === "decathlon") return `https://www.decathlon.com.br/search?query=${encodeURIComponent(it.name)}`;
-  return `https://mercado.carrefour.com.br/busca/${encodeURIComponent(it.name)}`;
+  return `https://secure.obahortifruti.com.br/busca?ft=${encodeURIComponent(it.name)}`;
 }
 
 // One-click purchase prep: open every item of the order on the store's search page
@@ -145,6 +146,9 @@ export default function OpsBoard() {
   const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [numbers, setNumbers] = useState<Record<string, string>>({});
+  const [quotes, setQuotes] = useState<
+    Record<string, { itemsSubtotal: string; deliveryFee: string; deliveryMode: string; deliveryPromise: string; etaMinutes: string }>
+  >({});
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [refundReferences, setRefundReferences] = useState<Record<string, string>>({});
   const [notify, setNotify] = useState<Record<string, string>>({});
@@ -209,7 +213,17 @@ export default function OpsBoard() {
   async function act(
     id: string,
     action: string,
-    extra?: { storeOrderNumber?: string; text?: string; trackingUrl?: string; refundReference?: string }
+    extra?: {
+      storeOrderNumber?: string;
+      text?: string;
+      trackingUrl?: string;
+      refundReference?: string;
+      itemsSubtotal?: number;
+      deliveryFee?: number;
+      deliveryMode?: string;
+      deliveryPromise?: string;
+      etaMinutes?: number;
+    }
   ): Promise<boolean> {
     setBusy(`${id}:${action}`);
     try {
@@ -266,14 +280,14 @@ export default function OpsBoard() {
     }
   }
 
-  async function runInternalPreflight(): Promise<void> {
-    const key = "internal-preflight";
+  async function runInternalPreflight(store: "oba" | "petz" | "boticario"): Promise<void> {
+    const key = `internal-preflight:${store}`;
     setBusy(key);
     try {
       const res = await fetch("/api/ops/internal-preflight", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ retry: true })
+        body: JSON.stringify({ retry: true, fresh: true, store })
       });
       const data = (await res.json().catch(() => ({}))) as {
         error?: string;
@@ -289,18 +303,64 @@ export default function OpsBoard() {
         return;
       }
       if (data.retried) {
-        alert("O último preflight interno foi reiniciado em cart_only.");
+        alert(`O último preflight interno da ${store} foi reiniciado em cart_only.`);
       } else if (data.reused) {
         const outcome = data.errorCode
           ? `${data.status ?? "needs_human"}: ${data.errorCode} — ${data.errorMessage ?? "sem detalhe"}`
           : `${data.status ?? "em andamento"}${data.actualTotal != null ? ` · total R$ ${data.actualTotal.toFixed(2).replace(".", ",")}` : ""}`;
-        alert(`Resultado do último preflight interno: ${outcome}`);
+        alert(`Resultado do último preflight interno da ${store}: ${outcome}`);
       } else {
-        alert("Preflight interno iniciado em cart_only.");
+        alert(`Preflight interno da ${store} iniciado em cart_only.`);
       }
       await load();
     } catch {
       alert("O preflight interno falhou (sem conexão?). Tente de novo.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function openRetailerSession(store: "petz" | "boticario"): Promise<void> {
+    const key = `live-session:${store}`;
+    setBusy(key);
+    try {
+      const res = await fetch("/api/ops/live-retailer-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ store })
+      });
+      const data = await res.json().catch(() => ({})) as { debuggerFullscreenUrl?: string; error?: string };
+      if (!res.ok || !data.debuggerFullscreenUrl) {
+        alert(data.error ?? `Não foi possível abrir a sessão ${store}.`);
+        return;
+      }
+      // A abertura em popup é bloqueada em alguns navegadores embutidos. Navegar
+      // na própria aba mantém a sessão visível para o operador sem expor o URL no chat.
+      window.location.assign(data.debuggerFullscreenUrl);
+    } catch {
+      alert("Não foi possível abrir a sessão da loja.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function releaseRetailerSession(store: "petz" | "boticario"): Promise<void> {
+    const key = `release-session:${store}`;
+    setBusy(key);
+    try {
+      const res = await fetch("/api/ops/live-retailer-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ store, action: "release" })
+      });
+      const data = await res.json().catch(() => ({})) as { released?: number; error?: string };
+      if (!res.ok) {
+        alert(data.error ?? `Não foi possível encerrar a sessão ${store}.`);
+        return;
+      }
+      alert(`${data.released ?? 0} sessão(ões) da ${store} foi(ram) encerrada(s). O Context foi salvo; agora pode rodar o preflight.`);
+    } catch {
+      alert("Não foi possível encerrar a sessão da loja.");
     } finally {
       setBusy(null);
     }
@@ -329,11 +389,51 @@ export default function OpsBoard() {
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <button
           style={secondary}
-          disabled={busy === "internal-preflight"}
-          onClick={() => void runInternalPreflight()}
-          title="Cria um pedido técnico de um SKU Carrefour e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
+          disabled={busy === "internal-preflight:oba"}
+          onClick={() => void runInternalPreflight("oba")}
+          title="Cria um pedido técnico de um SKU Oba e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
         >
-          {busy === "internal-preflight" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Carrefour"}
+          {busy === "internal-preflight:oba" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Oba"}
+        </button>
+        <button
+          style={secondary}
+          disabled={busy === "internal-preflight:petz"}
+          onClick={() => void runInternalPreflight("petz")}
+          title="Busca um SKU Petz ao vivo e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
+        >
+          {busy === "internal-preflight:petz" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Petz"}
+        </button>
+        <button
+          style={secondary}
+          disabled={busy === "internal-preflight:boticario"}
+          onClick={() => void runInternalPreflight("boticario")}
+          title="Busca um SKU Boticário ao vivo e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
+        >
+          {busy === "internal-preflight:boticario" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Boticário"}
+        </button>
+        <button
+          style={secondary}
+          disabled={busy === "live-session:petz"}
+          onClick={() => void openRetailerSession("petz")}
+          title="Abre o Context persistente Petz para a etapa de entrega. Não monta carrinho, não cobra e não compra."
+        >
+          {busy === "live-session:petz" ? "🌐 Abrindo Petz…" : "🌐 Abrir sessão Petz"}
+        </button>
+        <button
+          style={secondary}
+          disabled={busy === "release-session:petz"}
+          onClick={() => void releaseRetailerSession("petz")}
+          title="Encerra somente as sessões vivas do Context Petz para salvar login/endereço. Não monta carrinho, não cobra e não compra."
+        >
+          {busy === "release-session:petz" ? "💾 Salvando Petz…" : "💾 Salvar sessão Petz"}
+        </button>
+        <button
+          style={secondary}
+          disabled={busy === "live-session:boticario"}
+          onClick={() => void openRetailerSession("boticario")}
+          title="Abre o Context persistente Boticário para a etapa de entrega. Não monta carrinho, não cobra e não compra."
+        >
+          {busy === "live-session:boticario" ? "🌐 Abrindo Boticário…" : "🌐 Abrir sessão Boticário"}
         </button>
         <span style={{ fontSize: 12, color: "#667085" }}>Teste interno em cart_only: sem cobrança ou compra.</span>
       </div>
@@ -348,6 +448,10 @@ export default function OpsBoard() {
         const paymentReceived =
           Boolean(o.paidAt) ||
           ["paid", "retailer_preparing", "retailer_out_for_delivery", "operator_buying", "ready_for_pickup", "dispatched"].includes(o.status);
+        const operatorCourier = isOperatorCourierOrder(o);
+        const quote =
+          quotes[o.id] ?? { itemsSubtotal: "", deliveryFee: "", deliveryMode: "operator_courier", deliveryPromise: "", etaMinutes: "" };
+        const setQuote = (patch: Partial<typeof quote>) => setQuotes((prev) => ({ ...prev, [o.id]: { ...quote, ...patch } }));
         return (
           <div key={o.id} style={{ ...card, ...(cancelRequested ? cancelCard : {}) }}>
             {cancelRequested && (
@@ -427,6 +531,63 @@ export default function OpsBoard() {
             ) : null}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
+            {o.status === "awaiting_operator_quote" && (
+              <div style={quoteBox}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "#0f3d3a" }}>🧮 Cotar e enviar ao cliente</div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                  <input
+                    placeholder="custo produtos R$"
+                    inputMode="decimal"
+                    value={quote.itemsSubtotal}
+                    onChange={(e) => setQuote({ itemsSubtotal: e.target.value })}
+                    style={{ ...input, minWidth: 140 }}
+                  />
+                  <input
+                    placeholder="frete R$"
+                    inputMode="decimal"
+                    value={quote.deliveryFee}
+                    onChange={(e) => setQuote({ deliveryFee: e.target.value })}
+                    style={{ ...input, minWidth: 110 }}
+                  />
+                  <select value={quote.deliveryMode} onChange={(e) => setQuote({ deliveryMode: e.target.value })} style={{ ...input, minWidth: 180 }}>
+                    <option value="operator_courier">🛵 motoboy na hora</option>
+                    <option value="retailer_delivery">🚚 entrega do varejista</option>
+                  </select>
+                  <input
+                    placeholder="prazo (ex.: hoje até 19h)"
+                    value={quote.deliveryPromise}
+                    onChange={(e) => setQuote({ deliveryPromise: e.target.value })}
+                    style={{ ...input, minWidth: 200 }}
+                  />
+                  <input
+                    placeholder="ETA min"
+                    inputMode="numeric"
+                    value={quote.etaMinutes}
+                    onChange={(e) => setQuote({ etaMinutes: e.target.value })}
+                    style={{ ...input, minWidth: 90 }}
+                  />
+                  <button
+                    style={primary}
+                    disabled={busy === `${o.id}:publish_quote` || !(Number(quote.itemsSubtotal) > 0)}
+                    onClick={() =>
+                      act(o.id, "publish_quote", {
+                        itemsSubtotal: Number(quote.itemsSubtotal),
+                        deliveryFee: Number(quote.deliveryFee) || 0,
+                        deliveryMode: quote.deliveryMode,
+                        deliveryPromise: quote.deliveryPromise.trim() || undefined,
+                        etaMinutes: quote.etaMinutes ? Number(quote.etaMinutes) : undefined
+                      })
+                    }
+                  >
+                    Enviar cotação ao cliente
+                  </button>
+                </div>
+                <div style={{ fontSize: 12, color: "#667085" }}>
+                  Produtos recebem +10% de margem automático. O cliente aprova e paga por Pix/cartão; nada é cobrado antes.
+                </div>
+              </div>
+            )}
+
             {(o.purchaseJobs?.length ?? 0) > 0 && (
               <div style={{ display: "grid", gap: 7, marginTop: 10 }}>
                 {o.purchaseJobs!.map((job) => (
@@ -475,7 +636,7 @@ export default function OpsBoard() {
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>
               {o.status === "paid" && (
                 <>
-                  {(o.purchaseJobs?.length ?? 0) === 0 && (
+                  {(o.purchaseJobs?.length ?? 0) === 0 && !operatorCourier && o.storeKey !== "concierge" && (
                     <button
                       style={primary}
                       disabled={busy === `${o.id}:prepare_purchase`}
@@ -546,7 +707,7 @@ export default function OpsBoard() {
               )}
               {!retailerDelivery && (o.status === "operator_buying" || o.status === "ready_for_pickup") && (
                 <button style={primary} disabled={busy === `${o.id}:dispatch`} onClick={() => act(o.id, "dispatch")}>
-                  🛵 Despachar courier autorizado
+                  {operatorCourier ? "🛵 Despachar motoboy (sai da sua base)" : "🛵 Despachar courier autorizado"}
                 </button>
               )}
               {(o.status === "retailer_out_for_delivery" || o.status === "dispatched") && (
@@ -705,3 +866,4 @@ const regionChip: React.CSSProperties = { fontSize: 13, color: "#0f3d3a", backgr
 const reasonOut: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#93370d", background: "#fef0c7", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
 const reasonFar: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#5925dc", background: "#ebe9fe", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
 const ghost: React.CSSProperties = { padding: "8px 12px", background: "transparent", color: "#b42318", border: "1px solid #fda29b", borderRadius: 8, fontSize: 13, cursor: "pointer" };
+const quoteBox: React.CSSProperties = { marginTop: 10, padding: 10, border: "1px dashed #0f3d3a", borderRadius: 8, background: "#f2fbf9", display: "grid", gap: 8 };

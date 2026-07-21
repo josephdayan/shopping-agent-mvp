@@ -7,6 +7,36 @@ const items = [
   { qty: 1, name: "Óleo de Soja Liza 900ml", displayLineTotal: 8.79 }
 ];
 
+test("concierge: itens anotados, cotação pedida e resumo manual", () => {
+  const noted = copy.conciergeItemsNoted(["1x carregador de celular", "2x cadernos"], false);
+  assert.match(noted, /Anotei/);
+  assert.match(noted, /carregador/);
+  assert.match(noted, /só isso/);
+
+  const requested = copy.operatorQuoteRequested(["1x cabo usb-c", "1x vela"]);
+  assert.match(requested, /cotar/i);
+  assert.doesNotMatch(requested, /Total: R\$/); // nunca inventa total antes da cotação
+
+  const summary = copy.manualQuoteSummary({
+    items: [
+      { qty: 1, name: "cabo usb-c" },
+      { qty: 1, name: "vela de aniversário" }
+    ],
+    produtos: 55,
+    frete: 12,
+    deliveryPromise: "hoje até 19h",
+    total: 67,
+    deliveryAddress: "Rua das Flores, 123",
+    sameHour: true
+  });
+  assert.match(summary, /1x cabo usb-c/);
+  assert.match(summary, /Total: R\$ 67,00/);
+  assert.match(summary, /hoje até 19h/);
+  for (const t of [noted, requested, summary, copy.operatorQuoteStillWorking(), copy.conciergeAskWhatYouWant()]) {
+    assert.doesNotMatch(t, /undefined|NaN|\[object/);
+  }
+});
+
 test("summary: mostra itens, frete, total e itens não achados", () => {
   const text = copy.summary({
     items,
