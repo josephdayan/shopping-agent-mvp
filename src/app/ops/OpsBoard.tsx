@@ -677,13 +677,24 @@ export default function OpsBoard() {
                     onChange={(e) => setNumbers((n) => ({ ...n, [o.id]: e.target.value }))}
                     style={input}
                   />
-                  <button
-                    style={primary}
-                    disabled={busy === `${o.id}:bought`}
-                    onClick={() => act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "" })}
-                  >
-                    {retailerDelivery ? "Confirmar compra no varejista" : "Marquei como comprado"}
-                  </button>
+                  {operatorCourier ? (
+                    <button
+                      style={primary}
+                      disabled={busy === `${o.id}:bought_and_dispatch`}
+                      onClick={() => act(o.id, "bought_and_dispatch", { storeOrderNumber: numbers[o.id] ?? "" })}
+                      title="Marca como comprado e já chama o motoboy na sua base, num passo só."
+                    >
+                      🛵 Comprei — despachar motoboy
+                    </button>
+                  ) : (
+                    <button
+                      style={primary}
+                      disabled={busy === `${o.id}:bought`}
+                      onClick={() => act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "" })}
+                    >
+                      {retailerDelivery ? "Confirmar compra no varejista" : "Marquei como comprado"}
+                    </button>
+                  )}
                 </>
               )}
               {retailerDelivery && (o.status === "retailer_preparing" || o.status === "operator_buying") && (
