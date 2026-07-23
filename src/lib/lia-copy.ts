@@ -9,12 +9,14 @@ export function brl(value: number): string {
 
 export type CopyBasketItem = { qty: number; name: string; displayLineTotal: number };
 
-const EXAMPLES = `*"guaraná, pasta de dente e papel higiênico"*`;
+// Os exemplos ENSINAM a largura: três categorias que nenhuma loja única cobre. É assim
+// que o cliente aprende que pode pedir qualquer coisa, de qualquer lugar, numa mensagem.
+const EXAMPLES = `*"arroz, ração do meu cachorro e um carregador de iPhone"*`;
 
 // ---------- social ----------
 
 export function greeting(): string {
-  return `Oi! 💚 Sou a Lia — você me pede as compras do dia a dia por aqui, eu busco na loja e um motoboy entrega hoje mesmo.\n\nMe diz o que você precisa — ex.: ${EXAMPLES}.`;
+  return `Oi! 💚 Sou a Lia — você me pede *qualquer coisa* por aqui (mercado, pet, farmácia sem remédio, papelaria, presente…), eu compro e chega na sua casa hoje mesmo.\n\nMe diz o que você precisa — ex.: ${EXAMPLES}.`;
 }
 
 export function thanks(): string {
@@ -23,7 +25,7 @@ export function thanks(): string {
 
 export function help(): string {
   return [
-    "Eu faço suas compras do dia a dia e entrego hoje. 💚 Funciona assim:",
+    "Eu compro *qualquer coisa* pra você — mercado, pet, beleza, farmácia (sem remédio), papelaria, eletrônicos, presente… — e entrego hoje. 💚 Funciona assim:",
     "",
     `1. Me diz o que precisa — ex.: ${EXAMPLES}`,
     "2. Eu mostro o total com frete",
@@ -148,7 +150,7 @@ export function itemsNotFound(items: string[]): string {
 }
 
 export function noMedicine(): string {
-  return "Remédio eu não consigo trazer (por lei, só farmácia pode vender) 🙏. Mas te ajudo com higiene, beleza, limpeza, mercado, bebida e pet — o que você precisa?";
+  return "Remédio eu não consigo trazer (por lei, só farmácia pode vender) 🙏. Mas fora isso eu busco de tudo: mercado, higiene, beleza, pet, papelaria, eletrônicos, presente, bebida… — o que você precisa?";
 }
 
 export function medicineSkippedNote(): string {

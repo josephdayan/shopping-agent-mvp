@@ -20,6 +20,14 @@ process.env.WHATSAPP_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";
 process.env.LIA_RETAILER_TEST_SEED = "true";
 process.env.LIA_SEND_PHOTOS = "false";
+// The conversation evals assert NLU/choice/payment behavior, not the store roster, and
+// were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
+// Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba
+// tests). Pin the test registry to that set so routing stays deterministic; production
+// keeps all 11 vitrines. The 5 later vitrines are disabled so they don't shift routing.
+for (const store of ["SWIFT", "KALUNGA", "RIHAPPY", "CACAUSHOW", "KOPENHAGEN", "DROGARAIA"]) {
+  process.env[`LIA_ENABLE_${store}`] = "false";
+}
 // The catalog-choice conversation evals exercise the legacy auto-quote flow. The manual
 // concierge flow (production default) is covered by tests/manual-concierge.test.ts, which
 // re-enables the flag after importing this helper.

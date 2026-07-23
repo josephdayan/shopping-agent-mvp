@@ -1,6 +1,6 @@
 // Pluggable store layer. A StoreConnector is one supply source the operator can
-// buy from via clique-e-retire (Carrefour first; add farmácia/Petz/etc. by writing
-// one more file and registering it). The chat flow and the operator dashboard only
+// buy from through retailer delivery. Adding a source means writing one connector
+// and registering it; the chat flow and operator dashboard only
 // ever talk to this interface, never to a specific store.
 
 export type CatalogItem = {
@@ -12,14 +12,14 @@ export type CatalogItem = {
   category?: string;
   imageUrl?: string;
   // Real deep link to the product page on the store, when the scrape captured it
-  // (Boticário has these; Carrefour SKUs are synthetic). Lets /ops open the exact
+  // Lets /ops open the exact
   // item instead of a name search.
   productUrl?: string;
 };
 
 export type StoreUnit = {
   id: string;
-  label: string; // e.g. "Carrefour Pinheiros"
+  label: string; // e.g. "Petz Augusta"
   address: string;
   cep?: string;
   // Coordenadas reais da loja (pino do Google Maps). Quando presentes, a escolha da
@@ -30,10 +30,10 @@ export type StoreUnit = {
 };
 
 export type StoreConnector = {
-  key: string; // "carrefour"
-  label: string; // "Carrefour"
+  key: string; // "oba"
+  label: string; // "Oba Hortifruti"
   // Minimum order this store requires, in REAL cost (R$ of products we pay the store).
-  // Store-specific (e.g. Carrefour clique-e-retire ≈ 30); 0/undefined = no minimum.
+  // Store-specific; 0/undefined = no minimum.
   minOrder?: number;
   // Best catalog matches for one free-text basket line ("pasta de dente colgate").
   searchItems(query: string, limit?: number): Promise<CatalogItem[]>;

@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-07-20._
+_Última atualização: 2026-07-21._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -45,6 +45,27 @@ bloqueou o Browserbase em 19/07; Petz/Boticário não expõem frete no Context h
 - **Próximo passo**: piloto manual de 5–10 pedidos reais medindo demanda, margem após frete e
   tempo por pedido. Titularidade/NF continuam pendência antes do público. Código: TypeScript,
   lint, testes focados (fluxo manual + evals legados) e build verdes em 2026-07-20.
+- **Estado em 21/07**: os commits `bb48c2e` (fluxo), `ededf6a` (documentação) e `7ab8453`
+  (kit do operador) estão verdes localmente. Um pedido concierge percorreu, em ambiente local
+  mockado e sem cobrança, cotação → Pix confirmado → compra → despacho pela base do operador →
+  entrega; as mensagens ao cliente também foram conferidas. O concierge **não está implantado**:
+  publicar agora misturaria uma migration Oba inacabada de outro trabalho. Fazer deploy somente
+  quando houver publicação limpa. Há 19 pedidos técnicos na fila de produção; removê-los requer
+  autorização explícita. A decisão operacional é **contratar um operador** para o piloto.
+
+### Atualização 23/07/2026 — vitrines de referência (10 lojas)
+
+Por decisão do operador, a vitrine integrada foi ampliada para **10 lojas**: Carrefour
+(de volta como vitrine seed — a automação de checkout segue proibida; o bloqueio de
+19/07 era contra o robô, não contra o operador comprando como cliente comum), Oba, Petz,
+Boticário, Decathlon (restaurada + ampliada) e as novas **Swift, Kalunga, Ri Happy,
+Cacau Show e Kopenhagen**. As novas vitrines são seeds de dados REAIS colhidos dos sites
+públicos em 23/07 (nome/preço/URL verificados; sem invenção). No concierge, o preço da
+vitrine é referência — a autoridade é a cotação manual do operador. A seção de 19/07
+abaixo ("exatamente três fontes") fica **superada** por esta decisão. `quoteBasket`
+passou a tolerar loja sem unidade física (sem balcão → sem guarda de distância; frete
+cotado pelo CEP do cliente). Supersede também o item "não adicionar lojas agora": o
+operador decidiu ampliar a vitrine antes do piloto.
 
 O restante deste arquivo descreve o fluxo legado de automação por varejista; ele continua
 válido como referência, mas **o produto ativo é o concierge manual acima**.

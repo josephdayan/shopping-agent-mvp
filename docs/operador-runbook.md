@@ -46,6 +46,38 @@ Abra **uma vez** o link `https://liadelivery.com.br/ops?key=SEU_TOKEN`. Depois d
 - **Faixa vermelha "⚠️ CLIENTE PEDIU CANCELAMENTO":** o cliente pediu no WhatsApp. **Fale com
   o responsável antes de comprar ou despachar** esse pedido.
 
+## Onde comprar rápido (mapa de sourcing)
+
+A amplitude é o diferencial da Lia: o cliente pode pedir **qualquer coisa** e a resposta
+nunca é "não temos". Este mapa é o ponto de partida — complete com o que funcionar na
+sua região e anote os achados.
+
+| Categoria | Primeira opção | Alternativa |
+| --- | --- | --- |
+| Mercado grande / variedade | **Carrefour / Extra (hipermercado)** | Assaí, Roldão (atacado) |
+| Hortifruti / mercearia premium | Oba | Mercado de bairro |
+| Carnes / churrasco | Swift (entrega própria) | Açougue local / hipermercado |
+| Pet | Petz | Cobasi |
+| Beleza / presente | O Boticário | Farmácia grande (área de dermocosméticos) |
+| Farmácia (sem remédio!) | **Droga Raia** / Drogasil | Farmácia de bairro |
+| Papelaria / escritório | Kalunga | Papelaria de bairro |
+| Eletrônicos / acessórios | Fast Shop / Casas Bahia | Loja de shopping próximo |
+| Casa / manutenção | Leroy Merlin | Telhanorte / loja de material local |
+| Utilidades / variedades | Americanas / loja de R$1,99 | Shopping popular |
+| Presente / flores | Floricultura local | Chocolateria (Kopenhagen/Cacau Show) |
+| Bebê (fralda, lenço, fórmula*) | Droga Raia / Drogasil | Hipermercado |
+| Festa / bebidas / gelo | Adega local | Hipermercado / distribuidora de bebidas |
+| Esporte | Decathlon | Centauro |
+| Brinquedo (presente de última hora) | Ri Happy | Americanas / hipermercado |
+
+*Fórmula infantil é venda livre em farmácia — mas suplemento/medicamento infantil não; na
+dúvida sobre um item de farmácia, trate como remédio e recuse.
+
+- **Remédio nunca** (nem OTC) — é lei, e a Lia já recusa na conversa.
+- Compare o preço na hora de cotar; o preço que você digita é o custo real.
+- Item muito específico (marca rara, importado): confirme a disponibilidade ANTES de
+  enviar a cotação, para não prometer o que não tem.
+
 ## Regras de ouro
 
 - **Nunca cobre o cliente à mão.** A Lia cobra. Você só cota e compra.

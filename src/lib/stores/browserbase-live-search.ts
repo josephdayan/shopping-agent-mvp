@@ -34,7 +34,7 @@ export async function browserbaseLiveSearch(options: LiveSearchOptions): Promise
   }
 
   if (!process.env.BROWSERBASE_API_KEY) return [];
-  const country = (process.env.BROWSERBASE_PROXY_COUNTRY ?? process.env.CARREFOUR_BROWSER_PROXY_COUNTRY)?.trim().toUpperCase();
+  const country = process.env.BROWSERBASE_PROXY_COUNTRY?.trim().toUpperCase();
   const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
   const session = await bb.sessions.create({
     browserSettings: {

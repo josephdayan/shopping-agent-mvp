@@ -291,29 +291,13 @@ export const carrefourStore: StoreConnector = {
   minOrder: Number(process.env.LIA_CARREFOUR_MIN_ORDER ?? 30),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    if (process.env.LIA_RETAILER_TEST_SEED === "true") return seedSearch(query, limit);
-    // The chat must only display items that the purchase worker can actually open.
-    // Browserbase reads the current Carrefour page and yields real product deep links.
-    try {
-      const live = await searchCarrefourBrowserbase(query, limit);
-      if (live.length) return live;
-    } catch (error) {
-      console.warn("[carrefour:browserbase-search]", error instanceof Error ? error.message : error);
-    }
-
-    // Apify remains a secondary live source when explicitly enabled.
-    if (process.env.LIA_CARREFOUR_LIVE === "true" && process.env.APIFY_API_TOKEN) {
-      try {
-        const live = await searchCarrefourLive(query, limit);
-        const sellable = live.filter((item) => Boolean(item.productUrl));
-        if (sellable.length) return sellable;
-      } catch (error) {
-        console.warn("[carrefour:live:fallback-seed]", error instanceof Error ? error.message : error);
-      }
-    }
-    // Never sell a seed-only item in a real conversation: it may be stale and has
-    // no exact product URL.
-    return [];
+    // 2026-07: Carrefour blocked our automated sessions (19/07) and automation was
+    // removed from the critical path. In the manual-concierge product the operator's
+    // hand-made quote is the price authority, so the vitrine can safely show the
+    // scraped seed (real names + real deep links; price is only a reference) without
+    // fighting the retailer's anti-bot. Do NOT reintroduce Browserbase/Apify here
+    // without a formal authorization from the retailer.
+    return seedSearch(query, limit);
   },
 
   listCatalog(): CatalogItem[] {

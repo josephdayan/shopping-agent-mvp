@@ -527,17 +527,22 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   const fulfillments: StoreFulfillment[] = [];
   for (const [storeKey, items] of groups) {
     const groupStore = getStore(storeKey);
-    const near = await pickNearestUnit(groupStore.listUnits(), ctx.cep);
-    const distBlock = checkFreightGuard({ distanceKm: near.distanceKm });
+    // A store with no physical units (e.g. Oba, vitrine-only stores) is fulfilled by
+    // retailer delivery or the concierge operator — there is no pickup counter, so the
+    // legacy distance guard doesn't apply and the courier quote uses the customer's own
+    // CEP as a proxy (fine for the mock/base-fee path this legacy flow relies on).
+    const units = groupStore.listUnits();
+    const near = units.length ? await pickNearestUnit(units, ctx.cep) : null;
+    const distBlock = near ? checkFreightGuard({ distanceKm: near.distanceKm }) : null;
     if (distBlock) {
       ctx.guardBlock = distBlock;
       return;
     }
-    const unit = near.unit;
-    const pool = await quoteAll({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress });
+    const unit = near?.unit;
+    const pool = await quoteAll({ pickupCep: unit?.cep ?? ctx.cep, dropoffCep: ctx.cep, pickupAddress: unit?.address ?? ctx.deliveryAddress, dropoffAddress: ctx.deliveryAddress });
     const quotes = pool.length
       ? pool
-      : [await getCourier().quote({ pickupCep: unit.cep, dropoffCep: ctx.cep, pickupAddress: unit.address, dropoffAddress: ctx.deliveryAddress })];
+      : [await getCourier().quote({ pickupCep: unit?.cep ?? ctx.cep, dropoffCep: ctx.cep, pickupAddress: unit?.address ?? ctx.deliveryAddress, dropoffAddress: ctx.deliveryAddress })];
     const cheapest = quotes.reduce((best, quote) => (quote.fee < best.fee ? quote : best));
     const requireRealQuote = process.env.LIA_REQUIRE_REAL_COURIER_QUOTE !== "false" && process.env.WHATSAPP_PROVIDER === "meta";
     if (requireRealQuote && cheapest.mock) {
@@ -553,10 +558,11 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
     fulfillments.push({
       storeKey,
       storeLabel: groupStore.label,
-      unitId: unit.id,
-      unitLabel: unit.label,
-      unitAddress: unit.address,
-      unitCep: unit.cep,
+      // Unit-less store: the retailer/concierge delivers, so there is no pickup counter.
+      unitId: unit?.id ?? "retailer",
+      unitLabel: unit?.label ?? groupStore.label,
+      unitAddress: unit?.address ?? "—",
+      unitCep: unit?.cep,
       courierKey: cheapest.courierKey,
       courierQuoteId: cheapest.quoteId,
       deliveryFee: cheapest.fee,

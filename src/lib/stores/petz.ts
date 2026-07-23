@@ -3,13 +3,13 @@ import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { PETZ_CATALOG } from "./petz-catalog";
 import { browserbaseLiveSearch } from "./browserbase-live-search";
 
-// Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same shape as Carrefour
+// Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same connector shape as
 // but seed-only (no live scrape). Catalog is REAL data (petz-catalog.ts). The breadth of
 // a dedicated pet store is the point: deeper than the supermarket pet aisle.
 //
 // Real Petz stores in the city of São Paulo (sourced from petz.com.br store pages,
 // 2026-06-30; CEPs from search snippets — medium confidence, verify a store live before
-// leaning on it). nearestUnit picks the CEP-closest one (same heuristic as Carrefour).
+// leaning on it). nearestUnit picks the CEP-closest one.
 // Confirmed: Petz does "Retire na Loja" + third-party (motoboy) pickup — but the counter
 // enforces the TITULAR's document + (often) a signed authorization and only releases
 // after a "liberado para retirada" notice; the operator buys online and picks the store.

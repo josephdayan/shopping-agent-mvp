@@ -8,7 +8,7 @@ import type { CatalogItem } from "./types";
 // (clique-e-retire), which fits the pickup+courier model.
 //
 // Categories: perfumaria (504), maquiagem (496), corpo e banho (228), cabelos (181).
-// productUrl is a REAL deep link to the product page (unlike the synthetic Carrefour SKUs)
+// productUrl is a REAL deep link to the product page
 // — used by /ops to open the exact item. imageUrl (1380/1409 = 98%) is the Cloudinary
 // product photo, format-forced to JPG (f_jpg) so Twilio/WhatsApp render it (the raw is
 // AVIF, which WhatsApp rejects) — verified 200 image/jpeg server-side. Cloudinary is
