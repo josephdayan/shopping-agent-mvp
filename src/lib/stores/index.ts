@@ -56,15 +56,19 @@ export async function pickStoreForQueries(queries: string[]): Promise<StoreConne
   if (stores.length <= 1 || queries.length === 0) return stores[0] ?? getStore();
   const wins = new Map<string, number>(stores.map((s) => [s.key, 0]));
   for (const q of queries) {
+    // Accent-stripped so the vocation hints match "ração"/"coração de gato" etc.; the
+    // regexes are written without accents. Without this, a broad store (Carrefour) wins
+    // pet/beauty ties because the +hint never fired.
+    const qHint = q.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
     let winner: StoreConnector | null = null;
     let bestScore = 0;
     for (const store of stores) {
       const top = (await store.searchItems(q, 1))[0];
       let score = top ? scoreCatalogMatch(q, top) : 0;
       if (score > 0) {
-        // desempate por vocação da loja
-        if (store.key === "boticario" && BEAUTY_HINT_RE.test(q.toLowerCase())) score += 1;
-        if (store.key === "petz" && PET_HINT_RE.test(q.toLowerCase())) score += 1;
+        // desempate por vocação da loja (peso 2 para vencer o empate com folga)
+        if (store.key === "boticario" && BEAUTY_HINT_RE.test(qHint)) score += 2;
+        if (store.key === "petz" && PET_HINT_RE.test(qHint)) score += 2;
       }
       if (score > bestScore) {
         bestScore = score;

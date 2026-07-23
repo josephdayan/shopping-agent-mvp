@@ -89,13 +89,16 @@ function cleanName(name: string): boolean {
 }
 
 function expensiveItemQuery(): { query: string; qty: number } {
-  const catalog = getStore("carrefour").listCatalog();
+  const catalog = getStore("petz").listCatalog();
   const item =
     catalog.find((i) => i.unitPrice >= 20 && i.unitPrice <= 80 && cleanName(i.name)) ?? catalog[0];
   const qty = Math.max(1, Math.ceil(60 / item.unitPrice));
   return { query: item.name, qty };
 }
 
+// A cheap item that routes to a store WITH a minimum order (Carrefour, R$30) so the
+// below-minimum nudge fires. Petz has no minimum, so a cheap Petz item would never
+// trigger it — the eval is about the nudge, not about which store.
 function cheapItemQuery(): string {
   const catalog = getStore("carrefour").listCatalog();
   const item = catalog
@@ -221,8 +224,8 @@ test("opções antigas somem em silêncio no oi e a limpeza fica persistida", as
 
 test("produto ambíguo: mostra opções numeradas; 'mais barato' escolhe a mais barata", async (t) => {
   if (!dbOk) return t.skip();
-  const store = getStore("carrefour");
-  const candidates = ["leite", "arroz", "refrigerante", "sabonete", "cafe"];
+  const store = getStore("petz");
+  const candidates = ["ração", "areia", "petisco", "shampoo", "brinquedo"];
   let ambiguous: string | undefined;
   let options: { name: string; unitPrice: number }[] = [];
   for (const q of candidates) {
@@ -272,10 +275,10 @@ test("fluxo preguiçoso completo: oi → endereço → CEP → produto → duas 
   assert.match(charge, /MOCKPIX/);
 });
 
-test("multi-loja: creatina e perfume convivem na mesma cesta com duas retiradas", async (t) => {
+test("multi-loja: ração e perfume convivem na mesma cesta com duas entregas", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  let response = await c.send("2 creatina e 2 perfume");
+  let response = await c.send("2 ração e 2 perfume");
   let transcript = response;
   for (let i = 0; i < 4 && /Responde \*1\*/.test(response); i++) {
     response = await c.send("1");
@@ -284,14 +287,14 @@ test("multi-loja: creatina e perfume convivem na mesma cesta com duas retiradas"
   const user = await prisma.user.findUniqueOrThrow({ where: { phone: c.phone } });
   const convo = await prisma.conversation.findFirstOrThrow({ where: { userId: user.id, status: "active" } });
   const ctx = JSON.parse(convo.context ?? "{}") as { basket?: Array<{ storeKey: string }>; fulfillments?: Array<{ storeKey: string }> };
-  assert.deepEqual(new Set(ctx.basket?.map((item) => item.storeKey)), new Set(["decathlon", "boticario"]), `${transcript}\nCTX=${convo.context}`);
+  assert.deepEqual(new Set(ctx.basket?.map((item) => item.storeKey)), new Set(["petz", "boticario"]), `${transcript}\nCTX=${convo.context}`);
   assert.equal(ctx.fulfillments?.length, 2);
 });
 
 test("ação adicionar mais reabre a coleta sem perder a cesta", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("2 creatina");
+  await c.send("2 ração");
   await c.send("1");
   const prompt = await c.send("adicionar_mais");
   assert.match(prompt, /cesta continua salva|mais você quer/i);
@@ -306,20 +309,20 @@ test("memória: produto comprado antes sobe para a primeira opção", async (t) 
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const user = await prisma.user.findUniqueOrThrow({ where: { phone: c.phone } });
-  const candidates = await getStore("carrefour").searchItems("coca", 6);
+  const candidates = await getStore("petz").searchItems("ração", 6);
   assert.ok(candidates.length >= 3);
   const preferred = candidates[2];
   await prisma.deliveryOrder.create({
     data: {
       userId: user.id,
       phone: c.phone,
-      storeKey: "carrefour",
-      storeLabel: "Carrefour",
-      items: [{ sku: preferred.sku, name: preferred.name, qty: 4, unitPrice: preferred.unitPrice, lineTotal: preferred.unitPrice * 4, storeKey: "carrefour", storeLabel: "Carrefour" }],
+      storeKey: "petz",
+      storeLabel: "Petz",
+      items: [{ sku: preferred.sku, name: preferred.name, qty: 4, unitPrice: preferred.unitPrice, lineTotal: preferred.unitPrice * 4, storeKey: "petz", storeLabel: "Petz" }],
       status: "delivered"
     }
   });
-  const offer = await c.send("coca");
+  const offer = await c.send("ração");
   const firstOption = offer.match(/\*1\)\* ([^—\n]+)/)?.[1]?.trim();
   assert.equal(firstOption, preferred.name);
 });
@@ -539,7 +542,7 @@ test("estado-sp: Campinas é aceita (interior com loja perto)", async (t) => {
   if (!dbOk) return t.skip();
   await withPreset("estado-sp", async () => {
     const c = await returningCustomer();
-    const r = await c.send("13015-000"); // Campinas centro — Petz/Boticário/Carrefour a <6km
+    const r = await c.send("13015-000"); // Campinas centro — Petz/Boticário atendem o preset legado
     assert.match(r, /atualizado|salvo/i);
     const user = await prisma.user.findUnique({ where: { phone: c.phone } });
     assert.equal(user?.cep, "13015-000");
@@ -565,9 +568,9 @@ function optionNames(transcript: string): string[] {
 
 test("escolhendo: 'tem outras?' mostra as PRÓXIMAS opções, nunca as mesmas", async (t) => {
   if (!dbOk) return t.skip();
-  const store = getStore("carrefour");
+  const store = getStore("petz");
   let query: string | undefined;
-  for (const q of ["leite", "arroz", "cafe", "sabonete", "refrigerante"]) {
+  for (const q of ["ração", "areia", "petisco", "shampoo", "brinquedo"]) {
     if ((await store.searchItems(q, 9)).length >= 6) {
       query = q;
       break;
@@ -589,7 +592,7 @@ test("escolhendo: 'tem outras?' mostra as PRÓXIMAS opções, nunca as mesmas", 
 
 test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t) => {
   if (!dbOk) return t.skip();
-  const store = getStore("carrefour");
+  const store = getStore("petz");
   // Derive a (base, weight) pair from the catalog so the test adapts to catalog changes.
   let pair: { base: string; attr: string } | undefined;
   for (const item of store.listCatalog()) {
