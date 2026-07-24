@@ -67,6 +67,24 @@ passou a tolerar loja sem unidade física (sem balcão → sem guarda de distân
 cotado pelo CEP do cliente). Supersede também o item "não adicionar lojas agora": o
 operador decidiu ampliar a vitrine antes do piloto.
 
+**Totais da vitrine (seed/histórico, sob `LIA_RETAILER_TEST_SEED` ou como referência):**
+Carrefour 1.045 · Petz 2.812 · Boticário 1.380 · Ri Happy 1.196 · Swift 925 · Kopenhagen
+248 · Decathlon 17 · Kalunga 15 · Cacau Show 12 · Droga Raia 13 · Oba 2 (Oba usa busca ao
+vivo em prod). ~7,7 mil itens. Ri Happy/Swift/Kopenhagen colhidos pela API pública VTEX via
+`scripts/harvest-vtex-catalog.mts` (sem Chrome). Decathlon/Kalunga/Cacau/Raia têm API
+bloqueada (Akamai/não-VTEX) e ficaram em seed real menor — aprofundar exige DOM/Apify.
+
+**Bug de roteamento corrigido (23/07):** as dicas de vocação (pet/beleza) testavam a query
+COM acento contra regex SEM acento, então "ração" perdia o empate para o Carrefour. Agora
+normaliza (NFD) e pesa +2 → item de pet vai pra Petz, beleza pra Boticário.
+
+**Deploy 24/07:** remodelagem concierge + kit do operador + 11 vitrines + fix de roteamento
+foram para produção (`dpl_9upchNgpPZ15…`, READY). **Suíte completa 209/209 verde** (com banco),
+TypeScript, lint e build limpos. `liadelivery.com.br` responde (landing 200, `/ops` 401,
+webhook 403). A vitrine profunda ainda NÃO aparece pro cliente no concierge (fluxo é livre →
+operador); mostrar opções com foto seria a "vitrine híbrida" — decisão de produto em aberto.
+Pendências humanas: piloto 5–10 pedidos, titularidade/NF, rotação de senha Carrefour e PIN.
+
 O restante deste arquivo descreve o fluxo legado de automação por varejista; ele continua
 válido como referência, mas **o produto ativo é o concierge manual acima**.
 
