@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-07-20._
+_Última atualização: 2026-07-21._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -14,6 +14,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > medindo demanda, margem após frete e tempo por pedido; titularidade/NF seguem bloqueio
 > antes do público. Código do fluxo manual: TypeScript, lint, testes focados e build verdes
 > em 2026-07-20 (`tests/manual-concierge.test.ts`).
+
+> **Atualização de 21/07.** `bb48c2e` (fluxo), `ededf6a` (docs) e `7ab8453` (kit do operador)
+> estão verdes localmente. Uma demonstração mockada percorreu cotação de R$100 → Pix
+> confirmado → compra → despacho Uber Direct da base do operador → entrega, incluindo mensagens
+> ao cliente; não houve cobrança. O concierge não foi implantado porque o deploy atual incluiria
+> uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
+> pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
 
 ## Como usar
 
@@ -41,6 +48,20 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Operação, jurídico e pós-venda aprovados para lançamento público.
 
 ## P0 — antes do primeiro piloto com dinheiro real
+
+### Concierge manual — prioridade vigente
+
+- [x] Implementar a jornada livre: lista → `awaiting_operator_quote` → cotação no `/ops` →
+  aprovação → Pix/cartão → compra → despacho pela base do operador → entrega. Coberta por testes
+  focados, copy e demonstração local mockada em 21/07.
+- [x] Criar o kit de operação: botão único **“Comprei — despachar motoboy”** e
+  [runbook de uma página](docs/operador-runbook.md).
+- [ ] Contratar e treinar o operador antes do primeiro pedido real.
+- [ ] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
+  misturar a publicação com o trabalho paralelo do Oba.
+- [ ] Limpar os 19 pedidos técnicos de Production **somente após autorização explícita**.
+- [ ] Rodar 5–10 pedidos concierge reais, registrando tempo de cotação, margem depois do frete,
+  falhas e satisfação. A demonstração mockada não conta como piloto.
 
 ### Cotação e cobrança
 
@@ -378,7 +399,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 ### Piloto e lançamento
 
 - [ ] Definir grupo, limite de pedidos, ticket máximo, região e horário do piloto.
-- [ ] Rodar de 5 a 10 pedidos controlados com entrega direta e acompanhamento humano.
+- [ ] Rodar de 5 a 10 pedidos concierge controlados, com compra manual e acompanhamento humano.
 - [ ] Registrar sucesso, tempo, margem, falhas, estornos e satisfação de cada pedido.
 - [ ] Corrigir todos os incidentes financeiros P0 encontrados no piloto.
 - [ ] Aprovar checklist final de operação, jurídico, financeiro e suporte.
@@ -396,6 +417,23 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Criar painel de SLA por loja e modalidade de entrega.
 
 ## Registro de marcos
+
+- **2026-07-24:** **deploy de produção limpo.** Concierge + kit do operador + **11 vitrines
+  (~7,7 mil produtos reais)** + fix de roteamento foram para Production (`dpl_9upchNgpPZ15…`,
+  READY; `liadelivery.com.br` respondendo). Suíte completa **209/209 verde** (com banco),
+  TypeScript, lint e build limpos. Carrefour e Decathlon restaurados como vitrine (checkout
+  automatizado segue proibido); Ri Happy (1.196), Swift (925), Kopenhagen (248) colhidos pela
+  API pública VTEX; Kalunga/Cacau Show/Droga Raia em seed real menor (sites bloqueados).
+  Bug corrigido: dica de vocação testava query com acento contra regex sem acento ("ração"
+  ia pro Carrefour em vez da Petz). Commits `73102d0`, `b57d6a5`, `38f5e3d`, `64f37b5`.
+  **Próxima decisão de produto:** a vitrine profunda ainda não aparece pro cliente no
+  concierge (fluxo é livre → operador); mostrar opções com foto = "vitrine híbrida" (proposta,
+  não construída — risco de regressão no fluxo de escolha, decisão do dono).
+- **2026-07-21:** o fluxo concierge foi demonstrado localmente em ambiente mockado, do pedido à
+  entrega, sem cobrança. O kit do operador ficou pronto; os commits `bb48c2e`, `ededf6a` e
+  `7ab8453` permanecem fora de Production até a publicação limpa, pois uma migration Oba paralela
+  ainda está inacabada. Decidido contratar operador; limpeza dos 19 pedidos técnicos aguarda
+  autorização explícita.
 
 - **2026-07-14:** entrega direta do varejista definida como fluxo principal; retirada por
   motoboy deixou de ser premissa padrão.
