@@ -167,7 +167,7 @@ const BUBBLES_RIGHT = [
 const FAQ = [
   {
     q: "Onde a Lia entrega?",
-    a: "Na capital, na Grande São Paulo e nas principais cidades do interior — Campinas, Santos, Ribeirão Preto, São José dos Campos, Sorocaba e mais, com motoboy parceiro no mesmo dia. Manda seu CEP no WhatsApp que eu confirmo na hora se já chego aí. 📍"
+    a: "A Lia opera somente no estado de São Paulo: capital, Grande São Paulo e cidades do interior como Campinas, Santos, Ribeirão Preto, São José dos Campos, Sorocaba e mais. Manda seu CEP no WhatsApp que eu confirmo na hora se já chego aí. 📍"
   },
   {
     q: "Quanto custa?",

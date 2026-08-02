@@ -1,5 +1,5 @@
-// Onde a Lia entrega HOJE. Cobertura é DADO, não código: o piloto é São Paulo capital,
-// mas você amplia por env (sem deploy) conforme a operação chega em novas regiões. Puro e
+// Onde a Lia entrega HOJE. Cobertura é DADO, não código: a operação ativa é o estado de
+// São Paulo. O fluxo legado ainda pode usar presets mais estreitos por env. Puro e
 // unit-testado (sem DB, sem rede). O cérebro chama checkCoverage() logo depois de resolver
 // o CEP; se estiver fora da área, grava um lead na lista de espera em vez de aceitar um
 // pedido pago que não consegue entregar.
@@ -22,6 +22,19 @@
 
 export type CoverageInput = { cep?: string; city?: string; uf?: string };
 export type CoverageResult = { covered: boolean; city?: string; uf?: string };
+
+/**
+ * Hard geographic boundary of the active concierge. ViaCEP is authoritative when it
+ * returns a UF; the CEP prefix is the safe fallback when ViaCEP is unavailable.
+ * This deliberately ignores LIA_COVERAGE_OFF and the legacy city presets: production
+ * concierge traffic must never be accepted outside São Paulo state.
+ */
+export function isSaoPauloState(input: CoverageInput): boolean {
+  const uf = input.uf?.trim().toUpperCase();
+  if (uf) return uf === "SP";
+  const digits = (input.cep ?? "").replace(/\D/g, "");
+  return digits.length === 8 && /^[01]/.test(digits);
+}
 
 export function normalizeCity(s?: string): string {
   return (s ?? "")

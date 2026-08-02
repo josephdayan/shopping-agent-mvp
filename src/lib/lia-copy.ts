@@ -16,7 +16,7 @@ const EXAMPLES = `*"arroz, ração do meu cachorro e um carregador de iPhone"*`;
 // ---------- social ----------
 
 export function greeting(): string {
-  return `Oi! 💚 Sou a Lia — você me pede *qualquer coisa* por aqui (mercado, pet, farmácia sem remédio, papelaria, presente…), eu compro e chega na sua casa hoje mesmo.\n\nMe diz o que você precisa — ex.: ${EXAMPLES}.`;
+  return `Oi! 💚 Sou a Lia — você me pede *qualquer coisa* por aqui (mercado, pet, farmácia sem remédio, papelaria, presente…), eu compro e chega na sua casa hoje mesmo, em qualquer endereço do estado de São Paulo.\n\nMe diz o que você precisa — ex.: ${EXAMPLES}.`;
 }
 
 export function thanks(): string {
@@ -25,7 +25,7 @@ export function thanks(): string {
 
 export function help(): string {
   return [
-    "Eu compro *qualquer coisa* pra você — mercado, pet, beleza, farmácia (sem remédio), papelaria, eletrônicos, presente… — e entrego hoje. 💚 Funciona assim:",
+    "Eu compro *qualquer coisa* pra você — mercado, pet, beleza, farmácia (sem remédio), papelaria, eletrônicos, presente… — e entrego hoje dentro do estado de São Paulo. 💚 Funciona assim:",
     "",
     `1. Me diz o que precisa — ex.: ${EXAMPLES}`,
     "2. Eu mostro o total com frete",
@@ -49,16 +49,16 @@ export function askWhatYouWant(): string {
 
 export function welcomeAskCep(notedItems?: string[]): string {
   const note = notedItems?.length ? `Já anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\n` : "";
-  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Pra começar, me manda seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`;
+  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa no estado de São Paulo. ${note}Pra começar, me manda seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`;
 }
 
 export function welcomeAddressButton(): string {
-  return "Oi! 💚 Sou a Lia. Eu busco suas compras e entrego hoje mesmo. Pra começar, vamos cadastrar e verificar seu endereço — você só faz isso uma vez.";
+  return "Oi! 💚 Sou a Lia. Eu busco suas compras e entrego hoje mesmo no estado de São Paulo. Pra começar, vamos cadastrar e verificar seu endereço — você só faz isso uma vez.";
 }
 
 export function welcomeAskFullDeliveryAddress(notedItems?: string[]): string {
   const note = notedItems?.length ? `Já anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\n` : "";
-  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa. ${note}Antes do primeiro pedido, me manda seu *endereço completo* (rua, número, bairro e cidade). Eu salvo uma vez e só confirmo no resumo dos próximos pedidos. 📍`;
+  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa no estado de São Paulo. ${note}Antes do primeiro pedido, me manda seu *endereço completo* (rua, número, bairro e cidade). Eu salvo uma vez e só confirmo no resumo dos próximos pedidos. 📍`;
 }
 
 export function quantityAsk(name: string): string {

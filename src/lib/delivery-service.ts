@@ -49,7 +49,7 @@ import {
   statusAfterStorePurchase,
   withPaymentNote
 } from "@/lib/order-flags";
-import { checkCoverage, coverageLabel, normalizeCity } from "@/lib/coverage";
+import { checkCoverage, coverageLabel, isSaoPauloState, normalizeCity } from "@/lib/coverage";
 import { getPurchasePolicy } from "@/lib/purchasing/policy";
 import type { CartSnapshot } from "@/lib/purchasing/types";
 import * as copy from "@/lib/lia-copy";
@@ -61,7 +61,7 @@ import * as copy from "@/lib/lia-copy";
 // dashboard drives. Intent detection lives in lia-intents (pure, unit-tested) and
 // every customer-facing string lives in lia-copy.
 
-// The pilot's default product: a WhatsApp concierge with breadth — the customer asks
+// The active product: a WhatsApp concierge with breadth — the customer asks
 // for anything from anywhere, the operator sources, prices and buys it by hand, and a
 // courier (Uber Direct/Lalamove) delivers same-hour from the operator to the customer.
 // No live retailer automation (Browserbase) sits on the critical path here; the operator
@@ -73,7 +73,7 @@ function manualConciergeEnabled(): boolean {
 
 // Where the operator hands the goods to the courier (their own base). Same-hour courier
 // pickup is from HERE, never a store counter — so the retailer third-party-pickup document
-// rules never apply. Configured once via env for the pilot.
+// rules never apply. Configured once via env for same-hour operation.
 function operatorPickup(): { address: string; cep?: string } {
   const address = process.env.LIA_OPERATOR_PICKUP_ADDRESS?.trim();
   const cep = process.env.LIA_OPERATOR_PICKUP_CEP?.replace(/\D/g, "");
@@ -89,6 +89,10 @@ function requireOperatorPickup(): { address: string; cep: string } {
     throw new Error("Configure LIA_OPERATOR_PICKUP_ADDRESS e LIA_OPERATOR_PICKUP_CEP antes de despachar o courier.");
   }
   return { address: pickup.address, cep: pickup.cep };
+}
+
+function customerCoverageLabel(): string {
+  return manualConciergeEnabled() ? "o estado de São Paulo" : coverageLabel();
 }
 
 // Your margin is baked into the product price (no separate fee line). Customer sees
@@ -659,7 +663,7 @@ async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryCo
     ctx.step = "collecting";
     await writeCtx(convoId, ctx);
     if (ctx.cep) await recordWaitlistLead({ phone, cep: ctx.cep, city: ctx.city, uf: ctx.uf, reason });
-    await reply(phone, copy.tooFarForDelivery(ctx.city, coverageLabel()));
+    await reply(phone, copy.tooFarForDelivery(ctx.city, customerCoverageLabel()));
     return;
   }
   const minimumStore = [...new Set((ctx.basket ?? []).map((item) => item.storeKey))]
@@ -849,7 +853,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     }
     await reply(
       phone,
-      copy.serviceAnswer(intent.topic, coverageLabel(), {
+      copy.serviceAnswer(intent.topic, customerCoverageLabel(), {
         hasCep: Boolean(user.cep),
         hasBasket: (ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0
       })
@@ -1002,7 +1006,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     }
     const asking = intent.kind === "free_text" && isQuestion(text);
     if (asking) {
-      await reply(phone, copy.serviceAnswer("generic", coverageLabel()));
+      await reply(phone, copy.serviceAnswer("generic", customerCoverageLabel()));
       ctx.flow = "delivery";
       ctx.step = "need_address";
       await writeCtx(convo.id, ctx);
@@ -1039,7 +1043,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // Pergunta ("o que vc consegue comprar?") se responde — NUNCA vira item anotado.
     const asking = intent.kind === "free_text" && isQuestion(text);
     if (asking) {
-      await reply(phone, copy.serviceAnswer("generic", coverageLabel()));
+      await reply(phone, copy.serviceAnswer("generic", customerCoverageLabel()));
       ctx.flow = "delivery";
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
@@ -1364,7 +1368,7 @@ async function handleStatus(phone: string, userId: string, text?: string) {
   if (!order) {
     // "que horas chega?" sem pedido = pergunta de PRAZO, não de status.
     if (text && /\b(chega|demora|horas|prazo|falta)\b/.test(normalizeMsg(text))) {
-      await reply(phone, copy.serviceAnswer("eta", coverageLabel()));
+      await reply(phone, copy.serviceAnswer("eta", customerCoverageLabel()));
     } else {
       await reply(phone, copy.noOrdersYet());
     }
@@ -1513,12 +1517,16 @@ async function handleNewCep(
 
   // Trava de cobertura: nunca aceita um pedido pago que a operação não entrega. Fora da
   // área → grava o lead (vira mapa de demanda no /ops) e NÃO persiste o CEP nem cota.
-  const area = checkCoverage({ cep, city, uf });
+  // The active concierge has a hard state boundary. Legacy catalog mode keeps its
+  // configurable city/preset behavior for compatibility with the conversation evals.
+  const area = manualConciergeEnabled()
+    ? { covered: isSaoPauloState({ cep, city, uf }), city, uf }
+    : checkCoverage({ cep, city, uf });
   if (!area.covered) {
     await recordWaitlistLead({ phone, cep, city, uf, reason: "outside_coverage" });
     ctx.step = "need_cep";
     await writeCtx(convoId, ctx);
-    await reply(phone, copy.outsideCoverage(city, coverageLabel()));
+    await reply(phone, copy.outsideCoverage(city, customerCoverageLabel()));
     return;
   }
 
@@ -1532,7 +1540,7 @@ async function handleNewCep(
       await recordWaitlistLead({ phone, cep, city, uf, reason: "too_far" });
       ctx.step = "need_cep";
       await writeCtx(convoId, ctx);
-      await reply(phone, copy.tooFarForDelivery(city, coverageLabel()));
+      await reply(phone, copy.tooFarForDelivery(city, customerCoverageLabel()));
       return;
     }
   }

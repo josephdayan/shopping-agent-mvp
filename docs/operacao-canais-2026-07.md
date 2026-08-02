@@ -22,6 +22,17 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 > operação decidiu contratar um operador; os 19 pedidos técnicos em Production não serão limpos
 > sem autorização explícita.
 
+## Atualização vigente — 02/08/2026
+
+A Lia opera **exclusivamente dentro do estado de São Paulo**. O concierge rejeita UF/CEP fora
+de SP antes de cotar ou cobrar; dentro de SP, o endereço exato, o frete e o prazo ainda são
+confirmados pelo operador ou pelo varejista. A primeira validação com pedidos reais é uma etapa
+posterior escolhida pelo operador, não um bloqueio de prontidão.
+
+O deploy público está `Ready`. Para a modalidade de motoboy na hora, ainda é obrigatório
+configurar o endereço e o CEP da base do operador; a modalidade de entrega do próprio varejista
+continua disponível quando o checkout confirmar a promessa.
+
 ## Já encaminhado ou ativo
 
 | Frente | Situação | Observação operacional |
@@ -36,10 +47,10 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 | Cartão One-Click | Código pronto, não ativado | Meta Cloud API direta + Pagar.me; depende de allowlist BR, migrations, domínio/chaves/webhook e sandbox. Não usa 360dialog. |
 | Qualificação externa de Payments | Em andamento | Em 18/07, Samuel Santana enquadrou o volume de MVP (2.000–10.000 mensagens/mês) em Self-Service, remeteu dúvidas técnicas ao Customer Success e ofereceu conta de teste. Não há aprovação técnica, garantia de Cloud API direta, Mercado Pago PJ ou `credential_id`; não aceitar teste que altere WABA/número/sender sem autorização. |
 | Motoboy | Técnica pronta para o concierge | Uber Direct: OAuth e cotação validados. No fluxo ativo, o courier retira o pacote **na base do operador**, nunca no balcão do varejista. |
-| Operação interna | Concierge pronto localmente, pendente de deploy limpo | `/ops` recebe a cotação manual, reaproveita pagamento e une compra + despacho no botão **“Comprei — despachar motoboy”**. Demonstração mockada completa em 21/07; falta piloto real. |
+| Operação interna | Publicada e pronta tecnicamente | `/ops` recebe a cotação manual, reaproveita pagamento e une compra + despacho no botão **“Comprei — despachar motoboy”**. A base do operador ainda precisa ser configurada para despacho real. |
 | Acesso ao `/ops` | Ativo | `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN`. |
-| Área atendida | Em revisão | Estado de SP e guarda de 12 km são legado do motoboy. Na entrega direta, o checkout da loja decide cobertura por CEP. |
-| Piloto por varejista | Oba/Petz em preparação | Oba cobre mercado/essenciais e chegou a `cart_ready` em preflight Browserbase de Production; Petz já tem checkout observado. Boticário aguarda preflight. Carrefour foi desativado. |
+| Área atendida | Ativa — estado de SP | O concierge tem bloqueio rígido de UF/CEP para SP. O checkout/cotação confirma a viabilidade do endereço exato; a guarda de 12 km é legado. |
+| Vitrines e conectores legados | Referência | Oba/Petz/Boticário continuam documentados; Carrefour segue desativado para automação. A vitrine não amplia o escopo geográfico nem substitui a cotação manual. |
 
 ## Atualização operacional — 02/08/2026
 
@@ -52,7 +63,7 @@ O snapshot publicado foi consolidado nos commits `cc3b371` e `971c2a4`; `main` l
 por fast-forward e o worktree ficou limpo. O push remoto de `main` ainda é separado e não foi
 executado.
 
-Para o piloto, foi acrescentado um bloqueio de segurança no despacho: provider Meta não pode
+Para a operação, foi acrescentado um bloqueio de segurança no despacho: provider Meta não pode
 confirmar ao cliente um rastreio mockado. Além disso, o courier só parte depois de existir
 `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` válidos. A Vercel tem os Contexts e
 credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
@@ -60,9 +71,9 @@ credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
 operador.
 
 Antes de qualquer cobrança/compra real, o operador deve preencher a base, conferir
-`LIA_MANUAL_CONCIERGE=true`, manter `PURCHASE_AUTOMATION_MODE=cart_only`, e executar um pedido
-técnico isolado. Mercado Pago PJ/NF, titularidade, pós-venda, rotação da senha Carrefour/PIN do
-WhatsApp e 5–10 pedidos reais continuam pendentes.
+`LIA_MANUAL_CONCIERGE=true` e manter `PURCHASE_AUTOMATION_MODE=cart_only`. Mercado Pago PJ/NF,
+titularidade, pós-venda e rotação da senha Carrefour/PIN do WhatsApp continuam como gates humanos.
+Pedidos reais ficam para a validação que o operador escolher fazer depois.
 
 ## Meta e WhatsApp: estado correto
 
@@ -125,7 +136,7 @@ Para “entrega hoje”, a Lia pode usar a modalidade same-day do próprio varej
 manualmente e chamar o courier **a partir da base do operador**. Não enviar documento do titular
 a entregador on-demand e não usar o courier para retirada no balcão da loja.
 
-## Antes de abrir o piloto
+## Antes de aceitar pedidos pagos em SP
 
 - Usar Mercado Pago PJ e definir emissão de nota fiscal; hoje o Pix ainda está em nome
   pessoal.

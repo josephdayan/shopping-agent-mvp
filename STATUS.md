@@ -30,12 +30,16 @@ de hoje está em
 > operador. A fila de Production contém 19 pedidos técnicos e só pode ser limpa com aprovação
 > explícita.
 
-> **Atualização 02/08.** O deploy de 24/07 foi reconciliado e o commit `fb12645` foi publicado
+> **Atualização 02/08.** A Lia opera **somente no estado de São Paulo**. No concierge, o código
+> rejeita qualquer UF fora de SP (e usa o prefixo do CEP como fallback quando o ViaCEP cai),
+> independentemente dos overrides legados de cobertura. O deploy de 24/07 foi reconciliado e o commit `fb12645` foi publicado
 > como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`), reassumindo `liadelivery.com.br`. As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão explícitas em
 > Production. O código impede despacho mockado quando o provider é Meta e exige endereço + CEP
 > reais da base do operador. A base ainda não foi configurada; `PURCHASE_AUTOMATION_MODE=cart_only`
-> deve ser conferido antes de qualquer pedido real.
+> deve ser conferido antes de qualquer pedido real. A primeira validação com pedidos reais não é
+> pendência de desenvolvimento: fica a critério do operador depois que os gates abaixo estiverem
+> concluídos.
 
 > **Reconciliação de código.** O snapshot publicado foi consolidado no commit `971c2a4`; `main`
 > local foi avançada por fast-forward até ele e o worktree está limpo. O push de `main` para o
@@ -86,7 +90,7 @@ quando existir uma rota urgente formalmente compatível.
 
 | Componente | Status |
 |---|---|
-| **Oba — mercado/essenciais** | ✅ Cotação Browserbase validada em Production em 19/07, ainda em `cart_only`: catálogo VTEX por SKU/vendedor, sacola isolada, simulação por CEP e estoque/frete/prazo obrigatórios. O job técnico chegou a `cart_ready` com arroz Camil 1 kg (R$ 5,99), frete R$ 9,90 e janela de entrega do varejista no CEP público `01310-100` (total R$ 15,89). A chave Browserbase e `OBA_BROWSER_CONTEXT_ID` são Sensitive; migration de defaults Oba aplicada e conferida. Não houve cobrança nem pedido. Falta validação comercial e piloto. |
+| **Oba — mercado/essenciais** | ✅ Cotação Browserbase validada em Production em 19/07, ainda em `cart_only`: catálogo VTEX por SKU/vendedor, sacola isolada, simulação por CEP e estoque/frete/prazo obrigatórios. O job técnico chegou a `cart_ready` com arroz Camil 1 kg (R$ 5,99), frete R$ 9,90 e janela de entrega do varejista no CEP público `01310-100` (total R$ 15,89). A chave Browserbase e `OBA_BROWSER_CONTEXT_ID` são Sensitive; migration de defaults Oba aplicada e conferida. No fluxo ativo, a vitrine é referência e a cotação final é manual. |
 | **Busca Petz** | 🟡 busca ao vivo + cache de 15 min. O preflight novo de 20/07 confirmou SKU/preço/subtotal, alcançou `/checkout/cart/<id>`, mas não recebeu frete/prazo ou controles de entrega no Context; falhou fechada em `needs_human`. O `/ops` agora abre uma sessão viva isolada, sem sacola/pagamento, para o operador selecionar entrega no endereço na Petz; depois disso, o preflight deve ser repetido. |
 | **Busca Boticário** | 🟡 busca ao vivo + cache de 15 min; SKU, preço e URL reais. O novo preflight de 20/07 confirmou novamente SKU B88468, quantidade e subtotal de R$ 16,90, mas não recebeu prazo domiciliar. O link “Entrega Rápida” é informativo e o `postalCode` permanece bloqueado pelo varejista. O parser rejeita promoção de frete grátis e retirada como cotação. Permanece `needs_human`, sem cobrança ou compra. |
 | **Multi-loja + roteamento** | ✅ Oba + Petz + Boticário; **1 loja por pedido**, escolhida por match. |
@@ -101,13 +105,13 @@ quando existir uma rota urgente formalmente compatível.
 | **Testes de compra e conversa** | ✅ Em 19/07, TypeScript, lint, build e 204 testes passaram (162 aprovados; 42 integrações de banco puladas por indisponibilidade do Postgres remoto). Checkout ao vivo continua um gate separado. |
 | **Cotação antes de cobrar** | 🟡 Implementada genericamente para Oba, Petz e Boticário: só libera pagamento depois de itens, total, frete e prazo. Oba e Boticário ainda precisam de preflight Browserbase ao vivo; Petz precisa validar o fluxo genérico atual. Compra final permanece bloqueada em `cart_only`. |
 | **Motoboy (Uber Direct)** | ⚠️ OAuth + cotação funcionam, mas não autorizam retirada em varejistas de consumidor. Só usar com parceiro compatível. |
-| **Cobertura** | ⚠️ O preset de SP e a guarda de 12 km continuam no código, mas são legado do motoboy. Para entrega direta, o checkout do varejista é a autoridade por CEP. |
+| **Cobertura** | ✅ O concierge aceita somente o estado de SP, com bloqueio rígido de UF/CEP. Dentro de SP, o checkout do varejista ou a cotação manual confirma se o endereço, frete e prazo são viáveis. A guarda de 12 km é apenas legado do fluxo antigo. |
 | **Lojas (107 unidades geocodadas)** | ✅ dado útil para parceiros/same-day; proximidade não prova estoque, entrega ou prazo do varejista. |
 | **Landing + domínio** | ✅ **liadelivery.com.br no ar** (HTTPS) — site novo (pôster Petróleo), domínio **verificado na Meta** |
 | **Meta / WhatsApp oficial** | ✅ número aprovado, Cloud API ativa em produção e webhook assinado validado |
 | **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
 | **Pedido mínimo** | ✅ por loja; avisa o cliente p/ completar. |
-| **Painel do operador `/ops`** | 🟡 o fluxo concierge local está pronto: cota qualquer lista, reaproveita pagamento e tem o botão único **“Comprei — despachar motoboy”**. Uma demonstração mockada percorreu o ciclo inteiro. Falta deploy limpo e piloto real; não publicar enquanto a migration Oba de outro trabalho estiver inacabada. |
+| **Painel do operador `/ops`** | ✅ publicado: cota qualquer lista, reaproveita pagamento e tem o botão único **“Comprei — despachar motoboy”**. O despacho real exige `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP`. |
 | **Acesso ao `/ops`** | ✅ `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN` e não foi exposto. |
 | **Onboarding de endereço** | 🟡 o endereço completo é pedido e persistido uma vez no fluxo e está coberto pelos evals; falta validar o resumo/cotação em checkout real. |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
@@ -117,16 +121,21 @@ quando existir uma rota urgente formalmente compatível.
 
 ---
 
-## 4. O que FALTA (por prioridade)
+## 4. O que FALTA para aceitar pedidos pagos (por prioridade)
+
+O limite geográfico já está resolvido: o concierge opera somente no estado de São Paulo.
+O código, o deploy e a proteção de compra estão prontos; a lista abaixo reúne apenas
+configuração e decisões humanas que ainda impedem dinheiro real. A validação de pedidos fica
+para quando o operador decidir, depois desses gates.
 
 ### 🔴 O que destrava o produto
-- **Publicação limpa do concierge:** separar/concluir a migration Oba inacabada antes de
-  implantar `bb48c2e` + `7ab8453`. Não misturar esses trabalhos no deploy.
-- **Operação humana:** contratar o operador e usar [o runbook](docs/operador-runbook.md) para
-  o piloto. A demonstração local não substitui pedidos reais.
+- **Base para motoboy na hora:** preencher `LIA_OPERATOR_PICKUP_ADDRESS` e
+  `LIA_OPERATOR_PICKUP_CEP` na Vercel. A entrega do próprio varejista pode ser usada quando
+  o checkout confirmar essa modalidade.
+- **Operação humana:** contratar o operador e usar [o runbook](docs/operador-runbook.md).
 - **Fila técnica:** há 19 pedidos de teste em Production. A limpeza é uma ação de produção e
   permanece pendente de aprovação explícita.
-- **Prioridade atual (19/07):** o Context persistente, a configuração e o preflight técnico do
+- **Histórico do fluxo legado (19/07):** o Context persistente, a configuração e o preflight técnico do
   Oba já foram validados em Production em `cart_only`. Petz e Boticário chegaram a carrinhos reais,
   mas ambos falharam fechados antes de preço de entrega/prazo: Petz não expôs os campos na sacola
   completa; Boticário não liberou a confirmação de CEP. Resolver esses gates antes de repetir os

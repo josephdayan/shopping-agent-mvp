@@ -10,10 +10,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > WhatsApp (largura + cotação/compra do operador + motoboy saindo da base do operador).
 > Racional e contrato em [AGENTS.md](AGENTS.md) (topo). Muitos itens abaixo, escritos para a
 > automação por varejista, viram **referência do fluxo legado** (atrás de
-> `LIA_MANUAL_CONCIERGE=false`). Novo P0 do piloto: **rodar 5–10 pedidos concierge manuais**
-> medindo demanda, margem após frete e tempo por pedido; titularidade/NF seguem bloqueio
-> antes do público. Código do fluxo manual: TypeScript, lint, testes focados e build verdes
-> em 2026-07-20 (`tests/manual-concierge.test.ts`).
+> `LIA_MANUAL_CONCIERGE=false`). O P0 atual é **de prontidão operacional no estado de São Paulo**:
+> escopo geográfico rígido, configuração segura, operador e gates fiscais/financeiros. A
+> primeira validação com pedidos reais é opcional e fica para a decisão do operador; não é
+> uma pendência de desenvolvimento. Código do fluxo manual: TypeScript, lint, testes focados
+> e build verdes (`tests/manual-concierge.test.ts`).
 
 > **Atualização de 21/07.** `bb48c2e` (fluxo), `ededf6a` (docs) e `7ab8453` (kit do operador)
 > estão verdes localmente. Uma demonstração mockada percorreu cotação de R$100 → Pix
@@ -22,19 +23,21 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
 > pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
 
-> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371`,
+> **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
+> UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
+> O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371`,
 > `971c2a4` e `fb12645`; `main` local foi avançada por fast-forward. A versão final foi
 > publicada como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
-> base na Vercel, conferir `PURCHASE_AUTOMATION_MODE=cart_only` e executar um pedido técnico
-> isolado.
+> base na Vercel e conferir `PURCHASE_AUTOMATION_MODE=cart_only`; a validação real será feita
+> pelo operador quando ele considerar o sistema pronto.
 
 ## Como usar
 
-- **P0:** bloqueia o piloto ou pode causar perda financeira, jurídica ou operacional.
+- **P0:** bloqueia aceitar pedidos pagos ou pode causar perda financeira, jurídica ou operacional.
 - **P1:** necessário para o lançamento público.
-- **P2:** melhoria posterior; não deve atrasar o piloto controlado.
+- **P2:** melhoria posterior; não deve atrasar a operação inicial em SP.
 - Registre evidência curta no próprio item ou no documento relacionado antes de marcá-lo.
 - “Código pronto” não significa “validado”: teste ao vivo, deploy e operação são etapas
   distintas.
@@ -52,10 +55,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Fundamento de One-Click Meta + Pagar.me implementado atrás de flag, com tentativa
   idempotente, página de tokenização e reconciliação por webhook. Evidência:
   `docs/whatsapp-one-click-pagarme.md`; build e testes focados de 14/07/2026.
-- [ ] Fluxo completo cotar → cobrar → comprar → entregar validado em piloto.
+- [ ] Fluxo completo cotar → cobrar → comprar → entregar validado com pedido real pelo operador.
 - [ ] Operação, jurídico e pós-venda aprovados para lançamento público.
 
-## P0 — antes do primeiro piloto com dinheiro real
+## P0 — antes de aceitar pedidos pagos em São Paulo
 
 ### Concierge manual — prioridade vigente
 
@@ -65,17 +68,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Criar o kit de operação: botão único **“Comprei — despachar motoboy”** e
   [runbook de uma página](docs/operador-runbook.md).
 - [ ] Contratar e treinar o operador antes do primeiro pedido real.
-- [ ] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
+- [x] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
   misturar a publicação com o trabalho paralelo do Oba.
 - [ ] Limpar os 19 pedidos técnicos de Production **somente após autorização explícita**.
-- [ ] Rodar 5–10 pedidos concierge reais, registrando tempo de cotação, margem depois do frete,
-  falhas e satisfação. A demonstração mockada não conta como piloto.
+- [ ] (Opcional, após a prontidão) Registrar pedidos reais, tempo de cotação, margem depois do
+  frete, falhas e satisfação. Essa validação é decisão do operador e não bloqueia o código.
 - [x] Falhar fechado quando produção Meta não tiver despacho real do courier; o modo mock permanece
   disponível somente para testes locais.
 - [x] Bloquear a publicação de cotação de motoboy quando a base do operador não tiver endereço e
   CEP configurados; a checagem também é repetida no despacho.
 - [ ] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
-  Production antes de liberar o botão de despacho do piloto.
+  Production antes de liberar o botão de despacho real.
 
 ### Cotação e cobrança
 
@@ -148,7 +151,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 - [x] Manter produção com `PURCHASE_AUTOMATION_MODE=cart_only`.
 - [x] Não armazenar cartão, CVV, senha ou credenciais do varejista no banco/documentação.
-- [ ] Exigir confirmação explícita no momento de qualquer compra final durante o piloto.
+- [ ] Exigir confirmação explícita no momento de qualquer compra final.
 - [x] Tratar login, OTP, CAPTCHA, CVV e 3DS como `needs_human`. A detecção Carrefour
   cobre login/sessão expirada, CAPTCHA e 3DS; os testes unitários confirmam a classificação.
 - [x] Implementar fila ou isolamento por conta/Context Browserbase para impedir carrinhos
@@ -220,7 +223,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 ### Financeiro, fiscal e jurídico
 
-- [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes do piloto.
+- [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos.
 - [ ] Definir quem é o comprador perante o varejista e quem aparece como titular da nota
   fiscal.
 - [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
@@ -410,23 +413,24 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Medir latência p50/p95 por varejista; meta inicial de 15–30 s para cotação completa.
 - [ ] Configurar alertas para falha de webhook, cobrança, carrinho, compra e estorno.
 
-### Piloto e lançamento
+### Validação real e lançamento público (decisão do operador)
 
-- [ ] Definir grupo, limite de pedidos, ticket máximo, região e horário do piloto.
-- [ ] Rodar de 5 a 10 pedidos concierge controlados, com compra manual e acompanhamento humano.
+- [ ] Definir grupo, limite de pedidos, ticket máximo, região e horário da primeira validação.
+- [ ] Rodar de 5 a 10 pedidos concierge controlados, com compra manual e acompanhamento humano,
+  quando o operador decidir validar.
 - [ ] Registrar sucesso, tempo, margem, falhas, estornos e satisfação de cada pedido.
 - [ ] Corrigir todos os incidentes financeiros P0 encontrados no piloto.
 - [ ] Aprovar checklist final de operação, jurídico, financeiro e suporte.
 - [ ] Definir critérios objetivos de `go/no-go` para abrir ao público.
 
-## P2 — expansão depois do piloto
+## P2 — expansão depois da prontidão inicial
 
 - [ ] Obter parceiro local ou contrato merchant/courier que autorize retirada por terceiro
   para oferecer same-day fora da entrega do varejista.
 - [ ] Reavaliar Uber Direct somente para parceiros com autorização operacional formal.
 - [ ] Criar pool de contas/Contexts isolados para aumentar concorrência por varejista.
 - [ ] Avaliar novas lojas usando o mesmo gate: busca real, carrinho, entrega, termos,
-  pagamento, pós-venda e piloto.
+  pagamento e pós-venda.
 - [ ] Automatizar conciliação financeira e cálculo de margem por pedido.
 - [ ] Criar painel de SLA por loja e modalidade de entrega.
 

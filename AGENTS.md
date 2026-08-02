@@ -9,7 +9,7 @@ projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
 2. [PENDENCIAS.md](PENDENCIAS.md) — checklist canônico de progresso e lançamento;
 3. [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md) —
    evidências e decisão operacional vigente;
-4. [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md) — canais e piloto;
+4. [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md) — canais e operação;
 5. [docs/automacao-compra-varejistas.md](docs/automacao-compra-varejistas.md) — automação
    segura de cotação e compra por varejista;
 6. [CLAUDE.md](CLAUDE.md) — histórico de arquitetura e decisões.
@@ -28,6 +28,10 @@ bloqueou o Browserbase em 19/07; Petz/Boticário não expõem frete no Context h
   mensagem só. Item fora de catálogo **não é recusado** — vira uma linha livre que o
   operador cota e compra. O moat é a largura + estar no WhatsApp (onde o Rappi não está) +
   memória do cliente. Velocidade pura contra Rappi/iFood é armadilha e não é o jogo.
+- **Escopo geográfico**: a Lia opera **somente no estado de São Paulo**. No concierge, a
+  fronteira de UF é rígida: CEP/UF fora de SP vira lista de espera e nunca chega a cotação,
+  cobrança ou compra. Dentro de SP, o CEP exato, a disponibilidade do varejista e o frete
+  ainda precisam ser confirmados pedido a pedido.
 - **Cotação manual**: ao fechar a lista (`"só isso"`/`"pagar"`), a Lia cria um pedido em
   `awaiting_operator_quote`. O operador cota no `/ops` (custo dos produtos + frete +
   modalidade + prazo) e envia; o pedido reaproveita `awaiting_quote_confirmation` e toda a
@@ -40,11 +44,12 @@ bloqueou o Browserbase em 19/07; Petz/Boticário não expõem frete no Context h
   cotação por checkout automatizado e as guardas de distância de loja não rodam. O fluxo
   legado de catálogo/auto-cotação permanece atrás de `LIA_MANUAL_CONCIERGE=false` (é o que os
   evals de conversa continuam exercitando).
-- **Envs novos**: `LIA_MANUAL_CONCIERGE` (default on), `LIA_OPERATOR_PICKUP_ADDRESS`,
-  `LIA_OPERATOR_PICKUP_CEP` (base de onde o motoboy retira).
-- **Próximo passo**: piloto manual de 5–10 pedidos reais medindo demanda, margem após frete e
-  tempo por pedido. Titularidade/NF continuam pendência antes do público. Código: TypeScript,
-  lint, testes focados (fluxo manual + evals legados) e build verdes em 2026-07-20.
+- **Envs novos**: `LIA_MANUAL_CONCIERGE` (default on), `LIA_COVERAGE_PRESET=estado-sp`,
+  `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` (base de onde o motoboy retira).
+- **Prontidão**: o código e a publicação devem ficar configurados para operar em SP antes de
+  aceitar dinheiro real. A primeira validação com pedidos reais é uma decisão do operador,
+  não uma pendência de desenvolvimento. Titularidade/NF continuam exigências para abertura
+  pública. TypeScript, lint, testes focados (fluxo manual + evals legados) e build estão verdes.
 - **Estado em 21/07**: os commits `bb48c2e` (fluxo), `ededf6a` (documentação) e `7ab8453`
   (kit do operador) estão verdes localmente. Um pedido concierge percorreu, em ambiente local
   mockado e sem cobrança, cotação → Pix confirmado → compra → despacho pela base do operador →
@@ -88,7 +93,7 @@ Pendências humanas: piloto 5–10 pedidos, titularidade/NF, rotação de senha 
 O restante deste arquivo descreve o fluxo legado de automação por varejista; ele continua
 válido como referência, mas **o produto ativo é o concierge manual acima**.
 
-### Atualização 02/08/2026 — reconciliação de produção e segurança do piloto
+### Atualização 02/08/2026 — reconciliação de produção, escopo SP e segurança operacional
 
 - O deploy limpo de 24/07 continua sendo a versão pública: concierge manual, kit do operador,
   11 vitrines e correção de roteamento. A landing responde 200; `/ops` abre a interface, mas as
@@ -96,16 +101,18 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
 - O snapshot publicado foi consolidado no Git sem descartar alterações do usuário. `main` foi
   avançada localmente por fast-forward até o commit `971c2a4`, igualando a branch publicada;
   o worktree está limpo. O push remoto de `main` ainda é uma ação separada.
-- O item de segurança do piloto foi reforçado no código: em produção Meta, despacho mockado do
+- O item de segurança operacional foi reforçado no código: em produção Meta, despacho mockado do
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
   e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.
 - A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas, mas não
   encontrou configuração explícita da base do operador. `LIA_MANUAL_CONCIERGE=true` e
   `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` foram gravadas em Production e o commit `fb12645`
-  foi publicado como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). Não iniciar pedido real até
-  preencher endereço/CEP da base e confirmar `PURCHASE_AUTOMATION_MODE=cart_only`.
-- Continuam bloqueios humanos: contratar/treinar operador, Mercado Pago PJ e nota fiscal,
-  titularidade e pós-venda, rotação da senha Carrefour e PIN WhatsApp, e o piloto de 5–10 pedidos.
+  foi publicado como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). O código agora impõe
+  `estado-sp` no concierge, mesmo que um override legado tente ampliar ou desligar a cobertura.
+- Para considerar a operação pronta para uso real, falta somente completar a configuração da
+  base do operador (se a modalidade for motoboy na hora), confirmar `PURCHASE_AUTOMATION_MODE=cart_only`
+  e concluir os gates humanos de Mercado Pago PJ/NF, titularidade, pós-venda e rotação de segredos.
+  A validação real fica para quando o operador decidir; não é um gate técnico chamado de piloto.
 
 ## O produto
 
@@ -153,7 +160,7 @@ Fontes e detalhes:
 6. Cliente paga a Lia por Pix, Checkout Pro ou, quando habilitado, One-Click nativo no
    WhatsApp com Pagar.me.
 7. Lia revalida itens, total, endereço e prazo.
-8. Compra segue em `cart_only`/aprovação explícita durante o piloto.
+8. Compra segue em `cart_only`/aprovação explícita durante a operação.
 9. Varejista entrega; Lia acompanha e comunica o cliente.
 
 O comportamento legado que cobra primeiro e só monta a sacola depois deve ser invertido.

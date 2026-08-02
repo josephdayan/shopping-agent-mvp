@@ -6,10 +6,11 @@ Ele substitui a premissa anterior de que uma compra comum em `clique-e-retire` p
 coletada em escala por qualquer motoboy.
 
 > **Registro posterior — 02/08/2026.** A decisão de produto mais recente é o concierge manual
-> de largura descrito no topo de [AGENTS.md](../AGENTS.md). O deploy limpo de 24/07 está online.
-> Em produção Meta, despacho mockado agora falha fechado e o courier exige endereço/CEP reais
-> da base do operador. O piloto continua bloqueado por configuração da base, Mercado Pago PJ/NF,
-> titularidade/pós-venda, rotação de credenciais expostas e 5–10 pedidos reais. O histórico
+> de largura descrito no topo de [AGENTS.md](../AGENTS.md). A Lia opera somente no estado de
+> São Paulo, o deploy limpo de 24/07 está online e, em produção Meta, despacho mockado falha
+> fechado. O courier exige endereço/CEP reais da base do operador. Permanecem gates de
+> configuração e humanos (base, Mercado Pago PJ/NF, titularidade/pós-venda e rotação de
+> credenciais expostas); a validação com pedidos reais fica a critério do operador. O histórico
 > abaixo permanece válido para explicar por que não usamos retirada no balcão.
 
 ## Resumo executivo
@@ -634,3 +635,17 @@ limpeza do item anterior; o conector passou a reler o botão de remoção antes 
 precisa ser revalidado. No Boticário, o único link adicional exposto (“Entrega Rápida”) foi testado
 e navegou para uma página informativa, sem frete, prazo ou sacola: ele não é um passo válido da
 cotação e foi removido do fluxo. Nenhuma ação financeira foi executada.
+
+## Registro vigente — 02/08/2026: escopo estadual e prontidão
+
+A Lia opera somente no estado de São Paulo. No concierge manual, a UF fora de SP é rejeitada
+antes de cotação, cobrança ou compra; quando o ViaCEP não responde, o prefixo do CEP mantém a
+mesma fronteira. Overrides legados (`LIA_COVERAGE_OFF`, cidades ou UFs) não podem ampliar o
+concierge para fora de SP. Dentro do estado, o endereço exato, o frete, o prazo e a disponibilidade
+continuam sendo confirmados por pedido.
+
+O produto está publicado em produção com `LIA_MANUAL_CONCIERGE=true`, `cart_only` e bloqueio de
+despacho mockado no provider Meta. A primeira validação com pedidos reais é uma decisão posterior
+do operador, não uma pendência de desenvolvimento. Antes de aceitar dinheiro real, permanecem
+somente os gates humanos e de configuração: base do operador para motoboy na hora, Mercado Pago
+PJ/NF, titularidade/pós-venda e rotação dos segredos expostos.

@@ -1,7 +1,7 @@
 import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { checkCoverage, normalizeCity, coverageLabel } from "../src/lib/coverage";
+import { checkCoverage, isSaoPauloState, normalizeCity, coverageLabel } from "../src/lib/coverage";
 
 // Guard the env we toggle so tests don't leak into each other.
 function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
@@ -33,6 +33,14 @@ const cleanEnv = {
 test("normalizeCity strips accents and case", () => {
   assert.equal(normalizeCity("São Paulo"), "sao paulo");
   assert.equal(normalizeCity("  SANTO   ANDRÉ "), "santo andre");
+});
+
+test("active concierge boundary accepts all SP and rejects every other state", () => {
+  assert.equal(isSaoPauloState({ city: "Campinas", uf: "SP", cep: "13010000" }), true);
+  assert.equal(isSaoPauloState({ city: "Santos", uf: "sp", cep: "11010000" }), true);
+  assert.equal(isSaoPauloState({ city: "Rio de Janeiro", uf: "RJ", cep: "20040000" }), false);
+  assert.equal(isSaoPauloState({ cep: "13010000" }), true);
+  assert.equal(isSaoPauloState({ cep: "20040000" }), false);
 });
 
 test("default coverage = São Paulo capital (city known)", () => {
