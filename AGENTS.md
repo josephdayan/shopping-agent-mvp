@@ -96,7 +96,9 @@ foram para produção (`dpl_9upchNgpPZ15…`, READY). **Suíte completa 209/209 
 TypeScript, lint e build limpos. `liadelivery.com.br` responde (landing 200, `/ops` 401,
 webhook 403). A vitrine profunda ainda NÃO aparece pro cliente no concierge (fluxo é livre →
 operador); mostrar opções com foto seria a "vitrine híbrida" — decisão de produto em aberto.
-Pendências humanas: piloto 5–10 pedidos, titularidade/NF, rotação de senha Carrefour e PIN.
+Pendências humanas: conciliar os 7 pedidos pagos antigos, documentar a rotina fiscal do MEI,
+rotacionar a senha Carrefour/PIN do WhatsApp e as demais credenciais expostas. A validação com
+pedidos reais é opcional e não é requisito de desenvolvimento.
 
 O restante deste arquivo descreve o fluxo legado de automação por varejista; ele continua
 válido como referência, mas **o produto ativo é o concierge manual acima**.
