@@ -37,6 +37,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > de contador fixo; a rotina fiscal e o tipo de documento para cada caso ainda precisam ser
 > documentados.
 
+> **Atualização de 02/08 (2ª rodada).** Quatro decisões do dono: (1) **ele mesmo opera o
+> piloto** — não haverá contratação de operador agora; (2) a conta Mercado Pago
+> provavelmente já é PJ — falta só a conferência de 30 s no painel (API local sem escopo);
+> (3) rotina fiscal **decidida e documentada** em
+> [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md); (4) as rotações de credenciais
+> expostas foram **abandonadas como gate** ("esquece isso") — risco aceito, registrado.
+> Verificação técnica do dia: suíte completa **213/213 verde com banco**, `tsc` limpo,
+> produção `READY` no commit `a700290`, landing/`/ops`/webhook respondendo corretamente.
+> Vitrine em runtime: **7.652 produtos em 11 lojas** (Decathlon serve só 4 itens após o
+> filtro de imagem).
+
 ## Como usar
 
 - **P0:** bloqueia aceitar pedidos pagos ou pode causar perda financeira, jurídica ou operacional.
@@ -71,7 +82,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   focados, copy e demonstração local mockada em 21/07.
 - [x] Criar o kit de operação: botão único **“Comprei — despachar motoboy”** e
   [runbook de uma página](docs/operador-runbook.md).
-- [ ] Contratar e treinar o operador antes do primeiro pedido real.
+- [x] Definir quem opera o piloto: decisão do dono em 02/08 — **ele mesmo opera** os
+  primeiros pedidos (cotação, compra e despacho no `/ops`). Contratação de operador fica
+  para depois do piloto, se houver volume.
 - [x] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
   misturar a publicação com o trabalho paralelo do Oba.
 - [x] Limpar os preflights internos sem pagamento de Production após autorização explícita:
@@ -170,6 +183,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   Context para login humano. Em 19/07, a autenticação remota foi explicitamente bloqueada
   pelo Carrefour; não repetir nem tentar contornar. Reavaliar este critério por varejista,
   começando pela sessão Petz já validada.
+- **Decisão do dono em 02/08:** as rotações de credenciais abaixo foram **abandonadas como
+  gate de piloto** ("esquece isso"). Os itens permanecem registrados como risco conhecido e
+  aceito; nenhuma rotação foi executada. Reabrir somente por novo pedido explícito ou
+  incidente.
 - [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
   os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
   em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
@@ -230,7 +247,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 ### Financeiro, fiscal e jurídico
 
 - [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos;
-  decisão tomada: recebimento e operação financeira serão sempre na PJ.
+  decisão tomada: recebimento e operação financeira serão sempre na PJ. **02/08:** o dono
+  acredita que a conta já é PJ; a checagem via API local foi inconclusiva (token sem escopo
+  para `users/me`). Confirmar no painel do MP: Configurações → Dados da conta/negócio →
+  deve constar o CNPJ 67.742.955. O nome que aparece para quem paga o Pix também denuncia:
+  razão social = PJ, nome civil = PF.
 - [x] Decisão operacional de titularidade: a PJ/MEI é a compradora/titular da operação perante
   o cliente e o varejista. Não há obrigação de contratar contador fixo.
 - [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
@@ -245,9 +266,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   excepcional do `/ops`.
 - [x] Responsabilidade de comunicação por atraso: avisar o cliente assim que a Lia souber do
   atraso, sem prometer compensação ou substituição.
-- [ ] Documentar a rotina fiscal da Lia: para MEI, PF é dispensado de NF salvo solicitação e PJ
-  exige documento fiscal; ainda falta definir, para cada formato de operação, se será NF-e,
-  NFS-e ou outro documento. Isso pode ser resolvido com orientação pontual, sem contador mensal.
+- [x] Documentar a rotina fiscal da Lia. Decidido e documentado em 02/08 em
+  [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md): enquadramento de serviço de
+  intermediação; NF do produto é a do varejista; NFS-e pelo Emissor Nacional só quando PF
+  pedir ou cliente for PJ; rotina mensal DAS + relatório de receitas + DASN anual. Resta uma
+  confirmação contábil pontual pré-lançamento público (receita bruta = markup ou total).
 
 ### Cartão One-Click no WhatsApp
 

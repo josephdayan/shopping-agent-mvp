@@ -45,6 +45,21 @@ de hoje está em
 > local foi avançada por fast-forward até ele e o worktree está limpo. O push de `main` para o
 > GitHub ainda não foi feito.
 
+> **02/08 — 2ª rodada (decisões do dono + verificação).** O piloto será operado pelo próprio
+> dono (sem contratar operador). Rotina fiscal decidida e documentada em
+> [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md). Rotação das credenciais expostas
+> abandonada como gate de piloto (risco aceito). Conta Mercado Pago: conferir no painel se já
+> é PJ (o dono acredita que sim; API local sem escopo para confirmar). Verificação técnica:
+> suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` no commit `a700290`,
+> landing/`/ops`/webhook OK. Vitrine em runtime: **7.652 produtos em 11 lojas** — Carrefour
+> 1.045, Petz 2.812, Boticário 1.380, Ri Happy 1.196, Swift 925, Kopenhagen 248, Kalunga 15,
+> Droga Raia 13, Cacau Show 12, Decathlon 4 (filtro de imagem corta 13 dos 17), Oba 2
+> (busca ao vivo em prod). Lacunas de demanda mapeadas (e-commerce/delivery BR): farmácia
+> não-remédio (Droga Raia só 13 itens de seed), bebidas/adega dedicada, flores/presentes,
+> eletrônicos/acessórios, moda básica e hortifruti fresco (Oba ao vivo cobre em tese). No
+> concierge nada disso bloqueia pedido — item fora de vitrine vira linha livre que o operador
+> cota; as lacunas afetam só a vitrine com foto.
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;

@@ -126,6 +126,16 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   pagamento, estornar item faltante e avisar atraso. Restam a confirmação contábil do documento
   fiscal exato, a confirmação operacional da conta Mercado Pago PJ e a rotação de segredos. A
   validação real fica para quando o operador decidir; não é um gate técnico.
+- **2ª rodada de 02/08 — decisões do dono:** (1) o piloto será operado **pelo próprio dono**,
+  sem contratar operador agora; (2) a rotina fiscal foi decidida e documentada em
+  [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md) (intermediação de compras; NF do
+  produto é a do varejista; NFS-e só para PF que pedir ou cliente PJ; resta confirmação
+  contábil pontual do teto de receita antes do lançamento público); (3) a rotação das
+  credenciais expostas foi **abandonada como gate de piloto** — risco aceito e registrado,
+  reabrir só por pedido explícito ou incidente; (4) a conta Mercado Pago deve ser conferida
+  no painel (o dono acredita que já é PJ; a API local não teve escopo para confirmar).
+  Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
+  `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 
 ## O produto
 
