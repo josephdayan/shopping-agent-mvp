@@ -32,7 +32,7 @@ export function help(): string {
     "3. Você paga por Pix ou cartão",
     "4. Chega na sua casa em ~1h 🛵",
     "",
-    "Também entendo *status* (acompanhar o pedido), *trocar endereço*, *tira o item X*, *cancelar* e *repete o de sempre*."
+    "Também entendo *status* (acompanhar o pedido), *trocar endereço*, *tira o item X* e *repete o de sempre*. Antes de pagar, você pode limpar a lista."
   ].join("\n");
 }
 
@@ -508,11 +508,11 @@ export function canceledUnpaid(): string {
 }
 
 export function cancelRequestedPaid(): string {
-  return "Deixa comigo — já pedi o cancelamento pra equipe e te confirmo o estorno por aqui em instantes. 🙏";
+  return "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se houver atraso, eu aviso. 🙏";
 }
 
 export function cancelTooLate(): string {
-  return "Esse já saiu pra entrega, então não consigo mais cancelar 😅. Qualquer problema com o pedido, me chama que eu resolvo!";
+  return "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se houver atraso, eu aviso.";
 }
 
 export function nothingToCancel(): string {
@@ -536,7 +536,7 @@ export function delivered(): string {
 }
 
 export function refundRequested(): string {
-  return "Seu pedido foi cancelado. O estorno ficou pendente de processamento pela equipe — eu te aviso quando for confirmado. 🙏";
+  return "O estorno ficou pendente de processamento pela equipe — eu te aviso quando for confirmado. 🙏";
 }
 
 export function refundConfirmed(): string {
@@ -694,13 +694,13 @@ export function humanHandoff(): string {
 }
 
 export function complaintAck(): string {
-  return "Poxa, sinto muito por isso 😔 Já passei sua mensagem pra equipe — vamos resolver. Me conta o que aconteceu (ou manda uma foto) que a gente dá um jeito: troca ou estorno, o que preferir.";
+  return "Poxa, sinto muito por isso 😔 Já passei sua mensagem pra equipe. Se faltar algum item, estornamos o valor dele; se houver atraso, eu te aviso. Por enquanto não fazemos substituições.";
 }
 
-export function cancelHowTo(hasActiveOrder: boolean): string {
-  return hasActiveOrder
-    ? 'Consegue sim! É só responder *cancelar* que eu cancelo pra você. Se o pedido já saiu pra entrega aí não dá mais, tá? 🙂'
-    : 'Consegue sim — quando tiver um pedido em andamento, é só dizer *cancelar*. Agora mesmo você não tem nenhum aberto. 🙂';
+export function cancelHowTo(hasPaidOrder: boolean): string {
+  return hasPaidOrder
+    ? "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se atrasar, eu aviso."
+    : "Antes do pagamento, você pode limpar a lista a qualquer momento. Depois que pagar, não oferecemos cancelamento. 🙂";
 }
 
 export function cartExpired(): string {

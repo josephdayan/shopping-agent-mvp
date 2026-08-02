@@ -25,14 +25,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
 > UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
-> O deploy limpo foi reconciliado no commit `5a47d63`; `main` local está alinhada. A versão
-> final foi publicada como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`). As flags
+> O deploy limpo está publicado como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. A base do operador foi configurada como Sensitive
 > na Vercel e `PURCHASE_AUTOMATION_MODE=cart_only` está fixo. Dos 19 registros da fila, 12
 > preflights internos sem pagamento foram removidos com autorização; 7 pedidos pagos ficaram
-> preservados para conciliação/estorno. A validação real será feita pelo operador quando ele
-> considerar o sistema pronto.
+> preservados para conciliação/estorno. A decisão financeira é operar na PJ e manter a PJ como
+> titularidade operacional. Pós-venda: antes do pagamento, limpar a lista; depois, sem
+> cancelamento/substituição, estorno de item faltante e aviso de atraso. A validação real será
+> feita pelo operador quando ele considerar o sistema pronto; a obrigação e o tipo de documento
+> fiscal ainda dependem do contador.
 
 ## Como usar
 
@@ -226,16 +228,26 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 ### Financeiro, fiscal e jurídico
 
-- [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos.
-- [ ] Definir quem é o comprador perante o varejista e quem aparece como titular da nota
-  fiscal.
+- [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos;
+  decisão tomada: recebimento e operação financeira serão sempre na PJ.
+- [x] Decisão operacional de titularidade: a PJ é a compradora/titular da operação perante o
+  cliente e o varejista. O contador ainda precisa confirmar o documento fiscal correspondente
+  a cada tipo de operação.
 - [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
   central.
 - [ ] Validar nos termos de Petz, Carrefour e Boticário se o uso operacional da conta
   central é permitido.
-- [ ] Definir processo de cancelamento, troca, devolução, item faltante e chargeback.
-- [ ] Definir responsabilidade e comunicação quando o varejista atrasar ou não entregar.
-- [ ] Confirmar emissão fiscal e tributação da taxa/serviço cobrado pela Lia.
+- [x] Regra de pós-venda: antes do pagamento, o cliente pode limpar a lista; depois do pagamento
+  não há cancelamento iniciado pelo cliente nem substituição; item faltante gera estorno do
+  próprio item; atraso é comunicado ao cliente.
+- [ ] Fechar o procedimento operacional e a integração de estorno parcial por item, além de
+  devolução/chargeback quando aplicável. O estorno integral do pedido continua sendo uma ação
+  excepcional do `/ops`.
+- [x] Responsabilidade de comunicação por atraso: avisar o cliente assim que a Lia souber do
+  atraso, sem prometer compensação ou substituição.
+- [ ] Confirmar com o contador se a operação exige NF-e, NFS-e ou outro documento, e como
+  tributar a taxa/serviço cobrado pela Lia. Emissão não é automaticamente obrigatória em toda
+  venda a pessoa física, mas a regra muda conforme destinatário e enquadramento.
 
 ### Cartão One-Click no WhatsApp
 

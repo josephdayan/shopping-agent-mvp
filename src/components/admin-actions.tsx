@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Ban, CheckCircle2, FastForward, PackageCheck, RefreshCw, RotateCcw, Truck } from "lucide-react";
+import { Ban, CheckCircle2, FastForward, PackageCheck, RefreshCw, Truck } from "lucide-react";
 import { useState } from "react";
 
 export default function AdminActions({
@@ -16,7 +16,7 @@ export default function AdminActions({
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
 
-  async function call(action: "approve" | "advance" | "purchased" | "delivered" | "substitution" | "cancel-refund") {
+  async function call(action: "approve" | "advance" | "purchased" | "delivered" | "cancel-refund") {
     if (!orderId) {
       router.refresh();
       return;
@@ -72,14 +72,6 @@ export default function AdminActions({
       >
         <Truck size={14} />
         Entregue
-      </button>
-      <button
-        disabled={loading !== null}
-        onClick={() => call("substitution")}
-        className="inline-flex items-center gap-2 rounded-md border border-lia-warning/50 px-3 py-2 text-xs font-semibold text-lia-warning disabled:cursor-not-allowed disabled:opacity-45"
-      >
-        <RotateCcw size={14} />
-        Substituir
       </button>
       <button
         disabled={loading !== null}

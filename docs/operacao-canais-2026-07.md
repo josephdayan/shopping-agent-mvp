@@ -17,10 +17,9 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 
 > **Atualização de 21/07 — fluxo ativo.** A Lia é agora concierge manual: o operador cota e
 > compra qualquer pedido, e o motoboy sai da sua base com o pacote em mãos. O ciclo completo foi
-> demonstrado localmente, mockado e sem cobrança. O deploy do concierge aguarda separação de uma
-> migration Oba inacabada; até lá, os conectores permanecem apenas referência/fluxo legado. A
-> operação decidiu contratar um operador; os 19 pedidos técnicos em Production não serão limpos
-> sem autorização explícita.
+> demonstrado localmente, mockado e sem cobrança. O deploy público está separado e `Ready`; a
+> base do operador foi configurada em Production e os preflights internos sem pagamento foram
+> removidos com autorização. Pedidos pagos antigos permanecem para conciliação/estorno.
 
 ## Atualização vigente — 02/08/2026
 
@@ -29,9 +28,15 @@ de SP antes de cotar ou cobrar; dentro de SP, o endereço exato, o frete e o pra
 confirmados pelo operador ou pelo varejista. A primeira validação com pedidos reais é uma etapa
 posterior escolhida pelo operador, não um bloqueio de prontidão.
 
-O deploy público está `Ready`. Para a modalidade de motoboy na hora, ainda é obrigatório
-configurar o endereço e o CEP da base do operador; a modalidade de entrega do próprio varejista
-continua disponível quando o checkout confirmar a promessa.
+O deploy público está `Ready`. Para a modalidade de motoboy na hora, a base configurada é
+`Rua Engenheiro Edgar Egidio de Souza 221 ap 13`, CEP `01233020` (segredo operacional em
+Production); a modalidade de entrega do próprio varejista continua disponível quando o checkout
+confirmar a promessa.
+
+O recebimento será sempre pela PJ e a PJ é a titularidade operacional da compra. No pós-venda,
+antes do pagamento o cliente pode limpar a lista; depois do pagamento não há cancelamento
+iniciado pelo cliente nem substituição; item faltante gera estorno do item e atraso é comunicado.
+O estorno parcial ainda é executado manualmente e auditado pela referência do provedor.
 
 ## Já encaminhado ou ativo
 
@@ -41,13 +46,13 @@ continua disponível quando o checkout confirmar a promessa.
 | Meta / WhatsApp oficial | Ativo | Sender `+55 11 97844-4813` aprovado e registrado na Cloud API, com webhook assinado. |
 | Canal de teste | Legado | Twilio Sandbox fica como referência de teste; a produção usa a Cloud API da Meta. |
 | E-mail do domínio | Configurado | `contato@liadelivery.com.br` está configurado no ImprovMX e é o canal para resolver a verificação da Meta. |
-| Formalização | Encaminhada | MEI/CNPJ aberto; falta alinhar a conta Mercado Pago PJ e emissão de nota. |
+| Formalização | Encaminhada | Operação definida na PJ; falta alinhar a conta Mercado Pago PJ e o documento fiscal com o contador. |
 | Pix | Real e testado | Mercado Pago gera Pix copia-e-cola e recebe confirmação pelo webhook. |
 | Cartão | Real | Checkout Pro gera link hospedado; a taxa é repassada ao cliente. |
 | Cartão One-Click | Código pronto, não ativado | Meta Cloud API direta + Pagar.me; depende de allowlist BR, migrations, domínio/chaves/webhook e sandbox. Não usa 360dialog. |
 | Qualificação externa de Payments | Em andamento | Em 18/07, Samuel Santana enquadrou o volume de MVP (2.000–10.000 mensagens/mês) em Self-Service, remeteu dúvidas técnicas ao Customer Success e ofereceu conta de teste. Não há aprovação técnica, garantia de Cloud API direta, Mercado Pago PJ ou `credential_id`; não aceitar teste que altere WABA/número/sender sem autorização. |
 | Motoboy | Técnica pronta para o concierge | Uber Direct: OAuth e cotação validados. No fluxo ativo, o courier retira o pacote **na base do operador**, nunca no balcão do varejista. |
-| Operação interna | Publicada e pronta tecnicamente | `/ops` recebe a cotação manual, reaproveita pagamento e une compra + despacho no botão **“Comprei — despachar motoboy”**. A base do operador ainda precisa ser configurada para despacho real. |
+| Operação interna | Publicada e pronta tecnicamente | `/ops` recebe a cotação manual, reaproveita pagamento e une compra + despacho no botão **“Comprei — despachar motoboy”**. A base do operador está configurada em Production. |
 | Acesso ao `/ops` | Ativo | `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN`. |
 | Área atendida | Ativa — estado de SP | O concierge tem bloqueio rígido de UF/CEP para SP. O checkout/cotação confirma a viabilidade do endereço exato; a guarda de 12 km é legado. |
 | Vitrines e conectores legados | Referência | Oba/Petz/Boticário continuam documentados; Carrefour segue desativado para automação. A vitrine não amplia o escopo geográfico nem substitui a cotação manual. |
@@ -59,7 +64,7 @@ O deploy final foi publicado no commit `5a47d63` e o deploy
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
-O snapshot publicado foi consolidado no commit `5a47d63`; `main` local foi avançada
+O snapshot publicado foi consolidado no commit `93fcd50`; `main` local foi avançada
 por fast-forward e o worktree ficou limpo. O push remoto de `main` ainda é separado e não foi
 executado.
 
@@ -71,8 +76,10 @@ credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
 operador.
 
 Antes de qualquer cobrança/compra real, `LIA_MANUAL_CONCIERGE=true`, a base do operador e
-`PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. Mercado Pago PJ/NF,
-titularidade, pós-venda e rotação da senha Carrefour/PIN do WhatsApp continuam como gates humanos.
+`PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. A decisão é usar o
+Mercado Pago na PJ, manter a PJ como titular e operar o pós-venda sem cancelamento/substituição,
+com estorno de item faltante e aviso de atraso. Continua pendente só a confirmação contábil da
+obrigação e do tipo exato de documento fiscal, além da rotação da senha Carrefour/PIN do WhatsApp.
 Dos 19 itens da fila antiga, 12 preflights internos sem pagamento foram removidos; 7 pedidos
 pagos permanecem para conciliação/estorno.
 Pedidos reais ficam para a validação que o operador escolher fazer depois.
@@ -140,12 +147,12 @@ a entregador on-demand e não usar o courier para retirada no balcão da loja.
 
 ## Antes de aceitar pedidos pagos em SP
 
-- Usar Mercado Pago PJ e definir emissão de nota fiscal; hoje o Pix ainda está em nome
-  pessoal.
+- Usar Mercado Pago PJ (decisão tomada) e confirmar com o contador se o desenho exige NF-e,
+  NFS-e ou outro documento; a decisão fiscal exata depende do enquadramento.
 - Regenerar token do Mercado Pago e segredo/credenciais da Uber que foram expostos em chat,
   depois atualizar a Vercel.
-- Validar termos, nota fiscal, troca/devolução e uso de conta central para múltiplos
-  destinatários.
+- Validar termos e uso de conta central para múltiplos destinatários; pós-venda já decidido:
+  sem cancelamento/substituição depois do pagamento, estorno de item faltante e aviso de atraso.
 - Mover a confirmação de preço/frete/prazo real para antes da cobrança do cliente.
 - Fazer 5–10 pedidos controlados com entrega do varejista, medindo cotação, aprovação,
   prazo, divergência de preço/estoque e pós-venda.

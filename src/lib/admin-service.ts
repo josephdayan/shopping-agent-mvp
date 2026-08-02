@@ -43,7 +43,8 @@ export async function markOrderDelivered(orderId: string) {
 }
 
 export async function requestOrderSubstitution(orderId: string) {
-  return fulfillmentAdapter.requestSubstitution(orderId);
+  void orderId;
+  throw new Error("Substituição está desativada na operação atual; item faltante segue para estorno.");
 }
 
 export async function cancelAndRefundOrder(orderId: string) {

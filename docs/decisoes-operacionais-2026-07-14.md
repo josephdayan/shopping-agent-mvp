@@ -7,11 +7,13 @@ coletada em escala por qualquer motoboy.
 
 > **Registro posterior — 02/08/2026.** A decisão de produto mais recente é o concierge manual
 > de largura descrito no topo de [AGENTS.md](../AGENTS.md). A Lia opera somente no estado de
-> São Paulo, o deploy limpo de 24/07 está online e, em produção Meta, despacho mockado falha
-> fechado. O courier exige endereço/CEP reais da base do operador. Permanecem gates de
-> configuração e humanos (base, Mercado Pago PJ/NF, titularidade/pós-venda e rotação de
-> credenciais expostas); a validação com pedidos reais fica a critério do operador. O histórico
-> abaixo permanece válido para explicar por que não usamos retirada no balcão.
+> São Paulo, o deploy limpo está online, a base do operador está configurada em Production e,
+> em produção Meta, despacho mockado falha fechado. O recebimento será pela PJ, que também é a
+> titularidade operacional da compra. O pós-venda é sem cancelamento/substituição depois do
+> pagamento, com estorno de item faltante e aviso de atraso; antes do pagamento o cliente pode
+> limpar a lista. Falta confirmar com o contador o documento fiscal exato e permanecem pendentes
+> as rotações de credenciais expostas. O histórico abaixo permanece válido para explicar por que
+> não usamos retirada no balcão.
 
 ## Resumo executivo
 
@@ -649,5 +651,9 @@ automática desligada e bloqueio de despacho mockado no provider Meta. A base do
 configurada como Sensitive. Dos 19 itens antigos da fila, 12 preflights internos sem pagamento
 foram removidos com autorização; 7 pedidos pagos permanecem intactos para conciliação/estorno.
 A primeira validação com pedidos reais é uma decisão posterior do operador, não uma pendência de
-desenvolvimento. Antes de aceitar dinheiro real, permanecem os gates humanos: Mercado Pago PJ/NF,
-titularidade/pós-venda e rotação dos segredos expostos.
+desenvolvimento. A decisão financeira é usar o Mercado Pago na PJ e manter a PJ como titularidade
+operacional da compra. O pós-venda fica: limpar a lista antes do pagamento; sem cancelamento ou
+substituição depois do pagamento; estornar o item faltante; avisar atraso. Continua pendente a
+confirmação contábil de se o desenho exige NF-e, NFS-e ou outro documento e como tributar a taxa,
+além da rotação dos segredos expostos. O estorno parcial ainda é manual e deve guardar a
+referência do provedor.

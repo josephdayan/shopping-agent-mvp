@@ -98,7 +98,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
 | **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Antes do teste real, o Pagar.me deve confirmar a classificação `first/subsequent` e CVV para este fluxo; o payload atual usa `card_id` sem `recurrence_cycle`. Não usa 360dialog. |
 | **Qualificação externa de WhatsApp Payments** | 🟡 Em 18/07, Samuel classificou o volume de MVP (2.000–10.000 mensagens/mês) como Self-Service, encaminhou as dúvidas ao Customer Success e ofereceu uma conta de teste. O contato técnico foi enviado, com Samuel em cópia; aguarda resposta escrita. Isso não é aprovação nem confirma `credential_id`, Mercado Pago PJ, custos ou preservação da Cloud API direta. Não aceitar teste que migre/compartilhe o sender ou altere WABA, número, Graph API ou webhook. |
-| **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), cancelar, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
+| **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), limpar/cancelar antes do pagamento, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
 | **Matcher dos catálogos** | ✅ piso de relevância + guardas de negação, produto humano/pet, espécie, tamanho e variante; básico/adulto/seco primeiro quando não há preferência explícita |
@@ -117,7 +117,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
 | **Privacidade da loja** | ✅ a Lia não precisa expor o varejista ao cliente ("Procurando…"). |
 | **Canal** | ✅ Meta Cloud API em produção; Twilio Sandbox é legado de teste. |
-| **MEI / CNPJ + e-mail** | ✅ aberto (do seu lado); `contato@liadelivery.com.br` configurado no ImprovMX |
+| **PJ/CNPJ + e-mail** | 🟡 operação definida na PJ; alinhar conta Mercado Pago PJ e documento fiscal com o contador. `contato@liadelivery.com.br` configurado no ImprovMX |
 
 ---
 
@@ -174,8 +174,14 @@ para quando o operador decidir, depois desses gates.
   ou validação comercial. **Sephora:** chegou a produto/CEP, mas a sessão ficou instável antes da
   sacola; não é candidata. **Pão de Açúcar:** a rota pública foi bloqueada por `az-request-verify`
   antes de produto/CEP; não é candidato automatizável agora.
-- **Definir titularidade e pós-venda:** comprador, nota fiscal, troca, devolução e uso de
-  uma conta de varejista para múltiplos destinatários.
+- **Titularidade e pós-venda:** ✅ decisão tomada: a operação financeira e a titularidade
+  operacional são da PJ; antes do pagamento o cliente pode limpar a lista; depois do pagamento
+  não há cancelamento iniciado pelo cliente nem substituição; item faltante gera estorno do
+  próprio item; atraso é comunicado. A execução de estorno parcial ainda é manual e precisa de
+  referência do provedor.
+- **Fiscal:** 🟡 confirmar com o contador se, para o enquadramento da PJ e o desenho da Lia,
+  cabe NF-e, NFS-e ou outro documento e como tributar a taxa/serviço. NF não é automaticamente
+  obrigatória em toda venda a pessoa física.
 - **Pilotar entrega direta** com 5–10 pedidos controlados, sem prometer motoboy.
 - **Testar checkout e cartão salvo** em `cart_only`, incluindo CVV, 3DS, CAPTCHA e antifraude.
 - **Validar a revisão do `/ops`** para frete/prazo/rastreio do varejista e estorno auditável.
@@ -235,13 +241,14 @@ para quando o operador decidir, depois desses gates.
 **Cliente (pelo celular):** manda no WhatsApp da Lia → `oi` → CEP → itens → escolhe opções
 → `pagar` → paga o Pix. Recebe "Pagamento confirmado ✅".
 
-**Operador (piloto):** abre `liadelivery.com.br/ops?key=<OPS_TOKEN>` → vê o pedido
+**Operador:** abre `liadelivery.com.br/ops?key=<OPS_TOKEN>` → vê o pedido
 pago → confere o carrinho/sessão → aprova a compra com entrega direta → registra o número
 do pedido e acompanha preparação, rastreio e entrega do varejista. Cancelamento pago entra
 em `refund_pending`; a confirmação só é enviada depois de registrar a referência real do
 provedor. Runbook: [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
-O card também permite **avisar o cliente** (substituição/atraso, vira mensagem da Lia) e
-destaca em vermelho pedidos em que o **cliente pediu cancelamento** pelo WhatsApp.
+O card também permite **avisar o cliente** (item faltante/estorno ou atraso, vira mensagem da
+Lia). Substituições não fazem parte da operação atual; o pedido pago não oferece cancelamento
+ao cliente.
 
 **Motoboy:** não faz parte do fluxo padrão. Varejistas de consumidor podem exigir documentação do titular
 para retirada por terceiro; não enviar documentos pessoais a entregadores on-demand.

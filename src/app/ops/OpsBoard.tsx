@@ -761,25 +761,26 @@ export default function OpsBoard() {
                     ✅ Confirmar estorno concluído
                   </button>
                 </>
-              ) : (
+              ) : !paymentReceived ? (
                 <button
                   style={ghost}
                   disabled={busy === `${o.id}:cancel`}
                   onClick={() => {
-                    const prompt = paymentReceived
-                      ? "Cancelar este pedido e registrar o estorno como PENDENTE? Isso ainda não executa o estorno no provedor."
-                      : "Cancelar este pedido sem pagamento?";
-                    if (window.confirm(prompt)) void act(o.id, "cancel");
+                    if (window.confirm("Cancelar este pedido sem pagamento?")) void act(o.id, "cancel");
                   }}
                 >
-                  {paymentReceived ? "Cancelar e solicitar estorno" : "Cancelar pedido"}
+                  Cancelar pedido
                 </button>
+              ) : (
+                <span style={{ fontSize: 12, color: "#667085", alignSelf: "center" }}>
+                  Cancelamento pós-pagamento desativado; item faltante segue para estorno.
+                </span>
               )}
             </div>
 
             <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", alignItems: "center" }}>
               <input
-                placeholder='avisar cliente (ex.: "o arroz acabou, troco pela marca X?")'
+                placeholder='avisar cliente (ex.: "o arroz acabou; vou estornar esse item")'
                 value={notify[o.id] ?? ""}
                 onChange={(e) => setNotify((n) => ({ ...n, [o.id]: e.target.value }))}
                 onKeyDown={(e) => {

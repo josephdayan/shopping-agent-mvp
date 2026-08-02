@@ -152,3 +152,14 @@ test("todas as mensagens simples são não-vazias e sem placeholders", () => {
     assert.doesNotMatch(t, /undefined|NaN|\[object/);
   }
 });
+
+test("pós-venda: limpa antes do pagamento, sem cancelamento ou substituição depois", () => {
+  const beforePayment = copy.cancelHowTo(false);
+  const afterPayment = copy.cancelHowTo(true);
+  assert.match(beforePayment, /Antes do pagamento/);
+  assert.match(afterPayment, /não oferecemos cancelamento/);
+  assert.match(afterPayment, /estornamos o valor dele/);
+  assert.match(afterPayment, /atras/i);
+  assert.match(copy.complaintAck(), /não fazemos substituições/);
+  assert.doesNotMatch(copy.help(), /cancelar/);
+});

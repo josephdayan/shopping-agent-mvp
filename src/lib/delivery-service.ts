@@ -31,7 +31,6 @@ import {
 import {
   ACTIVE_DELIVERY_ORDER_STATUSES,
   AWAITING_OPERATOR_QUOTE_STATUS,
-  CANCEL_REQUEST_FLAG,
   CONCIERGE_STORE_KEY,
   CONCIERGE_STORE_LABEL,
   OPS_QUEUE_STATUSES,
@@ -877,7 +876,8 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
         status: { in: ACTIVE_ORDER_STATUSES.filter((status) => !isOrderOutForDelivery(status)) }
       }
     });
-    await reply(phone, copy.cancelHowTo(Boolean(active) || (ctx.basket?.length ?? 0) > 0));
+    const hasPaidOrder = Boolean(active && PAID_OR_IN_FULFILLMENT_STATUSES.includes(active.status));
+    await reply(phone, copy.cancelHowTo(hasPaidOrder));
     return;
   }
   if (intent.kind === "resend_code" || intent.kind === "switch_payment") {
@@ -1482,14 +1482,9 @@ async function handleCancel(
     await reply(phone, copy.cancelTooLate());
     return;
   }
-  // Paid or already being prepared: flag it loudly for the operator (the refund is
-  // manual) and reassure the customer.
-  if (!(order.notes ?? "").includes(CANCEL_REQUEST_FLAG)) {
-    await prisma.deliveryOrder.update({
-      where: { id: order.id },
-      data: { notes: [order.notes, CANCEL_REQUEST_FLAG].filter(Boolean).join("\n") }
-    });
-  }
+  // Paid orders do not offer customer-initiated cancellation for now. Missing items
+  // are refunded; delays are communicated. The operator's exceptional refund action
+  // remains available in /ops, but chat does not create a cancellation request.
   await reply(phone, copy.cancelRequestedPaid());
 }
 
@@ -3178,8 +3173,8 @@ export async function opsConfirmRefund(orderId: string, reference: string) {
   return order;
 }
 
-// Free-text note from the operator to the customer (out-of-stock, substitution,
-// delay…) — sent as Lia, logged in the conversation.
+// Free-text note from the operator to the customer (out-of-stock, item refund,
+// delay…) — sent as Lia, logged in the conversation. Substitutions are disabled.
 export async function opsNotifyCustomer(orderId: string, text: string) {
   const message = (text ?? "").trim();
   if (!message) throw new Error("Empty message");

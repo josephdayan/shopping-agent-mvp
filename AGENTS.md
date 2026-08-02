@@ -46,10 +46,16 @@ bloqueou o Browserbase em 19/07; Petz/Boticário não expõem frete no Context h
   evals de conversa continuam exercitando).
 - **Envs novos**: `LIA_MANUAL_CONCIERGE` (default on), `LIA_COVERAGE_PRESET=estado-sp`,
   `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` (base de onde o motoboy retira).
-- **Prontidão**: o código e a publicação devem ficar configurados para operar em SP antes de
-  aceitar dinheiro real. A primeira validação com pedidos reais é uma decisão do operador,
-  não uma pendência de desenvolvimento. Titularidade/NF continuam exigências para abertura
+- **Prontidão**: o código e a publicação estão configurados para operar em SP; a primeira
+  validação com pedidos reais é uma decisão do operador, não uma pendência de desenvolvimento.
+  A operação financeira será pela PJ e a PJ é a titularidade operacional da compra. NF não é
+  automaticamente obrigatória em toda venda a pessoa física: o enquadramento tributário e o
+  documento exato (NF-e/NFS-e) ainda devem ser confirmados com o contador antes da abertura
   pública. TypeScript, lint, testes focados (fluxo manual + evals legados) e build estão verdes.
+- **Pós-venda decidido em 02/08**: antes do pagamento, o cliente pode limpar a lista; depois do
+  pagamento não há cancelamento iniciado pelo cliente nem substituição. Se faltar item, a Lia
+  estorna o valor daquele item; se houver atraso, avisa o cliente. O procedimento de estorno
+  parcial ainda é manual e precisa de referência do provedor para auditoria.
 - **Estado em 21/07**: os commits `bb48c2e` (fluxo), `ededf6a` (documentação) e `7ab8453`
   (kit do operador) estão verdes localmente. Um pedido concierge percorreu, em ambiente local
   mockado e sem cobrança, cotação → Pix confirmado → compra → despacho pela base do operador →
@@ -110,9 +116,11 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   `PURCHASE_AUTOMATION_MODE=cart_only` e compra automática desligada estão ativas; o redeploy
   `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` ficou `Ready`. O código impõe `estado-sp` no concierge.
 - A fila tinha 19 entradas: 12 preflights internos sem pagamento foram removidos; 7 pedidos
-  pagos ficaram intactos para conciliação/estorno. Para dinheiro real, continuam apenas decisões
-  humanas de Mercado Pago PJ/NF, titularidade, pós-venda e rotação de segredos. A validação real
-  fica para quando o operador decidir; não é um gate técnico.
+  pagos ficaram intactos para conciliação/estorno. A decisão é receber na PJ, manter a PJ como
+  titularidade operacional e, no pós-venda, não aceitar cancelamento/substituição depois do
+  pagamento, estornar item faltante e avisar atraso. Restam a confirmação contábil do documento
+  fiscal exato, a confirmação operacional da conta Mercado Pago PJ e a rotação de segredos. A
+  validação real fica para quando o operador decidir; não é um gate técnico.
 
 ## O produto
 
