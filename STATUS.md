@@ -33,11 +33,11 @@ de hoje está em
 > **Atualização 02/08.** A Lia opera **somente no estado de São Paulo**. No concierge, o código
 > rejeita qualquer UF fora de SP (e usa o prefixo do CEP como fallback quando o ViaCEP cai),
 > independentemente dos overrides legados de cobertura. O deploy final foi publicado no commit `5a47d63`
-> como `dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` (`Ready`), reassumindo `liadelivery.com.br`. As flags
+> como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`), reassumindo `liadelivery.com.br`. As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão explícitas em
 > Production. O código impede despacho mockado quando o provider é Meta e exige endereço + CEP
-> reais da base do operador. A base ainda não foi configurada; `PURCHASE_AUTOMATION_MODE=cart_only`
-> deve ser conferido antes de qualquer pedido real. A primeira validação com pedidos reais não é
+> reais da base do operador. A base foi configurada como Sensitive em Production; `PURCHASE_AUTOMATION_MODE=cart_only`
+> e a compra automática desligada estão ativas. A primeira validação com pedidos reais não é
 > pendência de desenvolvimento: fica a critério do operador depois que os gates abaixo estiverem
 > concluídos.
 
@@ -129,12 +129,12 @@ configuração e decisões humanas que ainda impedem dinheiro real. A validaçã
 para quando o operador decidir, depois desses gates.
 
 ### 🔴 O que destrava o produto
-- **Base para motoboy na hora:** preencher `LIA_OPERATOR_PICKUP_ADDRESS` e
-  `LIA_OPERATOR_PICKUP_CEP` na Vercel. A entrega do próprio varejista pode ser usada quando
-  o checkout confirmar essa modalidade.
+- **Base para motoboy na hora:** `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` já
+  estão configurados como Sensitive em Production. A entrega do próprio varejista pode ser
+  usada quando o checkout confirmar essa modalidade.
 - **Operação humana:** contratar o operador e usar [o runbook](docs/operador-runbook.md).
-- **Fila técnica:** há 19 pedidos de teste em Production. A limpeza é uma ação de produção e
-  permanece pendente de aprovação explícita.
+- **Fila técnica:** 12 preflights internos sem pagamento foram removidos com autorização. Restam
+  7 pedidos `paid` antigos, preservados para conciliação ou estorno; não são lixo descartável.
 - **Histórico do fluxo legado (19/07):** o Context persistente, a configuração e o preflight técnico do
   Oba já foram validados em Production em `cart_only`. Petz e Boticário chegaram a carrinhos reais,
   mas ambos falharam fechados antes de preço de entrega/prazo: Petz não expôs os campos na sacola

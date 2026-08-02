@@ -55,7 +55,7 @@ continua disponível quando o checkout confirmar a promessa.
 ## Atualização operacional — 02/08/2026
 
 O deploy final foi publicado no commit `5a47d63` e o deploy
-`dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
+`dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
@@ -70,9 +70,11 @@ credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
 `LIA_REQUIRE_REAL_COURIER_DISPATCH=true`, mas ainda não tem esses dados explícitos da base do
 operador.
 
-Antes de qualquer cobrança/compra real, o operador deve preencher a base, conferir
-`LIA_MANUAL_CONCIERGE=true` e manter `PURCHASE_AUTOMATION_MODE=cart_only`. Mercado Pago PJ/NF,
+Antes de qualquer cobrança/compra real, `LIA_MANUAL_CONCIERGE=true`, a base do operador e
+`PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. Mercado Pago PJ/NF,
 titularidade, pós-venda e rotação da senha Carrefour/PIN do WhatsApp continuam como gates humanos.
+Dos 19 itens da fila antiga, 12 preflights internos sem pagamento foram removidos; 7 pedidos
+pagos permanecem para conciliação/estorno.
 Pedidos reais ficam para a validação que o operador escolher fazer depois.
 
 ## Meta e WhatsApp: estado correto

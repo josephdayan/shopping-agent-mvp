@@ -644,8 +644,10 @@ mesma fronteira. Overrides legados (`LIA_COVERAGE_OFF`, cidades ou UFs) não pod
 concierge para fora de SP. Dentro do estado, o endereço exato, o frete, o prazo e a disponibilidade
 continuam sendo confirmados por pedido.
 
-O produto está publicado em produção com `LIA_MANUAL_CONCIERGE=true`, `cart_only` e bloqueio de
-despacho mockado no provider Meta. A primeira validação com pedidos reais é uma decisão posterior
-do operador, não uma pendência de desenvolvimento. Antes de aceitar dinheiro real, permanecem
-somente os gates humanos e de configuração: base do operador para motoboy na hora, Mercado Pago
-PJ/NF, titularidade/pós-venda e rotação dos segredos expostos.
+O produto está publicado em produção com `LIA_MANUAL_CONCIERGE=true`, `cart_only`, compra
+automática desligada e bloqueio de despacho mockado no provider Meta. A base do operador já está
+configurada como Sensitive. Dos 19 itens antigos da fila, 12 preflights internos sem pagamento
+foram removidos com autorização; 7 pedidos pagos permanecem intactos para conciliação/estorno.
+A primeira validação com pedidos reais é uma decisão posterior do operador, não uma pendência de
+desenvolvimento. Antes de aceitar dinheiro real, permanecem os gates humanos: Mercado Pago PJ/NF,
+titularidade/pós-venda e rotação dos segredos expostos.

@@ -104,15 +104,15 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
 - O item de segurança operacional foi reforçado no código: em produção Meta, despacho mockado do
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
   e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.
-- A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas, mas não
-  encontrou configuração explícita da base do operador. `LIA_MANUAL_CONCIERGE=true` e
-  `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` foram gravadas em Production e o commit `5a47d63`
-  foi publicado como `dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` (`Ready`). O código agora impõe
-  `estado-sp` no concierge, mesmo que um override legado tente ampliar ou desligar a cobertura.
-- Para considerar a operação pronta para uso real, falta somente completar a configuração da
-  base do operador (se a modalidade for motoboy na hora), confirmar `PURCHASE_AUTOMATION_MODE=cart_only`
-  e concluir os gates humanos de Mercado Pago PJ/NF, titularidade, pós-venda e rotação de segredos.
-  A validação real fica para quando o operador decidir; não é um gate técnico chamado de piloto.
+- A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas. A base
+  do operador foi configurada como Sensitive em Production (endereço e CEP informados pelo
+  operador). `LIA_MANUAL_CONCIERGE=true`, `LIA_REQUIRE_REAL_COURIER_DISPATCH=true`,
+  `PURCHASE_AUTOMATION_MODE=cart_only` e compra automática desligada estão ativas; o redeploy
+  `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` ficou `Ready`. O código impõe `estado-sp` no concierge.
+- A fila tinha 19 entradas: 12 preflights internos sem pagamento foram removidos; 7 pedidos
+  pagos ficaram intactos para conciliação/estorno. Para dinheiro real, continuam apenas decisões
+  humanas de Mercado Pago PJ/NF, titularidade, pós-venda e rotação de segredos. A validação real
+  fica para quando o operador decidir; não é um gate técnico.
 
 ## O produto
 

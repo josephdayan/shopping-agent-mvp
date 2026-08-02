@@ -26,11 +26,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
 > UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
 > O deploy limpo foi reconciliado no commit `5a47d63`; `main` local está alinhada. A versão
-> final foi publicada como `dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` (`Ready`). As flags
+> final foi publicada como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
-> provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
-> base na Vercel e conferir `PURCHASE_AUTOMATION_MODE=cart_only`; a validação real será feita
-> pelo operador quando ele considerar o sistema pronto.
+> provider Meta não aceita despacho mockado. A base do operador foi configurada como Sensitive
+> na Vercel e `PURCHASE_AUTOMATION_MODE=cart_only` está fixo. Dos 19 registros da fila, 12
+> preflights internos sem pagamento foram removidos com autorização; 7 pedidos pagos ficaram
+> preservados para conciliação/estorno. A validação real será feita pelo operador quando ele
+> considerar o sistema pronto.
 
 ## Como usar
 
@@ -69,15 +71,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Contratar e treinar o operador antes do primeiro pedido real.
 - [x] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
   misturar a publicação com o trabalho paralelo do Oba.
-- [ ] Limpar os 19 pedidos técnicos de Production **somente após autorização explícita**.
+- [x] Limpar os preflights internos sem pagamento de Production após autorização explícita:
+  12 removidos; 7 pedidos pagos foram preservados para conciliação/estorno.
 - [ ] (Opcional, após a prontidão) Registrar pedidos reais, tempo de cotação, margem depois do
   frete, falhas e satisfação. Essa validação é decisão do operador e não bloqueia o código.
 - [x] Falhar fechado quando produção Meta não tiver despacho real do courier; o modo mock permanece
   disponível somente para testes locais.
 - [x] Bloquear a publicação de cotação de motoboy quando a base do operador não tiver endereço e
   CEP configurados; a checagem também é repetida no despacho.
-- [ ] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
-  Production antes de liberar o botão de despacho real.
+- [x] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
+  Production antes de liberar o botão de despacho real; variáveis Sensitive, redeploy
+  `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD`.
 
 ### Cotação e cobrança
 
