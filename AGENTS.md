@@ -124,7 +124,8 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   pagos ficaram intactos para conciliação/estorno. A decisão é receber na PJ, manter a PJ como
   titularidade operacional e, no pós-venda, não aceitar cancelamento/substituição depois do
   pagamento, estornar item faltante e avisar atraso. Restam a confirmação contábil do documento
-  fiscal exato, a confirmação operacional da conta Mercado Pago PJ e a rotação de segredos. A
+  fiscal exato e a rotação de segredos. A conta Mercado Pago PJ foi confirmada pelo dono no
+  painel; as variáveis de produção já estão presentes. A
   validação real fica para quando o operador decidir; não é um gate técnico.
 - **2ª rodada de 02/08 — decisões do dono:** (1) o piloto será operado **pelo próprio dono**,
   sem contratar operador agora; (2) a rotina fiscal foi decidida e documentada em
@@ -132,8 +133,10 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   produto é a do varejista; NFS-e só para PF que pedir ou cliente PJ; resta confirmação
   contábil pontual do teto de receita antes do lançamento público); (3) a rotação das
   credenciais expostas foi **abandonada como gate de piloto** — risco aceito e registrado,
-  reabrir só por pedido explícito ou incidente; (4) a conta Mercado Pago deve ser conferida
-  no painel (o dono acredita que já é PJ; a API local não teve escopo para confirmar).
+  reabrir só por pedido explícito ou incidente; (4) a conta Mercado Pago foi confirmada no
+  painel pelo dono como PJ, com a aplicação `LIA - APP` em Produção; as variáveis de acesso e
+  webhook já estão na Vercel Production. As credenciais mostradas em captura permanecem
+  tratadas como expostas, sem marcar a rotação como concluída.
   Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
   `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 

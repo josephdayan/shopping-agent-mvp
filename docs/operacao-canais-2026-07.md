@@ -76,11 +76,12 @@ credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
 operador.
 
 Antes de qualquer cobrança/compra real, `LIA_MANUAL_CONCIERGE=true`, a base do operador e
-`PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. A decisão é usar o
-Mercado Pago na PJ, manter a PJ como titular e operar o pós-venda sem cancelamento/substituição,
-com estorno de item faltante e aviso de atraso. Continua pendente apenas documentar a rotina fiscal
-e o tipo exato de documento por operação, além da rotação da senha Carrefour/PIN do WhatsApp; não
-é necessário contratar contador fixo.
+`PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. A conta Mercado Pago
+PJ foi confirmada pelo dono no painel para a aplicação `LIA - APP` em Produção, com as variáveis
+de acesso e webhook presentes na Vercel. A decisão é manter a PJ como titular e operar o
+pós-venda sem cancelamento/substituição, com estorno de item faltante e aviso de atraso.
+Continua pendente apenas a confirmação contábil pontual do tipo exato de documento por operação,
+além da rotação da senha Carrefour/PIN do WhatsApp; não é necessário contratar contador fixo.
 Dos 19 itens da fila antiga, 12 preflights internos sem pagamento foram removidos; 7 pedidos
 pagos permanecem para conciliação/estorno.
 Pedidos reais ficam para a validação que o operador escolher fazer depois.

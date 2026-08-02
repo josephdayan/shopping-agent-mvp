@@ -246,12 +246,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 ### Financeiro, fiscal e jurídico
 
-- [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos;
+- [x] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos;
   decisão tomada: recebimento e operação financeira serão sempre na PJ. **02/08:** o dono
-  acredita que a conta já é PJ; a checagem via API local foi inconclusiva (token sem escopo
-  para `users/me`). Confirmar no painel do MP: Configurações → Dados da conta/negócio →
-  deve constar o CNPJ 67.742.955. O nome que aparece para quem paga o Pix também denuncia:
-  razão social = PJ, nome civil = PF.
+  confirmou no painel do Mercado Pago que a aplicação `LIA - APP` em Produção está vinculada
+  à conta PJ. As variáveis `MERCADO_PAGO_ACCESS_TOKEN`, `MERCADO_PAGO_WEBHOOK_URL` e
+  `MERCADO_PAGO_WEBHOOK_SECRET` já existem na Vercel Production. A rotação de credenciais
+  expostas permanece registrada separadamente como risco aceito.
 - [x] Decisão operacional de titularidade: a PJ/MEI é a compradora/titular da operação perante
   o cliente e o varejista. Não há obrigação de contratar contador fixo.
 - [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
