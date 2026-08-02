@@ -1,14 +1,14 @@
-// Creates one auditable, non-customer Carrefour quote and runs only the cart_only preflight.
+// Creates one auditable, non-customer Oba quote and runs only the cart_only preflight.
 // It never creates a Mercado Pago charge, sends WhatsApp, or invokes the purchase step.
 import { prisma } from "../src/lib/prisma";
 import { createPurchaseJobsForOrder, preflightPurchaseJob } from "../src/lib/purchasing/service";
 
-const storeLabel = "Carrefour";
+const storeLabel = "Oba Hortifruti";
 const item = {
-  sku: "crf-live-3053",
-  name: "Detergente Líquido com Glicerina Cristal Limpol Squeeze 500ml",
-  unitPrice: 1.99,
-  productUrl: "https://mercado.carrefour.com.br/produto/detergente-liquido-com-glicerina-cristal-limpol-squeeze-500ml-3053"
+  sku: "oba-live-100004793-seller-1",
+  name: "Arroz Camil 1 Kg",
+  unitPrice: 5.99,
+  productUrl: "https://secure.obahortifruti.com.br/arroz-camil-1kg-100004793/p"
 } as const;
 const phone = `+550099${String(Date.now()).slice(-7)}`;
 
@@ -23,17 +23,17 @@ async function main() {
       userId: user.id,
       phone,
       customerName: "TESTE INTERNO — NÃO COBRAR",
-      // Deliberately omit CEP/address: the buyer reuses only the already-selected retailer
-      // region in the persistent Context and never stores the actual customer address here.
-      storeKey: "carrefour",
+      // The preflight uses only the public test CEP. No customer address is stored here.
+      cep: "01310-100",
+      storeKey: "oba",
       storeLabel,
-      items: [{ ...item, qty: 1, storeKey: "carrefour", storeLabel }],
-      fulfillments: [{ storeKey: "carrefour", storeLabel, deliveryMode: "retailer_delivery" }],
+      items: [{ ...item, qty: 1, storeKey: "oba", storeLabel }],
+      fulfillments: [{ storeKey: "oba", storeLabel, deliveryMode: "retailer_delivery" }],
       itemsSubtotal: item.unitPrice,
       courierKey: "retailer_delivery",
       total: 0,
       status: "awaiting_supplier_validation",
-      notes: "TESTE INTERNO 2026-07-16: preflight cart_only; sem WhatsApp, cobrança ou compra."
+      notes: "TESTE INTERNO 2026-07-19: preflight Oba em cart_only; sem WhatsApp, cobrança ou compra."
     }
   });
   const [job] = await createPurchaseJobsForOrder(order.id);

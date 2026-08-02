@@ -17,5 +17,4 @@ try {
 }
 
 process.env.WHATSAPP_PROVIDER = "mock"; // jamais Twilio real aqui
-process.env.LIA_CARREFOUR_LIVE = "false";
 process.env.LIA_SEND_PHOTOS = "false";

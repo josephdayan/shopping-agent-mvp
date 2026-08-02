@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { haversineKm, geocode, seedGeoCache, type LatLng } from "../src/lib/geo";
 
 const PAULISTA: LatLng = { lat: -23.5614, lng: -46.6559 }; // MASP, Av. Paulista
-const TAMBORE: LatLng = { lat: -23.5012, lng: -46.8319 }; // Carrefour Tamboré, Barueri
+const TAMBORE: LatLng = { lat: -23.5012, lng: -46.8319 }; // Barueri, ponto de regressão geográfica
 
 test("haversineKm: identidade é 0", () => {
   assert.equal(haversineKm(PAULISTA, PAULISTA), 0);

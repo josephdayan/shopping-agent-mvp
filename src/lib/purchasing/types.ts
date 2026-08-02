@@ -53,6 +53,9 @@ export type CartSnapshot = {
   // are required before Lia may present a direct-delivery quote to the customer.
   deliveryFee?: number;
   deliveryPromise?: string;
+  // Narrow, non-personal UI signals retained only when a checkout cannot expose
+  // delivery fields. Never include address, customer, cookies or payment data.
+  deliveryDiagnostics?: string[];
   total: number;
   currency: "BRL";
   capturedAt: string;

@@ -58,9 +58,14 @@ function isAlreadyCompletedPurchase(result: StoreOrderResult | AlreadyCompletedP
 }
 
 function workerAccountKey(input: BuyerInput): string {
-  // A Carrefour Browserbase Context is a single persisted shopping cart. Keep its
-  // lease separate from other stores/contexts, but never store a card or cookie.
-  const contextId = input.storeKey === "carrefour" ? process.env.CARREFOUR_BROWSER_CONTEXT_ID ?? "unconfigured" : input.storeUnitId ?? "default";
+  // A persistent Browserbase Context has a single retailer cart. Keep its lease
+  // separate per retailer/context, but never persist card data or cookies.
+  const contextIdByStore: Record<string, string | undefined> = {
+    oba: process.env.OBA_BROWSER_CONTEXT_ID,
+    petz: process.env.PETZ_BROWSER_CONTEXT_ID,
+    boticario: process.env.BOTICARIO_BROWSER_CONTEXT_ID
+  };
+  const contextId = contextIdByStore[input.storeKey] ?? input.storeUnitId ?? "unconfigured";
   return `${input.storeKey}:${contextId}`;
 }
 

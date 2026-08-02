@@ -1,10 +1,10 @@
 import { BoticarioBuyer } from "./stores/boticario-buyer";
-import { CarrefourBuyer } from "./stores/carrefour-buyer";
+import { ObaBuyer } from "./stores/oba-buyer";
 import { PetzBuyer } from "./stores/petz-buyer";
 import type { BuyerConnector } from "./types";
 
 const buyers: Record<string, BuyerConnector> = {
-  carrefour: new CarrefourBuyer(),
+  oba: new ObaBuyer(),
   petz: new PetzBuyer(),
   boticario: new BoticarioBuyer()
 };

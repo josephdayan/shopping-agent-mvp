@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-07-19. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-02. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -22,17 +22,36 @@ de hoje está em
 > e racional em [AGENTS.md](AGENTS.md) (topo) e no registro datado. A seção abaixo descreve o
 > fluxo legado de automação, mantido atrás da flag e ainda usado como referência/testes.
 
+> **Estado em 21/07.** O fluxo concierge passou por uma demonstração local mockada completa:
+> cotação manual de R$100, Pix confirmado, compra, despacho Uber Direct a partir da base do
+> operador e entrega — incluindo as mensagens ao cliente; não houve cobrança real. Os commits
+> `bb48c2e`, `ededf6a` e `7ab8453` estão verdes, mas o concierge ainda não foi implantado porque
+> o deploy arrastaria uma migration Oba inacabada de outro trabalho. A decisão é contratar um
+> operador. A fila de Production contém 19 pedidos técnicos e só pode ser limpa com aprovação
+> explícita.
+
+> **Atualização 02/08.** O deploy de 24/07 continua online e foi verificado: landing 200,
+> `/ops` acessível, APIs internas 401 sem credencial e webhook 403 sem assinatura. O código
+> local agora tem uma trava que impede despacho mockado quando o provider é Meta e exige
+> endereço + CEP reais da base do operador. A produção ainda precisa receber esses dois valores
+> e a guarda explícita antes de qualquer pedido real.
+
+> **Reconciliação de código.** A branch publicada está à frente de `main`; o worktree ainda
+> contém alterações não consolidadas da transição Carrefour → Oba e dos endpoints do operador.
+> O próximo commit deve preservar essas alterações e tornar o Git a fonte do artefato publicado.
+
 ## 1. O que é a Lia
 
-**Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem
-natural, recebe preço/frete/prazo cotados no checkout real e paga por **Pix ou cartão**.
-Pix e Checkout Pro usam Mercado Pago; o cartão nativo no WhatsApp, quando habilitado, usa
-Meta Cloud API direta + Pagar.me. A Lia compra e o **varejista entrega diretamente** ao
-endereço.
+**Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;
+um operador cota e compra o que for necessário, e a Lia só cobra por **Pix ou cartão** após a
+aprovação do cliente. Pix e Checkout Pro usam Mercado Pago; o cartão nativo no WhatsApp,
+quando habilitado, usa Meta Cloud API direta + Pagar.me. Na modalidade rápida, o motoboy retira
+o pacote **na base do operador**; a entrega do varejista continua alternativa.
 
-“Entrega hoje” é uma modalidade separada: só pode ser oferecida quando o próprio varejista
-prometer o mesmo dia ou quando houver parceiro formal que libere retirada por courier.
-`Clique-e-retire + motoboy aleatório` não é mais considerado fluxo escalável.
+“Entrega hoje” no concierge é uma modalidade separada: só pode ser oferecida quando o operador
+consegue comprar e entregar o pacote à sua própria base antes de despachar o courier. A alternativa
+é a promessa same-day do próprio varejista. `Clique-e-retire + motoboy aleatório` continua fora do
+modelo: o courier não retira no balcão da loja.
 
 - **Receita:** markup de **10%** embutido no preço (produto e frete são pass-through).
 - **Sem remédio** (ANVISA). **Fontes ativas:** Oba Hortifruti (mercado/essenciais), Petz e O
@@ -45,17 +64,15 @@ prometer o mesmo dia ou quando houver parceiro formal que libere retirada por co
 ## 2. O fluxo (e o que é automático vs. manual)
 
 ```
-1. 💳 Cliente manda no WhatsApp: "ração e arroz"
-2. 🤖 Lia pede o endereço (só na 1ª vez) e o mantém no perfil seguro
-3. 🤖 Lia acha os itens ao vivo e ROTEIA pra 1 loja só (a que cobre melhor)
-4. 🤖 Se ambíguo ("sal"), mostra até 3 opções → cliente responde o número
-5. 🤖 Monta uma sacola temporária e pede ao varejista preço, frete e prazo reais
-6. 💳 Cliente responde "pagar" → escolhe Pix (copia-e-cola, sem taxa) ou cartão. O
-   fallback ativo é link Checkout Pro; após habilitação externa, recompra com cartão salvo
-   usa confirmação nativa One-Click no WhatsApp → 🤖 Lia gera a cobrança REAL
-7. 💳 Cliente paga → 🤖 Lia revalida preço, itens, endereço e prazo
-8. 🛡️ A compra segue em cart_only/approval_required enquanto o checkout é pilotado
-9. 🏬 O varejista entrega diretamente e a Lia acompanha o pedido
+1. 💬 Cliente manda no WhatsApp o que quer e o endereço.
+2. 🤖 Lia preserva qualquer item pedido — inclusive fora de catálogo — e fecha a lista.
+3. 👤 Operador recebe o pedido em `awaiting_operator_quote`, pesquisa, compra/cota itens,
+   frete, modalidade e prazo no `/ops`.
+4. 🤖 Cliente aprova a cotação e escolhe Pix ou cartão; só então a Lia gera a cobrança.
+5. 👤 Pagamento confirmado → operador compra os itens.
+6. 🛵 Com as compras na base, o operador despacha o motoboy; alternativamente acompanha a
+   entrega do varejista.
+7. 🤖 Lia comunica o status até a entrega.
 ```
 
 **Dinheiro:** cliente paga tudo (produtos +10% + frete) no Pix → cai na sua conta MP →
@@ -89,7 +106,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Meta / WhatsApp oficial** | ✅ número aprovado, Cloud API ativa em produção e webhook assinado validado |
 | **Opções pra escolher** | ✅ até 3 cards com foto + botão **Escolher este** na Meta; lista numerada como fallback |
 | **Pedido mínimo** | ✅ por loja; avisa o cliente p/ completar. |
-| **Painel do operador `/ops`** | 🟡 entrega direta implementada localmente: mostra promessa/modalidade/rastreio, usa `retailer_preparing → retailer_out_for_delivery`, bloqueia courier externo e separa solicitação de estorno da confirmação por referência. Testes/build passaram; falta implantar e validar ao vivo. |
+| **Painel do operador `/ops`** | 🟡 o fluxo concierge local está pronto: cota qualquer lista, reaproveita pagamento e tem o botão único **“Comprei — despachar motoboy”**. Uma demonstração mockada percorreu o ciclo inteiro. Falta deploy limpo e piloto real; não publicar enquanto a migration Oba de outro trabalho estiver inacabada. |
 | **Acesso ao `/ops`** | ✅ `OPS_TOKEN` dedicado, Sensitive em Production e Preview, criado e implantado em 16/07; não substitui `API_TOKEN` e não foi exposto. |
 | **Onboarding de endereço** | 🟡 o endereço completo é pedido e persistido uma vez no fluxo e está coberto pelos evals; falta validar o resumo/cotação em checkout real. |
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
@@ -102,6 +119,12 @@ quando existir uma rota urgente formalmente compatível.
 ## 4. O que FALTA (por prioridade)
 
 ### 🔴 O que destrava o produto
+- **Publicação limpa do concierge:** separar/concluir a migration Oba inacabada antes de
+  implantar `bb48c2e` + `7ab8453`. Não misturar esses trabalhos no deploy.
+- **Operação humana:** contratar o operador e usar [o runbook](docs/operador-runbook.md) para
+  o piloto. A demonstração local não substitui pedidos reais.
+- **Fila técnica:** há 19 pedidos de teste em Production. A limpeza é uma ação de produção e
+  permanece pendente de aprovação explícita.
 - **Prioridade atual (19/07):** o Context persistente, a configuração e o preflight técnico do
   Oba já foram validados em Production em `cart_only`. Petz e Boticário chegaram a carrinhos reais,
   mas ambos falharam fechados antes de preço de entrega/prazo: Petz não expôs os campos na sacola

@@ -22,6 +22,20 @@ export function listCouriers(): CourierConnector[] {
   return Object.values(COURIERS);
 }
 
+/**
+ * Production must never tell a customer that a courier was dispatched when the
+ * connector only returned a deterministic mock. Tests and local demos keep the
+ * mock path by using WHATSAPP_PROVIDER=mock (or explicitly opting out).
+ */
+export function assertDispatchIsAllowed(dispatch: CourierDispatch): void {
+  const requireReal =
+    process.env.LIA_REQUIRE_REAL_COURIER_DISPATCH !== "false" &&
+    process.env.WHATSAPP_PROVIDER === "meta";
+  if (requireReal && dispatch.mock) {
+    throw new Error("O courier não confirmou um despacho real; o pedido permanece sem despacho.");
+  }
+}
+
 // Redeploy marker: pick up LALAMOVE_* env (empty commits are deduped by Vercel).
 const QUOTE_TIMEOUT_MS = Number(process.env.LIA_COURIER_QUOTE_TIMEOUT_MS ?? 8000);
 

@@ -3,19 +3,20 @@
 > Contexto obrigatório para agentes: [AGENTS.md](AGENTS.md). Checklist de progresso:
 > [PENDENCIAS.md](PENDENCIAS.md).
 
-> **⚠️ Estado atual (2026-07-14):** o produto vigente é a **concierge de compras no
-> WhatsApp** com cotação no checkout real e entrega feita pelo varejista. A modalidade
-> same-day só é oferecida pela própria loja ou por parceiro que autorize courier;
-> `clique-e-retire + motoboy aleatório` foi descartado como fluxo escalável. O estado está em
-> [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
+> **⚠️ Estado atual (2026-07-21):** o produto vigente é uma **concierge manual de compras no
+> WhatsApp**: o cliente pede qualquer coisa, o operador cota e compra, e o motoboy parte da
+> base do operador com o pacote em mãos. `Clique-e-retire + motoboy aleatório` continua fora do
+> modelo. O fluxo passou por demonstração local mockada sem cobrança, mas ainda aguarda deploy
+> limpo porque uma migration Oba paralela está inacabada; a operação decidiu contratar um
+> operador. O estado está em [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
 > (intenções em `src/lib/lia-intents.ts`, copy em `src/lib/lia-copy.ts`), painel do operador
 > em `/ops`, e os testes rodam com `npm test` (só unitários: `npm run test:unit`).
 > A reconstrução recente de conversa, matcher e testes está registrada em
 > [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 > A situação de Meta, domínio, canais, pagamentos e piloto está em
 > [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
-> A automação segura de carrinho/compra Carrefour e sua ativação por fases está em
-> [docs/automacao-compra-carrefour.md](docs/automacao-compra-carrefour.md).
+> A automação segura de cotação em carrinho para Oba, Petz e Boticário é fluxo legado e está em
+> [docs/automacao-compra-varejistas.md](docs/automacao-compra-varejistas.md).
 > O procedimento do piloto para `needs_human`, cancelamento e estorno está em
 > [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
 > As conclusões operacionais de hoje estão em
@@ -173,8 +174,8 @@ npx tsx scripts/talk-lia.mts
 OPENAI_API_KEY="" npx tsx scripts/talk-lia.mts "oi" "quero arroz e leite" "01310-100"
 ```
 
-O `talk-lia` usa o mesmo serviço do webhook, porém força mensageria mockada, desliga busca
-Carrefour ao vivo e limpa os dados de teste ao sair. O detalhe dos comportamentos cobertos
+O `talk-lia` usa o mesmo serviço do webhook, porém força mensageria mockada e limpa os dados
+de teste ao sair. O detalhe dos comportamentos cobertos
 está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 
 ## Estrutura do projeto

@@ -881,7 +881,7 @@ async function delayBetweenProductMessages(index: number, total: number) {
 // Hosts that block server-side fetches (Akamai/anti-bot) — WhatsApp/Twilio can't load
 // them, so we skip media and fall back to text (never ship a broken image). Petz
 // self-hosts product photos behind Akamai: only a real browser that solved the JS sensor
-// can fetch them, so their URLs 403 for Twilio (Carrefour's VTEX CDN is permissive and
+// can fetch them, so their URLs 403 for Twilio (a retailer VTEX CDN is permissive and
 // works). The Petz imageUrls stay in the catalog for the /ops dashboard and for a future
 // re-host to a public CDN — once re-hosted, drop the host here. Override via
 // LIA_MEDIA_BLOCK_HOSTS (comma-separated hostnames; empty string disables the blocklist).

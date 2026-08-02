@@ -3,7 +3,7 @@ import { chromium, type Page } from "playwright-core";
 import { getPurchasePolicy, money } from "../policy";
 import type { BuyerConnector, BuyerInput, CartSnapshot, ResolvedPurchaseItem, StoreOrderResult } from "../types";
 import { PurchaseError } from "../types";
-import { clickCookieConsent, isVisible, parseBrl, parseLabelledTotal, retailMatch, safeRetailerUrl } from "./browser-store-utils";
+import { clickCookieConsent, deliveryDiagnostics, isVisible, parseBrl, parseDeliveryFee, parseDeliveryPromise, parseLabelledTotal, retailMatch, safeRetailerUrl } from "./browser-store-utils";
 
 const PETZ_ORIGIN = "https://www.petz.com.br";
 
@@ -34,6 +34,37 @@ async function openBag(page: Page): Promise<string> {
   await bag.first().click({ timeout: 10_000 });
   await page.waitForTimeout(500);
   return drawer.innerText().catch(() => bodyText(page));
+}
+
+async function openFullBag(page: Page): Promise<string> {
+  // The mini-bag confirms the line item but intentionally omits delivery price and
+  // promise. The retailer exposes those authoritative fields only on the full bag.
+  await openBag(page);
+  let fullBag = page.locator('[data-testid="drawer-bag-checkout-button"]:visible');
+  if (!(await isVisible(fullBag))) fullBag = page.locator('[data-testid="ptz-button-ir-para-sacola"]:visible');
+  if (!(await isVisible(fullBag))) throw new PurchaseError("MANUAL_ACTION_REQUIRED", "A Petz não exibiu a ação para abrir a sacola completa.");
+  await fullBag.first().click({ timeout: 10_000 });
+  await page.waitForTimeout(1_000);
+  return bodyText(page);
+}
+
+async function openDeliveryStep(page: Page): Promise<string> {
+  // The full bag is still pre-checkout. Petz sometimes exposes delivery only on
+  // the immediately following checkout step. We allow only an explicitly named
+  // “go/continue to checkout” action while still on `/checkout/cart`, never a
+  // payment or order-confirmation control.
+  const path = new URL(page.url()).pathname;
+  if (!/^\/checkout\/cart(?:\/|$)/.test(path)) return bodyText(page);
+
+  const checkoutButtons = page.getByRole("button", { name: /^(?:ir para|continuar para) (?:o )?checkout$/i });
+  const checkoutLinks = page.getByRole("link", { name: /^(?:ir para|continuar para) (?:o )?checkout$/i });
+  const target = (await isVisible(checkoutButtons)) ? checkoutButtons.first() : (await isVisible(checkoutLinks)) ? checkoutLinks.first() : null;
+  if (!target) return bodyText(page);
+
+  await target.click({ timeout: 10_000 });
+  await page.waitForLoadState("domcontentloaded", { timeout: 20_000 }).catch(() => undefined);
+  await page.waitForTimeout(900);
+  return bodyText(page);
 }
 
 export class PetzBuyer implements BuyerConnector {
@@ -76,8 +107,9 @@ export class PetzBuyer implements BuyerConnector {
         const accepted = (parseLabelledTotal(drawerText, "subtotal") ?? 0) > 0 && retailMatch(item.requestedName, drawerText) >= 0.7;
         items.push({ ...item, status: accepted ? "resolved" : "ambiguous", retailerSku: petzProductId(url), retailerProductId: petzProductId(url), resolvedName: item.requestedName, actualUnitPrice: parseBrl(productText) ?? item.requestedUnitPrice ?? undefined, matchConfidence: retailMatch(item.requestedName, productText), raw: { url, quantity: item.requestedQty, accepted } });
       }
-      const cartText = await openBag(page);
-      return this.snapshot(input, session.id, items, cartText);
+      await openFullBag(page);
+      const deliveryText = await openDeliveryStep(page);
+      return this.snapshot(input, session.id, items, deliveryText, await deliveryDiagnostics(page));
     } finally { await browser.close(); }
   }
 
@@ -92,9 +124,10 @@ export class PetzBuyer implements BuyerConnector {
     try {
       // Stay on the live product page restored by Browserbase. Navigating to Petz's
       // home swaps frontend shells and can temporarily hide the in-memory cart.
-      const cartText = await openBag(page);
-      const items: ResolvedPurchaseItem[] = input.items.map((item) => ({ ...item, status: retailMatch(item.requestedName, cartText) >= 0.7 ? "resolved" : "ambiguous", retailerSku: petzProductId(item.productUrl ?? ""), retailerProductId: petzProductId(item.productUrl ?? ""), resolvedName: item.requestedName, actualUnitPrice: item.expectedUnitPrice ?? item.requestedUnitPrice ?? undefined, matchConfidence: retailMatch(item.requestedName, cartText), raw: { revalidated: true } }));
-      return this.snapshot(input, session.id, items, cartText);
+      await openFullBag(page);
+      const deliveryText = await openDeliveryStep(page);
+      const items: ResolvedPurchaseItem[] = input.items.map((item) => ({ ...item, status: retailMatch(item.requestedName, deliveryText) >= 0.7 ? "resolved" : "ambiguous", retailerSku: petzProductId(item.productUrl ?? ""), retailerProductId: petzProductId(item.productUrl ?? ""), resolvedName: item.requestedName, actualUnitPrice: item.expectedUnitPrice ?? item.requestedUnitPrice ?? undefined, matchConfidence: retailMatch(item.requestedName, deliveryText), raw: { revalidated: true } }));
+      return this.snapshot(input, session.id, items, deliveryText, await deliveryDiagnostics(page));
     } finally { await browser.close(); }
   }
 
@@ -103,12 +136,14 @@ export class PetzBuyer implements BuyerConnector {
     throw new PurchaseError("MANUAL_ACTION_REQUIRED", !policy.enabled || policy.mode === "off" || policy.mode === "cart_only" ? "A Petz está em cart_only: a sacola foi preparada, mas a compra não será finalizada." : "A finalização financeira da Petz ainda exige ação humana na sessão gravada.");
   }
 
-  private snapshot(input: BuyerInput, sessionId: string, items: ResolvedPurchaseItem[], cartText: string): CartSnapshot {
+  private snapshot(input: BuyerInput, sessionId: string, items: ResolvedPurchaseItem[], cartText: string, diagnostics: string[]): CartSnapshot {
     const total = parseLabelledTotal(cartText, "subtotal");
+    const deliveryFee = parseDeliveryFee(cartText);
+    const deliveryPromise = parseDeliveryPromise(cartText);
     const itemsSubtotal = money(items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0));
     const priceMatches = total !== undefined && Math.abs(total - itemsSubtotal) <= Math.max(5, itemsSubtotal * 0.05);
-    const ready = total !== undefined && (input.items.length === 0 ? total === 0 : total > 0) && priceMatches && items.length === input.items.length && items.every((item) => item.status === "resolved");
-    return { storeKey: input.storeKey, storeLabel: input.storeLabel, storeUnitId: input.storeUnitId, storeUnitLabel: input.storeUnitLabel, browserSessionId: sessionId, items, itemsSubtotal, total: total ?? itemsSubtotal, currency: "BRL", capturedAt: new Date().toISOString(), status: ready ? "ready" : "needs_human", reason: ready ? undefined : "A sacola Petz não confirmou todos os itens, quantidades e subtotal." };
+    const ready = total !== undefined && deliveryFee !== undefined && Boolean(deliveryPromise) && (input.items.length === 0 ? total === 0 : total > 0) && priceMatches && items.length === input.items.length && items.every((item) => item.status === "resolved");
+    return { storeKey: input.storeKey, storeLabel: input.storeLabel, storeUnitId: input.storeUnitId, storeUnitLabel: input.storeUnitLabel, browserSessionId: sessionId, items, itemsSubtotal, deliveryFee, deliveryPromise, deliveryDiagnostics: ready ? undefined : diagnostics, total: total === undefined ? itemsSubtotal : money(total + (deliveryFee ?? 0)), currency: "BRL", capturedAt: new Date().toISOString(), status: ready ? "ready" : "needs_human", reason: ready ? undefined : "A sacola Petz não confirmou itens, subtotal, frete e prazo de entrega." };
   }
 
   private assertConfigured(): void {
@@ -129,15 +164,31 @@ export class PetzBuyer implements BuyerConnector {
     let text = await openBag(page);
     for (let removed = 0; removed < 100; removed += 1) {
       const drawer = page.locator("[data-testid=ecom-product-card-modal-bag-dialog]:visible");
-      const card = drawer.locator(".bag-card-wrapper").first();
+      const card = drawer.locator(".bag-card-wrapper:visible").first();
       if (!(await isVisible(card))) {
         // After the last DELETE the card disappears before the subtotal animation
         // reaches zero. The later exact subtotal guard still prevents a stale item
         // from ever turning this snapshot into cart_ready.
         return;
       }
-      await card.locator("button.bag-card-icon").click({ timeout: 5_000 });
-      const confirm = card.locator("button.bag-card-delete");
+      // Petz re-renders the bag card during its quantity animation. Resolve the
+      // control again immediately before each safe delete action rather than
+      // keeping a stale nested locator from the previous render.
+      let removeError: unknown;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const remove = page.locator('[data-testid=ecom-product-card-modal-bag-dialog]:visible .bag-card-wrapper:visible button.bag-card-icon:visible').first();
+        if (!(await isVisible(remove))) break;
+        try {
+          await remove.click({ timeout: 10_000, force: true });
+          removeError = undefined;
+          break;
+        } catch (error) {
+          removeError = error;
+          await page.waitForTimeout(250);
+        }
+      }
+      if (removeError) throw removeError;
+      const confirm = page.locator('[data-testid=ecom-product-card-modal-bag-dialog]:visible .bag-card-wrapper:visible button.bag-card-delete:visible').first();
       if (!(await isVisible(confirm)) || !(await confirm.isEnabled())) throw new PurchaseError("MANUAL_ACTION_REQUIRED", "A Petz não habilitou a confirmação para limpar um item antigo da sacola.");
       await confirm.click({ timeout: 10_000 });
       await page.waitForTimeout(900);

@@ -3,7 +3,7 @@ import { chromium, type Page } from "playwright-core";
 import { getPurchasePolicy, money } from "../policy";
 import type { BuyerConnector, BuyerInput, CartSnapshot, ResolvedPurchaseItem, StoreOrderResult } from "../types";
 import { PurchaseError } from "../types";
-import { clickCookieConsent, isVisible, parseLabelledTotal, retailMatch, safeRetailerUrl } from "./browser-store-utils";
+import { clickCookieConsent, deliveryDiagnostics, isVisible, parseDeliveryFee, parseDeliveryPromise, parseLabelledTotal, retailMatch, safeRetailerUrl } from "./browser-store-utils";
 
 const BOTICARIO_ORIGIN = "https://www.boticario.com.br";
 
@@ -70,7 +70,7 @@ export class BoticarioBuyer implements BuyerConnector {
         const accepted = quantity === item.requestedQty && confidence >= 0.7;
         return { ...item, status: accepted ? "resolved" : "ambiguous", retailerSku: sku, retailerProductId: sku, resolvedName: item.requestedName, actualUnitPrice: item.requestedUnitPrice ?? undefined, matchConfidence: confidence, raw: { sku, requestedQty: item.requestedQty, cartQty: quantity } };
       }));
-      return this.snapshot(input, session.id, [...resolved, ...failed], cartText);
+      return this.snapshot(input, session.id, [...resolved, ...failed], cartText, await deliveryDiagnostics(page));
     } finally { await browser.close(); }
   }
 
@@ -99,7 +99,7 @@ export class BoticarioBuyer implements BuyerConnector {
         const confidence = retailMatch(item.requestedName, itemText || cartText);
         return { ...item, status: sku && quantity === item.requestedQty && confidence >= 0.7 ? "resolved" : "ambiguous", retailerSku: sku ?? undefined, retailerProductId: sku ?? undefined, resolvedName: item.requestedName, actualUnitPrice: item.expectedUnitPrice ?? item.requestedUnitPrice ?? undefined, matchConfidence: confidence, raw: { revalidated: true, cartQty: quantity } };
       }));
-      return this.snapshot(input, session.id, items, cartText);
+      return this.snapshot(input, session.id, items, cartText, await deliveryDiagnostics(page));
     } finally { await browser.close(); }
   }
 
@@ -108,12 +108,14 @@ export class BoticarioBuyer implements BuyerConnector {
     throw new PurchaseError("MANUAL_ACTION_REQUIRED", !policy.enabled || policy.mode === "off" || policy.mode === "cart_only" ? "O Boticário está em cart_only: a sacola foi preparada, mas a compra não será finalizada." : "A finalização financeira do Boticário ainda exige ação humana na sessão gravada.");
   }
 
-  private snapshot(input: BuyerInput, sessionId: string, items: ResolvedPurchaseItem[], cartText: string): CartSnapshot {
+  private snapshot(input: BuyerInput, sessionId: string, items: ResolvedPurchaseItem[], cartText: string, diagnostics: string[]): CartSnapshot {
     const total = parseLabelledTotal(cartText, "subtotal");
+    const deliveryFee = parseDeliveryFee(cartText);
+    const deliveryPromise = parseDeliveryPromise(cartText);
     const itemsSubtotal = money(items.reduce((sum, item) => sum + (item.actualUnitPrice ?? 0) * item.requestedQty, 0));
     const priceMatches = total !== undefined && Math.abs(total - itemsSubtotal) <= Math.max(5, itemsSubtotal * 0.05);
-    const ready = total !== undefined && priceMatches && items.length === input.items.length && items.every((item) => item.status === "resolved");
-    return { storeKey: input.storeKey, storeLabel: input.storeLabel, storeUnitId: input.storeUnitId, storeUnitLabel: input.storeUnitLabel, browserSessionId: sessionId, items, itemsSubtotal, total: total ?? itemsSubtotal, currency: "BRL", capturedAt: new Date().toISOString(), status: ready ? "ready" : "needs_human", reason: ready ? undefined : `A sacola do Boticário falhou na validação (total=${String(total)}, esperado=${itemsSubtotal}, preço=${priceMatches}, itens=${items.length}/${input.items.length}, status=${items.map((item) => item.status).join(",")}).` };
+    const ready = total !== undefined && deliveryFee !== undefined && Boolean(deliveryPromise) && priceMatches && items.length === input.items.length && items.every((item) => item.status === "resolved");
+    return { storeKey: input.storeKey, storeLabel: input.storeLabel, storeUnitId: input.storeUnitId, storeUnitLabel: input.storeUnitLabel, browserSessionId: sessionId, items, itemsSubtotal, deliveryFee, deliveryPromise, deliveryDiagnostics: ready ? undefined : diagnostics, total: total === undefined ? itemsSubtotal : money(total + (deliveryFee ?? 0)), currency: "BRL", capturedAt: new Date().toISOString(), status: ready ? "ready" : "needs_human", reason: ready ? undefined : `A sacola do Boticário falhou na validação (subtotal=${String(total)}, frete=${String(deliveryFee)}, prazo=${String(deliveryPromise)}, esperado=${itemsSubtotal}, preço=${priceMatches}, itens=${items.length}/${input.items.length}, status=${items.map((item) => item.status).join(",")}).` };
   }
 
   private assertConfigured(): void {
@@ -121,16 +123,43 @@ export class BoticarioBuyer implements BuyerConnector {
   }
 
   private async ensureCep(page: Page, deliveryCep?: string | null): Promise<void> {
-    const field = page.locator('input[name="postalCode"]:visible');
-    if (!(await isVisible(field))) return;
     const cep = deliveryCep?.replace(/\D/g, "");
     if (!cep || cep.length !== 8) throw new PurchaseError("CONFIGURATION_REQUIRED", "Falta o CEP de entrega para validar a sacola do Boticário.");
-    await field.first().fill(cep);
+    // On the bag page the CEP input is behind the retailer's "Consulte o frete"
+    // action. Prefer it even when a detached responsive-header CEP field exists.
+    const deliveryPrompt = page.getByText(/consulte o frete e o prazo de entrega/i);
+    if (await isVisible(deliveryPrompt)) {
+      await deliveryPrompt.first().click({ timeout: 10_000 });
+      await page.waitForTimeout(500);
+    }
+    let field = page.locator('[role="dialog"] [data-testid="postal-code-input"]:visible');
+    if (!(await isVisible(field))) field = page.locator('[data-testid="postal-code-input"]:visible');
+    if (!(await isVisible(field))) field = page.locator('[role="dialog"] input[name="postalCode"]:visible');
+    if (!(await isVisible(field))) field = page.locator('input[name="postalCode"]:visible');
+    // Keep going to snapshot the safe delivery diagnostics; `snapshot` still fails
+    // closed without freight/promise, so this can never become a customer quote.
+    if (!(await isVisible(field))) return;
+    // This is a retailer-owned gate. Do not force a field that the storefront
+    // intentionally marked disabled; return a safe `needs_human` snapshot.
+    if (
+      await field.first().isDisabled().catch(() => true) ||
+      (await field.first().getAttribute("data-disabled").catch(() => "true")) === "true"
+    ) return;
+    // The storefront validates the masked Brazilian format at form submission.
+    // Keep the normalized value for validation, but send the form's expected
+    // visual representation (e.g. 01310-100).
+    const formattedCep = `${cep.slice(0, 5)}-${cep.slice(5)}`;
+    await field.first().click();
+    await field.first().fill("");
+    await field.first().pressSequentially(formattedCep, { delay: 60 });
+    // This current Boticário field submits from its form on Enter; use that
+    // retailer-native non-financial action before trying legacy button labels.
+    await field.first().press("Enter").catch(() => undefined);
+    await page.waitForTimeout(1_000);
+    // The form may have already calculated delivery and removed the field.
+    if (!(await isVisible(field))) return;
     let submit = page.locator("[data-testid=submit-postalcode-button]:visible");
     if (!(await isVisible(submit))) submit = page.locator("button:visible").filter({ hasText: /^\s*(?:ok|confirmar|calcular)\s*$/i });
-    // The responsive header sometimes renders a detached CEP field with no submit.
-    // It does not affect SKU/price validation, so leave the saved customer CEP as
-    // the source of truth and continue instead of creating a false exception.
     if (!(await isVisible(submit))) return;
     await submit.first().click({ timeout: 10_000 }); await page.waitForTimeout(800);
   }

@@ -4,7 +4,7 @@ import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, allUnits, type StoreC
 import { pickNearestUnit } from "@/lib/stores/nearest";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import { attrMatchesItem, inferCatalogRefinement, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
-import { getCourier, quoteAll } from "@/lib/couriers";
+import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { createCardAttempt, expireOpenPaymentAttempts, getConfirmedPaymentAttempt, getOneClickCredential } from "@/lib/payments/whatsapp-pay";
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
@@ -75,10 +75,20 @@ function manualConciergeEnabled(): boolean {
 // pickup is from HERE, never a store counter — so the retailer third-party-pickup document
 // rules never apply. Configured once via env for the pilot.
 function operatorPickup(): { address: string; cep?: string } {
+  const address = process.env.LIA_OPERATOR_PICKUP_ADDRESS?.trim();
+  const cep = process.env.LIA_OPERATOR_PICKUP_CEP?.replace(/\D/g, "");
   return {
-    address: process.env.LIA_OPERATOR_PICKUP_ADDRESS ?? "Base da Lia",
-    cep: process.env.LIA_OPERATOR_PICKUP_CEP ?? undefined
+    address: address || "",
+    cep: cep || undefined
   };
+}
+
+function requireOperatorPickup(): { address: string; cep: string } {
+  const pickup = operatorPickup();
+  if (!pickup.address || !pickup.cep || pickup.cep.length !== 8) {
+    throw new Error("Configure LIA_OPERATOR_PICKUP_ADDRESS e LIA_OPERATOR_PICKUP_CEP antes de despachar o courier.");
+  }
+  return { address: pickup.address, cep: pickup.cep };
 }
 
 // Your margin is baked into the product price (no separate fee line). Customer sees
@@ -2996,7 +3006,7 @@ export async function opsDispatchCourier(orderId: string) {
     for (const fulfillment of fulfillments) {
       const store = getStore(fulfillment.storeKey);
       const courier = getCourier(fulfillment.courierKey);
-      dispatches.push(await courier.dispatch({
+      const dispatch = await courier.dispatch({
         orderId: `${order.id}-${fulfillment.storeKey}`,
         pickupAddress: fulfillment.unitAddress,
         dropoffAddress: order.deliveryAddress ?? "",
@@ -3006,7 +3016,9 @@ export async function opsDispatchCourier(orderId: string) {
         quoteId: fulfillment.courierQuoteId,
         dropoffName: order.customerName ?? undefined,
         dropoffPhone: order.phone
-      }));
+      });
+      assertDispatchIsAllowed(dispatch);
+      dispatches.push(dispatch);
     }
     const tracking = dispatches.map((dispatch, index) => `${fulfillments[index].storeLabel}: ${dispatch.trackingUrl}`).join("\n");
     const updated = await prisma.deliveryOrder.update({
@@ -3024,7 +3036,7 @@ export async function opsDispatchCourier(orderId: string) {
     // Same-hour concierge: the operator already holds the goods; the courier picks up at
     // the operator's base and delivers to the customer — no store counter, no titleholder
     // documents. This is the pilot's motoboy path.
-    const pickup = operatorPickup();
+    const pickup = requireOperatorPickup();
     pickupAddress = pickup.address;
     pickupCep = pickup.cep;
     instructions = `Retirar com a Lia e entregar ao cliente${order.storeOrderNumber?.trim() ? ` (ref. ${order.storeOrderNumber.trim()})` : ""}.`;
@@ -3048,6 +3060,7 @@ export async function opsDispatchCourier(orderId: string) {
     dropoffName: order.customerName ?? undefined,
     dropoffPhone: order.phone
   });
+  assertDispatchIsAllowed(dispatch);
   const updated = await prisma.deliveryOrder.update({
     where: { id: orderId },
     data: {

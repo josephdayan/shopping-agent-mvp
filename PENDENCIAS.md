@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-07-21._
+_Última atualização: 2026-08-02._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -21,6 +21,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > ao cliente; não houve cobrança. O concierge não foi implantado porque o deploy atual incluiria
 > uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
 > pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
+
+> **Atualização de 02/08.** O deploy limpo de 24/07 está online e foi conferido por endpoints
+> públicos. O worktree local ainda precisa ser consolidado para que `main`/Git representem o
+> artefato publicado. Foi adicionada uma guarda de produção: provider Meta não aceita despacho
+> mockado e o motoboy exige endereço + CEP configurados da base do operador. Antes de dinheiro
+> real, preencher a base na Vercel, manter `LIA_MANUAL_CONCIERGE=true` e
+> `PURCHASE_AUTOMATION_MODE=cart_only`, e validar o bloqueio com um pedido técnico isolado.
 
 ## Como usar
 
@@ -62,6 +69,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [ ] Limpar os 19 pedidos técnicos de Production **somente após autorização explícita**.
 - [ ] Rodar 5–10 pedidos concierge reais, registrando tempo de cotação, margem depois do frete,
   falhas e satisfação. A demonstração mockada não conta como piloto.
+- [x] Falhar fechado quando produção Meta não tiver despacho real do courier; o modo mock permanece
+  disponível somente para testes locais.
+- [ ] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
+  Production antes de liberar o botão de despacho do piloto.
 
 ### Cotação e cobrança
 

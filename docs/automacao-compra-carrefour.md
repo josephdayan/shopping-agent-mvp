@@ -1,5 +1,32 @@
 # Automação de compra — Carrefour (piloto controlado)
 
+> **Status — 19/07/2026:** este é um registro histórico; o código e as rotas Carrefour foram
+> removidos do produto ativo. A automação de autenticação/checkout via Browserbase está pausada.
+> Depois de a configuração de produção ser comprovada, o próprio Carrefour bloqueou a sessão
+> remota na rota de login por política de segurança. Não criar novos retries nem tentar contornar
+> WAF, fingerprint, CAPTCHA ou a política do varejista. O checkout só deve ser retomado com
+> API/parceria oficial ou ambiente autorizado. Para o produto ativo, priorizar Oba, Petz e
+> Boticário; o fluxo de cotação antes da cobrança está documentado em
+> [automacao-compra-varejistas.md](automacao-compra-varejistas.md).
+
+## Alternativas vigentes — 19/07/2026
+
+1. **Handoff para o cliente (rejeitado):** por decisão do operador em 19/07, o cliente não receberá
+   links nem concluirá a compra; a Lia deve preservar a experiência ponta a ponta.
+2. **Operação humana invisível (ponte interna):** operador monta manualmente no navegador comum.
+   Pode servir para demonstração controlada, mas não é automação nem solução de escala.
+3. **Shopper próprio/controlado:** compra fisicamente na loja e entrega depois. Evita o login web,
+   mas exige novo desenho de preço final, substituições, pagamento, NF, cadeia fria e logística.
+4. **Parceria homologada (rota de escala):** pedir ao Carrefour ou a um app de delivery parceiro
+   acesso formal a catálogo, estoque regional, frete/prazo, criação de pedido e webhooks.
+5. **Marketplace Seller (não aplicável):** a integração pública é para cadastrar ofertas e gerir
+   pedidos de quem vende no Carrefour; não cria compras de consumidor para a Lia.
+6. **VTEX direto (não autorizado):** a VTEX documenta orderForm e simulação de carrinho, mas o
+   endpoint padrão no domínio headless Carrefour respondeu 500 em uma requisição anônima de
+   leitura. Não descobrir ou chamar backend interno sem autorização escrita.
+7. **Automação local, extensão, proxy ou fingerprint (rejeitada):** não resolve os riscos de conta
+   central e termos e não deve ser usada para contornar a proteção observada.
+
 > **Atualização operacional — 14/07/2026:** esta automação continua útil para busca,
 > carrinho, cotação e compra com entrega do Carrefour. Ela não deve assumir que um motoboy
 > on-demand conseguirá retirar o pedido. O Carrefour exige documentação do titular para
@@ -45,7 +72,10 @@ Uma nova sessão foi aberta, mas a reautenticação humana não foi concluída e
 a tentativa. Não abrir outra sessão ou repetir o preflight até a próxima tentativa coordenada.
 Nenhuma cobrança ou compra foi executada; a cotação Browserbase continua pendente.
 
-## Ativação do primeiro piloto
+## Ativação do primeiro piloto Carrefour — suspensa
+
+As etapas abaixo ficam preservadas como referência técnica, mas não devem ser executadas enquanto
+não existir API/parceria oficial ou confirmação de ambiente autorizado pelo Carrefour.
 
 1. Crie uma conta Browserbase e gere `BROWSERBASE_API_KEY`.
 2. Crie um **Context** persistente exclusivo para a conta PJ do Carrefour e salve seu ID

@@ -23,9 +23,8 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
 
 function snapshot(total = 45): CartSnapshot {
   return {
-    storeKey: "carrefour",
-    storeLabel: "Carrefour",
-    storeUnitId: "crf-pinheiros",
+    storeKey: "oba",
+    storeLabel: "Oba Hortifruti",
     retailerCartId: "cart-1",
     items: [
       {

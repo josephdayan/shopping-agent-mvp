@@ -5,6 +5,13 @@ da Petz e revisar as políticas oficiais de retirada da Petz, Carrefour e Uber D
 Ele substitui a premissa anterior de que uma compra comum em `clique-e-retire` poderia ser
 coletada em escala por qualquer motoboy.
 
+> **Registro posterior — 02/08/2026.** A decisão de produto mais recente é o concierge manual
+> de largura descrito no topo de [AGENTS.md](../AGENTS.md). O deploy limpo de 24/07 está online.
+> Em produção Meta, despacho mockado agora falha fechado e o courier exige endereço/CEP reais
+> da base do operador. O piloto continua bloqueado por configuração da base, Mercado Pago PJ/NF,
+> titularidade/pós-venda, rotação de credenciais expostas e 5–10 pedidos reais. O histórico
+> abaixo permanece válido para explicar por que não usamos retirada no balcão.
+
 ## Resumo executivo
 
 - A proposta de conveniência no WhatsApp continua válida.
@@ -51,6 +58,19 @@ piloto. Racional canônico no topo do [AGENTS.md](../AGENTS.md).
   focados (`tests/manual-concierge.test.ts` + evals legados) e build passaram em 20/07. Ainda
   não implantado ao vivo; próximo passo é o piloto manual de 5–10 pedidos reais. Titularidade,
   NF, troca/devolução e chargeback seguem como bloqueio antes do lançamento público.
+
+### Atualização operacional — 21/07/2026
+
+O ciclo concierge foi demonstrado localmente em ambiente mockado, sem cobrança: cotação de
+R$100, confirmação de Pix, compra, despacho de Uber Direct a partir da base do operador e
+entrega, com as mensagens ao cliente conferidas. O botão único **“Comprei — despachar motoboy”**
+e o [runbook do operador](operador-runbook.md) formam o kit para a pessoa que vai operar o
+piloto.
+
+Os commits `bb48c2e`, `ededf6a` e `7ab8453` estão verdes, mas o concierge ainda não foi para
+Production: a publicação atual incluiria uma migration Oba inacabada de trabalho paralelo. A
+regra é publicar somente com deploy limpo. A operação decidiu contratar um operador. Há 19 pedidos
+técnicos na fila de Production; a limpeza é ação destrutiva e requer autorização explícita.
 
 ## Reavaliação Carrefour — 19/07/2026
 

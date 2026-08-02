@@ -64,7 +64,8 @@ test("retailer cart validation reads the labelled subtotal, not an offer card", 
   assert.ok(retailMatch("Lily Le Parfum Perfume 30ml", "Lily — Le Parfum Perfume 30 ml") >= 0.7);
 });
 
-test("purchase registry exposes Petz and Boticário buyers", () => {
+test("purchase registry exposes Oba, Petz and Boticário buyers", () => {
+  assert.equal(getBuyer("oba").key, "oba");
   assert.equal(getBuyer("petz").key, "petz");
   assert.equal(getBuyer("boticario").key, "boticario");
 });

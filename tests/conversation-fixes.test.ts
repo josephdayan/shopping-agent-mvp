@@ -200,7 +200,7 @@ test("escolha: último / mais caro / recomenda", () => {
 });
 
 test("matcher: piso de relevância mata ruído conversacional", () => {
-  const esponja = { sku: "x", name: "Esponja Multiuso Não Risca Carrefour", unitPrice: 2 };
+  const esponja = { sku: "x", name: "Esponja Multiuso Não Risca", unitPrice: 2 };
   assert.equal(scoreCatalogMatch("não, obrigado", esponja), 0);
   assert.equal(scoreCatalogMatch("vc entrega em osasco", esponja), 0);
 });
@@ -395,7 +395,7 @@ test("merge LLM+determinístico: 'presente pra minha namorada, tipo um perfume' 
 });
 
 test("matcher: tamanho sozinho não é relevância — 'arroz 2kg' não traz Areia Higiênica 2Kg (ciclo 2)", () => {
-  const areia = { sku: "a", name: "Areia Higiênica Carrefour 2Kg", unitPrice: 16 };
+  const areia = { sku: "a", name: "Areia Higiênica 2Kg", unitPrice: 16 };
   const arroz = { sku: "r", name: "Arroz Branco Longo-fino Tipo 1 Tio João 2Kg", brand: "Tio João", unitPrice: 13 };
   assert.equal(scoreCatalogMatch("arroz 2kg", areia), 0, "areia só casa no 2kg — ruído");
   assert.ok(scoreCatalogMatch("arroz 2kg", arroz) > 0);

@@ -22,7 +22,7 @@ test("busca de beleza acha na Boticário com productUrl real", async () => {
   assert.ok(perfume.productUrl?.startsWith("https://www.boticario.com.br/"), "deve ter deep-link real");
 });
 
-test("roteamento: item de beleza vai pra Boticário, não pro Carrefour", async () => {
+test("roteamento: item de beleza vai pra Boticário, não pro Oba", async () => {
   const { pickStoreForQueries } = await import("../src/lib/stores");
   const store = await pickStoreForQueries(["perfume", "batom", "maquiagem"]);
   assert.equal(store.key, "boticario", `roteou pra ${store.key}`);

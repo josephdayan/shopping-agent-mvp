@@ -19,7 +19,7 @@ test("retailer delivery is detected from the canonical key or fulfillment mode",
     isRetailerDeliveryOrder({
       courierKey: "uber_direct",
       fulfillments: [
-        { storeKey: "carrefour", deliveryMode: "retailer_delivery" },
+        { storeKey: "oba", deliveryMode: "retailer_delivery" },
         { storeKey: "petz", deliveryMode: "retailer_delivery" }
       ]
     }),
@@ -28,7 +28,7 @@ test("retailer delivery is detected from the canonical key or fulfillment mode",
   assert.equal(
     isRetailerDeliveryOrder({
       courierKey: "uber_direct",
-      fulfillments: [{ storeKey: "carrefour", deliveryMode: "authorized_courier" }]
+      fulfillments: [{ storeKey: "oba", deliveryMode: "authorized_courier" }]
     }),
     false
   );

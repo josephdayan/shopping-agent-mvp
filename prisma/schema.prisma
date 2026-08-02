@@ -38,8 +38,8 @@ model DeliveryOrder {
   cep                 String?
   deliveryAddress     String?
   // Pluggable supply: storeKey resolves to a StoreConnector in the registry.
-  storeKey            String        @default("carrefour")
-  storeLabel          String        @default("Carrefour")
+  storeKey            String        @default("oba")
+  storeLabel          String        @default("Oba Hortifruti")
   storeUnit           String?
   storeAddress        String?
   storeOrderNumber    String?

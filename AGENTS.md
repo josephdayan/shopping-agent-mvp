@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-07-21._
+_Última atualização: 2026-08-02._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -87,6 +87,25 @@ Pendências humanas: piloto 5–10 pedidos, titularidade/NF, rotação de senha 
 
 O restante deste arquivo descreve o fluxo legado de automação por varejista; ele continua
 válido como referência, mas **o produto ativo é o concierge manual acima**.
+
+### Atualização 02/08/2026 — reconciliação de produção e segurança do piloto
+
+- O deploy limpo de 24/07 continua sendo a versão pública: concierge manual, kit do operador,
+  11 vitrines e correção de roteamento. A landing responde 200; `/ops` abre a interface, mas as
+  APIs internas continuam protegidas e o webhook rejeita chamadas sem assinatura.
+- O primeiro trabalho de retorno é consolidar no Git o snapshot que foi publicado. A branch
+  `ops-direct-retailer-delivery` está à frente de `main` e o worktree ainda contém a migração
+  de default Oba, o comprador Oba, a sessão viva do operador e a remoção do checkout Carrefour
+  como alterações não consolidadas. Nenhuma alteração do usuário deve ser descartada.
+- O item de segurança do piloto foi reforçado no código: em produção Meta, despacho mockado do
+  courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
+  e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.
+- A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas, mas não
+  encontrou configuração explícita da base do operador. Não iniciar pedido real até preencher
+  endereço/CEP da base e confirmar `LIA_MANUAL_CONCIERGE=true`, `PURCHASE_AUTOMATION_MODE=cart_only`
+  e a guarda de despacho real em Production.
+- Continuam bloqueios humanos: contratar/treinar operador, Mercado Pago PJ e nota fiscal,
+  titularidade e pós-venda, rotação da senha Carrefour e PIN WhatsApp, e o piloto de 5–10 pedidos.
 
 ## O produto
 

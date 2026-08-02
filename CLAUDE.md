@@ -8,6 +8,13 @@ linguagem natural, recebe uma cotação do checkout real, paga por Pix/cartão, 
 para o varejista entregar diretamente. Este doc registra **por que** o produto é assim
 (a jornada e os becos sem saída) e **como** ele funciona.
 
+> **Atualização vigente — 21/07/2026:** o texto histórico abaixo descreve a estratégia de
+> checkout automatizado, que deixou de ser o caminho crítico. O produto ativo é concierge
+> manual: cliente pede qualquer coisa no WhatsApp, operador cota e compra, e o courier parte da
+> base do operador. O fluxo foi demonstrado localmente sem cobrança; ainda aguarda deploy limpo,
+> pois uma migration Oba paralela está inacabada. A operação decidiu contratar um operador.
+> Para a regra canônica, leia o topo de [AGENTS.md](AGENTS.md).
+
 > **Decisão de 14/07/2026:** a conclusão histórica `clique-e-retire + qualquer motoboy`
 > foi invalidada pelas políticas oficiais da Petz e do Carrefour. “Entrega hoje” exige
 > entrega same-day da própria loja ou parceiro formal que autorize courier. O registro

@@ -46,7 +46,7 @@ test("Context lease serializes concurrent carts and releases after completion", 
   });
 
   const first = withContextLease({
-    accountKey: "carrefour:context-a",
+    accountKey: "oba:context-a",
     token: "first",
     store,
     onBusy: busy,
@@ -59,7 +59,7 @@ test("Context lease serializes concurrent carts and releases after completion", 
   await firstStartedPromise;
 
   await assert.rejects(
-    () => withContextLease({ accountKey: "carrefour:context-a", token: "second", store, onBusy: busy, async work() { return "second"; } }),
+    () => withContextLease({ accountKey: "oba:context-a", token: "second", store, onBusy: busy, async work() { return "second"; } }),
     (error: unknown) => Boolean(error && typeof error === "object" && (error as { code?: string }).code === "RETAILER_BUSY")
   );
 
@@ -67,17 +67,17 @@ test("Context lease serializes concurrent carts and releases after completion", 
   assert.equal(await first, "first");
   assert.equal(leases.size, 0);
   assert.equal(
-    await withContextLease({ accountKey: "carrefour:context-a", token: "third", store, onBusy: busy, async work() { return "third"; } }),
+    await withContextLease({ accountKey: "oba:context-a", token: "third", store, onBusy: busy, async work() { return "third"; } }),
     "third"
   );
 });
 
 test("Context lease takes over only an expired lease and releases after work errors", async () => {
   const now = new Date("2026-07-16T12:00:00.000Z");
-  const { store, leases } = memoryStore([{ accountKey: "carrefour:context-a", token: "stale", expiresAt: new Date(now.getTime() - 1) }]);
+  const { store, leases } = memoryStore([{ accountKey: "oba:context-a", token: "stale", expiresAt: new Date(now.getTime() - 1) }]);
   await assert.rejects(
     () => withContextLease({
-      accountKey: "carrefour:context-a",
+      accountKey: "oba:context-a",
       token: "replacement",
       store,
       onBusy: busy,
@@ -97,7 +97,7 @@ test("Context lease does not hide database failures as a busy cart", async () =>
     throw new Error("database unavailable");
   };
   await assert.rejects(
-    () => withContextLease({ accountKey: "carrefour:context-a", token: "first", store, onBusy: busy, async work() { return "never"; } }),
+    () => withContextLease({ accountKey: "oba:context-a", token: "first", store, onBusy: busy, async work() { return "never"; } }),
     /database unavailable/
   );
 });
