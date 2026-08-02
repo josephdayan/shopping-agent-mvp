@@ -54,12 +54,12 @@ continua disponível quando o checkout confirmar a promessa.
 
 ## Atualização operacional — 02/08/2026
 
-O deploy de 24/07 foi reconciliado nos commits `cc3b371` e `fb12645` e o deploy
-`dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
+O deploy final foi publicado no commit `5a47d63` e o deploy
+`dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
-O snapshot publicado foi consolidado nos commits `cc3b371` e `971c2a4`; `main` local foi avançada
+O snapshot publicado foi consolidado no commit `5a47d63`; `main` local foi avançada
 por fast-forward e o worktree ficou limpo. O push remoto de `main` ainda é separado e não foi
 executado.
 

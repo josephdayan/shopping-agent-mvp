@@ -99,15 +99,15 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   11 vitrines e correção de roteamento. A landing responde 200; `/ops` abre a interface, mas as
   APIs internas continuam protegidas e o webhook rejeita chamadas sem assinatura.
 - O snapshot publicado foi consolidado no Git sem descartar alterações do usuário. `main` foi
-  avançada localmente por fast-forward até o commit `971c2a4`, igualando a branch publicada;
+  avançada localmente até o commit `5a47d63`, que contém o limite estadual de SP;
   o worktree está limpo. O push remoto de `main` ainda é uma ação separada.
 - O item de segurança operacional foi reforçado no código: em produção Meta, despacho mockado do
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
   e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.
 - A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas, mas não
   encontrou configuração explícita da base do operador. `LIA_MANUAL_CONCIERGE=true` e
-  `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` foram gravadas em Production e o commit `fb12645`
-  foi publicado como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). O código agora impõe
+  `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` foram gravadas em Production e o commit `5a47d63`
+  foi publicado como `dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` (`Ready`). O código agora impõe
   `estado-sp` no concierge, mesmo que um override legado tente ampliar ou desligar a cobertura.
 - Para considerar a operação pronta para uso real, falta somente completar a configuração da
   base do operador (se a modalidade for motoboy na hora), confirmar `PURCHASE_AUTOMATION_MODE=cart_only`

@@ -25,9 +25,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
 > UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
-> O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371`,
-> `971c2a4` e `fb12645`; `main` local foi avançada por fast-forward. A versão final foi
-> publicada como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). As flags
+> O deploy limpo foi reconciliado no commit `5a47d63`; `main` local está alinhada. A versão
+> final foi publicada como `dpl_7JfzybJLahQRgdnmkMKu4fjAf6Np` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
 > base na Vercel e conferir `PURCHASE_AUTOMATION_MODE=cart_only`; a validação real será feita
