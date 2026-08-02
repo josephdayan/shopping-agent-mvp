@@ -2908,6 +2908,9 @@ export async function opsPublishManualQuote(
   const total = roundMoney(produtos + deliveryFee);
   const deliveryMode = input.deliveryMode === "retailer_delivery" ? "retailer_delivery" : "operator_courier";
   const sameHour = deliveryMode === "operator_courier";
+  // Never publish a quote that can charge the customer when the operator's own
+  // pickup base is not configured. The same validation runs again at dispatch.
+  if (sameHour) requireOperatorPickup();
   const courierKey = deliveryMode === "retailer_delivery" ? "retailer_delivery" : "uber_direct";
 
   const items: BasketItem[] = input.items?.length
