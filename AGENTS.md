@@ -105,7 +105,8 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   11 vitrines e correção de roteamento. A landing responde 200; `/ops` abre a interface, mas as
   APIs internas continuam protegidas e o webhook rejeita chamadas sem assinatura.
 - O snapshot publicado foi consolidado no Git sem descartar alterações do usuário. `main` foi
-  avançada localmente até o commit `5a47d63`, que contém o limite estadual de SP;
+  avançada localmente até o commit `a700290`, que contém o limite estadual de SP, a titularidade
+  na PJ e a política de pós-venda;
   o worktree está limpo. O push remoto de `main` ainda é uma ação separada.
 - O item de segurança operacional foi reforçado no código: em produção Meta, despacho mockado do
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
@@ -114,7 +115,7 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   do operador foi configurada como Sensitive em Production (endereço e CEP informados pelo
   operador). `LIA_MANUAL_CONCIERGE=true`, `LIA_REQUIRE_REAL_COURIER_DISPATCH=true`,
   `PURCHASE_AUTOMATION_MODE=cart_only` e compra automática desligada estão ativas; o redeploy
-  `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` ficou `Ready`. O código impõe `estado-sp` no concierge.
+  `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4` ficou `Ready`. O código impõe `estado-sp` no concierge.
 - A fila tinha 19 entradas: 12 preflights internos sem pagamento foram removidos; 7 pedidos
   pagos ficaram intactos para conciliação/estorno. A decisão é receber na PJ, manter a PJ como
   titularidade operacional e, no pós-venda, não aceitar cancelamento/substituição depois do

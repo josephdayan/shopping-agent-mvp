@@ -59,12 +59,12 @@ O estorno parcial ainda é executado manualmente e auditado pela referência do 
 
 ## Atualização operacional — 02/08/2026
 
-O deploy final foi publicado no commit `5a47d63` e o deploy
-`dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
+O deploy final foi publicado no commit `a700290` e o deploy
+`dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
-O snapshot publicado foi consolidado no commit `93fcd50`; `main` local foi avançada
+O snapshot publicado foi consolidado no commit `a700290`; `main` local foi avançada
 por fast-forward e o worktree ficou limpo. O push remoto de `main` ainda é separado e não foi
 executado.
 

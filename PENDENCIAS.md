@@ -25,7 +25,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
 > UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
-> O deploy limpo está publicado como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`). As flags
+> O deploy limpo de código está publicado como `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. A base do operador foi configurada como Sensitive
 > na Vercel e `PURCHASE_AUTOMATION_MODE=cart_only` está fixo. Dos 19 registros da fila, 12
@@ -83,7 +83,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   CEP configurados; a checagem também é repetida no despacho.
 - [x] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
   Production antes de liberar o botão de despacho real; variáveis Sensitive, redeploy
-  `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD`.
+  `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4`.
 
 ### Cotação e cobrança
 

@@ -12,8 +12,9 @@ coletada em escala por qualquer motoboy.
 > titularidade operacional da compra. O pós-venda é sem cancelamento/substituição depois do
 > pagamento, com estorno de item faltante e aviso de atraso; antes do pagamento o cliente pode
 > limpar a lista. Falta confirmar com o contador o documento fiscal exato e permanecem pendentes
-> as rotações de credenciais expostas. O histórico abaixo permanece válido para explicar por que
-> não usamos retirada no balcão.
+> as rotações de credenciais expostas. O código mais recente está no commit `a700290` e o deploy
+> correspondente é `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4`. O histórico abaixo permanece válido para
+> explicar por que não usamos retirada no balcão.
 
 ## Resumo executivo
 

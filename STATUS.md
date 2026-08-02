@@ -32,8 +32,8 @@ de hoje está em
 
 > **Atualização 02/08.** A Lia opera **somente no estado de São Paulo**. No concierge, o código
 > rejeita qualquer UF fora de SP (e usa o prefixo do CEP como fallback quando o ViaCEP cai),
-> independentemente dos overrides legados de cobertura. O deploy final foi publicado no commit `5a47d63`
-> como `dpl_88YdRfBvLEAC24NNTiytnwyAdeGD` (`Ready`), reassumindo `liadelivery.com.br`. As flags
+> independentemente dos overrides legados de cobertura. O deploy final de código foi publicado no
+> commit `a700290` como `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4` (`Ready`), reassumindo `liadelivery.com.br`. As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão explícitas em
 > Production. O código impede despacho mockado quando o provider é Meta e exige endereço + CEP
 > reais da base do operador. A base foi configurada como Sensitive em Production; `PURCHASE_AUTOMATION_MODE=cart_only`
@@ -41,7 +41,7 @@ de hoje está em
 > pendência de desenvolvimento: fica a critério do operador depois que os gates abaixo estiverem
 > concluídos.
 
-> **Reconciliação de código.** O snapshot publicado foi consolidado no commit `5a47d63`; `main`
+> **Reconciliação de código.** O snapshot publicado foi consolidado no commit `a700290`; `main`
 > local foi avançada por fast-forward até ele e o worktree está limpo. O push de `main` para o
 > GitHub ainda não foi feito.
 
