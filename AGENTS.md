@@ -93,10 +93,9 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
 - O deploy limpo de 24/07 continua sendo a versão pública: concierge manual, kit do operador,
   11 vitrines e correção de roteamento. A landing responde 200; `/ops` abre a interface, mas as
   APIs internas continuam protegidas e o webhook rejeita chamadas sem assinatura.
-- O primeiro trabalho de retorno é consolidar no Git o snapshot que foi publicado. A branch
-  `ops-direct-retailer-delivery` está à frente de `main` e o worktree ainda contém a migração
-  de default Oba, o comprador Oba, a sessão viva do operador e a remoção do checkout Carrefour
-  como alterações não consolidadas. Nenhuma alteração do usuário deve ser descartada.
+- O snapshot publicado foi consolidado no Git sem descartar alterações do usuário. `main` foi
+  avançada localmente por fast-forward até o commit `971c2a4`, igualando a branch publicada;
+  o worktree está limpo. O push remoto de `main` ainda é uma ação separada.
 - O item de segurança do piloto foi reforçado no código: em produção Meta, despacho mockado do
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
   e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.

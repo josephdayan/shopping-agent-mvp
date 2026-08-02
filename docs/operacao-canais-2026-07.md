@@ -48,9 +48,9 @@ O deploy de 24/07 foi reconciliado no commit `cc3b371` e o deploy
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
-O repositório local ainda não estava reconciliado com o snapshot publicado: a branch de trabalho
-está à frente de `main` e preserva alterações locais da migração Oba e da retirada do checkout
-Carrefour. O trabalho de consolidação deve manter essas alterações, sem reset destrutivo.
+O snapshot publicado foi consolidado nos commits `cc3b371` e `971c2a4`; `main` local foi avançada
+por fast-forward e o worktree ficou limpo. O push remoto de `main` ainda é separado e não foi
+executado.
 
 Para o piloto, foi acrescentado um bloqueio de segurança no despacho: provider Meta não pode
 confirmar ao cliente um rastreio mockado. Além disso, o courier só parte depois de existir

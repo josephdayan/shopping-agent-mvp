@@ -22,8 +22,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
 > pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
 
-> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado no commit `cc3b371` e
-> publicado como `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`). As flags
+> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371` e
+> `971c2a4`; `main` local foi avançada por fast-forward. A versão foi publicada como
+> `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
 > base na Vercel, conferir `PURCHASE_AUTOMATION_MODE=cart_only` e executar um pedido técnico

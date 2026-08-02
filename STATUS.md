@@ -37,9 +37,9 @@ de hoje está em
 > reais da base do operador. A base ainda não foi configurada; `PURCHASE_AUTOMATION_MODE=cart_only`
 > deve ser conferido antes de qualquer pedido real.
 
-> **Reconciliação de código.** A branch publicada está à frente de `main`; o worktree ainda
-> contém alterações não consolidadas da transição Carrefour → Oba e dos endpoints do operador.
-> O próximo commit deve preservar essas alterações e tornar o Git a fonte do artefato publicado.
+> **Reconciliação de código.** O snapshot publicado foi consolidado no commit `971c2a4`; `main`
+> local foi avançada por fast-forward até ele e o worktree está limpo. O push de `main` para o
+> GitHub ainda não foi feito.
 
 ## 1. O que é a Lia
 
