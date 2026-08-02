@@ -22,9 +22,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
 > pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
 
-> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371` e
-> `971c2a4`; `main` local foi avançada por fast-forward. A versão foi publicada como
-> `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`). As flags
+> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado nos commits `cc3b371`,
+> `971c2a4` e `fb12645`; `main` local foi avançada por fast-forward. A versão final foi
+> publicada como `dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` (`Ready`). As flags
 > `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
 > provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
 > base na Vercel, conferir `PURCHASE_AUTOMATION_MODE=cart_only` e executar um pedido técnico
@@ -72,6 +72,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   falhas e satisfação. A demonstração mockada não conta como piloto.
 - [x] Falhar fechado quando produção Meta não tiver despacho real do courier; o modo mock permanece
   disponível somente para testes locais.
+- [x] Bloquear a publicação de cotação de motoboy quando a base do operador não tiver endereço e
+  CEP configurados; a checagem também é repetida no despacho.
 - [ ] Configurar e conferir `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` em
   Production antes de liberar o botão de despacho do piloto.
 

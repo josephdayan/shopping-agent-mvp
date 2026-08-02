@@ -43,8 +43,8 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 
 ## Atualização operacional — 02/08/2026
 
-O deploy de 24/07 foi reconciliado no commit `cc3b371` e o deploy
-`dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
+O deploy de 24/07 foi reconciliado nos commits `cc3b371` e `fb12645` e o deploy
+`dpl_8RejxiZ3UrAg8qUwDbQPc3NhMrac` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
 anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
 403 sem assinatura.
 
