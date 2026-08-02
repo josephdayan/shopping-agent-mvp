@@ -33,8 +33,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > preservados para conciliação/estorno. A decisão financeira é operar na PJ e manter a PJ como
 > titularidade operacional. Pós-venda: antes do pagamento, limpar a lista; depois, sem
 > cancelamento/substituição, estorno de item faltante e aviso de atraso. A validação real será
-> feita pelo operador quando ele considerar o sistema pronto; a obrigação e o tipo de documento
-> fiscal ainda dependem do contador.
+> feita pelo operador quando ele considerar o sistema pronto. A empresa é MEI: não há obrigação
+> de contador fixo; a rotina fiscal e o tipo de documento para cada caso ainda precisam ser
+> documentados.
 
 ## Como usar
 
@@ -230,9 +231,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 - [ ] Confirmar que a conta Mercado Pago PJ está apta ao modelo e aos volumes previstos;
   decisão tomada: recebimento e operação financeira serão sempre na PJ.
-- [x] Decisão operacional de titularidade: a PJ é a compradora/titular da operação perante o
-  cliente e o varejista. O contador ainda precisa confirmar o documento fiscal correspondente
-  a cada tipo de operação.
+- [x] Decisão operacional de titularidade: a PJ/MEI é a compradora/titular da operação perante
+  o cliente e o varejista. Não há obrigação de contratar contador fixo.
 - [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
   central.
 - [ ] Validar nos termos de Petz, Carrefour e Boticário se o uso operacional da conta
@@ -245,9 +245,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   excepcional do `/ops`.
 - [x] Responsabilidade de comunicação por atraso: avisar o cliente assim que a Lia souber do
   atraso, sem prometer compensação ou substituição.
-- [ ] Confirmar com o contador se a operação exige NF-e, NFS-e ou outro documento, e como
-  tributar a taxa/serviço cobrado pela Lia. Emissão não é automaticamente obrigatória em toda
-  venda a pessoa física, mas a regra muda conforme destinatário e enquadramento.
+- [ ] Documentar a rotina fiscal da Lia: para MEI, PF é dispensado de NF salvo solicitação e PJ
+  exige documento fiscal; ainda falta definir, para cada formato de operação, se será NF-e,
+  NFS-e ou outro documento. Isso pode ser resolvido com orientação pontual, sem contador mensal.
 
 ### Cartão One-Click no WhatsApp
 

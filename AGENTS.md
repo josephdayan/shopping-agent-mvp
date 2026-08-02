@@ -48,10 +48,12 @@ bloqueou o Browserbase em 19/07; Petz/Boticário não expõem frete no Context h
   `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` (base de onde o motoboy retira).
 - **Prontidão**: o código e a publicação estão configurados para operar em SP; a primeira
   validação com pedidos reais é uma decisão do operador, não uma pendência de desenvolvimento.
-  A operação financeira será pela PJ e a PJ é a titularidade operacional da compra. NF não é
-  automaticamente obrigatória em toda venda a pessoa física: o enquadramento tributário e o
-  documento exato (NF-e/NFS-e) ainda devem ser confirmados com o contador antes da abertura
-  pública. TypeScript, lint, testes focados (fluxo manual + evals legados) e build estão verdes.
+  A empresa é MEI, a operação financeira será pela PJ e a PJ é a titularidade operacional da
+  compra. MEI não exige contador fixo nem contabilidade formal: mantém relatório mensal de
+  receitas e DASN anual. Para NF, venda a PF é dispensada salvo solicitação; venda a PJ exige
+  documento fiscal. O formato exato para mercadoria/serviço deve ser documentado, mas não exige
+  contratar contador mensalmente. TypeScript, lint, testes focados (fluxo manual + evals legados)
+  e build estão verdes.
 - **Pós-venda decidido em 02/08**: antes do pagamento, o cliente pode limpar a lista; depois do
   pagamento não há cancelamento iniciado pelo cliente nem substituição. Se faltar item, a Lia
   estorna o valor daquele item; se houver atraso, avisa o cliente. O procedimento de estorno

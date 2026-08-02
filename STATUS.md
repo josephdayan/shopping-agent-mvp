@@ -117,7 +117,7 @@ quando existir uma rota urgente formalmente compatível.
 | **Markup 10%** | ✅ embutido no preço (sem linha de "taxa") |
 | **Privacidade da loja** | ✅ a Lia não precisa expor o varejista ao cliente ("Procurando…"). |
 | **Canal** | ✅ Meta Cloud API em produção; Twilio Sandbox é legado de teste. |
-| **PJ/CNPJ + e-mail** | 🟡 operação definida na PJ; alinhar conta Mercado Pago PJ e documento fiscal com o contador. `contato@liadelivery.com.br` configurado no ImprovMX |
+| **MEI (PJ/CNPJ) + e-mail** | ✅ MEI confirmado; não exige contador fixo. Manter relatório mensal/DASN e documentar a rotina fiscal da Lia. `contato@liadelivery.com.br` configurado no ImprovMX |
 
 ---
 
@@ -179,9 +179,9 @@ para quando o operador decidir, depois desses gates.
   não há cancelamento iniciado pelo cliente nem substituição; item faltante gera estorno do
   próprio item; atraso é comunicado. A execução de estorno parcial ainda é manual e precisa de
   referência do provedor.
-- **Fiscal:** 🟡 confirmar com o contador se, para o enquadramento da PJ e o desenho da Lia,
-  cabe NF-e, NFS-e ou outro documento e como tributar a taxa/serviço. NF não é automaticamente
-  obrigatória em toda venda a pessoa física.
+- **Fiscal:** 🟡 a empresa é MEI e não precisa de contador fixo. Para a rotina da Lia, PF é
+  dispensado de NF salvo solicitação; PJ exige documento fiscal. Falta apenas documentar se o
+  fluxo de mercadoria/serviço usa NF-e, NFS-e ou outro documento.
 - **Pilotar entrega direta** com 5–10 pedidos controlados, sem prometer motoboy.
 - **Testar checkout e cartão salvo** em `cart_only`, incluindo CVV, 3DS, CAPTCHA e antifraude.
 - **Validar a revisão do `/ops`** para frete/prazo/rastreio do varejista e estorno auditável.

@@ -11,7 +11,8 @@ coletada em escala por qualquer motoboy.
 > em produção Meta, despacho mockado falha fechado. O recebimento será pela PJ, que também é a
 > titularidade operacional da compra. O pós-venda é sem cancelamento/substituição depois do
 > pagamento, com estorno de item faltante e aviso de atraso; antes do pagamento o cliente pode
-> limpar a lista. Falta confirmar com o contador o documento fiscal exato e permanecem pendentes
+> limpar a lista. A empresa é MEI e não precisa de contador fixo; falta documentar o documento
+> fiscal exato por formato de operação e permanecem pendentes
 > as rotações de credenciais expostas. O código mais recente está no commit `a700290` e o deploy
 > correspondente é `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4`. O histórico abaixo permanece válido para
 > explicar por que não usamos retirada no balcão.
@@ -652,9 +653,9 @@ automática desligada e bloqueio de despacho mockado no provider Meta. A base do
 configurada como Sensitive. Dos 19 itens antigos da fila, 12 preflights internos sem pagamento
 foram removidos com autorização; 7 pedidos pagos permanecem intactos para conciliação/estorno.
 A primeira validação com pedidos reais é uma decisão posterior do operador, não uma pendência de
-desenvolvimento. A decisão financeira é usar o Mercado Pago na PJ e manter a PJ como titularidade
-operacional da compra. O pós-venda fica: limpar a lista antes do pagamento; sem cancelamento ou
+desenvolvimento. A empresa é MEI e não exige contador fixo. A decisão financeira é usar o Mercado
+Pago na PJ e manter a PJ como titularidade operacional da compra. O pós-venda fica: limpar a lista antes do pagamento; sem cancelamento ou
 substituição depois do pagamento; estornar o item faltante; avisar atraso. Continua pendente a
-confirmação contábil de se o desenho exige NF-e, NFS-e ou outro documento e como tributar a taxa,
+documentação de se o desenho exige NF-e, NFS-e ou outro documento e como registrar a taxa,
 além da rotação dos segredos expostos. O estorno parcial ainda é manual e deve guardar a
 referência do provedor.

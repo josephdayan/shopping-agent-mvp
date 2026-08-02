@@ -46,7 +46,7 @@ O estorno parcial ainda é executado manualmente e auditado pela referência do 
 | Meta / WhatsApp oficial | Ativo | Sender `+55 11 97844-4813` aprovado e registrado na Cloud API, com webhook assinado. |
 | Canal de teste | Legado | Twilio Sandbox fica como referência de teste; a produção usa a Cloud API da Meta. |
 | E-mail do domínio | Configurado | `contato@liadelivery.com.br` está configurado no ImprovMX e é o canal para resolver a verificação da Meta. |
-| Formalização | Encaminhada | Operação definida na PJ; falta alinhar a conta Mercado Pago PJ e o documento fiscal com o contador. |
+| Formalização | MEI/PJ | MEI confirmado; não exige contador fixo. Manter relatório mensal/DASN e documentar a rotina fiscal da Lia. |
 | Pix | Real e testado | Mercado Pago gera Pix copia-e-cola e recebe confirmação pelo webhook. |
 | Cartão | Real | Checkout Pro gera link hospedado; a taxa é repassada ao cliente. |
 | Cartão One-Click | Código pronto, não ativado | Meta Cloud API direta + Pagar.me; depende de allowlist BR, migrations, domínio/chaves/webhook e sandbox. Não usa 360dialog. |
@@ -78,8 +78,9 @@ operador.
 Antes de qualquer cobrança/compra real, `LIA_MANUAL_CONCIERGE=true`, a base do operador e
 `PURCHASE_AUTOMATION_MODE=cart_only` já estão configurados em Production. A decisão é usar o
 Mercado Pago na PJ, manter a PJ como titular e operar o pós-venda sem cancelamento/substituição,
-com estorno de item faltante e aviso de atraso. Continua pendente só a confirmação contábil da
-obrigação e do tipo exato de documento fiscal, além da rotação da senha Carrefour/PIN do WhatsApp.
+com estorno de item faltante e aviso de atraso. Continua pendente apenas documentar a rotina fiscal
+e o tipo exato de documento por operação, além da rotação da senha Carrefour/PIN do WhatsApp; não
+é necessário contratar contador fixo.
 Dos 19 itens da fila antiga, 12 preflights internos sem pagamento foram removidos; 7 pedidos
 pagos permanecem para conciliação/estorno.
 Pedidos reais ficam para a validação que o operador escolher fazer depois.
@@ -147,8 +148,8 @@ a entregador on-demand e não usar o courier para retirada no balcão da loja.
 
 ## Antes de aceitar pedidos pagos em SP
 
-- Usar Mercado Pago PJ (decisão tomada) e confirmar com o contador se o desenho exige NF-e,
-  NFS-e ou outro documento; a decisão fiscal exata depende do enquadramento.
+- Manter o relatório mensal e a DASN do MEI; documentar quando a Lia emitirá NF-e/NFS-e ou outro
+  documento. Para PF, o MEI é dispensado salvo solicitação; para PJ, a emissão é obrigatória.
 - Regenerar token do Mercado Pago e segredo/credenciais da Uber que foram expostos em chat,
   depois atualizar a Vercel.
 - Validar termos e uso de conta central para múltiplos destinatários; pós-venda já decidido:
