@@ -43,8 +43,10 @@ que ainda impede a operação pública em escala. Para o produto e arquitetura, 
 
 ## Atualização operacional — 02/08/2026
 
-O deploy de 24/07 continua respondendo em produção. A checagem pública retornou landing 200,
-`/ops` acessível, APIs internas 401 sem credencial e webhook 403 sem assinatura.
+O deploy de 24/07 foi reconciliado no commit `cc3b371` e o deploy
+`dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` ficou `Ready`, reassumindo `liadelivery.com.br`. A checagem
+anterior retornou landing 200, `/ops` acessível, APIs internas 401 sem credencial e webhook
+403 sem assinatura.
 
 O repositório local ainda não estava reconciliado com o snapshot publicado: a branch de trabalho
 está à frente de `main` e preserva alterações locais da migração Oba e da retirada do checkout
@@ -53,7 +55,9 @@ Carrefour. O trabalho de consolidação deve manter essas alterações, sem rese
 Para o piloto, foi acrescentado um bloqueio de segurança no despacho: provider Meta não pode
 confirmar ao cliente um rastreio mockado. Além disso, o courier só parte depois de existir
 `LIA_OPERATOR_PICKUP_ADDRESS` e `LIA_OPERATOR_PICKUP_CEP` válidos. A Vercel tem os Contexts e
-credenciais históricas, mas ainda não tem esses dados explícitos da base do operador.
+credenciais históricas, e agora também `LIA_MANUAL_CONCIERGE=true` e
+`LIA_REQUIRE_REAL_COURIER_DISPATCH=true`, mas ainda não tem esses dados explícitos da base do
+operador.
 
 Antes de qualquer cobrança/compra real, o operador deve preencher a base, conferir
 `LIA_MANUAL_CONCIERGE=true`, manter `PURCHASE_AUTOMATION_MODE=cart_only`, e executar um pedido

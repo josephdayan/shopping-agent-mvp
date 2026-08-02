@@ -22,12 +22,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
 > pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
 
-> **Atualização de 02/08.** O deploy limpo de 24/07 está online e foi conferido por endpoints
-> públicos. O worktree local ainda precisa ser consolidado para que `main`/Git representem o
-> artefato publicado. Foi adicionada uma guarda de produção: provider Meta não aceita despacho
-> mockado e o motoboy exige endereço + CEP configurados da base do operador. Antes de dinheiro
-> real, preencher a base na Vercel, manter `LIA_MANUAL_CONCIERGE=true` e
-> `PURCHASE_AUTOMATION_MODE=cart_only`, e validar o bloqueio com um pedido técnico isolado.
+> **Atualização de 02/08.** O deploy limpo de 24/07 foi reconciliado no commit `cc3b371` e
+> publicado como `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`). As flags
+> `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
+> provider Meta não aceita despacho mockado. Antes de dinheiro real, ainda falta preencher a
+> base na Vercel, conferir `PURCHASE_AUTOMATION_MODE=cart_only` e executar um pedido técnico
+> isolado.
 
 ## Como usar
 

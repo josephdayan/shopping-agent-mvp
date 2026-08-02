@@ -30,11 +30,12 @@ de hoje está em
 > operador. A fila de Production contém 19 pedidos técnicos e só pode ser limpa com aprovação
 > explícita.
 
-> **Atualização 02/08.** O deploy de 24/07 continua online e foi verificado: landing 200,
-> `/ops` acessível, APIs internas 401 sem credencial e webhook 403 sem assinatura. O código
-> local agora tem uma trava que impede despacho mockado quando o provider é Meta e exige
-> endereço + CEP reais da base do operador. A produção ainda precisa receber esses dois valores
-> e a guarda explícita antes de qualquer pedido real.
+> **Atualização 02/08.** O deploy de 24/07 foi reconciliado e o commit `cc3b371` foi publicado
+> como `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`), reassumindo `liadelivery.com.br`. As flags
+> `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão explícitas em
+> Production. O código impede despacho mockado quando o provider é Meta e exige endereço + CEP
+> reais da base do operador. A base ainda não foi configurada; `PURCHASE_AUTOMATION_MODE=cart_only`
+> deve ser conferido antes de qualquer pedido real.
 
 > **Reconciliação de código.** A branch publicada está à frente de `main`; o worktree ainda
 > contém alterações não consolidadas da transição Carrefour → Oba e dos endpoints do operador.

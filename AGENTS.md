@@ -101,9 +101,10 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   courier agora falha fechado; o despacho por motoboy também exige `LIA_OPERATOR_PICKUP_ADDRESS`
   e um `LIA_OPERATOR_PICKUP_CEP` válido. Demos locais continuam usando o provider `mock`.
 - A auditoria de nomes de variáveis da Vercel encontrou Contexts/credenciais históricas, mas não
-  encontrou configuração explícita da base do operador. Não iniciar pedido real até preencher
-  endereço/CEP da base e confirmar `LIA_MANUAL_CONCIERGE=true`, `PURCHASE_AUTOMATION_MODE=cart_only`
-  e a guarda de despacho real em Production.
+  encontrou configuração explícita da base do operador. `LIA_MANUAL_CONCIERGE=true` e
+  `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` foram gravadas em Production e o commit `cc3b371`
+  foi publicado como `dpl_7eQ78UVuxVaJTr8Cey8EG1SLsMYA` (`Ready`). Não iniciar pedido real até
+  preencher endereço/CEP da base e confirmar `PURCHASE_AUTOMATION_MODE=cart_only`.
 - Continuam bloqueios humanos: contratar/treinar operador, Mercado Pago PJ e nota fiscal,
   titularidade e pós-venda, rotação da senha Carrefour e PIN WhatsApp, e o piloto de 5–10 pedidos.
 
