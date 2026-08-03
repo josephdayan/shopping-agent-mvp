@@ -29,13 +29,11 @@ const STORES: Record<string, StoreConnector> = {
   // concierge product the operator buys by hand and the operator quote is the price
   // authority, so the seed serves as reference vitrine only.
   ...(process.env.LIA_ENABLE_CARREFOUR !== "false" ? { [carrefourStore.key]: carrefourStore } : {}),
-  // Oba is the groceries/essentials source with a working Browserbase buyer that
-  // validates regional inventory, freight and delivery promise before payment.
+  // Oba is the groceries/essentials source. Catálogo colhido da API pública VTEX.
   ...(process.env.LIA_ENABLE_OBA !== "false" ? { [obaStore.key]: obaStore } : {}),
   // Petz is the pet vertical. Delivery is by the retailer; no courier pickup is used.
   ...(process.env.LIA_ENABLE_PETZ !== "false" ? { [petzStore.key]: petzStore } : {}),
-  // Boticário is the beauty vertical. Its Browserbase buyer now fails closed unless
-  // the live cart exposes freight and delivery promise as well as the subtotal.
+  // Boticário is the beauty vertical. Seed colhido; recolheita é manual (anti-bot).
   ...(process.env.LIA_ENABLE_BOTICARIO !== "false" ? { [boticarioStore.key]: boticarioStore } : {}),
   // Decathlon: sports vitrine (small real seed; concierge/operator fulfills).
   ...(process.env.LIA_ENABLE_DECATHLON !== "false" ? { [decathlonStore.key]: decathlonStore } : {}),
