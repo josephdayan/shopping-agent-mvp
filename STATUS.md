@@ -86,6 +86,14 @@ de hoje está em
 > que recolhe as 10 lojas com API/SSR aberta e resume o que mudou. Suíte **210/210 verde**,
 > `tsc`, lint e build limpos. Detalhes em [AGENTS.md](AGENTS.md).
 
+> **03/08 — PUBLICADO.** Os 27 commits locais foram enviados ao GitHub e o deploy
+> `dpl_BKzUbC4brKprMqrdMYJQ7QDnt5Kr` (commit `cf131f5`) ficou `READY` em Production.
+> Smoke verificado: landing 200, `/ops` 200, webhook 403 (assinatura exigida) e as rotas
+> Browserbase removidas respondendo 404 (`/api/cron/prewarm-search`,
+> `/api/ops/internal-preflight`, `/api/ops/live-retailer-session`) — prova de que o código
+> novo está no ar. Produção agora tem: 18 lojas (~17,4 mil itens), guardas ANVISA/MAPA em
+> runtime, Oba com catálogo de 1.494 itens e zero Browserbase. O piloto pode começar.
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;

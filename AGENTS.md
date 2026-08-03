@@ -177,6 +177,11 @@ pegou uma promoção que acabou).
 Verificação: suíte **210/210 verde** (os 14 a menos são os testes do Browserbase removidos),
 `tsc`, lint e build limpos.
 
+**Publicado em 03/08:** push da `main` (27 commits) → deploy `dpl_BKzUbC4brKprMqrdMYJQ7QDnt5Kr`
+(commit `cf131f5`) `READY` em Production. Smoke: landing 200, `/ops` 200, webhook 403 e as
+rotas removidas do Browserbase respondendo 404. Produção e código local estão idênticos;
+não há mais gate técnico para o piloto.
+
 ### Atualização 02/08/2026 — 7 vitrines novas (18 lojas, 17.264 itens)
 
 Por decisão do dono ("adiciona todos esses"), as lacunas de demanda mapeadas contra os dados
