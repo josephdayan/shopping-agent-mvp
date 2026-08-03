@@ -11,6 +11,13 @@ import { rihappyStore } from "./rihappy";
 import { cacauShowStore } from "./cacaushow";
 import { kopenhagenStore } from "./kopenhagen";
 import { drogaRaiaStore } from "./drogaraia";
+import { drogariaSpStore } from "./drogariasp";
+import { pagueMenosStore } from "./paguemenos";
+import { divvinoStore } from "./divvino";
+import { imigrantesStore } from "./imigrantes";
+import { naturalDaTerraStore } from "./naturaldaterra";
+import { cobasiStore } from "./cobasi";
+import { giulianaFloresStore } from "./giulianaflores";
 
 // Store registry. Adding a supply source = write one connector file and register it
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
@@ -39,7 +46,17 @@ const STORES: Record<string, StoreConnector> = {
   ...(process.env.LIA_ENABLE_RIHAPPY !== "false" ? { [rihappyStore.key]: rihappyStore } : {}),
   ...(process.env.LIA_ENABLE_CACAUSHOW !== "false" ? { [cacauShowStore.key]: cacauShowStore } : {}),
   ...(process.env.LIA_ENABLE_KOPENHAGEN !== "false" ? { [kopenhagenStore.key]: kopenhagenStore } : {}),
-  ...(process.env.LIA_ENABLE_DROGARAIA !== "false" ? { [drogaRaiaStore.key]: drogaRaiaStore } : {})
+  ...(process.env.LIA_ENABLE_DROGARAIA !== "false" ? { [drogaRaiaStore.key]: drogaRaiaStore } : {}),
+  // Vitrines adicionadas em 2026-08-02 para fechar as lacunas de demanda mapeadas
+  // (farmácia não-remédio, bebidas, hortifruti, flores/presente e redundância de pet).
+  // Farmácia: catálogo restrito por allowlist de categoria + deny-regex de medicamento.
+  ...(process.env.LIA_ENABLE_DROGARIASP !== "false" ? { [drogariaSpStore.key]: drogariaSpStore } : {}),
+  ...(process.env.LIA_ENABLE_PAGUEMENOS !== "false" ? { [pagueMenosStore.key]: pagueMenosStore } : {}),
+  ...(process.env.LIA_ENABLE_DIVVINO !== "false" ? { [divvinoStore.key]: divvinoStore } : {}),
+  ...(process.env.LIA_ENABLE_IMIGRANTES !== "false" ? { [imigrantesStore.key]: imigrantesStore } : {}),
+  ...(process.env.LIA_ENABLE_NATURALDATERRA !== "false" ? { [naturalDaTerraStore.key]: naturalDaTerraStore } : {}),
+  ...(process.env.LIA_ENABLE_COBASI !== "false" ? { [cobasiStore.key]: cobasiStore } : {}),
+  ...(process.env.LIA_ENABLE_GIULIANAFLORES !== "false" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {})
 };
 
 // Pick the single store for an order (one order = one store, one retailer delivery). For each
@@ -50,6 +67,10 @@ const STORES: Record<string, StoreConnector> = {
 // Oba e Boticário devem ir pra loja de beleza; "ração" empatada vai pra Petz.
 const BEAUTY_HINT_RE = /\b(perfume|colonia|maquiagem|batom|base|rimel|gloss|hidratante|corretivo|blush|serum)\b/;
 const PET_HINT_RE = /\b(racao|petisco|cachorro|gato|caes|pet|aquario|areia (de|pro|para) gato)\b/;
+// Verticais novas (02/08): sem estas dicas, "vinho" e "buque" empatam com a vitrine larga
+// (Carrefour) e o pedido vai para a loja errada — mesmo bug que "ração" tinha em 23/07.
+const DRINK_HINT_RE = /\b(vinho|cerveja|whisky|whiskey|vodka|gin|cachaca|espumante|champagne|champanhe|licor|rum|tequila|destilado|chopp|heineken|budweiser|corona|brahma|skol)\b/;
+const FLOWER_HINT_RE = /\b(flor|flores|buque|buques|rosa|rosas|girassol|girassois|orquidea|orquideas|lirio|lirios|arranjo|floricultura|ramalhete)\b/;
 
 export async function pickStoreForQueries(queries: string[]): Promise<StoreConnector> {
   const stores = listStores();
@@ -69,6 +90,8 @@ export async function pickStoreForQueries(queries: string[]): Promise<StoreConne
         // desempate por vocação da loja (peso 2 para vencer o empate com folga)
         if (store.key === "boticario" && BEAUTY_HINT_RE.test(qHint)) score += 2;
         if (store.key === "petz" && PET_HINT_RE.test(qHint)) score += 2;
+        if ((store.key === "divvino" || store.key === "imigrantes") && DRINK_HINT_RE.test(qHint)) score += 2;
+        if (store.key === "giulianaflores" && FLOWER_HINT_RE.test(qHint)) score += 2;
       }
       if (score > bestScore) {
         bestScore = score;

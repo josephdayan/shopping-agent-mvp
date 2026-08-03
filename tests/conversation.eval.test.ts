@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage } from "../src/lib/delivery-service";
-import { getStore } from "../src/lib/stores";
+import { getStore, pickStoreForQueries } from "../src/lib/stores";
 import { attrMatchesItem } from "../src/lib/stores/types";
 import { seedGeoCache } from "../src/lib/geo";
 
@@ -99,12 +99,21 @@ function expensiveItemQuery(): { query: string; qty: number } {
 // A cheap item that routes to a store WITH a minimum order (Carrefour, R$30) so the
 // below-minimum nudge fires. Petz has no minimum, so a cheap Petz item would never
 // trigger it — the eval is about the nudge, not about which store.
-function cheapItemQuery(): string {
-  const catalog = getStore("carrefour").listCatalog();
-  const item = catalog
+//
+// O elenco de lojas fica fixado no load-env, então o item mais barato do Carrefour já roteia
+// para ele. Confirmar o roteamento aqui é a rede de segurança: se alguém somar uma vitrine
+// sem pinar a chave no load-env, o eval escolhe outro item em vez de falhar por um motivo
+// que não é o dele — foi assim que a Pague Menos (mínimo 0) roubou o Baton em 02/08.
+async function cheapItemQuery(): Promise<string> {
+  const candidates = getStore("carrefour")
+    .listCatalog()
     .filter((i) => i.unitPrice > 2 && i.unitPrice < 10 && cleanName(i.name))
-    .sort((a, b) => a.unitPrice - b.unitPrice)[0];
-  return item?.name ?? "sabonete";
+    .sort((a, b) => a.unitPrice - b.unitPrice);
+  for (const item of candidates.slice(0, 40)) {
+    const store = await pickStoreForQueries([item.name]);
+    if ((store.minOrder ?? 0) > 0) return item.name;
+  }
+  return candidates[0]?.name ?? "sabonete";
 }
 
 async function wipeTestData() {
@@ -348,7 +357,7 @@ test("trocar item: 'troca X por Y' remove e busca o novo", async (t) => {
 test("pedido mínimo: item barato + 'pagar' avisa quanto falta", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.sendAndResolve(cheapItemQuery());
+  await c.sendAndResolve(await cheapItemQuery());
   const pay = await c.send("pagar");
   assert.match(pay, /mínimo/);
   assert.match(pay, /Falta|falta/);
@@ -357,7 +366,7 @@ test("pedido mínimo: item barato + 'pagar' avisa quanto falta", async (t) => {
 test("pedido mínimo: 'pix' abaixo do mínimo recebe a saída honesta, não o nudge em loop", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.sendAndResolve(cheapItemQuery());
+  await c.sendAndResolve(await cheapItemQuery());
   await c.send("so isso");
   const pix = await c.send("pix");
   assert.match(pix, /não fecha pedido abaixo/);

@@ -140,6 +140,61 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
   `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 
+### Atualização 02/08/2026 — 7 vitrines novas (18 lojas, 17.264 itens)
+
+Por decisão do dono ("adiciona todos esses"), as lacunas de demanda mapeadas contra os dados
+de e-commerce/delivery BR foram fechadas. A vitrine saiu de **7.652 itens em 11 lojas** para
+**17.264 itens em 18 lojas**. Todos os dados são reais (nome/preço/URL/imagem verbatim) e cada
+CDN foi testado como hotlinkável antes de registrar a loja.
+
+| Loja | Lacuna | Itens | Método |
+|---|---|---|---|
+| Drogaria São Paulo | farmácia s/ remédio | 4.682 | API VTEX + allowlist + deny-regex |
+| Pague Menos | farmácia s/ remédio | 1.551 | API VTEX + allowlist + deny-regex |
+| Natural da Terra | hortifruti/empório | 1.000 | API VTEX |
+| Cobasi | pet (redundância da Petz) | 998 | API VTEX |
+| Divvino | adega/vinho | 998 | API VTEX |
+| Imigrantes Bebidas | cerveja/destilado | 406 | SSR (coletor próprio, sem Chrome) |
+| Giuliana Flores | flores/presente | 204 | DOM renderizado (loja client-rendered) |
+
+- **Regra ANVISA nas farmácias virou TRIPLA guarda — e a terceira foi necessária.** A colheita
+  usa allowlist de categorias seguras **e** um deny-regex. Mas a auditoria profunda encontrou
+  medicamento registrado que passou pelas duas, porque **a própria loja classifica medicamento
+  dentro de categorias cosméticas**: esmalte antifúngico com ciclopirox, shampoo com cetoconazol,
+  gel Rozex com metronidazol, "Dermodex Tratamento 100.000 U.I./g" e gel Zella. Por isso a
+  terceira guarda mora em `src/lib/stores/anvisa.ts` e roda **em runtime no conector**
+  (`withoutMedicine`), não no script: assim uma recolheita futura não reintroduz remédio por
+  esquecimento de flag. Ela filtra princípio ativo, marca de medicamento, notação de dosagem
+  (`mg/g`, `U.I./g`) e alegação terapêutica; removeu 18 itens (7 Drogaria SP, 11 Pague Menos).
+  `tests/anvisa-pharmacy.test.ts` trava a regra nos dois sentidos: nenhum medicamento passa e a
+  vitrine não pode ser esvaziada por um regex ganancioso. **Não afrouxar sem evidência de que o
+  item não é medicamento registrado.** Sem a allowlist, a varredura por mais-vendidos de uma
+  farmácia volta ~80% medicamento (o teste inicial trouxe Mounjaro e dipirona no topo).
+- **A mesma auditoria pegou o lado pet, que ninguém tinha revisado.** A Cobasi veio com 65
+  medicamentos veterinários e antipulgas (Simparic, Bravecto, NexGard, Apoquel, Drontal,
+  Seresto) e 56 dietas de prescrição; a **Petz**, cujo seed era tido como "sem remédio/antipulga"
+  desde 2026-06, tinha 58 itens da linha "Nutrição Clínica" (dieta terapêutica com receita).
+  `withoutVeterinaryMedicine` (mesmo módulo) agora filtra as duas vitrines — e também os
+  resultados da **busca ao vivo** da Petz, que não passa por curadoria humana. Removidos: 122
+  na Cobasi e 87 na Petz. Antiparasitário e medicamento veterinário são regulados (MAPA) e
+  dieta terapêutica exige receita; se um cliente pedir, o operador cota à mão com a receita.
+- **Total após as guardas: 17.264 itens** (227 removidos por segurança do bruto colhido).
+- **Roteamento:** `DRINK_HINT_RE` e `FLOWER_HINT_RE` foram somados às dicas de vocação. Sem
+  elas, "vinho" e "buquê" empatavam com o Carrefour — o mesmo bug que "ração" tinha em 23/07.
+  Conferido: vinho/cerveja → Divvino, buquê → Giuliana, ração → Petz, perfume → Boticário.
+- **Leroy Merlin ficou de fora**, apesar de constar da lista: bloqueia fetch server-side (403)
+  e, no navegador, a listagem não expõe imagem — a URL do CDN só aparece no `og:image` de cada
+  página de produto, exigindo uma visita por item. Os 40 produtos reais colhidos na validação
+  não foram persistidos. Reabrir só se alguém aceitar o custo de uma visita por produto; a
+  restrição documentada de aceitar apenas itens "vendido e entregue por Leroy Merlin" continua
+  valendo.
+- **Decathlon segue servindo 4 de 17 itens**: o filtro `catalogWithImages` corta os 13 sem foto.
+  É um bug conhecido de vitrine, não de dados.
+- `scripts/harvest-vtex-catalog.mts` ganhou `--categories` e `--deny`; o novo
+  `scripts/harvest-imigrantes-catalog.mts` cobre lojas SSR não-VTEX. O
+  [README das vitrines](src/lib/stores/README.md) documenta os quatro métodos de colheita
+  (VTEX / SSR / navegador / seed) e o requisito de imagem.
+
 ## O produto
 
 A Lia é uma concierge de compras pelo WhatsApp. O cliente descreve o que quer, a Lia busca

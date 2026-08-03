@@ -24,8 +24,25 @@ process.env.LIA_SEND_PHOTOS = "false";
 // were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
 // Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba
 // tests). Pin the test registry to that set so routing stays deterministic; production
-// keeps all 11 vitrines. The 5 later vitrines are disabled so they don't shift routing.
-for (const store of ["SWIFT", "KALUNGA", "RIHAPPY", "CACAUSHOW", "KOPENHAGEN", "DROGARAIA"]) {
+// keeps all 18 vitrines. Every later vitrine is disabled so it can't shift routing —
+// as provou a rodada de 02/08, em que a conveniência da Pague Menos passou a ganhar o
+// item barato do Carrefour e derrubou os evals de pedido mínimo (as novas vitrines têm
+// mínimo 0). Ao somar uma vitrine, acrescente a chave aqui.
+for (const store of [
+  "SWIFT",
+  "KALUNGA",
+  "RIHAPPY",
+  "CACAUSHOW",
+  "KOPENHAGEN",
+  "DROGARAIA",
+  "DROGARIASP",
+  "PAGUEMENOS",
+  "DIVVINO",
+  "IMIGRANTES",
+  "NATURALDATERRA",
+  "COBASI",
+  "GIULIANAFLORES"
+]) {
   process.env[`LIA_ENABLE_${store}`] = "false";
 }
 // The catalog-choice conversation evals exercise the legacy auto-quote flow. The manual

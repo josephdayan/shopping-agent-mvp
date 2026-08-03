@@ -16,37 +16,31 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > uma pendência de desenvolvimento. Código do fluxo manual: TypeScript, lint, testes focados
 > e build verdes (`tests/manual-concierge.test.ts`).
 
-> **Atualização de 21/07.** `bb48c2e` (fluxo), `ededf6a` (docs) e `7ab8453` (kit do operador)
-> estão verdes localmente. Uma demonstração mockada percorreu cotação de R$100 → Pix
-> confirmado → compra → despacho Uber Direct da base do operador → entrega, incluindo mensagens
-> ao cliente; não houve cobrança. O concierge não foi implantado porque o deploy atual incluiria
-> uma migration Oba inacabada de outro trabalho. A decisão é contratar um operador. Existem 19
-> pedidos técnicos na fila de Production, cuja limpeza requer autorização explícita.
+> **Estado vigente (02/08).** A Lia opera somente em SP, com bloqueio rígido de UF, e o
+> concierge manual está publicado em Production com `LIA_MANUAL_CONCIERGE=true`,
+> `LIA_REQUIRE_REAL_COURIER_DISPATCH=true`, `PURCHASE_AUTOMATION_MODE=cart_only` e base do
+> operador configurada. A conta Mercado Pago da aplicação `LIA - APP` foi confirmada pelo dono
+> como PJ; a rotina fiscal do MEI está em [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md).
+> O dono opera a operação; não há contratação de operador agora. A validação com pedidos reais
+> fica para quando ele considerar o sistema pronto e não é pendência de desenvolvimento.
 
-> **Atualização de 02/08.** A Lia opera somente no estado de São Paulo: o concierge bloqueia
-> UFs fora de SP mesmo diante de overrides legados, e a mensagem ao cliente identifica o estado.
-> O deploy limpo de código está publicado como `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4` (`Ready`). As flags
-> `LIA_MANUAL_CONCIERGE=true` e `LIA_REQUIRE_REAL_COURIER_DISPATCH=true` estão em Production;
-> provider Meta não aceita despacho mockado. A base do operador foi configurada como Sensitive
-> na Vercel e `PURCHASE_AUTOMATION_MODE=cart_only` está fixo. Dos 19 registros da fila, 12
-> preflights internos sem pagamento foram removidos com autorização; 7 pedidos pagos ficaram
-> preservados para conciliação/estorno. A decisão financeira é operar na PJ e manter a PJ como
-> titularidade operacional. Pós-venda: antes do pagamento, limpar a lista; depois, sem
-> cancelamento/substituição, estorno de item faltante e aviso de atraso. A validação real será
-> feita pelo operador quando ele considerar o sistema pronto. A empresa é MEI: não há obrigação
-> de contador fixo; a rotina fiscal e o tipo de documento para cada caso ainda precisam ser
-> documentados.
+> **Vitrine ampliada (02/08).** Por decisão do dono, as lacunas de demanda foram fechadas: a
+> vitrine passou de **7.652 itens em 11 lojas** para **17.264 itens em 18 lojas**. Entraram
+> Drogaria São Paulo (4.675), Pague Menos (1.540), Natural da Terra (1.000), Cobasi (998),
+> Divvino (998), Imigrantes Bebidas (406) e Giuliana Flores (204) — todos com dados reais e CDN
+> de imagem testado. Nas farmácias, a proibição de medicamento (ANVISA) virou **tripla guarda**:
+> allowlist de categoria + deny-regex na colheita e `withoutMedicine` em runtime. A terceira foi
+> necessária: a auditoria achou cetoconazol, metronidazol e ciclopirox classificados pela loja
+> em categorias cosméticas. A mesma auditoria pegou o lado pet: Cobasi trazia 65 medicamentos
+> veterinários e 56 dietas de prescrição; a Petz, 58 itens de "Nutrição Clínica". 227 itens
+> removidos no total; `tests/anvisa-pharmacy.test.ts` trava as duas regras.
+> Leroy Merlin não entrou: bloqueia fetch (403) e a imagem exige uma visita por produto.
+> Detalhes em [AGENTS.md](AGENTS.md) e no [README das vitrines](src/lib/stores/README.md).
 
-> **Atualização de 02/08 (2ª rodada).** Quatro decisões do dono: (1) **ele mesmo opera o
-> piloto** — não haverá contratação de operador agora; (2) a conta Mercado Pago
-> provavelmente já é PJ — falta só a conferência de 30 s no painel (API local sem escopo);
-> (3) rotina fiscal **decidida e documentada** em
-> [docs/rotina-fiscal-mei.md](docs/rotina-fiscal-mei.md); (4) as rotações de credenciais
-> expostas foram **abandonadas como gate** ("esquece isso") — risco aceito, registrado.
-> Verificação técnica do dia: suíte completa **213/213 verde com banco**, `tsc` limpo,
-> produção `READY` no commit `a700290`, landing/`/ops`/webhook respondendo corretamente.
-> Vitrine em runtime: **7.652 produtos em 11 lojas** (Decathlon serve só 4 itens após o
-> filtro de imagem).
+> **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
+> atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
+> continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam
+> registradas para referência, mas não bloqueiam o concierge manual em SP.
 
 ## Como usar
 
@@ -70,7 +64,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Fundamento de One-Click Meta + Pagar.me implementado atrás de flag, com tentativa
   idempotente, página de tokenização e reconciliação por webhook. Evidência:
   `docs/whatsapp-one-click-pagarme.md`; build e testes focados de 14/07/2026.
-- [ ] Fluxo completo cotar → cobrar → comprar → entregar validado com pedido real pelo operador.
+- [~] Fluxo completo cotar → cobrar → comprar → entregar validado com pedido real pelo operador;
+  validação real fica para quando o dono declarar o sistema pronto.
 - [ ] Operação, jurídico e pós-venda aprovados para lançamento público.
 
 ## P0 — antes de aceitar pedidos pagos em São Paulo
@@ -89,7 +84,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   misturar a publicação com o trabalho paralelo do Oba.
 - [x] Limpar os preflights internos sem pagamento de Production após autorização explícita:
   12 removidos; 7 pedidos pagos foram preservados para conciliação/estorno.
-- [ ] (Opcional, após a prontidão) Registrar pedidos reais, tempo de cotação, margem depois do
+- [~] (Opcional, após a prontidão) Registrar pedidos reais, tempo de cotação, margem depois do
   frete, falhas e satisfação. Essa validação é decisão do operador e não bloqueia o código.
 - [x] Falhar fechado quando produção Meta não tiver despacho real do courier; o modo mock permanece
   disponível somente para testes locais.
@@ -101,76 +96,29 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 ### Cotação e cobrança
 
-- [ ] Montar a sacola real e calcular estoque, preço, frete e prazo **antes** de cobrar o
-  cliente. Implementado para Oba, Petz e Boticário em 19/07: a cotação só é publicada quando
-  o comprador retornar esses quatro campos e falha fechada em `needs_human`. **Oba foi validado
-  ao vivo em Production em `cart_only`:** o job técnico chegou a `cart_ready` com arroz Camil
-  1 kg R$ 5,99, frete R$ 9,90, janela do varejista e total R$ 15,89 no CEP público `01310-100`.
-  A migration de default Oba foi aplicada e conferida. Próximo critério: validar o fluxo atual
-  de Petz e Boticário ao vivo, ainda sem WhatsApp, cobrança ou compra. **Tentativas de 19/07:**
-  Petz confirmou SKU/preço/subtotal, mas não expôs frete/prazo nem na sacola completa; o retry
-  revelou re-render transitório ao limpar a sacola e o seletor foi endurecido; o retry chegou à
-  rota real `/checkout/cart/<id>`, mas continuou sem frete/prazo expostos. Boticário confirmou
-  SKU/quantidade/subtotal, mas não liberou a confirmação de CEP do painel de frete; “Entrega
-  Rápida” leva só a uma página informativa e foi descartada como rota de cotação. O diagnóstico
-  final encontrou o campo `postalCode`, mas a sacola o marcou como desabilitado (`data-disabled=true`);
-  não forçar nem contornar esse gate do varejista.
-  **Retestes novos de 20/07:** Petz voltou a chegar à sacola completa sem entrega exposta;
-  Boticário voltou a confirmar item/subtotal sem prazo domiciliar. O parser passou a rejeitar
-  publicidade de frete grátis e retirada como se fossem cotação. Ambos permanecem `needs_human`.
-  Ambos falharam fechados em `needs_human`; nenhuma mensagem, cobrança ou compra ocorreu.
-  **Sessão assistida Petz (20/07):** o `/ops` foi publicado com abertura de Context vivo isolado,
-  sem criar sacola ou executar ação financeira, e a sessão Petz foi aberta para o operador marcar
-  entrega no endereço. Ela inicia na home da loja para evitar a aba remota vazia. Após essa escolha
-  na UI do varejista, repetir somente o preflight técnico. A sessão permanece viva por até uma hora.
-  O visualizador embutido do Codex não sustentou interação visual estável; a sessão foi aberta no
-  Safari, sem alterar Context, carrinho ou pagamento.
-  **Persistência/retry (20/07):** o `/ops` ganhou encerramento autenticado das sessões vivas do
-  Context para salvar a ação manual antes do preflight. O retry novo continuou apenas na rota
-  `/checkout/cart/<id>`, com item/subtotal mas sem controles, frete ou prazo. O CTA explícito
-  “ir/continuar para checkout” também não foi exposto. Petz permanece `needs_human`.
-  **Reteste Boticário (20/07):** SKU B88468, quantidade e subtotal R$ 16,90 foram confirmados
-  novamente. A sacola ainda deixou `postalCode` bloqueado e não exibiu prazo domiciliar; “frete
-  grátis” e retirada foram tratados apenas como promoções. Permanece `needs_human`.
-  **Substituições a validar:** priorizar Pão de Açúcar (mercado em São Paulo) e Cobasi (pet),
-  sempre com entrega do próprio varejista, Context isolado e preflight `cart_only`. Savegnago
-  permanece candidato de interior paulista. A triagem oficial é favorável, mas nenhum deles deve
-  aparecer ao cliente até a cotação ao vivo passar.
-  **Smoke Cobasi (20/07):** passou em navegação anônima com CEP técnico `01310-100`: produto
-  real, sacola, modalidades Cobasi Já/Econômica, frete, prazo e total apareceram antes de
-  pagamento; carrinho técnico limpo. Priorizar agora Context isolado, conector e preflight
-  `cart_only` da Cobasi. **Pão de Açúcar:** a rota pública foi interceptada por
-  `az-request-verify` antes de produto/CEP; não integrar sem nova evidência de acesso permitido.
-  **Evidência de deploy:** a prévia Vercel `dpl_GHsPBkvKhrw4zAUZsoh5uT6P5jac` ficou `Ready` em
-  19/07. A auditoria de nomes de variáveis confirmou `BROWSERBASE_API_KEY`, Contexts Petz/Boticário
-  e ausência de `OBA_BROWSER_CONTEXT_ID` em Production; nenhum valor foi lido ou exposto. A tentativa
-  única e segura de criar um Context vazio respondeu `401 Unauthorized`. **Correção posterior
-  em 19/07:** a nova chave foi gerada no painel autenticado, validada ao criar o Context vazio do
-  Oba e gravada como Sensitive em Production, assim como `OBA_BROWSER_CONTEXT_ID`. Arquivos
-  temporários e área de transferência foram limpos. **Primeiro preflight em Production:** o job
-  técnico terminou em `needs_human` por `PURCHASE_WORKER_ERROR` porque o comprador fechava a
-  página antes de `buildSnapshot` concluir. A correção (`return await`) passou em TypeScript e
-  204 testes (162 aprovados; 42 integrações de banco puladas), foi publicada no deploy
-  `dpl_CpcjWKyHrteDuiQQ2DU9NZbj5Pwz` e o retry chegou a `cart_ready`, com todos os campos
-  exigidos. Não houve WhatsApp, cobrança ou compra.
-- [ ] Mostrar no WhatsApp resumo da cotação, endereço, modalidade, prazo e validade.
-  O núcleo já é genérico para Oba/Petz/Boticário; falta evidência ao vivo de cada varejista.
-- [ ] Implementar expiração curta da cotação e impedir pagamento de cotação vencida.
-  Implementado no núcleo genérico; a expiração cancela a cotação e libera o Context. Falta
-  validação ao vivo no novo conjunto de varejistas.
-- [ ] Revalidar itens, quantidade, total, endereço, frete e prazo imediatamente antes da
-  compra.
-- [ ] Definir a política para diferença de preço após pagamento: limite automático,
-  aprovação do cliente ou estorno.
-- [ ] Garantir idempotência entre pedido, cobrança, carrinho e tentativa de compra.
-- [ ] Impedir nova tentativa automática quando o resultado do clique financeiro for
-  incerto.
+- [x] No concierge manual, o operador cota produtos, frete, modalidade e prazo antes de a Lia
+  cobrar; o cliente só recebe Pix/cartão depois da cotação. O checkout automatizado por varejista
+  continua legado e não é caminho crítico.
+- [x] Mostrar no WhatsApp resumo da cotação, endereço, modalidade, prazo, total e validade. Coberto
+  por `opsPublishManualQuote` e `tests/manual-concierge.test.ts`.
+- [x] Implementar expiração curta da cotação e impedir pagamento de cotação vencida. O teste do
+  concierge confirma que uma cotação vencida é cancelada sem liberar cobrança.
+- [x] Revalidar antes da compra: no fluxo manual, qualquer alteração de item/preço/frete/prazo
+  exige nova cotação do operador; o runbook bloqueia substituição automática e compra sem conferência.
+- [x] Política de divergência: item faltante ou preço alterado não é substituído automaticamente;
+  o operador avisa, recota ou estorna o item conforme o procedimento documentado.
+- [x] Garantir idempotência entre pedido, cobrança e despacho. O pedido aberto é reutilizado, a
+  emissão usa atualização condicional, pagamentos/provedores usam suas chaves e o despacho repetido
+  retorna o despacho existente. Coberto por teste do concierge.
+- [x] Impedir nova tentativa automática quando o resultado financeiro for incerto; a regra está
+  no runbook de `needs_human` e nos guards de compra.
 
 ### Compra segura
 
 - [x] Manter produção com `PURCHASE_AUTOMATION_MODE=cart_only`.
 - [x] Não armazenar cartão, CVV, senha ou credenciais do varejista no banco/documentação.
-- [ ] Exigir confirmação explícita no momento de qualquer compra final.
+- [x] Exigir confirmação explícita no momento de qualquer compra final: o cliente escolhe Pix/cartão
+  após a cotação e o operador só pode marcar a compra depois de o pedido estar `paid`.
 - [x] Tratar login, OTP, CAPTCHA, CVV e 3DS como `needs_human`. A detecção Carrefour
   cobre login/sessão expirada, CAPTCHA e 3DS; os testes unitários confirmam a classificação.
 - [x] Implementar fila ou isolamento por conta/Context Browserbase para impedir carrinhos
@@ -178,7 +126,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   `RETAILER_BUSY` volta a `preflight_queued` e o workflow tenta de novo a cada minuto por até
   uma hora. Leases vencidos só podem ser retomados após 15 min, e testes unitários cobrem
   concorrência, expiração e falha de infraestrutura.
-- [ ] Validar recuperação segura quando a sessão Browserbase expirar. Em 16/07 foi
+- [~] Validar recuperação segura quando a sessão Browserbase expirar. Isso pertence ao fluxo legado
+  `LIA_MANUAL_CONCIERGE=false`; o concierge atual não usa Browserbase no caminho crítico. Em 16/07 foi
   implantada uma rota autenticada e página operacional que criam uma sessão viva do mesmo
   Context para login humano. Em 19/07, a autenticação remota foi explicitamente bloqueada
   pelo Carrefour; não repetir nem tentar contornar. Reavaliar este critério por varejista,
@@ -187,7 +136,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   gate de piloto** ("esquece isso"). Os itens permanecem registrados como risco conhecido e
   aceito; nenhuma rotação foi executada. Reabrir somente por novo pedido explícito ou
   incidente.
-- [ ] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
+- [~] Rotacionar todas as credenciais que já tenham sido expostas em conversas e atualizar
   os ambientes de produção. **Urgente em 15/07:** credenciais Browserbase/Vercel apareceram
   em saída de diagnóstico; o token OIDC local da Vercel já foi renovado sem expor valor.
   Ainda falta regenerar a chave Browserbase e atualizar os ambientes. Uma sessão persistente
@@ -209,7 +158,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   validar o preflight implantado. A reautenticação informada em 15/07 não permaneceu válida:
   o retry de 16/07 chegou a `LOGIN_REQUIRED`. Uma nova sessão viva foi aberta; falta o login
   humano e repetir a cotação, sem cobrar nem comprar.
-- [ ] Rotacionar a senha Carrefour exposta no chat em 16/07. Não persistir o valor em
+- [~] Rotacionar a senha Carrefour exposta no chat em 16/07. Não persistir o valor em
   código, banco, `.env`, documentação ou memória operacional; concluir o login somente na
   sessão viva e trocar a senha antes do piloto. Em 18/07, o operador optou por adiar a troca;
   nenhuma alteração foi feita. A conta/Context Carrefour continua bloqueada para piloto até a
@@ -240,7 +189,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   comprovada e o login funciona no navegador comum do operador, o checkout remoto Carrefour
   deixou de ser caminho viável para o piloto. Pausar retries e priorizar Petz; só reabrir
   Carrefour com API/parceria oficial ou ambiente autorizado. Sem WhatsApp, cobrança ou compra.
-- [ ] Rotacionar o PIN de registro do WhatsApp que estava salvo em um Markdown local
+- [~] Rotacionar o PIN de registro do WhatsApp que estava salvo em um Markdown local
   ignorado pelo Git. O valor foi removido em 16/07; guardar o novo somente no cofre de
   segredos, nunca em Markdown, chat ou logs.
 
@@ -254,16 +203,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   expostas permanece registrada separadamente como risco aceito.
 - [x] Decisão operacional de titularidade: a PJ/MEI é a compradora/titular da operação perante
   o cliente e o varejista. Não há obrigação de contratar contador fixo.
-- [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta
-  central.
-- [ ] Validar nos termos de Petz, Carrefour e Boticário se o uso operacional da conta
-  central é permitido.
+- [ ] Definir o tratamento de compras para destinatários diferentes usando uma conta central.
+  Esta é uma decisão jurídica/comercial do dono; não vou inventar a política.
+- [ ] Validar nos termos dos varejistas se o uso operacional da conta central é permitido.
+  Esta confirmação depende de consulta/aceite externo e não é resolvida por código.
 - [x] Regra de pós-venda: antes do pagamento, o cliente pode limpar a lista; depois do pagamento
   não há cancelamento iniciado pelo cliente nem substituição; item faltante gera estorno do
   próprio item; atraso é comunicado ao cliente.
-- [ ] Fechar o procedimento operacional e a integração de estorno parcial por item, além de
-  devolução/chargeback quando aplicável. O estorno integral do pedido continua sendo uma ação
-  excepcional do `/ops`.
+- [x] Fechar o procedimento operacional e o registro de estorno parcial por item. O operador
+  executa o estorno no provedor, informa valor (integral ou parcial) e referência no `/ops`, e
+  só então o cliente é avisado; o estorno integral continua excepcional. Runbook e UI atualizados.
 - [x] Responsabilidade de comunicação por atraso: avisar o cliente assim que a Lia souber do
   atraso, sem prometer compensação ou substituição.
 - [x] Documentar a rotina fiscal da Lia. Decidido e documentado em 02/08 em
@@ -272,7 +221,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   pedir ou cliente for PJ; rotina mensal DAS + relatório de receitas + DASN anual. Resta uma
   confirmação contábil pontual pré-lançamento público (receita bruta = markup ou total).
 
-### Cartão One-Click no WhatsApp
+### Cartão One-Click no WhatsApp — adiado, não bloqueia o concierge
 
 - [x] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
   `20260714123000_pagarme_one_click` no ambiente de produção. Aplicadas em 15/07;
@@ -280,22 +229,22 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Enviar em 18/07 a solicitação técnica a Samuel Santana/Infobip e ao Customer Success
   (`success@infobip.com`), com a exigência de preservar WABA, número, Cloud API/Graph API e
   webhook, sem migração/compartilhamento de sender/BSP sem autorização separada.
-- [ ] Aguardar a resposta técnica escrita da Infobip: matriz de compatibilidade de
+- [~] Aguardar a resposta técnica escrita da Infobip: matriz de compatibilidade de
   `order_details` / `offsite_card_pay`, Mercado Pago PJ, `credential_id`, webhook, sandbox,
   custos e limites. Não criar/usar conta de teste, alterar canal ou ativar One-Click antes
   dessa confirmação.
-- [ ] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
+- [~] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
   shape definitivo do webhook de confirmação.
-- [ ] Confirmar por escrito se Mercado Pago PJ é suportado nesse desenho, quem gera o
+- [~] Confirmar por escrito se Mercado Pago PJ é suportado nesse desenho, quem gera o
   `credential_id`, custos/mínimos, prazo de onboarding e se algum BSP precisa assumir a
   WABA ou o número. Não substituir o desenho Pagar.me já implementado sem essa evidência.
-- [ ] Configurar Pagar.me V5: chaves, domínio liberado para `tokenizecard.js`, webhook e
+- [~] Configurar Pagar.me V5: chaves, domínio liberado para `tokenizecard.js`, webhook e
   os eventos de pedido/cobrança/cartão descritos no guia.
-- [ ] Confirmar com o Pagar.me, antes do sandbox real, se a primeira cobrança e as recompras
+- [~] Confirmar com o Pagar.me, antes do sandbox real, se a primeira cobrança e as recompras
   avulsas confirmadas no WhatsApp devem usar `recurrence_cycle=first|subsequent`, quando
   CVV/3DS é exigido e se a conta operará como PSP ou Gateway. O adaptador atual envia
   `card_id` sem `recurrence_cycle`; ajustar código e testes somente com essa resposta.
-- [ ] Executar primeira compra e recompra reais em sandbox; verificar CVV/3DS, recusa,
+- [~] Executar primeira compra e recompra reais em sandbox; verificar CVV/3DS, recusa,
   resposta perdida e reconciliação antes de ativar `LIA_ENABLE_WA_PAYMENTS=true`.
 
 ### Operação mínima
@@ -316,11 +265,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Criar procedimento de estorno quando a compra não puder ser concluída. O `/ops` agora
   separa `refund_pending` de `refunded`, exige referência do provedor antes de confirmar ao
   cliente e o runbook documenta a sequência segura.
-- [ ] Validar ao vivo os novos estados de entrega direta e o fluxo de estorno no `/ops`,
+- [~] Validar ao vivo os novos estados de entrega direta e o fluxo de estorno no `/ops`,
   sem usar pedidos legados como massa de teste. Implantação em produção confirmada em 18/07.
-- [ ] Registrar eventos suficientes para auditar cada transição sem expor dados sensíveis.
+- [x] Registrar eventos suficientes para auditar cada transição sem expor dados sensíveis. O `/ops`
+  agora acrescenta eventos de compra, despacho, entrega, estorno e valor/referência do estorno às
+  notas operacionais, sem guardar segredos ou dados de cartão.
 
-## P0 — validação por varejista
+## Referência legada — automação por varejista (não bloqueia o concierge manual)
 
 ### Petz
 
@@ -328,16 +279,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Endereço reconhecido no checkout.
 - [x] Busca, produto, sacola, frete e prazo validados ao vivo.
 - [x] Checkout alcançado sem finalizar compra.
-- [ ] Portar para Petz a orquestração de cotação antes da cobrança, com validade curta,
+- [~] Portar para Petz a orquestração de cotação antes da cobrança, com validade curta,
   hash de itens/total/frete/prazo e falha fechada.
-- [ ] Executar pedido técnico Petz em `cart_only` e validar o resumo no WhatsApp e no `/ops`,
+- [~] Executar pedido técnico Petz em `cart_only` e validar o resumo no WhatsApp e no `/ops`,
   sem cobrança ou compra. Em 19/07 o job técnico chegou ao SKU/preço/subtotal reais, mas a sacola
   completa não mostrou frete/prazo no Context; investigar a etapa de entrega antes do retry.
-- [ ] Testar cartão salvo e verificar quando CVV/3DS/antifraude são exigidos.
-- [ ] Testar Pix do varejista apenas para entender o fluxo; não misturar com o Pix pago à
+- [~] Testar cartão salvo e verificar quando CVV/3DS/antifraude são exigidos.
+- [~] Testar Pix do varejista apenas para entender o fluxo; não misturar com o Pix pago à
   Lia sem desenho financeiro explícito.
-- [ ] Validar rastreio e comunicação pós-compra da entrega Petz.
-- [ ] Executar primeiro pedido controlado entregue pela própria Petz.
+- [~] Validar rastreio e comunicação pós-compra da entrega Petz.
+- [~] Executar primeiro pedido controlado entregue pela própria Petz.
 
 ### Carrefour
 
@@ -345,23 +296,23 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Automação de carrinho preparada.
 - [x] Registrar o bloqueio da autenticação remota: em 19/07 o Carrefour recusou a sessão
   Browserbase por política de segurança, apesar da configuração de runtime estar válida.
-- [ ] Obter API/parceria oficial ou confirmação de um ambiente autorizado antes de retomar
+- [~] Obter API/parceria oficial ou confirmação de um ambiente autorizado antes de retomar
   automação de autenticação/checkout. Até lá, manter essa frente pausada e sem contorno de WAF.
 - [x] Rejeitar o fallback de handoff: por decisão do operador em 19/07, o cliente não receberá
   links nem concluirá a compra no Carrefour; a Lia deve manter a experiência ponta a ponta.
-- [ ] Desenhar um teste Carrefour com operação humana invisível no navegador comum, sem automação,
+- [~] Desenhar um teste Carrefour com operação humana invisível no navegador comum, sem automação,
   apenas como ponte interna e sem tratá-lo como solução de escala.
-- [ ] Avaliar um modelo Carrefour com shopper próprio/controlado comprando na loja física e entrega
+- [~] Avaliar um modelo Carrefour com shopper próprio/controlado comprando na loja física e entrega
   posterior, incluindo cotação final, substituições, pagamento, NF, cadeia fria e logística.
-- [ ] Preparar proposta comercial Carrefour com escopo explícito de catálogo, estoque por região,
+- [~] Preparar proposta comercial Carrefour com escopo explícito de catálogo, estoque por região,
   simulação de frete/prazo, criação de carrinho/pedido, pagamento, webhook e pós-venda. Marketplace
   Seller e API merchant do iFood não atendem a esse escopo de compra do consumidor.
-- [ ] Não testar endpoints internos VTEX/Carrefour, automação local, extensão, proxy residencial ou
+- [~] Não testar endpoints internos VTEX/Carrefour, automação local, extensão, proxy residencial ou
   fingerprint como substitutos do Browserbase sem autorização escrita do varejista.
-- [ ] Validar ao vivo o checkout com endereço, estoque, frete e prazo.
-- [ ] Confirmar separadamente o fluxo de Carrefour alimentar e não alimentar.
-- [ ] Validar pagamento, antifraude, nota fiscal, rastreio e entrega direta.
-- [ ] Executar primeiro pedido controlado entregue pelo próprio Carrefour.
+- [~] Validar ao vivo o checkout com endereço, estoque, frete e prazo.
+- [~] Confirmar separadamente o fluxo de Carrefour alimentar e não alimentar.
+- [~] Validar pagamento, antifraude, nota fiscal, rastreio e entrega direta.
+- [~] Executar primeiro pedido controlado entregue pelo próprio Carrefour.
 
 ### Homologação de novos supermercados
 
@@ -374,18 +325,18 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   (`2h`, sem janela no horário). Carrinho esvaziado; sem login, pagamento ou pedido.
 - [x] Validar o núcleo público Mambo no mesmo CEP: dois SKUs, carrinho anônimo de R$ 22,78 e
   Entrega Agendada R$ 12,90 (`2h`, 19 janelas). Carrinho esvaziado; sem login, pagamento ou pedido.
-- [ ] Implementar primeiro o conector Oba em `cart_only`, usando seleção regional antes da sacola e
+- [~] Implementar primeiro o conector Oba em `cart_only`, usando seleção regional antes da sacola e
   falha fechada quando um item do catálogo não tiver estoque para o CEP. Validar persistência,
   checkout, total final e promessa selecionada sem abrir pagamento.
-- [ ] Confirmar com o Oba uma rota comercial para concierge/automação; o canal oficial de WhatsApp
+- [~] Confirmar com o Oba uma rota comercial para concierge/automação; o canal oficial de WhatsApp
   torna a conversa plausível, mas não é autorização automática.
-- [ ] Manter Mambo como fallback regional após o Oba. O núcleo público funciona, mas os termos
+- [~] Manter Mambo como fallback regional após o Oba. O núcleo público funciona, mas os termos
   publicados vinculam conta individual ao CPF e proíbem compartilhamento; não usar conta central
   em piloto sem validação comercial/jurídica.
-- [ ] Manter Savegnago como candidato regional e confirmar cobertura do CEP do piloto antes do teste.
-- [ ] Avaliar Pão de Açúcar em sessão descartável antes de criar Context persistente; a home pública
+- [~] Manter Savegnago como candidato regional e confirmar cobertura do CEP do piloto antes do teste.
+- [~] Avaliar Pão de Açúcar em sessão descartável antes de criar Context persistente; a home pública
   respondeu `200`, mas emitiu cookies específicos de bot management.
-- [ ] Depriorizar St. Marche enquanto o Grupo Hortus estiver em recuperação judicial; não construir
+- [~] Depriorizar St. Marche enquanto o Grupo Hortus estiver em recuperação judicial; não construir
   dependência operacional sem reavaliar continuidade e eventual aquisição pela Cencosud.
 
 ### Cobasi e Leroy Merlin — candidatos ainda não integrados
@@ -395,11 +346,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Validar em 20/07 o fluxo público da Leroy até o login: produto vendido e entregue pela
   Leroy, CEP público, entrega domiciliar, frete, prazo e total; a sacola técnica foi limpa, sem
   login, pagamento ou pedido.
-- [ ] Implementar e validar primeiro o conector Cobasi em `cart_only`, com Context isolado,
+- [~] Implementar e validar primeiro o conector Cobasi em `cart_only`, com Context isolado,
   revalidação e falha fechada sem estoque/frete/prazo/total.
-- [ ] Só avaliar conector Leroy após Cobasi; restringir produtos a “Vendido e entregue por Leroy
+- [~] Só avaliar conector Leroy após Cobasi; restringir produtos a “Vendido e entregue por Leroy
   Merlin” e obter validação comercial/termos antes de qualquer piloto.
-- [ ] Não priorizar Sephora: a sessão pública não chegou à sacola/checkout de modo estável.
+- [~] Não priorizar Sephora: a sessão pública não chegou à sacola/checkout de modo estável.
 
 ### Boticário
 
@@ -407,26 +358,28 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Automação de carrinho preparada.
 - [x] Reexecutar a cobertura automatizada em 19/07: suíte de 210 testes sem falhas, com 168 aprovados
   e 42 integrações de banco puladas por indisponibilidade externa.
-- [ ] Estender o comprador para capturar frete e promessa de entrega; hoje ele valida apenas
+- [~] Estender o comprador para capturar frete e promessa de entrega; hoje ele valida apenas
   SKU/quantidade/subtotal e não satisfaz a cotação antes da cobrança.
-- [ ] Validar ao vivo o checkout com endereço, estoque, frete e prazo em ambiente Browserbase
+- [~] Validar ao vivo o checkout com endereço, estoque, frete e prazo em ambiente Browserbase
   configurado. Em 19/07 o ambiente confirmou SKU/quantidade/subtotal reais, mas a loja não expôs
   a confirmação de CEP para calcular frete/prazo; o job falhou fechado sem cobrança ou compra.
-- [ ] Validar titularidade, pagamento, antifraude, nota fiscal e entrega direta.
-- [ ] Validar rastreio e comunicação pós-compra.
-- [ ] Executar primeiro pedido controlado entregue pelo próprio Boticário.
+- [~] Validar titularidade, pagamento, antifraude, nota fiscal e entrega direta.
+- [~] Validar rastreio e comunicação pós-compra.
+- [~] Executar primeiro pedido controlado entregue pelo próprio Boticário.
 
 ## P1 — qualidade para lançamento público
 
 ### Conversa e experiência do cliente
 
-- [ ] Ajustar a conversa para pedir endereço completo uma vez e sempre confirmá-lo no
-  resumo do pedido.
-- [ ] Não mostrar produto sem URL real, preço atual e possibilidade de montar carrinho.
-- [ ] Resolver ambiguidades de tamanho, sabor, cor, quantidade e substituição antes da
+- [x] Ajustar a conversa para pedir endereço completo uma vez e sempre confirmá-lo no resumo
+  do pedido. O onboarding exige rua/número + CEP e a cotação manual repete o endereço.
+- [~] Não mostrar produto sem URL real, preço atual e possibilidade de montar carrinho.
+  Regra do fluxo legado de catálogo; o concierge manual envia a cotação do operador.
+- [x] Resolver ambiguidades de tamanho, sabor, cor, quantidade e substituição antes da
   cobrança.
-- [ ] Informar claramente quem entrega e nunca prometer “hoje” sem cotação ao vivo.
-- [ ] Criar mensagens para produto indisponível, mudança de preço, atraso, falha de compra
+- [x] Informar claramente quem entrega e nunca prometer “hoje” sem cotação ao vivo. A cotação
+  manual mostra modalidade e prazo; a promessa de hoje só aparece quando o operador informa.
+- [x] Criar mensagens para produto indisponível, mudança de preço, atraso, falha de compra
   e estorno.
 - [ ] Medir abandono e tempo em cada etapa da conversa.
 
@@ -439,38 +392,39 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Deixar a suíte `npm test` inteira verde. A rodada de 16/07 passou com 210 testes
   (168 aprovados e 42 integrações puladas por banco indisponível); `npx tsc --noEmit`, lint
   e `npm run build` também passaram.
-- [ ] Criar testes de idempotência, cotação vencida, preço alterado e pagamento duplicado.
-  Já existem coberturas de hash/preço, duplicidade One-Click e expiração da tentativa de
-  pagamento; ainda faltam regressões de banco para expiração da cotação do varejista e
-  idempotência de `place_order`.
+- [x] Criar testes de idempotência, cotação vencida, preço alterado e pagamento duplicado.
+  O concierge cobre cotação vencida e despacho repetido em `tests/manual-concierge.test.ts`;
+  o fluxo legado cobre hash/preço, duplicidade One-Click e expiração da tentativa de pagamento.
 - [x] Criar testes unitários do payload Meta, parser, idempotência Pagar.me e resposta
   ambígua do PSP. Os testes de banco aguardam as migrations em um Postgres de teste.
 - [x] Criar testes de queda do Browserbase, varejista indisponível e sessão expirada.
   `tests/carrefour-buyer.test.ts` cobre erro Browserbase 401/503, indisponibilidade exibida
   pelo varejista e sessão expirada; os casos falham fechados sem checkout.
-- [ ] Medir latência p50/p95 por varejista; meta inicial de 15–30 s para cotação completa.
+- [~] Medir latência p50/p95 por varejista; meta inicial de 15–30 s para cotação completa. É
+  métrica do fluxo legado por varejista, não do concierge manual atual.
 - [ ] Configurar alertas para falha de webhook, cobrança, carrinho, compra e estorno.
 
 ### Validação real e lançamento público (decisão do operador)
 
-- [ ] Definir grupo, limite de pedidos, ticket máximo, região e horário da primeira validação.
-- [ ] Rodar de 5 a 10 pedidos concierge controlados, com compra manual e acompanhamento humano,
+- [~] Definir grupo, limite de pedidos, ticket máximo, região e horário da primeira validação;
+  fica para quando o dono decidir iniciar a validação real.
+- [~] Rodar de 5 a 10 pedidos concierge controlados, com compra manual e acompanhamento humano,
   quando o operador decidir validar.
-- [ ] Registrar sucesso, tempo, margem, falhas, estornos e satisfação de cada pedido.
-- [ ] Corrigir todos os incidentes financeiros P0 encontrados no piloto.
+- [~] Registrar sucesso, tempo, margem, falhas, estornos e satisfação de cada pedido.
+- [~] Corrigir todos os incidentes financeiros P0 encontrados no piloto.
 - [ ] Aprovar checklist final de operação, jurídico, financeiro e suporte.
 - [ ] Definir critérios objetivos de `go/no-go` para abrir ao público.
 
-## P2 — expansão depois da prontidão inicial
+## P2 — expansão depois da prontidão inicial (adiado)
 
-- [ ] Obter parceiro local ou contrato merchant/courier que autorize retirada por terceiro
+- [~] Obter parceiro local ou contrato merchant/courier que autorize retirada por terceiro
   para oferecer same-day fora da entrega do varejista.
-- [ ] Reavaliar Uber Direct somente para parceiros com autorização operacional formal.
-- [ ] Criar pool de contas/Contexts isolados para aumentar concorrência por varejista.
-- [ ] Avaliar novas lojas usando o mesmo gate: busca real, carrinho, entrega, termos,
+- [~] Reavaliar Uber Direct somente para parceiros com autorização operacional formal.
+- [~] Criar pool de contas/Contexts isolados para aumentar concorrência por varejista.
+- [~] Avaliar novas lojas usando o mesmo gate: busca real, carrinho, entrega, termos,
   pagamento e pós-venda.
-- [ ] Automatizar conciliação financeira e cálculo de margem por pedido.
-- [ ] Criar painel de SLA por loja e modalidade de entrega.
+- [~] Automatizar conciliação financeira e cálculo de margem por pedido.
+- [~] Criar painel de SLA por loja e modalidade de entrega.
 
 ## Registro de marcos
 

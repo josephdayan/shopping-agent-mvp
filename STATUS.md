@@ -60,6 +60,22 @@ de hoje está em
 > concierge nada disso bloqueia pedido — item fora de vitrine vira linha livre que o operador
 > cota; as lacunas afetam só a vitrine com foto.
 
+> **02/08 — vitrine ampliada para 18 lojas / 17.264 itens.** As lacunas acima foram fechadas
+> por decisão do dono. Novas: **Drogaria São Paulo (4.675)** e **Pague Menos (1.540)** para
+> farmácia sem remédio, **Natural da Terra (1.000)** para hortifruti, **Cobasi (998)** como
+> redundância de pet, **Divvino (998)** e **Imigrantes Bebidas (406)** para bebidas, e
+> **Giuliana Flores (204)** para flores/presente. Dados reais, CDNs testados como hotlinkáveis.
+> Nas farmácias a regra ANVISA virou **tripla guarda**: allowlist de categoria + deny-regex na
+> colheita e `withoutMedicine` em runtime (`src/lib/stores/anvisa.ts`). A terceira foi
+> necessária — a loja classifica medicamento dentro de categorias cosméticas (cetoconazol,
+> metronidazol, ciclopirox passaram pelas duas primeiras). 18 itens removidos; regra travada em
+> `tests/anvisa-pharmacy.test.ts`. A mesma auditoria pegou o lado pet: Cobasi (65 medicamentos
+> veterinários + 56 dietas de prescrição) e Petz (58 itens da linha "Nutrição Clínica") agora
+> passam por `withoutVeterinaryMedicine` — inclusive a busca ao vivo da Petz. Roteamento ganhou
+> dicas de bebida e flor.
+> **Leroy Merlin não entrou**: bloqueia fetch (403) e a listagem não expõe imagem sem uma visita
+> por produto. Detalhes em [AGENTS.md](AGENTS.md) e [README das vitrines](src/lib/stores/README.md).
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;
@@ -133,6 +149,11 @@ quando existir uma rota urgente formalmente compatível.
 | **Privacidade da loja** | ✅ a Lia não precisa expor o varejista ao cliente ("Procurando…"). |
 | **Canal** | ✅ Meta Cloud API em produção; Twilio Sandbox é legado de teste. |
 | **MEI (PJ/CNPJ) + e-mail** | ✅ MEI confirmado; não exige contador fixo. Manter relatório mensal/DASN e documentar a rotina fiscal da Lia. `contato@liadelivery.com.br` configurado no ImprovMX |
+
+**Atualização operacional (02/08):** o `/ops` agora trata despacho repetido como operação
+idempotente (não cria um segundo courier), registra eventos seguros de compra/despacho/entrega
+e permite registrar o valor e a referência de estorno integral ou parcial antes de avisar o
+cliente. A validação com pedidos reais continua separada e opcional.
 
 ---
 

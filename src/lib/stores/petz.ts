@@ -1,5 +1,6 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
+import { withoutVeterinaryMedicine } from "./anvisa";
 import { PETZ_CATALOG } from "./petz-catalog";
 import { browserbaseLiveSearch } from "./browserbase-live-search";
 
@@ -13,7 +14,11 @@ import { browserbaseLiveSearch } from "./browserbase-live-search";
 // Confirmed: Petz does "Retire na Loja" + third-party (motoboy) pickup — but the counter
 // enforces the TITULAR's document + (often) a signed authorization and only releases
 // after a "liberado para retirada" notice; the operator buys online and picks the store.
-const SEED_CATALOG: CatalogItem[] = catalogWithImages(PETZ_CATALOG);
+// O seed foi curado sem remédio/antipulga, mas a auditoria de 02/08 achou 58 itens da linha
+// "Nutrição Clínica" (dieta terapêutica, exige receita veterinária). O mesmo filtro de runtime
+// da Cobasi remove medicamento veterinário e dieta de prescrição — inclusive de resultados da
+// busca ao vivo, que não passa por curadoria humana.
+const SEED_CATALOG: CatalogItem[] = withoutVeterinaryMedicine(catalogWithImages(PETZ_CATALOG));
 
 const UNITS: StoreUnit[] = [
   { id: "petz-augusta", label: "Petz Augusta", address: "Rua Augusta, 215, Bela Vista, São Paulo - SP", cep: "01305-000", lat: -23.5528, lng: -46.6605 },
@@ -127,7 +132,11 @@ async function liveSearch(query: string, limit: number): Promise<CatalogItem[]> 
           };
         })
       );
-      return rankCatalog(query, parsePetzSearchCards(cards), 40).filter((item) => scoreCatalogMatch(query, item) > 0);
+      // A busca ao vivo devolve o catálogo inteiro do varejista, inclusive antipulga e dieta de
+      // prescrição — o filtro tem de rodar aqui também, não só no seed curado.
+      return withoutVeterinaryMedicine(rankCatalog(query, parsePetzSearchCards(cards), 40)).filter(
+        (item) => scoreCatalogMatch(query, item) > 0
+      );
     }
   });
 }

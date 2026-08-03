@@ -1,5 +1,6 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { rankCatalog } from "./types";
+import { withoutMedicine } from "./anvisa";
 
 // Droga Raia — farmácia SEM MEDICAMENTO (higiene, bebê, dermocosmético, cabelo, solar).
 // A Raia tem Akamai (como o Carrefour), então a API pública não é raspável em massa; este
@@ -21,15 +22,19 @@ const CATALOG: CatalogItem[] = [
   { sku: "raia-rexona-clinical-150", name: "Desodorante Aerosol Rexona Clinical Classic Feminino 150ml", brand: "Rexona", unitPrice: 17.98, unit: "un", category: "higiene desodorante", imageUrl: "https://product-data.raiadrogasil.io/images/19192931.webp", productUrl: "https://www.drogaraia.com.br/rexona-clinical-antitranspirante-aerosol-classic-96h-150ml.html" }
 ];
 
+// Mesma terceira guarda das outras farmácias: o seed é curado à mão, mas o filtro de runtime
+// impede que uma edição futura reintroduza medicamento sem passar pelo teste.
+const ITEMS = withoutMedicine(CATALOG);
+
 export const drogaRaiaStore: StoreConnector = {
   key: "drogaraia",
   label: "Droga Raia",
   minOrder: Number(process.env.LIA_DROGARAIA_MIN_ORDER ?? 0),
   async searchItems(query: string, limit = 4) {
-    return rankCatalog(query, CATALOG, limit);
+    return rankCatalog(query, ITEMS, limit);
   },
   listCatalog() {
-    return CATALOG;
+    return ITEMS;
   },
   listUnits(): StoreUnit[] {
     return [];

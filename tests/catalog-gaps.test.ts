@@ -21,9 +21,9 @@ test("Oba nunca oferece seed sem foto para o card da Meta", async () => {
   }
 });
 
-test("registro de teste = mundo original dos evals (produção tem as 11 vitrines; elenco fixado no load-env)", () => {
+test("registro de teste = mundo original dos evals (produção tem as 18 vitrines; elenco fixado no load-env)", () => {
   // load-env fixa o elenco de teste em carrefour/petz/boticario/decathlon (o mundo que
-  // passava 210/210). Produção tem as 11 vitrines.
+  // passava 210/210). Produção tem as 18 vitrines.
   assert.deepEqual(listStores().map((store) => store.key).sort(), ["carrefour", "oba", "petz", "boticario", "decathlon"].sort());
   assert.equal(getStore().key, "carrefour");
   void pickStoreForQueries;
