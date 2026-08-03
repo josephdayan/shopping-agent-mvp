@@ -14,18 +14,6 @@ type Fulfillment = {
   deliveryPromise?: string;
   retailerTotal?: number;
 };
-type PurchaseJob = {
-  id: string;
-  storeLabel: string;
-  status: string;
-  actualTotal?: number | null;
-  cartHash?: string | null;
-  storeOrderNumber?: string | null;
-  browserSessionId?: string | null;
-  lastErrorCode?: string | null;
-  lastErrorMessage?: string | null;
-  items: Array<{ requestedName: string; requestedQty: number; status: string }>;
-};
 
 type DeliveryOrder = {
   id: string;
@@ -49,7 +37,6 @@ type DeliveryOrder = {
   pixCopiaECola?: string | null;
   courierKey?: string | null;
   courierTrackingUrl?: string | null;
-  purchaseJobs?: PurchaseJob[];
   createdAt: string;
   paidAt?: string | null;
   quoteExpiresAt?: string | null;
@@ -79,20 +66,6 @@ const STATUS_LABEL: Record<string, string> = {
   ready_for_pickup: "📦 Pronto — courier autorizado",
   dispatched: "🛵 Saiu pra entrega",
   refund_pending: "↩️ Estorno pendente"
-};
-
-const PURCHASE_STATUS_LABEL: Record<string, string> = {
-  preflight_queued: "⏳ carrinho na fila",
-  preflighting: "🔎 validando loja",
-  cart_ready: "🛒 carrinho pronto",
-  awaiting_approval: "✋ aguardando aprovação",
-  approved: "💳 compra aprovada",
-  purchasing: "🛍️ finalizando",
-  ordered: "✅ pedido confirmado no varejista",
-  ready_for_pickup: "📦 pronto para retirada autorizada",
-  needs_human: "⚠️ precisa de humano",
-  failed: "❌ falhou",
-  canceled: "cancelado"
 };
 
 // Where the operator double-checks the live price/stock before buying, per store.
@@ -151,6 +124,7 @@ export default function OpsBoard() {
   >({});
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [refundReferences, setRefundReferences] = useState<Record<string, string>>({});
+  const [refundAmounts, setRefundAmounts] = useState<Record<string, string>>({});
   const [notify, setNotify] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
@@ -218,6 +192,7 @@ export default function OpsBoard() {
       text?: string;
       trackingUrl?: string;
       refundReference?: string;
+      refundAmount?: number;
       itemsSubtotal?: number;
       deliveryFee?: number;
       deliveryMode?: string;
@@ -248,124 +223,6 @@ export default function OpsBoard() {
     }
   }
 
-  async function purchaseAct(job: PurchaseJob, action: "preflight" | "retry" | "request_approval" | "approve"): Promise<boolean> {
-    if (
-      action === "approve" &&
-      !window.confirm(
-        `Aprovar compra de ${brl(job.actualTotal ?? 0)} na ${job.storeLabel}? O fluxo fará uma última validação antes de tentar finalizar.`
-      )
-    ) {
-      return false;
-    }
-    const key = `${job.id}:${action}`;
-    setBusy(key);
-    try {
-      const res = await fetch(`/api/ops/purchases/${job.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action })
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        alert(data.error ?? `A ação de compra falhou (${res.status}).`);
-        return false;
-      }
-      await load();
-      return true;
-    } catch {
-      alert("A ação de compra falhou (sem conexão?). Tente de novo.");
-      return false;
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  async function runInternalPreflight(store: "oba" | "petz" | "boticario"): Promise<void> {
-    const key = `internal-preflight:${store}`;
-    setBusy(key);
-    try {
-      const res = await fetch("/api/ops/internal-preflight", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ retry: true, fresh: true, store })
-      });
-      const data = (await res.json().catch(() => ({}))) as {
-        error?: string;
-        reused?: boolean;
-        retried?: boolean;
-        status?: string;
-        actualTotal?: number | null;
-        errorCode?: string | null;
-        errorMessage?: string | null;
-      };
-      if (!res.ok) {
-        alert(data.error ?? `O preflight interno falhou (${res.status}).`);
-        return;
-      }
-      if (data.retried) {
-        alert(`O último preflight interno da ${store} foi reiniciado em cart_only.`);
-      } else if (data.reused) {
-        const outcome = data.errorCode
-          ? `${data.status ?? "needs_human"}: ${data.errorCode} — ${data.errorMessage ?? "sem detalhe"}`
-          : `${data.status ?? "em andamento"}${data.actualTotal != null ? ` · total R$ ${data.actualTotal.toFixed(2).replace(".", ",")}` : ""}`;
-        alert(`Resultado do último preflight interno da ${store}: ${outcome}`);
-      } else {
-        alert(`Preflight interno da ${store} iniciado em cart_only.`);
-      }
-      await load();
-    } catch {
-      alert("O preflight interno falhou (sem conexão?). Tente de novo.");
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  async function openRetailerSession(store: "petz" | "boticario"): Promise<void> {
-    const key = `live-session:${store}`;
-    setBusy(key);
-    try {
-      const res = await fetch("/api/ops/live-retailer-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ store })
-      });
-      const data = await res.json().catch(() => ({})) as { debuggerFullscreenUrl?: string; error?: string };
-      if (!res.ok || !data.debuggerFullscreenUrl) {
-        alert(data.error ?? `Não foi possível abrir a sessão ${store}.`);
-        return;
-      }
-      // A abertura em popup é bloqueada em alguns navegadores embutidos. Navegar
-      // na própria aba mantém a sessão visível para o operador sem expor o URL no chat.
-      window.location.assign(data.debuggerFullscreenUrl);
-    } catch {
-      alert("Não foi possível abrir a sessão da loja.");
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  async function releaseRetailerSession(store: "petz" | "boticario"): Promise<void> {
-    const key = `release-session:${store}`;
-    setBusy(key);
-    try {
-      const res = await fetch("/api/ops/live-retailer-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ store, action: "release" })
-      });
-      const data = await res.json().catch(() => ({})) as { released?: number; error?: string };
-      if (!res.ok) {
-        alert(data.error ?? `Não foi possível encerrar a sessão ${store}.`);
-        return;
-      }
-      alert(`${data.released ?? 0} sessão(ões) da ${store} foi(ram) encerrada(s). O Context foi salvo; agora pode rodar o preflight.`);
-    } catch {
-      alert("Não foi possível encerrar a sessão da loja.");
-    } finally {
-      setBusy(null);
-    }
-  }
-
   async function sendNotify(id: string) {
     const text = (notify[id] ?? "").trim();
     if (!text) return;
@@ -387,55 +244,7 @@ export default function OpsBoard() {
   return (
     <div style={{ marginTop: 20, display: "grid", gap: 14 }}>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <button
-          style={secondary}
-          disabled={busy === "internal-preflight:oba"}
-          onClick={() => void runInternalPreflight("oba")}
-          title="Cria um pedido técnico de um SKU Oba e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
-        >
-          {busy === "internal-preflight:oba" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Oba"}
-        </button>
-        <button
-          style={secondary}
-          disabled={busy === "internal-preflight:petz"}
-          onClick={() => void runInternalPreflight("petz")}
-          title="Busca um SKU Petz ao vivo e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
-        >
-          {busy === "internal-preflight:petz" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Petz"}
-        </button>
-        <button
-          style={secondary}
-          disabled={busy === "internal-preflight:boticario"}
-          onClick={() => void runInternalPreflight("boticario")}
-          title="Busca um SKU Boticário ao vivo e só valida carrinho, frete e prazo. Não envia mensagem, não cobra e não compra."
-        >
-          {busy === "internal-preflight:boticario" ? "🔎 Iniciando teste…" : "🧪 Testar cotação Boticário"}
-        </button>
-        <button
-          style={secondary}
-          disabled={busy === "live-session:petz"}
-          onClick={() => void openRetailerSession("petz")}
-          title="Abre o Context persistente Petz para a etapa de entrega. Não monta carrinho, não cobra e não compra."
-        >
-          {busy === "live-session:petz" ? "🌐 Abrindo Petz…" : "🌐 Abrir sessão Petz"}
-        </button>
-        <button
-          style={secondary}
-          disabled={busy === "release-session:petz"}
-          onClick={() => void releaseRetailerSession("petz")}
-          title="Encerra somente as sessões vivas do Context Petz para salvar login/endereço. Não monta carrinho, não cobra e não compra."
-        >
-          {busy === "release-session:petz" ? "💾 Salvando Petz…" : "💾 Salvar sessão Petz"}
-        </button>
-        <button
-          style={secondary}
-          disabled={busy === "live-session:boticario"}
-          onClick={() => void openRetailerSession("boticario")}
-          title="Abre o Context persistente Boticário para a etapa de entrega. Não monta carrinho, não cobra e não compra."
-        >
-          {busy === "live-session:boticario" ? "🌐 Abrindo Boticário…" : "🌐 Abrir sessão Boticário"}
-        </button>
-        <span style={{ fontSize: 12, color: "#667085" }}>Teste interno em cart_only: sem cobrança ou compra.</span>
+        <span style={{ fontSize: 12, color: "#667085" }}>Cotação e compra são manuais: nada é cobrado antes da aprovação do cliente.</span>
       </div>
       {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
       {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
@@ -588,64 +397,9 @@ export default function OpsBoard() {
               </div>
             )}
 
-            {(o.purchaseJobs?.length ?? 0) > 0 && (
-              <div style={{ display: "grid", gap: 7, marginTop: 10 }}>
-                {o.purchaseJobs!.map((job) => (
-                  <div key={job.id} style={{ border: "1px solid #d0d5dd", borderRadius: 8, padding: 9, background: "#fcfcfd" }}>
-                    <div style={{ display: "flex", gap: 8, justifyContent: "space-between", flexWrap: "wrap", alignItems: "center" }}>
-                      <strong style={{ fontSize: 13 }}>{job.storeLabel}</strong>
-                      <span style={{ fontSize: 12, color: "#475467" }}>{PURCHASE_STATUS_LABEL[job.status] ?? job.status}</span>
-                    </div>
-                    <div style={{ fontSize: 12, color: "#667085", marginTop: 4 }}>
-                      {job.items.map((item) => `${item.requestedQty}x ${item.requestedName} (${item.status})`).join(" · ")}
-                      {job.actualTotal != null ? ` · loja: ${brl(job.actualTotal)}` : ""}
-                    </div>
-                    {job.lastErrorCode && (
-                      <div style={{ fontSize: 12, color: "#b42318", marginTop: 4 }}>
-                        {job.lastErrorCode}: {job.lastErrorMessage}
-                      </div>
-                    )}
-                    <div style={{ display: "flex", gap: 7, marginTop: 8, flexWrap: "wrap", alignItems: "center" }}>
-                      {(job.status === "preflight_queued" || job.status === "needs_human" || job.status === "failed") && (
-                        <button style={secondary} disabled={busy === `${job.id}:preflight` || busy === `${job.id}:retry`} onClick={() => void purchaseAct(job, job.status === "preflight_queued" ? "preflight" : "retry")}>
-                          🔎 Montar carrinho
-                        </button>
-                      )}
-                      {o.status === "paid" && job.status === "cart_ready" && (
-                        <button style={primary} disabled={busy === `${job.id}:request_approval`} onClick={() => void purchaseAct(job, "request_approval")}>
-                          Pedir aprovação
-                        </button>
-                      )}
-                      {o.status === "paid" && job.status === "awaiting_approval" && (
-                        <button style={primary} disabled={busy === `${job.id}:approve`} onClick={() => void purchaseAct(job, "approve")}>
-                          Aprovar compra
-                        </button>
-                      )}
-                      {job.browserSessionId && (
-                        <a href={`https://www.browserbase.com/sessions/${job.browserSessionId}`} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: "#0f3d3a" }}>
-                          Abrir sessão da loja
-                        </a>
-                      )}
-                      {job.storeOrderNumber && <span style={{ fontSize: 12 }}>Pedido loja: <strong>{job.storeOrderNumber}</strong></span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
             <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>
               {o.status === "paid" && (
                 <>
-                  {(o.purchaseJobs?.length ?? 0) === 0 && !operatorCourier && o.storeKey !== "concierge" && (
-                    <button
-                      style={primary}
-                      disabled={busy === `${o.id}:prepare_purchase`}
-                      onClick={() => act(o.id, "prepare_purchase")}
-                      title="Abre uma sessão segura, confere os itens reais e monta o carrinho. No modo inicial, nunca finaliza a compra."
-                    >
-                      🤖 Montar carrinho automático
-                    </button>
-                  )}
                   <button
                     style={secondary}
                     onClick={() => openAllItems(o)}
@@ -743,6 +497,15 @@ export default function OpsBoard() {
                     }
                     style={{ ...input, minWidth: 240 }}
                   />
+                  <input
+                    inputMode="decimal"
+                    placeholder="valor estornado (vazio = total)"
+                    value={refundAmounts[o.id] ?? ""}
+                    onChange={(e) =>
+                      setRefundAmounts((current) => ({ ...current, [o.id]: e.target.value }))
+                    }
+                    style={{ ...input, width: 190 }}
+                  />
                   <button
                     style={primary}
                     disabled={busy === `${o.id}:confirm_refund` || !(refundReferences[o.id] ?? "").trim()}
@@ -753,7 +516,8 @@ export default function OpsBoard() {
                         )
                       ) {
                         void act(o.id, "confirm_refund", {
-                          refundReference: refundReferences[o.id] ?? ""
+                          refundReference: refundReferences[o.id] ?? "",
+                          refundAmount: refundAmounts[o.id] ? Number(refundAmounts[o.id].replace(",", ".")) : undefined
                         });
                       }
                     }}

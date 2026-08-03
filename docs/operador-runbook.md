@@ -41,7 +41,8 @@ Abra **uma vez** o link `https://liadelivery.com.br/ops?key=SEU_TOKEN`. Depois d
   troco pelo Y?"). Nunca troque por conta própria nem invente preço.
 - **Cliente quer cancelar / precisa estornar:** clique **Cancelar e solicitar estorno**. Isso
   marca **ESTORNO PENDENTE**. O estorno de verdade é feito no Mercado Pago; só depois você
-  confirma com a referência (botão **Confirmar estorno**). Detalhes:
+  informa o valor (vazio = total) e confirma com a referência (botão **Confirmar estorno**).
+  O campo aceita estorno parcial do item faltante. Detalhes:
   [operacao-piloto-needs-human-estorno.md](operacao-piloto-needs-human-estorno.md).
 - **Faixa vermelha "⚠️ CLIENTE PEDIU CANCELAMENTO":** o cliente pediu no WhatsApp. **Fale com
   o responsável antes de comprar ou despachar** esse pedido.
@@ -83,6 +84,8 @@ dúvida sobre um item de farmácia, trate como remédio e recuse.
 - **Nunca cobre o cliente à mão.** A Lia cobra. Você só cota e compra.
 - **Nunca prometa um prazo que não consegue cumprir.** Na dúvida, coloque um prazo folgado.
 - **Só clique "despachar motoboy" com os produtos já em mãos.**
+- **Se o despacho já foi confirmado, repetir o clique não cria outro courier**; confira o
+  rastreio existente no card.
 - **Dúvida financeira ou algo estranho → pare e chame o responsável.** Não repita um clique
   de compra/pagamento se ficou em dúvida se deu certo.
 

@@ -1,9 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { catalogWithImages, rankCatalog, normalizeText, scoreCatalogMatch } from "./types";
-import { prisma } from "@/lib/prisma";
-import { runApifyActor } from "@/lib/adapters/suppliers";
-import { Browserbase } from "@browserbasehq/sdk";
-import { chromium } from "playwright-core";
+import { catalogWithImages, rankCatalog } from "./types";
 import { CARREFOUR_CATALOG } from "./carrefour-catalog";
 import { CARREFOUR_FRESH_CATALOG } from "./carrefour-fresh-catalog";
 
@@ -56,7 +52,6 @@ const UNITS: StoreUnit[] = [
 
 const CARREFOUR_ACTOR = process.env.APIFY_CARREFOUR_ACTOR ?? "gio21~carrefour-br-scraper";
 const CACHE_TTL_MS = Number(process.env.LIA_SEARCH_CACHE_TTL_MS ?? 7 * 24 * 60 * 60 * 1000);
-const BROWSERBASE_CACHE_TTL_MS = Number(process.env.LIA_CARREFOUR_LIVE_CACHE_TTL_MS ?? 15 * 60 * 1000);
 // Hard cap so a slow Carrefour scrape never hangs the WhatsApp turn — past this we
 // fall back to the seed and the user always gets a reply.
 const CARREFOUR_MAX_WAIT_MS = Number(process.env.LIA_CARREFOUR_TIMEOUT_MS ?? 22000);
@@ -97,193 +92,6 @@ function mapCarrefourItem(raw: Record<string, unknown>): CatalogItem | null {
   };
 }
 
-type CarrefourSearchCard = { href: string; text: string; imageUrl?: string };
-
-function parsePrice(text: string): number | null {
-  const match = text.match(/R\$\s*([\d.]+,\d{2})/i);
-  if (!match) return null;
-  const value = Number(match[1].replace(/\./g, "").replace(",", "."));
-  return Number.isFinite(value) && value > 0 ? value : null;
-}
-
-// Pure parser: only product cards with an exact Carrefour page are sellable.
-export function parseCarrefourSearchCards(cards: CarrefourSearchCard[]): CatalogItem[] {
-  const seen = new Set<string>();
-  const items: CatalogItem[] = [];
-  for (const card of cards) {
-    let url: URL;
-    try {
-      url = new URL(card.href);
-    } catch {
-      continue;
-    }
-    if (!url.hostname.endsWith("carrefour.com.br") || !/\/produto\//.test(url.pathname) || seen.has(url.toString())) continue;
-    const unitPrice = parsePrice(card.text);
-    const priceIndex = card.text.search(/R\$\s*/i);
-    const name = (priceIndex >= 0 ? card.text.slice(0, priceIndex) : card.text).replace(/\s+/g, " ").trim();
-    const sku = url.pathname.match(/-(\d+)(?:\/|$)/)?.[1];
-    if (!name || !unitPrice || !sku) continue;
-    seen.add(url.toString());
-    items.push({
-      sku: `crf-live-${sku}`,
-      name,
-      unitPrice,
-      unit: "un",
-      category: "carrefour",
-      imageUrl: card.imageUrl,
-      productUrl: url.toString()
-    });
-  }
-  return items;
-}
-
-async function readBrowserbaseCache(query: string): Promise<CatalogItem[]> {
-  const queryKey = `carrefour-browserbase-v2|${normalizeText(query)}`;
-  try {
-    const row = await prisma.searchCache.findUnique({ where: { queryKey }, select: { items: true, updatedAt: true } });
-    if (!row || Date.now() - new Date(row.updatedAt).getTime() >= BROWSERBASE_CACHE_TTL_MS) return [];
-    const cached = Array.isArray(row.items) ? (row.items as unknown as CatalogItem[]) : [];
-    return cached.filter((item) => Boolean(item.productUrl && /^https:\/\//i.test(item.productUrl)));
-  } catch (error) {
-    console.warn("[carrefour:browserbase-cache:read]", error instanceof Error ? error.message : error);
-    return [];
-  }
-}
-
-async function writeBrowserbaseCache(query: string, items: CatalogItem[]): Promise<void> {
-  const queryKey = `carrefour-browserbase-v2|${normalizeText(query)}`;
-  try {
-    await prisma.searchCache.upsert({
-      where: { queryKey },
-      create: { queryKey, query, items: items as unknown as object },
-      update: { query, items: items as unknown as object }
-    });
-  } catch (error) {
-    console.warn("[carrefour:browserbase-cache:write]", error instanceof Error ? error.message : error);
-  }
-}
-
-async function searchCarrefourBrowserbase(query: string, limit: number): Promise<CatalogItem[]> {
-  if (!process.env.BROWSERBASE_API_KEY || !process.env.CARREFOUR_BROWSER_CONTEXT_ID) return [];
-  const cached = await readBrowserbaseCache(query);
-  if (cached.length) return cached.slice(0, limit);
-
-  const country = process.env.CARREFOUR_BROWSER_PROXY_COUNTRY?.trim().toUpperCase();
-  const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
-  const session = await bb.sessions.create({
-    browserSettings: {
-      context: { id: process.env.CARREFOUR_BROWSER_CONTEXT_ID, persist: true },
-      allowedDomains: ["carrefour.com.br"]
-    },
-    ...(country && /^[A-Z]{2}$/.test(country)
-      ? { proxies: [{ type: "browserbase" as const, geolocation: { country } }] }
-      : {})
-  });
-  const browser = await chromium.connectOverCDP(session.connectUrl);
-  try {
-    const context = browser.contexts()[0];
-    const page = context.pages()[0] ?? (await context.newPage());
-    const searchSlug = normalizeText(query).replace(/\s+/g, "-");
-    await page.goto(`https://mercado.carrefour.com.br/busca/${encodeURIComponent(searchSlug)}`, {
-      waitUntil: "domcontentloaded",
-      timeout: 45_000
-    });
-    await page.waitForTimeout(1_200);
-    const cards = await page.locator('a[href*="/produto/"]').evaluateAll((anchors) =>
-      anchors.map((anchor) => ({
-        href: (anchor as HTMLAnchorElement).href,
-        text: (anchor.textContent ?? "").replace(/\s+/g, " ").trim(),
-        imageUrl: anchor.querySelector("img")?.getAttribute("src") ?? undefined
-      }))
-    );
-    const items = rankCatalog(query, parseCarrefourSearchCards(cards), Math.max(limit, 12)).filter((item) => scoreCatalogMatch(query, item) > 0);
-    if (items.length) await writeBrowserbaseCache(query, items);
-    return items.slice(0, limit);
-  } finally {
-    await browser.close();
-  }
-}
-
-// Live Carrefour catalog via Apify (keyword search), cached per query in SearchCache.
-// maxWaitMs: short in the chat turn (don't hang the user); long in the prewarm cron.
-async function searchCarrefourLive(query: string, limit: number, maxWaitMs = CARREFOUR_MAX_WAIT_MS): Promise<CatalogItem[]> {
-  const token = process.env.APIFY_API_TOKEN;
-  if (!token) return [];
-  const cacheKey = `carrefour|${normalizeText(query)}`;
-
-  try {
-    const row = await prisma.searchCache.findUnique({ where: { queryKey: cacheKey }, select: { items: true, updatedAt: true } });
-    if (row && Date.now() - new Date(row.updatedAt).getTime() < CACHE_TTL_MS) {
-      const cached = Array.isArray(row.items) ? (row.items as unknown as CatalogItem[]) : [];
-      if (cached.length) return cached.slice(0, limit);
-    }
-  } catch (error) {
-    console.warn("[carrefour:cache:read]", error instanceof Error ? error.message : error);
-  }
-
-  const raw = await runApifyActor(CARREFOUR_ACTOR, token, { searchTerm: query, maxItems: 20, maxPages: 1 }, maxWaitMs);
-  const items = catalogWithImages((raw ?? [])
-    .map((entry) => mapCarrefourItem(entry as Record<string, unknown>))
-    .filter((item): item is CatalogItem => Boolean(item)));
-  const ranked = rankCatalog(query, items, items.length);
-
-  if (ranked.length) {
-    try {
-      await prisma.searchCache.upsert({
-        where: { queryKey: cacheKey },
-        create: { queryKey: cacheKey, query, items: ranked as unknown as object },
-        update: { query, items: ranked as unknown as object }
-      });
-    } catch (error) {
-      console.warn("[carrefour:cache:write]", error instanceof Error ? error.message : error);
-    }
-  }
-  return ranked.slice(0, limit);
-}
-
-// Prewarm the cache for the most common everyday queries so they're INSTANT in chat
-// (the long-tail is still scraped on demand, then cached). Run from the cron with a
-// long wait since it's background, not a user turn.
-export async function prewarmCarrefour(queries: string[], options?: { limit?: number; minAgeMs?: number }) {
-  // Off until live scraping actually works — otherwise the cron burns Apify money on
-  // an actor that returns nothing.
-  if (process.env.LIA_CARREFOUR_LIVE !== "true") {
-    return { ok: false, reason: "live_disabled", attempted: 0, warmed: 0, total: queries.length };
-  }
-  if (!process.env.APIFY_API_TOKEN) {
-    return { ok: false, reason: "no_apify_token", attempted: 0, warmed: 0, total: queries.length };
-  }
-  const limit = Math.max(1, Math.floor(options?.limit ?? 8));
-  const minAgeMs = options?.minAgeMs ?? Math.floor(CACHE_TTL_MS * 0.7);
-
-  let rows: { queryKey: string; updatedAt: Date }[] = [];
-  try {
-    rows = await prisma.searchCache.findMany({
-      where: { queryKey: { startsWith: "carrefour|" } },
-      select: { queryKey: true, updatedAt: true }
-    });
-  } catch (error) {
-    console.warn("[carrefour:prewarm:status-read]", error instanceof Error ? error.message : error);
-  }
-  const ageByKey = new Map(rows.map((r) => [r.queryKey, Date.now() - new Date(r.updatedAt).getTime()]));
-  const candidates = queries
-    .map((query) => ({ query, age: ageByKey.get(`carrefour|${normalizeText(query)}`) ?? Number.POSITIVE_INFINITY }))
-    .filter((candidate) => candidate.age >= minAgeMs)
-    .sort((a, b) => b.age - a.age)
-    .slice(0, limit);
-
-  let warmed = 0;
-  for (const candidate of candidates) {
-    try {
-      const items = await searchCarrefourLive(candidate.query, 8, Number(process.env.LIA_PREWARM_TIMEOUT_MS ?? 90000));
-      if (items.length) warmed += 1;
-    } catch (error) {
-      console.warn("[carrefour:prewarm:item]", candidate.query, error instanceof Error ? error.message : error);
-    }
-  }
-  return { ok: true, attempted: candidates.length, warmed, total: queries.length };
-}
-
 export const carrefourStore: StoreConnector = {
   key: "carrefour",
   label: "Carrefour",
@@ -295,7 +103,7 @@ export const carrefourStore: StoreConnector = {
     // removed from the critical path. In the manual-concierge product the operator's
     // hand-made quote is the price authority, so the vitrine can safely show the
     // scraped seed (real names + real deep links; price is only a reference) without
-    // fighting the retailer's anti-bot. Do NOT reintroduce Browserbase/Apify here
+    // fighting the retailer's anti-bot. Do NOT reintroduce browser automation here
     // without a formal authorization from the retailer.
     return seedSearch(query, limit);
   },

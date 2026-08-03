@@ -76,6 +76,16 @@ de hoje está em
 > **Leroy Merlin não entrou**: bloqueia fetch (403) e a listagem não expõe imagem sem uma visita
 > por produto. Detalhes em [AGENTS.md](AGENTS.md) e [README das vitrines](src/lib/stores/README.md).
 
+> **03/08 — Browserbase removido; catálogo com rotina mensal.** O navegador remoto saiu do
+> produto inteiro: busca ao vivo, os 3 compradores automatizados, o lease de Context, o
+> workflow de compra, as rotas de preflight/sessão viva do `/ops`, o cron de prewarm e as
+> dependências `@browserbasehq/sdk`/`playwright-core`. Tudo isso já era código morto (atrás de
+> `manualConciergeEnabled()` e de `PURCHASE_AUTOMATION_ENABLED=false`). A **Oba** deixou de
+> depender dele: a API pública dela responde direto e virou catálogo de **1.494 itens**.
+> Preço agora se atualiza por rotina mensal — `npm run catalog:refresh` (`--dry` simula),
+> que recolhe as 10 lojas com API/SSR aberta e resume o que mudou. Suíte **210/210 verde**,
+> `tsc`, lint e build limpos. Detalhes em [AGENTS.md](AGENTS.md).
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;

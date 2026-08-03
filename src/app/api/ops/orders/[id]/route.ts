@@ -9,8 +9,6 @@ import {
   opsNotifyCustomer,
   opsPublishManualQuote
 } from "@/lib/delivery-service";
-import { createPurchaseJobsForOrder } from "@/lib/purchasing/service";
-import { startPreflightPurchaseWorkflow } from "@/lib/purchasing/workflow-dispatch";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +31,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     text?: string;
     trackingUrl?: string;
     refundReference?: string;
+    refundAmount?: number | string;
     itemsSubtotal?: number | string;
     deliveryFee?: number | string;
     deliveryMode?: "operator_courier" | "retailer_delivery";
@@ -74,18 +73,17 @@ export async function POST(request: Request, { params }: { params: { id: string 
         await opsCancelRefund(id);
         break;
       case "confirm_refund":
-        await opsConfirmRefund(id, String(body.refundReference ?? ""));
+        await opsConfirmRefund(
+          id,
+          String(body.refundReference ?? ""),
+          body.refundAmount == null || body.refundAmount === "" ? undefined : Number(body.refundAmount)
+        );
         break;
       case "notify": {
         const text = String(body.text ?? "").trim();
         // Client-input problem, not a server failure — answer 400, not 500.
         if (!text) return NextResponse.json({ error: "empty text" }, { status: 400 });
         await opsNotifyCustomer(id, text);
-        break;
-      }
-      case "prepare_purchase": {
-        const jobs = await createPurchaseJobsForOrder(id);
-        await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
         break;
       }
       default:

@@ -2,7 +2,6 @@ import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { catalogWithImages, scoreCatalogMatch, rankCatalog } from "./types";
 import { withoutVeterinaryMedicine } from "./anvisa";
 import { PETZ_CATALOG } from "./petz-catalog";
-import { browserbaseLiveSearch } from "./browserbase-live-search";
 
 // Petz — pet niche (ração, petisco, areia, higiene, brinquedo). Same connector shape as
 // but seed-only (no live scrape). Catalog is REAL data (petz-catalog.ts). The breadth of
@@ -112,50 +111,17 @@ export function parsePetzSearchCards(cards: PetzSearchCard[]): CatalogItem[] {
   return items;
 }
 
-async function liveSearch(query: string, limit: number): Promise<CatalogItem[]> {
-  return browserbaseLiveSearch({
-    cacheNamespace: "petz-browserbase-v1",
-    query,
-    limit,
-    domain: "petz.com.br",
-    contextId: process.env.PETZ_BROWSER_CONTEXT_ID,
-    searchUrl: (value) => `https://www.petz.com.br/busca?q=${encodeURIComponent(value)}`,
-    extract: async (page) => {
-      const cards = await page.locator('a[href*="/produto/"]').evaluateAll((anchors) =>
-        anchors.map((anchor) => {
-          const image = anchor.querySelector("img");
-          return {
-            href: (anchor as HTMLAnchorElement).href,
-            text: (anchor.textContent ?? "").replace(/\s+/g, " ").trim(),
-            imageUrl: image?.getAttribute("src") ?? undefined,
-            imageAlt: image?.getAttribute("alt") ?? undefined
-          };
-        })
-      );
-      // A busca ao vivo devolve o catálogo inteiro do varejista, inclusive antipulga e dieta de
-      // prescrição — o filtro tem de rodar aqui também, não só no seed curado.
-      return withoutVeterinaryMedicine(rankCatalog(query, parsePetzSearchCards(cards), 40)).filter(
-        (item) => scoreCatalogMatch(query, item) > 0
-      );
-    }
-  });
-}
-
 export const petzStore: StoreConnector = {
   key: "petz",
   label: "Petz",
   // Petz clique-e-retire minimum is unverified — set 0 (no enforced minimum) for now.
   minOrder: Number(process.env.LIA_PETZ_MIN_ORDER ?? 0),
 
+  // Busca no catálogo colhido. Até 03/08 havia busca ao vivo por Browserbase; o navegador
+  // remoto saiu do produto (no concierge quem cota é o operador). O preço do catálogo é
+  // referência e é atualizado pela recolheita mensal — ver scripts/refresh-catalogs.mts.
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
-    if (process.env.LIA_RETAILER_TEST_SEED === "true") return seedSearch(query, limit);
-    try {
-      const live = await liveSearch(query, limit);
-      return live;
-    } catch (error) {
-      console.warn("[petz:browserbase-search]", error instanceof Error ? error.message : error);
-      return [];
-    }
+    return seedSearch(query, limit);
   },
 
   listCatalog(): CatalogItem[] {

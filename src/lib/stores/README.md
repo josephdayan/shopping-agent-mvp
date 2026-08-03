@@ -24,7 +24,7 @@ vitrine = 1 arquivo + 1 linha no registro.
 | drogaraia | farmácia s/ remédio | 13 | seed real (Akamai) |
 | cacaushow | chocolate | 12 | seed real (Salesforce Commerce) |
 | decathlon | esporte | 4 de 17 | seed curado; 13 são cortados pelo filtro de imagem |
-| oba | hortifruti | ~vivo | busca ao vivo Browserbase (seed de 2 p/ testes) |
+| oba | hortifruti | 1.494 | gerado VTEX (`oba-catalog.ts`) |
 
 `LIA_ENABLE_<LOJA>=false` desliga uma vitrine.
 
@@ -97,6 +97,41 @@ Em `index.ts`: `import` + uma linha no objeto `STORES` com o toggle `LIA_ENABLE_
 Roteamento por vocação: adicione palavras-chave em `BEAUTY_HINT_RE`/`PET_HINT_RE`/
 `DRINK_HINT_RE`/`FLOWER_HINT_RE` se a loja disputa termos com uma vitrine ampla (Carrefour).
 As dicas são testadas com a query normalizada (sem acento).
+
+## Atualizar preços (rotina mensal)
+
+O catálogo é arquivo estático: rápido, sem rede no turno da conversa e sem navegador remoto.
+O custo disso é que o preço envelhece. Uma vez por mês:
+
+```bash
+npm run catalog:refresh -- --dry
+```
+Mostra, loja a loja, quantos preços mudaram, a variação média e as três maiores mexidas —
+sem tocar em arquivo. Se o resumo fizer sentido:
+
+```bash
+npm run catalog:refresh
+npm test && git add src/lib/stores/*-catalog.ts && git commit
+```
+
+A rotina cobre as lojas com API/SSR aberta: oba, divvino, naturaldaterra, cobasi, rihappy,
+swift, kopenhagen, paguemenos, drogariasp e imigrantes. As farmácias mantêm allowlist de
+categoria + deny-regex dentro do próprio script — **não rodar farmácia sem elas**.
+
+Ficam de fora (colheita manual): **giulianaflores** (client-rendered, precisa de navegador),
+**carrefour/petz/boticario** (anti-bot) e os seeds pequenos (kalunga, cacaushow, decathlon,
+drogaraia). Para essas, repita o método da seção acima quando o preço divergir demais.
+
+Uma colheita que volta vazia é quase sempre a loja bloqueando, não a loja sem produto: o
+script preserva o catálogo anterior e marca a loja como falha em vez de esvaziá-la.
+
+## Sem navegador remoto
+
+Até 03/08/2026 Oba, Petz e Boticário faziam busca ao vivo por Browserbase, e havia um
+subsistema de compra automatizada (carrinho/checkout por robô). **Tudo isso foi removido**:
+no concierge quem cota e compra é o operador, então o navegador remoto não estava no caminho
+crítico — só custava dependência, credencial e superfície de falha. Não reintroduzir sem uma
+mudança de produto explícita.
 
 ## Regra de ouro
 Preço/nome/URL sempre REAIS (colhidos, nunca inventados). No concierge o preço da vitrine é

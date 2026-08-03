@@ -18,7 +18,9 @@ import {
   opsPublishManualQuote,
   opsMarkBought,
   opsDispatchCourier,
-  opsMarkDelivered
+  opsMarkDelivered,
+  opsCancelRefund,
+  opsConfirmRefund
 } from "../src/lib/delivery-service";
 import { isOperatorCourierOrder } from "../src/lib/order-flags";
 
@@ -157,6 +159,13 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   const dispatched = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal(dispatched!.status, "dispatched");
   assert.ok(dispatched!.courierTrackingUrl, "deveria ter rastreio do motoboy");
+  // Repetir o clique não pode criar um segundo despacho nem enviar nova mensagem.
+  const trackingBeforeRetry = dispatched!.courierTrackingUrl;
+  const messagesBeforeRetry = outbox.length;
+  const retry = await opsDispatchCourier(pending!.id);
+  assert.equal(retry.status, "dispatched");
+  assert.equal(retry.courierTrackingUrl, trackingBeforeRetry);
+  assert.equal(outbox.length, messagesBeforeRetry);
 
   // 8. Entregue.
   await opsMarkDelivered(pending!.id);
@@ -179,6 +188,47 @@ test("não é possível cotar um pedido que não está aguardando cotação", as
     () => opsPublishManualQuote(order!.id, { itemsSubtotal: 40, deliveryFee: 10 }),
     /aguardando cotação/i
   );
+});
+
+test("cotação concierge vencida não libera pagamento", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("um guarda-chuva");
+  await c.send("só isso");
+  const order = await prisma.deliveryOrder.findFirst({
+    where: { userId: c.userId, status: "awaiting_operator_quote" },
+    orderBy: { createdAt: "desc" }
+  });
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
+  await prisma.deliveryOrder.update({
+    where: { id: order!.id },
+    data: { quoteExpiresAt: new Date(Date.now() - 1_000) }
+  });
+  const expired = await c.send("pix");
+  assert.match(expired, /cotação venceu/i);
+  const canceled = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(canceled!.status, "canceled");
+});
+
+test("estorno parcial registra valor e referência antes de avisar", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("um guarda-chuva");
+  await c.send("só isso");
+  const order = await prisma.deliveryOrder.findFirst({
+    where: { userId: c.userId, status: "awaiting_operator_quote" },
+    orderBy: { createdAt: "desc" }
+  });
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
+  await c.send("pix");
+  await markDeliveryOrderPaid(order!.id);
+  await opsCancelRefund(order!.id);
+  await opsConfirmRefund(order!.id, "mp-ref-123", 12);
+  const refunded = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(refunded!.status, "refunded");
+  assert.match(refunded!.notes ?? "", /ESTORNO CONFIRMADO: parcial R\$ 12,00 — mp-ref-123/);
 });
 
 test("cancelar durante a cotação do operador cancela sem cobrança", async (t) => {

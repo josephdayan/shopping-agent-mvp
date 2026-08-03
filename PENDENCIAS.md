@@ -37,6 +37,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > Leroy Merlin não entrou: bloqueia fetch (403) e a imagem exige uma visita por produto.
 > Detalhes em [AGENTS.md](AGENTS.md) e no [README das vitrines](src/lib/stores/README.md).
 
+> **03/08 — Browserbase removido; catálogo com rotina mensal.** O navegador remoto saiu do
+> produto inteiro: busca ao vivo, os 3 compradores automatizados, o lease de Context, o
+> workflow de compra, as rotas de preflight/sessão viva do `/ops`, o cron de prewarm e as
+> dependências `@browserbasehq/sdk`/`playwright-core`. Tudo isso já era código morto (atrás de
+> `manualConciergeEnabled()` e de `PURCHASE_AUTOMATION_ENABLED=false`). A **Oba** deixou de
+> depender dele: a API pública dela responde direto e virou catálogo de **1.494 itens**.
+> Preço agora se atualiza por rotina mensal — `npm run catalog:refresh` (`--dry` simula),
+> que recolhe as 10 lojas com API/SSR aberta e resume o que mudou. Suíte **210/210 verde**,
+> `tsc`, lint e build limpos. Detalhes em [AGENTS.md](AGENTS.md).
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam

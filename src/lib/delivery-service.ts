@@ -49,8 +49,6 @@ import {
   withPaymentNote
 } from "@/lib/order-flags";
 import { checkCoverage, coverageLabel, isSaoPauloState, normalizeCity } from "@/lib/coverage";
-import { getPurchasePolicy } from "@/lib/purchasing/policy";
-import type { CartSnapshot } from "@/lib/purchasing/types";
 import * as copy from "@/lib/lia-copy";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
@@ -598,18 +596,6 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
   ctx.etaMinutes = Math.max(...fulfillments.map((f) => f.etaMinutes));
   ctx.total = Math.round(((ctx.itemsSubtotal ?? 0) + (ctx.serviceFee ?? 0) + (ctx.deliveryFee ?? 0)) * 100) / 100;
   ctx.courierOptions = undefined;
-}
-
-const BROWSERBASE_RETAILER_KEYS = new Set(["oba", "petz", "boticario"]);
-
-function usesRetailerCheckoutQuote(ctx: DeliveryContext): boolean {
-  // In the concierge pilot the operator quotes by hand; the live retailer checkout
-  // (Browserbase) is never on the critical path.
-  if (manualConciergeEnabled()) return false;
-  const policy = getPurchasePolicy();
-  const basket = ctx.basket ?? [];
-  const keys = new Set(basket.map((item) => item.storeKey));
-  return policy.enabled && policy.mode !== "off" && basket.length > 0 && keys.size === 1 && BROWSERBASE_RETAILER_KEYS.has(basket[0]?.storeKey ?? "");
 }
 
 // Apply a chosen courier quote to the context (fee/eta/key/quoteId + recompute total).
@@ -1251,10 +1237,6 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       return;
     }
     if (directMethod) {
-      if (ctx.step !== "quoted" && usesRetailerCheckoutQuote(ctx)) {
-        await continueAfterBasket(phone, convo.id, ctx, user.cep);
-        return;
-      }
       await createOrderAndCharge(phone, user.id, convo.id, ctx, directMethod);
       return;
     }
@@ -2277,10 +2259,6 @@ async function continueAfterBasket(
     await createOperatorQuoteRequest(phone, convoId, ctx, prefix);
     return;
   }
-  if (usesRetailerCheckoutQuote(ctx)) {
-    await beginRetailerQuote(phone, convoId, ctx);
-    return;
-  }
   await quoteBasket(ctx, store);
   await respondAfterQuote(phone, convoId, ctx, store, prefix);
 }
@@ -2364,132 +2342,6 @@ async function setQuoteConversationAwaitingPayment(order: { id: string; conversa
   if (!convo) return;
   const ctx = readCtx(convo.context);
   if (ctx.deliveryOrderId === order.id) await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
-}
-
-async function beginRetailerQuote(phone: string, convoId: string, ctx: DeliveryContext) {
-  const convo = await prisma.conversation.findUnique({ where: { id: convoId } });
-  if (!convo) throw new Error("Conversation not found while preparing retailer quote.");
-
-  const existing = await prisma.deliveryOrder.findFirst({
-    where: { conversationId: convoId, status: "awaiting_supplier_validation" },
-    orderBy: { createdAt: "desc" }
-  });
-  if (existing) {
-    await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: existing.id, step: "awaiting_supplier_validation" });
-    await reply(phone, copy.supplierValidationPending());
-    return;
-  }
-
-  const store = orderStore(ctx);
-  if (belowMinimum(ctx, store)) {
-    await reply(phone, minimumOrderText(ctx, store));
-    return;
-  }
-
-  const basket = ctx.basket ?? [];
-  const expectedItemsSubtotal = roundMoney(basket.reduce((sum, item) => sum + item.lineTotal, 0));
-  const order = await prisma.deliveryOrder.create({
-    data: {
-      userId: convo.userId,
-      conversationId: convoId,
-      phone,
-      cep: ctx.cep,
-      deliveryAddress: ctx.deliveryAddress,
-      storeKey: store.key,
-      storeLabel: store.label,
-      items: basket as unknown as object,
-      // Direct delivery is determined in the retailer checkout. No courier quote is
-      // carried forward from the legacy pickup flow.
-      fulfillments: [{ storeKey: store.key, storeLabel: store.label, deliveryMode: "retailer_delivery" }] as unknown as object,
-      itemsSubtotal: expectedItemsSubtotal,
-      courierKey: "retailer_delivery",
-      deliveryFee: 0,
-      serviceFee: 0,
-      total: 0,
-      notes: `Cotação ${store.label} pendente de confirmação no checkout.`,
-      status: "awaiting_supplier_validation"
-    }
-  });
-
-  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_supplier_validation" });
-  const [{ createPurchaseJobsForOrder }, { startPreflightPurchaseWorkflow }] = await Promise.all([
-    import("@/lib/purchasing/service"),
-    import("@/lib/purchasing/workflow-dispatch")
-  ]);
-  const jobs = await createPurchaseJobsForOrder(order.id);
-  await Promise.all(jobs.map((job) => startPreflightPurchaseWorkflow(job.id)));
-  await reply(phone, copy.supplierValidationStarted());
-}
-
-// Called by the preflight workflow only after the retailer has exposed an exact
-// cart, freight and delivery promise. It publishes a quote; it never creates a
-// payment on its own, so the customer still explicitly chooses Pix or card.
-export async function publishValidatedRetailerQuote(orderId: string) {
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
-  if (!order || order.status !== "awaiting_supplier_validation") return order;
-  if (!order.purchaseJobs.length || order.purchaseJobs.some((job) => job.status !== "cart_ready" || !job.cartSnapshot || job.actualTotal == null)) return order;
-
-  const snapshots = order.purchaseJobs.map((job) => job.cartSnapshot as unknown as CartSnapshot);
-  if (snapshots.some((snapshot) => snapshot.deliveryFee === undefined || !snapshot.deliveryPromise)) return order;
-
-  const retailerTotal = roundMoney(order.purchaseJobs.reduce((sum, job) => sum + (job.actualTotal ?? 0), 0));
-  const deliveryFee = roundMoney(snapshots.reduce((sum, snapshot) => sum + (snapshot.deliveryFee ?? 0), 0));
-  const itemsSubtotal = roundMoney(Math.max(0, retailerTotal - deliveryFee));
-  const serviceFee = roundMoney(itemsSubtotal * (MARKUP - 1));
-  const total = roundMoney(itemsSubtotal + serviceFee + deliveryFee);
-  const quoteExpiresAt = new Date(Date.now() + quoteTtlMinutes() * 60_000);
-  const fulfillment = {
-    storeKey: order.storeKey,
-    storeLabel: order.storeLabel,
-    deliveryMode: "retailer_delivery",
-    retailerTotal,
-    deliveryFee,
-    deliveryPromise: snapshots.map((snapshot) => snapshot.deliveryPromise).filter(Boolean).join(" · "),
-    browserSessionIds: snapshots.map((snapshot) => snapshot.browserSessionId).filter(Boolean)
-  };
-
-  const claimed = await prisma.deliveryOrder.updateMany({
-    where: { id: order.id, status: "awaiting_supplier_validation" },
-    data: {
-      status: "awaiting_quote_confirmation",
-      itemsSubtotal,
-      serviceFee,
-      deliveryFee,
-      total,
-      courierKey: "retailer_delivery",
-      fulfillments: [fulfillment] as unknown as object,
-      quoteExpiresAt
-    }
-  });
-  if (claimed.count !== 1) return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
-
-  if (order.conversationId) {
-    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
-    if (convo) {
-      const ctx = readCtx(convo.context);
-      if (ctx.deliveryOrderId === order.id) {
-        await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_quote_confirmation" });
-      }
-    }
-  }
-
-  const quoteItems = snapshots.flatMap((snapshot) => snapshot.items).map((item) => ({
-    qty: item.requestedQty,
-    name: item.resolvedName ?? item.requestedName,
-    displayLineTotal: display((item.actualUnitPrice ?? item.requestedUnitPrice ?? 0) * item.requestedQty)
-  }));
-  await reply(order.phone, copy.summary({
-    items: quoteItems,
-    produtos: roundMoney(itemsSubtotal + serviceFee),
-    frete: deliveryFee,
-    deliveryPromise: fulfillment.deliveryPromise,
-    total,
-    deliveryAddress: order.deliveryAddress ?? undefined
-  }));
-  const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
-  if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
-  await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
-  return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }
 
 export async function issueValidatedRetailerQuotePayment(orderId: string, method: "pix" | "card"): Promise<{ expired: boolean }> {
@@ -2649,110 +2501,6 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
   await reply(phone, charge.copiaECola);
 }
 
-// Called by the durable preflight workflow only after every retailer fulfillment has
-// produced the same validated cart. This makes the customer payment the LAST step
-// before a confirmed, purchasable basket — not a bet on stale catalog data.
-export async function issueDeferredOrderPayment(orderId: string, options: { requireCartReady?: boolean } = {}) {
-  const requireCartReady = options.requireCartReady ?? true;
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
-  if (!order || order.status !== "awaiting_supplier_validation") return order;
-  if (requireCartReady && (!order.purchaseJobs.length || order.purchaseJobs.some((job) => job.status !== "cart_ready"))) return order;
-
-  // The customer quote uses the catalog's raw store cost in itemsSubtotal (before
-  // Lia's markup/freight). Never send a charge when the live retailer cart drifted
-  // beyond the configured tolerance — that would turn a stock check into a margin bet.
-  if (requireCartReady) {
-    const liveStoreTotal = order.purchaseJobs.reduce((sum, job) => sum + (job.actualTotal ?? 0), 0);
-    const expectedStoreTotal = order.itemsSubtotal;
-    const policy = getPurchasePolicy();
-    const delta = Math.abs(liveStoreTotal - expectedStoreTotal);
-    if (
-      expectedStoreTotal > 0 &&
-      (delta > policy.maxPriceDelta || delta / expectedStoreTotal > policy.maxPriceDeltaPercent)
-    ) {
-      await prisma.purchaseJob.updateMany({
-        where: { deliveryOrderId: order.id, status: "cart_ready" },
-        data: {
-          status: "needs_human",
-          lastErrorCode: "PRICE_CHANGED",
-          lastErrorMessage: `Total ${order.storeLabel} ${copy.brl(liveStoreTotal)} divergiu da cotação ${copy.brl(expectedStoreTotal)}.`
-        }
-      });
-      return order;
-    }
-  }
-
-  // Two preflight workflows may finish together. Only the caller that atomically
-  // claims this short issuing state may create the payment request.
-  const claimed = await prisma.deliveryOrder.updateMany({
-    where: { id: orderId, status: "awaiting_supplier_validation" },
-    data: { status: "payment_issuing" }
-  });
-  if (claimed.count !== 1) return prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-
-  const card = (order.notes ?? "").includes("Pagamento: cartão");
-  try {
-    if (card) {
-      const credential = await getOneClickCredential(order.userId);
-      if (credential) {
-        const awaitingPayment = await prisma.deliveryOrder.update({
-          where: { id: order.id },
-          data: { status: "awaiting_payment", pixId: null, pixCopiaECola: null }
-        });
-        await createCardAttempt(awaitingPayment, credential);
-      } else {
-        const awaitingPayment = await prisma.deliveryOrder.update({
-          where: { id: order.id },
-          data: { status: "awaiting_payment", pixId: null, pixCopiaECola: null }
-        });
-        if (await sendFirstCardEnrollment(awaitingPayment)) {
-          // The enrollment page creates the first charge after tokenizing the card.
-        } else {
-          const link = await checkoutAdapter.createLink({
-            orderId: order.id,
-            amount: order.total,
-            description: `Lia · pedido ${order.id.slice(-6)}`,
-            method: "card"
-          });
-          await prisma.deliveryOrder.update({
-            where: { id: order.id },
-            data: { status: "awaiting_payment", pixId: link.preferenceId, pixCopiaECola: link.initPoint }
-          });
-          await reply(order.phone, copy.cardInstructions(order.total, link.initPoint, link.mock));
-        }
-      }
-    } else {
-      const charge = await pixAdapter.createPix({
-        orderId: order.id,
-        amount: order.total,
-        description: `Lia · pedido ${order.id.slice(-6)}`
-      });
-      await prisma.deliveryOrder.update({
-        where: { id: order.id },
-        data: { status: "awaiting_payment", pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
-      });
-      await reply(order.phone, copy.pixInstructions(order.total, charge.mock));
-      await reply(order.phone, charge.copiaECola);
-    }
-    if (order.conversationId) {
-      const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
-      if (convo) {
-        const ctx = readCtx(convo.context);
-        if (ctx.deliveryOrderId === order.id || !ctx.deliveryOrderId) {
-          await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
-        }
-      }
-    }
-    return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
-  } catch (error) {
-    await prisma.deliveryOrder.update({
-      where: { id: order.id },
-      data: { status: "awaiting_supplier_validation", notes: [order.notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n") }
-    });
-    throw error;
-  }
-}
-
 // The customer changed their mind about how to pay while the charge is still open:
 // re-issue the charge with the other method (total re-derived from the order rows so
 // the fee pass-through stays honest) and keep reconciliation on the same order id.
@@ -2859,33 +2607,15 @@ export async function markDeliveryOrderPaid(orderId: string) {
       console.warn("[delivery:paid:ctx-reset]", error instanceof Error ? error.message : error);
     }
   }
-  // Retailer checkout quotes are prepared before payment, so the customer sees a live
-  // total, freight and promise first. Do not reopen or clear that reserved cart after
-  // payment: the operator will explicitly request approval/revalidation from /ops.
-  const purchasePolicy = getPurchasePolicy();
-  if (purchasePolicy.enabled && BROWSERBASE_RETAILER_KEYS.has(order.storeKey)) {
-    const { listPurchaseJobsForOrder } = await import("@/lib/purchasing/service");
-    const jobs = await listPurchaseJobsForOrder(order.id);
-    // Older/exceptional orders may not have been quoted before payment. They are
-    // intentionally not sent into a fresh checkout here: fail visibly to /ops instead
-    // of changing a paid customer's basket behind their back.
-    if (!jobs.length) {
-      await prisma.deliveryOrder.update({
-        where: { id: order.id },
-        data: { status: "needs_human", notes: appendOrderNote(order.notes, "[PREPAYMENT_QUOTE_MISSING] Pedido pago sem cotação prévia do varejista.") }
-      });
-    }
-    await reply(order.phone, copy.paymentConfirmedSupplierCheck());
-  } else {
-    await reply(order.phone, copy.paymentConfirmed());
-  }
+  // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
+  // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
+  await reply(order.phone, copy.paymentConfirmed());
   return order;
 }
 
-// The operator publishes the hand-made quote from /ops. Concierge analogue of
-// publishValidatedRetailerQuote: it sets the real products cost + freight + delivery
-// mode, moves the order into awaiting_quote_confirmation and sends the customer the
-// summary + payment buttons — reusing issueValidatedRetailerQuotePayment for the charge.
+// O operador publica a cotação feita à mão no /ops: grava custo real dos produtos +
+// frete + modalidade, move o pedido para awaiting_quote_confirmation e manda ao cliente
+// o resumo com os botões de pagamento — a cobrança em si é issueValidatedRetailerQuotePayment.
 export async function opsPublishManualQuote(
   orderId: string,
   input: {
@@ -2995,7 +2725,8 @@ export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
     // this is an authorized-courier order.
     data: {
       status: statusAfterStorePurchase(current),
-      storeOrderNumber: storeOrderNumber.trim() || null
+      storeOrderNumber: storeOrderNumber.trim() || null,
+      notes: appendOrderNote(current.notes, `🧾 Compra marcada pelo operador em ${new Date().toISOString()}.`)
     }
   });
 }
@@ -3003,8 +2734,14 @@ export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
 export async function opsDispatchCourier(orderId: string) {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order) throw new Error("Order not found");
+  // A second click must never create a second courier job. Returning the existing
+  // dispatch is idempotent and keeps a slow/double-click from charging twice.
+  if (order.status === "dispatched") return order;
   if (isRetailerDeliveryOrder(order)) {
     throw new Error("Pedidos com entrega do varejista não podem despachar courier externo.");
+  }
+  if (!["operator_buying", "ready_for_pickup"].includes(order.status)) {
+    throw new Error("O pedido precisa estar comprado antes de despachar o courier.");
   }
   const fulfillments = (order.fulfillments as unknown as StoreFulfillment[] | null) ?? [];
   if (fulfillments.length > 1) {
@@ -3029,7 +2766,12 @@ export async function opsDispatchCourier(orderId: string) {
     const tracking = dispatches.map((dispatch, index) => `${fulfillments[index].storeLabel}: ${dispatch.trackingUrl}`).join("\n");
     const updated = await prisma.deliveryOrder.update({
       where: { id: orderId },
-      data: { status: "dispatched", courierTrackingUrl: tracking, courierDispatchedAt: new Date() }
+      data: {
+        status: "dispatched",
+        courierTrackingUrl: tracking,
+        courierDispatchedAt: new Date(),
+        notes: appendOrderNote(order.notes, `🧾 Courier despachado pelo operador em ${new Date().toISOString()}.`)
+      }
     });
     await reply(order.phone, copy.dispatched(tracking));
     return updated;
@@ -3072,7 +2814,8 @@ export async function opsDispatchCourier(orderId: string) {
     data: {
       status: "dispatched",
       courierTrackingUrl: dispatch.trackingUrl,
-      courierDispatchedAt: new Date()
+      courierDispatchedAt: new Date(),
+      notes: appendOrderNote(order.notes, `🧾 Courier despachado pelo operador em ${new Date().toISOString()}.`)
     }
   });
   await reply(order.phone, copy.dispatched(dispatch.trackingUrl));
@@ -3099,7 +2842,8 @@ export async function opsMarkRetailerOutForDelivery(orderId: string, trackingUrl
       // This legacy column is now the generic customer-facing tracking URL. Keeping
       // it avoids a risky production migration during the controlled pilot.
       courierTrackingUrl: safeTrackingUrl || null,
-      courierDispatchedAt: new Date()
+      courierDispatchedAt: new Date(),
+      notes: appendOrderNote(order.notes, `🧾 Varejista saiu para entrega em ${new Date().toISOString()}.`)
     }
   });
   await reply(order.phone, copy.retailerOutForDelivery(safeTrackingUrl || null));
@@ -3114,7 +2858,11 @@ export async function opsMarkDelivered(orderId: string) {
   }
   const order = await prisma.deliveryOrder.update({
     where: { id: orderId },
-    data: { status: "delivered", deliveredAt: new Date() }
+    data: {
+      status: "delivered",
+      deliveredAt: new Date(),
+      notes: appendOrderNote(current.notes, `🧾 Entrega marcada pelo operador em ${new Date().toISOString()}.`)
+    }
   });
   await reply(order.phone, copy.delivered());
   return order;
@@ -3129,8 +2877,14 @@ export async function opsCancelRefund(orderId: string) {
     prisma.deliveryOrder.update({
       where: { id: orderId },
       data: paymentReceived
-        ? { status: "refund_pending", notes: appendOrderNote(current.notes, REFUND_PENDING_FLAG) }
-        : { status: "canceled" }
+        ? {
+            status: "refund_pending",
+            notes: appendOrderNote(
+              appendOrderNote(current.notes, REFUND_PENDING_FLAG),
+              `🧾 Estorno solicitado pelo operador em ${new Date().toISOString()}.`
+            )
+          }
+        : { status: "canceled", notes: appendOrderNote(current.notes, `🧾 Pedido cancelado sem pagamento em ${new Date().toISOString()}.`) }
     }),
     // Cancel every pre-purchase step so a released/abandoned cart never blocks the
     // next customer. A job already in purchasing/ordered is intentionally preserved
@@ -3152,12 +2906,17 @@ export async function opsCancelRefund(orderId: string) {
   return order;
 }
 
-export async function opsConfirmRefund(orderId: string, reference: string) {
+export async function opsConfirmRefund(orderId: string, reference: string, amount?: number) {
   const safeReference = reference.replace(/[\r\n]/g, " ").trim().slice(0, 120);
   if (!safeReference) throw new Error("Informe a referência do estorno para auditoria.");
   const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!current) throw new Error("Order not found");
   if (current.status !== "refund_pending") throw new Error("O pedido não está aguardando estorno.");
+  const refundAmount = amount == null ? current.total : roundMoney(Number(amount));
+  if (!Number.isFinite(refundAmount) || refundAmount <= 0 || refundAmount > current.total + 0.01) {
+    throw new Error("O valor do estorno deve ser maior que zero e não pode ultrapassar o total pago.");
+  }
+  const amountLabel = Math.abs(refundAmount - current.total) <= 0.01 ? "integral" : `parcial R$ ${refundAmount.toFixed(2).replace(".", ",")}`;
   const notesWithoutPending = (current.notes ?? "")
     .split("\n")
     .filter((line) => line !== REFUND_PENDING_FLAG)
@@ -3166,7 +2925,10 @@ export async function opsConfirmRefund(orderId: string, reference: string) {
     where: { id: orderId },
     data: {
       status: "refunded",
-      notes: appendOrderNote(notesWithoutPending, `${REFUND_CONFIRMED_PREFIX} ${safeReference}`)
+      notes: appendOrderNote(
+        notesWithoutPending,
+        `${REFUND_CONFIRMED_PREFIX} ${amountLabel} — ${safeReference}`
+      )
     }
   });
   await reply(order.phone, copy.refundConfirmed());

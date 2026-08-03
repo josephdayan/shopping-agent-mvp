@@ -140,6 +140,43 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
   `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 
+### Atualização 03/08/2026 — Browserbase removido; catálogo com rotina mensal
+
+Por decisão do dono, **o Browserbase saiu do produto inteiro** ("não precisa disso, não estamos
+fazendo assim"). Todo o navegador remoto era suporte ao caminho automatizado, que já estava
+atrás de `manualConciergeEnabled()` e desligado por `PURCHASE_AUTOMATION_ENABLED=false` — ou
+seja, código morto em todos os ambientes. Não reintroduzir sem mudança explícita de produto.
+
+**Removido:** busca ao vivo (`browserbase-live-search.ts`), os 3 compradores automatizados
+(`purchasing/stores/`), o lease de Context, `purchasing/` inteiro, `workflows/purchase-order.ts`,
+as rotas `/api/ops/internal-preflight` e `/api/ops/live-retailer-session`, o cron
+`/api/cron/prewarm-search` (só existia para aquecer o cache do robô) e o `vercel.json` que o
+agendava. No `/ops` saíram os botões de preflight/sessão viva e os cards de PurchaseJob. No
+cérebro saíram `beginRetailerQuote`, `publishValidatedRetailerQuote`, `issueDeferredOrderPayment`
+e a guarda `usesRetailerCheckoutQuote`. As dependências `@browserbasehq/sdk` e `playwright-core`
+saíram do `package.json` (`workflow` fica: é do One-Click de cartão).
+
+**Preservado de propósito:** `issueValidatedRetailerQuotePayment` e
+`setQuoteConversationAwaitingPayment` — o concierge manual reusa os dois para cobrar depois que
+o operador publica a cotação. O modelo `PurchaseJob` continua no schema (nenhuma migration), só
+não é mais alimentado.
+
+**Oba deixou de ser exceção.** Ela dependia de busca ao vivo e tinha só 2 itens de seed. A API
+pública VTEX dela responde direto (206 + JSON) — o navegador nunca foi necessário ali. Colhida:
+**1.494 itens reais**. Petz e Boticário passam a servir o catálogo colhido (anti-bot impede
+recolheita automática; seguem em colheita manual).
+
+**Rotina mensal de preço** (`npm run catalog:refresh`, `scripts/refresh-catalogs.mts`): recolhe
+as 10 lojas com API/SSR aberta, compara preço a preço com o catálogo atual e resume quantos
+mudaram, a variação média e as maiores mexidas. `--dry` simula sem tocar em arquivo. Colheita
+vazia **preserva** o catálogo anterior (vazio quase sempre é bloqueio, não loja sem produto).
+As farmácias carregam allowlist + deny-regex dentro do script. Primeira execução já mostrou o
+valor: o Divvino teve **320 preços diferentes em um dia** (+31,8% médio — a colheita de 02/08
+pegou uma promoção que acabou).
+
+Verificação: suíte **210/210 verde** (os 14 a menos são os testes do Browserbase removidos),
+`tsc`, lint e build limpos.
+
 ### Atualização 02/08/2026 — 7 vitrines novas (18 lojas, 17.264 itens)
 
 Por decisão do dono ("adiciona todos esses"), as lacunas de demanda mapeadas contra os dados
