@@ -69,8 +69,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
 > já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
-> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Os dois e-mails que iniciam o
-> processo foram redigidos e entregues ao dono em 03/08; o envio é dele. O piloto não espera:
+> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Em 03/08 a Infobip NEGOU a habilitação —
+> a rota vigente é ticket no Suporte Direto da Meta. A dúvida técnica do Pagar.me foi
+> resolvida por documentação: `recurrence_cycle` é só de recorrência externa; o adaptador
+> atual está correto e nenhum e-mail ao PSP é necessário. O piloto não espera:
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
 > [PENDENCIAS.md](PENDENCIAS.md) (seção One-Click) e [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
 
@@ -262,19 +264,30 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **Decisão de 03/08:** o dono quer o One-Click ativo o quanto antes ("vamos fazer isso").
 > O desenho continua o canônico: Meta Cloud API direta + Pagar.me V5, sem 360dialog. O código
-> e as migrations já estão em produção; a ativação depende de 3 destravamentos externos, e os
-> dois e-mails que os iniciam foram redigidos e entregues ao dono em 03/08 (follow-up Infobip
-> pedindo a allowlist Payments API BR sem migração de sender, e pergunta técnica ao Pagar.me
-> sobre `recurrence_cycle`/CVV/3DS/PSP-vs-Gateway + liberação de domínio). O envio é ação do
-> dono. O piloto NÃO espera por isso: Pix + Checkout Pro cobrem o cartão enquanto isso.
-> Divisão do trabalho: dono envia e-mails, cria conta Pagar.me PJ e cadastra o domínio;
-> agente configura envs Sensitive (`PAGARME_SECRET_KEY`, `PAGARME_PUBLIC_KEY`,
-> `PAGARME_WEBHOOK_TOKEN`, `LIA_PUBLIC_URL`), cadastra o webhook com os 6 eventos, ajusta o
-> adaptador conforme a resposta do PSP, roda o sandbox (primeira compra, recompra, recusa,
-> resposta perdida) e só então liga `LIA_ENABLE_WA_PAYMENTS=true`.
+> e as migrations já estão em produção. **A Infobip respondeu NÃO** — essa rota para a
+> allowlist morreu; a rota vigente é o Suporte Direto da Meta (ticket pedindo a habilitação
+> da Payments API BR na WABA, sem migração de sender). O piloto NÃO espera por isso: Pix +
+> Checkout Pro cobrem o cartão enquanto isso.
+>
+> **Pergunta técnica ao Pagar.me RESOLVIDA por documentação (03/08), sem e-mail:**
+> `recurrence_cycle=first|subsequent` marca transações de **recorrência externa** (assinatura
+> gerida fora do motor Pagar.me) e é opcional — "não cria uma cobrança recorrente". A recompra
+> da Lia é **avulsa, iniciada e confirmada pelo cliente** no WhatsApp: o campo não se aplica e
+> **o adaptador atual (`card_id` sem `recurrence_cycle`) está correto como está**. A regra de
+> "CVV só na primeira" também é do contexto de recorrência; para cobrança avulsa com `card_id`
+> a doc não exige CVV (one-click-buy é caso de uso documentado) — o comportamento do antifraude
+> é o que o sandbox valida. A liberação do domínio para o `tokenizecard.js` é feita pelo
+> próprio dashboard (configurações da conta), sem e-mail. Contatos humanos, se precisar:
+> `relacionamento@pagar.me` (geral, seg–sex 9h–18h, tel 4004-1330) e `homologacao@pagar.me`
+> (fase de homologação); chat no dashboard após criar a conta.
 
-- [ ] **(dono)** Enviar o follow-up à Infobip (thread do Samuel + `success@infobip.com`) — rascunho entregue em 03/08.
-- [ ] **(dono)** Criar/ativar conta Pagar.me PJ, enviar a pergunta técnica e cadastrar `liadelivery.com.br` para o `tokenizecard.js` — rascunho entregue em 03/08.
+- [ ] **(dono)** Abrir ticket no Suporte Direto da Meta (Meta Business Suite → Ajuda, ou
+  developers.facebook.com/support) pedindo a habilitação da **Payments API BR** na WABA
+  `Lia Delivery` (+55 11 97844-4813), mantendo Cloud API direta, sem migração de sender —
+  rascunho entregue em 03/08. Rota Infobip: **negada** em 03/08.
+- [ ] **(dono)** Criar/ativar conta Pagar.me PJ, emitir as chaves e liberar o domínio
+  `liadelivery.com.br` para o `tokenizecard.js` no dashboard (Configurações da conta).
+  Nenhum e-mail é necessário; `homologacao@pagar.me` só se a homologação travar.
 
 - [x] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
   `20260714123000_pagarme_one_click` no ambiente de produção. Aplicadas em 15/07;

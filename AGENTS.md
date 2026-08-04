@@ -144,11 +144,15 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
 
 O cartão nativo no WhatsApp saiu de "adiado" para "em ativação" ("vamos fazer isso"). Nada
 mudou no desenho canônico (Meta Cloud API direta + Pagar.me V5, sem 360dialog) nem no código —
-os gates são externos. Em 03/08 foram redigidos e entregues ao dono os dois e-mails que
-iniciam o processo: follow-up à Infobip (allowlist Payments API BR, preservando WABA/número/
-Cloud API direta, sem migração de sender) e pergunta técnica ao Pagar.me (`recurrence_cycle`
-first|subsequent, CVV/3DS, PSP vs Gateway, liberação do domínio para tokenizecard.js). Envio
-é ação do dono. O piloto não espera o One-Click: Pix + Checkout Pro cobrem cartão. Sequência
+os gates são externos. Em 03/08, dois desdobramentos: (1) a **Infobip
+respondeu NÃO** — a rota de allowlist via eles morreu; a rota vigente é ticket no Suporte
+Direto da Meta pedindo a Payments API BR na WABA, sem migração de sender (rascunho entregue
+ao dono); (2) a pergunta técnica ao Pagar.me foi **resolvida por documentação, sem e-mail**:
+`recurrence_cycle` marca recorrência externa, é opcional e "não cria cobrança recorrente" —
+a recompra da Lia é avulsa iniciada pelo cliente, então **o adaptador atual (`card_id` sem
+`recurrence_cycle`) está correto**; CVV para card_id avulso não é exigido pela doc (antifraude
+é o que o sandbox valida); domínio do tokenizecard.js se libera pelo dashboard. Contatos:
+relacionamento@pagar.me / homologacao@pagar.me. O piloto não espera o One-Click: Pix + Checkout Pro cobrem cartão. Sequência
 pós-chaves (agente): envs Sensitive → webhook com 6 eventos → ajuste do adaptador conforme o
 PSP → sandbox completo → só então `LIA_ENABLE_WA_PAYMENTS=true`.
 
