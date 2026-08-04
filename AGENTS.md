@@ -140,6 +140,18 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
   `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 
+### Atualização 03/08/2026 — One-Click reativado (decisão do dono)
+
+O cartão nativo no WhatsApp saiu de "adiado" para "em ativação" ("vamos fazer isso"). Nada
+mudou no desenho canônico (Meta Cloud API direta + Pagar.me V5, sem 360dialog) nem no código —
+os gates são externos. Em 03/08 foram redigidos e entregues ao dono os dois e-mails que
+iniciam o processo: follow-up à Infobip (allowlist Payments API BR, preservando WABA/número/
+Cloud API direta, sem migração de sender) e pergunta técnica ao Pagar.me (`recurrence_cycle`
+first|subsequent, CVV/3DS, PSP vs Gateway, liberação do domínio para tokenizecard.js). Envio
+é ação do dono. O piloto não espera o One-Click: Pix + Checkout Pro cobrem cartão. Sequência
+pós-chaves (agente): envs Sensitive → webhook com 6 eventos → ajuste do adaptador conforme o
+PSP → sandbox completo → só então `LIA_ENABLE_WA_PAYMENTS=true`.
+
 ### Atualização 03/08/2026 — vitrine híbrida (o cliente passa a ver produto)
 
 Até aqui o concierge só ANOTAVA o pedido: os 17,4 mil itens existiam mas nunca chegavam ao

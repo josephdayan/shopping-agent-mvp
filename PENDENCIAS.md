@@ -66,6 +66,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > testes (219 verdes; 1 flake de conexão do Postgres que passa isolado), `tsc`, lint e build
 > limpos.
 
+> **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
+> Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
+> já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
+> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Os dois e-mails que iniciam o
+> processo foram redigidos e entregues ao dono em 03/08; o envio é dele. O piloto não espera:
+> Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
+> [PENDENCIAS.md](PENDENCIAS.md) (seção One-Click) e [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam
@@ -250,7 +258,23 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   pedir ou cliente for PJ; rotina mensal DAS + relatório de receitas + DASN anual. Resta uma
   confirmação contábil pontual pré-lançamento público (receita bruta = markup ou total).
 
-### Cartão One-Click no WhatsApp — adiado, não bloqueia o concierge
+### Cartão One-Click no WhatsApp — REATIVADO por decisão do dono (03/08)
+
+> **Decisão de 03/08:** o dono quer o One-Click ativo o quanto antes ("vamos fazer isso").
+> O desenho continua o canônico: Meta Cloud API direta + Pagar.me V5, sem 360dialog. O código
+> e as migrations já estão em produção; a ativação depende de 3 destravamentos externos, e os
+> dois e-mails que os iniciam foram redigidos e entregues ao dono em 03/08 (follow-up Infobip
+> pedindo a allowlist Payments API BR sem migração de sender, e pergunta técnica ao Pagar.me
+> sobre `recurrence_cycle`/CVV/3DS/PSP-vs-Gateway + liberação de domínio). O envio é ação do
+> dono. O piloto NÃO espera por isso: Pix + Checkout Pro cobrem o cartão enquanto isso.
+> Divisão do trabalho: dono envia e-mails, cria conta Pagar.me PJ e cadastra o domínio;
+> agente configura envs Sensitive (`PAGARME_SECRET_KEY`, `PAGARME_PUBLIC_KEY`,
+> `PAGARME_WEBHOOK_TOKEN`, `LIA_PUBLIC_URL`), cadastra o webhook com os 6 eventos, ajusta o
+> adaptador conforme a resposta do PSP, roda o sandbox (primeira compra, recompra, recusa,
+> resposta perdida) e só então liga `LIA_ENABLE_WA_PAYMENTS=true`.
+
+- [ ] **(dono)** Enviar o follow-up à Infobip (thread do Samuel + `success@infobip.com`) — rascunho entregue em 03/08.
+- [ ] **(dono)** Criar/ativar conta Pagar.me PJ, enviar a pergunta técnica e cadastrar `liadelivery.com.br` para o `tokenizecard.js` — rascunho entregue em 03/08.
 
 - [x] Aplicar as migrations `20260714110000_whatsapp_one_click_payments` e
   `20260714123000_pagarme_one_click` no ambiente de produção. Aplicadas em 15/07;

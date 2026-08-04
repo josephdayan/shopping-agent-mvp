@@ -105,6 +105,14 @@ de hoje está em
 > testes (219 verdes; 1 flake de conexão do Postgres que passa isolado), `tsc`, lint e build
 > limpos.
 
+> **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
+> Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
+> já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
+> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Os dois e-mails que iniciam o
+> processo foram redigidos e entregues ao dono em 03/08; o envio é dele. O piloto não espera:
+> Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
+> [PENDENCIAS.md](PENDENCIAS.md) (seção One-Click) e [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;
