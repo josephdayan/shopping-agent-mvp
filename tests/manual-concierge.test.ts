@@ -103,6 +103,56 @@ test("breadth: itens fora de qualquer catálogo são anotados, não recusados", 
   assert.doesNotMatch(noted, /não achei|catálogo de hoje/i);
 });
 
+// ---------- vitrine híbrida (03/08) ----------
+// O concierge procura na vitrine e mostra opções com foto; o que não tem match vira linha
+// livre. Estes testes travam as três regras que fazem isso não virar um passo atrás.
+
+test("vitrine híbrida: item da vitrine vira opção pra escolher, item de fora vira linha livre", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("quero coca cola e um vedante pra torneira");
+  // A coca existe na vitrine → opções numeradas.
+  assert.match(out, /op(ç|c)(õ|o)es/i);
+  assert.match(out.toLowerCase(), /coca/);
+  // O vedante não existe → anotado como linha livre, nunca recusado.
+  assert.match(out.toLowerCase(), /garimpar|anotei/);
+  assert.match(out.toLowerCase(), /vedante|torneira/);
+  assert.doesNotMatch(out, /não achei/i);
+});
+
+test("vitrine híbrida: escolher NÃO fecha a lista — o cliente ainda soma itens", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  // Pode cair na pergunta de quantidade (qty implícita) — responde e segue.
+  const settled = /quantas unidades/i.test(afterChoice) ? await c.send("2") : afterChoice;
+  // A lista continua aberta: convida a somar mais e a fechar com "só isso".
+  assert.match(settled, /mais alguma coisa/i);
+  assert.match(settled, /só isso/i);
+  // E NÃO foi para a fila de cotação ainda.
+  assert.doesNotMatch(settled, /Recebi seu pedido/i);
+  const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone } });
+  assert.equal(order, null, "a lista não pode virar pedido antes de o cliente fechar");
+});
+
+test("vitrine híbrida: fechar a lista com escolha pendente NÃO descarta o item", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  // Fecha a lista no meio das opções, sem escolher.
+  const closed = await c.send("só isso");
+  assert.match(closed, /Recebi seu pedido/i);
+  assert.match(closed.toLowerCase(), /coca/, "o item pendente tem de sobreviver como linha livre");
+  const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone } });
+  assert.ok(order, "pedido deve existir");
+  const items = (order!.items as unknown as { name: string }[]) ?? [];
+  assert.ok(
+    items.some((i) => /coca/i.test(i.name)),
+    `o pedido precisa conter a coca; veio: ${JSON.stringify(items.map((i) => i.name))}`
+  );
+});
+
 test("concierge completo: pede → operador cota → paga → compra → motoboy do operador → entregue", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

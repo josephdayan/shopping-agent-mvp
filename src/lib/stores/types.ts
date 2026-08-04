@@ -391,6 +391,43 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   return score;
 }
 
+// Piso de relevância do CONCIERGE — mais exigente que o `scoreCatalogMatch > 0` do fluxo
+// legado, e de propósito.
+//
+// No fluxo legado, um match fraco era o melhor disponível: ou mostrava aquilo, ou não
+// mostrava nada. No concierge existe uma saída melhor — a linha livre, que o operador
+// garimpa à mão. Então um palpite errado é PIOR que nenhum palpite: sugerir "Espumante
+// Concerto" para quem pediu "conserto de torneira" (caso real, o fuzzy casa conserto≈concerto)
+// queima confiança, enquanto cair na linha livre resolve o pedido de verdade.
+//
+// A regra é COBERTURA da consulta, não score: o item precisa responder por todas as palavras
+// que o cliente usou. Consulta curta (1–2 palavras) é o próprio substantivo — qualquer palavra
+// solta invalida. Consulta longa carrega qualificadores ("escova de dente macia"), então uma
+// palavra sem correspondência é tolerada. Tokens de tamanho ("2kg", "350ml") nunca contam:
+// eles são filtro de variante, não identidade do produto.
+export function conciergeMatchIsStrong(query: string, item: CatalogItem): boolean {
+  if (scoreCatalogMatch(query, item) <= 0) return false;
+
+  const negs = new Set(negatedWords(query));
+  const wordTokens = queryTokens(query).filter(
+    (token) => !negs.has(token) && !/^\d+(?:[.,]\d+)?(?:kg|g|ml|l|lt|un)$/.test(token) && !/^\d+$/.test(token)
+  );
+  if (!wordTokens.length) return false;
+
+  const nameWords = words(item.name);
+  const brandWords = words(item.brand ?? "");
+  const categoryWords = words(item.category ?? "");
+  const covered = wordTokens.filter(
+    (token) =>
+      nameWords.some((word) => tokenMatchesWordSyn(token, word)) ||
+      brandWords.some((word) => tokenMatchesWord(token, word)) ||
+      categoryWords.some((word) => tokenMatchesWord(token, word))
+  ).length;
+
+  const missing = wordTokens.length - covered;
+  return wordTokens.length <= 2 ? missing === 0 : missing <= 1;
+}
+
 // Ranking compartilhado dos catálogos-seed (os 3 conectores usam): score desc →
 // adulto antes de infantil (quando não pedido) → menos variantes não pedidas
 // (integral/diet/zero…) → mais barato. O desempate infantil existe porque nomes de

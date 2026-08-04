@@ -140,6 +140,33 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
   Verificação do dia: suíte **213/213 verde com banco**, `tsc` limpo, produção `READY` em
   `a700290`; vitrine runtime com **7.652 produtos em 11 lojas**.
 
+### Atualização 03/08/2026 — vitrine híbrida (o cliente passa a ver produto)
+
+Até aqui o concierge só ANOTAVA o pedido: os 17,4 mil itens existiam mas nunca chegavam ao
+cliente (a "vitrine híbrida" era proposta desde 24/07). Agora `handleConciergeRequest` busca
+nas 18 lojas via `buildChoices` (sem travar loja — o operador compra onde precisar, então a
+cesta pode ser mista) e mostra até 3 opções com foto e botão. Item sem match continua virando
+linha livre: a largura é o moat e nada é recusado.
+
+Três regras sustentam a qualidade — todas viraram teste:
+
+1. **Piso de relevância do concierge** (`conciergeMatchIsStrong`, em `stores/types.ts`). O piso
+   legado (`scoreCatalogMatch > 0`) é permissivo porque lá não havia alternativa ao catálogo.
+   No concierge há: a linha livre. Então sugerir errado é PIOR que não sugerir. Caso real que
+   motivou: "conserto de torneira" casava com **"Espumante Argentino Concerto Brut"** (o fuzzy
+   trata conserto≈concerto) e o cliente recebia vinho. A regra é COBERTURA da consulta, não
+   score: consulta de 1–2 palavras exige cobertura total; consulta longa tolera 1 palavra sem
+   correspondência; token de tamanho ("2kg") nunca conta. Opção reprovada faz a linha voltar a
+   ser livre. Coberto por `tests/concierge-match-floor.test.ts`.
+2. **Escolher NÃO fecha a lista.** No legado, acabar as escolhas ia direto pra cotação porque
+   escolher era o último passo. No concierge o cliente ainda soma itens e só fecha com
+   "só isso" — `advancePending` ganhou o ramo concierge.
+3. **Fechar com escolha pendente não descarta o item** (`foldPendingIntoBasket`). Antes, dizer
+   "só isso" no meio das opções perdia o item silenciosamente; agora ele vira linha livre.
+
+Regressões 2 e 3 cobertas em `tests/manual-concierge.test.ts`. Suíte: 220 testes, 219 verdes
+(1 flake de conexão do Postgres sob carga, que passa isolado em 45s), `tsc`, lint e build limpos.
+
 ### Atualização 03/08/2026 — Browserbase removido; catálogo com rotina mensal
 
 Por decisão do dono, **o Browserbase saiu do produto inteiro** ("não precisa disso, não estamos

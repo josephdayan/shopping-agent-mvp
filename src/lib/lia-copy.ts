@@ -607,6 +607,20 @@ export function conciergeItemsNoted(items: string[], hadBasketBefore: boolean): 
   ].join("\n");
 }
 
+// Vitrine híbrida: itens que a Lia NÃO achou na vitrine viram linha livre e ela mesma
+// garimpa. Fica sem o convite de fechar a lista de propósito — esta mensagem vem junto com
+// opções para escolher, e o cliente precisa escolher antes.
+export function conciergeSourcingNote(items: string[]): string {
+  const list = items.map((i) => `• ${i}`).join("\n");
+  return `Anotei e vou garimpar pra você:\n${list}`;
+}
+
+// Depois de escolher as opções: a lista continua aberta (diferente do fluxo legado, onde
+// escolher já ia direto pra cotação).
+export function conciergeKeepAdding(): string {
+  return 'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega. 🙂';
+}
+
 export function conciergeAskWhatYouWant(): string {
   return `Deixa comigo! 🙂 Me diz o que você precisa — pode ser de qualquer lugar, junto numa mensagem só. Ex.: ${EXAMPLES}.`;
 }

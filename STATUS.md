@@ -94,6 +94,17 @@ de hoje está em
 > novo está no ar. Produção agora tem: 18 lojas (~17,4 mil itens), guardas ANVISA/MAPA em
 > runtime, Oba com catálogo de 1.494 itens e zero Browserbase. O piloto pode começar.
 
+> **03/08 — vitrine híbrida ligada.** A Lia deixou de só anotar: agora procura o pedido nas
+> 18 lojas e mostra até 3 opções com foto para o cliente escolher; o que não tem match vira
+> linha livre e o operador garimpa — a largura continua intacta. Três regras novas travam a
+> qualidade: (1) **piso de relevância próprio do concierge** (`conciergeMatchIsStrong`) — no
+> concierge um palpite errado é pior que nenhum, porque a linha livre resolve de verdade; o
+> caso real que motivou foi "conserto de torneira" casando com "Espumante Concerto"; (2)
+> **escolher não fecha a lista** — o cliente segue somando e só fecha com "só isso"; (3)
+> **fechar com escolha pendente não descarta o item** — ele vira linha livre. Suíte 220
+> testes (219 verdes; 1 flake de conexão do Postgres que passa isolado), `tsc`, lint e build
+> limpos.
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;

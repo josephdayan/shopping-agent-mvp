@@ -3,7 +3,13 @@ import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, allUnits, type StoreConnector } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
-import { attrMatchesItem, inferCatalogRefinement, queryTokens, scoreCatalogMatch } from "@/lib/stores/types";
+import {
+  attrMatchesItem,
+  conciergeMatchIsStrong,
+  inferCatalogRefinement,
+  queryTokens,
+  scoreCatalogMatch
+} from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { createCardAttempt, expireOpenPaymentAttempts, getConfirmedPaymentAttempt, getOneClickCredential } from "@/lib/payments/whatsapp-pay";
@@ -341,6 +347,10 @@ type ChoicesResult = {
   autoAdded: BasketItem[];
   pending: PendingChoice[];
   notFound: string[];
+  // As mesmas linhas de `notFound`, mas com a quantidade preservada. O concierge precisa
+  // disso para transformar "2 pães de forma" numa linha livre com qty=2 em vez de perder o
+  // número no caminho (o fluxo legado só mostra os nomes, por isso `notFound` é string[]).
+  notFoundLines: ParsedLine[];
   greetingOnly: boolean;
   containsMedicine: boolean;
 };
@@ -368,9 +378,11 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
   const autoAdded: BasketItem[] = [];
   const pending: PendingChoice[] = [];
   const notFound: string[] = [];
+  const notFoundLines: ParsedLine[] = [];
   for (const { line, store, options } of results) {
     if (!options.length) {
       notFound.push(line.phrase);
+      notFoundLines.push(line);
     } else {
       pending.push({
         query: line.phrase,
@@ -385,6 +397,7 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
     autoAdded: dedupeBasket(autoAdded),
     pending,
     notFound,
+    notFoundLines,
     greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
     containsMedicine
   };
@@ -393,6 +406,16 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
 // The store an in-progress order belongs to (picked when the basket was built).
 function orderStore(ctx: DeliveryContext): StoreConnector {
   return getStore(ctx.storeKey ?? ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
+}
+
+// Concierge: dobra as escolhas ainda abertas em linhas livres, para que fechar a lista
+// nunca descarte um item que o cliente pediu mas ainda não escolheu. O operador cota a
+// linha livre normalmente — é o mesmo destino de um item que não existe na vitrine.
+function foldPendingIntoBasket(ctx: DeliveryContext): void {
+  if (!ctx.pending?.length) return;
+  const leftovers = ctx.pending.map((choice) => conciergeItem(choice.query, choice.qty));
+  ctx.basket = mergeBaskets(ctx.basket ?? [], leftovers);
+  ctx.pending = undefined;
 }
 
 // A free-form concierge line: whatever the customer asked for, verbatim. No catalog
@@ -1175,6 +1198,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // Concierge: "só isso"/"pagar"/"pix" close the list and hand it to the operator to
     // quote — there is no total to charge until the operator sends the quote.
     if (manualConciergeEnabled()) {
+      // Fechar a lista com uma escolha ainda aberta não pode DESCARTAR o item: a escolha
+      // pendente vira linha livre e o operador garimpa. Antes disso, quem dissesse
+      // "só isso" no meio das opções perdia o item silenciosamente.
+      foldPendingIntoBasket(ctx);
       if ((ctx.basket?.length ?? 0) > 0) {
         await continueAfterBasket(phone, convo.id, ctx, user.cep);
         return;
@@ -1881,6 +1908,19 @@ async function advancePending(
     await reply(phone, copy.didNotUnderstand());
     return;
   }
+  // No concierge, acabar as escolhas NÃO fecha a lista. O fluxo legado cotava aqui porque
+  // escolher era o último passo; aqui o cliente ainda pode somar itens e só fecha quando
+  // disser "só isso". Fechar sozinho tiraria dele o controle da lista.
+  if (manualConciergeEnabled()) {
+    ctx.step = "collecting";
+    ctx.cep = ctx.cep ?? userCep ?? undefined;
+    await writeCtx(convoId, ctx);
+    const notes: string[] = [];
+    if (prefix) notes.push(prefix);
+    notes.push(copy.conciergeKeepAdding());
+    await reply(phone, notes.join("\n"));
+    return;
+  }
   const next: DeliveryContext = {
     flow: "delivery",
     basket: ctx.basket,
@@ -2017,28 +2057,66 @@ async function handleConciergeRequest(
   ctx: DeliveryContext,
   text: string
 ) {
-  const { lines, greetingOnly, containsMedicine } = await extractLines(text);
-  if (greetingOnly && !lines.length) {
+  // Vitrine híbrida: procura o que o cliente pediu nas 18 lojas e mostra até 3 opções com
+  // foto para ele escolher. O que NÃO tiver match vira linha livre, como antes — a largura
+  // ("qualquer coisa, de qualquer lugar") continua sendo o moat e nada é recusado.
+  //
+  // Sem travar loja (`lockedStoreKey` fica indefinido): no concierge quem compra é o
+  // operador, que vai em quantas lojas precisar. A cesta pode ser mista, diferente do fluxo
+  // legado, onde um pedido = uma loja = uma entrega do varejista.
+  const raw = await buildChoices(text);
+  // Piso de relevância próprio do concierge: opção que não responde pelo que o cliente
+  // escreveu é descartada e a linha volta a ser livre. Sugerir errado é pior que não
+  // sugerir, porque a linha livre resolve o pedido de verdade.
+  const pending: PendingChoice[] = [];
+  const weakLines: ParsedLine[] = [];
+  for (const choice of raw.pending) {
+    const strong = choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
+    if (strong.length) pending.push({ ...choice, options: strong });
+    else weakLines.push({ phrase: choice.query, qty: choice.qty, ...(choice.qtyExplicit ? { qtyExplicit: true } : {}) });
+  }
+  const notFoundLines = [...raw.notFoundLines, ...weakLines];
+  const { greetingOnly, containsMedicine } = raw;
+  if (greetingOnly && !pending.length && !notFoundLines.length) {
     await reply(phone, copy.greeting());
     return;
   }
-  if (!lines.length) {
+  if (!pending.length && !notFoundLines.length) {
     await reply(phone, containsMedicine ? copy.noMedicine() : copy.didNotUnderstand());
     return;
   }
+
   const hadBasket = (ctx.basket?.length ?? 0) > 0;
-  const newItems = lines.map((line) => conciergeItem(line.phrase, line.qty));
+  const freeFormItems = notFoundLines.map((line) => conciergeItem(line.phrase, line.qty));
   ctx.flow = "delivery";
-  ctx.basket = mergeBaskets(ctx.basket ?? [], newItems);
+  ctx.basket = mergeBaskets(ctx.basket ?? [], freeFormItems);
+  // A cesta continua pertencendo ao "concierge" mesmo quando o item veio de uma vitrine: o
+  // pedido é cotado e comprado à mão, então não há uma loja dona do pedido.
   ctx.storeKey = CONCIERGE_STORE_KEY;
-  ctx.step = "collecting";
   ctx.cep = ctx.cep ?? userCep ?? undefined;
-  ctx.pending = undefined;
   ctx.notFound = undefined;
+
+  if (pending.length) {
+    ctx.step = "choosing";
+    ctx.pending = pending;
+    await writeCtx(convoId, ctx);
+    const notes: string[] = [];
+    if (containsMedicine) notes.push(copy.medicineSkippedNote());
+    // Os itens sem match são anunciados ANTES das opções e sem o convite de fechar a lista:
+    // o cliente precisa escolher primeiro.
+    if (freeFormItems.length) notes.push(copy.conciergeSourcingNote(freeFormItems.map((i) => `${i.qty}x ${i.name}`)));
+    if (notes.length) await reply(phone, notes.join("\n"));
+    if (pending.length > 1) await reply(phone, copy.choiceSequence(pending.map((p) => p.query)));
+    await sendChoices(phone, pending[0]);
+    return;
+  }
+
+  ctx.step = "collecting";
+  ctx.pending = undefined;
   await writeCtx(convoId, ctx);
   const notes: string[] = [];
   if (containsMedicine) notes.push(copy.medicineSkippedNote());
-  notes.push(copy.conciergeItemsNoted(newItems.map((i) => `${i.qty}x ${i.name}`), hadBasket));
+  notes.push(copy.conciergeItemsNoted(freeFormItems.map((i) => `${i.qty}x ${i.name}`), hadBasket));
   await reply(phone, notes.join("\n"));
 }
 
