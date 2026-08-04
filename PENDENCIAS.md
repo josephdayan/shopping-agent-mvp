@@ -281,10 +281,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > `relacionamento@pagar.me` (geral, seg–sex 9h–18h, tel 4004-1330) e `homologacao@pagar.me`
 > (fase de homologação); chat no dashboard após criar a conta.
 
-- [ ] **(dono)** Abrir ticket no Suporte Direto da Meta (Meta Business Suite → Ajuda, ou
-  developers.facebook.com/support) pedindo a habilitação da **Payments API BR** na WABA
-  `Lia Delivery` (+55 11 97844-4813), mantendo Cloud API direta, sem migração de sender —
-  rascunho entregue em 03/08. Rota Infobip: **negada** em 03/08.
+- [ ] **(dono)** Abrir ticket no Suporte Direto da Meta pedindo a habilitação da **Payments
+  API BR** na WABA `Lia Delivery` (+55 11 97844-4813), mantendo Cloud API direta, sem migração
+  de sender — rascunho entregue em 03/08. Rota Infobip: **negada** em 03/08.
+  **Expectativa verificada em 03/08 (ser honesto):** a Payments API BR está em **beta
+  fechado/disponibilidade limitada** — a Meta escolhe quem entra ("select customers", doc da
+  Sinch) e as habilitações documentadas passam por BSPs abrindo ticket pelos clientes (doc da
+  Exotel). Para uma empresa em Cloud API direta, o Suporte Direto é a única porta self-serve —
+  o ticket é barato e vale abrir, mas **a chance de aprovação de um MEI em beta fechado é
+  baixa no curto prazo e não há prazo**. Pré-requisito adicional descoberto: a WABA precisa de
+  **Meta Product Catalog vinculado** (doc da CM.com). Plano B vigente: cartão continua no
+  Checkout Pro até a Payments API BR virar disponibilidade geral; reavaliar a cada ciclo.
 - [ ] **(dono)** Criar/ativar conta Pagar.me PJ, emitir as chaves e liberar o domínio
   `liadelivery.com.br` para o `tokenizecard.js` no dashboard (Configurações da conta).
   Nenhum e-mail é necessário; `homologacao@pagar.me` só se a homologação travar.

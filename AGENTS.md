@@ -145,9 +145,12 @@ válido como referência, mas **o produto ativo é o concierge manual acima**.
 O cartão nativo no WhatsApp saiu de "adiado" para "em ativação" ("vamos fazer isso"). Nada
 mudou no desenho canônico (Meta Cloud API direta + Pagar.me V5, sem 360dialog) nem no código —
 os gates são externos. Em 03/08, dois desdobramentos: (1) a **Infobip
-respondeu NÃO** — a rota de allowlist via eles morreu; a rota vigente é ticket no Suporte
-Direto da Meta pedindo a Payments API BR na WABA, sem migração de sender (rascunho entregue
-ao dono); (2) a pergunta técnica ao Pagar.me foi **resolvida por documentação, sem e-mail**:
+respondeu NÃO** — a rota de allowlist via eles morreu; a rota restante é ticket no Suporte
+Direto da Meta (rascunho entregue ao dono) — mas a verificação de 03/08 mostrou que a
+Payments API BR segue em **beta fechado** ("select customers"); habilitações documentadas
+passam por BSPs, então o ticket direto tem chance baixa/prazo indefinido para um MEI. Vale
+abrir mesmo assim; plano B = Checkout Pro até a GA. A WABA também precisará de Meta Product
+Catalog vinculado; (2) a pergunta técnica ao Pagar.me foi **resolvida por documentação, sem e-mail**:
 `recurrence_cycle` marca recorrência externa, é opcional e "não cria cobrança recorrente" —
 a recompra da Lia é avulsa iniciada pelo cliente, então **o adaptador atual (`card_id` sem
 `recurrence_cycle`) está correto**; CVV para card_id avulso não é exigido pela doc (antifraude

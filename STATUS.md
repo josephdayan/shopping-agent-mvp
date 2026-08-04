@@ -109,7 +109,9 @@ de hoje está em
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
 > já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
 > conta/chaves Pagar.me, resposta do `recurrence_cycle`). Em 03/08 a Infobip NEGOU a habilitação —
-> a rota vigente é ticket no Suporte Direto da Meta. A dúvida técnica do Pagar.me foi
+> resta o ticket no Suporte Direto da Meta, que a verificação do mesmo dia mostrou ser
+> incerto: a Payments API BR está em beta fechado e as habilitações passam por BSPs; o
+> ticket vale o custo, mas sem prazo. Plano B: Checkout Pro até a disponibilidade geral. A dúvida técnica do Pagar.me foi
 > resolvida por documentação: `recurrence_cycle` é só de recorrência externa; o adaptador
 > atual está correto e nenhum e-mail ao PSP é necessário. O piloto não espera:
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
