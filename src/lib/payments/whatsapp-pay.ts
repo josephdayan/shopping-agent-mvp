@@ -50,6 +50,21 @@ function paymentFeatureEnabled() {
   return process.env.LIA_ENABLE_WA_PAYMENTS === "true" && process.env.WHATSAPP_PROVIDER === "meta" && pagarmeAdapter.isAvailable();
 }
 
+// Cartão salvo SEM a Payments API da Meta (que segue em beta fechado): mesma
+// tokenização/cobrança Pagar.me, mas a recompra é confirmada por botões comuns do
+// WhatsApp em vez do order_details nativo. Flag independente para o sandbox validar
+// antes de ligar em produção.
+function savedCardModeEnabled() {
+  return process.env.LIA_ENABLE_SAVED_CARD === "true" && pagarmeAdapter.isAvailable();
+}
+
+// Qualquer modo de cartão salvo ativo (nativo Meta OU botões comuns). É o gate único
+// para buscar credencial e oferecer o cadastro do cartão — chave Pagar.me configurada
+// sem flag nenhuma NÃO pode mudar o caminho de checkout sozinha.
+export function cardOnFileEnabled() {
+  return paymentFeatureEnabled() || savedCardModeEnabled();
+}
+
 function basketItems(items: unknown): StoredBasketItem[] {
   if (!Array.isArray(items)) return [];
   return items.filter((item): item is StoredBasketItem => {
@@ -99,7 +114,7 @@ function orderDetailsInput(order: CardOrder, credential: { id: string; last4: st
 }
 
 export async function getOneClickCredential(userId: string) {
-  if (!paymentFeatureEnabled()) return null;
+  if (!cardOnFileEnabled()) return null;
   return prisma.paymentCredential.findFirst({
     where: { userId, provider: "pagarme", status: "active" },
     orderBy: { createdAt: "desc" }
@@ -139,13 +154,26 @@ export async function createCardAttempt(order: CardOrder, credential: { id: stri
     }
   });
   try {
-    const input = orderDetailsInput(order, credential);
-    await whatsappAdapter.sendOrderDetailsCard(order.phone, { ...input, referenceId: attempt.id });
+    if (paymentFeatureEnabled()) {
+      const input = orderDetailsInput(order, credential);
+      await whatsappAdapter.sendOrderDetailsCard(order.phone, { ...input, referenceId: attempt.id });
+      return attempt;
+    }
+    // Modo cartão salvo sem Meta Payments: botões comuns. O toque volta como
+    // `cardpay:<attemptId>` e só então a cobrança acontece — o envio não cobra nada.
+    const interactive = await whatsappAdapter.sendSavedCardButtons(order.phone, {
+      attemptId: attempt.id,
+      last4: credential.last4,
+      total: order.total
+    });
+    if (!interactive) {
+      await whatsappAdapter.sendMessage(order.phone, copy.savedCardOffer(order.total, credential.last4));
+    }
     return attempt;
   } catch (error) {
     await prisma.paymentAttempt.update({
       where: { id: attempt.id },
-      data: { status: "failed", error: error instanceof Error ? error.message.slice(0, 500) : "Unable to send order_details" }
+      data: { status: "failed", error: error instanceof Error ? error.message.slice(0, 500) : "Unable to send card confirmation" }
     });
     throw error;
   }
@@ -157,7 +185,13 @@ async function sendOrderStatus(
   input: { body: string; orderStatus?: "processing" | "canceled"; paymentStatus: "captured" | "failed" }
 ) {
   try {
-    await whatsappAdapter.sendOrderStatus(phone, { referenceId, ...input });
+    if (paymentFeatureEnabled()) {
+      await whatsappAdapter.sendOrderStatus(phone, { referenceId, ...input });
+      return;
+    }
+    // Sem a Payments API nativa não existe mensagem de order_status: o desfecho vai
+    // como texto comum, com o mesmo conteúdo.
+    await whatsappAdapter.sendMessage(phone, input.body);
   } catch (error) {
     // Payment state is authoritative. Retrying Meta's notification must never retry
     // the card charge, which is protected separately by Pagar.me idempotency.
@@ -343,4 +377,33 @@ export async function reconcilePagarmeOrder(input: { providerOrderId?: string; a
 
 export function attemptTotal(attempt: { amountCents: number }) {
   return fromCents(attempt.amountCents);
+}
+
+// Última tentativa pendente de um pedido — resolve o toque "usar cartão" por texto,
+// quando o cliente responde sem o id do botão.
+export async function findPendingSavedCardAttempt(deliveryOrderId: string) {
+  return prisma.paymentAttempt.findFirst({
+    where: { deliveryOrderId, status: "pending", expiresAt: { gt: new Date() } },
+    orderBy: { createdAt: "desc" },
+    include: { credential: true }
+  });
+}
+
+// Toque no botão "Pagar •••• 1234" (modo sem Meta Payments). Mesmo contrato do webhook
+// nativo: o workflow durável faz claim + cobrança idempotente; se o control plane
+// estiver indisponível, uma tentativa síncrona única cobre o caso (idempotência
+// Pagar.me pelo attemptId protege contra replay). Em teste, vai direto no síncrono.
+export async function confirmSavedCardTap(attemptId: string, phone: string) {
+  const confirmation: PaymentConfirmation = { referenceId: attemptId, phone, status: "captured" };
+  if (process.env.NODE_ENV === "production") {
+    try {
+      const { startWhatsAppCardChargeWorkflow } = await import("@/lib/payments/whatsapp-pay-dispatch");
+      const runId = await startWhatsAppCardChargeWorkflow(confirmation);
+      return { started: true as const, runId };
+    } catch (error) {
+      console.error("[whatsapp-pay:saved-card-workflow-start]", error);
+    }
+  }
+  const result = await handlePaymentConfirmation(confirmation);
+  return { started: false as const, result };
 }

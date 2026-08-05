@@ -344,6 +344,22 @@ export const whatsappAdapter = {
     ], `Pix ${formatBRL(pixTotal)} · Cartão ${formatBRL(cardTotal)}`);
   },
 
+  // Confirmação de recompra com cartão salvo SEM a Payments API da Meta: botões comuns
+  // de resposta. O toque volta como texto `cardpay:<attemptId>` / `cardother` e o fluxo
+  // cobra pelo Pagar.me — nenhum dado de cartão passa pelo chat.
+  async sendSavedCardButtons(to: string, input: { attemptId: string; last4: string; total: number }) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(
+      to,
+      `Pagar ${formatBRL(input.total)} com o cartão salvo final ${input.last4}?`,
+      [
+        { id: `cardpay:${input.attemptId}`, title: `Pagar •••• ${input.last4}` },
+        { id: "cardother", title: "Usar outro cartão" }
+      ],
+      "Cobrança segura via Pagar.me — seus dados não passam pelo chat."
+    );
+  },
+
   async sendOrderDetailsCard(to: string, input: WhatsAppOrderDetailsInput) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") throw new Error("WhatsApp One-Click requires WHATSAPP_PROVIDER=meta");
     const token = process.env.WHATSAPP_ACCESS_TOKEN;

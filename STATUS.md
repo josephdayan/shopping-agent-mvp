@@ -128,6 +128,22 @@ de hoje está em
 > Pagar.me (criação da conta segue sendo ação do dono). Recusa/indisponibilidade cai no
 > Checkout Pro, que permanece como fallback permanente.
 
+> **05/08 — cartão salvo construído (sem Meta).** O modo `LIA_ENABLE_SAVED_CARD` foi
+> implementado reusando o alicerce One-Click: primeira compra cadastra o cartão no link
+> seguro `/cartao` e cobra; recompra é confirmada por botões comuns ("Pagar •••• 1234" /
+> "Usar outro cartão", ids `cardpay:<attemptId>`/`cardother`), com formas por texto
+> equivalentes. Desfechos viram texto comum; recusa cai no Checkout Pro; "outro cartão"
+> expira a tentativa e re-cadastra. `cardOnFileEnabled()` garante que chave Pagar.me sem
+> flag não muda o checkout. Testes novos em `tests/saved-card.test.ts` (6, com banco e
+> mock Pagar.me): oferta, toque, replay sem dupla cobrança, texto, troca de cartão e
+> resposta honesta sem pendência. Falta para ligar: conta/chaves/domínio/webhook Pagar.me
+> (ação do dono) + sandbox real. A flag segue desligada.
+> **Regra de produto (05/08):** depois da primeira compra, o cliente **nunca redigita o
+> número do cartão**. Se o sandbox mostrar antifraude exigindo CVV, a contingência aprovada
+> é o modo CVV-only na página `/cartao` (mostra "Pagar com •••• 1234" e pede só os 3
+> dígitos). Conta de teste Pagar.me criada em 05/08 (grátis, loja "Lia Delivery"); a
+> habilitação comercial/chaves live só acontece se a bateria de sandbox aprovar.
+
 ## 1. O que é a Lia
 
 **Concierge de compras do dia a dia no WhatsApp.** O cliente pede itens em linguagem natural;

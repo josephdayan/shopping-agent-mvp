@@ -44,6 +44,11 @@ export type Intent =
   // o item com carinho, nunca "não entendi seu pedido" nem disparar busca.
   | { kind: "want_items" }
   | { kind: "number"; value: number }
+  // Cartão salvo (modo sem Meta Payments): toque no botão "Pagar •••• 1234" volta como
+  // id `cardpay:<attemptId>`; o texto humano equivalente vem sem o id. "Outro cartão"
+  // troca a credencial (novo link de cadastro).
+  | { kind: "saved_card_pay"; attemptId?: string }
+  | { kind: "saved_card_other" }
   | { kind: "free_text" };
 
 export function normalizeMsg(input: string): string {
@@ -431,6 +436,12 @@ export function detectIntent(text: string): Intent {
   const n = normalizeMsg(text);
   if (!n) return { kind: "free_text" };
 
+  // Ids exatos dos botões de cartão salvo (chegam como texto quando o cliente toca).
+  // Vêm ANTES de qualquer regex: são strings de máquina, não linguagem.
+  const savedCardTap = n.match(/^cardpay:([a-z0-9]+)$/);
+  if (savedCardTap) return { kind: "saved_card_pay", attemptId: savedCardTap[1] };
+  if (n === "cardother") return { kind: "saved_card_other" };
+
   // Emoji sozinho: 👍/✅ = sim; 🙏/❤️/💚/😊/🙌 = obrigado; resto = um "oi" acenando.
   if (EMOJI_ONLY_RE.test(n)) {
     if (/[👍✅🆗]/u.test(n)) return { kind: "affirm" };
@@ -508,6 +519,15 @@ export function detectIntent(text: string): Intent {
   }
   if (REPEAT_RE.test(n)) return { kind: "repeat_last" };
   if (STATUS_RE.test(n)) return { kind: "status" };
+
+  // Formas humanas do cartão salvo — ANTES do método genérico, senão "outro cartão"
+  // viraria choose_payment(card) e cobraria de novo o cartão que o cliente quer trocar.
+  if (/^(usar |pagar (com )?)?outro cart(a|ã)o[\s!.]*$/.test(n) || /^trocar (de |o )?cart(a|ã)o[\s!.]*$/.test(n)) {
+    return { kind: "saved_card_other" };
+  }
+  if (/^(usar |pagar (com )?)?(o )?cart(a|ã)o salvo[\s!.]*$/.test(n) || /^usar (o |esse |este )?cart(a|ã)o[\s!.]*$/.test(n)) {
+    return { kind: "saved_card_pay" };
+  }
 
   const method = paymentMethodIn(n);
   if (PAY_RE.test(n) && !isQuestion(n)) return { kind: "pay", ...(method ? { method } : {}) };

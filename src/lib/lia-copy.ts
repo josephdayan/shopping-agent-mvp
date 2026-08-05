@@ -393,6 +393,25 @@ export function orderDetailsBody(total: number, last4: string): string {
   return `Confira seu pedido de *${brl(total)}*. Para pagar com o cartão final *${last4}*, toque em *Revisar e pagar* abaixo. 💳`;
 }
 
+// Fallback em texto quando os botões interativos não estão disponíveis (provider de
+// teste). Aceita as formas humanas que o parser entende: "usar cartão" / "outro cartão".
+export function savedCardOffer(total: number, last4: string): string {
+  return [
+    `Pagar *${brl(total)}* com o cartão salvo final *${last4}*? 💳`,
+    "",
+    'Responde *usar cartão* que eu cobro nele, ou *outro cartão* para cadastrar um novo.',
+    "_Cobrança segura via Pagar.me — seus dados não passam pelo chat._"
+  ].join("\n");
+}
+
+export function savedCardCharging(last4: string): string {
+  return `Cobrando no cartão final *${last4}*… te confirmo aqui em instantes. 💳`;
+}
+
+export function savedCardNothingPending(): string {
+  return 'Não achei uma cobrança de cartão em aberto. Me diz *pagar* que eu gero uma nova. 🙂';
+}
+
 export function cardChargeFailed(last4: string): string {
   return `Não consegui aprovar o cartão final *${last4}* agora. Posso seguir por Pix ou te mandar um link seguro de cartão. 💳`;
 }

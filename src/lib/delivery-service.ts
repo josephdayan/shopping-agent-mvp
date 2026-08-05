@@ -12,7 +12,15 @@ import {
 } from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
 import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
-import { createCardAttempt, expireOpenPaymentAttempts, getConfirmedPaymentAttempt, getOneClickCredential } from "@/lib/payments/whatsapp-pay";
+import {
+  cardOnFileEnabled,
+  confirmSavedCardTap,
+  createCardAttempt,
+  expireOpenPaymentAttempts,
+  findPendingSavedCardAttempt,
+  getConfirmedPaymentAttempt,
+  getOneClickCredential
+} from "@/lib/payments/whatsapp-pay";
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
 import { extractShoppingList } from "@/lib/adapters/ai";
 import {
@@ -920,6 +928,16 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   }
 
   // ---- order-level commands (work in ANY step) ----
+  // Cartão salvo (modo sem Meta Payments): o toque no botão traz o attemptId; o texto
+  // humano ("usar cartão") resolve pela última tentativa pendente do pedido em aberto.
+  if (intent.kind === "saved_card_pay") {
+    await handleSavedCardPay(phone, user.id, intent.attemptId);
+    return;
+  }
+  if (intent.kind === "saved_card_other") {
+    await handleSavedCardOther(phone, user.id);
+    return;
+  }
   if (intent.kind === "status") {
     await handleStatus(phone, user.id, text);
     return;
@@ -2226,13 +2244,70 @@ async function sendCartActionButtons(phone: string) {
   if (!interactive) await reply(phone, 'Quer ajustar? Manda mais itens ou responde *cancelar*.');
 }
 
-// The card is entered exactly once in Pagar.me's tokenization form. Once stored,
-// every later card payment comes back to WhatsApp's native order_details UI.
+// The card is entered exactly once in Pagar.me's tokenization form. Once stored, every
+// later card payment is confirmed in-chat (Meta order_details when enabled, common
+// reply buttons otherwise). Gated on cardOnFileEnabled: a configured Pagar.me key with
+// no flag must never silently change the checkout path away from Checkout Pro.
 async function sendFirstCardEnrollment(order: { id: string; userId: string; phone: string; total: number }) {
-  if (!isCardEnrollmentAvailable()) return false;
+  if (!cardOnFileEnabled() || !isCardEnrollmentAvailable()) return false;
   const enrollment = await createCardEnrollmentSession({ orderId: order.id, userId: order.userId });
   await reply(order.phone, copy.cardEnrollmentInstructions(order.total, enrollment.url, process.env.PAGARME_MOCK === "true"));
   return true;
+}
+
+// Toque em "Pagar •••• 1234" (ou o texto "usar cartão"). O attemptId do botão localiza a
+// tentativa exata; a forma por texto resolve pela última pendente do pedido em aberto.
+async function handleSavedCardPay(phone: string, userId: string, attemptId?: string) {
+  let resolved = attemptId;
+  let last4: string | undefined;
+  if (!resolved) {
+    const order = await prisma.deliveryOrder.findFirst({
+      where: { userId, status: "awaiting_payment" },
+      orderBy: { createdAt: "desc" }
+    });
+    const pending = order ? await findPendingSavedCardAttempt(order.id) : null;
+    if (!pending) {
+      await reply(phone, copy.savedCardNothingPending());
+      return;
+    }
+    resolved = pending.id;
+    last4 = pending.credential.last4;
+  }
+  if (last4) await reply(phone, copy.savedCardCharging(last4));
+  // Claim + cobrança idempotente acontecem no pipeline (workflow ou fallback síncrono);
+  // o desfecho volta por mensagem própria (aprovado / recusado + fallback de link).
+  await confirmSavedCardTap(resolved, phone);
+}
+
+// "Outro cartão": expira a cobrança pendente e manda um link novo de cadastro — o
+// cartão anterior deixa de ser cobrado e a credencial é substituída no submit.
+async function handleSavedCardOther(phone: string, userId: string) {
+  const order = await prisma.deliveryOrder.findFirst({
+    where: { userId, status: "awaiting_payment" },
+    orderBy: { createdAt: "desc" }
+  });
+  if (!order || !isCardCharge(order)) {
+    await reply(phone, copy.savedCardNothingPending());
+    return;
+  }
+  if (await getConfirmedPaymentAttempt(order.id)) {
+    await reply(phone, copy.cardPaymentProcessing());
+    return;
+  }
+  await expireOpenPaymentAttempts(order.id);
+  if (await sendFirstCardEnrollment(order)) return;
+  // Sem cadastro disponível → link Checkout Pro, o fallback permanente de cartão.
+  const link = await checkoutAdapter.createLink({
+    orderId: order.id,
+    amount: order.total,
+    description: `Lia · pedido ${order.id.slice(-6)}`,
+    method: "card"
+  });
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }
+  });
+  await reply(phone, copy.cardInstructions(order.total, link.initPoint, link.mock));
 }
 
 // Which payment method (if any) an intent unambiguously names.

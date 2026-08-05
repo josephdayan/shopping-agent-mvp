@@ -15,6 +15,30 @@ participa do envio, recebimento ou da cobrança.
 4. O webhook Pagar.me é apenas um sinal de reconciliação. A aplicação consulta
    o pedido na API V5 antes de atualizar o status local.
 
+## Modo cartão salvo sem Meta Payments (ativo por decisão de 05/08)
+
+Enquanto a Payments API BR segue em beta fechado, o mesmo alicerce funciona com botões
+comuns do WhatsApp, atrás da flag independente `LIA_ENABLE_SAVED_CARD=true`:
+
+1. Primeira compra no cartão → link `/cartao` (tokenizecard.js → Pagar.me), credencial
+   salva (`PaymentCredential`) e cobrança do pedido — exatamente o fluxo já descrito.
+2. Recompra → botões comuns "Pagar •••• 1234" / "Usar outro cartão" (ids
+   `cardpay:<attemptId>` / `cardother`). O toque volta como texto e dispara o mesmo
+   pipeline: claim da tentativa → cobrança idempotente → confirmação. Formas por texto
+   ("usar cartão", "outro cartão") também são entendidas.
+3. Desfechos (aprovado/recusado/expirado) vão como texto comum em vez de `order_status`.
+   Recusa cai no fallback Checkout Pro; "outro cartão" expira a tentativa e manda um
+   link novo de cadastro (a credencial é substituída no submit).
+
+O gate `cardOnFileEnabled()` (uma das duas flags) controla credencial e cadastro: chave
+Pagar.me configurada sem flag nenhuma NÃO muda o caminho de checkout. Quando a Meta
+liberar a Payments API, `LIA_ENABLE_WA_PAYMENTS=true` promove a recompra ao
+`order_details` nativo sem tocar no resto.
+
+Pré-requisitos deste modo: chaves/domínio/webhook Pagar.me (passos 2–3 abaixo) e o
+sandbox validando primeira compra, recompra, recusa e resposta perdida. A allowlist da
+Meta NÃO é necessária.
+
 ## Ativação em produção
 
 1. Obtenha da Meta a allowlist da Payments API BR para a WABA brasileira e mantenha
