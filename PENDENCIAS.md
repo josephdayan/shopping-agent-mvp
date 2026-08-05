@@ -69,8 +69,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
 > já estão em produção. Em 03/08 a Infobip NEGOU a habilitação. Em 04/08 o ticket foi aberto
-> diretamente no Suporte da Meta (`37565409896407734`, status **Open**); agora a rota é aguardar
-> a resposta desse chamado. A dúvida técnica do Pagar.me foi
+> diretamente no Suporte da Meta (`37565409896407734`); em 05/08 a Meta o **encerrou com
+> resposta padronizada**, sem análise e sem aceitar réplica. Não há porta self-serve: o
+> One-Click fica **estacionado** até a GA ou um Solution Partner que habilite sem migrar o
+> sender. A dúvida técnica do Pagar.me foi
 > resolvida por documentação: `recurrence_cycle` é só de recorrência externa; o adaptador
 > atual está correto e nenhum e-mail ao PSP é necessário. O piloto não espera:
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
@@ -286,7 +288,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   de sender. Concluído em 04/08: protocolo **`37565409896407734`**, status inicial **Open**,
   assunto **Dev: Cloud API** e tipo **Messages API and Webhook**, no Business ID
   `1802515380110705`. O formulário não aceitou português; a solicitação equivalente foi enviada
-  em inglês. [Acompanhar o chamado](https://business.facebook.com/direct-support/case-detail/37565409896407734/?business_id=1802515380110705).
+  em inglês. [Registro do chamado](https://business.facebook.com/direct-support/case-detail/37565409896407734/?business_id=1802515380110705).
+  **Desfecho em 05/08:** a Meta **encerrou o chamado no mesmo dia**, com resposta padronizada
+  (triagem "STANDARD" + documentação antiga de On-Premises), sem analisar a arquitetura da
+  Lia; o caso está **Closed** e não aceita réplica. Conclusão: **não existe porta self-serve**
+  para a Payments API BR em Cloud API direta hoje. Frente **estacionada** aguardando (a) GA da
+  API ou (b) Solution Partner que patrocine a habilitação **sem migrar o sender** e confirme o
+  Pagar.me como PSP participante. O piloto segue com Pix + Checkout Pro; reavaliar na rotina
+  mensal.
   Rota Infobip: **negada** em 03/08.
   **Expectativa verificada em 03/08 (ser honesto):** a Payments API BR está em **beta
   fechado/disponibilidade limitada** — a Meta escolhe quem entra ("select customers", doc da
@@ -311,7 +320,8 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   direto à Meta `37565409896407734`.
 - [~] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
   shape definitivo do webhook de confirmação. Ticket `37565409896407734` aberto em 04/08 e
-  aguardando resposta; status **Open** não significa habilitação.
+  **encerrado pela Meta em 05/08 com resposta padronizada**, sem análise. Frente estacionada
+  até GA ou Solution Partner patrocinador (sem migração de sender, Pagar.me como PSP).
 - [~] Confirmar por escrito se Mercado Pago PJ é suportado nesse desenho, quem gera o
   `credential_id`, custos/mínimos, prazo de onboarding e se algum BSP precisa assumir a
   WABA ou o número. Não substituir o desenho Pagar.me já implementado sem essa evidência.

@@ -108,7 +108,7 @@ de hoje está em
 > **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
 > já estão em produção. Em 03/08 a Infobip NEGOU a habilitação; em 04/08 o pedido foi aberto
-> diretamente no Suporte da Meta, protocolo `37565409896407734`, status **Open**, categoria
+> diretamente no Suporte da Meta, protocolo `37565409896407734` — **encerrado pela Meta em 05/08 com resposta padronizada, sem análise** —, categoria
 > **Dev: Cloud API / Messages API and Webhook**. A Payments API BR segue em beta fechado e as
 > habilitações documentadas passam por BSPs; o chamado não garante aprovação nem prazo. Plano B:
 > Checkout Pro até a disponibilidade geral. A dúvida técnica do Pagar.me foi
@@ -168,8 +168,8 @@ quando existir uma rota urgente formalmente compatível.
 | **Multi-loja + roteamento** | ✅ Oba + Petz + Boticário; **1 loja por pedido**, escolhida por match. |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** — conta PJ confirmada pelo dono no painel para a aplicação `LIA - APP` em Produção; variáveis de acesso e webhook presentes na Vercel Production. |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
-| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations aplicadas. Ticket Meta `37565409896407734` aberto em 04/08 e aguardando resposta; ainda faltam habilitação/allowlist, configuração Pagar.me e sandbox. A documentação confirma que `recurrence_cycle` é de recorrência externa e não se aplica à recompra avulsa da Lia; o payload atual usa corretamente `card_id` sem o campo. Não usa 360dialog. |
-| **Qualificação externa de WhatsApp Payments** | 🟡 A rota Infobip foi encerrada após a negativa de 03/08. O canal vigente é o Suporte Direto da Meta: ticket `37565409896407734` aberto em 04/08 e aguardando resposta. Isso não é aprovação nem prazo; não migrar/compartilhar sender nem alterar WABA, número, Graph API ou webhook. |
+| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations aplicadas. Ticket Meta `37565409896407734` **encerrado em 05/08 com resposta padronizada** — sem porta self-serve; frente estacionada até GA ou Solution Partner (sem migrar sender). Faltam habilitação, configuração Pagar.me e sandbox. A documentação confirma que `recurrence_cycle` é de recorrência externa e não se aplica à recompra avulsa da Lia; o payload atual usa corretamente `card_id` sem o campo. Não usa 360dialog. |
+| **Qualificação externa de WhatsApp Payments** | 🟡 A rota Infobip foi encerrada após a negativa de 03/08. O Suporte Direto da Meta **encerrou o ticket `37565409896407734` em 05/08** com resposta padronizada, sem análise. Frente estacionada até GA ou Solution Partner patrocinador; não migrar/compartilhar sender nem alterar WABA, número, Graph API ou webhook. |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), limpar/cancelar antes do pagamento, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
@@ -268,8 +268,10 @@ para quando o operador decidir, depois desses gates.
   allowlist Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
   sandbox de primeira compra, recompra, recusa e resposta perdida. Guia:
   [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
-- **Acompanhar a habilitação na Meta:** aguardar a resposta do ticket `37565409896407734` e
-  manter a flag desligada até a allowlist ser comprovada. A rota Infobip foi encerrada.
+- **Habilitação na Meta encerrada sem análise (05/08):** o ticket `37565409896407734` foi
+  fechado com resposta padronizada e não aceita réplica. Manter a flag desligada; reavaliar na
+  rotina mensal (GA da Payments API BR ou Solution Partner que habilite sem migrar o sender).
+  A rota Infobip foi encerrada em 03/08.
 - **Validar o payload Pagar.me no sandbox:** manter `card_id` sem `recurrence_cycle`, pois o
   campo é de recorrência externa; testar CVV/3DS, antifraude, recusa e reconciliação antes da
   ativação real.
