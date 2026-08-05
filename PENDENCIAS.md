@@ -78,6 +78,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
 > [PENDENCIAS.md](PENDENCIAS.md) (seção One-Click) e [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
 
+> **05/08 — decisão do dono: cartão salvo SEM esperar a Meta.** "Se não vai ser automático,
+> no mínimo deixa o cartão salvo" — redigitar cartão a cada compra é atrito inaceitável. O
+> desenho aprovado reusa a infraestrutura One-Click já pronta (página `/cartao` com
+> `tokenizecard.js` → Pagar.me, `PaymentCredential` tokenizada, cobrança idempotente por
+> `PaymentAttempt`, webhook de reconciliação): a única troca é o gatilho da recompra — botões
+> comuns de resposta do WhatsApp ("Pagar com cartão •••• 1234") em vez do `order_details`
+> nativo da Meta, que segue estacionado atrás de `LIA_ENABLE_WA_PAYMENTS`. Flag nova e
+> independente (`LIA_ENABLE_SAVED_CARD`), desligada até o sandbox validar com as chaves
+> Pagar.me (criação da conta segue sendo ação do dono). Recusa/indisponibilidade cai no
+> Checkout Pro, que permanece como fallback permanente.
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam
