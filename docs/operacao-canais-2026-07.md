@@ -124,15 +124,25 @@ O contato técnico foi enviado ao Customer Success em 18/07, com Samuel em cópi
 aguarda confirmação escrita; nenhuma conta de teste foi criada, nenhum canal foi alterado e
 o One-Click permanece desligado.
 
-Na frente Pagar.me, a revisão documental de 16/07 confirmou que o `tokenizecard.js` envia
-os dados diretamente ao PSP e requer domínio liberado, e que pedidos podem usar `card_id`.
-A documentação atual também distingue `recurrence_cycle=first|subsequent` e orienta que o
-CVV apareça apenas na primeira transação de recorrência externa. Como o adaptador atual usa
-`card_id` sem marcar o ciclo, é obrigatório confirmar com o Pagar.me como classificar a
-primeira compra e as recompras avulsas confirmadas no WhatsApp antes de alterar o payload ou
-testar cartão real. Fontes: [Tokenizecard JS](https://docs.pagar.me/reference/pagarme-js),
+Na frente Pagar.me, a revisão documental confirmou que o `tokenizecard.js` envia os dados
+diretamente ao PSP, requer domínio liberado e permite pedidos com `card_id`.
+`recurrence_cycle=first|subsequent` descreve recorrência externa e é opcional; não cria uma
+cobrança recorrente. A recompra da Lia é avulsa e confirmada pelo cliente, portanto o adaptador
+atual (`card_id` sem `recurrence_cycle`) está correto. CVV/3DS, recusa e antifraude continuam
+como validações de sandbox antes de ativar a flag. Fontes:
+[Tokenizecard JS](https://docs.pagar.me/reference/pagarme-js),
 [criar pedido](https://docs.pagar.me/reference/criar-pedido-2) e
 [cartão de crédito](https://docs.pagar.me/reference/cart%C3%A3o-de-cr%C3%A9dito-1).
+
+### Atualização de canal — 04/08/2026
+
+A rota Infobip foi encerrada após a negativa de 03/08. Em 04/08, o pedido de habilitação da
+Payments API Brasil foi aberto diretamente no Suporte da Meta: protocolo `37565409896407734`,
+status inicial **Open**, categoria **Dev: Cloud API** e tipo **Messages API and Webhook**, no
+Business ID `1802515380110705`. A solicitação preserva WABA, número, Graph API e webhook na
+Cloud API direta, sem migração de sender, e mantém Pagar.me no backend. O ticket não comprova
+allowlist nem prazo; até resposta positiva e habilitação efetiva, One-Click permanece desligado
+e Checkout Pro continua sendo o cartão do piloto.
 
 ## Rotina operacional de um pedido (concierge ativo)
 

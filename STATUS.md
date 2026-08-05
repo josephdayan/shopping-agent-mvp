@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-02. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-04. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -107,11 +107,11 @@ de hoje está em
 
 > **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
-> já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
-> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Em 03/08 a Infobip NEGOU a habilitação —
-> resta o ticket no Suporte Direto da Meta, que a verificação do mesmo dia mostrou ser
-> incerto: a Payments API BR está em beta fechado e as habilitações passam por BSPs; o
-> ticket vale o custo, mas sem prazo. Plano B: Checkout Pro até a disponibilidade geral. A dúvida técnica do Pagar.me foi
+> já estão em produção. Em 03/08 a Infobip NEGOU a habilitação; em 04/08 o pedido foi aberto
+> diretamente no Suporte da Meta, protocolo `37565409896407734`, status **Open**, categoria
+> **Dev: Cloud API / Messages API and Webhook**. A Payments API BR segue em beta fechado e as
+> habilitações documentadas passam por BSPs; o chamado não garante aprovação nem prazo. Plano B:
+> Checkout Pro até a disponibilidade geral. A dúvida técnica do Pagar.me foi
 > resolvida por documentação: `recurrence_cycle` é só de recorrência externa; o adaptador
 > atual está correto e nenhum e-mail ao PSP é necessário. O piloto não espera:
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
@@ -168,8 +168,8 @@ quando existir uma rota urgente formalmente compatível.
 | **Multi-loja + roteamento** | ✅ Oba + Petz + Boticário; **1 loja por pedido**, escolhida por match. |
 | **Pix (Mercado Pago)** | ✅ **REAL, testado com pagamento de verdade** — conta PJ confirmada pelo dono no painel para a aplicação `LIA - APP` em Produção; variáveis de acesso e webhook presentes na Vercel Production. |
 | **Cartão (Checkout Pro)** | ✅ link hospedado no MP com taxa repassada; mesmo webhook do Pix |
-| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations foram aplicadas; faltam allowlist Meta, configuração Pagar.me e sandbox. Antes do teste real, o Pagar.me deve confirmar a classificação `first/subsequent` e CVV para este fluxo; o payload atual usa `card_id` sem `recurrence_cycle`. Não usa 360dialog. |
-| **Qualificação externa de WhatsApp Payments** | 🟡 Em 18/07, Samuel classificou o volume de MVP (2.000–10.000 mensagens/mês) como Self-Service, encaminhou as dúvidas ao Customer Success e ofereceu uma conta de teste. O contato técnico foi enviado, com Samuel em cópia; aguarda resposta escrita. Isso não é aprovação nem confirma `credential_id`, Mercado Pago PJ, custos ou preservação da Cloud API direta. Não aceitar teste que migre/compartilhe o sender ou altere WABA, número, Graph API ou webhook. |
+| **Cartão One-Click (Meta + Pagar.me)** | 🟡 código concluído, flag desligada; primeira compra tokeniza no Pagar.me, recompra usa `order_details` nativo. Migrations aplicadas. Ticket Meta `37565409896407734` aberto em 04/08 e aguardando resposta; ainda faltam habilitação/allowlist, configuração Pagar.me e sandbox. A documentação confirma que `recurrence_cycle` é de recorrência externa e não se aplica à recompra avulsa da Lia; o payload atual usa corretamente `card_id` sem o campo. Não usa 360dialog. |
+| **Qualificação externa de WhatsApp Payments** | 🟡 A rota Infobip foi encerrada após a negativa de 03/08. O canal vigente é o Suporte Direto da Meta: ticket `37565409896407734` aberto em 04/08 e aguardando resposta. Isso não é aprovação nem prazo; não migrar/compartilhar sender nem alterar WABA, número, Graph API ou webhook. |
 | **Comandos de conversa** | ✅ status, "paguei" (verificado no MP em prod), limpar/cancelar antes do pagamento, trocar endereço, "tira X", "troca X por Y", repete o de sempre, ajuda |
 | **Conversa / NLU** | ✅ reconstruída após review: onboarding preserva o pedido até o CEP, perguntas não viram item, total parcial, encerramento de lista, atendimento/reclamação, cancelamento e pagamento são contextuais |
 | **Escolha de opções** | ✅ número, ordinal, preço, recomendação, marca/nome, refinamento e estreitamento de opções; "coca" entre duas Cocas não vira item novo |
@@ -268,14 +268,11 @@ para quando o operador decidir, depois desses gates.
   allowlist Payments API BR da Meta, liberar domínio/configurar webhook no Pagar.me e rodar testes
   sandbox de primeira compra, recompra, recusa e resposta perdida. Guia:
   [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
-- **Responder à qualificação comercial de Payments:** enviar projeções como estimativas de
-  MVP, informar predominância Utility/Brasil/WhatsApp e exigir por escrito a preservação da
-  WABA, número e Cloud API direta. Depois confirmar PSP suportado, custos, prazo, onboarding
-  e responsabilidade pela geração do `credential_id`.
-- **Fechar o payload Pagar.me com o PSP:** confirmar se a primeira cobrança após a
-  tokenização e as recompras confirmadas no WhatsApp devem usar
-  `recurrence_cycle=first|subsequent`, como fica o CVV/3DS e se o modelo é PSP ou Gateway.
-  Ajustar o adaptador e os testes conforme a resposta antes do sandbox real.
+- **Acompanhar a habilitação na Meta:** aguardar a resposta do ticket `37565409896407734` e
+  manter a flag desligada até a allowlist ser comprovada. A rota Infobip foi encerrada.
+- **Validar o payload Pagar.me no sandbox:** manter `card_id` sem `recurrence_cycle`, pois o
+  campo é de recorrência externa; testar CVV/3DS, antifraude, recusa e reconciliação antes da
+  ativação real.
 
 ### 🟡 Pra operar de verdade
 - **WhatsApp oficial da Meta**: ✅ o número `+55 11 97844-4813` foi aprovado como

@@ -235,6 +235,11 @@ runtime: não envia a mensagem, não recebe o webhook e não processa a cobranç
   Pagar.me. Workflows e reconciliação por webhook cobrem toque duplicado e resposta perdida.
 - Código, migrations, documentação e testes focados estão prontos; a flag continua desligada.
 
-Para ativar faltam: migrations em produção, allowlist Payments API BR da Meta, domínio/chaves
-e webhook Pagar.me, depois teste sandbox de primeira compra, recompra, recusa e recuperação.
+As migrations já foram aplicadas em produção. Em 04/08/2026, o pedido de allowlist/habilitação
+foi aberto no Suporte Direto da Meta, protocolo `37565409896407734`; em 05/08 a Meta o
+**encerrou com resposta padronizada** (docs antigas de On-Premises), sem análise e sem aceitar
+réplica — não há porta self-serve hoje. O One-Click fica estacionado até a disponibilidade
+geral ou um Solution Partner que habilite sem migrar o sender. Para ativar ainda faltam
+habilitação da Meta,
+domínio/chaves e webhook Pagar.me, depois teste sandbox de primeira compra, recompra, recusa e recuperação.
 O guia canônico é [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).

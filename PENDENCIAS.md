@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-02._
+_Última atualização: 2026-08-04._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -68,9 +68,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **03/08 — One-Click reativado por decisão do dono.** O cartão nativo no WhatsApp (Meta
 > Cloud API direta + Pagar.me) deixa de ser "adiado": a ativação começou. Código e migrations
-> já estão em produção; faltam os 3 destravamentos externos (allowlist Meta via Infobip,
-> conta/chaves Pagar.me, resposta do `recurrence_cycle`). Em 03/08 a Infobip NEGOU a habilitação —
-> a rota vigente é ticket no Suporte Direto da Meta. A dúvida técnica do Pagar.me foi
+> já estão em produção. Em 03/08 a Infobip NEGOU a habilitação. Em 04/08 o ticket foi aberto
+> diretamente no Suporte da Meta (`37565409896407734`, status **Open**); agora a rota é aguardar
+> a resposta desse chamado. A dúvida técnica do Pagar.me foi
 > resolvida por documentação: `recurrence_cycle` é só de recorrência externa; o adaptador
 > atual está correto e nenhum e-mail ao PSP é necessário. O piloto não espera:
 > Pix + Checkout Pro cobrem cartão até lá. Plano completo e divisão do trabalho em
@@ -281,9 +281,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > `relacionamento@pagar.me` (geral, seg–sex 9h–18h, tel 4004-1330) e `homologacao@pagar.me`
 > (fase de homologação); chat no dashboard após criar a conta.
 
-- [ ] **(dono)** Abrir ticket no Suporte Direto da Meta pedindo a habilitação da **Payments
+- [x] **(dono)** Abrir ticket no Suporte Direto da Meta pedindo a habilitação da **Payments
   API BR** na WABA `Lia Delivery` (+55 11 97844-4813), mantendo Cloud API direta, sem migração
-  de sender — rascunho entregue em 03/08. Rota Infobip: **negada** em 03/08.
+  de sender. Concluído em 04/08: protocolo **`37565409896407734`**, status inicial **Open**,
+  assunto **Dev: Cloud API** e tipo **Messages API and Webhook**, no Business ID
+  `1802515380110705`. O formulário não aceitou português; a solicitação equivalente foi enviada
+  em inglês. [Acompanhar o chamado](https://business.facebook.com/direct-support/case-detail/37565409896407734/?business_id=1802515380110705).
+  Rota Infobip: **negada** em 03/08.
   **Expectativa verificada em 03/08 (ser honesto):** a Payments API BR está em **beta
   fechado/disponibilidade limitada** — a Meta escolhe quem entra ("select customers", doc da
   Sinch) e as habilitações documentadas passam por BSPs abrindo ticket pelos clientes (doc da
@@ -302,21 +306,21 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Enviar em 18/07 a solicitação técnica a Samuel Santana/Infobip e ao Customer Success
   (`success@infobip.com`), com a exigência de preservar WABA, número, Cloud API/Graph API e
   webhook, sem migração/compartilhamento de sender/BSP sem autorização separada.
-- [~] Aguardar a resposta técnica escrita da Infobip: matriz de compatibilidade de
-  `order_details` / `offsite_card_pay`, Mercado Pago PJ, `credential_id`, webhook, sandbox,
-  custos e limites. Não criar/usar conta de teste, alterar canal ou ativar One-Click antes
-  dessa confirmação.
+- [x] Encerrar a rota Infobip: a resposta de 03/08 foi negativa para a habilitação; não criar
+  conta de teste, migrar sender nem manter essa frente como gate. A rota vigente é o chamado
+  direto à Meta `37565409896407734`.
 - [~] Obter a allowlist da Payments API BR para a WABA brasileira na Meta e confirmar o
-  shape definitivo do webhook de confirmação.
+  shape definitivo do webhook de confirmação. Ticket `37565409896407734` aberto em 04/08 e
+  aguardando resposta; status **Open** não significa habilitação.
 - [~] Confirmar por escrito se Mercado Pago PJ é suportado nesse desenho, quem gera o
   `credential_id`, custos/mínimos, prazo de onboarding e se algum BSP precisa assumir a
   WABA ou o número. Não substituir o desenho Pagar.me já implementado sem essa evidência.
 - [~] Configurar Pagar.me V5: chaves, domínio liberado para `tokenizecard.js`, webhook e
   os eventos de pedido/cobrança/cartão descritos no guia.
-- [~] Confirmar com o Pagar.me, antes do sandbox real, se a primeira cobrança e as recompras
-  avulsas confirmadas no WhatsApp devem usar `recurrence_cycle=first|subsequent`, quando
-  CVV/3DS é exigido e se a conta operará como PSP ou Gateway. O adaptador atual envia
-  `card_id` sem `recurrence_cycle`; ajustar código e testes somente com essa resposta.
+- [x] Resolver a classificação `recurrence_cycle`: a documentação Pagar.me confirma que o
+  campo representa recorrência externa e é opcional; a recompra da Lia é avulsa e iniciada
+  pelo cliente, portanto o adaptador atual (`card_id` sem `recurrence_cycle`) está correto.
+  CVV/3DS e antifraude continuam sendo validados no sandbox da conta antes da ativação.
 - [~] Executar primeira compra e recompra reais em sandbox; verificar CVV/3DS, recusa,
   resposta perdida e reconciliação antes de ativar `LIA_ENABLE_WA_PAYMENTS=true`.
 

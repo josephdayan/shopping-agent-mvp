@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-02._
+_Última atualização: 2026-08-04._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -158,6 +158,19 @@ a recompra da Lia é avulsa iniciada pelo cliente, então **o adaptador atual (`
 relacionamento@pagar.me / homologacao@pagar.me. O piloto não espera o One-Click: Pix + Checkout Pro cobrem cartão. Sequência
 pós-chaves (agente): envs Sensitive → webhook com 6 eventos → ajuste do adaptador conforme o
 PSP → sandbox completo → só então `LIA_ENABLE_WA_PAYMENTS=true`.
+
+### Atualização 04/08/2026 — ticket da Payments API aberto na Meta
+
+O pedido de habilitação da **Payments API Brasil** foi aberto no Suporte Direto da Meta em
+04/08, no portfólio **Lia** (`Business ID 1802515380110705`). Protocolo
+**`37565409896407734`**, status inicial **Open**, assunto **Dev: Cloud API** e tipo
+**Messages API and Webhook**. O chamado pede a habilitação de `order_details` / one-click
+offsite card payment para a WABA **Lia Delivery** (+55 11 97844-4813), preservando número,
+webhook e Graph API na Cloud API direta, sem migração de sender, com Pagar.me no backend.
+O formulário recusou português para esse tipo de pergunta; a mesma solicitação foi enviada em
+inglês. Abertura do ticket **não é habilitação nem prazo**: a flag continua desligada e o gate
+agora é aguardar resposta da Meta. Acompanhar em
+<https://business.facebook.com/direct-support/case-detail/37565409896407734/?business_id=1802515380110705>.
 
 ### Atualização 03/08/2026 — vitrine híbrida (o cliente passa a ver produto)
 
@@ -536,8 +549,9 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - confirmar situação PJ/NF do Mercado Pago antes do lançamento público;
 - Pix e Checkout Pro do Mercado Pago permanecem o caminho ativo.
 - O One-Click BR (Meta Cloud API direta + Pagar.me) está implementado, mas permanece
-  desligado até a allowlist da Meta, chaves/domínio/webhook Pagar.me e migrations serem
-  configurados. Não depende de 360dialog. Ver
+  desligado até a habilitação da Meta, chaves/domínio/webhook Pagar.me e sandbox. As
+  migrations já estão aplicadas; o ticket Meta `37565409896407734` está **Open** desde
+  04/08. Não depende de 360dialog. Ver
   [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
 - Em 16/07, Samuel Santana, da Infobip, respondeu sobre `order_details` /
   `offsite_card_pay` com Mercado Pago PJ e pediu volume, categoria das mensagens, países e
@@ -555,14 +569,12 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
   garantia de `credential_id`. Só solicitar/usar teste se ficar documentado que ele não
   migra nem compartilha WABA/número, preserva a Cloud API/Graph API e o webhook atuais, e
   se o escopo de `order_details`/`offsite_card_pay`, sandbox, webhook e custos for confirmado.
-  O contato ao Customer Success foi enviado em 18/07, com Samuel em cópia; aguardar resposta
-  técnica escrita antes de criar conta de teste, alterar canal ou ligar a flag.
-- A revisão da documentação Pagar.me V5 em 16/07 confirmou `tokenizecard.js`, domínio
-  liberado e cobrança por `card_id`, mas também expôs um gate a confirmar com o PSP: a API
-  distingue `recurrence_cycle=first|subsequent` e orienta CVV apenas na primeira transação
-  de recorrência externa. O adaptador atual usa `card_id` sem marcar o ciclo. Isto não é
-  falha validada ao vivo, mas precisa de resposta do Pagar.me e eventual ajuste/teste antes
-  do sandbox real e antes de ligar a flag.
+  O contato ao Customer Success foi enviado em 18/07, com Samuel em cópia; em 03/08 a Infobip
+  respondeu negativamente e essa rota foi encerrada. Não criar conta de teste nem migrar sender.
+- A revisão da documentação Pagar.me V5 confirmou `tokenizecard.js`, domínio liberado e
+  cobrança por `card_id`. `recurrence_cycle=first|subsequent` descreve recorrência externa e
+  não se aplica à recompra avulsa da Lia; o adaptador atual (`card_id` sem o campo) está
+  correto. CVV/3DS, recusa e antifraude ainda precisam passar no sandbox antes de ligar a flag.
 
 ### Deploy e testes
 

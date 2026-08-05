@@ -17,6 +17,15 @@ coletada em escala por qualquer motoboy.
 > correspondente é `dpl_5kTpBbsitN6BgP5vcQrDh22AfqP4`. O histórico abaixo permanece válido para
 > explicar por que não usamos retirada no balcão.
 
+> **Registro posterior — 04/08/2026.** O dono reativou a frente de cartão One-Click em 03/08.
+> A Infobip negou a rota de habilitação e, em 04/08, a Lia abriu diretamente no Suporte da
+> Meta o chamado `37565409896407734` (status inicial **Open**, **Dev: Cloud API / Messages API
+> and Webhook**) para habilitar `order_details` / offsite card payment sem migrar número,
+> WABA, Graph API ou webhook. O ticket não é aprovação nem cria prazo; a flag continua
+> desligada e Checkout Pro permanece como fallback. A dúvida `recurrence_cycle` foi resolvida
+> pela documentação Pagar.me: o campo é de recorrência externa e não se aplica à recompra
+> avulsa da Lia.
+
 ## Resumo executivo
 
 - A proposta de conveniência no WhatsApp continua válida.
