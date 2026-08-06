@@ -105,6 +105,18 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > dígitos). Conta de teste Pagar.me criada em 05/08 (grátis, loja "Lia Delivery"); a
 > habilitação comercial/chaves live só acontece se a bateria de sandbox aprovar.
 
+> **05/08 — 1ª bateria sandbox Pagar.me: contrato OK, simulador não habilitado.** Com as
+> chaves da loja "Lia Delivery" (criada no plano à vista, pré-habilitação), a bateria provou
+> na API real de teste: tokenização pela chave pública ✅, criação de cliente ✅, contrato de
+> order/idempotência aceito ✅. Porém TODA aprovação falha: salvar cartão → 412 "card
+> verification failed" (com e sem `verify_card`, cartões 4242… e 4000…0010) e cobrança →
+> `not_authorized` 1011 "Número do cartão inválido" — mesmo seguindo as regras documentadas
+> do Simulador PSP (Luhn válido + CVV 123). Conclusão: as chaves dessa loja são de PRODUÇÃO
+> pré-habilitação (por isso sem o infixo `test_`), e o simulador NÃO roda nela. O caminho é a
+> **conta de teste separada** (company.pagar.me → Contas → criar conta de teste), cujas chaves
+> `sk_test_`/`pk_test_` ativam o simulador. Nenhum custo incorrido; a condição "só pago se
+> funcionar" segue intacta.
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam
