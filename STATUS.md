@@ -191,23 +191,50 @@ modelo: o courier não retira no balcão da loja.
 
 ---
 
-## 2. O fluxo (e o que é automático vs. manual)
+## 2. O fluxo completo do cliente (vigente em 05/08)
+
+### Primeira compra (cliente novo)
 
 ```
-1. 💬 Cliente manda no WhatsApp o que quer e o endereço.
-2. 🤖 Lia preserva qualquer item pedido — inclusive fora de catálogo — e fecha a lista.
-3. 👤 Operador recebe o pedido em `awaiting_operator_quote`, pesquisa, compra/cota itens,
-   frete, modalidade e prazo no `/ops`.
-4. 🤖 Cliente aprova a cotação e escolhe Pix ou cartão; só então a Lia gera a cobrança.
-5. 👤 Pagamento confirmado → operador compra os itens.
-6. 🛵 Com as compras na base, o operador despacha o motoboy; alternativamente acompanha a
-   entrega do varejista.
-7. 🤖 Lia comunica o status até a entrega.
+1. 💬 "oi" → Lia pede endereço completo + CEP (uma vez; fica salvo).
+2. 💬 Cliente pede em linguagem natural ("coca, ração e um vedante de torneira").
+3. 🤖 Vitrine híbrida: item com match nas 18 lojas vira card com foto + botão
+   "Escolher este" (até 3 opções); item sem match vira linha livre ("vou garimpar
+   pra você"). NADA é recusado. Escolher não fecha a lista.
+4. 💬 Cliente soma o que quiser → fecha com "só isso".
+5. 👤 Operador cota no /ops (custo dos produtos + frete + modalidade + prazo) e publica.
+6. 🤖 Cliente recebe o resumo com total e os botões Pix / Cartão:
+   · Pix → copia-e-cola → confirmação na hora (webhook MP).
+   · Cartão 1ª vez → link seguro /cartao → digita o cartão UMA única vez →
+     cobra e SALVA a credencial (tokenizada no Pagar.me; a Lia não vê o número).
+7. ✅ Pago → operador compra → motoboy da base do operador OU entrega do varejista.
+8. 🤖 Lia comunica cada etapa até a entrega.
 ```
 
-**Dinheiro:** cliente paga tudo (produtos +10% + frete) no Pix → cai na sua conta MP →
-você paga o varejista desse saldo → **sobra a margem de 10%**. Courier só entra e é pago
-quando existir uma rota urgente formalmente compatível.
+### Recompra (a mágica do cartão salvo)
+
+```
+1. 💬 Pede itens (ou "o de sempre") → mesmas opções → "só isso" → operador cota.
+2. 🤖 No resumo, escolhendo cartão: chega o botão "💳 Pagar •••• 1234".
+3. 👆 UM TOQUE. Pago. Sem número, sem CVV, sem sair do chat.
+```
+
+### Desvios já tratados (nenhum cliente fica preso)
+
+- Cartão recusado → aviso + link Checkout Pro na hora.
+- "Outro cartão" → expira a cobrança pendente e manda link novo de cadastro.
+- Toque duplo no botão → cobra UMA vez (idempotência por tentativa).
+- "Só isso" no meio das opções → o item pendente vira linha livre (não some).
+- Pós-pagamento: sem cancelamento/substituição; item faltante = estorno do item;
+  atraso = aviso. Antes de pagar, o cliente pode limpar a lista à vontade.
+
+**Status do cartão salvo:** validado ponta a ponta no sandbox real do Pagar.me em 05/08
+(inclusive cobrança sem CVV, replay e recusa). Em produção fica atrás de
+`LIA_ENABLE_SAVED_CARD` (desligada) até a habilitação comercial + smoke real de R$ 1.
+
+**Dinheiro:** cliente paga tudo (produtos +10% + frete) → cai na conta MP (Pix/link) ou
+Pagar.me (cartão salvo) → você paga o varejista desse saldo → **sobra a margem de 10%**.
+No cartão via Pagar.me o repasse leva ~15 dias (capital de giro no meio).
 
 ---
 

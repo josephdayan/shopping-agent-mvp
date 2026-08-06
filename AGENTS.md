@@ -332,6 +332,18 @@ como fulfillment padrão. Não enviar documentos pessoais a entregadores on-dema
 Fontes e detalhes:
 [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md).
 
+## Fluxo do cliente vigente (05/08) — resumo canônico
+
+Primeira compra: onboarding endereço+CEP (1x) → pedido em linguagem natural → vitrine
+híbrida (card com foto para match; linha livre para o resto; escolher NÃO fecha a lista) →
+"só isso" → cotação manual no /ops → resumo com Pix (copia-e-cola) ou cartão (1ª vez: link
+/cartao, digita UMA vez e salva tokenizado). Recompra no cartão: botão "Pagar •••• 1234",
+um toque, sem CVV. Desvios: recusa → Checkout Pro; "outro cartão" → re-cadastro; toque
+duplo → cobra 1x; fechar com escolha pendente → vira linha livre. Pós-pago: sem
+cancelamento/substituição; item faltante = estorno do item; atraso = aviso. Cartão salvo
+validado no sandbox real em 05/08; produção atrás de LIA_ENABLE_SAVED_CARD até habilitação
+comercial + smoke de R$ 1. A seção "Fluxo-alvo" abaixo é o desenho legado da automação.
+
 ## Fluxo-alvo vigente
 
 1. Cliente informa itens e endereço no WhatsApp.
