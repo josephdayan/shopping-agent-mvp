@@ -117,6 +117,20 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > `sk_test_`/`pk_test_` ativam o simulador. Nenhum custo incorrido; a condição "só pago se
 > funcionar" segue intacta.
 
+> **05/08 — VEREDITO DO SANDBOX: o cartão salvo FUNCIONA.** Com a conta de teste
+> "Lia Delivery - test" (chaves `sk_test_`/`pk_test_`), a bateria completa passou contra a
+> API real: tokenização ✅, cliente ✅, **salvar cartão pelo adapter com verificação ligada** ✅
+> (nenhuma mudança de código necessária), **cobrança com `card_id` SEM CVV APROVADA** ✅ (a
+> pergunta central), replay com mesma Idempotency-Key devolve a MESMA order ✅ (dupla cobrança
+> impossível), reconciliação `getOrder` ✅ e **recusa pelo antifraude → `declined`** ✅ (regra
+> do Simulador PSP com documento 111…), acionando o fallback Checkout Pro. A condição do dono
+> ("só pago se funcionar") está satisfeita. Nota: a 1ª bateria falhou porque as chaves da loja
+> de produção pré-habilitação não rodam o simulador — o diagnóstico está no registro anterior.
+> **Para ligar em produção falta:** (dono) habilitação comercial → chaves live; cadastrar
+> `liadelivery.com.br` para o tokenizecard.js; chaves live + `PAGARME_WEBHOOK_TOKEN` +
+> `LIA_PUBLIC_URL` na Vercel (Sensitive). (agente) cadastrar webhook com os 6 eventos, ligar
+> `LIA_ENABLE_SAVED_CARD=true`, smoke real de R$ ~1 com estorno.
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam
