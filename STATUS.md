@@ -194,6 +194,14 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **07/08 (2ª) — emoji literal era bug do minificador SWC; resolvido na raiz.** O
+> `🙂` visto no WhatsApp vinha do SWC fundindo strings com emoji em template
+> literals com escape duplo — 5 emojis de copy corrompidos no bundle, fonte sempre esteve
+> certo. `serverMinification: false` + guarda `check-bundle-emoji.mjs` no build (falha se
+> voltar). A linha livre agora conta que a Lia PROCUROU ("isso ainda não está na vitrine —
+> consigo mesmo assim: o operador cota") — o caso "adaptador hdmi" (nenhuma loja tem) parecia
+> "anotou sem procurar". Vitrine de eletrônicos/acessórios segue rasa (lacuna conhecida).
+
 > **07/08 — PUBLICADO em produção.** Deploy `dpl_Hg6fJBVaD7a8xMWZPVsKqP5eFuPg` (commit
 > `e8dea9f`, READY) com autorização do dono: busca com rerank por IA + golden set, consertos
 > de matcher/onboarding, cotação sem engolir pedido novo, e os commits do cartão salvo de

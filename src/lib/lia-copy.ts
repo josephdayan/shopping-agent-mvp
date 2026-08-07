@@ -616,13 +616,17 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
 // Modo concierge: o cliente pede QUALQUER coisa (de qualquer lugar); a Lia anota,
 // confirma a lista e cota na sequência. Nada de "não achei no catálogo" — a graça é
 // justamente resolver o que os apps de loja única não resolvem.
+// Linha livre = o item NÃO está na vitrine das lojas parceiras. A copy precisa contar
+// que a busca aconteceu ("procurei e não tem pronto") — sem isso, o "Anotei" parece que
+// a Lia nem procurou o produto (feedback real do dono, 07/08).
 export function conciergeItemsNoted(items: string[], hadBasketBefore: boolean): string {
   const list = items.map((i) => `• ${i}`).join("\n");
   const abre = hadBasketBefore ? "Anotei mais:" : "Anotei! 📝";
   return [
     `${abre}\n${list}`,
     "",
-    'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega. 🙂'
+    "Procurei nas minhas lojas parceiras e isso ainda não está na vitrine — mas consigo mesmo assim: nosso operador cota por fora e o preço entra no total. 🙂",
+    'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega.'
   ].join("\n");
 }
 

@@ -267,6 +267,19 @@ emoji literal `🙂` são o código ANTIGO em produção — o cotonete já reso
 deploy (match por apposição + rerank), e o emoji não existe em NENHUMA versão do fonte
 (artefato do build implantado; conferir na primeira conversa pós-deploy).
 
+**07/08 (2ª rodada) — emoji literal RESOLVIDO na raiz + linha livre passou a contar que buscou.**
+O `🙂` que aparecia no WhatsApp era **bug do minificador SWC do Next 14**: ao fundir
+`[template, "", 'string'].join("\n")` num template literal único, ele emitia o emoji com barra
+dupla (`\\uD83D\\uDE42`) — texto literal pro cliente. Por isso o 📝 da MESMA mensagem
+renderizava e o 🙂 final não, e nenhuma versão do fonte tinha o problema. 5 emojis de copy
+estavam corrompidos no bundle (💚×4, 💳, 📍×2, 🙂×2, 🛵). Conserto na raiz:
+`experimental.serverMinification: false` no `next.config.mjs` (minificar servidor não paga
+nada aqui) + guarda `scripts/check-bundle-emoji.mjs` no `npm run build` que FALHA o build se
+um surrogate com barra dupla voltar ao bundle. Junto: o caso real "adaptador hdmi pra usb"
+(nenhuma das 18 lojas tem) mostrou que a linha livre parecia "anotou sem procurar" — a copy
+`conciergeItemsNoted` agora diz que PROCUROU nas lojas parceiras e que o operador cota por
+fora. Guarda do teste breadth mantida (a frase de recusa legada continua proibida).
+
 **Três bugs de onboarding achados ao validar a busca numa conversa real (mesmos consertados).**
 Eles produziam exatamente o sintoma que motivou o trabalho — busca devolvendo lixo — só que a
 origem era o endereço, não o matcher:
