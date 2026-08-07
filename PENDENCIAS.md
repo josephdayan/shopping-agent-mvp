@@ -136,10 +136,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > 18 vitrines + rerank semântico por IA (skus validados, fallback determinístico, kill-switch)
 > + 7 consertos principiais no scorer (compostos usb-c, typo≥6, marca sem typo, bônus de
 > categoria/negação, desempate por variantes, diversificação de cores). Método de melhoria
-> agora é medido: golden set de 28 casos + `npx tsx scripts/eval-search.mts` (placar DET/IA);
-> estreia 27/28 · 28/28. Toda busca ruim reportada deve virar caso no golden ANTES do
+> agora é medido: golden set de 32 casos + `npx tsx scripts/eval-search.mts` (placar DET/IA);
+> hoje 31/32 · 32/32. Toda busca ruim reportada deve virar caso no golden ANTES do
 > conserto. Também corrigido: `talk-env.mts` não carregava `.env` (ESM `__dirname`) — o
 > talk-lia rodava sem IA mesmo com chave.
+>
+> **Varredura faz parte do método.** Passar 60 pedidos realistas pelo pipeline achou 4 bugs
+> não reportados: "cotonete" não achava o cotonete que está no catálogo; "leite" devolvia
+> loção de pele ("Leite de Rosas"), leite de coco e leite pet; "água" vinha com gás; e a
+> penalidade nova de item-pet punia refrigerante — em catálogo brasileiro **"PET" é a
+> garrafa plástica**. Todos consertados por regra geral, nunca por regra de produto.
 >
 > **Onboarding no mesmo lote:** validar a busca numa conversa real expôs 3 bugs que também
 > produziam "busca ruim", vindos do endereço: endereço com CEP junto virava lista de compras

@@ -179,9 +179,13 @@ de hoje está em
 > mais estrito — "miojo" não vira vinho "Miolo" —, marca sem typo, bônus de categoria, bônus
 > "sem X", diversificação de cores) → nada serve = linha livre do operador. Quando o rerank
 > roda, ele substitui o piso `conciergeMatchIsStrong`. Qualidade agora é MEDIDA:
-> golden set com 28 casos (`tests/helpers/search-golden.ts`), regressão determinística no
-> `npm test` e placar completo via `npx tsx scripts/eval-search.mts` — estreia **27/28
-> determinístico · 28/28 com IA**. Busca ruim nova → vira caso no golden → mede → conserta.
+> golden set com 32 casos (`tests/helpers/search-golden.ts`), regressão determinística no
+> `npm test` e placar completo via `npx tsx scripts/eval-search.mts` — **31/32 determinístico
+> · 32/32 com IA**. Busca ruim nova → vira caso no golden → mede → conserta.
+> O método já se pagou: varrer 60 pedidos realistas achou 4 bugs não reportados —
+> "cotonete" não achava o cotonete do catálogo, "leite" devolvia loção de pele
+> ("Leite de Rosas"), "água" vinha com gás, e a penalidade nova de item-pet punia
+> refrigerante porque em catálogo brasileiro **"PET" é a garrafa plástica**.
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 

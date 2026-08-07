@@ -186,14 +186,16 @@ function tokenMatchesWord(token: string, word: string): boolean {
   return false;
 }
 
-// Marca é nome próprio: typo-fuzzy contra marca é o pior falso positivo possível
-// ("miojo" casava com a vinícola "Miolo" e pontuava +4 de marca). Match de marca
-// exige exato ou prefixo — nunca distância de edição.
+// Marca é nome próprio: casar por aproximação com ela é o pior falso positivo possível,
+// porque vale +4 de score. Dois casos reais: "miojo" casava com a vinícola "Miolo" (typo)
+// e "leite" casava com a marca "Leiteria" (prefixo), roubando o topo do leite de verdade.
+// Só exato ou plural — "coca" continua achando a marca Coca-Cola, que é o caso que
+// justifica match por marca existir.
+function isSameNoun(token: string, word: string): boolean {
+  return word === token || word === `${token}s` || word === `${token}es` || token === `${word}s` || token === `${word}es`;
+}
 function tokenMatchesBrand(token: string, word: string): boolean {
-  if (token === word) return true;
-  if (token.length >= 4 && word.startsWith(token)) return true;
-  if (word.length >= 4 && token.startsWith(word) && token.length - word.length <= 3) return true;
-  return false;
+  return isSameNoun(token, word);
 }
 
 // The meaningful product tokens in a request (greetings/fillers removed).
@@ -213,11 +215,21 @@ const HUMAN_PRODUCT_WORDS = new Set(["shampoo", "xampu", "condicionador", "perfu
 // Qualquer marca de "é produto pet" no nome (inclui itens "para Cães E Gatos", que o
 // species-guard deixa passar por servirem as duas espécies).
 const PET_ANY_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|pet|aquario|peixes?|roedores?|passaros?)\b/;
+// Palavras do cliente que JÁ são de pet mesmo sem citar o bicho ("ração", "petisco"):
+// com elas, a penalidade de item-pet não faz sentido — todo candidato é pet.
+const PET_INTRINSIC_RE = /\b(racao|racoes|petiscos?|bifinhos?|areia|coleiras?|arranhador|aquario|antipulgas|comedouro|bebedouro|guia)\b/;
+// Marcas de item pet para a PENALIDADE geral. Sem o "pet" solto do PET_ANY_RE de
+// propósito: em catálogo brasileiro "PET" é a garrafa plástica ("Coca-Cola Pet 2L"),
+// então usá-lo aqui penalizava refrigerante como se fosse ração.
+const PET_SPECIES_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|aquario|peixes?|roedores?|passaros?)\b/;
 
 // Variantes "processadas" que só devem vencer quando pedidas ("café" = torrado/moído,
 // não sachê; "leite" nunca é condensado/fermentado/vegetal).
 const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada"]);
-const PROCESSED_BIGRAM_RE = /\bem po\b|\bde soja\b|\bde amendoas\b/;
+// "Leite DE COCO" é tão pouco "leite" quanto o de soja: quem pede leite quer o de vaca.
+// A lista existia mas estava incompleta, e o coco (barato, 200ml) vencia o desempate de
+// preço — pedir "leite" devolvia leite de coco.
+const PROCESSED_BIGRAM_RE = /\bem po\b|\bde soja\b|\bde amendoas\b|\bde coco\b|\bde castanha\b|\bde aveia\b|\bde arroz\b/;
 // Produto infantil/baby é variante: só rankeia bem se a query pedir criança.
 // Vale pra fase de vida pet também: "ração" sem falar idade = adulto (não filhote/sênior).
 // Exceção: categorias inerentemente infantis (fralda tem "Baby" no nome de fábrica).
@@ -252,7 +264,7 @@ function isDrinkPack(nameNorm: string): boolean {
 // Variantes "de dieta/estilo" usadas só como DESEMPATE (quem pede "arroz" quer o comum;
 // quem pede "leite" aceita integral/desnatado — ambos são leite). Termos veterinários
 // entram aqui: "ração" genérica não deve dar Veterinary Diets/Hipoalergênica primeiro.
-const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semidesnatado", "zero", "diet", "light", "organico", "organica", "vegano", "vegana", "hipoalergenica", "hipoalergenico", "veterinary", "vet", "terapeutica", "terapeutico", "castrados", "castrado", "castradas"]);
+const TIEBREAK_VARIANTS = new Set(["integral", "desnatado", "desnatada", "semidesnatado", "zero", "diet", "light", "organico", "organica", "vegano", "vegana", "hipoalergenica", "hipoalergenico", "veterinary", "vet", "terapeutica", "terapeutico", "castrados", "castrado", "castradas", "gas"]);
 
 // Nº de palavras de variante no nome que o cliente NÃO pediu — usado como desempate
 // (menos variantes = mais "produto básico"). O que vem depois de "sabor" é descrição
@@ -406,15 +418,30 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     nameWords.some((w) => CATEGORY_NOUNS.has(w) && tokenMatchesWordSyn(token, w))
   );
   if (score > 0 && (headHit || categoryHit)) score += 2;
-  // Pedido de UMA palavra ("ovos", "frango"): se ela não é o head nem a marca, o item é
-  // outra coisa que só CONTÉM a palavra (Macarrão com Ovos, Petisco de Frango) — zera.
-  // Exceção: substantivo de categoria vale em qualquer posição, porque beleza enterra
-  // o nome no meio ("Celebre Agora Feminino Desodorante COLÔNIA 100ml" é um perfume).
+  // Pedido de UMA palavra ("ovos", "frango"): se ela não é o head nem a marca, o item
+  // costuma ser outra coisa que só CONTÉM a palavra (Macarrão COM Ovos, Petisco DE
+  // Frango) — zera. O que separa esses do caso legítimo é a PREPOSIÇÃO: em "Macarrão com
+  // Ovos" a palavra é ingrediente/qualificador; em "Hastes Flexíveis Cotonetes" ela está
+  // justaposta ao head, nomeando o mesmo produto (e o cliente pede exatamente por ela).
+  // Sem esta distinção, pedir "cotonete" não achava o cotonete que está no catálogo.
+  // Substantivo de categoria vale em qualquer posição pelo mesmo motivo (beleza enterra
+  // o nome no meio: "Celebre Agora Feminino Desodorante COLÔNIA 100ml" é um perfume).
+  const QUALIFIER_MARKERS = new Set(["com", "de", "da", "do", "sem", "sabor", "para", "pra", "em", "tipo", "c"]);
+  // A apposição exige a MESMA palavra (ou plural dela), não o prefixo folgado que serve
+  // pra "refri"→"refrigerante": senão "leite" entra por "Iogurte Grego LEITERIA" e a
+  // exceção vira um buraco maior que a regra.
+  // …e só na frase inicial do nome (até a 3ª palavra), que é onde o catálogo brasileiro
+  // põe o produto. No fim do nome a palavra é sabor/complemento — "Petisco para Cachorro
+  // Purina FRANGO" não responde por "frango", mesmo sem preposição antes.
+  const appositionHit = effTokens.some((token) =>
+    nameWords.some((word, i) => isSameNoun(token, word) && i > 0 && i <= 2 && !QUALIFIER_MARKERS.has(nameWords[i - 1]))
+  );
   if (
     effTokens.length === 1 &&
     !headHit &&
     !categoryHit &&
-    !brandWords.some((w) => tokenMatchesWord(effTokens[0], w))
+    !appositionHit &&
+    !brandWords.some((w) => tokenMatchesBrand(effTokens[0], w))
   ) {
     return 0;
   }
@@ -436,6 +463,23 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     const processedHay = /\bachocolatado\b/.test(nameNorm) ? nameNorm.replace(/\bem po\b/g, " ") : nameNorm;
     if (!wantsProcessed && (nameWords.some((w) => PROCESSED_VARIANTS.has(w)) || PROCESSED_BIGRAM_RE.test(processedHay))) score -= 2;
     if (!PACK_ASK_RE.test(queryNorm) && isDrinkPack(nameNorm)) score -= 2;
+    // Quem não falou de bicho não está pedindo a versão pet. A guarda dura acima só vale
+    // pra higiene/beleza; aqui é a versão geral, e como PENALIDADE (não zero) porque
+    // existe item que só existe em versão pet. Palavra intrinsecamente pet desliga:
+    // pedir "ração" não pode punir toda ração por ela dizer "Cães" no nome.
+    if (!queryAnimal && PET_SPECIES_RE.test(nameNorm) && !PET_INTRINSIC_RE.test(queryNorm)) score -= 3;
+    // Pedido de UMA palavra genérica ("leite", "ovos", "café") = o produto básico. Um
+    // qualificador "DE x" que o cliente não pediu troca o TIPO do produto, não a variante:
+    // "Leite de Rosas" é loção de pele, "Leite de Coco" é ingrediente, "Ovos de Codorna"
+    // é outro ovo. Isto generaliza a lista fixa acima (que só tinha soja/amêndoas) — sem
+    // ela, quem pedia "leite" recebia loção, porque o desempate caía no preço.
+    if (effTokens.length === 1) {
+      const asked = new Set(effTokens);
+      const unrequested = [...nameNorm.matchAll(/\bde\s+([a-z]{3,})\b/g)].filter(
+        (m) => !asked.has(m[1]) && !words(query).includes(m[1])
+      );
+      if (unrequested.length) score -= 2;
+    }
     // Versão infantil/baby só quando pedida ("perfume" pra adulto não pode virar
     // Boti Baby; "shampoo" não pode virar Johnson's Baby). Pedir "infantil" inverte.
     if (!CHILD_VARIANT_RE.test(queryNorm) && isChildVariant(nameNorm)) score -= 2;

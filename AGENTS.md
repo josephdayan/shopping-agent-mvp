@@ -205,13 +205,35 @@ Desenho novo (implementado e testado):
    barato); e as 3 opções são **diversificadas** — cores do mesmo produto ocupam 1 vaga
    (pedir uma cor desliga a regra).
 
+**O método já se pagou no mesmo dia.** Rodar 60 pedidos realistas pelo pipeline (varredura
+exploratória, o passo "procurar busca ruim" do método) achou quatro bugs que ninguém tinha
+reportado, todos consertados por regra principial — nunca por regra de produto:
+
+- **"cotonete" não achava cotonete**, que ESTÁ no catálogo ("Hastes Flexíveis **Cotonetes**
+  Johnson & Johnson"). A regra de pedido-de-uma-palavra zerava tudo que não fosse head. O que
+  separa o caso legítimo do falso positivo é a **preposição**: em "Macarrão COM Ovos" a palavra
+  é ingrediente; em "Hastes Flexíveis Cotonetes" ela nomeia o produto. Agora vale quando está
+  justaposta e na frase inicial do nome (até a 3ª palavra) — no fim do nome é sabor
+  ("Petisco para Cachorro Purina FRANGO" não responde por "frango").
+- **"leite" devolvia loção de pele** ("Leite de Rosas"), leite de coco e leite pet. Três causas:
+  a lista de variantes processadas tinha soja/amêndoas mas não coco; a marca "Leiteria" casava
+  com "leite" por prefixo; e a versão pet não era penalizada. Agora: qualificador "de X" não
+  pedido penaliza em consulta de uma palavra (regra geral no lugar da lista), marca só casa
+  exato/plural (nome próprio não admite aproximação — foi o mesmo defeito do "Miolo") e item de
+  espécie pet perde pontos quando o cliente não falou de bicho.
+- **"água" vinha com gás** — "gas" entrou nas variantes de desempate, junto de integral/zero.
+- **Armadilha achada no próprio conserto:** em catálogo brasileiro **"PET" é a garrafa
+  plástica** ("Coca-Cola Pet 2L"). A penalidade de item-pet usava o mesmo regex do guarda
+  duro, que inclui "pet" solto, e passou a punir refrigerante como se fosse ração. A
+  penalidade agora usa só palavras de espécie.
+
 **Método novo — fim da tentativa-e-erro infinita.** A qualidade da busca agora é MEDIDA:
 `tests/helpers/search-golden.ts` guarda os casos rotulados (28 hoje);
 `tests/search-golden.test.ts` trava os determinísticos no `npm test` (regressão dura, roster
 completo de 18 lojas); `npx tsx scripts/eval-search.mts` roda o pipeline completo (extração +
 rerank com a chave real) e imprime o placar DET/IA. Fluxo de melhoria: busca ruim reportada →
-vira caso no golden → mede → conserta → placar sobe → commit. Placar de estreia: **27/28
-determinístico · 28/28 com IA**. Regra: mudança de scorer/prompt só entra acompanhada do caso
+vira caso no golden → mede → conserta → placar sobe → commit. Placar atual: **31/32
+determinístico · 32/32 com IA**. Regra: mudança de scorer/prompt só entra acompanhada do caso
 que a justifica.
 
 Bônus: consertado o bug que escondia a IA dos scripts — `scripts/talk-env.mts` usava

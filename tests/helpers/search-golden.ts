@@ -75,6 +75,34 @@ export const GOLDEN_CASES: GoldenCase[] = [
   { name: "água com gás", query: "agua com gas", top1Include: /com gas/, deterministic: true },
   { name: "detergente", query: "detergente", top1Include: /detergente/, deterministic: true },
   { name: "miojo acha o lámen", query: "miojo", top1Include: /miojo|lamen/, deterministic: true },
+  {
+    name: "leite é de vaca — não de coco, não loção, não pet",
+    query: "leite",
+    top1Include: /^leite/,
+    allExclude: /de (coco|soja|amendoas|castanha|aveia|rosas)|\bpet\b|gatos?|caes/,
+    deterministic: true,
+    note: "3 bugs empilhados: 'de coco' faltava na lista de variantes, a marca 'Leiteria' casava por prefixo e a versão pet não era penalizada — o cliente recebia loção de pele"
+  },
+  {
+    name: "água sem qualificador é água mineral (com gás só quando pedido)",
+    query: "agua",
+    top1Include: /agua mineral|agua natural/,
+    deterministic: true
+  },
+  {
+    name: "cotonete acha o cotonete (nome comercial põe o termo em 2º lugar)",
+    query: "cotonete",
+    top1Include: /cotonete|haste/,
+    deterministic: true,
+    note: "a regra de pedido-de-1-palavra zerava 'Hastes Flexíveis COTONETES' por não ser o head"
+  },
+  {
+    name: "ovos: a palavra como ingrediente não vale (regra que a apposição não pode afrouxar)",
+    query: "ovos",
+    top1Include: /^ovos?\b/,
+    allExclude: /macarrao|biscoito/,
+    deterministic: true
+  },
 
   // ---- verticais ----
   { name: "perfume feminino vai pra beleza", query: "perfume feminino", top1Include: /colonia|perfume|eau de/, deterministic: true },
