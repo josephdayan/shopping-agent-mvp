@@ -194,6 +194,14 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **07/08 — PUBLICADO em produção.** Deploy `dpl_Hg6fJBVaD7a8xMWZPVsKqP5eFuPg` (commit
+> `e8dea9f`, READY) com autorização do dono: busca com rerank por IA + golden set, consertos
+> de matcher/onboarding, cotação sem engolir pedido novo, e os commits do cartão salvo de
+> 05/08 (flag desligada — sem mudança de comportamento). Smoke: landing 200, `/ops` 200,
+> webhook rejeitando sem assinatura. Verificação humana pendente: conversa real no WhatsApp
+> (carregador usb c, cotonete, item durante cotação, emoji 🙂) e limpar pedidos antigos
+> presos em `awaiting_operator_quote` no `/ops`.
+
 > **07/08 — cotação do operador deixou de engolir pedido novo.** Screenshot de produção:
 > "quero um cotonete" com pedido em `awaiting_operator_quote` respondia "segura aí" e
 > descartava o item — o cliente teve que cancelar pra pedir de novo. Agora o item entra no

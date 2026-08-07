@@ -164,9 +164,19 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > do dono mostrou: item pedido durante `awaiting_operator_quote` era descartado ("segura aí")
 > e o cliente precisou cancelar. Corrigido: o item entra no mesmo pedido como linha livre, com
 > nota no /ops. Os outros dois problemas da tela (cotonete sem match e emoji literal
-> `🙂`) são o código antigo em produção — TODO o trabalho de busca de 06-07/08
-> está em `main` local, ainda sem push/deploy. Próxima ação: push + deploy + smoke, e conferir
-> o emoji na primeira conversa real pós-deploy.
+> `🙂`) eram o código antigo em produção.
+>
+> **07/08 — PUBLICADO.** Com autorização do dono, os 8 commits (busca com rerank + golden set,
+> consertos de matcher e onboarding, cotação sem engolir, e os 2 commits do cartão salvo de
+> 05/08 com a flag desligada) foram ao GitHub e o deploy
+> `dpl_Hg6fJBVaD7a8xMWZPVsKqP5eFuPg` (commit `e8dea9f`) ficou `READY` em Production. Smoke:
+> landing 200, `/ops` 200, webhook 403 (GET) / 401 (POST sem assinatura). Pendências de
+> verificação humana pós-deploy: (1) mandar uma conversa real no WhatsApp e conferir
+> carregador usb c / cotonete / adicionar item durante cotação; (2) conferir se o emoji 🙂
+> renderiza (o literal `\uD83D…` não existe no fonte — se persistir, é build, eu caço);
+> (3) conferir a fila do /ops — havia pedido antigo preso em `awaiting_operator_quote`, que
+> foi o gatilho do bug da tela. O rerank exige `OPENAI_API_KEY` em Production (sem ela, cai
+> no determinístico, que já cobre 31/32); kill-switch: `LIA_SEARCH_RERANK_OFF=true`.
 
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
