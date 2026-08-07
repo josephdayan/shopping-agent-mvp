@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-04._
+_Última atualização: 2026-08-06._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -171,6 +171,70 @@ O formulário recusou português para esse tipo de pergunta; a mesma solicitaç�
 inglês. Abertura do ticket **não é habilitação nem prazo**: a flag continua desligada e o gate
 agora é aguardar resposta da Meta. Acompanhar em
 <https://business.facebook.com/direct-support/case-detail/37565409896407734/?business_id=1802515380110705>.
+
+### Atualização 06/08/2026 — busca da vitrine: a IA passa a escolher o produto (rerank + golden set)
+
+Caso real do dono: "carregador usb c" devolvia **3 carregadores veiculares** (o mesmo item em
+3 cores). Quatro falhas léxicas empilhadas: o token "c" era descartado (1 letra); o item certo
+("Carregador de Parede … Usb-C", Pague Menos) EMPATAVA no score com o veicular; o roteador de
+loja única resolvia o empate pela ORDEM do registry (Petz vem antes); e o desempate final era
+preço. Diagnóstico geral: o matcher conta palavras em comum, não entende o pedido — e a IA,
+que já rodava na extração, **nunca participava da escolha do produto**.
+
+Desenho novo (implementado e testado):
+
+1. **Candidatos largos** — `gatherCrossStoreCandidates` (stores/index.ts) junta o top-4 de
+   TODAS as vitrines e rankeia globalmente (score → variantes não pedidas → preço). No
+   concierge, o roteador de loja única (`pickStoreForQueries`) sai do caminho: a cesta já era
+   mista mesmo (quem compra é o operador). O fluxo legado travado em uma loja não muda.
+2. **Rerank por IA** — `rerankShoppingOptions` (adapters/ai.ts): UMA chamada batched por
+   mensagem decide, por item, quais candidatos são REALMENTE o produto pedido e em que ordem,
+   diversificando cor/embalagem. Lista vazia = nada serve → linha livre do operador (o
+   resultado honesto). Skus são validados contra os candidatos enviados (IA não inventa
+   produto); timeout de 6s (`LIA_SEARCH_RERANK_TIMEOUT_MS`) e kill-switch
+   `LIA_SEARCH_RERANK_OFF`; qualquer falha cai no determinístico de sempre. Quando o rerank
+   roda, ELE substitui o piso `conciergeMatchIsStrong` — a IA entende "escova de dente" ≈
+   "Escova Dental", que o piso léxico mata.
+3. **Determinístico melhor mesmo sem IA** (regras principiais, nunca por produto): compostos
+   ("usb c"/"tipo c" viram token único; o genérico "usb" ainda serve o específico "Usb-C");
+   typo-fuzzy passa a exigir palavra de catálogo com 6+ letras ("miojo" casava com a vinícola
+   **Miolo** e com "Miolo de Alcatra" — em 5 letras, palavras reais colidem a distância 1);
+   marca nunca typo-casa (nome próprio); substantivo de categoria ganha o bônus de head
+   ("Pack Macarrão … Nissin **Miojo** 510g" vale como miojo); "sem X" bonifica quem diz
+   "Sem/Zero X" no nome ("leite sem lactose" acha o Italac sem lactose, não o desnatado mais
+   barato); e as 3 opções são **diversificadas** — cores do mesmo produto ocupam 1 vaga
+   (pedir uma cor desliga a regra).
+
+**Método novo — fim da tentativa-e-erro infinita.** A qualidade da busca agora é MEDIDA:
+`tests/helpers/search-golden.ts` guarda os casos rotulados (28 hoje);
+`tests/search-golden.test.ts` trava os determinísticos no `npm test` (regressão dura, roster
+completo de 18 lojas); `npx tsx scripts/eval-search.mts` roda o pipeline completo (extração +
+rerank com a chave real) e imprime o placar DET/IA. Fluxo de melhoria: busca ruim reportada →
+vira caso no golden → mede → conserta → placar sobe → commit. Placar de estreia: **27/28
+determinístico · 28/28 com IA**. Regra: mudança de scorer/prompt só entra acompanhada do caso
+que a justifica.
+
+Bônus: consertado o bug que escondia a IA dos scripts — `scripts/talk-env.mts` usava
+`__dirname` (inexistente em ESM), o `catch` engolia o erro e o `.env` nunca era carregado; o
+`talk-lia` sempre rodou determinístico mesmo com `OPENAI_API_KEY` presente no `.env` (origem
+da crença "não tem chave local"). Em produção o rerank vale automaticamente onde
+`OPENAI_API_KEY` já está configurada (a mesma chave da extração).
+
+**Três bugs de onboarding achados ao validar a busca numa conversa real (mesmos consertados).**
+Eles produziam exatamente o sintoma que motivou o trabalho — busca devolvendo lixo — só que a
+origem era o endereço, não o matcher:
+
+1. **Endereço + CEP na mesma mensagem** ("Av. Paulista 1000, apto 5, Bela Vista, São Paulo,
+   01310-100" — o jeito mais natural de responder) era interceptado pelo ramo de CEP, que
+   tratava o resto como ITENS: a Lia respondia "Já anotei: 1x apto 5" e pedia o endereço de
+   novo. Agora `looksLikeDeliveryAddress` decide, e o endereço salvo vem do texto **cru** (com
+   acento, maiúscula e vírgula) — o normalizado ia pro motoboy como "av paulista 1000 apto 5".
+2. **Endereço como primeira mensagem** (cliente que não diz "oi") virava lista de compras pelo
+   mesmo motivo; agora é salvo.
+3. **Pedido feito enquanto a Lia espera o endereço** era descartado em silêncio; agora fica
+   guardado em `pendingRequest` e roda assim que o endereço chega.
+
+Regressões em `tests/manual-concierge.test.ts` (3 testes novos).
 
 ### Atualização 03/08/2026 — vitrine híbrida (o cliente passa a ver produto)
 

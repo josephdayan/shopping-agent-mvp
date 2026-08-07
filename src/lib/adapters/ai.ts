@@ -458,6 +458,105 @@ export async function extractShoppingList(text: string): Promise<ShoppingExtract
   }
 }
 
+export type RerankCandidate = { sku: string; name: string; brand?: string; price: number; store: string };
+export type RerankLine = { query: string; candidates: RerankCandidate[] };
+export type RerankResult = { lines: { skus: string[] }[] };
+
+// A decisão de QUAL produto mostrar deixou de ser só léxica: o scorer de tokens conta
+// palavras em comum, então "carregador usb c" empatava com "carregador veicular 2 USB"
+// e o cliente recebia acessório de carro (caso real, 06/08). Aqui a IA — que já roda na
+// extração — passa a julgar o MATCH: recebe a mensagem do cliente e os candidatos de
+// catálogo por item, e devolve só o que um atendente humano entregaria sem reclamação.
+// Lista vazia = nenhum candidato serve (a linha vira livre e o operador cota — errar
+// pra menos é melhor que sugerir errado). Retorna null se OpenAI está off/falhou, para
+// o chamador cair no ranking determinístico de hoje. Skus são validados contra os
+// candidatos enviados: a IA nunca inventa produto.
+export async function rerankShoppingOptions(message: string, lines: RerankLine[]): Promise<RerankResult | null> {
+  if (!process.env.OPENAI_API_KEY || process.env.LIA_SEARCH_RERANK_OFF === "true") return null;
+  if (!lines.length || lines.every((line) => !line.candidates.length)) return null;
+  try {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      // O webhook do WhatsApp precisa responder; sem resposta em 6s, seguimos com o
+      // ranking determinístico em vez de deixar o cliente no vácuo.
+      signal: AbortSignal.timeout(Number(process.env.LIA_SEARCH_RERANK_TIMEOUT_MS ?? 6000)),
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "Você é a Lia, concierge de compras no WhatsApp. Recebe a MENSAGEM do cliente e, para cada ITEM pedido, uma lista de CANDIDATOS do catálogo (sku, nome, marca, preço, loja). Para cada item, escolha até 3 candidatos que sejam REALMENTE o produto pedido, em ordem de recomendação. Regras: (1) Só inclua um candidato se um atendente humano o entregaria sem o cliente reclamar — mesmo tipo, forma e uso; palavras parecidas não bastam. Ex.: pedido 'carregador usb c' → carregador de parede/cabo USB-C serve; 'carregador veicular' (de carro) NÃO serve, a menos que o cliente tenha pedido veicular. Pedido 'escova de dente' → 'Escova Dental' serve (mesmo produto, outro nome); 'escova de cabelo' não. (2) Atributos que o cliente pediu (tamanho, cor, sabor, marca, espécie/porte do pet, 'sem açúcar', 'sem lactose') são obrigatórios quando os candidatos os distinguem. (3) Diversifique as até 3 escolhas: não repita o mesmo produto em cor/embalagem diferente; prefira marcas, apresentações ou faixas de preço diferentes, do mais recomendado para o menos. (4) Se NENHUM candidato serve de verdade, devolva lista vazia para aquele item — um operador humano cota e compra qualquer coisa, então lista vazia é melhor que sugestão errada. (5) Use APENAS skus da lista daquele item; nunca invente. (6) Devolva exatamente um resultado por item, na mesma ordem dos itens. Responda apenas JSON válido."
+          },
+          {
+            role: "user",
+            content: JSON.stringify({
+              mensagem: message,
+              itens: lines.map((line) => ({
+                pedido: line.query,
+                candidatos: line.candidates.map((c) => ({ sku: c.sku, nome: c.name, marca: c.brand ?? "", preco: c.price, loja: c.store }))
+              }))
+            })
+          }
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name: "shopping_rerank",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                lines: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    properties: {
+                      skus: { type: "array", items: { type: "string" } }
+                    },
+                    required: ["skus"]
+                  }
+                }
+              },
+              required: ["lines"]
+            }
+          }
+        }
+      })
+    });
+    if (!response.ok) {
+      console.warn("[ai:rerank:fallback]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const jsonText = payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text;
+    if (!jsonText) return null;
+    const parsed = JSON.parse(jsonText) as RerankResult;
+    if (!Array.isArray(parsed.lines) || parsed.lines.length !== lines.length) return null;
+    return {
+      lines: parsed.lines.map((line, i) => {
+        const valid = new Set(lines[i].candidates.map((c) => c.sku));
+        const seen = new Set<string>();
+        const skus = (line.skus ?? []).filter((sku) => {
+          if (!valid.has(sku) || seen.has(sku)) return false;
+          seen.add(sku);
+          return true;
+        });
+        return { skus: skus.slice(0, 3) };
+      })
+    };
+  } catch (error) {
+    console.warn("[ai:rerank:error]", error);
+    return null;
+  }
+}
+
 async function classifyTurnWithOpenAI(text: string, context: TurnContext): Promise<TurnClassification | null> {
   if (!process.env.OPENAI_API_KEY) return null;
   const normalized = normalize(text).trim();

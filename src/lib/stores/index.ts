@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch } from "./types";
+import { scoreCatalogMatch, variantCount } from "./types";
 import { petzStore } from "./petz";
 import { boticarioStore } from "./boticario";
 import { obaStore } from "./oba";
@@ -143,6 +143,30 @@ export async function searchAcrossStores(query: string, limitPerStore = 4) {
     })
   );
   return perStore.flat();
+}
+
+// Candidatos LARGOS para uma linha do pedido, vindos de TODAS as vitrines. Existe
+// porque eleger uma loja única por palpite léxico esconde o item certo: no empate, a
+// ordem do registry decidia — foi assim que "carregador usb c" caiu na Petz (3
+// veiculares) com o carregador de parede USB-C parado na Pague Menos. Quem decide o
+// que aparece é a camada de cima (rerank semântico; fallback = este ranking global).
+export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
+export async function gatherCrossStoreCandidates(query: string, limit = 12): Promise<StoreCandidate[]> {
+  const hits = await searchAcrossStores(query, 4);
+  return hits
+    .map((hit) => ({ hit, score: scoreCatalogMatch(query, hit.item) }))
+    .filter((entry) => entry.score > 0)
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        // Mesmos desempates do rankCatalog dentro da loja: produto básico (menos
+        // variantes não pedidas) antes do mais barato — senão "leite sem lactose"
+        // perde para o desnatado de outra vitrine só porque ele custa menos.
+        variantCount(query, a.hit.item) - variantCount(query, b.hit.item) ||
+        a.hit.item.unitPrice - b.hit.item.unitPrice
+    )
+    .slice(0, limit)
+    .map((entry) => entry.hit);
 }
 
 export type { CatalogItem, StoreConnector, StoreUnit };

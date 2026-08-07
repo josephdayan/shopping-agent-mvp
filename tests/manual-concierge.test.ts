@@ -153,6 +153,45 @@ test("vitrine híbrida: fechar a lista com escolha pendente NÃO descarta o item
   );
 });
 
+// ---------- onboarding: o endereço não pode virar lista de compras (06/08) ----------
+// Achados ao validar a busca numa conversa real: o jeito mais natural de responder
+// ("Av. Paulista 1000, apto 5, Bela Vista, São Paulo, 01310-100") caía no parser de
+// itens e a Lia respondia "Já anotei: 1x apto 5" — e ainda pedia o endereço de novo.
+
+test("onboarding: endereço com CEP na mesma mensagem é salvo (não vira '1x apto 5')", async (t) => {
+  if (!dbOk) return t.skip();
+  const phone = newPhone();
+  const c = driver(phone);
+  const out = await c.send("Av. Paulista 1000, apto 5, Bela Vista, São Paulo, 01310-100");
+  assert.match(out, /Endere(ç|c)o salvo/i);
+  // O texto do endereço nunca pode aparecer como item anotado.
+  assert.doesNotMatch(out, /1x apto|1x Av|Já anotei/i);
+  // E vai pro courier como o cliente escreveu — com acento, maiúscula e vírgula.
+  const user = await prisma.user.findUnique({ where: { phone } });
+  assert.equal(user?.defaultAddress, "Av. Paulista 1000, apto 5, Bela Vista, São Paulo");
+  assert.equal(user?.cep, "01310-100");
+});
+
+test("onboarding: endereço como PRIMEIRA mensagem da conversa é salvo, não buscado", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = driver(newPhone());
+  const out = await c.send("Rua das Flores, 123, Bela Vista, São Paulo");
+  assert.match(out, /Endere(ç|c)o salvo/i);
+  assert.doesNotMatch(out, /Já anotei|1x Rua/i);
+});
+
+test("onboarding: pedido feito enquanto a Lia espera o endereço não é descartado", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = driver(newPhone());
+  await c.send("oi");
+  // Cliente responde com o PEDIDO em vez do endereço — a Lia repergunta o endereço…
+  const asked = await c.send("preciso de um carregador usb c");
+  assert.match(asked, /endere(ç|c)o/i);
+  // …e, quando o endereço chega, o pedido guardado é buscado (não sumiu).
+  const after = await c.send("Rua das Flores, 123, Bela Vista, São Paulo, 01310-100");
+  assert.match(after.toLowerCase(), /carregador/);
+});
+
 test("concierge completo: pede → operador cota → paga → compra → motoboy do operador → entregue", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

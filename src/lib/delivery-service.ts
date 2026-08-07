@@ -1,11 +1,20 @@
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
-import { getStore, DEFAULT_STORE_KEY, pickStoreForQueries, allUnits, type StoreConnector } from "@/lib/stores";
+import {
+  getStore,
+  DEFAULT_STORE_KEY,
+  pickStoreForQueries,
+  gatherCrossStoreCandidates,
+  allUnits,
+  type StoreCandidate,
+  type StoreConnector
+} from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import {
   attrMatchesItem,
   conciergeMatchIsStrong,
+  diversifyOptions,
   inferCatalogRefinement,
   queryTokens,
   scoreCatalogMatch
@@ -22,7 +31,7 @@ import {
   getOneClickCredential
 } from "@/lib/payments/whatsapp-pay";
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
-import { extractShoppingList } from "@/lib/adapters/ai";
+import { extractShoppingList, rerankShoppingOptions } from "@/lib/adapters/ai";
 import {
   detectIntent,
   detectPaymentMethod,
@@ -359,53 +368,101 @@ type ChoicesResult = {
   // disso para transformar "2 pães de forma" numa linha livre com qty=2 em vez de perder o
   // número no caminho (o fluxo legado só mostra os nomes, por isso `notFound` é string[]).
   notFoundLines: ParsedLine[];
+  // As opções já passaram pelo julgamento semântico da IA (rerank). Quando true, o piso
+  // léxico do concierge NÃO deve rodar por cima: a IA entende sinônimos que o piso mata
+  // ("escova de dente" ≈ "Escova Dental") e já descartou o que não serve.
+  reranked: boolean;
   greetingOnly: boolean;
   containsMedicine: boolean;
 };
 
 // Like buildBasket, but instead of auto-picking the top match it returns up to 3
 // OPTIONS per item so the customer chooses (numbered list — tappable buttons need an
-// approved WhatsApp Business sender). Items with a single match are auto-added.
+// approved WhatsApp Business sender).
 async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus?: Map<string, number>): Promise<ChoicesResult> {
   const { lines, greetingOnly, containsMedicine } = await extractLines(text);
 
-  // One order = one store. If the order already has a store (items added earlier),
-  // stay on it; otherwise pick the store that best covers this basket.
-  const results = await Promise.all(
+  // Candidatos por linha. No concierge sem loja travada a busca é LARGA (todas as
+  // vitrines): eleger uma loja única por palpite léxico escondia o item certo — no
+  // empate a ordem do registry decidia, e "carregador usb c" caía na Petz (veicular)
+  // com o carregador de parede USB-C parado na Pague Menos. No fluxo legado vale
+  // "one order = one store", então a linha continua buscando numa loja só.
+  const crossStore = !lockedStoreKey && manualConciergeEnabled();
+  const perLine = await Promise.all(
     lines.map(async (line) => {
       // "vinho até 40 reais": o teto NÃO é termo de busca — vira filtro sobre o
       // preço exibido (com markup), senão a lista mostra item acima do que pediram.
       const { phrase: searchPhrase, cap } = splitPriceCap(line.phrase);
-      const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
-      const found = await lineStore.searchItems(searchPhrase, 12);
-      const options = cap != null ? found.filter((o) => display(o.unitPrice) <= cap) : found;
-      options.sort((a, b) => (preferredSkus?.get(b.sku) ?? 0) - (preferredSkus?.get(a.sku) ?? 0));
-      return { line: { ...line, phrase: searchPhrase }, store: lineStore, options: options.slice(0, 3) };
+      let candidates: StoreCandidate[];
+      if (crossStore) {
+        candidates = await gatherCrossStoreCandidates(searchPhrase, 12);
+      } else {
+        const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
+        candidates = (await lineStore.searchItems(searchPhrase, 12)).map((item) => ({ store: lineStore, item }));
+      }
+      if (cap != null) candidates = candidates.filter((c) => display(c.item.unitPrice) <= cap);
+      // Recompra: o que o cliente já escolheu antes sobe (sort estável preserva o
+      // ranking de relevância entre itens sem histórico).
+      candidates.sort((a, b) => (preferredSkus?.get(b.item.sku) ?? 0) - (preferredSkus?.get(a.item.sku) ?? 0));
+      return { line: { ...line, phrase: searchPhrase }, candidates };
     })
   );
+
+  // UMA chamada de IA julga todas as linhas: dos candidatos, o que é realmente o
+  // produto pedido, em que ordem — e lista vazia quando nada serve (a linha vira
+  // livre/não-achei, que é o resultado honesto). IA off/falhou → null → ranking
+  // determinístico de sempre, diversificado.
+  const withCandidates = perLine.filter((entry) => entry.candidates.length);
+  const rerank = withCandidates.length
+    ? await rerankShoppingOptions(
+        text,
+        withCandidates.map((entry) => ({
+          query: entry.line.phrase,
+          candidates: entry.candidates.map((c) => ({
+            sku: c.item.sku,
+            name: c.item.name,
+            brand: c.item.brand,
+            price: display(c.item.unitPrice),
+            store: c.store.label
+          }))
+        }))
+      )
+    : null;
+  const rerankedSkus = new Map<(typeof perLine)[number], string[]>();
+  if (rerank) withCandidates.forEach((entry, i) => rerankedSkus.set(entry, rerank.lines[i].skus));
+
   const autoAdded: BasketItem[] = [];
   const pending: PendingChoice[] = [];
   const notFound: string[] = [];
   const notFoundLines: ParsedLine[] = [];
-  for (const { line, store, options } of results) {
+  let firstStore: StoreConnector | undefined;
+  for (const entry of perLine) {
+    const { line, candidates } = entry;
+    const bySku = new Map(candidates.map((c) => [c.item.sku, c]));
+    const chosen = rerankedSkus.get(entry);
+    const options: StoreCandidate[] = chosen
+      ? chosen.map((sku) => bySku.get(sku)).filter((c): c is StoreCandidate => Boolean(c))
+      : diversifyOptions(line.phrase, candidates.map((c) => c.item), 3).map((item) => bySku.get(item.sku)!);
     if (!options.length) {
       notFound.push(line.phrase);
       notFoundLines.push(line);
-    } else {
-      pending.push({
-        query: line.phrase,
-        qty: line.qty,
-        ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
-        options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, storeKey: store.key, storeLabel: store.label }))
-      });
+      continue;
     }
+    firstStore = firstStore ?? options[0].store;
+    pending.push({
+      query: line.phrase,
+      qty: line.qty,
+      ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
+      options: options.slice(0, 3).map(({ store, item: o }) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, storeKey: store.key, storeLabel: store.label }))
+    });
   }
   return {
-    store: results[0]?.store ?? getStore(lockedStoreKey),
+    store: firstStore ?? getStore(lockedStoreKey),
     autoAdded: dedupeBasket(autoAdded),
     pending,
     notFound,
     notFoundLines,
+    reranked: Boolean(rerank),
     greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
     containsMedicine
   };
@@ -1003,7 +1060,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
 
   // ---- CEP (onboarding, requested change, or spontaneously sent) ----
   if (intent.kind === "cep") {
-    await handleNewCep(phone, user.id, convo.id, ctx, intent.cep, Boolean(savedCep), intent.rest);
+    await handleNewCep(phone, user.id, convo.id, ctx, intent.cep, Boolean(savedCep), intent.rest, text);
     return;
   }
 
@@ -1038,6 +1095,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
       ctx.step = "need_address";
       await writeCtx(convo.id, ctx);
       await reply(phone, copy.askFullDeliveryAddress());
+      return;
+    }
+    // Cliente que abre a conversa mandando o endereço direto (sem "oi") está respondendo
+    // à pergunta que ainda nem foi feita — salvar, não tratar como lista de compras
+    // ("1x Av Paulista 1000", "1x apto 5").
+    if (looksLikeDeliveryAddress(text)) {
+      ctx.flow = "delivery";
+      await handleDeliveryAddress(phone, user.id, convo.id, ctx, user.cep, text);
       return;
     }
     const lines = intent.kind === "free_text" ? parseBasketLines(text) : [];
@@ -1523,8 +1588,12 @@ async function handleNewCep(
   cep: string,
   hadCepBefore: boolean,
   // Itens que vieram JUNTO do CEP ("meu cep é X, quero arroz e leite") — processados
-  // depois de salvar o endereço, nunca descartados.
-  restItems?: string
+  // depois de salvar o endereço, nunca descartados. Já vem normalizado (sem acento/
+  // pontuação), o que serve pra busca mas não pra endereço — daí o rawText.
+  restItems?: string,
+  // Mensagem original. O endereço que vai pro courier tem que sair daqui: "Av Paulista
+  // 1000, apto 5" não pode virar "av paulista 1000 apto 5" no rótulo da entrega.
+  rawText?: string
 ) {
   const normalizedCep = cep.replace(/\D/g, "");
   const previousCep = ctx.cep?.replace(/\D/g, "");
@@ -1578,9 +1647,27 @@ async function handleNewCep(
   }
   ctx.flow = "delivery";
   await prisma.user.update({ where: { id: userId }, data: { cep } });
+  // "Av Paulista 1000, Bela Vista, São Paulo, 01310-100" é UMA mensagem com endereço E
+  // CEP — o jeito mais natural de responder. O resto da mensagem só é "itens" quando não
+  // é a própria rua: sem esta checagem o endereço virava pedido ("1x apto 5") e o cliente
+  // ainda tinha que redigitar tudo.
+  const restIsAddress = Boolean(restItems && looksLikeDeliveryAddress(restItems));
+  if (restIsAddress && !ctx.deliveryAddressVerified) {
+    // O texto ORIGINAL menos o CEP — com acento, maiúscula e vírgula, do jeito que o
+    // motoboy precisa ler. Só cai no `restItems` normalizado se o raw não sobreviver.
+    const fromRaw = (rawText ?? "")
+      .replace(/\b\d{5}-?\d{3}\b/, " ")
+      .replace(/\s*[,;]\s*$/, "")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+      .replace(/[,;]+$/, "");
+    ctx.deliveryAddress = looksLikeDeliveryAddress(fromRaw) ? fromRaw : restItems!.trim();
+    ctx.deliveryAddressVerified = true;
+    await prisma.user.update({ where: { id: userId }, data: { defaultAddress: ctx.deliveryAddress } });
+  }
   // Itens enviados na MESMA mensagem do CEP — ou guardados no onboarding — entram no
   // fluxo NORMAL de busca (com opções e preço), nunca auto-escolhidos.
-  const queued = [restItems, ctx.pendingRequest].filter(Boolean).join(", ").trim();
+  const queued = [restIsAddress ? undefined : restItems, ctx.pendingRequest].filter(Boolean).join(", ").trim();
   ctx.pendingRequest = queued || undefined;
   if (!ctx.deliveryAddressVerified) {
     ctx.step = "need_address";
@@ -1617,6 +1704,16 @@ async function handleNewCep(
   await reply(phone, hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedAskItems(shownAddress));
 }
 
+// Uma mensagem é o ENDEREÇO de entrega (e não um pedido de produto)? Marcador de
+// logradouro + número é o menor sinal confiável, sem tentar parsing frágil. Serve às
+// duas pontas: aceitar o endereço e — no caminho do CEP — não confundir a rua com item.
+function looksLikeDeliveryAddress(text: string): boolean {
+  const address = text.trim();
+  const hasStreet = /\b(?:rua|r\.?|avenida|av\.?|alameda|travessa|estrada|rodovia|pra[çc]a|largo)\b/i.test(address);
+  const hasNumber = /(?:\d|\bs\/?n\b)/i.test(address);
+  return address.length >= 12 && hasStreet && hasNumber;
+}
+
 async function handleDeliveryAddress(
   phone: string,
   userId: string,
@@ -1626,12 +1723,13 @@ async function handleDeliveryAddress(
   rawAddress: string
 ) {
   const address = rawAddress.trim();
-  // Avoid saving a product message such as "Coca 2L" as the delivery address while
-  // the customer is in the one-time address setup. A street marker plus number is
-  // the smallest reliable signal we can require without attempting fragile parsing.
-  const hasStreet = /\b(?:rua|r\.?|avenida|av\.?|alameda|travessa|estrada|rodovia|pra[çc]a|largo)\b/i.test(address);
-  const hasNumber = /(?:\d|\bs\/?n\b)/i.test(address);
-  if (address.length < 12 || !hasStreet || !hasNumber) {
+  if (!looksLikeDeliveryAddress(address)) {
+    // Não é endereço — mas TAMBÉM não é lixo: quem responde "preciso de um carregador"
+    // aqui está fazendo o pedido, não errando o endereço. Guardar em vez de descartar,
+    // pra rodar a busca assim que o endereço chegar (senão o pedido some em silêncio).
+    if (queryTokens(address).length && !looksLikeMedicine(address)) {
+      ctx.pendingRequest = ctx.pendingRequest ? `${ctx.pendingRequest}, ${address}` : address;
+    }
     ctx.step = "need_address";
     await writeCtx(convoId, ctx);
     await reply(phone, copy.askFullDeliveryAddress());
@@ -2086,10 +2184,16 @@ async function handleConciergeRequest(
   // Piso de relevância próprio do concierge: opção que não responde pelo que o cliente
   // escreveu é descartada e a linha volta a ser livre. Sugerir errado é pior que não
   // sugerir, porque a linha livre resolve o pedido de verdade.
+  //
+  // Quando o rerank de IA rodou, ELE é o piso: já descartou o que não serve e entende
+  // sinônimos que o piso léxico mata ("escova de dente" ≈ "Escova Dental"). Rodar o
+  // piso por cima desfaria exatamente esses acertos.
   const pending: PendingChoice[] = [];
   const weakLines: ParsedLine[] = [];
   for (const choice of raw.pending) {
-    const strong = choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
+    const strong = raw.reranked
+      ? choice.options
+      : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
     if (strong.length) pending.push({ ...choice, options: strong });
     else weakLines.push({ phrase: choice.query, qty: choice.qty, ...(choice.qtyExplicit ? { qtyExplicit: true } : {}) });
   }

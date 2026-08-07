@@ -1,0 +1,77 @@
+import "./helpers/golden-env";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+
+import { gatherCrossStoreCandidates, listStores } from "../src/lib/stores";
+import { conciergeMatchIsStrong, diversifyOptions, normalizeText } from "../src/lib/stores/types";
+import { GOLDEN_CASES } from "./helpers/search-golden";
+
+// Piso de regressão da busca: o pipeline determinístico (sem OpenAI) tem que passar
+// todos os casos `deterministic: true` do golden. Espelha o fallback do buildChoices
+// do concierge: candidatos largos em todas as vitrines → top-3 diversificado → piso
+// de relevância. Se mudar lá, mude aqui.
+async function deterministicOptions(query: string): Promise<string[]> {
+  const candidates = await gatherCrossStoreCandidates(query, 12);
+  const top3 = diversifyOptions(query, candidates.map((c) => c.item), 3);
+  return top3.filter((item) => conciergeMatchIsStrong(query, item)).map((item) => normalizeText(item.name));
+}
+
+for (const c of GOLDEN_CASES.filter((c) => c.deterministic)) {
+  test(`golden determinístico: ${c.name}`, async () => {
+    const shown = await deterministicOptions(c.query);
+    if (c.none) {
+      assert.deepEqual(shown, [], `"${c.query}" deveria ser linha livre, mas mostrou: ${shown.join(" | ")}`);
+      return;
+    }
+    assert.ok(shown.length > 0, `"${c.query}" não mostrou nenhuma opção`);
+    if (c.top1Include) {
+      assert.match(shown[0], c.top1Include, `1ª opção de "${c.query}" foi: ${shown[0]}`);
+    }
+    if (c.top1Exclude) {
+      assert.doesNotMatch(shown[0], c.top1Exclude, `1ª opção de "${c.query}" foi: ${shown[0]}`);
+    }
+    if (c.allExclude) {
+      for (const name of shown) {
+        assert.doesNotMatch(name, c.allExclude, `"${c.query}" mostrou opção proibida: ${name}`);
+      }
+    }
+  });
+}
+
+test("golden: as 3 opções não são o mesmo produto em cores diferentes", async () => {
+  // Caso real: "carregador usb" genérico mostrava Branco/Preto/Rosa do MESMO carregador.
+  const candidates = await gatherCrossStoreCandidates("carregador usb", 12);
+  const top3 = diversifyOptions("carregador usb", candidates.map((c) => c.item), 3);
+  const stripped = top3.map((item) =>
+    normalizeText(item.name)
+      .split(" ")
+      .filter((w) => !["branco", "branca", "preto", "preta", "rosa", "vermelho", "vermelha", "azul"].includes(w))
+      .join(" ")
+  );
+  assert.equal(new Set(stripped).size, stripped.length, `opções repetidas: ${top3.map((i) => i.name).join(" | ")}`);
+});
+
+test("golden: sku é único em TODAS as vitrines (o rerank resolve a escolha por sku)", () => {
+  // buildChoices manda os candidatos pra IA identificados por sku e resolve a resposta
+  // por sku. Se duas vitrines usassem o mesmo sku, a escolha da IA cairia no produto da
+  // loja errada — com preço e loja errados na mensagem, sem erro nenhum aparecer.
+  const owners = new Map<string, string[]>();
+  for (const store of listStores()) {
+    for (const item of store.listCatalog()) {
+      owners.set(item.sku, [...(owners.get(item.sku) ?? []), store.key]);
+    }
+  }
+  const repeated = [...owners.entries()].filter(([, keys]) => keys.length > 1);
+  assert.deepEqual(
+    repeated.slice(0, 5).map(([sku, keys]) => `${sku} em ${keys.join(",")}`),
+    [],
+    `${repeated.length} sku(s) repetidos`
+  );
+});
+
+test("golden: pedir uma COR específica desliga a diversificação", async () => {
+  const candidates = await gatherCrossStoreCandidates("carregador veicular rosa", 12);
+  const top3 = diversifyOptions("carregador veicular rosa", candidates.map((c) => c.item), 3);
+  assert.ok(top3.length > 0, "nenhuma opção para cor específica");
+  assert.match(normalizeText(top3[0].name), /rosa/, `1ª opção: ${top3[0].name}`);
+});

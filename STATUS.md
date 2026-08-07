@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-04. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-06. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -169,6 +169,31 @@ de hoje está em
 > `liadelivery.com.br` para o tokenizecard.js; chaves live + `PAGARME_WEBHOOK_TOKEN` +
 > `LIA_PUBLIC_URL` na Vercel (Sensitive). (agente) cadastrar webhook com os 6 eventos, ligar
 > `LIA_ENABLE_SAVED_CARD=true`, smoke real de R$ ~1 com estorno.
+
+> **06/08 — busca da vitrine reconstruída: IA escolhe o produto + placar medido.** Caso real:
+> "carregador usb c" devolvia 3 carregadores veiculares (mesmo item, 3 cores) com o carregador
+> de parede USB-C parado em outra vitrine. A busca deixou de ser só léxica: candidatos largos
+> nas 18 lojas (`gatherCrossStoreCandidates`) → **rerank por IA** (`rerankShoppingOptions`,
+> 1 chamada batched por mensagem, skus validados, timeout 6s, kill-switch
+> `LIA_SEARCH_RERANK_OFF`) → fallback determinístico melhorado (compostos usb-c, typo-fuzzy
+> mais estrito — "miojo" não vira vinho "Miolo" —, marca sem typo, bônus de categoria, bônus
+> "sem X", diversificação de cores) → nada serve = linha livre do operador. Quando o rerank
+> roda, ele substitui o piso `conciergeMatchIsStrong`. Qualidade agora é MEDIDA:
+> golden set com 28 casos (`tests/helpers/search-golden.ts`), regressão determinística no
+> `npm test` e placar completo via `npx tsx scripts/eval-search.mts` — estreia **27/28
+> determinístico · 28/28 com IA**. Busca ruim nova → vira caso no golden → mede → conserta.
+> Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
+> scripts locais rodavam "sem IA" mesmo com chave; corrigido.
+
+> **06/08 — onboarding: endereço deixou de virar lista de compras.** Achados ao validar a
+> busca numa conversa real, mesma família de sintoma (busca devolvendo lixo), origem
+> diferente: (1) endereço **com CEP na mesma mensagem** — a forma mais natural de responder —
+> caía no parser de itens ("Já anotei: 1x apto 5") e a Lia repetia o pedido de endereço;
+> agora é salvo, e do texto **cru** (o normalizado mandava "av paulista 1000 apto 5" pro
+> motoboy); (2) endereço como **primeira mensagem** virava itens; agora é salvo; (3) pedido
+> feito **enquanto a Lia espera o endereço** era descartado em silêncio; agora é guardado e
+> buscado quando o endereço chega. 3 regressões novas em `tests/manual-concierge.test.ts`
+> (12/12 verde).
 
 ## 1. O que é a Lia
 

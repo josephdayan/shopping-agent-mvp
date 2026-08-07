@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-04._
+_Última atualização: 2026-08-06._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -130,6 +130,22 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > `liadelivery.com.br` para o tokenizecard.js; chaves live + `PAGARME_WEBHOOK_TOKEN` +
 > `LIA_PUBLIC_URL` na Vercel (Sensitive). (agente) cadastrar webhook com os 6 eventos, ligar
 > `LIA_ENABLE_SAVED_CARD=true`, smoke real de R$ ~1 com estorno.
+
+> **06/08 — busca da vitrine: rerank por IA + golden set (tentativa-e-erro infinita acabou).**
+> O caso "carregador usb c → 3 veiculares" virou reconstrução da busca: candidatos largos nas
+> 18 vitrines + rerank semântico por IA (skus validados, fallback determinístico, kill-switch)
+> + 7 consertos principiais no scorer (compostos usb-c, typo≥6, marca sem typo, bônus de
+> categoria/negação, desempate por variantes, diversificação de cores). Método de melhoria
+> agora é medido: golden set de 28 casos + `npx tsx scripts/eval-search.mts` (placar DET/IA);
+> estreia 27/28 · 28/28. Toda busca ruim reportada deve virar caso no golden ANTES do
+> conserto. Também corrigido: `talk-env.mts` não carregava `.env` (ESM `__dirname`) — o
+> talk-lia rodava sem IA mesmo com chave.
+>
+> **Onboarding no mesmo lote:** validar a busca numa conversa real expôs 3 bugs que também
+> produziam "busca ruim", vindos do endereço: endereço com CEP junto virava lista de compras
+> ("1x apto 5") e ainda era pedido de novo; endereço como 1ª mensagem idem; e pedido feito
+> durante a espera do endereço sumia. Corrigidos, com o endereço do courier preservado em
+> texto cru (acento/vírgula/maiúscula). 3 regressões em `tests/manual-concierge.test.ts`.
 
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo

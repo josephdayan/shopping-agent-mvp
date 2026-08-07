@@ -78,8 +78,36 @@ const STOPWORDS = new Set(
 // ("fralda pampers G" — o G é a informação mais importante da mensagem).
 const SIZE_LETTER_RE = /^(p|m|g|gg|xg|xxg|rn)$/;
 
+// Compostos que a normalização separa ("USB-C" → "usb c"; o cliente também fala
+// "tipo C"): re-colados num token canônico único. Sem isso a letra final é descartada
+// como ruído e "carregador usb c" fica idêntico a "carregador usb" — foi assim que 3
+// carregadores veiculares venceram o carregador de parede USB-C (caso real, 06/08).
+const COMPOUND_PAIRS: Array<[string, string, string]> = [
+  ["usb", "c", "usbc"],
+  ["tipo", "c", "usbc"],
+  ["usb", "a", "usba"],
+  ["micro", "usb", "microusb"]
+];
+// Compound → cabeça genérica: pedido genérico ("usb") serve o item específico
+// ("usb-c"), mas pedido específico ("usb c") NÃO casa com o genérico ("2 saídas USB").
+const COMPOUND_HEADS: Record<string, string> = { usbc: "usb", usba: "usb", microusb: "usb" };
+
+function collapseCompounds(tokens: string[]): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const pair = COMPOUND_PAIRS.find(([a, b]) => tokens[i] === a && tokens[i + 1] === b);
+    if (pair) {
+      out.push(pair[2]);
+      i++;
+    } else {
+      out.push(tokens[i]);
+    }
+  }
+  return out;
+}
+
 function words(text: string): string[] {
-  return normalizeText(text).split(" ").filter(Boolean);
+  return collapseCompounds(normalizeText(text).split(" ").filter(Boolean));
 }
 
 // Pet vocabulary. Customers say "cachorro"/"gato"; catalogs say "Cães"/"Gatos"
@@ -106,6 +134,9 @@ function animalOf(wordList: string[]): "dog" | "cat" | null {
 // beleza (perfume≈colônia — no Boticário os perfumes se chamam "Desodorante Colônia").
 function tokenMatchesWordSyn(token: string, word: string): boolean {
   if (tokenMatchesWord(token, word)) return true;
+  // Pedido genérico serve o específico: "usb" casa com "usb-c" do nome. A direção
+  // inversa (pedir "usb c", nome só diz "usb") fica de fora de propósito.
+  if (COMPOUND_HEADS[word] === token) return true;
   if (DOG_WORDS.has(token) && DOG_WORDS.has(word)) return true;
   if (CAT_WORDS.has(token) && CAT_WORDS.has(word)) return true;
   if ((token === "perfume" || token === "perfumes") && (word === "colonia" || word === "colonias")) return true;
@@ -130,8 +161,10 @@ function tokenMatchesWord(token: string, word: string): boolean {
   // ("detergnte", "bananna", "escva"). Só habilitamos para palavras de 5+
   // letras e mesma faixa de tamanho, para não transformar ruído curto em produto.
   // A 1ª letra tem que bater: typo raramente erra ela, e sem essa trava "vinho"
-  // vira "Ninho" (distância 1, produto completamente diferente).
-  if (token.length >= 5 && word.length >= 5 && Math.abs(token.length - word.length) <= 1 && token[0] === word[0]) {
+  // vira "Ninho" (distância 1, produto completamente diferente). A palavra do
+  // CATÁLOGO precisa de 6+ letras: em 5 letras o espaço é denso demais e palavras
+  // REAIS colidem a distância 1 — "miojo" virava "Miolo" (vinho e alcatra).
+  if (token.length >= 5 && word.length >= 6 && Math.abs(token.length - word.length) <= 1 && token[0] === word[0]) {
     let previous = Array.from({ length: word.length + 1 }, (_, i) => i);
     for (let i = 1; i <= token.length; i++) {
       const current = [i];
@@ -150,6 +183,16 @@ function tokenMatchesWord(token: string, word: string): boolean {
     }
     if (previous[word.length] <= 1) return true;
   }
+  return false;
+}
+
+// Marca é nome próprio: typo-fuzzy contra marca é o pior falso positivo possível
+// ("miojo" casava com a vinícola "Miolo" e pontuava +4 de marca). Match de marca
+// exige exato ou prefixo — nunca distância de edição.
+function tokenMatchesBrand(token: string, word: string): boolean {
+  if (token === word) return true;
+  if (token.length >= 4 && word.startsWith(token)) return true;
+  if (word.length >= 4 && token.startsWith(word) && token.length - word.length <= 3) return true;
   return false;
 }
 
@@ -324,7 +367,7 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     // "arroz 2kg" traz "Areia Higiênica 2Kg" (só o peso em comum). Ele soma score,
     // mas o produto precisa de um token de PALAVRA forte pra passar do piso.
     const isSizeToken = /^\d+(?:[.,]\d+)?(?:kg|g|ml|l|lt|un)$/.test(token);
-    if (brandWords.some((word) => tokenMatchesWord(token, word))) {
+    if (brandWords.some((word) => tokenMatchesBrand(token, word))) {
       score += 4; // explicit brand match is the strongest signal
       if (!isSizeToken) strongHit = true;
     } else if (nameWords.some((word) => tokenMatchesWordSyn(token, word))) {
@@ -352,17 +395,21 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
 
   // Head-noun bonus: o head EFETIVO pula as palavras da marca ("Quem Disse, Berenice?
   // BASE Líquida" → head = "base"), senão nome com marca na frente nunca ganha o bônus.
+  // Substantivo de categoria no MEIO do nome vale como head também: "Pack Macarrão
+  // Instantâneo Lámen … Nissin MIOJO 510g" é um miojo tanto quanto "Miojo Nissin …" —
+  // sem isso, o item certo com nome comercial comprido perde de qualquer coisa cujo
+  // nome COMEÇA com a palavra parecida.
   const brandSet = new Set(brandWords);
   const headWord = nameWords.find((w) => !brandSet.has(w)) ?? nameWords[0];
   const headHit = Boolean(headWord && effTokens.some((token) => tokenMatchesWordSyn(token, headWord)));
-  if (score > 0 && headHit) score += 2;
+  const categoryHit = effTokens.some((token) =>
+    nameWords.some((w) => CATEGORY_NOUNS.has(w) && tokenMatchesWordSyn(token, w))
+  );
+  if (score > 0 && (headHit || categoryHit)) score += 2;
   // Pedido de UMA palavra ("ovos", "frango"): se ela não é o head nem a marca, o item é
   // outra coisa que só CONTÉM a palavra (Macarrão com Ovos, Petisco de Frango) — zera.
   // Exceção: substantivo de categoria vale em qualquer posição, porque beleza enterra
   // o nome no meio ("Celebre Agora Feminino Desodorante COLÔNIA 100ml" é um perfume).
-  const categoryHit = effTokens.some((token) =>
-    nameWords.some((w) => CATEGORY_NOUNS.has(w) && tokenMatchesWordSyn(token, w))
-  );
   if (
     effTokens.length === 1 &&
     !headHit &&
@@ -373,6 +420,11 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   }
 
   if (score > 0) {
+    // Quem pediu "sem X" quer a VERSÃO sem X: o item que diz "Sem/Zero Lactose" no nome
+    // deve vencer o leite comum (que também sobrevive à exclusão por nem citar X).
+    for (const neg of negs) {
+      if (new RegExp(`\\b(sem|zero)\\s+${neg}\\b`).test(nameNorm)) score += 3;
+    }
     // Staple-first: quem não pediu sachê/úmida/cápsula/fardo quer o produto básico.
     const wantsWet = effTokens.some((token) => WET_WORDS.has(token));
     // (PET_ANY_RE cobre "para Cães e Gatos", que deixa itemAnimal ambíguo)
@@ -426,6 +478,39 @@ export function conciergeMatchIsStrong(query: string, item: CatalogItem): boolea
 
   const missing = wordTokens.length - covered;
   return wordTokens.length <= 2 ? missing === 0 : missing <= 1;
+}
+
+// Cores/acabamentos que distinguem variantes do MESMO produto. Usadas para não gastar
+// as 3 vagas de opção com "Branco/Preto/Rosa" do mesmo item (caso real: 3 carregadores
+// veiculares idênticos em cores diferentes) — cada vaga deve apresentar um produto
+// de verdade diferente. Se o cliente PEDIU uma cor, a diversificação sai do caminho:
+// aí a cor é exatamente o que ele está escolhendo.
+const VARIANT_COLOR_WORDS = new Set([
+  "branco", "branca", "preto", "preta", "rosa", "vermelho", "vermelha", "azul",
+  "verde", "amarelo", "amarela", "roxo", "roxa", "cinza", "bege", "marrom",
+  "dourado", "dourada", "prata", "prateado", "prateada", "lilas", "laranja", "vinho"
+]);
+
+export function diversifyOptions(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
+  const colorAsked = queryTokens(query).some((t) => VARIANT_COLOR_WORDS.has(t));
+  const identity = (item: CatalogItem) =>
+    colorAsked ? normalizeText(item.name) : words(item.name).filter((w) => !VARIANT_COLOR_WORDS.has(w)).join(" ");
+  const out: CatalogItem[] = [];
+  const seen = new Set<string>();
+  for (const item of items) {
+    if (out.length >= limit) break;
+    const key = identity(item);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  // Menos produtos distintos que vagas: completa com as variantes repetidas mesmo —
+  // 3 opções (ainda que 2 sejam cores) atendem melhor que uma lista curta.
+  for (const item of items) {
+    if (out.length >= limit) break;
+    if (!out.includes(item)) out.push(item);
+  }
+  return out;
 }
 
 // Ranking compartilhado dos catálogos-seed (os 3 conectores usam): score desc →

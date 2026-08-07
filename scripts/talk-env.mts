@@ -4,10 +4,13 @@
 // `OPENAI_API_KEY="" npx tsx scripts/talk-lia.mts` continua forçando o modo sem LLM
 // (env explícita do caller vence o .env).
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 try {
-  const raw = readFileSync(join(__dirname, "..", ".env"), "utf8");
+  // __dirname não existe em ESM (.mts): a versão antiga lançava aqui e o catch engolia —
+  // o .env nunca era carregado e o talk-lia rodava sem LLM mesmo com chave configurada.
+  const raw = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", ".env"), "utf8");
   for (const line of raw.split("\n")) {
     const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*"?([^"\n]*)"?\s*$/);
     if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2];
