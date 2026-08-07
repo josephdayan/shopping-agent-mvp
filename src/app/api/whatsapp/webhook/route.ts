@@ -96,6 +96,25 @@ export async function POST(request: Request) {
   // Meta sends delivery/read receipts to the same webhook. They are not customer
   // messages, but must be acknowledged with 200 or Meta retries them in bursts.
   if (inbound.provider === "meta" && inbound.eventType !== "message") {
+    // Falha ASSÍNCRONA de entrega chega aqui como status "failed" — a Graph API aceita
+    // a mensagem (2xx) e o WhatsApp descarta depois (ex.: header de imagem que o fetcher
+    // rejeitou). Ignorar isso em silêncio custou um dia de "cadê os cards?" (07/08):
+    // o cliente via só o header e nada de opção, e nenhum log contava o porquê. O erro
+    // da Meta (code/title/details) agora fica gritando no runtime log da Vercel.
+    try {
+      const entries = (rawPayload as { entry?: Array<{ changes?: Array<{ value?: { statuses?: Array<Record<string, unknown>> } }> }> }).entry ?? [];
+      for (const entry of entries) {
+        for (const change of entry.changes ?? []) {
+          for (const status of change.value?.statuses ?? []) {
+            if (status.status === "failed") {
+              console.error("[whatsapp:meta:status-failed]", JSON.stringify(status).slice(0, 1500));
+            }
+          }
+        }
+      }
+    } catch {
+      // diagnóstico nunca pode derrubar o ACK — Meta re-tentaria em rajada
+    }
     return NextResponse.json({ ok: true, provider: "meta", ignored: inbound.eventType });
   }
 

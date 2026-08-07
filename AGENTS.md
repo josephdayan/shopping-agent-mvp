@@ -267,6 +267,18 @@ emoji literal `🙂` são o código ANTIGO em produção — o cotonete já reso
 deploy (match por apposição + rerank), e o emoji não existe em NENHUMA versão do fonte
 (artefato do build implantado; conferir na primeira conversa pós-deploy).
 
+**07/08 (3ª rodada) — cards de opção descartados pela Meta sem erro visível.** Teste real:
+header "Achei essas opções de cotonete:" saiu e nenhum card chegou. Runtime logs: webhook
+200, zero exceção → a Graph API aceitou os cards e o WhatsApp os descartou DEPOIS (falha
+assíncrona). Dois buracos fechados: (1) `safeMediaLink` (adapters/whatsapp.ts) percent-encoda
+URLs de imagem com byte não-ASCII — caso real: `…cotonetes®-150…` da Pague Menos; o fetcher
+da Meta rejeita o que o curl aceita — aplicado nos 3 envios de mídia Meta (card interativo,
+mensagem de imagem, sendMedia); (2) o webhook LOGA todo `status: failed` da Meta
+(`[whatsapp:meta:status-failed]`, com code/title/details) antes do ACK — era ACKado e
+descartado em silêncio, o que tornava esse tipo de falha indiagnosticável. Lição de método:
+teste com adapter mockado NÃO cobre a entrega real da Meta; validação de card exige teste
+real + leitura do runtime log. Unit de `safeMediaLink` em tests/whatsapp-adapter.test.ts.
+
 **07/08 (2ª rodada) — emoji literal RESOLVIDO na raiz + linha livre passou a contar que buscou.**
 O `🙂` que aparecia no WhatsApp era **bug do minificador SWC do Next 14**: ao fundir
 `[template, "", 'string'].join("\n")` num template literal único, ele emitia o emoji com barra

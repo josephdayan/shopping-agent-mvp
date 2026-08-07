@@ -194,6 +194,17 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **07/08 (3ª) — cards de opção sumindo: URL de imagem com caractere não-ASCII + falha
+> assíncrona invisível.** Teste real do dono às 11:51: "quero um cotonete" → header "Achei
+> essas opções" e NENHUM card. Telemetria de produção: webhook 200, zero exceção — a Graph
+> API aceita o card (2xx) e o fetcher da Meta descarta depois, silenciosamente; o suspeito é
+> o `®` cru no path da imagem da Pague Menos ("hastes-flexiveis-cotonetes®-…"). Dois
+> consertos: (1) `safeMediaLink` percent-encoda URL não-ASCII em todos os envios de mídia
+> Meta (nunca re-encoda %XX legítimo); (2) o webhook agora LOGA `status: failed` da Meta
+> com código e detalhes (`[whatsapp:meta:status-failed]`) — antes o callback de falha era
+> ACKado e jogado fora, e não havia como saber o porquê. Próximo teste real mostra o erro
+> exato nos runtime logs da Vercel se algo ainda falhar.
+
 > **07/08 (2ª) — emoji literal era bug do minificador SWC; resolvido na raiz.** O
 > `🙂` visto no WhatsApp vinha do SWC fundindo strings com emoji em template
 > literals com escape duplo — 5 emojis de copy corrompidos no bundle, fonte sempre esteve

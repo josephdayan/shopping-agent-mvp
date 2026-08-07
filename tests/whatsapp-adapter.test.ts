@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
+import { safeMediaLink, whatsappAdapter } from "../src/lib/adapters/whatsapp";
 
 test("Meta: botão de opção volta como número entendido pelo fluxo", () => {
   const inbound = whatsappAdapter.parseInbound({
@@ -83,4 +83,16 @@ test("Meta: onboarding, quantidade e pagamento usam botões com ids estáveis", 
     process.env.WHATSAPP_PHONE_NUMBER_ID = previous.phoneId;
     global.fetch = previous.fetch;
   }
+});
+
+test("safeMediaLink: percent-encoda apenas URL com byte não-ASCII (caso ® da Pague Menos)", () => {
+  const raw = "https://paguemenos.vteximg.com.br/arquivos/ids/662056/hastes-flexiveis-cotonetes®-150-unidades_7891010560812_1.jpg?v=638054079322100000";
+  const encoded = safeMediaLink(raw);
+  assert.ok(!/[^\x00-\x7F]/.test(encoded), "não pode sobrar byte não-ASCII");
+  assert.match(encoded, /cotonetes%C2%AE-150/);
+  // URL limpa passa intocada; URL já percent-encodada NUNCA é re-encodada (%20 ficaria %2520).
+  const clean = "https://obahortifruti.vteximg.com.br/arquivos/ids/9835305/Cotonetes-Johnson-75-Unidades.png?v=638659866555900000";
+  assert.equal(safeMediaLink(clean), clean);
+  const preEncoded = "https://cdn.exemplo.com.br/img%20com%20espaco.jpg";
+  assert.equal(safeMediaLink(preEncoded), preEncoded);
 });

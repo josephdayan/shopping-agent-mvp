@@ -459,7 +459,7 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
         }]
       }
     };
-    interactive.header = { type: "image", image: { link: option.imageUrl } };
+    interactive.header = { type: "image", image: { link: safeMediaLink(option.imageUrl ?? "") } };
     messages.push(await sendMetaPayload(phoneNumberId, token, {
       messaging_product: "whatsapp",
       recipient_type: "individual",
@@ -560,7 +560,7 @@ async function sendMetaProductImageMessage(
     to,
     type: "image",
     image: {
-      link: option.product.imageUrl,
+      link: safeMediaLink(option.product.imageUrl),
       caption
     }
   });
@@ -678,7 +678,7 @@ async function sendMetaImage(to: string, text: string, mediaUrl: string) {
       recipient_type: "individual",
       to: normalizeWhatsAppPhone(to),
       type: "image",
-      image: { link: mediaUrl, caption: text.slice(0, 1024) }
+      image: { link: safeMediaLink(mediaUrl), caption: text.slice(0, 1024) }
     });
   } catch (error) {
     console.warn("[whatsapp:meta:media:fallback-text]", error instanceof Error ? error.message : error);
@@ -905,6 +905,16 @@ const MEDIA_BLOCK_HOSTS = (process.env.LIA_MEDIA_BLOCK_HOSTS ?? "images.petz.com
   .split(",")
   .map((h) => h.trim().toLowerCase())
   .filter(Boolean);
+
+// URLs de catálogo podem carregar caracteres fora do ASCII no path — caso real:
+// "hastes-flexiveis-cotonetes®-150-unidades…" da Pague Menos. A Graph API ACEITA a
+// mensagem (2xx) e o fetcher da Meta descarta o download depois, silenciosamente: o
+// cliente vê o header "Achei essas opções" e nenhum card (produção, 07/08). Percent-
+// encoda só quando há byte não-ASCII, para nunca re-encodar %XX legítimo já presente.
+export function safeMediaLink(url: string): string {
+  // eslint-disable-next-line no-control-regex
+  return /[^\x00-\x7F]/.test(url) ? encodeURI(url) : url;
+}
 
 function isPublicMediaUrl(url: string) {
   if (!/^https:\/\/.+/i.test(url)) return false;
