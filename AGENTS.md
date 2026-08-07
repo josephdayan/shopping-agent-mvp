@@ -195,6 +195,9 @@ Desenho novo (implementado e testado):
    `LIA_SEARCH_RERANK_OFF`; qualquer falha cai no determinístico de sempre. Quando o rerank
    roda, ELE substitui o piso `conciergeMatchIsStrong` — a IA entende "escova de dente" ≈
    "Escova Dental", que o piso léxico mata.
+   *Custo/latência:* é a 2ª chamada de LLM por mensagem (a 1ª é a extração, que já existia),
+   uma só por mensagem independente do nº de itens, com payload pequeno (≤12 candidatos por
+   linha). Some ~1–3s ao turno; o teto de 6s garante que a Lia nunca fique presa esperando.
 3. **Determinístico melhor mesmo sem IA** (regras principiais, nunca por produto): compostos
    ("usb c"/"tipo c" viram token único; o genérico "usb" ainda serve o específico "Usb-C");
    typo-fuzzy passa a exigir palavra de catálogo com 6+ letras ("miojo" casava com a vinícola
