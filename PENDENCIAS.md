@@ -160,6 +160,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > durante a espera do endereço sumia. Corrigidos, com o endereço do courier preservado em
 > texto cru (acento/vírgula/maiúscula). 3 regressões em `tests/manual-concierge.test.ts`.
 
+> **07/08 — cotação não engole mais pedido novo + deploy é o gate.** O screenshot de produção
+> do dono mostrou: item pedido durante `awaiting_operator_quote` era descartado ("segura aí")
+> e o cliente precisou cancelar. Corrigido: o item entra no mesmo pedido como linha livre, com
+> nota no /ops. Os outros dois problemas da tela (cotonete sem match e emoji literal
+> `🙂`) são o código antigo em produção — TODO o trabalho de busca de 06-07/08
+> está em `main` local, ainda sem push/deploy. Próxima ação: push + deploy + smoke, e conferir
+> o emoji na primeira conversa real pós-deploy.
+
 > **Como ler este arquivo.** `[x]` é concluído; `[ ]` é trabalho ainda necessário no caminho
 > atual; `[~]` é adiado, opcional, risco aceito ou referência do fluxo legado. O arquivo antigo
 > continha dezenas de tarefas da automação por varejista, One-Click e expansão; elas continuam

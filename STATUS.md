@@ -194,6 +194,15 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **07/08 — cotação do operador deixou de engolir pedido novo.** Screenshot de produção:
+> "quero um cotonete" com pedido em `awaiting_operator_quote` respondia "segura aí" e
+> descartava o item — o cliente teve que cancelar pra pedir de novo. Agora o item entra no
+> mesmo pedido como linha livre, o operador vê a adição no /ops (nota ➕) e o cliente recebe
+> "Anotei e já incluí na cotação". Regressão em `tests/manual-concierge.test.ts` (13 testes).
+> Do mesmo screenshot: cotonete como linha livre e o emoji literal `🙂` são o
+> código antigo no ar — resolvem com o deploy (o emoji não existe em nenhuma versão do
+> fonte; conferir pós-deploy).
+
 > **06/08 — onboarding: endereço deixou de virar lista de compras.** Achados ao validar a
 > busca numa conversa real, mesma família de sintoma (busca devolvendo lixo), origem
 > diferente: (1) endereço **com CEP na mesma mensagem** — a forma mais natural de responder —

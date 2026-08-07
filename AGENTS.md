@@ -255,6 +255,18 @@ Bônus: consertado o bug que escondia a IA dos scripts — `scripts/talk-env.mts
 da crença "não tem chave local"). Em produção o rerank vale automaticamente onde
 `OPENAI_API_KEY` já está configurada (a mesma chave da extração).
 
+**07/08 — pedido durante a cotação do operador (screenshot de produção).** Com um pedido em
+`awaiting_operator_quote`, QUALQUER mensagem de produto respondia "Ainda estou cotando…
+segura aí!" e o item era descartado — o cliente teve que CANCELAR o pedido pra conseguir
+pedir um cotonete. Agora o item novo entra no MESMO pedido como linha livre (a cotação ainda
+não saiu; o operador cota tudo junto), com nota "➕ Cliente adicionou durante a cotação" no
+/ops e confirmação ao cliente (`copy.addedToPendingQuote`). Pergunta ("já saiu o total?")
+continua com a resposta de andamento; só remédio continua recusado. Regressão em
+`tests/manual-concierge.test.ts`. No mesmo screenshot: o "1x cotonete" como linha livre e o
+emoji literal `🙂` são o código ANTIGO em produção — o cotonete já resolve com o
+deploy (match por apposição + rerank), e o emoji não existe em NENHUMA versão do fonte
+(artefato do build implantado; conferir na primeira conversa pós-deploy).
+
 **Três bugs de onboarding achados ao validar a busca numa conversa real (mesmos consertados).**
 Eles produziam exatamente o sintoma que motivou o trabalho — busca devolvendo lixo — só que a
 origem era o endereço, não o matcher:

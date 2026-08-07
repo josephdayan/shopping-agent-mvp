@@ -262,6 +262,38 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   assert.equal(delivered!.status, "delivered");
 });
 
+test("pedir item DURANTE a cotação do operador inclui no pedido — nunca engole (caso real 07/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("uma vela de aniversário");
+  await c.send("só isso");
+  const pending = await prisma.deliveryOrder.findFirst({
+    where: { userId: c.userId, status: "awaiting_operator_quote" }
+  });
+  assert.ok(pending, "pedido deveria estar aguardando cotação");
+
+  // Em produção isso respondia "segura aí" e DESCARTAVA o cotonete; o cliente teve
+  // que cancelar o pedido pra conseguir pedir de novo.
+  const out = await c.send("quero um cotonete");
+  assert.match(out, /inclu(í|i) na cotação/i);
+  assert.match(out.toLowerCase(), /cotonete/);
+  assert.doesNotMatch(out, /segura aí/i);
+
+  const updated = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
+  assert.equal(updated!.status, "awaiting_operator_quote");
+  const items = updated!.items as unknown as { name: string; qty: number }[];
+  assert.equal(items.length, 2);
+  assert.ok(items.some((i) => /cotonete/i.test(i.name)), `itens: ${items.map((i) => i.name).join(", ")}`);
+  assert.match(updated!.notes ?? "", /adicionou durante a cotação/i);
+
+  // Pergunta sobre o andamento tem resposta própria e NÃO vira item na cotação.
+  const asking = await c.send("já saiu o total?");
+  assert.ok(asking.length > 0, "pergunta ficou sem resposta");
+  assert.doesNotMatch(asking, /inclu(í|i) na cotação/i);
+  const afterAsk = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
+  assert.equal((afterAsk!.items as unknown as unknown[]).length, 2);
+});
+
 test("não é possível cotar um pedido que não está aguardando cotação", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

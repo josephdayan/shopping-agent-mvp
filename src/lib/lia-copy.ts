@@ -659,6 +659,13 @@ export function operatorQuoteStillWorking(): string {
   return "Ainda estou cotando seu pedido 🙂 Já te mando o total com a entrega e o prazo em instantes — segura aí!";
 }
 
+// Item pedido ENQUANTO a cotação do operador está em andamento: entra no mesmo pedido
+// (a cotação ainda não saiu), nunca é engolido nem exige cancelar pra pedir de novo.
+export function addedToPendingQuote(items: string[]): string {
+  const list = items.map((i) => `• ${i}`).join("\n");
+  return [`Anotei e já incluí na cotação: 📝\n${list}`, "", "Te mando o total com tudo junto em instantes! 🙂"].join("\n");
+}
+
 // Resumo da cotação manual: itens por nome (o operador informa o custo total dos
 // produtos e o frete), com prazo/entrega e endereço. É o gêmeo de `summary` para o
 // fluxo concierge, onde não há preço por linha.

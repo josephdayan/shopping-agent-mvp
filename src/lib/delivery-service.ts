@@ -1008,6 +1008,39 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     return;
   }
   if (ctx.step === "awaiting_operator_quote") {
+    // Pedido NOVO enquanto o operador cota não pode ser engolido (caso real de produção,
+    // 07/08: "quero um cotonete" → "segura aí" e o item sumia; o cliente teve que
+    // CANCELAR pra conseguir pedir). A cotação ainda não saiu, então item novo entra no
+    // MESMO pedido como linha livre — o operador cota tudo junto e vê a adição no /ops.
+    if (intent.kind === "free_text" && !isQuestion(text) && ctx.deliveryOrderId) {
+      const { lines, containsMedicine } = await extractLines(text);
+      if (lines.length) {
+        const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+        if (order && order.status === AWAITING_OPERATOR_QUOTE_STATUS) {
+          const added = lines.map((line) => conciergeItem(line.phrase, line.qty));
+          const items = mergeBaskets((order.items as unknown as BasketItem[]) ?? [], added);
+          const addedLabels = added.map((i) => `${i.qty}x ${i.name}`);
+          await prisma.deliveryOrder.update({
+            where: { id: order.id },
+            data: {
+              items: items as unknown as object,
+              notes: appendOrderNote(order.notes, `➕ Cliente adicionou durante a cotação: ${addedLabels.join(", ")}`)
+            }
+          });
+          const notes: string[] = [];
+          if (containsMedicine) notes.push(copy.medicineSkippedNote());
+          notes.push(copy.addedToPendingQuote(addedLabels));
+          await reply(phone, notes.join("\n"));
+          return;
+        }
+      }
+      // A mensagem era SÓ remédio (a extração filtra): responde a recusa certa em vez
+      // de fingir que está cotando algo que não pode vender.
+      if (!lines.length && containsMedicine) {
+        await reply(phone, copy.noMedicine());
+        return;
+      }
+    }
     await reply(phone, copy.operatorQuoteStillWorking());
     return;
   }
