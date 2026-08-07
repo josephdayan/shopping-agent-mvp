@@ -160,6 +160,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > durante a espera do endereço sumia. Corrigidos, com o endereço do courier preservado em
 > texto cru (acento/vírgula/maiúscula). 3 regressões em `tests/manual-concierge.test.ts`.
 
+> **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
+> `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com
+> barra dupla — 5 emojis corrompidos no bundle; fonte sempre esteve certo.
+> `serverMinification: false` + guarda `scripts/check-bundle-emoji.mjs` no `npm run build`
+> (o build FALHA se voltar). A linha livre agora diz que a Lia procurou nas lojas e que o
+> operador cota por fora (caso "adaptador hdmi": nenhuma das 18 lojas tem eletrônicos —
+> lacuna conhecida; aprofundar Kalunga/nova fonte é o próximo passo da vitrine). Commit
+> `dd1d636`, deploy `dpl_7FumMkVLB35EA5rhuTfQfkMP1Yzn`.
+
 > **07/08 — cotação não engole mais pedido novo + deploy é o gate.** O screenshot de produção
 > do dono mostrou: item pedido durante `awaiting_operator_quote` era descartado ("segura aí")
 > e o cliente precisou cancelar. Corrigido: o item entra no mesmo pedido como linha livre, com
