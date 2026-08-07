@@ -447,6 +447,13 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
   }
 
   if (score > 0) {
+    // INVARIANTE das linhas abaixo: penalidade REORDENA, nunca exclui. Quem exclui são as
+    // guardas que dão `return 0` (espécie, negação, piso de relevância, pedido de uma
+    // palavra). Isso importa porque `score > 0` é lido como "casa ou não casa" fora daqui
+    // — `itemMatchesPhrase`, do "tira o X", é um deles. Sem o piso no fim, duas
+    // penalidades somadas derrubavam um match legítimo de head e o cliente não conseguia
+    // mais remover o item da cesta ("Acessório de Comedouro … para Cães" ficava em -1).
+    const beforePenalties = score;
     // Quem pediu "sem X" quer a VERSÃO sem X: o item que diz "Sem/Zero Lactose" no nome
     // deve vencer o leite comum (que também sobrevive à exclusão por nem citar X).
     for (const neg of negs) {
@@ -483,6 +490,7 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     // Versão infantil/baby só quando pedida ("perfume" pra adulto não pode virar
     // Boti Baby; "shampoo" não pode virar Johnson's Baby). Pedir "infantil" inverte.
     if (!CHILD_VARIANT_RE.test(queryNorm) && isChildVariant(nameNorm)) score -= 2;
+    if (beforePenalties > 0) score = Math.max(1, score);
   }
   return score;
 }

@@ -227,6 +227,16 @@ reportado, todos consertados por regra principial — nunca por regra de produto
   duro, que inclui "pet" solto, e passou a punir refrigerante como se fosse ração. A
   penalidade agora usa só palavras de espécie.
 
+**Invariante que saiu daí — penalidade REORDENA, guarda EXCLUI.** Fora do scorer,
+`score > 0` é lido como "casa ou não casa" (`itemMatchesPhrase`, do "tira o X", é um
+desses). Duas penalidades novas somadas derrubaram um match legítimo de head para -1
+("Acessório de Comedouro … para Cães" com a consulta "Acessório") e o cliente perdeu a
+capacidade de REMOVER o item da cesta — a busca continuava certa, o comando é que quebrou.
+Agora, item que passou pelas guardas nunca cai abaixo de 1: quem exclui é `return 0`
+explícito (espécie, negação, piso de relevância, pedido de uma palavra), penalidade só
+empurra pra baixo no ranking. Pego pelo eval de conversa legado, não pelo golden — os dois
+harnesses cobrem coisas diferentes e vale rodar ambos.
+
 **Método novo — fim da tentativa-e-erro infinita.** A qualidade da busca agora é MEDIDA:
 `tests/helpers/search-golden.ts` guarda os casos rotulados (28 hoje);
 `tests/search-golden.test.ts` trava os determinísticos no `npm test` (regressão dura, roster

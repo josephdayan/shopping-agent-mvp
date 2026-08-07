@@ -186,6 +186,11 @@ de hoje está em
 > "cotonete" não achava o cotonete do catálogo, "leite" devolvia loção de pele
 > ("Leite de Rosas"), "água" vinha com gás, e a penalidade nova de item-pet punia
 > refrigerante porque em catálogo brasileiro **"PET" é a garrafa plástica**.
+> Invariante que saiu do lote: **penalidade reordena, guarda exclui**. Fora do scorer,
+> `score > 0` significa "casa ou não casa" — duas penalidades somadas derrubaram um match
+> legítimo para -1 e quebraram o "tira o X" (o cliente não conseguia mais remover o item
+> da cesta). Item que passou pelas guardas nunca cai abaixo de 1. Pego pelo eval de
+> conversa legado, não pelo golden: os dois harnesses cobrem coisas diferentes.
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 

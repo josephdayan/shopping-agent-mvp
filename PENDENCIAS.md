@@ -147,6 +147,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > penalidade nova de item-pet punia refrigerante — em catálogo brasileiro **"PET" é a
 > garrafa plástica**. Todos consertados por regra geral, nunca por regra de produto.
 >
+> **Invariante para quem mexer no scorer: penalidade REORDENA, guarda EXCLUI.** `score > 0`
+> é lido fora do scorer como "casa ou não casa" (o "tira o X" usa isso). Duas penalidades
+> somadas derrubaram um match legítimo para -1 e o cliente perdeu o comando de remover item
+> da cesta — a busca continuava certa. Item que passou pelas guardas nunca cai abaixo de 1.
+> O golden set não pega esse tipo de dano colateral; o eval de conversa legado pega. Rodar
+> os dois antes de commitar mudança de scorer.
+>
 > **Onboarding no mesmo lote:** validar a busca numa conversa real expôs 3 bugs que também
 > produziam "busca ruim", vindos do endereço: endereço com CEP junto virava lista de compras
 > ("1x apto 5") e ainda era pedido de novo; endereço como 1ª mensagem idem; e pedido feito
