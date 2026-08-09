@@ -2064,6 +2064,16 @@ async function advancePending(
     ctx.step = "collecting";
     ctx.cep = ctx.cep ?? userCep ?? undefined;
     await writeCtx(convoId, ctx);
+    // As três saídas naturais pós-escolha viram botão no canal Meta (Pagar /
+    // Adicionar mais itens / Cancelar); os ids voltam como texto e caem nos ramos
+    // já existentes. Sem Meta (ou falha do envio interativo), o texto de sempre.
+    const body = [prefix, copy.conciergeChooseNext()].filter(Boolean).join("\n");
+    try {
+      const interactive = await whatsappAdapter.sendChoiceFollowUp(phone, body);
+      if (interactive) return;
+    } catch (error) {
+      console.warn("[whatsapp:choice-followup:fallback-text]", error instanceof Error ? error.message : error);
+    }
     const notes: string[] = [];
     if (prefix) notes.push(prefix);
     notes.push(copy.conciergeKeepAdding());

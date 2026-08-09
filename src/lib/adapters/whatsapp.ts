@@ -376,6 +376,19 @@ export const whatsappAdapter = {
     return sendMetaPayload(phoneNumberId, token, buildOrderStatusPayload(to, input));
   },
 
+  // Pós-escolha do concierge: o cliente acabou de confirmar um item e as três saídas
+  // naturais viram botão (pedido do dono, 09/08). Os ids voltam como texto e caem nos
+  // ramos que JÁ existem: "pagar" fecha a lista e cota, "adicionar_mais" pede o próximo
+  // item, "cancelar" limpa a lista em montagem.
+  async sendChoiceFollowUp(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [
+      { id: "pagar", title: "Pagar" },
+      { id: "adicionar_mais", title: "Adicionar mais itens" },
+      { id: "cancelar", title: "Cancelar" }
+    ]);
+  },
+
   async sendCartActions(to: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     return sendMetaSimpleButtons(to, "Quer ajustar o pedido antes de pagar?", [

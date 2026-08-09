@@ -194,6 +194,14 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **09/08 (2ª) — CARDS VALIDADOS EM PRODUÇÃO + botões pós-escolha.** Teste real do dono:
+> "Quero um cotonete" → cards chegaram com foto e botão, escolha "2" funcionou — o fix do
+> `safeMediaLink` (URL com `®`) está confirmado no mundo real; zero `meta-status-failed` no
+> banco. Na sequência, pedido novo do dono implementado: a confirmação pós-escolha agora traz
+> 3 botões — **Pagar** (fecha e cota), **Adicionar mais itens** e **Cancelar** — via
+> `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
+> "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
+
 > **09/08 — falha da Meta agora é DURÁVEL no banco + tail de conversa.** Constatação: o
 > conserto dos cards (09adb388, quinta ~12:40) nunca foi exercitado — as duas únicas
 > mensagens no banco desde então são as do teste das 11:51 de quinta, ANTERIORES ao fix.

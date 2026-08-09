@@ -663,6 +663,13 @@ export function operatorQuoteStillWorking(): string {
   return "Ainda estou cotando seu pedido 🙂 Já te mando o total com a entrega e o prazo em instantes — segura aí!";
 }
 
+// Corpo da confirmação pós-escolha quando os BOTÕES (Pagar / Adicionar mais itens /
+// Cancelar) vão junto — o texto não repete o que os botões já dizem. O fallback sem
+// botões continua sendo conciergeKeepAdding().
+export function conciergeChooseNext(): string {
+  return "Quer fechar e pagar, somar mais itens ou cancelar? É só tocar embaixo — ou mandar o próximo item direto. 🙂";
+}
+
 // Item pedido ENQUANTO a cotação do operador está em andamento: entra no mesmo pedido
 // (a cotação ainda não saiu), nunca é engolido nem exige cancelar pra pedir de novo.
 export function addedToPendingQuote(items: string[]): string {
