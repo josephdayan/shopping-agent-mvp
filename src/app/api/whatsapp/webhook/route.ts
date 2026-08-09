@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
 import { requireMetaSignature, requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { handleDeliveryMessage } from "@/lib/delivery-service";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError } from "@/lib/lia-copy";
@@ -107,13 +108,30 @@ export async function POST(request: Request) {
         for (const change of entry.changes ?? []) {
           for (const status of change.value?.statuses ?? []) {
             if (status.status === "failed") {
-              console.error("[whatsapp:meta:status-failed]", JSON.stringify(status).slice(0, 1500));
+              const detail = JSON.stringify(status).slice(0, 1500);
+              console.error("[whatsapp:meta:status-failed]", detail);
+              // Runtime log do plano Hobby retém só 1h — a falha também vai pro BANCO,
+              // como Message da conversa do destinatário, senão o diagnóstico evapora
+              // antes de alguém olhar (scripts/tail-messages.mts lê depois).
+              const digits = String(status.recipient_id ?? "").replace(/\D/g, "");
+              if (digits) {
+                const user = await prisma.user.findUnique({ where: { phone: `+${digits}` } });
+                const convo = user
+                  ? await prisma.conversation.findFirst({ where: { userId: user.id }, orderBy: { updatedAt: "desc" } })
+                  : null;
+                if (convo) {
+                  await prisma.message.create({
+                    data: { conversationId: convo.id, sender: "meta-status-failed", text: detail }
+                  });
+                }
+              }
             }
           }
         }
       }
-    } catch {
+    } catch (error) {
       // diagnóstico nunca pode derrubar o ACK — Meta re-tentaria em rajada
+      console.error("[whatsapp:meta:status-log-error]", error instanceof Error ? error.message : error);
     }
     return NextResponse.json({ ok: true, provider: "meta", ignored: inbound.eventType });
   }

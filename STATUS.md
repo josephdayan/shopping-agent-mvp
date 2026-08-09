@@ -194,6 +194,15 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **09/08 — falha da Meta agora é DURÁVEL no banco + tail de conversa.** Constatação: o
+> conserto dos cards (09adb388, quinta ~12:40) nunca foi exercitado — as duas únicas
+> mensagens no banco desde então são as do teste das 11:51 de quinta, ANTERIORES ao fix.
+> E o runtime log do plano Hobby retém só 1h: se o teste real não for lido na hora, a
+> evidência evapora. Fechado: `status: failed` da Meta agora também vira `Message`
+> (sender `meta-status-failed`) na conversa do destinatário, e `scripts/tail-messages.mts`
+> lê as últimas mensagens reais do banco a qualquer momento. Pendente: 1 teste real do
+> dono ("quero um cotonete") para validar os cards com URL encodada.
+
 > **07/08 (3ª) — cards de opção sumindo: URL de imagem com caractere não-ASCII + falha
 > assíncrona invisível.** Teste real do dono às 11:51: "quero um cotonete" → header "Achei
 > essas opções" e NENHUM card. Telemetria de produção: webhook 200, zero exceção — a Graph
