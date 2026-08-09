@@ -192,6 +192,54 @@ test("onboarding: pedido feito enquanto a Lia espera o endereço não é descart
   assert.match(after.toLowerCase(), /carregador/);
 });
 
+test("cotação instantânea: cesta 100% vitrine fecha com total NA HORA, sem esperar operador", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  const closed = await c.send("só isso");
+  // Nada de "vou cotar e te aviso": o total chega na mesma resposta, com menu de pagamento.
+  assert.match(closed, /Total/i, `resposta do fechamento: ${closed.slice(0, 200)}`);
+  assert.doesNotMatch(closed, /Vou cotar tudo agora/i);
+  const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
+  assert.equal(order!.status, "awaiting_quote_confirmation");
+  assert.ok(order!.deliveryFee > 0, `frete deveria ser > 0, veio ${order!.deliveryFee}`);
+  assert.ok(order!.total > order!.deliveryFee, "total inclui produtos + frete");
+  assert.match(order!.notes ?? "", /Cotação instantânea/i);
+  assert.match(order!.notes ?? "", /Frete por loja/i);
+});
+
+test("cotação instantânea: linha livre na cesta mantém o caminho do operador", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola e uma vela de aniversário");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  const closed = await c.send("só isso");
+  // Item sem preço não pode ser cobrado na hora — a cotação continua com o operador.
+  assert.match(closed, /Recebi seu pedido/i);
+  const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
+  assert.equal(order!.status, "awaiting_operator_quote");
+});
+
+test("cotação instantânea: kill-switch LIA_INSTANT_QUOTE=false volta ao fluxo manual", async (t) => {
+  if (!dbOk) return t.skip();
+  process.env.LIA_INSTANT_QUOTE = "false";
+  try {
+    const c = await returningCustomer();
+    await c.send("quero coca cola");
+    const afterChoice = await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+    const closed = await c.send("só isso");
+    assert.match(closed, /Recebi seu pedido/i);
+    const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
+    assert.equal(order!.status, "awaiting_operator_quote");
+  } finally {
+    delete process.env.LIA_INSTANT_QUOTE;
+  }
+});
+
 test("concierge completo: pede → operador cota → paga → compra → motoboy do operador → entregue", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

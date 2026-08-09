@@ -33,6 +33,13 @@ import {
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
 import { extractShoppingList, rerankShoppingOptions } from "@/lib/adapters/ai";
 import {
+  computeStoreFreights,
+  freightBreakdownLabel,
+  instantQuoteEligible,
+  instantQuoteMaxKm,
+  type InstantQuoteItem
+} from "@/lib/instant-quote";
+import {
   detectIntent,
   detectPaymentMethod,
   isQuestion,
@@ -2566,6 +2573,12 @@ async function continueAfterBasket(
 // Concierge finish: the list is closed, so create (or refresh) an order that waits for
 // the operator to quote by hand. No catalog price, no fake total — the customer sees the
 // real number only after the operator publishes the quote (opsPublishManualQuote).
+//
+// EXCEÇÃO (decisão do dono, 09/08): cesta 100% de vitrine cota NA HORA — o cliente não
+// espera no chat. A Lia publica sozinha a mesma cotação que o operador digitaria
+// (subtotal da vitrine + frete POR LOJA, da unidade mais próxima até a casa do cliente;
+// 2 lojas = 2 fretes) e o pedido chega ao /ops já indo pra pagamento. Linha livre (sem
+// preço) mantém o caminho manual — não se cobra o que não tem preço.
 async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: DeliveryContext, prefix?: string) {
   const convo = await prisma.conversation.findUnique({ where: { id: convoId } });
   if (!convo) throw new Error("Conversation not found while creating concierge quote request.");
@@ -2576,42 +2589,76 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
     where: { conversationId: convoId, status: AWAITING_OPERATOR_QUOTE_STATUS },
     orderBy: { createdAt: "desc" }
   });
+  let order;
   if (existing) {
-    await prisma.deliveryOrder.update({
+    order = await prisma.deliveryOrder.update({
       where: { id: existing.id },
       data: { items: basket, cep: ctx.cep, deliveryAddress: ctx.deliveryAddress }
     });
-    await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: existing.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
-    if (prefix) await reply(phone, prefix);
-    await reply(phone, copy.operatorQuoteStillWorking());
-    return;
+  } else {
+    order = await prisma.deliveryOrder.create({
+      data: {
+        userId: convo.userId,
+        conversationId: convoId,
+        phone,
+        cep: ctx.cep,
+        deliveryAddress: ctx.deliveryAddress,
+        storeKey: CONCIERGE_STORE_KEY,
+        storeLabel: CONCIERGE_STORE_LABEL,
+        items: basket,
+        // Default to same-hour operator courier; the operator can switch to retailer
+        // delivery when quoting, per item availability.
+        fulfillments: [{ storeKey: CONCIERGE_STORE_KEY, storeLabel: CONCIERGE_STORE_LABEL, deliveryMode: "operator_courier" }] as unknown as object,
+        itemsSubtotal: 0,
+        courierKey: "uber_direct",
+        deliveryFee: 0,
+        serviceFee: 0,
+        total: 0,
+        notes: "Pedido concierge aguardando cotação do operador.",
+        status: AWAITING_OPERATOR_QUOTE_STATUS
+      }
+    });
+  }
+  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
+
+  if (instantQuoteEligible((ctx.basket ?? []) as InstantQuoteItem[], CONCIERGE_STORE_KEY) && ctx.cep) {
+    const published = await tryPublishInstantQuote(order.id, phone, ctx, prefix);
+    if (published) return;
   }
 
-  const order = await prisma.deliveryOrder.create({
-    data: {
-      userId: convo.userId,
-      conversationId: convoId,
-      phone,
-      cep: ctx.cep,
-      deliveryAddress: ctx.deliveryAddress,
-      storeKey: CONCIERGE_STORE_KEY,
-      storeLabel: CONCIERGE_STORE_LABEL,
-      items: basket,
-      // Default to same-hour operator courier; the operator can switch to retailer
-      // delivery when quoting, per item availability.
-      fulfillments: [{ storeKey: CONCIERGE_STORE_KEY, storeLabel: CONCIERGE_STORE_LABEL, deliveryMode: "operator_courier" }] as unknown as object,
-      itemsSubtotal: 0,
-      courierKey: "uber_direct",
-      deliveryFee: 0,
-      serviceFee: 0,
-      total: 0,
-      notes: "Pedido concierge aguardando cotação do operador.",
-      status: AWAITING_OPERATOR_QUOTE_STATUS
-    }
-  });
-  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
   if (prefix) await reply(phone, prefix);
-  await reply(phone, copy.operatorQuoteRequested(itemNames));
+  await reply(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
+}
+
+// Publica a cotação instantânea reutilizando opsPublishManualQuote — status, mensagem ao
+// cliente e menu de pagamento são EXATAMENTE os mesmos da cotação manual. Qualquer erro
+// (frete incalculável, endereço longe demais, corrida com o /ops) devolve false e o
+// fluxo cai no caminho manual de sempre: nunca quebra o fechamento da lista.
+async function tryPublishInstantQuote(orderId: string, phone: string, ctx: DeliveryContext, prefix?: string): Promise<boolean> {
+  try {
+    const items = ctx.basket ?? [];
+    const { freights, totalFee, maxKm } = await computeStoreFreights(items as InstantQuoteItem[], ctx.cep!);
+    if (!freights.length) return false;
+    if (maxKm != null && maxKm > instantQuoteMaxKm()) return false;
+    const itemsSubtotal = roundMoney(items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0));
+    if (itemsSubtotal <= 0) return false;
+    const breakdown = freightBreakdownLabel(freights);
+    await prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: { notes: `Cotação instantânea (vitrine). Frete por loja: ${breakdown}.` }
+    });
+    if (prefix) await reply(phone, prefix);
+    await opsPublishManualQuote(orderId, {
+      itemsSubtotal,
+      deliveryFee: totalFee,
+      deliveryMode: "operator_courier",
+      deliveryPromise: freights.length > 1 ? `hoje, por motoboy (${freights.length} retiradas)` : "hoje, por motoboy"
+    });
+    return true;
+  } catch (error) {
+    console.warn("[instant-quote:fallback-manual]", error instanceof Error ? error.message : error);
+    return false;
+  }
 }
 
 function roundMoney(value: number): number {

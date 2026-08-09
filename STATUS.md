@@ -194,6 +194,20 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **09/08 (3ª) — COTAÇÃO INSTANTÂNEA: o cliente não espera mais no chat.** Decisão do dono
+> ("na hora que estiver falando com a Lia é rolê esperar; depois pode esperar o quanto for"):
+> cesta 100% de vitrine agora fecha com o TOTAL na mesma resposta — a Lia auto-publica a
+> mesma cotação que o operador digitaria (`tryPublishInstantQuote` → `opsPublishManualQuote`)
+> e o pedido chega ao `/ops` já indo pra pagamento; a espera fica na compra/entrega. Frete
+> **por loja, da unidade mais próxima até a casa do cliente** ("2 lojas = 2 fretes"):
+> `base + R$/km` (envs `LIA_FREIGHT_BASE` 12 · `LIA_FREIGHT_PER_KM` 1,80 · sem distância
+> real `LIA_FREIGHT_DEFAULT` 18 · teto `LIA_INSTANT_QUOTE_MAX_KM` 30 → acima volta pro
+> operador). Linha livre (sem preço) mantém o caminho manual — não se cobra o que não tem
+> preço. Kill-switch `LIA_INSTANT_QUOTE=false`. Módulo `src/lib/instant-quote.ts`; a quebra
+> de frete por loja fica nas notas do pedido no `/ops`. Política de preço defasado: a margem
+> de 10% absorve; acima disso, avisar e estornar a diferença (mesma política do item em
+> falta). Testes: 3 E2E (instantânea, linha livre, kill-switch) + unidade do frete.
+
 > **09/08 (2ª) — CARDS VALIDADOS EM PRODUÇÃO + botões pós-escolha.** Teste real do dono:
 > "Quero um cotonete" → cards chegaram com foto e botão, escolha "2" funcionou — o fix do
 > `safeMediaLink` (URL com `®`) está confirmado no mundo real; zero `meta-status-failed` no

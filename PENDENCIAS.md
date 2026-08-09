@@ -160,6 +160,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > durante a espera do endereço sumia. Corrigidos, com o endereço do courier preservado em
 > texto cru (acento/vírgula/maiúscula). 3 regressões em `tests/manual-concierge.test.ts`.
 
+> **09/08 — cotação instantânea no ar (cesta de vitrine paga na hora).** Pedido do dono:
+> zero espera no chat. Cesta 100% vitrine → total + menu de pagamento na mesma resposta;
+> frete por loja (base+R$/km da unidade mais próxima ao CEP; 2 lojas = 2 fretes; envs
+> ajustáveis sem deploy). Linha livre segue com o operador. **Ação do dono:** calibrar
+> `LIA_FREIGHT_BASE`/`LIA_FREIGHT_PER_KM`/`LIA_FREIGHT_DEFAULT` na Vercel com os preços
+> reais do seu motoboy (defaults 12/1,80/18) e testar um pedido de vitrine ponta a ponta.
+
 > **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
 > `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com
 > barra dupla — 5 emojis corrompidos no bundle; fonte sempre esteve certo.

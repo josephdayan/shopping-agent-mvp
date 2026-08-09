@@ -267,6 +267,21 @@ emoji literal `🙂` são o código ANTIGO em produção — o cotonete já reso
 deploy (match por apposição + rerank), e o emoji não existe em NENHUMA versão do fonte
 (artefato do build implantado; conferir na primeira conversa pós-deploy).
 
+**09/08 — cotação instantânea (decisão do dono: cliente não espera no chat).** Cesta 100%
+de vitrine fecha com o total NA HORA: `tryPublishInstantQuote` calcula o subtotal da vitrine
+(custo real; o markup entra no publish, como na cotação manual) + **frete por loja** — da
+unidade mais próxima da loja até o CEP do cliente, "2 lojas = 2 fretes" — e auto-chama
+`opsPublishManualQuote`, reutilizando por inteiro a máquina de cotação/pagamento existente.
+Frete = `LIA_FREIGHT_BASE` (12) + `LIA_FREIGHT_PER_KM` (1,80) × km, teto arredondado;
+sem distância real (loja sem coords/geocode fora) usa `LIA_FREIGHT_DEFAULT` (18); km >
+`LIA_INSTANT_QUOTE_MAX_KM` (30) volta pro operador. Linha livre mantém o fluxo manual
+(não se cobra o que não tem preço); kill-switch `LIA_INSTANT_QUOTE=false`. A autoridade de
+preço do operador passa a valer só para linha livre e casos de teto; para vitrine, o preço
+raspado (com markup como colchão) é o cobrado — defasagem acima da margem segue a política
+de pós-venda (avisar + estornar diferença). Módulo `src/lib/instant-quote.ts` (puro/testável);
+quebra por loja nas notas do pedido. Testes em `tests/instant-quote.test.ts` + 3 E2E no
+`tests/manual-concierge.test.ts`.
+
 **07/08 (3ª rodada) — cards de opção descartados pela Meta sem erro visível.** Teste real:
 header "Achei essas opções de cotonete:" saiu e nenhum card chegou. Runtime logs: webhook
 200, zero exceção → a Graph API aceitou os cards e o WhatsApp os descartou DEPOIS (falha
