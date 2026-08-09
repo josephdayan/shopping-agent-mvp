@@ -161,11 +161,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > texto cru (acento/vírgula/maiúscula). 3 regressões em `tests/manual-concierge.test.ts`.
 
 > **09/08 — cotação instantânea no ar (cesta de vitrine paga na hora).** Pedido do dono:
-> zero espera no chat. Cesta 100% vitrine → total + menu de pagamento na mesma resposta;
-> frete por loja (base+R$/km da unidade mais próxima ao CEP; 2 lojas = 2 fretes; envs
-> ajustáveis sem deploy). Linha livre segue com o operador. **Ação do dono:** calibrar
-> `LIA_FREIGHT_BASE`/`LIA_FREIGHT_PER_KM`/`LIA_FREIGHT_DEFAULT` na Vercel com os preços
-> reais do seu motoboy (defaults 12/1,80/18) e testar um pedido de vitrine ponta a ponta.
+> zero espera no chat. Cesta 100% vitrine → total + menu de pagamento na mesma resposta.
+> **Frete = política do SITE de cada loja** (a entrega é o varejista entregando; "2 lojas =
+> 2 fretes" = dois checkouts): `LIA_STORE_FREIGHT_<LOJA>` + `LIA_STORE_FREE_ABOVE_<LOJA>`
+> por loja; sem política, `LIA_FREIGHT_DEFAULT` (18) marcado "(tarifa padrão)" na nota do
+> /ops. Linha livre segue com o operador. **Ação do dono (importante pra precisão):**
+> preencher na Vercel o frete real do site das lojas que usa — ex.:
+> `LIA_STORE_FREIGHT_CARREFOUR=14.90` + `LIA_STORE_FREE_ABOVE_CARREFOUR=99`,
+> `LIA_STORE_FREIGHT_PETZ=…` — os valores você vê no checkout de cada site; muda sem
+> deploy. Enquanto não calibrar, vale a tarifa padrão de R$18 por loja. Próximo nível de
+> precisão (futuro): simulação de frete ao vivo na API VTEX das lojas que a expõem.
 
 > **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
 > `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com

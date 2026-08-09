@@ -36,7 +36,6 @@ import {
   computeStoreFreights,
   freightBreakdownLabel,
   instantQuoteEligible,
-  instantQuoteMaxKm,
   type InstantQuoteItem
 } from "@/lib/instant-quote";
 import {
@@ -2637,22 +2636,24 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
 async function tryPublishInstantQuote(orderId: string, phone: string, ctx: DeliveryContext, prefix?: string): Promise<boolean> {
   try {
     const items = ctx.basket ?? [];
-    const { freights, totalFee, maxKm } = await computeStoreFreights(items as InstantQuoteItem[], ctx.cep!);
+    // A entrega é pelo SITE de cada loja (o operador compra lá e a loja entrega), então
+    // o frete é a política de cada site — por loja, com frete grátis por limiar.
+    const { freights, totalFee } = computeStoreFreights(items as InstantQuoteItem[]);
     if (!freights.length) return false;
-    if (maxKm != null && maxKm > instantQuoteMaxKm()) return false;
     const itemsSubtotal = roundMoney(items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0));
     if (itemsSubtotal <= 0) return false;
     const breakdown = freightBreakdownLabel(freights);
     await prisma.deliveryOrder.update({
       where: { id: orderId },
-      data: { notes: `Cotação instantânea (vitrine). Frete por loja: ${breakdown}.` }
+      data: { notes: `Cotação instantânea (vitrine, entrega pelo site). Frete por loja: ${breakdown}.` }
     });
     if (prefix) await reply(phone, prefix);
     await opsPublishManualQuote(orderId, {
       itemsSubtotal,
       deliveryFee: totalFee,
-      deliveryMode: "operator_courier",
-      deliveryPromise: freights.length > 1 ? `hoje, por motoboy (${freights.length} retiradas)` : "hoje, por motoboy"
+      deliveryMode: "retailer_delivery",
+      deliveryPromise:
+        freights.length > 1 ? `pela própria loja (${freights.length} entregas)` : "pela própria loja"
     });
     return true;
   } catch (error) {

@@ -2,15 +2,17 @@
 // chat. Quando TODOS os itens da cesta têm preço de vitrine, a Lia publica a cotação na
 // hora e o pedido chega ao /ops já pago; a espera fica onde não incomoda (compra/entrega).
 //
-// O frete é POR LOJA, da unidade mais próxima da loja até a casa do cliente — "se for 2
-// lojas, 2 fretes" (dono). Aproximação de preço de motoboy: base + R$/km, ajustável por
-// env SEM deploy. Sem distância real (loja sem coordenadas, geocode fora), vale a tarifa
-// padrão. Distância acima do teto = volta pro operador cotar à mão (caso raro/longe).
+// A entrega é PELO SITE da própria loja (correção do dono, 09/08: "não é via Uber, é via
+// site" — o operador compra no site do varejista e a loja entrega). Logo o frete é POR
+// LOJA — "2 lojas = 2 fretes" — e o número certo é o que o SITE daquela loja cobra:
+//   1. Política da loja: env `LIA_STORE_FREIGHT_<LOJA>` (ex.: LIA_STORE_FREIGHT_CARREFOUR)
+//      com limiar de frete grátis `LIA_STORE_FREE_ABOVE_<LOJA>` sobre o subtotal daquela
+//      loja (o site olha o carrinho DELE, então o limiar compara o custo de site, sem
+//      markup). Valores calibrados pelo operador com o que os sites cobram de verdade;
+//      mudam por env, sem deploy.
+//   2. Sem política configurada: tarifa padrão `LIA_FREIGHT_DEFAULT`.
 //
 // Linha livre (item sem preço) NUNCA entra aqui: não se cobra o que não tem preço.
-import { getStore } from "@/lib/stores";
-import { pickNearestUnit } from "@/lib/stores/nearest";
-
 export type InstantQuoteItem = {
   qty: number;
   unitPrice: number;
@@ -21,14 +23,16 @@ export type InstantQuoteItem = {
 export type StoreFreight = {
   storeKey: string;
   storeLabel: string;
-  km: number | null;
+  subtotal: number;
   fee: number;
+  // De onde saiu o número — política configurada da loja ("loja", incluindo frete
+  // grátis por limiar) ou tarifa padrão ("padrao"). Vai pra nota do /ops.
+  source: "loja" | "padrao";
 };
 
 export type InstantFreights = {
   freights: StoreFreight[];
   totalFee: number;
-  maxKm: number | null;
 };
 
 function envNumber(name: string, fallback: number): number {
@@ -36,17 +40,8 @@ function envNumber(name: string, fallback: number): number {
   return Number.isFinite(value) && value >= 0 ? value : fallback;
 }
 
-export function freightForKm(km: number | null): number {
-  if (km == null) return envNumber("LIA_FREIGHT_DEFAULT", 18);
-  const base = envNumber("LIA_FREIGHT_BASE", 12);
-  const perKm = envNumber("LIA_FREIGHT_PER_KM", 1.8);
-  // Arredonda pra cima em reais inteiros: número limpo pro cliente, centavos a favor
-  // da operação.
-  return Math.ceil(base + perKm * km);
-}
-
-export function instantQuoteMaxKm(): number {
-  return envNumber("LIA_INSTANT_QUOTE_MAX_KM", 30);
+function envKey(storeKey: string): string {
+  return storeKey.replace(/[^a-z0-9]/gi, "_").toUpperCase();
 }
 
 export function instantQuoteEnabled(): boolean {
@@ -60,37 +55,45 @@ export function instantQuoteEligible(items: InstantQuoteItem[], conciergeStoreKe
   return items.every((item) => item.unitPrice > 0 && item.storeKey && item.storeKey !== conciergeStoreKey);
 }
 
-export async function computeStoreFreights(items: InstantQuoteItem[], cep: string): Promise<InstantFreights> {
-  const stores = new Map<string, string>();
+// Frete de UMA loja segundo a política do site dela: valor configurado, zerado quando o
+// subtotal (custo de site) passa do limiar de frete grátis. Sem política → tarifa padrão.
+export function storeFreight(storeKey: string, storeLabel: string, subtotal: number): StoreFreight {
+  const key = envKey(storeKey);
+  const configured = process.env[`LIA_STORE_FREIGHT_${key}`];
+  const fee = Number(configured);
+  if (configured !== undefined && Number.isFinite(fee) && fee >= 0) {
+    const freeAbove = Number(process.env[`LIA_STORE_FREE_ABOVE_${key}`]);
+    const free = Number.isFinite(freeAbove) && freeAbove > 0 && subtotal >= freeAbove;
+    return { storeKey, storeLabel, subtotal, fee: free ? 0 : Math.round(fee * 100) / 100, source: "loja" };
+  }
+  return { storeKey, storeLabel, subtotal, fee: envNumber("LIA_FREIGHT_DEFAULT", 18), source: "padrao" };
+}
+
+export function computeStoreFreights(items: InstantQuoteItem[]): InstantFreights {
+  const stores = new Map<string, { label: string; subtotal: number }>();
   for (const item of items) {
-    if (item.storeKey) stores.set(item.storeKey, item.storeLabel ?? item.storeKey);
+    if (!item.storeKey) continue;
+    const entry = stores.get(item.storeKey) ?? { label: item.storeLabel ?? item.storeKey, subtotal: 0 };
+    entry.subtotal += item.unitPrice * item.qty;
+    stores.set(item.storeKey, entry);
   }
   const freights: StoreFreight[] = [];
-  let maxKm: number | null = null;
-  for (const [storeKey, storeLabel] of stores) {
-    const units = getStore(storeKey)?.listUnits() ?? [];
-    let km: number | null = null;
-    if (units.length) {
-      try {
-        km = (await pickNearestUnit(units, cep)).distanceKm;
-      } catch {
-        km = null;
-      }
-    }
-    if (km != null) maxKm = Math.max(maxKm ?? 0, km);
-    freights.push({ storeKey, storeLabel, km, fee: freightForKm(km) });
+  for (const [storeKey, { label, subtotal }] of stores) {
+    freights.push(storeFreight(storeKey, label, Math.round(subtotal * 100) / 100));
   }
   return {
     freights,
-    totalFee: Math.round(freights.reduce((sum, f) => sum + f.fee, 0) * 100) / 100,
-    maxKm
+    totalFee: Math.round(freights.reduce((sum, f) => sum + f.fee, 0) * 100) / 100
   };
 }
 
-// Linha humana do frete pra nota do /ops e pro texto da promessa: o operador (e o
-// cliente, resumido) enxergam de onde saiu o número.
+// Linha humana do frete pra nota do /ops: o operador enxerga de onde saiu cada número
+// ("padrão" grita que falta calibrar a política daquela loja).
 export function freightBreakdownLabel(freights: StoreFreight[]): string {
   return freights
-    .map((f) => `${f.storeLabel} ${f.km != null ? `${f.km}km ` : ""}R$${f.fee.toFixed(2).replace(".", ",")}`)
+    .map((f) => {
+      const valor = f.fee === 0 ? "grátis" : `R$${f.fee.toFixed(2).replace(".", ",")}`;
+      return `${f.storeLabel} ${valor}${f.source === "padrao" ? " (tarifa padrão)" : ""}`;
+    })
     .join(" + ");
 }
