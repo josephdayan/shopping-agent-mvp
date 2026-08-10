@@ -55,15 +55,25 @@ export function instantQuoteEligible(items: InstantQuoteItem[], conciergeStoreKe
   return items.every((item) => item.unitPrice > 0 && item.storeKey && item.storeKey !== conciergeStoreKey);
 }
 
-// Frete de UMA loja segundo a política do site dela: valor configurado, zerado quando o
-// subtotal (custo de site) passa do limiar de frete grátis. Sem política → tarifa padrão.
+// Políticas de frete PESQUISADAS dos sites (SP capital como referência) — semente em
+// código para a cotação funcionar precisa sem depender de env. Env sobrepõe campo a
+// campo sem deploy (LIA_STORE_FREIGHT_<LOJA> / LIA_STORE_FREE_ABOVE_<LOJA>). freeAbove
+// compara com o subtotal de CUSTO daquela loja (é o carrinho que o site enxerga).
+export const SEED_STORE_FREIGHT: Record<string, { fee: number; freeAbove?: number }> = {};
+
+// Frete de UMA loja segundo a política do site dela: env → semente pesquisada → tarifa
+// padrão. Zerado quando o subtotal (custo de site) passa do limiar de frete grátis.
 export function storeFreight(storeKey: string, storeLabel: string, subtotal: number): StoreFreight {
   const key = envKey(storeKey);
   const configured = process.env[`LIA_STORE_FREIGHT_${key}`];
-  const fee = Number(configured);
-  if (configured !== undefined && Number.isFinite(fee) && fee >= 0) {
-    const freeAbove = Number(process.env[`LIA_STORE_FREE_ABOVE_${key}`]);
-    const free = Number.isFinite(freeAbove) && freeAbove > 0 && subtotal >= freeAbove;
+  const envFee = Number(configured);
+  const seed = SEED_STORE_FREIGHT[storeKey];
+  const hasEnvFee = configured !== undefined && Number.isFinite(envFee) && envFee >= 0;
+  if (hasEnvFee || seed) {
+    const fee = hasEnvFee ? envFee : seed!.fee;
+    const envFreeAbove = Number(process.env[`LIA_STORE_FREE_ABOVE_${key}`]);
+    const freeAbove = Number.isFinite(envFreeAbove) && envFreeAbove > 0 ? envFreeAbove : seed?.freeAbove;
+    const free = freeAbove != null && freeAbove > 0 && subtotal >= freeAbove;
     return { storeKey, storeLabel, subtotal, fee: free ? 0 : Math.round(fee * 100) / 100, source: "loja" };
   }
   return { storeKey, storeLabel, subtotal, fee: envNumber("LIA_FREIGHT_DEFAULT", 18), source: "padrao" };
