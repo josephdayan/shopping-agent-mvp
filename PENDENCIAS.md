@@ -165,12 +165,22 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **Frete = política do SITE de cada loja** (a entrega é o varejista entregando; "2 lojas =
 > 2 fretes" = dois checkouts): `LIA_STORE_FREIGHT_<LOJA>` + `LIA_STORE_FREE_ABOVE_<LOJA>`
 > por loja; sem política, `LIA_FREIGHT_DEFAULT` (18) marcado "(tarifa padrão)" na nota do
-> /ops. Linha livre segue com o operador. **Ação do dono (importante pra precisão):**
-> preencher na Vercel o frete real do site das lojas que usa — ex.:
-> `LIA_STORE_FREIGHT_CARREFOUR=14.90` + `LIA_STORE_FREE_ABOVE_CARREFOUR=99`,
-> `LIA_STORE_FREIGHT_PETZ=…` — os valores você vê no checkout de cada site; muda sem
-> deploy. Enquanto não calibrar, vale a tarifa padrão de R$18 por loja. Próximo nível de
-> precisão (futuro): simulação de frete ao vivo na API VTEX das lojas que a expõem.
+> /ops. Linha livre segue com o operador.
+>
+> **10/08 — fretes PESQUISADOS e semeados no código (11 de 18 lojas).** Simulação REAL no
+> checkout VTEX (CEP 01310-100): Pague Menos R$4,90 (grátis ≥ ~R$174) · Drogaria SP R$6,90
+> (≥ ~R$240) · Cobasi R$7,90 (≥ ~R$234) · Oba R$9,90 same-day (sem grátis) · Swift R$15,90
+> (≥ ~R$400) · Divvino R$15,90 (≥ ~R$600) · Kopenhagen R$15,90 (≥ ~R$118) · Ri Happy R$18
+> (≥ ~R$420). Política publicada: Carrefour mercado grátis > R$349 (fee ~14,90 ESTIMADO) ·
+> Petz grátis SP > R$119 (fee ~9,90 ESTIMADO) · Boticário grátis > R$229 (fee ~14,90
+> ESTIMADO). Limiares = MENOR carrinho observado com frete zero (conservador: nunca cobra a
+> menos; o site pode zerar antes e a diferença vira margem). Tabela em
+> `SEED_STORE_FREIGHT` (src/lib/instant-quote.ts); env sobrepõe sem deploy. **Restam em
+> tarifa padrão (R$18):** Imigrantes (frete dinâmico por distância), Natural da Terra,
+> Kalunga, Decathlon, Cacau Show, Giuliana Flores, Droga Raia. **Conferência do dono
+> (rápida):** os 3 fees ESTIMADOS (Carrefour/Petz/Boticário) no checkout real, e baixar
+> os limiares prováveis se quiser ser mais generoso (PM 149, Cobasi 199, RiHappy 399,
+> Kopenhagen 99).
 
 > **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
 > `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com

@@ -55,11 +55,33 @@ export function instantQuoteEligible(items: InstantQuoteItem[], conciergeStoreKe
   return items.every((item) => item.unitPrice > 0 && item.storeKey && item.storeKey !== conciergeStoreKey);
 }
 
-// Políticas de frete PESQUISADAS dos sites (SP capital como referência) — semente em
-// código para a cotação funcionar precisa sem depender de env. Env sobrepõe campo a
-// campo sem deploy (LIA_STORE_FREIGHT_<LOJA> / LIA_STORE_FREE_ABOVE_<LOJA>). freeAbove
-// compara com o subtotal de CUSTO daquela loja (é o carrinho que o site enxerga).
-export const SEED_STORE_FREIGHT: Record<string, { fee: number; freeAbove?: number }> = {};
+// Políticas de frete PESQUISADAS dos sites (SP capital, CEP 01310-100, 10/08/2026) —
+// semente em código para a cotação nascer precisa. Env sobrepõe campo a campo sem
+// deploy (LIA_STORE_FREIGHT_<LOJA> / LIA_STORE_FREE_ABOVE_<LOJA>). freeAbove compara
+// com o subtotal de CUSTO daquela loja (é o carrinho que o site enxerga).
+//
+// Fonte A = simulação REAL no checkout (VTEX orderForms/simulation): fee exato da
+// entrega padrão; freeAbove = MENOR carrinho observado com frete zerado (conservador —
+// nunca cobra a menos; o site pode zerar um pouco antes, e a diferença vira margem).
+// Fonte B = política publicada no site (fee com "ESTIMADO" precisa de conferência).
+export const SEED_STORE_FREIGHT: Record<string, { fee: number; freeAbove?: number }> = {
+  // — Fonte A: simulação real —
+  paguemenos: { fee: 4.9, freeAbove: 174 }, // Econômica 1d útil · pago a R$115,60, grátis a R$173,40 (política provável: R$149)
+  drogariasp: { fee: 6.9, freeAbove: 240 }, // NORMAL 1d útil · pago a R$147,95, grátis a R$239,58 (provável: R$199)
+  cobasi: { fee: 7.9, freeAbove: 234 }, // Econômica 1d útil · pago a R$175,50, grátis a R$234 (provável: R$199)
+  oba: { fee: 9.9 }, // Convencional no MESMO dia · sem frete grátis observado até R$97
+  swift: { fee: 15.9, freeAbove: 400 }, // 1d útil · pago a R$299,40, grátis a R$399,20 (provável: R$349–399)
+  divvino: { fee: 15.9, freeAbove: 600 }, // NORMAL 5d úteis · pago a R$479,60, grátis a R$599,50
+  kopenhagen: { fee: 15.9, freeAbove: 118 }, // RÁPIDA 1d útil · pago a R$98, grátis a R$117,60 (provável: R$99)
+  rihappy: { fee: 18, freeAbove: 420 }, // até 2 dias · pago a R$342,93, grátis a R$419,97 (provável: R$399)
+  // — Fonte B: política publicada (fee ESTIMADO — o site só mostra no checkout) —
+  carrefour: { fee: 14.9, freeAbove: 349 }, // mercado: mínimo R$30, grátis > R$349 (FAQ oficial); fee varia por CEP/agenda
+  petz: { fee: 9.9, freeAbove: 119 }, // grátis SP capital > R$119,01 (política oficial); fee típico VTEX pet
+  boticario: { fee: 14.9, freeAbove: 229 } // grátis site R$199–229 (conservador: 229); fee varia por CEP
+  // imigrantes (frete dinâmico por distância), naturaldaterra, kalunga, decathlon,
+  // cacaushow, giulianaflores, drogaraia: sem dado confiável → tarifa padrão até
+  // calibrar por env.
+};
 
 // Frete de UMA loja segundo a política do site dela: env → semente pesquisada → tarifa
 // padrão. Zerado quando o subtotal (custo de site) passa do limiar de frete grátis.
