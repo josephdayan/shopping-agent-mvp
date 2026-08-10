@@ -543,17 +543,53 @@ const VARIANT_COLOR_WORDS = new Set([
   "dourado", "dourada", "prata", "prateado", "prateada", "lilas", "laranja", "vinho"
 ]);
 
+// Tokens de MEDIDA que distinguem variantes do mesmo produto ("500ml", "15kg", "20w",
+// número solto, letra de tamanho P/M/G). Mesma lógica das cores: não são identidade do
+// produto — a menos que o cliente tenha pedido a medida, aí ela é o que ele escolhe.
+const SIZE_VALUE_RE = /^\d+(?:[.,]\d+)?(?:kg|g|mg|ml|l|lt|un|w|v|gb)?$/;
+const SIZE_UNIT_WORDS = new Set(["kg", "quilo", "quilos", "grama", "gramas", "litro", "litros", "ml", "unidade", "unidades"]);
+function isSizeToken(token: string): boolean {
+  return SIZE_VALUE_RE.test(token) || SIZE_LETTER_RE.test(token) || SIZE_UNIT_WORDS.has(token);
+}
+
+// O que sobra do nome quando se tira o que é variante (cor/medida) e ruído: a
+// IDENTIDADE do produto, usada pra reconhecer "quase o mesmo item de novo".
+function identityTokens(name: string, keepColors: boolean, keepSizes: boolean): Set<string> {
+  return new Set(
+    words(name).filter(
+      (w) =>
+        !STOPWORDS.has(w) &&
+        (keepColors || !VARIANT_COLOR_WORDS.has(w)) &&
+        (keepSizes || !isSizeToken(w))
+    )
+  );
+}
+
+// Dois candidatos são o MESMO produto (ou quase) em variante diferente? Caso real
+// (10/08): pedir "carregador" mostrava 3 vezes quase o mesmo carregador; "ração", 3
+// tamanhos da mesma ração. Identidade = tokens do nome sem cor/medida; sobreposição
+// alta (Jaccard ≥ 0.75) = variante, não um produto distinto que mereça vaga própria.
+// Marcas declaradas e diferentes nunca são variantes (nomes iguais de marcas rivais).
+export function sameProductVariant(query: string, a: CatalogItem, b: CatalogItem): boolean {
+  const brandA = normalizeText(a.brand ?? "");
+  const brandB = normalizeText(b.brand ?? "");
+  if (brandA && brandB && brandA !== brandB) return false;
+  const asked = queryTokens(query);
+  const keepColors = asked.some((t) => VARIANT_COLOR_WORDS.has(t));
+  const keepSizes = asked.some((t) => isSizeToken(t));
+  const ta = identityTokens(a.name, keepColors, keepSizes);
+  const tb = identityTokens(b.name, keepColors, keepSizes);
+  if (!ta.size || !tb.size) return false;
+  let common = 0;
+  for (const t of ta) if (tb.has(t)) common++;
+  return common / (ta.size + tb.size - common) >= 0.75;
+}
+
 export function diversifyOptions(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
-  const colorAsked = queryTokens(query).some((t) => VARIANT_COLOR_WORDS.has(t));
-  const identity = (item: CatalogItem) =>
-    colorAsked ? normalizeText(item.name) : words(item.name).filter((w) => !VARIANT_COLOR_WORDS.has(w)).join(" ");
   const out: CatalogItem[] = [];
-  const seen = new Set<string>();
   for (const item of items) {
     if (out.length >= limit) break;
-    const key = identity(item);
-    if (seen.has(key)) continue;
-    seen.add(key);
+    if (out.some((picked) => sameProductVariant(query, picked, item))) continue;
     out.push(item);
   }
   // Menos produtos distintos que vagas: completa com as variantes repetidas mesmo —

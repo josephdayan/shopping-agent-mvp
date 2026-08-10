@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { scoreCatalogMatch, variantCount } from "./types";
+import { sameProductVariant, scoreCatalogMatch, variantCount } from "./types";
 import { petzStore } from "./petz";
 import { boticarioStore } from "./boticario";
 import { obaStore } from "./oba";
@@ -153,7 +153,7 @@ export async function searchAcrossStores(query: string, limitPerStore = 4) {
 export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
 export async function gatherCrossStoreCandidates(query: string, limit = 12): Promise<StoreCandidate[]> {
   const hits = await searchAcrossStores(query, 4);
-  return hits
+  const ranked = hits
     .map((hit) => ({ hit, score: scoreCatalogMatch(query, hit.item) }))
     .filter((entry) => entry.score > 0)
     .sort(
@@ -165,8 +165,17 @@ export async function gatherCrossStoreCandidates(query: string, limit = 12): Pro
         variantCount(query, a.hit.item) - variantCount(query, b.hit.item) ||
         a.hit.item.unitPrice - b.hit.item.unitPrice
     )
-    .slice(0, limit)
     .map((entry) => entry.hit);
+  // Variantes do mesmo produto (cada loja manda seu top-4, que costuma ser a mesma
+  // ração em 4 tamanhos) não podem esgotar as vagas: produtos DISTINTOS ocupam as
+  // vagas primeiro e as variantes só preenchem o que sobrar — senão nem o rerank de
+  // IA consegue diversificar, porque os 12 candidatos já chegam quase iguais.
+  const distinct: StoreCandidate[] = [];
+  const variants: StoreCandidate[] = [];
+  for (const cand of ranked) {
+    (distinct.some((d) => sameProductVariant(query, d.item, cand.item)) ? variants : distinct).push(cand);
+  }
+  return [...distinct, ...variants].slice(0, limit);
 }
 
 export type { CatalogItem, StoreConnector, StoreUnit };

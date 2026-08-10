@@ -245,9 +245,9 @@ harnesses cobrem coisas diferentes e vale rodar ambos.
 `tests/search-golden.test.ts` trava os determinísticos no `npm test` (regressão dura, roster
 completo de 18 lojas); `npx tsx scripts/eval-search.mts` roda o pipeline completo (extração +
 rerank com a chave real) e imprime o placar DET/IA. Fluxo de melhoria: busca ruim reportada →
-vira caso no golden → mede → conserta → placar sobe → commit. Placar atual: **31/32
-determinístico · 32/32 com IA**. Regra: mudança de scorer/prompt só entra acompanhada do caso
-que a justifica.
+vira caso no golden → mede → conserta → placar sobe → commit. Placar da época: **31/32
+determinístico · 32/32 com IA** (placar vigente: ver a entrada mais recente datada). Regra:
+mudança de scorer/prompt só entra acompanhada do caso que a justifica.
 
 Bônus: consertado o bug que escondia a IA dos scripts — `scripts/talk-env.mts` usava
 `__dirname` (inexistente em ESM), o `catch` engolia o erro e o `.env` nunca era carregado; o
@@ -280,6 +280,22 @@ Petz bloqueiam consulta externa → sempre tabela. Validação real 10/08: PM R$
 R$9,90 same-day, Swift R$0 (grátis auto), Campinas R$4,90 — e a incógnita restante é só
 se os sites tratam o IP da Vercel diferente (o log responde no 1º pedido; se bloquear,
 degrada pra tabela sozinho).
+
+**10/08 — diversidade nas opções (caso do dono: "quase o mesmo carregador 3x").** Pedir
+"carregador" ou "ração" mostrava 3 variantes quase iguais do mesmo produto. Três causas e
+três consertos: (1) `gatherCrossStoreCandidates` agora ordena produtos DISTINTOS primeiro —
+cada loja manda seu top-4, que costuma ser a mesma ração em 4 tamanhos, e as variantes
+esgotavam as 12 vagas antes de o rerank sequer ver um produto diferente; (2)
+`sameProductVariant` (stores/types.ts): identidade = tokens do nome sem cor/medida
+(Jaccard ≥ 0.75 = variante; marcas declaradas diferentes nunca são variantes; pedir
+cor/tamanho mantém o atributo na identidade) — `diversifyOptions` passou a usar isso no
+lugar do dedupe só-por-cor; (3) regra 3 do prompt do rerank endurecida: produto realmente
+diferente (marca/modelo/tipo/faixa de preço), variante só como preenchimento quando não há
+3 distintos. Golden ganhou o campo `distinctOptions` (checado no unit E no eval); casos
+novos/marcados: "carregador usb", "racao para cachorro", "carregador de celular". Placar
+pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só a IA resolve por
+desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
+preenchem quando o catálogo não tem 3 produtos distintos.
 
 **09/08 — cotação instantânea (decisão do dono: cliente não espera no chat).** Cesta 100%
 de vitrine fecha com o total NA HORA: `tryPublishInstantQuote` calcula o subtotal da vitrine

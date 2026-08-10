@@ -3,22 +3,23 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { gatherCrossStoreCandidates, listStores } from "../src/lib/stores";
-import { conciergeMatchIsStrong, diversifyOptions, normalizeText } from "../src/lib/stores/types";
+import { conciergeMatchIsStrong, diversifyOptions, normalizeText, sameProductVariant, type CatalogItem } from "../src/lib/stores/types";
 import { GOLDEN_CASES } from "./helpers/search-golden";
 
 // Piso de regressão da busca: o pipeline determinístico (sem OpenAI) tem que passar
 // todos os casos `deterministic: true` do golden. Espelha o fallback do buildChoices
 // do concierge: candidatos largos em todas as vitrines → top-3 diversificado → piso
 // de relevância. Se mudar lá, mude aqui.
-async function deterministicOptions(query: string): Promise<string[]> {
+async function deterministicOptions(query: string): Promise<CatalogItem[]> {
   const candidates = await gatherCrossStoreCandidates(query, 12);
   const top3 = diversifyOptions(query, candidates.map((c) => c.item), 3);
-  return top3.filter((item) => conciergeMatchIsStrong(query, item)).map((item) => normalizeText(item.name));
+  return top3.filter((item) => conciergeMatchIsStrong(query, item));
 }
 
 for (const c of GOLDEN_CASES.filter((c) => c.deterministic)) {
   test(`golden determinístico: ${c.name}`, async () => {
-    const shown = await deterministicOptions(c.query);
+    const items = await deterministicOptions(c.query);
+    const shown = items.map((item) => normalizeText(item.name));
     if (c.none) {
       assert.deepEqual(shown, [], `"${c.query}" deveria ser linha livre, mas mostrou: ${shown.join(" | ")}`);
       return;
@@ -33,6 +34,16 @@ for (const c of GOLDEN_CASES.filter((c) => c.deterministic)) {
     if (c.allExclude) {
       for (const name of shown) {
         assert.doesNotMatch(name, c.allExclude, `"${c.query}" mostrou opção proibida: ${name}`);
+      }
+    }
+    if (c.distinctOptions) {
+      for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+          assert.ok(
+            !sameProductVariant(c.query, items[i], items[j]),
+            `"${c.query}" mostrou quase o mesmo produto duas vezes: ${items[i].name} | ${items[j].name}`
+          );
+        }
       }
     }
   });

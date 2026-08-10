@@ -14,15 +14,17 @@
 import "./talk-env.mts";
 
 import { gatherCrossStoreCandidates } from "../src/lib/stores";
-import { conciergeMatchIsStrong, diversifyOptions, normalizeText } from "../src/lib/stores/types";
+import { conciergeMatchIsStrong, diversifyOptions, normalizeText, sameProductVariant, type CatalogItem } from "../src/lib/stores/types";
 import { extractShoppingList, rerankShoppingOptions } from "../src/lib/adapters/ai";
 import { GOLDEN_CASES, type GoldenCase } from "../tests/helpers/search-golden";
 
 process.env.LIA_RETAILER_TEST_SEED = process.env.LIA_RETAILER_TEST_SEED ?? "true";
 
+type Shown = { items: CatalogItem[]; query: string };
 type Verdict = { pass: boolean; shown: string[]; detail?: string };
 
-function judge(c: GoldenCase, shown: string[]): Verdict {
+function judge(c: GoldenCase, { items, query }: Shown): Verdict {
+  const shown = items.map((item) => normalizeText(item.name));
   if (c.none) {
     return shown.length === 0
       ? { pass: true, shown }
@@ -35,19 +37,28 @@ function judge(c: GoldenCase, shown: string[]): Verdict {
     const bad = shown.find((name) => c.allExclude!.test(name));
     if (bad) return { pass: false, shown, detail: `opção proibida: ${bad}` };
   }
+  if (c.distinctOptions) {
+    for (let i = 0; i < items.length; i++) {
+      for (let j = i + 1; j < items.length; j++) {
+        if (sameProductVariant(query, items[i], items[j])) {
+          return { pass: false, shown, detail: `quase o mesmo produto 2x: ${shown[i]} | ${shown[j]}` };
+        }
+      }
+    }
+  }
   return { pass: true, shown };
 }
 
 // Espelho do fallback determinístico do buildChoices do concierge (candidatos largos →
 // diversifica → piso). Se mudar lá, mude aqui e no unit test.
-async function deterministicShown(query: string): Promise<string[]> {
+async function deterministicShown(query: string): Promise<Shown> {
   const candidates = await gatherCrossStoreCandidates(query, 12);
   const top3 = diversifyOptions(query, candidates.map((c) => c.item), 3);
-  return top3.filter((item) => conciergeMatchIsStrong(query, item)).map((item) => normalizeText(item.name));
+  return { items: top3.filter((item) => conciergeMatchIsStrong(query, item)), query };
 }
 
 // Pipeline com IA: extração (se houver mensagem crua) → candidatos → rerank.
-async function aiShown(c: GoldenCase): Promise<{ shown: string[]; usedAi: boolean }> {
+async function aiShown(c: GoldenCase): Promise<{ shown: Shown; usedAi: boolean }> {
   let query = c.query;
   let usedAi = false;
   if (c.message) {
@@ -58,7 +69,7 @@ async function aiShown(c: GoldenCase): Promise<{ shown: string[]; usedAi: boolea
     }
   }
   const candidates = await gatherCrossStoreCandidates(query, 12);
-  if (!candidates.length) return { shown: [], usedAi };
+  if (!candidates.length) return { shown: { items: [], query }, usedAi };
   const rerank = await rerankShoppingOptions(c.message ?? query, [
     {
       query,
@@ -74,11 +85,11 @@ async function aiShown(c: GoldenCase): Promise<{ shown: string[]; usedAi: boolea
   if (!rerank) {
     // IA off/falhou: mesmo fallback do produto.
     const top3 = diversifyOptions(query, candidates.map((cand) => cand.item), 3);
-    return { shown: top3.filter((item) => conciergeMatchIsStrong(query, item)).map((i) => normalizeText(i.name)), usedAi };
+    return { shown: { items: top3.filter((item) => conciergeMatchIsStrong(query, item)), query }, usedAi };
   }
   const bySku = new Map(candidates.map((cand) => [cand.item.sku, cand.item]));
   return {
-    shown: rerank.lines[0].skus.map((sku) => normalizeText(bySku.get(sku)!.name)),
+    shown: { items: rerank.lines[0].skus.map((sku) => bySku.get(sku)!), query },
     usedAi: true
   };
 }

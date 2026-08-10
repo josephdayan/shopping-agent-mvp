@@ -34,6 +34,9 @@ export type GoldenCase = {
   allExclude?: RegExp;
   // Resultado honesto = nenhuma opção (linha livre pro operador cotar).
   none?: boolean;
+  // As opções mostradas devem ser produtos DISTINTOS entre si — nunca o mesmo produto
+  // (ou quase) em outra cor/tamanho/embalagem (checado com sameProductVariant).
+  distinctOptions?: boolean;
   // O pipeline determinístico (sem OpenAI) já passa este caso — vira regressão dura
   // no npm test. `false` = só a camada de IA resolve (sinônimo/julgamento semântico).
   deterministic: boolean;
@@ -57,8 +60,18 @@ export const GOLDEN_CASES: GoldenCase[] = [
     deterministic: true
   },
 
+  // ---- diversidade (10/08): as 3 opções não podem ser quase o mesmo produto ----
+  {
+    name: "carregador genérico mostra 3 produtos distintos, não 3 vezes o quase-mesmo",
+    query: "carregador usb",
+    top1Include: /carregador/,
+    distinctOptions: true,
+    deterministic: true,
+    note: "caso real 10/08: pedir carregador devolvia quase o mesmo carregador 3x"
+  },
+
   // ---- guardas de espécie/variante que já existiam (não podem regredir) ----
-  { name: "ração de cachorro sem item de gato", query: "racao para cachorro", top1Include: /ca(es|o)|cachorro/, allExclude: /gato/, deterministic: true },
+  { name: "ração de cachorro sem item de gato", query: "racao para cachorro", top1Include: /ca(es|o)|cachorro/, allExclude: /gato/, distinctOptions: true, deterministic: true, note: "distinctOptions 10/08: mostrava 3 tamanhos da quase-mesma ração" },
   { name: "ração de gato sem item de cão", query: "racao para gato", top1Include: /gato/, allExclude: /\bca(es|o)\b(?! e gatos)|cachorro/, deterministic: true },
   { name: "ração de filhote quando pedida", query: "racao filhote cachorro", top1Include: /filhote|puppy|junior/, deterministic: true },
   { name: "shampoo humano nunca vira produto pet", query: "shampoo", allExclude: /\bca(es|o)\b|cachorro|\bgatos?\b|\bpet\b/, top1Include: /shampoo|xampu/, deterministic: true },
@@ -145,6 +158,7 @@ export const GOLDEN_CASES: GoldenCase[] = [
     name: "carregador genérico prioriza o de uso comum (parede), não o veicular",
     query: "carregador de celular",
     top1Exclude: /veicular/,
+    distinctOptions: true,
     deterministic: false,
     note: "empate semântico: IA deve preferir parede/cabo como 1ª opção"
   }
