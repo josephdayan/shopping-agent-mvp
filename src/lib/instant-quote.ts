@@ -25,9 +25,9 @@ export type StoreFreight = {
   storeLabel: string;
   subtotal: number;
   fee: number;
-  // De onde saiu o número — política configurada da loja ("loja", incluindo frete
-  // grátis por limiar) ou tarifa padrão ("padrao"). Vai pra nota do /ops.
-  source: "loja" | "padrao";
+  // De onde saiu o número — consulta ao vivo no checkout do site ("vivo"), política
+  // configurada/semeada da loja ("loja") ou tarifa padrão ("padrao"). Vai pra nota do /ops.
+  source: "vivo" | "loja" | "padrao";
 };
 
 export type InstantFreights = {
@@ -125,7 +125,8 @@ export function freightBreakdownLabel(freights: StoreFreight[]): string {
   return freights
     .map((f) => {
       const valor = f.fee === 0 ? "grátis" : `R$${f.fee.toFixed(2).replace(".", ",")}`;
-      return `${f.storeLabel} ${valor}${f.source === "padrao" ? " (tarifa padrão)" : ""}`;
+      const marca = f.source === "vivo" ? " (ao vivo)" : f.source === "padrao" ? " (tarifa padrão)" : "";
+      return `${f.storeLabel} ${valor}${marca}`;
     })
     .join(" + ");
 }

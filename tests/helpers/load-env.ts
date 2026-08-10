@@ -20,6 +20,9 @@ process.env.WHATSAPP_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";
 process.env.LIA_RETAILER_TEST_SEED = "true";
 process.env.LIA_SEND_PHOTOS = "false";
+// Frete ao vivo consulta a rede (checkout das lojas) — nos testes fica desligado para
+// os E2E de cotação instantânea serem determinísticos (tabela semeada).
+process.env.LIA_LIVE_FREIGHT_OFF = "true";
 // The conversation evals assert NLU/choice/payment behavior, not the store roster, and
 // were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
 // Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba

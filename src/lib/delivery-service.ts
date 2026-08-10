@@ -38,6 +38,7 @@ import {
   instantQuoteEligible,
   type InstantQuoteItem
 } from "@/lib/instant-quote";
+import { liveFreightEnabled, liveStoreFreight } from "@/lib/live-freight";
 import {
   detectIntent,
   detectPaymentMethod,
@@ -2638,8 +2639,31 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
     const items = ctx.basket ?? [];
     // A entrega é pelo SITE de cada loja (o operador compra lá e a loja entrega), então
     // o frete é a política de cada site — por loja, com frete grátis por limiar.
-    const { freights, totalFee } = computeStoreFreights(items as InstantQuoteItem[]);
+    const seeded = computeStoreFreights(items as InstantQuoteItem[]);
+    let freights = seeded.freights;
     if (!freights.length) return false;
+    // Precisão final: consulta AO VIVO no checkout de cada loja (cesta + CEP reais), em
+    // PARALELO com timeout curto — o fechamento nunca espera mais que um timeout. Site
+    // respondeu → frete exato daquele endereço (grátis incluso). Site sem entrega pro
+    // CEP → operador cota à mão. Falhou/bloqueou → tabela semeada de sempre.
+    if (liveFreightEnabled() && ctx.cep) {
+      const outcomes = await Promise.all(
+        freights.map((f) =>
+          liveStoreFreight(
+            f.storeKey,
+            items.filter((i) => i.storeKey === f.storeKey).map((i) => ({ sku: i.sku, qty: i.qty })),
+            ctx.cep!
+          )
+        )
+      );
+      for (let i = 0; i < freights.length; i++) {
+        const outcome = outcomes[i];
+        console.log("[instant-quote:live]", freights[i].storeKey, outcome.kind, outcome.kind === "ok" ? outcome.fee : "");
+        if (outcome.kind === "no-delivery") return false;
+        if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
+      }
+    }
+    const totalFee = Math.round(freights.reduce((sum, f) => sum + f.fee, 0) * 100) / 100;
     const itemsSubtotal = roundMoney(items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0));
     if (itemsSubtotal <= 0) return false;
     const breakdown = freightBreakdownLabel(freights);

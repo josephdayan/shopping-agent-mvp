@@ -194,6 +194,21 @@ de hoje está em
 > Bônus: `talk-env.mts` nunca carregava o `.env` (bug `__dirname` em ESM) — por isso os
 > scripts locais rodavam "sem IA" mesmo com chave; corrigido.
 
+> **10/08 — FRETE AO VIVO POR CEP (precisão final).** No fechamento, a Lia consulta o
+> checkout real de cada loja da cesta (VTEX `orderForms/simulation`) com a CESTA e o CEP
+> exatos do cliente — frete certo para aquele endereço, frete grátis aplicado pelo próprio
+> site (validado: Swift devolveu R$0 em carrinho de R$499). Consultas em PARALELO com
+> timeout de 4,5s (`LIA_LIVE_FREIGHT_TIMEOUT_MS`; medido: fria ~3s, quente ~0,6s) — teto
+> real de espera extra do fechamento. 8 lojas abertas (Pague Menos, Drogaria SP, Cobasi,
+> Oba, Swift, Divvino, Kopenhagen, Ri Happy); Carrefour/Petz bloqueiam → tabela por
+> política. Resposta válida SEM opção de entrega = site não atende o CEP → cai pro
+> operador (não se cobra entrega que não existe). Teto de sanidade `LIA_LIVE_FREIGHT_MAX`
+> (150); kill-switch `LIA_LIVE_FREIGHT_OFF`. Fonte visível por loja na nota do /ops
+> ("ao vivo"/"tabela"/"tarifa padrão") + log `[instant-quote:live]` por consulta — o 1º
+> pedido real diz se o site trata o IP da Vercel diferente (se bloquear, fica na tabela
+> sozinho). Módulo `src/lib/live-freight.ts`; unit 4/4 (fetch mockado), E2E 3/3
+> (determinísticos via kill-switch no load-env).
+
 > **09/08 (3ª) — COTAÇÃO INSTANTÂNEA: o cliente não espera mais no chat.** Decisão do dono
 > ("na hora que estiver falando com a Lia é rolê esperar; depois pode esperar o quanto for"):
 > cesta 100% de vitrine agora fecha com o TOTAL na mesma resposta — a Lia auto-publica a

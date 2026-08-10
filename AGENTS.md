@@ -267,6 +267,20 @@ emoji literal `🙂` são o código ANTIGO em produção — o cotonete já reso
 deploy (match por apposição + rerank), e o emoji não existe em NENHUMA versão do fonte
 (artefato do build implantado; conferir na primeira conversa pós-deploy).
 
+**10/08 — frete AO VIVO por CEP (`src/lib/live-freight.ts`).** A cotação instantânea agora
+consulta o checkout real da loja (VTEX `orderForms/simulation`, allowlist de 8 lojas
+abertas) com a cesta exata e o CEP do cliente, em paralelo com timeout 4,5s; o frete vem
+exato por endereço e o frete grátis é o do próprio site. Hierarquia: **ao vivo → tabela
+semeada (`SEED_STORE_FREIGHT`) → tarifa padrão**; resposta válida sem SLA de entrega =
+site não atende o CEP → pedido cai pra cotação manual. Cesta simulada tem que ser 100%
+parseável (sku `<loja>-<id>`) senão desiste — cesta parcial daria frete grátis errado.
+Fonte por loja na nota do /ops e log `[instant-quote:live]`; kill-switch
+`LIA_LIVE_FREIGHT_OFF` (pinado nos testes), teto `LIA_LIVE_FREIGHT_MAX` (150). Carrefour e
+Petz bloqueiam consulta externa → sempre tabela. Validação real 10/08: PM R$4,90, Oba
+R$9,90 same-day, Swift R$0 (grátis auto), Campinas R$4,90 — e a incógnita restante é só
+se os sites tratam o IP da Vercel diferente (o log responde no 1º pedido; se bloquear,
+degrada pra tabela sozinho).
+
 **09/08 — cotação instantânea (decisão do dono: cliente não espera no chat).** Cesta 100%
 de vitrine fecha com o total NA HORA: `tryPublishInstantQuote` calcula o subtotal da vitrine
 (custo real; o markup entra no publish, como na cotação manual) + **frete por loja** e
