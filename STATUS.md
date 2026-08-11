@@ -244,8 +244,12 @@ de hoje está em
 > variante do dispensado. A vistoria de rodagem completa (talk-lia) pegou e fechou um buraco
 > antigo: paginação sem piso de relevância ("outras" de carregador devolvia Sérum Nivea
 > "Cellular" e chip de operadora) — `conciergeMatchIsStrong` agora vale na paginação/refino.
-> Suíte inteira verde local. **Ainda não publicado** (commits locais à frente do origin);
-> o card com 2 botões precisa de 1 teste real pós-deploy (lição: card só se prova ao vivo).
+> Suíte inteira verde local (283/283). **PUBLICADO no mesmo dia** com autorização do dono:
+> push `93e8f78..a4fd0ef`, deploy `dpl_4Aa3SdK3pUEt5M5wBaM8H6s2rM6g` (commit `a4fd0ef`)
+> `READY` em Production servindo `liadelivery.com.br`. Smoke: landing 200, `/ops` 200,
+> webhook GET 403 / POST sem assinatura 401. Pendente de verificação humana: 1 conversa
+> real tocando **"Outras opções"** no último card (card só se prova ao vivo;
+> `scripts/tail-messages.mts` lê a evidência) e o log `[instant-quote:live]` do 1º pedido.
 
 > **09/08 — falha da Meta agora é DURÁVEL no banco + tail de conversa.** Constatação: o
 > conserto dos cards (09adb388, quinta ~12:40) nunca foi exercitado — as duas únicas

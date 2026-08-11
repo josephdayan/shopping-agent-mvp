@@ -187,10 +187,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > gosta de nenhuma tem o botão **"Outras opções"** no último card Meta (ou digita "outras"
 > — o fallback numerado anuncia). Paginação virou cross-store, diversificada e com piso de
 > relevância (a vistoria pegou "outras" de carregador devolvendo Sérum Nivea "Cellular").
-> Golden 32/33 DET · 33/33 IA. **Pendências:** (1) push + deploy (commits locais à frente
-> do origin); (2) 1 teste real pós-deploy do card com 2 botões (card só se prova ao vivo);
-> (3) limitação assumida: paginação usa só o piso léxico (sem rerank) — "outras" pode dizer
-> "essas são todas" cedo demais em pedido com qualificador ("carregador de celular").
+> Golden 32/33 DET · 33/33 IA. **PUBLICADO 10/08** (deploy `dpl_4Aa3SdK3pUEt5M5wBaM8H6s2rM6g`,
+> commit `a4fd0ef`, smoke verde). **Pendências:** (1) 1 teste real do card com 2 botões —
+> pedir um item no WhatsApp e tocar "Outras opções" (card só se prova ao vivo;
+> `scripts/tail-messages.mts` lê a evidência); (2) limitação assumida: paginação usa só o
+> piso léxico (sem rerank) — "outras" pode dizer "essas são todas" cedo demais em pedido
+> com qualificador ("carregador de celular"); o refinamento cobre.
 
 > **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
 > `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com
