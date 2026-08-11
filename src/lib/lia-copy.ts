@@ -229,8 +229,8 @@ export function choiceLine(index: number, name: string, displayPrice: number): s
 export function choicesAsk(count: number): string {
   const nums = Array.from({ length: count }, (_, i) => i + 1);
   return count <= 1
-    ? "Responde *1* pra confirmar — ou *qualquer* que eu escolho, ou *pula* pra deixar de fora. 🙂"
-    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho, ou *pula* pra deixar de fora. 🙂`;
+    ? "Responde *1* pra confirmar — ou *qualquer* que eu escolho, *outras* que eu mostro mais, ou *pula* pra deixar de fora. 🙂"
+    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho, *outras* que eu mostro mais, ou *pula* pra deixar de fora. 🙂`;
 }
 
 export function choicesText(query: string, options: { name: string; displayPrice: number }[], header?: string): string {

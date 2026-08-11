@@ -570,7 +570,7 @@ function identityTokens(name: string, keepColors: boolean, keepSizes: boolean): 
 // tamanhos da mesma ração. Identidade = tokens do nome sem cor/medida; sobreposição
 // alta (Jaccard ≥ 0.75) = variante, não um produto distinto que mereça vaga própria.
 // Marcas declaradas e diferentes nunca são variantes (nomes iguais de marcas rivais).
-export function sameProductVariant(query: string, a: CatalogItem, b: CatalogItem): boolean {
+export function sameProductVariant(query: string, a: Pick<CatalogItem, "name" | "brand">, b: Pick<CatalogItem, "name" | "brand">): boolean {
   const brandA = normalizeText(a.brand ?? "");
   const brandB = normalizeText(b.brand ?? "");
   if (brandA && brandB && brandA !== brandB) return false;
@@ -585,8 +585,8 @@ export function sameProductVariant(query: string, a: CatalogItem, b: CatalogItem
   return common / (ta.size + tb.size - common) >= 0.75;
 }
 
-export function diversifyOptions(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
-  const out: CatalogItem[] = [];
+export function diversifyOptions<T extends Pick<CatalogItem, "name" | "brand">>(query: string, items: T[], limit: number): T[] {
+  const out: T[] = [];
   for (const item of items) {
     if (out.length >= limit) break;
     if (out.some((picked) => sameProductVariant(query, picked, item))) continue;

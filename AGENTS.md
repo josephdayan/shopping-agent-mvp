@@ -297,6 +297,20 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**10/08 (2ª rodada) — botão "Outras opções" + paginação cross-store.** Pedido do dono: quem
+não gosta de NENHUMA das 3 opções precisa de uma saída visível. O último card de produto no
+canal Meta ganhou um segundo botão **"Outras opções"** (id de máquina `opt:outras`, que volta
+como texto e cai no MESMO ramo do "mostra outras" digitado); o fallback numerado anuncia o
+atalho no `choicesAsk` ("*outras* que eu mostro mais") e `wantsMoreOptions` aceita "outras"
+seco, "mostrar mais" e o id do botão. Toque atrasado fora da escolha vira `reject` educado
+(nunca busca de produto). Por baixo, dois consertos na paginação: `choiceCandidates` agora
+busca em TODAS as vitrines no concierge (paginava só a loja da opção 1, escondendo as
+outras; cada opção carrega a própria loja) com pool mais fundo (40, 8/loja), e tanto a
+paginação quanto o refinamento passam pelo `diversifyOptions` — "outras" nunca devolve
+variante do que o cliente acabou de dispensar (só se não sobrar nada distinto). Pool
+esgotado continua honesto (`noMoreOptions`). Testes: intents (botão/atalhos), adapter
+(2 botões no último card), E2E de paginação por botão.
+
 **09/08 — cotação instantânea (decisão do dono: cliente não espera no chat).** Cesta 100%
 de vitrine fecha com o total NA HORA: `tryPublishInstantQuote` calcula o subtotal da vitrine
 (custo real; o markup entra no publish, como na cotação manual) + **frete por loja** e

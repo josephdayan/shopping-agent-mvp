@@ -17,6 +17,7 @@ import {
   diversifyOptions,
   inferCatalogRefinement,
   queryTokens,
+  sameProductVariant,
   scoreCatalogMatch
 } from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
@@ -1928,7 +1929,7 @@ async function handleChoosing(
   // fixa. Isso cobre marca, sabor, aroma, material, número de roupa/calçado e futuras
   // características do catálogo. Se não combinar com a busca atual (ex.: "leite"
   // enquanto escolhe Coca), continua sendo tratado como um NOVO produto.
-  const catalogAttrs = await contextualCatalogAttrs(store, current, text);
+  const catalogAttrs = await contextualCatalogAttrs(store, ctx, current, text);
   if (catalogAttrs) {
     await refineOptions(phone, convoId, ctx, store, catalogAttrs);
     return;
@@ -1958,8 +1959,8 @@ async function handleChoosing(
   await sendChoices(phone, current);
 }
 
-async function contextualCatalogAttrs(store: StoreConnector, current: PendingChoice, text: string): Promise<string[] | null> {
-  const candidates = await choiceCandidates(store, current);
+async function contextualCatalogAttrs(store: StoreConnector, ctx: DeliveryContext, current: PendingChoice, text: string): Promise<string[] | null> {
+  const candidates = await choiceCandidates(store, ctx, current);
   return inferCatalogRefinement(text, candidates);
 }
 
@@ -1994,26 +1995,39 @@ async function finishQuantityChoice(
 
 // Ranked candidates for the item being chosen, with the active refinement attributes
 // re-applied — the single source pageMoreOptions and refineOptions share, so paging
-// after a refine keeps honoring the attribute filter.
-async function choiceCandidates(store: StoreConnector, p: PendingChoice, attrs?: string[]) {
+// after a refine keeps honoring the attribute filter. No concierge sem loja travada o
+// pool vem de TODAS as vitrines (como o buildChoices que gerou as opções): paginar só
+// na loja da opção 1 escondia os produtos das outras — cada opção carrega a própria
+// loja no resultado.
+async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: PendingChoice, attrs?: string[]): Promise<ChoiceOption[]> {
   const active = attrs ?? p.attrs ?? [];
-  const base = p.baseQuery ?? p.query;
-  const ranked = await store.searchItems(active.length ? base : p.query, 40);
-  return active.length ? ranked.filter((o) => active.every((a) => attrMatchesItem(a, o))) : ranked;
+  const query = active.length ? (p.baseQuery ?? p.query) : p.query;
+  let pool: ChoiceOption[];
+  if (!ctx.storeKey && manualConciergeEnabled()) {
+    const candidates = await gatherCrossStoreCandidates(query, 40, 8);
+    pool = candidates.map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }));
+  } else {
+    pool = (await store.searchItems(query, 40)).map((item) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }));
+  }
+  return active.length ? pool.filter((o) => active.every((a) => attrMatchesItem(a, o))) : pool;
 }
 
-// "acha outras": show the NEXT 3 catalog matches for the same item — never repeat a
-// sku already shown. When the pool is exhausted, say so honestly.
+// "acha outras" (ou o botão "Outras opções"): show the NEXT 3 catalog matches for the
+// same item — never repeat a sku already shown. When the pool is exhausted, say so
+// honestly.
 async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector) {
   const p = ctx.pending![0];
   const shown = p.shownSkus ?? p.options.map((o) => o.sku);
-  const next = (await choiceCandidates(store, p)).filter((o) => !shown.includes(o.sku)).slice(0, 3);
+  const pool = (await choiceCandidates(store, ctx, p)).filter((o) => !shown.includes(o.sku));
+  // Quem pediu "outras" dispensou o que está na mesa: variante do dispensado não é
+  // "outra opção". Só volta a valer se não sobrar mais nada de distinto.
+  const fresh = pool.filter((o) => !p.options.some((cur) => sameProductVariant(p.query, cur, o)));
+  const next = diversifyOptions(p.query, fresh.length ? fresh : pool, 3);
   if (!next.length) {
     await reply(phone, copy.noMoreOptions(p.query));
     return;
   }
-  const storeRef = { storeKey: p.options[0]?.storeKey, storeLabel: p.options[0]?.storeLabel };
-  p.options = next.map((option) => toChoiceOption(option, storeRef));
+  p.options = next;
   p.shownSkus = [...shown, ...next.map((o) => o.sku)];
   await writeCtx(convoId, ctx);
   await sendChoices(phone, p, copy.moreChoicesHeader(p.query));
@@ -2027,7 +2041,7 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   const p = ctx.pending![0];
   const base = p.baseQuery ?? p.query;
   const refined = `${base} ${attrs.join(" ")}`;
-  const matches = (await choiceCandidates(store, p, attrs)).slice(0, 3);
+  const matches = diversifyOptions(refined, await choiceCandidates(store, ctx, p, attrs), 3);
   if (!matches.length) {
     await reply(phone, copy.refineNoResult(refined));
     await sendChoices(phone, p);
@@ -2036,8 +2050,7 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   p.baseQuery = base;
   p.attrs = attrs;
   p.query = refined;
-  const storeRef = { storeKey: p.options[0]?.storeKey, storeLabel: p.options[0]?.storeLabel };
-  p.options = matches.map((option) => toChoiceOption(option, storeRef));
+  p.options = matches;
   p.shownSkus = matches.map((m) => m.sku);
   await writeCtx(convoId, ctx);
   await sendChoices(phone, p);

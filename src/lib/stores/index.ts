@@ -151,8 +151,8 @@ export async function searchAcrossStores(query: string, limitPerStore = 4) {
 // veiculares) com o carregador de parede USB-C parado na Pague Menos. Quem decide o
 // que aparece é a camada de cima (rerank semântico; fallback = este ranking global).
 export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
-export async function gatherCrossStoreCandidates(query: string, limit = 12): Promise<StoreCandidate[]> {
-  const hits = await searchAcrossStores(query, 4);
+export async function gatherCrossStoreCandidates(query: string, limit = 12, perStore = 4): Promise<StoreCandidate[]> {
+  const hits = await searchAcrossStores(query, perStore);
   const ranked = hits
     .map((hit) => ({ hit, score: scoreCatalogMatch(query, hit.item) }))
     .filter((entry) => entry.score > 0)

@@ -461,16 +461,20 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
   // Each option is its own interactive card. The image header, product details and
   // reply button live in the SAME WhatsApp message, so there is no ambiguity about
   // which product "Escolher esse" selects.
-  for (const option of options) {
+  for (const [index, option] of options.entries()) {
+    const buttons: Array<{ type: "reply"; reply: { id: string; title: string } }> = [
+      { type: "reply", reply: { id: option.id.slice(0, 256), title: "Escolher esse" } }
+    ];
+    // O último card leva a saída "nenhuma dessas": o toque volta como o texto de
+    // máquina `opt:outras` e cai no MESMO ramo do "mostra outras" digitado (paginação
+    // sem repetir sku). Pedido do dono, 10/08.
+    if (index === options.length - 1) {
+      buttons.push({ type: "reply", reply: { id: "opt:outras", title: "Outras opções" } });
+    }
     const interactive: Record<string, unknown> = {
       type: "button",
       body: { text: `${option.name}\n*${formatBRL(option.displayPrice)}*`.slice(0, 1024) },
-      action: {
-        buttons: [{
-          type: "reply",
-          reply: { id: option.id.slice(0, 256), title: "Escolher esse" }
-        }]
-      }
+      action: { buttons }
     };
     interactive.header = { type: "image", image: { link: safeMediaLink(option.imageUrl ?? "") } };
     messages.push(await sendMetaPayload(phoneNumberId, token, {

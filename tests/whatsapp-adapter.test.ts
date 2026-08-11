@@ -44,6 +44,10 @@ test("Meta: cada produto vira uma mensagem com foto e botão Escolher esse", asy
     assert.equal(bodies[0].interactive.action.buttons.length, 1);
     assert.equal(bodies[1].interactive.header.type, "image");
     assert.equal(bodies[1].interactive.action.buttons[0].reply.title, "Escolher esse");
+    // O ÚLTIMO card leva a saída "nenhuma dessas": botão extra que volta como opt:outras.
+    assert.equal(bodies[1].interactive.action.buttons.length, 2);
+    assert.equal(bodies[1].interactive.action.buttons[1].reply.id, "opt:outras");
+    assert.equal(bodies[1].interactive.action.buttons[1].reply.title, "Outras opções");
   } finally {
     process.env.WHATSAPP_PROVIDER = previous.provider;
     process.env.WHATSAPP_ACCESS_TOKEN = previous.token;

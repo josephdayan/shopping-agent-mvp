@@ -114,6 +114,8 @@ test("afirmação, rejeição e números", () => {
   assert.equal(kind("fechado"), "affirm");
   assert.equal(kind("não era isso"), "reject");
   assert.equal(kind("não gostei, tem outras?"), "reject");
+  // toque atrasado no botão "Outras opções" fora da escolha: reject educado, nunca busca
+  assert.equal(kind("opt:outras"), "reject");
   const n = detectIntent("2");
   assert.equal(n.kind, "number");
   assert.equal((n as { value: number }).value, 2);
@@ -198,6 +200,10 @@ test("escolhendo: 'acha outras' pede MAIS opções (não repete as mesmas)", () 
   assert.equal(wantsMoreOptions("mostra outras"), true);
   assert.equal(wantsMoreOptions("quero ver mais"), true);
   assert.equal(wantsMoreOptions("nenhuma dessas, mostra outras"), true);
+  // botão "Outras opções" do card (id de máquina) e o atalho que a copy anuncia
+  assert.equal(wantsMoreOptions("opt:outras"), true);
+  assert.equal(wantsMoreOptions("outras"), true);
+  assert.equal(wantsMoreOptions("mostrar mais"), true);
   // "mais barato" é escolha da mais barata, não paginação
   assert.equal(wantsMoreOptions("tem mais barato?"), false);
   assert.equal(wantsMoreOptions("quero o 2"), false);

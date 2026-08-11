@@ -599,6 +599,19 @@ test("escolhendo: 'tem outras?' mostra as PRÓXIMAS opções, nunca as mesmas", 
   }
 });
 
+test("escolhendo: botão 'Outras opções' (opt:outras) pagina igual ao texto", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const first = await c.send("quero refrigerante");
+  const firstNames = optionNames(first);
+  assert.ok(firstNames.length >= 2, `esperava opções: ${first.slice(0, 200)}`);
+  const more = await c.send("opt:outras");
+  assert.match(more, /Mais opções/, `botão não paginou: ${more.slice(0, 200)}`);
+  for (const name of optionNames(more)) {
+    assert.ok(!firstNames.includes(name), `opção repetida na paginação: ${name}`);
+  }
+});
+
 test("escolhendo: 'tem de Xkg?' refina de verdade ou responde honesto", async (t) => {
   if (!dbOk) return t.skip();
   const store = getStore("petz");

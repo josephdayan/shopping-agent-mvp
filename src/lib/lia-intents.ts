@@ -441,6 +441,11 @@ export function detectIntent(text: string): Intent {
   const savedCardTap = n.match(/^cardpay:([a-z0-9]+)$/);
   if (savedCardTap) return { kind: "saved_card_pay", attemptId: savedCardTap[1] };
   if (n === "cardother") return { kind: "saved_card_other" };
+  // Botão "Outras opções" do último card de produto. No fluxo de escolha, o
+  // handleChoosing pagina via wantsMoreOptions ANTES de tratar reject; num toque
+  // atrasado (fora da escolha) o reject responde "o que você prefere então?" em vez
+  // de deixar `opt:outras` virar busca de produto.
+  if (n === "opt:outras") return { kind: "reject" };
 
   // Emoji sozinho: 👍/✅ = sim; 🙏/❤️/💚/😊/🙌 = obrigado; resto = um "oi" acenando.
   if (EMOJI_ONLY_RE.test(n)) {
@@ -641,9 +646,14 @@ const REFINE_FILLER = new Set(
 // picking the cheapest — neither is paging.
 export function wantsMoreOptions(text: string): boolean {
   const n = normalizeMsg(text).replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim();
+  // Toque no botão "Outras opções" do card (id de máquina, não linguagem).
+  if (n === "opt:outras") return true;
   if (/\b(mais|outras) opcoes\b/.test(n)) return true;
+  // "outras"/"outros" seco: é o atalho que a própria Lia anuncia no choicesAsk
+  // ("*outras* que eu mostro mais") — tem que funcionar sozinho.
+  if (/^outr[ao]s$/.test(n)) return true;
   if (/^e (as|os) outr[ao]s( opcoes)?$/.test(n)) return true;
-  const m = n.match(/\b(?:tem|acha|ache|mostra|procura|busca|manda|me ve|quero ver|ver)\s+(?:mais|outr[ao]s?)\b(.*)$/);
+  const m = n.match(/\b(?:tem|acha|ache|mostrar?|procura|busca|manda|me ve|quero ver|ver)\s+(?:mais|outr[ao]s?)\b(.*)$/);
   if (!m) return false;
   const tail = m[1]
     .replace(/\b(opcoes|opcao|marcas?|sabores?|tipos?|modelos?|delas|dessas|desses|deles|por|favor|pfv|ai|aqui|pra|mim|um|pouco|entao)\b/g, " ")
