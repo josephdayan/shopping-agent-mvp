@@ -599,6 +599,19 @@ test("escolhendo: 'tem outras?' mostra as PRÓXIMAS opções, nunca as mesmas", 
   }
 });
 
+test("escolhendo: 'outras' respeita o piso de relevância (sérum 'Cellular' não é carregador)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Vistoria 10/08: a paginação não aplicava piso nenhum — "outras" de carregador
+  // devolvia Sérum Nivea "Cellular" e chip de operadora (score>0 por token solto).
+  const c = await returningCustomer();
+  const first = await c.send("quero um carregador usb");
+  assert.ok(optionNames(first).length > 0, `esperava opções: ${first.slice(0, 200)}`);
+  const more = await c.send("outras");
+  for (const name of optionNames(more)) {
+    assert.match(name.toLowerCase(), /carregador|usb|cabo/, `paginação vazou item irrelevante: ${name}`);
+  }
+});
+
 test("escolhendo: botão 'Outras opções' (opt:outras) pagina igual ao texto", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();

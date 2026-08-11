@@ -310,6 +310,14 @@ paginação quanto o refinamento passam pelo `diversifyOptions` — "outras" nun
 variante do que o cliente acabou de dispensar (só se não sobrar nada distinto). Pool
 esgotado continua honesto (`noMoreOptions`). Testes: intents (botão/atalhos), adapter
 (2 botões no último card), E2E de paginação por botão.
+A vistoria de rodagem completa (talk-lia) no mesmo dia pegou o buraco que a suíte não via:
+a paginação nunca teve piso de relevância — "outras" de "carregador de celular" devolvia
+Sérum Nivea "Cellular" e chip de operadora (score>0 por token solto; o pool cross-store
+escancarou). `choiceCandidates` agora aplica `conciergeMatchIsStrong` na paginação e no
+refino. Limitação assumida: o rerank de IA não roda na paginação (resposta na hora), então
+o piso léxico é estrito — "outras" de "carregador de celular" pode dizer "essas são todas"
+mesmo havendo veicular/cabo no catálogo (o refinamento cobre); regressão E2E do sérum em
+tests/conversation.eval.test.ts.
 
 **09/08 — cotação instantânea (decisão do dono: cliente não espera no chat).** Cesta 100%
 de vitrine fecha com o total NA HORA: `tryPublishInstantQuote` calcula o subtotal da vitrine

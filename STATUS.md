@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-06. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-10. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -233,6 +233,19 @@ de hoje está em
 > 3 botões — **Pagar** (fecha e cota), **Adicionar mais itens** e **Cancelar** — via
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
+
+> **10/08 — opções diversas + botão "Outras opções" + vistoria de rodagem.** Caso do dono:
+> "carregador"/"ração" mostravam 3 variantes quase iguais. As 3 opções agora são produtos
+> DISTINTOS (`sameProductVariant`: nome sem cor/medida, Jaccard ≥ 0.75; candidatos distintos
+> primeiro no gather; regra 3 do rerank endurecida) — golden 32/33 DET · 33/33 IA, campo novo
+> `distinctOptions`. Quem não gosta de nenhuma tem saída visível: botão **"Outras opções"**
+> no último card Meta (`opt:outras`, mesmo ramo do texto), atalho anunciado no fallback
+> numerado ("*outras*" seco funciona), paginação cross-store com diversidade e sem repetir
+> variante do dispensado. A vistoria de rodagem completa (talk-lia) pegou e fechou um buraco
+> antigo: paginação sem piso de relevância ("outras" de carregador devolvia Sérum Nivea
+> "Cellular" e chip de operadora) — `conciergeMatchIsStrong` agora vale na paginação/refino.
+> Suíte inteira verde local. **Ainda não publicado** (commits locais à frente do origin);
+> o card com 2 botões precisa de 1 teste real pós-deploy (lição: card só se prova ao vivo).
 
 > **09/08 — falha da Meta agora é DURÁVEL no banco + tail de conversa.** Constatação: o
 > conserto dos cards (09adb388, quinta ~12:40) nunca foi exercitado — as duas únicas

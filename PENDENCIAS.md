@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-06._
+_Última atualização: 2026-08-10._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -181,6 +181,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (rápida):** os 3 fees ESTIMADOS (Carrefour/Petz/Boticário) no checkout real, e baixar
 > os limiares prováveis se quiser ser mais generoso (PM 149, Cobasi 199, RiHappy 399,
 > Kopenhagen 99).
+
+> **10/08 (2ª) — diversidade nas opções + botão "Outras opções" + piso na paginação.** As 3
+> opções agora são produtos distintos (não o quase-mesmo em 3 tamanhos/cores); quem não
+> gosta de nenhuma tem o botão **"Outras opções"** no último card Meta (ou digita "outras"
+> — o fallback numerado anuncia). Paginação virou cross-store, diversificada e com piso de
+> relevância (a vistoria pegou "outras" de carregador devolvendo Sérum Nivea "Cellular").
+> Golden 32/33 DET · 33/33 IA. **Pendências:** (1) push + deploy (commits locais à frente
+> do origin); (2) 1 teste real pós-deploy do card com 2 botões (card só se prova ao vivo);
+> (3) limitação assumida: paginação usa só o piso léxico (sem rerank) — "outras" pode dizer
+> "essas são todas" cedo demais em pedido com qualificador ("carregador de celular").
 
 > **07/08 (2ª) — emoji literal resolvido na raiz (bug do minificador SWC).** O
 > `🙂` do WhatsApp era o SWC fundindo strings com emoji em template literal com

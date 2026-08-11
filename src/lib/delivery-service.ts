@@ -2009,6 +2009,11 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
   } else {
     pool = (await store.searchItems(query, 40)).map((item) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }));
   }
+  // Piso de relevância TAMBÉM na paginação/refino (vistoria 10/08: "outras" de
+  // "carregador de celular" devolvia Sérum Nivea "Cellular" e chip de operadora —
+  // score>0 sem piso). O rerank de IA não roda aqui (resposta na hora), então o piso
+  // léxico é a única guarda; pool que esvazia vira o honesto "essas são todas".
+  pool = pool.filter((o) => conciergeMatchIsStrong(query, o));
   return active.length ? pool.filter((o) => active.every((a) => attrMatchesItem(a, o))) : pool;
 }
 
