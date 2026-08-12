@@ -70,9 +70,11 @@ async function returningCustomer() {
 async function manualQuoteOrder(c: { send: (t: string) => Promise<string>; userId: string }) {
   process.env.LIA_INSTANT_QUOTE = "false";
   try {
-    await c.send("quero coca cola");
+    // Quantidade que passa do MÍNIMO da loja (o registry de teste pina o Carrefour,
+    // mínimo R$30): fechar com 1 unidade agora é corretamente barrado.
+    await c.send("quero 10 coca cola");
     const afterChoice = await c.send("1");
-    if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("10");
     await c.send("só isso");
   } finally {
     delete process.env.LIA_INSTANT_QUOTE;
@@ -165,9 +167,9 @@ test("fechar a lista com escolha pendente pede pra ESCOLHER — e aí o total sa
   assert.match(closed.toLowerCase(), /coca/, "as opções voltam pra facilitar a escolha");
   const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone } });
   assert.equal(order, null, "sem escolha não há pedido");
-  // Escolhe e fecha: total na mesma resposta.
+  // Escolhe (com quantidade que passa do mínimo da loja) e fecha: total na mesma resposta.
   const afterChoice = await c.send("1");
-  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("10");
   const done = await c.send("só isso");
   assert.match(done, /Total/i, `fechamento: ${done.slice(0, 200)}`);
 });
@@ -214,9 +216,10 @@ test("onboarding: pedido feito enquanto a Lia espera o endereço não é descart
 test("cotação instantânea: cesta 100% vitrine fecha com total NA HORA, sem esperar operador", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("quero coca cola");
+  // 10 unidades: passa do mínimo da loja pinada nos testes (Carrefour, R$30).
+  await c.send("quero 10 coca cola");
   const afterChoice = await c.send("1");
-  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("10");
   const closed = await c.send("só isso");
   // Nada de "vou cotar e te aviso": o total chega na mesma resposta, com menu de pagamento.
   assert.match(closed, /Total/i, `resposta do fechamento: ${closed.slice(0, 200)}`);
@@ -232,13 +235,13 @@ test("cotação instantânea: cesta 100% vitrine fecha com total NA HORA, sem es
 test("cotação instantânea: item sem preço é recusado na entrada e o resto fecha NA HORA", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  const first = await c.send("quero coca cola e uma vela de aniversário");
+  const first = await c.send("quero 10 coca cola e uma vela de aniversário");
   // Regra 11/08: a vela (sem preço) é recusada JÁ na entrada — nunca arrasta o pedido
   // inteiro pra cotação manual.
   assert.match(first, /não tenho como trazer/i);
   assert.match(first.toLowerCase(), /vela/);
   const afterChoice = await c.send("1");
-  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("10");
   const closed = await c.send("só isso");
   assert.match(closed, /Total/i, `fechamento: ${closed.slice(0, 200)}`);
   const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
@@ -252,9 +255,9 @@ test("cotação instantânea: kill-switch LIA_INSTANT_QUOTE=false volta ao fluxo
   process.env.LIA_INSTANT_QUOTE = "false";
   try {
     const c = await returningCustomer();
-    await c.send("quero coca cola");
+    await c.send("quero 10 coca cola");
     const afterChoice = await c.send("1");
-    if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("10");
     const closed = await c.send("só isso");
     assert.match(closed, /Recebi seu pedido/i);
     const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
@@ -438,7 +441,9 @@ test("concierge: cotação abandonada 1h+ expira sozinha e a conversa recomeça"
   const c = await returningCustomer();
   const stuck = await manualQuoteOrder(c);
   assert.ok(stuck, "esperava pedido em awaiting_operator_quote");
-  // Viagem no tempo: o cliente sumiu por 2 horas.
+  // Viagem no tempo: o cliente sumiu por 2 horas. Backdata as MENSAGENS também — desde
+  // 11/08 o TTL mede a última atividade real (mensagem), não só o contexto gravado.
+  await prisma.$executeRaw`UPDATE "Message" SET "createdAt" = NOW() - INTERVAL '2 hours' WHERE "conversationId" IN (SELECT id FROM "Conversation" WHERE "userId" = ${c.userId})`;
   await prisma.$executeRaw`UPDATE "Conversation" SET "updatedAt" = NOW() - INTERVAL '2 hours' WHERE "userId" = ${c.userId}`;
   const back = await c.send("quero um leite");
   assert.match(back, /cancelei pra não te atrapalhar/, `sem aviso de recomeço: ${back.slice(0, 200)}`);
@@ -467,4 +472,96 @@ test("card ANTIGO escolhe o produto do card, não a posição (ids por sku — b
   const out = await c.send(`optsku:${tapped.sku}`);
   const fragment = tapped.name.slice(0, 14).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(out, new RegExp(fragment, "i"), `esperava "${tapped.name}", veio: ${out.slice(0, 200)}`);
+});
+
+// ---------- achados da revisão de código (11/08) ----------
+
+test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {
+  if (!dbOk) return t.skip();
+  // Antes: findFirst-depois-create deixava duas entregas SIMULTÂNEAS do mesmo sid
+  // passarem juntas. Agora o índice único parcial decide quem processa.
+  const c = await returningCustomer();
+  const sid = `dup_${RUN}_${Date.now()}`;
+  await Promise.all([
+    handleDeliveryMessage({ phone: c.phone, text: "quero coca cola", messageId: sid }),
+    handleDeliveryMessage({ phone: c.phone, text: "quero coca cola", messageId: sid })
+  ]);
+  const stored = await prisma.message.count({
+    where: { conversation: { userId: c.userId }, metadata: sid, sender: "user" }
+  });
+  assert.equal(stored, 1, "a mesma mensagem do provedor foi gravada duas vezes");
+  // RAIZ do problema: sem o upsert por id determinístico, as duas chamadas criavam
+  // conversas DIFERENTES — o dedupe (por conversa) não colidia e a cesta se dividia.
+  const convos = await prisma.conversation.count({ where: { userId: c.userId, status: "active" } });
+  assert.equal(convos, 1, "duas mensagens simultâneas abriram conversas separadas");
+});
+
+test("pedido mínimo da LOJA vale no concierge (não cota o que a loja recusaria)", async (t) => {
+  if (!dbOk) return t.skip();
+  // A checagem existia só no fluxo legado, depois do return do concierge: uma cesta
+  // abaixo do mínimo era cotada, cobrada e depois recusada no checkout da loja.
+  // O registry de teste pina o Carrefour (mínimo R$30), então 1 refrigerante não fecha.
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  const closed = await c.send("só isso");
+  assert.match(closed, /m(í|i)nimo/i, `esperava aviso de pedido mínimo: ${closed.slice(0, 200)}`);
+  const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId } });
+  assert.equal(order, null, "não pode criar pedido abaixo do mínimo da loja");
+  // Somando até passar do mínimo, o pedido fecha normalmente.
+  await c.send("quero 10 coca cola");
+  const more = await c.send("1");
+  if (/quantas unidades/i.test(more)) await c.send("10");
+  const done = await c.send("só isso");
+  assert.doesNotMatch(done, /m(í|i)nimo/i, `deveria ter fechado: ${done.slice(0, 200)}`);
+});
+
+test("trocar endereço com cotação na mesa cancela a cotação (não paga endereço velho)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  const out = await c.send("trocar_endereco");
+  assert.match(out, /cancelei essa cotação|CEP/i, `resposta: ${out.slice(0, 200)}`);
+  assert.doesNotMatch(out, /Como prefere pagar/i, "não pode devolver o menu de pagamento");
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled");
+});
+
+test("falha de envio ao publicar cotação DEVOLVE o pedido para a fila do operador", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  const original = whatsappAdapter.sendMessage;
+  (whatsappAdapter as { sendMessage: unknown }).sendMessage = async () => {
+    throw new Error("Graph API 500");
+  };
+  try {
+    await assert.rejects(() => opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 }));
+  } finally {
+    (whatsappAdapter as { sendMessage: unknown }).sendMessage = original;
+  }
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  // Sem o rollback, o pedido ficava em awaiting_quote_confirmation: cliente sem total e
+  // operador sem conseguir recotar (o /ops só cota quem está aguardando cotação).
+  assert.equal(after!.status, "awaiting_operator_quote");
+  assert.match(after!.notes ?? "", /Cotação revertida/);
+  // E o operador consegue cotar de novo.
+  const republished = await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  assert.equal(republished!.status, "awaiting_quote_confirmation");
+});
+
+test("cliente ativo NÃO é expirado: o TTL mede a última mensagem, não só o contexto", async (t) => {
+  if (!dbOk) return t.skip();
+  // Perguntar "já saiu o total?" não grava contexto — com o relógio em
+  // Conversation.updatedAt, quem só pergunta parecia inativo e era cancelado no meio de
+  // uma conversa viva.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await prisma.$executeRaw`UPDATE "Conversation" SET "updatedAt" = NOW() - INTERVAL '2 hours' WHERE "userId" = ${c.userId}`;
+  const out = await c.send("já saiu o total?");
+  assert.doesNotMatch(out, /cancelei pra não te atrapalhar/i, `pedido vivo foi expirado: ${out.slice(0, 200)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "awaiting_operator_quote");
 });

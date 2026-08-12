@@ -277,8 +277,15 @@ async function getOrCreateConvo(phone: string, name?: string) {
     orderBy: { updatedAt: "desc" }
   });
   if (!convo) {
-    convo = await prisma.conversation.create({
-      data: { userId: user.id, status: "active", currentStep: "delivery" }
+    // Id DETERMINÍSTICO por cliente: duas mensagens simultâneas do mesmo número
+    // convergem para a MESMA conversa, porque upsert por chave primária é atômico.
+    // Com `create`, o ler-depois-criar abria DUAS conversas ativas — cada mensagem
+    // caía numa, dividindo a cesta e furando o dedupe do webhook (que é por conversa).
+    // Conversa nunca é desativada no produto, então reaproveitar o id é seguro.
+    convo = await prisma.conversation.upsert({
+      where: { id: `conv_${user.id}` },
+      update: { status: "active" },
+      create: { id: `conv_${user.id}`, userId: user.id, status: "active", currentStep: "delivery" }
     });
   }
   return { user, convo };
@@ -311,6 +318,27 @@ function addressOnlyCtx(ctx: DeliveryContext, userCep?: string | null): Delivery
 
 async function reply(phone: string, text: string) {
   await whatsappAdapter.sendMessage(phone, text);
+}
+
+// Quando o cliente falou/agiu pela última vez ANTES desta mensagem. Base dos dois TTLs
+// (cesta parada, cotação abandonada). Usa a mensagem anterior da conversa, não só
+// `Conversation.updatedAt`: o updatedAt só se move quando o contexto é gravado, então
+// quem só pergunta ("já saiu o total?") parecia inativo e podia ser expirado no meio de
+// uma conversa viva. Fica com o MAIS RECENTE dos dois sinais.
+async function lastActivityAt(
+  convo: { id: string; updatedAt?: Date | null },
+  exceptMessageId?: string
+): Promise<Date | undefined> {
+  const previous = await prisma.message.findFirst({
+    where: { conversationId: convo.id, ...(exceptMessageId ? { id: { not: exceptMessageId } } : {}) },
+    orderBy: { createdAt: "desc" },
+    select: { createdAt: true }
+  });
+  const candidates = [previous?.createdAt, convo.updatedAt ? new Date(convo.updatedAt) : undefined].filter(
+    (date): date is Date => date instanceof Date
+  );
+  if (!candidates.length) return undefined;
+  return candidates.reduce((latest, date) => (date > latest ? date : latest));
 }
 
 // Mensagens de ESPERA de cotação sempre saem com o botão "Cancelar pedido" no Meta
@@ -801,6 +829,17 @@ async function respondAfterQuote(phone: string, convoId: string, ctx: DeliveryCo
 function storeMinReal(store: StoreConnector): number {
   return store.minOrder ?? 0;
 }
+// Lojas da cesta (concierge = cesta mista) cujo subtotal está abaixo do mínimo DELAS.
+// Linha do próprio concierge não tem loja real, então não tem mínimo — e `getStore` cai
+// no default quando a chave é desconhecida, o que faria a Lia cobrar o mínimo do
+// Carrefour por engano.
+function conciergeStoresBelowMinimum(ctx: DeliveryContext): StoreConnector[] {
+  return [...new Set((ctx.basket ?? []).map((item) => item.storeKey))]
+    .filter((key): key is string => Boolean(key) && key !== CONCIERGE_STORE_KEY)
+    .map((key) => getStore(key))
+    .filter((store) => belowMinimum(ctx, store));
+}
+
 function belowMinimum(ctx: DeliveryContext, store: StoreConnector): boolean {
   const min = storeMinReal(store);
   const subtotal = (ctx.basket ?? []).filter((item) => item.storeKey === store.key).reduce((sum, item) => sum + item.lineTotal, 0);
@@ -822,18 +861,20 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   const text = (input.text ?? "").trim();
   const { user, convo } = await getOrCreateConvo(phone, input.name);
 
-  // Twilio retries the webhook when a turn is slow — never process the same inbound
-  // message twice (a duplicated "2 arroz" would silently double the basket).
-  if (input.messageId) {
-    const dup = await prisma.message.findFirst({
-      where: { conversationId: convo.id, metadata: input.messageId },
-      select: { id: true }
+  // Twilio/Meta retry the webhook when a turn is slow — never process the same inbound
+  // message twice (a duplicated "2 arroz" would silently double the basket). O dedupe é
+  // ATÔMICO pelo índice único (conversationId, metadata): checar-depois-gravar deixava
+  // duas entregas SIMULTÂNEAS do mesmo sid passarem juntas pelo findFirst.
+  let inboundMessageId: string | undefined;
+  try {
+    const created = await prisma.message.create({
+      data: { conversationId: convo.id, sender: "user", text, metadata: input.messageId }
     });
-    if (dup) return;
+    inboundMessageId = created.id;
+  } catch (error) {
+    if (input.messageId && (error as { code?: string })?.code === "P2002") return;
+    throw error;
   }
-  await prisma.message.create({
-    data: { conversationId: convo.id, sender: "user", text, metadata: input.messageId }
-  });
 
   const ctx = readCtx(convo.context);
   // Addresses saved through the legacy checkout are customer-entered and can be
@@ -848,11 +889,12 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // (keep only the saved address) so a leftover basket from a previous session doesn't
   // bleed into a new order — the reported "old items still there" problem.
   const CART_TTL_MS = Number(process.env.LIA_CART_TTL_MS ?? 30 * 60 * 1000);
-  const stale = Boolean(
-    (ctx.basket?.length || ctx.pending?.length) &&
-      convo.updatedAt &&
-      Date.now() - new Date(convo.updatedAt).getTime() > CART_TTL_MS
-  );
+  // ÚLTIMA ATIVIDADE REAL = a mensagem anterior da conversa. `Conversation.updatedAt` só
+  // muda quando o contexto é gravado: quem só faz perguntas ("já saiu o total?") ficava
+  // com o relógio parado e podia ser expirado no meio de uma conversa viva.
+  const idleSince = await lastActivityAt(convo, inboundMessageId);
+  const idleMs = idleSince ? Date.now() - idleSince.getTime() : 0;
+  const stale = Boolean((ctx.basket?.length || ctx.pending?.length) && idleSince && idleMs > CART_TTL_MS);
   if (stale) {
     const hadBasket = (ctx.basket?.length ?? 0) > 0;
     const keptCep = ctx.cep;
@@ -880,32 +922,36 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // agora mesmo — e a cotação vencida já bloqueia pagamento velho por conta própria).
   const QUOTE_ABANDON_TTL_MS = Number(process.env.LIA_QUOTE_ABANDON_TTL_MS ?? 60 * 60 * 1000);
   const quoteWaitSteps: Array<DeliveryContext["step"]> = ["awaiting_operator_quote", "awaiting_supplier_validation", "awaiting_quote_confirmation"];
-  if (
-    quoteWaitSteps.includes(ctx.step) &&
-    convo.updatedAt &&
-    Date.now() - new Date(convo.updatedAt).getTime() > QUOTE_ABANDON_TTL_MS
-  ) {
+  if (quoteWaitSteps.includes(ctx.step) && idleSince && idleMs > QUOTE_ABANDON_TTL_MS) {
     let canceledShortId: string | undefined;
+    // O operador pode ter publicado a cotação no exato instante em que o cliente voltou.
+    // Se a corrida for perdida, NÃO limpamos a conversa: o contexto correto acabou de ser
+    // escrito por opsPublishManualQuote e o cliente já recebeu o total.
+    let lostRaceToOperator = false;
     if (ctx.deliveryOrderId) {
       const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
       if (order?.status === AWAITING_OPERATOR_QUOTE_STATUS) {
-        await prisma.deliveryOrder.update({
-          where: { id: order.id },
+        // Guardado por status no próprio UPDATE (nada de ler-depois-escrever por id).
+        const canceled = await prisma.deliveryOrder.updateMany({
+          where: { id: order.id, status: AWAITING_OPERATOR_QUOTE_STATUS },
           data: {
             status: "canceled",
             notes: appendOrderNote(order.notes, "⏰ Cancelado automático: cliente ficou 1h+ sem resposta antes da cotação sair.")
           }
         });
-        canceledShortId = order.id.slice(-6).toUpperCase();
+        if (canceled.count) canceledShortId = order.id.slice(-6).toUpperCase();
+        else lostRaceToOperator = true;
       } else if (order && (await cancelPendingRetailerQuote(order.id))) {
         canceledShortId = order.id.slice(-6).toUpperCase();
       }
     }
-    const fresh = addressOnlyCtx(ctx);
-    for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
-    Object.assign(ctx, fresh);
-    await writeCtx(convo.id, ctx);
-    if (canceledShortId) await reply(phone, copy.staleQuoteRestart(canceledShortId));
+    if (!lostRaceToOperator) {
+      const fresh = addressOnlyCtx(ctx);
+      for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
+      Object.assign(ctx, fresh);
+      await writeCtx(convo.id, ctx);
+      if (canceledShortId) await reply(phone, copy.staleQuoteRestart(canceledShortId));
+    }
   }
 
   const savedCep = user.cep ?? ctx.cep;
@@ -1075,6 +1121,25 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     await handleCancel(phone, convo.id, user.id, user.cep, ctx, intent.explicitOrder ?? false);
     return;
   }
+  // Trocar endereço vale em QUALQUER estado — inclusive nos de ESPERA, que abaixo
+  // respondem e retornam (o cliente pedia a troca e recebia de volta o menu de
+  // pagamento, podendo pagar uma cotação amarrada ao endereço velho). Como o frete foi
+  // calculado pro endereço antigo, uma cotação em aberto cai antes de pedir o CEP novo.
+  if (intent.kind === "change_address") {
+    if (ctx.deliveryOrderId && (ctx.step === "awaiting_quote_confirmation" || ctx.step === "awaiting_supplier_validation")) {
+      if (await cancelPendingRetailerQuote(ctx.deliveryOrderId)) {
+        await reply(phone, copy.quoteDroppedForNewAddress());
+      }
+    }
+    // A new CEP must never inherit the previous door number/address.
+    ctx.deliveryAddress = undefined;
+    ctx.deliveryAddressVerified = false;
+    ctx.step = "need_cep";
+    ctx.deliveryOrderId = undefined;
+    await writeCtx(convo.id, ctx);
+    await reply(phone, copy.askNewCep());
+    return;
+  }
   if (ctx.step === "awaiting_operator_quote") {
     // Pedido NOVO enquanto o operador cota não pode ser engolido (caso real de produção,
     // 07/08: "quero um cotonete" → "segura aí" e o item sumia; o cliente teve que
@@ -1148,15 +1213,6 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   if (intent.kind === "clear_cart") {
     await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
     await reply(phone, copy.cartCleared());
-    return;
-  }
-  if (intent.kind === "change_address") {
-    // A new CEP must never inherit the previous door number/address.
-    ctx.deliveryAddress = undefined;
-    ctx.deliveryAddressVerified = false;
-    ctx.step = "need_cep";
-    await writeCtx(convo.id, ctx);
-    await reply(phone, copy.askNewCep());
     return;
   }
 
@@ -2150,10 +2206,16 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   p.baseQuery = base;
   p.attrs = attrs;
   p.query = refined;
-  const remembered = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
-  p.shownOptions = [...(p.shownOptions ?? p.options), ...matches.filter((o) => !remembered.has(o.sku))];
+  // O que JÁ estava na mesa antes do refino — capturado antes de sobrescrever p.options.
+  const previouslyShownSkus = p.shownSkus ?? p.options.map((o) => o.sku);
+  const previouslyShown = p.shownOptions ?? p.options;
+  const remembered = new Set(previouslyShown.map((o) => o.sku));
+  p.shownOptions = [...previouslyShown, ...matches.filter((o) => !remembered.has(o.sku))];
   p.options = matches;
-  p.shownSkus = matches.map((m) => m.sku);
+  // Histórico de paginação ACUMULA (não substitui): refinar e depois pedir "outras"
+  // repetia cards já mostrados, porque o refino apagava o que a paginação usa pra não
+  // repetir. Skus fora do refino atual continuam valendo como "já mostrei isso".
+  p.shownSkus = [...new Set([...previouslyShownSkus, ...matches.map((m) => m.sku)])];
   await writeCtx(convoId, ctx);
   await sendChoices(phone, p);
 }
@@ -2298,7 +2360,16 @@ async function handleSwap(
   const removedNames = [...removed.map((i) => i.name), ...removedPending.map((p) => p.query)].join(", ");
   const qty = removed[0]?.qty ?? removedPending[0]?.qty ?? 1;
   const store = orderStore(ctx);
-  const options = await store.searchItems(to, 3);
+  // "troca X por Y" busca nas MESMAS vitrines que o pedido normal. Como no concierge
+  // `ctx.storeKey` é "concierge", `orderStore` caía na loja default e o Y só era
+  // procurado no Carrefour — as outras 17 vitrines ficavam invisíveis nesse comando.
+  const crossStore = !ctx.storeKey || ctx.storeKey === CONCIERGE_STORE_KEY;
+  const candidates: StoreCandidate[] = crossStore
+    ? await gatherCrossStoreCandidates(to, 12)
+    : (await store.searchItems(to, 3)).map((item) => ({ store, item }));
+  const options = diversifyOptions(to, candidates.map((c) => c.item), 3)
+    .filter((item) => conciergeMatchIsStrong(to, item))
+    .map((item) => candidates.find((c) => c.item.sku === item.sku)!);
 
   if (!options.length) {
     const prefix = `${copy.swapRemovedPrefix(removedNames)} ${copy.itemsNotFound([to])}`;
@@ -2311,15 +2382,16 @@ async function handleSwap(
     return;
   }
   if (options.length === 1 && !(ctx.pending?.length)) {
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(options[0], qty, store)]);
-    await continueAfterBasket(phone, convoId, ctx, userCep, copy.swappedFor(removedNames, options[0].name));
+    const only = options[0];
+    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(toChoiceOption(only.item, { storeKey: only.store.key, storeLabel: only.store.label }), qty, only.store)]);
+    await continueAfterBasket(phone, convoId, ctx, userCep, copy.swappedFor(removedNames, only.item.name));
     return;
   }
   ctx.pending = [
     {
       query: to,
       qty,
-      options: options.slice(0, 3).map((o) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl }))
+      options: options.map(({ store: optionStore, item }) => toChoiceOption(item, { storeKey: optionStore.key, storeLabel: optionStore.label }))
     },
     ...(ctx.pending ?? [])
   ];
@@ -2680,6 +2752,17 @@ async function continueAfterBasket(
     return;
   }
   if (manualConciergeEnabled()) {
+    // Pedido mínimo é regra DA LOJA (o operador compra no site dela): fechar abaixo do
+    // mínimo cota, cobra e depois toma recusa no checkout. A checagem existia só no
+    // fluxo legado, depois do return acima — no concierge nunca rodava.
+    const belowStore = conciergeStoresBelowMinimum(ctx)[0];
+    if (belowStore) {
+      ctx.step = "collecting";
+      await writeCtx(convoId, ctx);
+      if (prefix) await reply(phone, prefix);
+      await reply(phone, minimumOrderText(ctx, belowStore));
+      return;
+    }
     await createOperatorQuoteRequest(phone, convoId, ctx, prefix);
     return;
   }
@@ -2777,7 +2860,9 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
       for (let i = 0; i < freights.length; i++) {
         const outcome = outcomes[i];
         console.log("[instant-quote:live]", freights[i].storeKey, outcome.kind, outcome.kind === "ok" ? outcome.fee : "");
-        if (outcome.kind === "no-delivery") return false;
+        // Site não entrega nesse CEP, ou algum item da cesta está indisponível lá: nos
+        // dois casos não dá pra cobrar automático — o operador cota à mão.
+        if (outcome.kind === "no-delivery" || outcome.kind === "item-unavailable") return false;
         if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       }
     }
@@ -3164,8 +3249,11 @@ export async function opsPublishManualQuote(
     retailerTotal: produtos,
     etaMinutes: input.etaMinutes
   };
-  await prisma.deliveryOrder.update({
-    where: { id: order.id },
+  // Flip ATÔMICO: a condição de status vai no próprio UPDATE. Sem isso, um cancelamento
+  // concorrente (cliente mandando "cancelar", ou a expiração de abandono) era
+  // sobrescrito e o pedido "ressuscitava" indo pedir pagamento.
+  const claimed = await prisma.deliveryOrder.updateMany({
+    where: { id: order.id, status: AWAITING_OPERATOR_QUOTE_STATUS },
     data: {
       status: "awaiting_quote_confirmation",
       items: items as unknown as object,
@@ -3179,6 +3267,9 @@ export async function opsPublishManualQuote(
       notes: appendOrderNote(order.notes, `Cotação manual enviada (${sameHour ? "motoboy na hora" : "entrega do varejista"}).`)
     }
   });
+  if (!claimed.count) {
+    throw new Error("O pedido mudou de estado antes da cotação sair (cancelado ou já cotado). Recarregue o /ops.");
+  }
 
   if (order.conversationId) {
     const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
@@ -3198,21 +3289,46 @@ export async function opsPublishManualQuote(
     deliveryAddress: order.deliveryAddress ?? undefined,
     sameHour
   };
-  // Resumo com botão "Trocar endereço" (dono, 11/08). Corpo interativo tem teto de 1024
-  // chars na Meta — resumo comprido (ou canal sem botão) cai no texto com a dica escrita.
-  let summarySent = false;
-  const buttonBody = copy.manualQuoteSummary({ ...summaryInput, addressButton: true });
-  if (summaryInput.deliveryAddress && buttonBody.length <= 1024) {
-    try {
-      summarySent = Boolean(await whatsappAdapter.sendQuoteSummary(order.phone, buttonBody));
-    } catch (error) {
-      console.warn("[whatsapp:quote-summary:fallback-text]", error instanceof Error ? error.message : error);
+  // O pedido JÁ saiu de "aguardando cotação"; se o WhatsApp falhar daqui pra frente, o
+  // cliente nunca vê o total e o operador não consegue recotar (o /ops só cota pedido em
+  // awaiting_operator_quote). Então falha de envio DESFAZ a publicação e devolve o
+  // pedido para a fila do operador, com a nota do erro.
+  try {
+    // Resumo com botão "Trocar endereço" (dono, 11/08). Corpo interativo tem teto de 1024
+    // chars na Meta — resumo comprido (ou canal sem botão) cai no texto com a dica escrita.
+    let summarySent = false;
+    const buttonBody = copy.manualQuoteSummary({ ...summaryInput, addressButton: true });
+    if (summaryInput.deliveryAddress && buttonBody.length <= 1024) {
+      try {
+        summarySent = Boolean(await whatsappAdapter.sendQuoteSummary(order.phone, buttonBody));
+      } catch (error) {
+        console.warn("[whatsapp:quote-summary:fallback-text]", error instanceof Error ? error.message : error);
+      }
     }
+    if (!summarySent) await reply(order.phone, copy.manualQuoteSummary(summaryInput));
+    const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
+    if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
+    await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("[ops:publish-quote:send-failed]", detail);
+    await prisma.deliveryOrder.updateMany({
+      where: { id: order.id, status: "awaiting_quote_confirmation" },
+      data: {
+        status: AWAITING_OPERATOR_QUOTE_STATUS,
+        quoteExpiresAt: null,
+        notes: appendOrderNote(order.notes, `⚠️ Cotação revertida: falha ao enviar no WhatsApp (${detail.slice(0, 120)}). Tente cotar de novo.`)
+      }
+    });
+    if (order.conversationId) {
+      const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+      if (convo) {
+        const ctx = readCtx(convo.context);
+        await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
+      }
+    }
+    throw error;
   }
-  if (!summarySent) await reply(order.phone, copy.manualQuoteSummary(summaryInput));
-  const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
-  if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
-  await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
   return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }
 

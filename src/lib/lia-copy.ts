@@ -790,3 +790,9 @@ export function operatorPaidAlert(shortId: string, total: number): string {
 export function staleQuoteRestart(shortId: string): string {
   return `Aquele pedido *#${shortId}* ficou um tempão parado, então cancelei pra não te atrapalhar (não cobrei nada) 👍 Bora recomeçar!`;
 }
+
+// Trocar endereço com cotação na mesa: o frete foi calculado pro endereço antigo, então
+// a cotação cai e a Lia recota depois do endereço novo. Nada foi cobrado.
+export function quoteDroppedForNewAddress(): string {
+  return "Beleza! Como o frete depende do endereço, cancelei essa cotação (não cobrei nada) e refaço com o endereço novo. 📍";
+}

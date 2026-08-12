@@ -277,6 +277,16 @@ model Message {
   metadata       String?
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  // ⚠️ Existe um índice ÚNICO PARCIAL no banco que o Prisma não consegue declarar:
+  //   CREATE UNIQUE INDEX "Message_inbound_provider_id_key"
+  //     ON "Message"("conversationId", "metadata") WHERE "sender" = 'user';
+  // (migration 20260811120000_message_provider_dedupe)
+  // Ele é o que torna o dedupe do webhook ATÔMICO: `metadata` guarda o MessageSid/wamid
+  // e duas entregas simultâneas do mesmo id não podem mais ser processadas as duas.
+  // PARCIAL de propósito: no fluxo legado de busca, `metadata` de mensagens do
+  // ASSISTENTE guarda um JSON de opções que legitimamente se repete — um índice global
+  // quebraria aquele fluxo. Não troque por @@unique.
 }
 
 model Product {

@@ -192,6 +192,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **11/08 (5ª) — revisão de código do lote (6 P1 + 4 P2/P3) corrigida e testada.** Detalhe
+> por achado em [AGENTS.md](AGENTS.md). **Ação já feita:** o índice único parcial do dedupe
+> (`Message_inbound_provider_id_key`) foi aplicado no banco de produção e a migration
+> marcada como aplicada — deploy do código sem esse índice NÃO teria dedupe. **Ação
+> pendente do dono:** conferir se o pedido mínimo do Carrefour (R$30, default de
+> `LIA_CARREFOUR_MIN_ORDER`) e os mínimos das outras 17 lojas batem com a realidade — a
+> regra agora BLOQUEIA o fechamento, então mínimo errado vira recusa indevida; as demais
+> vitrines estão com 0 (sem mínimo) e só o Carrefour tem valor.
+
 > **11/08 (4ª) — bugs do teste real: card por SKU, "outras" com 3, botão Trocar endereço.**
 > O id posicional dos cards era o bug do "escolhi um e veio outro" (lista trocava por baixo
 > na paginação); id agora é o sku e o histórico (`shownOptions`) resolve card antigo.

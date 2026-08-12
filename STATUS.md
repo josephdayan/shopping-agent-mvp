@@ -234,6 +234,23 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **11/08 (6ª) — conversa duplicada dividia a cesta (achado ao consertar o dedupe).** Duas
+> mensagens simultâneas do mesmo número abriam DUAS conversas ativas — cesta dividida,
+> item sumindo, dedupe furado. Um número em produção tinha 86 conversas ativas. A criação
+> virou upsert com id determinístico (`conv_<userId>`), atômico por chave primária. Suíte
+> 297/297; golden 32/33 DET · 33/33 IA.
+
+> **11/08 (5ª) — revisão de código: 6 P1 corrigidos antes de publicar.** Frete VTEX cobrava
+> o frete de 1 item numa cesta de N (agora soma por item, item indisponível vai pro
+> operador, preço ausente ≠ grátis); falha de envio ao publicar cotação deixava pedido
+> zumbi (agora faz rollback pra fila do operador); pedido mínimo da loja não valia no
+> concierge; botão "Trocar endereço" era engolido pelo menu de pagamento; escritas
+> concorrentes podiam ressuscitar pedido cancelado (agora `updateMany` com status no
+> WHERE); dedupe de webhook virou atômico com índice único PARCIAL (`sender='user'`,
+> **já aplicado no banco**). Mais: TTL passa a medir a última mensagem (cliente ativo não
+> é mais expirado), "troca X por Y" busca nas 18 vitrines, refino não apaga o histórico de
+> paginação, `tail-messages` vira tail de verdade.
+
 > **11/08 (4ª) — teste real do dono: card escolhia produto errado (id posicional) + "outras"
 > com 1 opção + botão Trocar endereço.** "Escolher esse" agora carrega o SKU do card — toque
 > em card antigo (pós-paginação) escolhe o produto DAQUELE card, nunca a posição da lista

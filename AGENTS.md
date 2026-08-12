@@ -297,6 +297,66 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**11/08 (5ª) — revisão de código do lote: 6 P1 + 4 P2/P3 corrigidos.** Uma revisão
+independente dos 19 commits achou defeitos que a suíte verde não pegava (cada um virou
+teste):
+1. **Frete VTEX cobrava por 1 item.** `logisticsInfo` é POR ITEM; o código achatava todos
+   os SLAs e pegava o mais barato — cesta de N itens saía com o frete de um. Agora soma o
+   SLA de entrega mais barato de CADA item, exige que a resposta cubra a cesta inteira,
+   trata item indisponível como `item-unavailable` (→ operador, nunca tabela) e **preço
+   ausente não é frete grátis** (só `price: 0` explícito é). Prazo exibido = o do item
+   mais lento.
+2. **Falha de envio deixava pedido zumbi.** `opsPublishManualQuote` movia o status ANTES
+   de mandar as mensagens: erro no WhatsApp deixava o cliente sem total e o operador sem
+   poder recotar (o /ops só cota `awaiting_operator_quote`). Agora falha de envio faz
+   ROLLBACK do status, anota o erro no /ops e propaga o erro.
+3. **Pedido mínimo da loja não valia no concierge** (a checagem vivia só no ramo legado,
+   depois do return): cesta abaixo do mínimo era cotada, cobrada e recusada no checkout
+   da loja. `conciergeStoresBelowMinimum` roda antes de criar o pedido (linha concierge
+   não tem loja real → sem mínimo, senão herdaria o do default).
+4. **Botão "Trocar endereço" não trocava**: em `awaiting_quote_confirmation` o bloco de
+   pagamento capturava tudo e devolvia o menu — dava pra pagar cotação amarrada ao
+   endereço velho. O `change_address` subiu para antes dos estados de espera e derruba a
+   cotação aberta (o frete era do outro endereço).
+5. **Escritas ler-depois-escrever por id**: cancelamento automático e publicação podiam
+   se sobrescrever. Ambos agora são `updateMany` com o status no WHERE; quem perde a
+   corrida não mexe no contexto da conversa.
+6. **Dedupe de webhook não era atômico** (findFirst→create): duas entregas simultâneas do
+   mesmo sid passavam juntas. Agora há índice ÚNICO PARCIAL
+   (`Message_inbound_provider_id_key`, migration 20260811120000) sobre
+   (conversationId, metadata) **WHERE sender = 'user'** e o P2002 decide. Parcial porque
+   `metadata` de mensagens do ASSISTENTE guarda JSON de opções do fluxo legado, que se
+   repete legitimamente (2 grupos assim existem em produção) — índice global exigiria
+   apagar mensagens reais. **Índice já aplicado no banco.**
+7. **TTL media o relógio errado**: `Conversation.updatedAt` só muda quando o contexto é
+   gravado, então quem só perguntava ("já saiu o total?") era expirado no meio de uma
+   conversa viva. `lastActivityAt` usa a última MENSAGEM (ou o updatedAt, o que for mais
+   recente); vale para o TTL de cesta e o de cotação.
+8. **"troca X por Y" só olhava o Carrefour** no concierge (`orderStore` cai no default
+   quando a chave é "concierge"): agora usa `gatherCrossStoreCandidates` + diversidade +
+   piso, como o pedido normal, e a opção carrega a loja dela.
+9. **Refino apagava o histórico de paginação** (`shownSkus` era substituído) e "outras"
+   repetia cards; agora acumula.
+10. `tail-messages` ordenava ASC com `take: 60` — mostrava as 60 mais ANTIGAS, escondendo
+    justo o erro recente. Agora é DESC + reverse (tail de verdade).
+Efeito colateral saudável nos testes: com o mínimo valendo, fechar 1 refrigerante do
+Carrefour (mínimo R$30, loja pinada no registro de teste) passou a ser barrado — os evals
+que fechavam cesta agora usam quantidade que passa do mínimo, e há caso novo cobrindo os
+dois lados.
+
+**Bug MAIOR achado ao consertar o nº 6 — conversa duplicada divide a cesta.** O teste de
+dedupe passava sozinho e falhava na suíte cheia (sob carga). Causa: `getOrCreateConvo`
+fazia ler-depois-criar, então duas mensagens simultâneas do MESMO número abriam DUAS
+conversas ativas — cada uma com seu contexto (cesta dividida, item sumindo) e com o
+dedupe, que é por conversa, sem colidir. O banco confirmou o estrago: um número com **86
+conversas ativas**. Conserto na raiz e sem tocar em dados: a criação virou `upsert` com id
+DETERMINÍSTICO (`conv_<userId>`) — upsert por PK é atômico, então as duas chamadas
+convergem para a mesma conversa. Conversa nunca é desativada no produto (o único
+`status: "inactive"` é de cartão salvo), então reaproveitar o id é seguro. O teste trava a
+raiz (1 conversa ativa), não só o sintoma. **Descartada** a alternativa de índice único
+global por `metadata`: os ids de teste (`dup_1`) se repetem entre usuários diferentes nos
+evals, e um índice global quebraria a suíte além de exigir apagar linhas reais.
+
 **11/08 (4ª) — teste real do dono pegou 2 bugs + 1 pedido de UX.** (1) **"Escolher esse"
 confirmava OUTRO produto**: o id do botão era a POSIÇÃO ("1"/"2"/"3"); depois de "Outras
 opções" a lista trocava por baixo e o toque num card antigo escolhia a posição equivalente

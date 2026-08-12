@@ -16,6 +16,10 @@
 export type LiveFreightOutcome =
   | { kind: "ok"; fee: number; estimate?: string }
   | { kind: "no-delivery" }
+  // O site respondeu, mas algum item da cesta não está disponível pra esse CEP (sem
+  // estoque / não vendido na região). Cobrar pela tabela venderia o que a loja não
+  // entrega — quem chama trata como o `no-delivery`: cotação manual do operador.
+  | { kind: "item-unavailable" }
   | { kind: "unavailable" };
 
 const VTEX_LIVE: Record<string, { domain: string; sku: RegExp }> = {
@@ -49,6 +53,36 @@ function maxLiveFee(): number {
 }
 
 type Sla = { name?: string; price?: number; shippingEstimate?: string; pickupStoreInfo?: { isPickupStore?: boolean } };
+type SimItem = { availability?: string };
+type LogisticsInfo = { slas?: Sla[] };
+
+// "3bd" (dias úteis), "2d", "6h", "45m" → minutos, para comparar prazos entre itens.
+// Dia útil vale 1 dia aqui: a comparação só serve para dizer QUAL item chega por
+// último; a promessa exibida continua sendo a string original da loja.
+function estimateMinutes(estimate?: string): number {
+  const m = /^(\d+)\s*(bd|d|h|m)$/i.exec((estimate ?? "").trim());
+  if (!m) return -1;
+  const value = Number(m[1]);
+  const unit = m[2].toLowerCase();
+  if (unit === "m") return value;
+  if (unit === "h") return value * 60;
+  return value * 24 * 60;
+}
+
+// A cesta inteira só chega quando o item MAIS LENTO chega.
+function slowestEstimate(estimates: (string | undefined)[]): string | undefined {
+  let best: string | undefined;
+  let bestMinutes = -1;
+  for (const estimate of estimates) {
+    if (!estimate) continue;
+    const minutes = estimateMinutes(estimate);
+    if (best === undefined || minutes > bestMinutes) {
+      best = estimate;
+      bestMinutes = minutes;
+    }
+  }
+  return best;
+}
 
 export async function liveStoreFreight(
   storeKey: string,
@@ -78,18 +112,44 @@ export async function liveStoreFreight(
       signal: AbortSignal.timeout(timeoutMs())
     });
     if (!response.ok) return { kind: "unavailable" };
-    const payload = (await response.json()) as { items?: unknown[]; logisticsInfo?: { slas?: Sla[] }[] };
-    if (!Array.isArray(payload.items) || !payload.items.length) return { kind: "unavailable" };
+    const payload = (await response.json()) as { items?: SimItem[]; logisticsInfo?: LogisticsInfo[] };
+    const simulated = Array.isArray(payload.items) ? payload.items : [];
+    const logistics = Array.isArray(payload.logisticsInfo) ? payload.logisticsInfo : [];
+    // O frete é POR ITEM no VTEX (um logisticsInfo por item). Uma resposta que não cobre
+    // a cesta inteira não permite calcular o frete do carrinho — sem isso, uma cesta de
+    // 5 itens era cobrada pelo frete de 1 (achatava todos os SLAs e pegava o mais barato).
+    if (simulated.length !== simItems.length || logistics.length !== simItems.length) {
+      return { kind: "unavailable" };
+    }
+    // Item que a loja não vende/não tem pra esse CEP: cobrar pela tabela venderia o que
+    // ela não entrega. Vai pro operador. (`availability` ausente = a loja não informou;
+    // não inventamos indisponibilidade.)
+    if (simulated.some((item) => item.availability && item.availability !== "available")) {
+      return { kind: "item-unavailable" };
+    }
 
-    const deliveries = (payload.logisticsInfo ?? [])
-      .flatMap((li) => li.slas ?? [])
-      .filter((sla) => !sla.pickupStoreInfo?.isPickupStore && !/retir/i.test(sla.name ?? ""));
-    if (!deliveries.length) return { kind: "no-delivery" };
-
-    const cheapest = deliveries.reduce((best, sla) => ((sla.price ?? Infinity) < (best.price ?? Infinity) ? sla : best));
-    const fee = Math.round(((cheapest.price ?? 0) / 100) * 100) / 100;
+    let fee = 0;
+    const estimates: (string | undefined)[] = [];
+    for (const info of logistics) {
+      const deliveries = (info.slas ?? []).filter(
+        (sla) =>
+          !sla.pickupStoreInfo?.isPickupStore &&
+          !/retir/i.test(sla.name ?? "") &&
+          // Preço AUSENTE não é frete grátis: sem número, não há o que cobrar com
+          // segurança. Só `price: 0` explícito é grátis de verdade.
+          typeof sla.price === "number" &&
+          Number.isFinite(sla.price) &&
+          sla.price >= 0
+      );
+      // Um item sem opção de entrega = a loja não entrega essa cesta nesse CEP.
+      if (!deliveries.length) return { kind: "no-delivery" };
+      const cheapest = deliveries.reduce((best, sla) => (sla.price! < best.price! ? sla : best));
+      fee += cheapest.price! / 100;
+      estimates.push(cheapest.shippingEstimate);
+    }
+    fee = Math.round(fee * 100) / 100;
     if (!Number.isFinite(fee) || fee < 0 || fee > maxLiveFee()) return { kind: "unavailable" };
-    return { kind: "ok", fee, estimate: cheapest.shippingEstimate };
+    return { kind: "ok", fee, estimate: slowestEstimate(estimates) };
   } catch {
     return { kind: "unavailable" };
   }
