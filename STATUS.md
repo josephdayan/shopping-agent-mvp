@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-10. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-11. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -233,6 +233,32 @@ de hoje está em
 > 3 botões — **Pagar** (fecha e cota), **Adicionar mais itens** e **Cancelar** — via
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
+
+> **11/08 (3ª) — fim da linha livre: pede → preço na hora → acabou.** Decisão do dono: o
+> "vou cotar" não existe mais no fluxo normal. Item sem preço nas 18 lojas = "não tenho
+> como trazer" na mesma resposta (nunca entra na cesta); fechar com escolha aberta pede
+> pra confirmar o item. Toda cesta é precificada e todo fechamento tem total NA HORA. O
+> caminho do operador virou fallback técnico (falha de frete / kill-switch), cercado por
+> alerta + expiração de 1h. Bônus: 151 palavras com encoding corrompido no seed Imigrantes
+> corrigidas (destravou 30 águas e a penalidade da Coca "Sem Açúcar" que o mojibake
+> driblava); "tônica/micelar/termal" viraram variante processada. Golden 32/33 · 33/33.
+
+> **11/08 (2ª) — saída sempre visível + abandono expira sozinho.** Botão *Cancelar* no menu
+> de pagamento e botão *Cancelar pedido* em toda mensagem de espera de cotação (Meta;
+> texto puro segue aceitando "cancelar"). Cliente que some por 1h+ com cotação parada:
+> pedido não-pago cancela sozinho (nota no /ops), conversa recomeça limpa (endereço fica)
+> e a mensagem nova processa do zero — o zumbi não se repete. Pago e awaiting_payment
+> nunca são tocados. Env: `LIA_QUOTE_ABANDON_TTL_MS` (60 min).
+
+> **11/08 — "camiseta caiu na cotação" NÃO era a busca: pedido zumbi + falta de alerta ao
+> operador.** O pedido de ração de sábado (26 min antes do deploy da cotação instantânea)
+> ficou 2 dias em `awaiting_operator_quote` sem ninguém cotar no /ops, e a camiseta de
+> hoje entrou nele (desenho de 07/08). Causa raiz: nenhum aviso ao operador. Fechado:
+> alertas no WhatsApp do operador (`LIA_OPERATOR_PHONE` — **setar na Vercel + redeploy**)
+> em cotação manual nova, item adicionado e pedido PAGO. Bônus do mergulho: card de
+> sábado morreu por foto 404 no CDN (erro 131053, classe nova) — pré-flight de imagem no
+> card Meta: foto morta = card sem foto, nunca card perdido. Desbloqueio do zumbi: cliente
+> manda "cancelar". Testes novos: alerta E2E + card sem header.
 
 > **10/08 — opções diversas + botão "Outras opções" + vistoria de rodagem.** Caso do dono:
 > "carregador"/"ração" mostravam 3 variantes quase iguais. As 3 opções agora são produtos

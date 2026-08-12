@@ -225,7 +225,10 @@ const PET_SPECIES_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|aquario|
 
 // Variantes "processadas" que só devem vencer quando pedidas ("café" = torrado/moído,
 // não sachê; "leite" nunca é condensado/fermentado/vegetal).
-const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada"]);
+// "tonica"/"micelar"/"termal" entraram em 11/08: o conserto do encoding do Imigrantes
+// destravou 30 águas antes invisíveis e a Água Tônica empatou com a mineral no pedido
+// "agua" — mesma classe da sanitária/oxigenada (água que não é água de beber).
+const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada", "tonica", "micelar", "termal"]);
 // "Leite DE COCO" é tão pouco "leite" quanto o de soja: quem pede leite quer o de vaca.
 // A lista existia mas estava incompleta, e o coco (barato, 200ml) vencia o desempate de
 // preço — pedir "leite" devolvia leite de coco.

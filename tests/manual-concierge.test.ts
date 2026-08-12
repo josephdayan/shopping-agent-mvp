@@ -65,6 +65,24 @@ async function returningCustomer() {
   return { phone, userId: user.id, ...driver(phone) };
 }
 
+// Regra 11/08 matou a linha livre no fluxo do cliente: para exercitar o FALLBACK manual
+// (operador cota no /ops), desliga a cotação instantânea e fecha uma cesta de vitrine.
+async function manualQuoteOrder(c: { send: (t: string) => Promise<string>; userId: string }) {
+  process.env.LIA_INSTANT_QUOTE = "false";
+  try {
+    await c.send("quero coca cola");
+    const afterChoice = await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+    await c.send("só isso");
+  } finally {
+    delete process.env.LIA_INSTANT_QUOTE;
+  }
+  return prisma.deliveryOrder.findFirst({
+    where: { userId: c.userId, status: "awaiting_operator_quote" },
+    orderBy: { createdAt: "desc" }
+  });
+}
+
 async function wipeTestData() {
   const users = await prisma.user.findMany({ where: { phone: { startsWith: PREFIX } }, select: { id: true } });
   const ids = users.map((u) => u.id);
@@ -92,32 +110,32 @@ after(async () => {
   await prisma.$disconnect();
 });
 
-test("breadth: itens fora de qualquer catálogo são anotados, não recusados", async (t) => {
+test("regra 11/08: item sem preço é recusado NA HORA — nunca 'anotei, vou cotar'", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  const noted = await c.send("um carregador de celular e 2 cadernos universitários");
-  assert.match(noted, /Anotei/i);
-  assert.match(noted.toLowerCase(), /carregador/);
-  assert.match(noted.toLowerCase(), /caderno/);
-  // Nunca cai no "não achei no catálogo" do fluxo legado.
-  assert.doesNotMatch(noted, /não achei|catálogo de hoje/i);
+  const out = await c.send("quero um vedante pra torneira");
+  assert.match(out, /não tenho como trazer/i);
+  assert.match(out.toLowerCase(), /vedante/);
+  assert.doesNotMatch(out, /anotei|vou cotar|garimpar/i);
+  const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId } });
+  assert.equal(order, null, "recusa honesta não cria pedido");
 });
 
-// ---------- vitrine híbrida (03/08) ----------
-// O concierge procura na vitrine e mostra opções com foto; o que não tem match vira linha
-// livre. Estes testes travam as três regras que fazem isso não virar um passo atrás.
+// ---------- vitrine (03/08; regra 11/08: sem linha livre) ----------
+// O concierge procura na vitrine e mostra opções com foto; o que não tem preço é recusado
+// com honestidade na mesma resposta — nunca vira espera de cotação.
 
-test("vitrine híbrida: item da vitrine vira opção pra escolher, item de fora vira linha livre", async (t) => {
+test("vitrine: item com preço vira opção; item sem preço é recusado na mesma resposta", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const out = await c.send("quero coca cola e um vedante pra torneira");
   // A coca existe na vitrine → opções numeradas.
   assert.match(out, /op(ç|c)(õ|o)es/i);
   assert.match(out.toLowerCase(), /coca/);
-  // O vedante não existe → anotado como linha livre, nunca recusado.
-  assert.match(out.toLowerCase(), /garimpar|anotei/);
+  // O vedante não existe → recusa honesta na hora (regra 11/08), nunca "vou cotar".
+  assert.match(out, /não tenho como trazer/i);
   assert.match(out.toLowerCase(), /vedante|torneira/);
-  assert.doesNotMatch(out, /não achei/i);
+  assert.doesNotMatch(out, /garimpar|vou cotar/i);
 });
 
 test("vitrine híbrida: escolher NÃO fecha a lista — o cliente ainda soma itens", async (t) => {
@@ -136,21 +154,22 @@ test("vitrine híbrida: escolher NÃO fecha a lista — o cliente ainda soma ite
   assert.equal(order, null, "a lista não pode virar pedido antes de o cliente fechar");
 });
 
-test("vitrine híbrida: fechar a lista com escolha pendente NÃO descarta o item", async (t) => {
+test("fechar a lista com escolha pendente pede pra ESCOLHER — e aí o total sai na hora", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   await c.send("quero coca cola");
-  // Fecha a lista no meio das opções, sem escolher.
+  // Fecha a lista no meio das opções, sem escolher: a Lia pede pra confirmar o item
+  // (regra 11/08: nada de linha livre — só item com preço entra no pedido).
   const closed = await c.send("só isso");
-  assert.match(closed, /Recebi seu pedido/i);
-  assert.match(closed.toLowerCase(), /coca/, "o item pendente tem de sobreviver como linha livre");
+  assert.match(closed, /confirma esse item primeiro/i);
+  assert.match(closed.toLowerCase(), /coca/, "as opções voltam pra facilitar a escolha");
   const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone } });
-  assert.ok(order, "pedido deve existir");
-  const items = (order!.items as unknown as { name: string }[]) ?? [];
-  assert.ok(
-    items.some((i) => /coca/i.test(i.name)),
-    `o pedido precisa conter a coca; veio: ${JSON.stringify(items.map((i) => i.name))}`
-  );
+  assert.equal(order, null, "sem escolha não há pedido");
+  // Escolhe e fecha: total na mesma resposta.
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  const done = await c.send("só isso");
+  assert.match(done, /Total/i, `fechamento: ${done.slice(0, 200)}`);
 });
 
 // ---------- onboarding: o endereço não pode virar lista de compras (06/08) ----------
@@ -210,17 +229,22 @@ test("cotação instantânea: cesta 100% vitrine fecha com total NA HORA, sem es
   assert.match(order!.notes ?? "", /Frete por loja/i);
 });
 
-test("cotação instantânea: linha livre na cesta mantém o caminho do operador", async (t) => {
+test("cotação instantânea: item sem preço é recusado na entrada e o resto fecha NA HORA", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("quero coca cola e uma vela de aniversário");
+  const first = await c.send("quero coca cola e uma vela de aniversário");
+  // Regra 11/08: a vela (sem preço) é recusada JÁ na entrada — nunca arrasta o pedido
+  // inteiro pra cotação manual.
+  assert.match(first, /não tenho como trazer/i);
+  assert.match(first.toLowerCase(), /vela/);
   const afterChoice = await c.send("1");
   if (/quantas unidades/i.test(afterChoice)) await c.send("1");
   const closed = await c.send("só isso");
-  // Item sem preço não pode ser cobrado na hora — a cotação continua com o operador.
-  assert.match(closed, /Recebi seu pedido/i);
+  assert.match(closed, /Total/i, `fechamento: ${closed.slice(0, 200)}`);
   const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone }, orderBy: { createdAt: "desc" } });
-  assert.equal(order!.status, "awaiting_operator_quote");
+  assert.equal(order!.status, "awaiting_quote_confirmation");
+  const items = (order!.items as unknown as { name: string }[]) ?? [];
+  assert.ok(!items.some((i) => /vela/i.test(i.name)), "a vela recusada não pode entrar no pedido");
 });
 
 test("cotação instantânea: kill-switch LIA_INSTANT_QUOTE=false volta ao fluxo manual", async (t) => {
@@ -244,19 +268,11 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
 
-  // 1. Cliente pede coisas diversas (largura). A Lia anota, sem cotar sozinha.
-  await c.send("um cabo usb-c e uma vela de aniversário");
-  const closed = await c.send("só isso");
-  assert.match(closed, /cotar/i);
-  assert.doesNotMatch(closed, /Total: R\$/); // nada de total inventado antes da cotação real
-
-  // 2. O pedido está aguardando a cotação do operador.
-  const pending = await prisma.deliveryOrder.findFirst({
-    where: { userId: c.userId, status: "awaiting_operator_quote" }
-  });
+  // 1-2. Fallback manual (instantânea desligada): pedido de vitrine aguardando cotação.
+  const pending = await manualQuoteOrder(c);
   assert.ok(pending, "deveria existir um pedido aguardando cotação");
   assert.equal(pending!.storeKey, "concierge");
-  assert.equal((pending!.items as unknown as unknown[]).length, 2);
+  assert.equal((pending!.items as unknown as unknown[]).length, 1);
 
   // 3. Operador cota à mão: R$ 50 de produtos + R$ 12 de motoboy, entrega na hora.
   const start = outbox.length;
@@ -313,11 +329,7 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
 test("pedir item DURANTE a cotação do operador inclui no pedido — nunca engole (caso real 07/08)", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("uma vela de aniversário");
-  await c.send("só isso");
-  const pending = await prisma.deliveryOrder.findFirst({
-    where: { userId: c.userId, status: "awaiting_operator_quote" }
-  });
+  const pending = await manualQuoteOrder(c);
   assert.ok(pending, "pedido deveria estar aguardando cotação");
 
   // Em produção isso respondia "segura aí" e DESCARTAVA o cotonete; o cliente teve
@@ -345,11 +357,7 @@ test("pedir item DURANTE a cotação do operador inclui no pedido — nunca engo
 test("não é possível cotar um pedido que não está aguardando cotação", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("uma echarpe");
-  await c.send("só isso");
-  const order = await prisma.deliveryOrder.findFirst({
-    where: { userId: c.userId, status: "awaiting_operator_quote" }
-  });
+  const order = await manualQuoteOrder(c);
   assert.ok(order);
   await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
   // Segunda cotação no mesmo pedido (agora awaiting_quote_confirmation) deve falhar.
@@ -362,12 +370,7 @@ test("não é possível cotar um pedido que não está aguardando cotação", as
 test("cotação concierge vencida não libera pagamento", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("um guarda-chuva");
-  await c.send("só isso");
-  const order = await prisma.deliveryOrder.findFirst({
-    where: { userId: c.userId, status: "awaiting_operator_quote" },
-    orderBy: { createdAt: "desc" }
-  });
+  const order = await manualQuoteOrder(c);
   assert.ok(order);
   await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
   await prisma.deliveryOrder.update({
@@ -383,12 +386,7 @@ test("cotação concierge vencida não libera pagamento", async (t) => {
 test("estorno parcial registra valor e referência antes de avisar", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("um guarda-chuva");
-  await c.send("só isso");
-  const order = await prisma.deliveryOrder.findFirst({
-    where: { userId: c.userId, status: "awaiting_operator_quote" },
-    orderBy: { createdAt: "desc" }
-  });
+  const order = await manualQuoteOrder(c);
   assert.ok(order);
   await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
   await c.send("pix");
@@ -403,10 +401,51 @@ test("estorno parcial registra valor e referência antes de avisar", async (t) =
 test("cancelar durante a cotação do operador cancela sem cobrança", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("um guarda-chuva");
-  await c.send("só isso");
+  await manualQuoteOrder(c);
   const canceled = await c.send("cancelar");
   assert.match(canceled, /cancel/i);
   const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId }, orderBy: { createdAt: "desc" } });
   assert.equal(order!.status, "canceled");
+});
+
+test("concierge: cotação manual dispara alerta no WhatsApp do OPERADOR", async (t) => {
+  if (!dbOk) return t.skip();
+  // Caso real 11/08: pedido ficou 2 dias em awaiting_operator_quote porque nada avisava
+  // o operador — o alerta (LIA_OPERATOR_PHONE) é o que fecha o ciclo "em instantes".
+  const operator = "+5500999000111";
+  process.env.LIA_OPERATOR_PHONE = operator;
+  try {
+    const c = await returningCustomer();
+    const start = outbox.length;
+    await manualQuoteOrder(c);
+    const toOperator = outbox
+      .slice(start)
+      .filter((m) => m.to === operator)
+      .map((m) => m.text)
+      .join("\n");
+    assert.match(toOperator, /aguardando SUA cotação/, `sem alerta ao operador: ${toOperator || "(vazio)"}`);
+    assert.match(toOperator.toLowerCase(), /coca/);
+  } finally {
+    delete process.env.LIA_OPERATOR_PHONE;
+  }
+});
+
+test("concierge: cotação abandonada 1h+ expira sozinha e a conversa recomeça", async (t) => {
+  if (!dbOk) return t.skip();
+  // Caso real 11/08: pedido de sábado ficou 2 dias em awaiting_operator_quote e a
+  // "camiseta de futebol" de segunda caiu DENTRO dele. Agora o retorno após 1h+ de
+  // silêncio cancela o pedido não-cotado e processa a mensagem nova do zero.
+  const c = await returningCustomer();
+  const stuck = await manualQuoteOrder(c);
+  assert.ok(stuck, "esperava pedido em awaiting_operator_quote");
+  // Viagem no tempo: o cliente sumiu por 2 horas.
+  await prisma.$executeRaw`UPDATE "Conversation" SET "updatedAt" = NOW() - INTERVAL '2 hours' WHERE "userId" = ${c.userId}`;
+  const back = await c.send("quero um leite");
+  assert.match(back, /cancelei pra não te atrapalhar/, `sem aviso de recomeço: ${back.slice(0, 200)}`);
+  assert.doesNotMatch(back, /já incluí na cotação/, "a mensagem nova NÃO pode cair no pedido velho");
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: stuck!.id } });
+  assert.equal(after?.status, "canceled");
+  assert.match(after?.notes ?? "", /Cancelado automático/);
+  // O leite seguiu como pedido NOVO (opções ou anotação — qualquer resposta de produto).
+  assert.match(back, /leite/i);
 });

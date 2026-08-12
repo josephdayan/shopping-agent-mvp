@@ -338,10 +338,20 @@ export const whatsappAdapter = {
 
   async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    // A saída sempre visível (pedido do dono, 11/08): dá pra desistir sem digitar nada.
     return sendMetaSimpleButtons(to, "Escolha como prefere pagar:", [
       { id: "pix", title: "Pagar com Pix" },
-      { id: "cartao", title: "Pagar com cartão" }
+      { id: "cartao", title: "Pagar com cartão" },
+      { id: "cancelar", title: "Cancelar" }
     ], `Pix ${formatBRL(pixTotal)} · Cartão ${formatBRL(cardTotal)}`);
+  },
+
+  // Aviso de espera de cotação com a saída SEMPRE visível (pedido do dono, 11/08): botão
+  // "Cancelar pedido" cujo toque volta como o texto "cancelar" e cai no cancel contextual
+  // que já existe. Fora do Meta retorna null e o chamador manda o texto puro.
+  async sendCancelableNotice(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [{ id: "cancelar", title: "Cancelar pedido" }]);
   },
 
   // Confirmação de recompra com cartão salvo SEM a Payments API da Meta: botões comuns
@@ -446,6 +456,24 @@ async function sendMetaSimpleButtons(
   });
 }
 
+// Pré-flight da imagem do card (caso real 09/08: foto de catálogo 404 no CDN → a Meta
+// aceita o envio e descarta o card INTEIRO depois, em silêncio — erro assíncrono 131053).
+// Só um 4xx definitivo derruba a foto; timeout/erro de rede mantém (não punir CDN lento).
+// O card degradado vai SEM header de imagem — o produto, o preço e o botão sobrevivem.
+async function mediaLinkAlive(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, {
+      headers: { Range: "bytes=0-0" },
+      signal: AbortSignal.timeout(Number(process.env.LIA_MEDIA_PREFLIGHT_TIMEOUT_MS ?? 1500)),
+      cache: "no-store"
+    });
+    res.body?.cancel().catch(() => {});
+    return res.status < 400 || res.status >= 500;
+  } catch {
+    return true;
+  }
+}
+
 async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoice[]) {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
@@ -455,6 +483,7 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
   if (options.some((option) => !isPublicMediaUrl(option.imageUrl ?? ""))) {
     throw new Error("Refusing to send a WhatsApp product card without a deliverable image");
   }
+  const imageAlive = await Promise.all(options.map((option) => mediaLinkAlive(safeMediaLink(option.imageUrl ?? ""))));
 
   const normalizedTo = normalizeWhatsAppPhone(to);
   const messages = [];
@@ -476,7 +505,9 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
       body: { text: `${option.name}\n*${formatBRL(option.displayPrice)}*`.slice(0, 1024) },
       action: { buttons }
     };
-    interactive.header = { type: "image", image: { link: safeMediaLink(option.imageUrl ?? "") } };
+    if (imageAlive[index]) {
+      interactive.header = { type: "image", image: { link: safeMediaLink(option.imageUrl ?? "") } };
+    }
     messages.push(await sendMetaPayload(phoneNumberId, token, {
       messaging_product: "whatsapp",
       recipient_type: "individual",

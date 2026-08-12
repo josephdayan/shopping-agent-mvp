@@ -99,6 +99,20 @@ function manualConciergeEnabled(): boolean {
   return process.env.LIA_MANUAL_CONCIERGE !== "false";
 }
 
+// Alerta operacional no WhatsApp do operador (LIA_OPERATOR_PHONE; sem env = silêncio).
+// Caso real (11/08): um pedido ficou 2 DIAS em awaiting_operator_quote porque nada avisava
+// o operador de que havia trabalho no /ops — pro cliente, o "te mando em instantes" virou
+// nunca. Best-effort: falha de envio jamais afeta o fluxo do cliente.
+async function notifyOperator(text: string) {
+  const to = process.env.LIA_OPERATOR_PHONE?.trim();
+  if (!to) return;
+  try {
+    await whatsappAdapter.sendMessage(to, text);
+  } catch (error) {
+    console.warn("[operator-alert:failed]", error instanceof Error ? error.message : error);
+  }
+}
+
 // Where the operator hands the goods to the courier (their own base). Same-hour courier
 // pickup is from HERE, never a store counter — so the retailer third-party-pickup document
 // rules never apply. Configured once via env for same-hour operation.
@@ -295,6 +309,18 @@ async function reply(phone: string, text: string) {
   await whatsappAdapter.sendMessage(phone, text);
 }
 
+// Mensagens de ESPERA de cotação sempre saem com o botão "Cancelar pedido" no Meta
+// (pedido do dono, 11/08: a saída tem que estar visível, não escondida num comando).
+// Sem Meta (ou em falha), cai no texto puro — "cancelar" digitado funciona igual.
+async function replyQuoteNotice(phone: string, text: string) {
+  try {
+    if (await whatsappAdapter.sendCancelableNotice(phone, text)) return;
+  } catch (error) {
+    console.warn("[whatsapp:cancel-notice:fallback-text]", error instanceof Error ? error.message : error);
+  }
+  await reply(phone, text);
+}
+
 // ---------- basket parsing + catalog matching ----------
 
 type ExtractedLines = { lines: ParsedLine[]; greetingOnly: boolean; containsMedicine: boolean };
@@ -479,16 +505,6 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
 // The store an in-progress order belongs to (picked when the basket was built).
 function orderStore(ctx: DeliveryContext): StoreConnector {
   return getStore(ctx.storeKey ?? ctx.basket?.[0]?.storeKey ?? DEFAULT_STORE_KEY);
-}
-
-// Concierge: dobra as escolhas ainda abertas em linhas livres, para que fechar a lista
-// nunca descarte um item que o cliente pediu mas ainda não escolheu. O operador cota a
-// linha livre normalmente — é o mesmo destino de um item que não existe na vitrine.
-function foldPendingIntoBasket(ctx: DeliveryContext): void {
-  if (!ctx.pending?.length) return;
-  const leftovers = ctx.pending.map((choice) => conciergeItem(choice.query, choice.qty));
-  ctx.basket = mergeBaskets(ctx.basket ?? [], leftovers);
-  ctx.pending = undefined;
 }
 
 // A free-form concierge line: whatever the customer asked for, verbatim. No catalog
@@ -848,6 +864,43 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // a fresh greeting.
     if (hadBasket && intent.kind !== "greeting") await reply(phone, copy.cartExpired());
   }
+  // "Foi embora no meio" (pedido do dono, 11/08): cotação parada + cliente sumido por
+  // LIA_QUOTE_ABANDON_TTL_MS (60 min) = ele não quer mais aquilo. Na volta, o pedido
+  // não-pago é cancelado sozinho, a conversa recomeça do zero (endereço preservado) e a
+  // mensagem nova é processada normalmente — o zumbi de sábado (2 dias preso em
+  // awaiting_operator_quote, camiseta caindo dentro) não pode se repetir. Pedido PAGO
+  // nunca é tocado; awaiting_payment também não (o cliente pode estar pagando o Pix
+  // agora mesmo — e a cotação vencida já bloqueia pagamento velho por conta própria).
+  const QUOTE_ABANDON_TTL_MS = Number(process.env.LIA_QUOTE_ABANDON_TTL_MS ?? 60 * 60 * 1000);
+  const quoteWaitSteps: Array<DeliveryContext["step"]> = ["awaiting_operator_quote", "awaiting_supplier_validation", "awaiting_quote_confirmation"];
+  if (
+    quoteWaitSteps.includes(ctx.step) &&
+    convo.updatedAt &&
+    Date.now() - new Date(convo.updatedAt).getTime() > QUOTE_ABANDON_TTL_MS
+  ) {
+    let canceledShortId: string | undefined;
+    if (ctx.deliveryOrderId) {
+      const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+      if (order?.status === AWAITING_OPERATOR_QUOTE_STATUS) {
+        await prisma.deliveryOrder.update({
+          where: { id: order.id },
+          data: {
+            status: "canceled",
+            notes: appendOrderNote(order.notes, "⏰ Cancelado automático: cliente ficou 1h+ sem resposta antes da cotação sair.")
+          }
+        });
+        canceledShortId = order.id.slice(-6).toUpperCase();
+      } else if (order && (await cancelPendingRetailerQuote(order.id))) {
+        canceledShortId = order.id.slice(-6).toUpperCase();
+      }
+    }
+    const fresh = addressOnlyCtx(ctx);
+    for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
+    Object.assign(ctx, fresh);
+    await writeCtx(convo.id, ctx);
+    if (canceledShortId) await reply(phone, copy.staleQuoteRestart(canceledShortId));
+  }
+
   const savedCep = user.cep ?? ctx.cep;
 
   if (normalizeMsg(text) === "cadastrar_endereco") {
@@ -1038,7 +1091,8 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
           const notes: string[] = [];
           if (containsMedicine) notes.push(copy.medicineSkippedNote());
           notes.push(copy.addedToPendingQuote(addedLabels));
-          await reply(phone, notes.join("\n"));
+          await replyQuoteNotice(phone, notes.join("\n"));
+          await notifyOperator(copy.operatorItemAddedAlert(order.id.slice(-6).toUpperCase(), addedLabels));
           return;
         }
       }
@@ -1049,7 +1103,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
         return;
       }
     }
-    await reply(phone, copy.operatorQuoteStillWorking());
+    await replyQuoteNotice(phone, copy.operatorQuoteStillWorking());
     return;
   }
   if (ctx.step === "awaiting_supplier_validation") {
@@ -1322,10 +1376,14 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // Concierge: "só isso"/"pagar"/"pix" close the list and hand it to the operator to
     // quote — there is no total to charge until the operator sends the quote.
     if (manualConciergeEnabled()) {
-      // Fechar a lista com uma escolha ainda aberta não pode DESCARTAR o item: a escolha
-      // pendente vira linha livre e o operador garimpa. Antes disso, quem dissesse
-      // "só isso" no meio das opções perdia o item silenciosamente.
-      foldPendingIntoBasket(ctx);
+      // Fechar no meio de uma escolha não descarta o item NEM vira linha livre (regra
+      // 11/08: só item com preço entra no pedido) — a Lia pede pra terminar a escolha,
+      // que é o único jeito de fechar com total na hora.
+      if (ctx.pending?.length) {
+        await reply(phone, copy.finishChoiceFirst());
+        await sendChoices(phone, ctx.pending[0]);
+        return;
+      }
       if ((ctx.basket?.length ?? 0) > 0) {
         await continueAfterBasket(phone, convo.id, ctx, user.cep);
         return;
@@ -1335,7 +1393,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
         orderBy: { createdAt: "desc" }
       });
       if (openOrder?.status === AWAITING_OPERATOR_QUOTE_STATUS) {
-        await reply(phone, copy.operatorQuoteStillWorking());
+        await replyQuoteNotice(phone, copy.operatorQuoteStillWorking());
         return;
       }
       if (openOrder?.status === "awaiting_payment") {
@@ -2277,9 +2335,11 @@ async function handleConciergeRequest(
   }
 
   const hadBasket = (ctx.basket?.length ?? 0) > 0;
-  const freeFormItems = notFoundLines.map((line) => conciergeItem(line.phrase, line.qty));
+  // Regra do dono (11/08): item sem preço nas lojas parceiras NUNCA vira espera de
+  // cotação — "se não tem, fala que não tem". A linha livre saiu do fluxo do cliente:
+  // só item com preço entra na cesta, e por isso todo fechamento tem total NA HORA.
+  const unavailable = notFoundLines.map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
   ctx.flow = "delivery";
-  ctx.basket = mergeBaskets(ctx.basket ?? [], freeFormItems);
   // A cesta continua pertencendo ao "concierge" mesmo quando o item veio de uma vitrine: o
   // pedido é cotado e comprado à mão, então não há uma loja dona do pedido.
   ctx.storeKey = CONCIERGE_STORE_KEY;
@@ -2292,21 +2352,21 @@ async function handleConciergeRequest(
     await writeCtx(convoId, ctx);
     const notes: string[] = [];
     if (containsMedicine) notes.push(copy.medicineSkippedNote());
-    // Os itens sem match são anunciados ANTES das opções e sem o convite de fechar a lista:
-    // o cliente precisa escolher primeiro.
-    if (freeFormItems.length) notes.push(copy.conciergeSourcingNote(freeFormItems.map((i) => `${i.qty}x ${i.name}`)));
+    // Os itens sem preço são recusados ANTES das opções — resposta honesta, sem promessa.
+    if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
     if (notes.length) await reply(phone, notes.join("\n"));
     if (pending.length > 1) await reply(phone, copy.choiceSequence(pending.map((p) => p.query)));
     await sendChoices(phone, pending[0]);
     return;
   }
 
-  ctx.step = "collecting";
-  ctx.pending = undefined;
+  // Nada com preço nesta mensagem: recusa honesta na hora; a cesta que já existia fica
+  // exatamente como estava.
+  if (hadBasket) ctx.step = "collecting";
   await writeCtx(convoId, ctx);
   const notes: string[] = [];
   if (containsMedicine) notes.push(copy.medicineSkippedNote());
-  notes.push(copy.conciergeItemsNoted(freeFormItems.map((i) => `${i.qty}x ${i.name}`), hadBasket));
+  notes.push(copy.itemsNotAvailable(unavailable));
   await reply(phone, notes.join("\n"));
 }
 
@@ -2645,7 +2705,8 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   }
 
   if (prefix) await reply(phone, prefix);
-  await reply(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
+  await replyQuoteNotice(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
+  await notifyOperator(copy.operatorQuoteAlert(order.id.slice(-6).toUpperCase(), itemNames));
 }
 
 // Publica a cotação instantânea reutilizando opsPublishManualQuote — status, mensagem ao
@@ -3000,6 +3061,8 @@ export async function markDeliveryOrderPaid(orderId: string) {
   // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
   // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
   await reply(order.phone, copy.paymentConfirmed());
+  // Pedido pago é o alerta mais urgente de todos: dinheiro na mão e ninguém comprando.
+  await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total));
   return order;
 }
 

@@ -61,7 +61,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-ultra-lt-269ml",
-  name: "Cerveja Imp�rio Ultra Lata 269ml",
+  name: "Cerveja Império Ultra Lata 269ml",
   unitPrice: 3.19,
   unit: "un",
   category: "cervejas",
@@ -142,7 +142,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-heineken-0-0-alcool-lata-350ml",
-  name: "Cerveja Heineken 0,0% �lcool Lata 350ml",
+  name: "Cerveja Heineken 0,0% Álcool Lata 350ml",
   unitPrice: 6.89,
   unit: "un",
   category: "cervejas",
@@ -178,7 +178,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-promocional-com-15-un-cerveja-imperio-puro-malte-lata-269ml",
-  name: "Pack Promocional com 15 un. Cerveja Imp�rio Puro Malte Lata 269ml",
+  name: "Pack Promocional com 15 un. Cerveja Império Puro Malte Lata 269ml",
   unitPrice: 34.35,
   unit: "un",
   category: "cervejas",
@@ -214,7 +214,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-heineken-0-0-alcool-long-neck-330ml",
-  name: "Cerveja Heineken 0,0% �lcool Long Neck 330ml",
+  name: "Cerveja Heineken 0,0% Álcool Long Neck 330ml",
   unitPrice: 7.89,
   unit: "un",
   category: "cervejas",
@@ -304,7 +304,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-gunnen-puro-malte-zero-acucar-lata-473ml",
-  name: "Cerveja Gunnen Puro Malte Zero A��car Lata 473ml",
+  name: "Cerveja Gunnen Puro Malte Zero Açúcar Lata 473ml",
   unitPrice: 3.59,
   unit: "un",
   category: "cervejas",
@@ -313,7 +313,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-paulaner-hefe-weissbier-sem-alcool-500-ml",
-  name: "Cerveja Paulaner Hefe Weissbier Sem �lcool 500 ml",
+  name: "Cerveja Paulaner Hefe Weissbier Sem Álcool 500 ml",
   unitPrice: 13.99,
   unit: "un",
   category: "cervejas",
@@ -331,7 +331,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-promocional-com-15-un-cerveja-imperio-puro-malte-lata-350ml",
-  name: "Pack Promocional com 15 un. Cerveja Imp�rio Puro Malte Lata 350ml",
+  name: "Pack Promocional com 15 un. Cerveja Império Puro Malte Lata 350ml",
   unitPrice: 41.85,
   unit: "un",
   category: "cervejas",
@@ -340,7 +340,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-ultra-long-neck-210ml",
-  name: "Cerveja Imp�rio Ultra Long Neck 210ml",
+  name: "Cerveja Império Ultra Long Neck 210ml",
   unitPrice: 3.89,
   unit: "un",
   category: "cervejas",
@@ -412,7 +412,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-nortena-lata-473ml",
-  name: "Cerveja Norte�a Lata 473ml",
+  name: "Cerveja Norteña Lata 473ml",
   unitPrice: 12.99,
   unit: "un",
   category: "cervejas",
@@ -439,7 +439,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-nortena-uruguay-960-ml",
-  name: "Cerveja Norte�a Uruguay 960 ml",
+  name: "Cerveja Norteña Uruguay 960 ml",
   unitPrice: 29.99,
   unit: "un",
   category: "cervejas",
@@ -529,7 +529,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-quilmes-clasica-340ml",
-  name: "Cerveja Quilmes Cl�sica 340ml",
+  name: "Cerveja Quilmes Clásica 340ml",
   unitPrice: 8.99,
   unit: "un",
   category: "cervejas",
@@ -538,7 +538,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-heineken-600ml-nao-retornavel",
-  name: "Cerveja Heineken 600ml - N�o Retorn�vel",
+  name: "Cerveja Heineken 600ml - Não Retornável",
   unitPrice: 15.09,
   unit: "un",
   category: "cervejas",
@@ -628,7 +628,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-sem-alcool-lata-350ml",
-  name: "Cerveja Imp�rio Puro Malte 0.0 Sem �lcool Lata 350ml",
+  name: "Cerveja Império Puro Malte 0.0 Sem Álcool Lata 350ml",
   unitPrice: 3.99,
   unit: "un",
   category: "cervejas",
@@ -637,7 +637,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-com-12-un-cerveja-original-pilsen-lata-350ml",
-  name: "Pack Econ�mico com 12 un. Cerveja Original Pilsen Lata 350ml",
+  name: "Pack Econômico com 12 un. Cerveja Original Pilsen Lata 350ml",
   unitPrice: 52.09,
   unit: "un",
   category: "cervejas",
@@ -664,7 +664,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-lager-lata-350ml",
-  name: "Cerveja Imp�rio Puro Malte Lager Lata 350ml",
+  name: "Cerveja Império Puro Malte Lager Lata 350ml",
   unitPrice: 3.69,
   unit: "un",
   category: "cervejas",
@@ -736,7 +736,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-gold-long-neck-210-ml",
-  name: "Cerveja Imp�rio Gold Long Neck 210ml",
+  name: "Cerveja Império Gold Long Neck 210ml",
   unitPrice: 3.89,
   unit: "un",
   category: "cervejas",
@@ -763,7 +763,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-00-sem-alcool-long-neck-330ml",
-  name: "Cerveja Imp�rio Puro Malte 0.0 Sem �lcool Long Neck 330ml",
+  name: "Cerveja Império Puro Malte 0.0 Sem Álcool Long Neck 330ml",
   unitPrice: 4.39,
   unit: "un",
   category: "cervejas",
@@ -772,7 +772,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-economico-com-15-un-cerveja-skol-lata-350ml",
-  name: "Pack Econ�mico com 18 un. Cerveja Skol Lata 350ml",
+  name: "Pack Econômico com 18 un. Cerveja Skol Lata 350ml",
   unitPrice: 66.42,
   unit: "un",
   category: "cervejas",
@@ -808,7 +808,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-economico-com-15-un-cerveja-budweiser-lata-269ml",
-  name: "Pack Econ�mico com 15 un. Cerveja Budweiser Lata 269ml",
+  name: "Pack Econômico com 15 un. Cerveja Budweiser Lata 269ml",
   unitPrice: 51.75,
   unit: "un",
   category: "cervejas",
@@ -916,7 +916,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-chopp-de-vinho-draft-sem-alcool-0-0-line-600ml",
-  name: "Chopp de Vinho Draft Sem �lcool 0,0% Line 600ml",
+  name: "Chopp de Vinho Draft Sem Álcool 0,0% Line 600ml",
   unitPrice: 13.99,
   unit: "un",
   category: "cervejas",
@@ -925,7 +925,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-helles-lata-269ml",
-  name: "Cerveja Imp�rio Puro Malte Helles Lata 269ml",
+  name: "Cerveja Império Puro Malte Helles Lata 269ml",
   unitPrice: 3.59,
   unit: "un",
   category: "cervejas",
@@ -997,7 +997,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-erdinger-alkoholfrei-sem-alcool-lata-500ml",
-  name: "Cerveja Erdinger Alkoholfrei Sem �lcool Lata 500ml",
+  name: "Cerveja Erdinger Alkoholfrei Sem Álcool Lata 500ml",
   unitPrice: 16.99,
   unit: "un",
   category: "cervejas",
@@ -1015,7 +1015,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-gunnen-puro-malte-zero-acucar-long-neck-355ml",
-  name: "Cerveja Gunnen Puro Malte Zero A��car Long Neck 355ml",
+  name: "Cerveja Gunnen Puro Malte Zero Açúcar Long Neck 355ml",
   unitPrice: 4.79,
   unit: "un",
   category: "cervejas",
@@ -1033,7 +1033,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-gold-premium-lager-lata-350ml",
-  name: "Cerveja Therez�polis Gold Premium Lager Lata 350ml",
+  name: "Cerveja Therezópolis Gold Premium Lager Lata 350ml",
   unitPrice: 4.99,
   unit: "un",
   category: "cervejas",
@@ -1060,7 +1060,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-helles-330ml",
-  name: "Cerveja Imp�rio Puro Malte Helles 330ml",
+  name: "Cerveja Império Puro Malte Helles 330ml",
   unitPrice: 4.39,
   unit: "un",
   category: "cervejas",
@@ -1105,7 +1105,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-erdinger-alkoholfrei-sem-alcool-500ml",
-  name: "Cerveja Erdinger Alkoholfrei Sem �lcool 500ml",
+  name: "Cerveja Erdinger Alkoholfrei Sem Álcool 500ml",
   unitPrice: 19.99,
   unit: "un",
   category: "cervejas",
@@ -1186,7 +1186,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-rubine-bock-500ml",
-  name: "Cerveja Therez�polis Rubine Bock 500ml",
+  name: "Cerveja Therezópolis Rubine Bock 500ml",
   unitPrice: 14.99,
   unit: "un",
   category: "cervejas",
@@ -1195,7 +1195,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-colorado-ribeirao-lager-600ml",
-  name: "Cerveja Colorado Ribeir�o Lager 600ml",
+  name: "Cerveja Colorado Ribeirão Lager 600ml",
   unitPrice: 17.79,
   unit: "un",
   category: "cervejas",
@@ -1249,7 +1249,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-puro-malte-helles-lata-350ml",
-  name: "Cerveja Imp�rio Puro Malte Helles Lata 350ml",
+  name: "Cerveja Império Puro Malte Helles Lata 350ml",
   unitPrice: 4.39,
   unit: "un",
   category: "cervejas",
@@ -1285,7 +1285,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-gold-premium-lager-500ml",
-  name: "Cerveja Therez�polis Gold Premium Lager 500ml",
+  name: "Cerveja Therezópolis Gold Premium Lager 500ml",
   unitPrice: 11.99,
   unit: "un",
   category: "cervejas",
@@ -1330,7 +1330,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-puro-malte-imperio-gold-330ml",
-  name: "Cerveja Puro Malte Imp�rio Gold 330ml",
+  name: "Cerveja Puro Malte Império Gold 330ml",
   unitPrice: 4.99,
   unit: "un",
   category: "cervejas",
@@ -1339,7 +1339,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-lager-garrafa-330-ml",
-  name: "Cerveja Imp�rio Lager Long Neck 330ml",
+  name: "Cerveja Império Lager Long Neck 330ml",
   unitPrice: 3.99,
   unit: "un",
   category: "cervejas",
@@ -1366,7 +1366,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-estrella-galicia-0-0-alcool-lata-330ml",
-  name: "Cerveja Estrella Galicia 0,0% �lcool Lata 330ml",
+  name: "Cerveja Estrella Galicia 0,0% Álcool Lata 330ml",
   unitPrice: 6.69,
   unit: "un",
   category: "cervejas",
@@ -1438,7 +1438,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-praya-receita-classica-lata-269ml",
-  name: "Cerveja Praya Receita Cl�ssica Lata 269ml",
+  name: "Cerveja Praya Receita Clássica Lata 269ml",
   unitPrice: 7.49,
   unit: "un",
   category: "cervejas",
@@ -1465,7 +1465,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-sol-zero-alcool-long-neck-330ml",
-  name: "Cerveja Sol Zero �lcool Long Neck 330ml",
+  name: "Cerveja Sol Zero Álcool Long Neck 330ml",
   unitPrice: 7.39,
   unit: "un",
   category: "cervejas",
@@ -1492,7 +1492,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-gold-lata-269ml",
-  name: "Cerveja Imp�rio Gold Lata 269ml",
+  name: "Cerveja Império Gold Lata 269ml",
   unitPrice: 3.49,
   unit: "un",
   category: "cervejas",
@@ -1564,7 +1564,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-praya-receita-classica-long-neck-355ml",
-  name: "Cerveja Praya Receita Cl�ssica Long Neck 355ml",
+  name: "Cerveja Praya Receita Clássica Long Neck 355ml",
   unitPrice: 9.99,
   unit: "un",
   category: "cervejas",
@@ -1573,7 +1573,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-heineken-00-alcool-lata-269ml",
-  name: "Cerveja Heineken 0.0% �lcool Lata 269ml",
+  name: "Cerveja Heineken 0.0% Álcool Lata 269ml",
   unitPrice: 5.39,
   unit: "un",
   category: "cervejas",
@@ -1618,7 +1618,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-gold-premium-lager-long-neck-355ml-1",
-  name: "Cerveja Therez�polis Gold Premium Lager Long Neck 355ml",
+  name: "Cerveja Therezópolis Gold Premium Lager Long Neck 355ml",
   unitPrice: 5.99,
   unit: "un",
   category: "cervejas",
@@ -1645,7 +1645,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-praya-receita-classica-600ml-1",
-  name: "Cerveja Praya Receita Cl�ssica 600ml",
+  name: "Cerveja Praya Receita Clássica 600ml",
   unitPrice: 15.99,
   unit: "un",
   category: "cervejas",
@@ -1717,7 +1717,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-ebenholz-dunkel-500ml",
-  name: "Cerveja Therez�polis Ebenholz Dunkel 500ml",
+  name: "Cerveja Therezópolis Ebenholz Dunkel 500ml",
   unitPrice: 14.99,
   unit: "un",
   category: "cervejas",
@@ -1735,7 +1735,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-itaipava-pilsen-latao-473ml",
-  name: "Cerveja Itaipava Pilsen Lat�o 473ml",
+  name: "Cerveja Itaipava Pilsen Latão 473ml",
   unitPrice: 4.59,
   unit: "un",
   category: "cervejas",
@@ -1744,7 +1744,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-therezopolis-weiss-elfenbein-500-ml",
-  name: "Cerveja Therez�polis Weiss Elfenbein 500 ml",
+  name: "Cerveja Therezópolis Weiss Elfenbein 500 ml",
   unitPrice: 14.99,
   unit: "un",
   category: "cervejas",
@@ -1807,7 +1807,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cerveja-imperio-lager-lata-269ml",
-  name: "Cerveja Imp�rio Lager Lata 269ml",
+  name: "Cerveja Império Lager Lata 269ml",
   unitPrice: 3.79,
   unit: "un",
   category: "cervejas",
@@ -1852,7 +1852,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-refrigerante-coca-cola-sem-acucar-lata-350ml-1",
-  name: "Refrigerante Coca-Cola Sem A��car Lata 350ml",
+  name: "Refrigerante Coca-Cola Sem Açúcar Lata 350ml",
   unitPrice: 3.89,
   unit: "un",
   category: "promocoes",
@@ -1861,7 +1861,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-vida-sem-gas-500ml",
-  name: "�gua Mineral Lind�ya Vida Sem G�s 500ml",
+  name: "Água Mineral Lindóya Vida Sem Gás 500ml",
   unitPrice: 1.19,
   unit: "un",
   category: "promocoes",
@@ -1870,7 +1870,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-refrigerante-coca-cola-sem-acucar-2l",
-  name: "Refrigerante Coca-Cola Sem A��car 2L",
+  name: "Refrigerante Coca-Cola Sem Açúcar 2L",
   unitPrice: 10.99,
   unit: "un",
   category: "promocoes",
@@ -1897,7 +1897,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-com-gas-500ml",
-  name: "�gua Mineral Lind�ya Vida Com G�s 500ml",
+  name: "Água Mineral Lindóya Vida Com Gás 500ml",
   unitPrice: 1.99,
   unit: "un",
   category: "promocoes",
@@ -1906,7 +1906,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sense-sem-gas-240ml",
-  name: "�gua Mineral Lindoya Ver�o Sense Sem G�s 240ml",
+  name: "Água Mineral Lindoya Verão Sense Sem Gás 240ml",
   unitPrice: 1.09,
   unit: "un",
   category: "promocoes",
@@ -1915,7 +1915,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-vida-sem-gas-1-5l",
-  name: "�gua Mineral Lind�ya Vida Sem G�s 1,5L",
+  name: "Água Mineral Lindóya Vida Sem Gás 1,5L",
   unitPrice: 2.59,
   unit: "un",
   category: "promocoes",
@@ -1924,7 +1924,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-refrigerante-guarana-antarctica-sem-acucares-2l",
-  name: "Refrigerante Guaran� Antarctica Sem A��cares 2L",
+  name: "Refrigerante Guaraná Antarctica Sem Açúcares 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -1933,7 +1933,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-refrigerante-guarana-antarctica-2l",
-  name: "Refrigerante Guaran� Antarctica 2L",
+  name: "Refrigerante Guaraná Antarctica 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -1942,7 +1942,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-250ml",
-  name: "Energ�tico Red Bull Energy Drink 250ml",
+  name: "Energético Red Bull Energy Drink 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -1960,7 +1960,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-tonica-antarctica-zero-acucar-lata-350ml",
-  name: "�gua T�nica Antarctica Zero A��cares Lata 350ml",
+  name: "Água Tônica Antarctica Zero Açúcares Lata 350ml",
   unitPrice: 3.19,
   unit: "un",
   category: "promocoes",
@@ -2005,7 +2005,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-cosecha-tarapaca-cabernet-sauvignon-750ml",
-  name: "Vinho Cosecha Tarapac� Cabernet Sauvignon 750ml",
+  name: "Vinho Cosecha Tarapacá Cabernet Sauvignon 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2032,7 +2032,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-com-gas-510ml",
-  name: "�gua Mineral Lindoya Ver�o Com G�s 510ml",
+  name: "Água Mineral Lindoya Verão Com Gás 510ml",
   unitPrice: 1.89,
   unit: "un",
   category: "promocoes",
@@ -2041,7 +2041,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-tropical-250ml",
-  name: "Energ�tico Red Bull Energy Drink Tropical 250ml",
+  name: "Energético Red Bull Energy Drink Tropical 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2050,7 +2050,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-whisky-ballantines-finest-blended-escoces-1l",
-  name: "Whisky Ballantine's Finest Blended Escoc�s 1L",
+  name: "Whisky Ballantine's Finest Blended Escocês 1L",
   unitPrice: 71.99,
   unit: "un",
   category: "promocoes",
@@ -2059,7 +2059,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-tropical-2l",
-  name: "Energ�tico Baly Tropical 2L",
+  name: "Energético Baly Tropical 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2068,7 +2068,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-vida-sem-gas-6l",
-  name: "�gua Mineral Lind�ya Vida Sem G�s 6L",
+  name: "Água Mineral Lindóya Vida Sem Gás 6L",
   unitPrice: 9.79,
   unit: "un",
   category: "promocoes",
@@ -2086,7 +2086,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-energy-ultra-lata-473ml",
-  name: "Energ�tico Monster Energy Ultra Lata 473ml",
+  name: "Energético Monster Energy Ultra Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2095,7 +2095,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-tonica-antarctica-lata-350ml",
-  name: "�gua T�nica Antarctica Lata 350ml",
+  name: "Água Tônica Antarctica Lata 350ml",
   unitPrice: 3.19,
   unit: "un",
   category: "promocoes",
@@ -2104,7 +2104,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sem-gas-1-5l",
-  name: "�gua Mineral Lindoya Ver�o Sem G�s 1,5L",
+  name: "Água Mineral Lindoya Verão Sem Gás 1,5L",
   unitPrice: 2.49,
   unit: "un",
   category: "promocoes",
@@ -2122,7 +2122,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-sugarfree-lata-250ml",
-  name: "Energ�tico Red Bull Energy Drink Sugarfree 250ml",
+  name: "Energético Red Bull Energy Drink Sugarfree 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2149,7 +2149,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-vida-sem-gas-copo-200-ml",
-  name: "�gua Mineral Lind�ya Vida Sem G�s Copo 200 ml",
+  name: "Água Mineral Lindóya Vida Sem Gás Copo 200 ml",
   unitPrice: 0.86,
   unit: "un",
   category: "promocoes",
@@ -2158,7 +2158,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-cosecha-tarapaca-carmenere-750ml",
-  name: "Vinho Cosecha Tarapac� Carmen�re 750ml",
+  name: "Vinho Cosecha Tarapacá Carmenère 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2167,7 +2167,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-energy-zero-acucar-lata-473ml",
-  name: "Energ�tico Monster Energy Zero A��car Lata 473ml",
+  name: "Energético Monster Energy Zero Açúcar Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2194,7 +2194,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-energy-mango-loco-lata-473ml",
-  name: "Energ�tico Monster Energy Mango Loco Lata 473ml",
+  name: "Energético Monster Energy Mango Loco Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2212,7 +2212,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-minalba-com-gas-310ml",
-  name: "�gua Mineral Minalba Com G�s 310ml",
+  name: "Água Mineral Minalba Com Gás 310ml",
   unitPrice: 2.09,
   unit: "un",
   category: "promocoes",
@@ -2221,7 +2221,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-minalba-sem-gas-310ml",
-  name: "�gua Mineral Minalba Sem G�s 310ml",
+  name: "Água Mineral Minalba Sem Gás 310ml",
   unitPrice: 1.89,
   unit: "un",
   category: "promocoes",
@@ -2248,7 +2248,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-de-coco-kerococo-1l",
-  name: "�gua de Coco Kerococo 1L",
+  name: "Água de Coco Kerococo 1L",
   unitPrice: 14.99,
   unit: "un",
   category: "promocoes",
@@ -2257,7 +2257,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sense-sem-gas-510ml",
-  name: "�gua Mineral Lindoya Ver�o Sense Sem G�s 510ml",
+  name: "Água Mineral Lindoya Verão Sense Sem Gás 510ml",
   unitPrice: 1.19,
   unit: "un",
   category: "promocoes",
@@ -2275,7 +2275,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-melancia-2l",
-  name: "Energ�tico Baly Melancia 2L",
+  name: "Energético Baly Melancia 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2284,7 +2284,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-refrigerante-pepsi-black-sem-acucares-lata-350ml",
-  name: "Refrigerante Pepsi Black Sem A��cares Lata 350ml",
+  name: "Refrigerante Pepsi Black Sem Açúcares Lata 350ml",
   unitPrice: 3.19,
   unit: "un",
   category: "promocoes",
@@ -2293,7 +2293,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-com-12-un-refrigerante-guarana-antarctica-zero-lata-350ml",
-  name: "Pack Econ�mico com 12 un. Refrigerante Guaran� Antarctica Zero Lata 350ml",
+  name: "Pack Econômico com 12 un. Refrigerante Guaraná Antarctica Zero Lata 350ml",
   unitPrice: 35.88,
   unit: "un",
   category: "promocoes",
@@ -2302,7 +2302,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-primicias-brut-660ml",
-  name: "Espumante Garibaldi Prim�cias Brut 660ml",
+  name: "Espumante Garibaldi Primícias Brut 660ml",
   unitPrice: 23.99,
   unit: "un",
   category: "promocoes",
@@ -2338,7 +2338,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-energy-drink-morango-e-pessego-2l",
-  name: "Energ�tico Baly Energy Drink Morango e P�ssego 2L",
+  name: "Energético Baly Energy Drink Morango e Pêssego 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2347,7 +2347,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-energy-drink-2l",
-  name: "Energ�tico Baly Energy Drink 2L",
+  name: "Energético Baly Energy Drink 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2365,7 +2365,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-summer-edition-melancia-250ml",
-  name: "Energ�tico Red Bull Energy Drink Summer Edition Melancia 250ml",
+  name: "Energético Red Bull Energy Drink Summer Edition Melancia 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2374,7 +2374,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-vero-brut-ros-750ml",
-  name: "Espumante Garibaldi Vero Brut Ros� 750ml",
+  name: "Espumante Garibaldi Vero Brut Rosé 750ml",
   unitPrice: 31.99,
   unit: "un",
   category: "promocoes",
@@ -2383,7 +2383,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-whisky-chivas-regal-12-anos-escoces-1l",
-  name: "Whisky Chivas Regal 12 anos Escoc�s 1L",
+  name: "Whisky Chivas Regal 12 anos Escocês 1L",
   unitPrice: 135.99,
   unit: "un",
   category: "promocoes",
@@ -2392,7 +2392,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-zero-250ml",
-  name: "Energ�tico Red Bull Zero 250ml",
+  name: "Energético Red Bull Zero 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2419,7 +2419,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-com-gas-300ml",
-  name: "�gua Mineral Lindoya Ver�o Com G�s 300ml",
+  name: "Água Mineral Lindoya Verão Com Gás 300ml",
   unitPrice: 1.89,
   unit: "un",
   category: "promocoes",
@@ -2428,7 +2428,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-de-coco-integral-campo-largo-900ml",
-  name: "�gua de Coco Integral Campo Largo 900ml",
+  name: "Água de Coco Integral Campo Largo 900ml",
   unitPrice: 11.99,
   unit: "un",
   category: "promocoes",
@@ -2437,7 +2437,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-the-doctor-473ml",
-  name: "Energ�tico Monster The Doctor 473ml",
+  name: "Energético Monster The Doctor 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2446,7 +2446,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-maca-verde-2l",
-  name: "Energ�tico Baly Ma�� Verde 2L",
+  name: "Energético Baly Maçã Verde 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2455,7 +2455,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-cosecha-tarapaca-chardonnay-750ml",
-  name: "Vinho Cosecha Tarapac� Chardonnay 750ml",
+  name: "Vinho Cosecha Tarapacá Chardonnay 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2482,7 +2482,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-freixenet-0-0-alcool-tinto-750ml",
-  name: "Vinho Freixenet 0,0% �lcool Tinto 750ml",
+  name: "Vinho Freixenet 0,0% Álcool Tinto 750ml",
   unitPrice: 69.99,
   unit: "un",
   category: "promocoes",
@@ -2491,7 +2491,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cava-freixenet-rose-750ml",
-  name: "Cava Freixenet Ros� 750ml",
+  name: "Cava Freixenet Rosé 750ml",
   unitPrice: 79.99,
   unit: "un",
   category: "promocoes",
@@ -2500,7 +2500,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-primicias-moscatel-rose-660ml",
-  name: "Espumante Garibaldi Prim�cias Moscatel Ros� 660ml",
+  name: "Espumante Garibaldi Primícias Moscatel Rosé 660ml",
   unitPrice: 23.99,
   unit: "un",
   category: "promocoes",
@@ -2509,7 +2509,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-porteno-malbec-750ml",
-  name: "Vinho Porte�o Malbec 750ml",
+  name: "Vinho Porteño Malbec 750ml",
   unitPrice: 32.99,
   unit: "un",
   category: "promocoes",
@@ -2518,7 +2518,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-acquissima-passion-com-gas-510-ml",
-  name: "�gua Mineral Acquissima Passion Com G�s 510 ml",
+  name: "Água Mineral Acquissima Passion Com Gás 510 ml",
   unitPrice: 2.59,
   unit: "un",
   category: "promocoes",
@@ -2527,7 +2527,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-cosecha-tarapaca-merlot-750ml",
-  name: "Vinho Cosecha Tarapac� Merlot 750ml",
+  name: "Vinho Cosecha Tarapacá Merlot 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2536,7 +2536,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-de-coco-kerococo-200ml",
-  name: "�gua de Coco Kerococo 200ml",
+  name: "Água de Coco Kerococo 200ml",
   unitPrice: 3.29,
   unit: "un",
   category: "promocoes",
@@ -2545,7 +2545,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-sagatiba-cristalina-700ml",
-  name: "Cacha�a Sagatiba Cristalina 700ml",
+  name: "Cachaça Sagatiba Cristalina 700ml",
   unitPrice: 26.99,
   unit: "un",
   category: "promocoes",
@@ -2554,7 +2554,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-summer-edition-morango-e-pessego-250",
-  name: "Energ�tico Red Bull Energy Drink Summer Edition Morango e P�ssego 250ml",
+  name: "Energético Red Bull Energy Drink Summer Edition Morango e Pêssego 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2563,7 +2563,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-acquissima-personnalit-sem-gas-510-ml",
-  name: "�gua Mineral Acquissima Personnalit� Sem G�s 510 ml",
+  name: "Água Mineral Acquissima Personnalité Sem Gás 510 ml",
   unitPrice: 2.29,
   unit: "un",
   category: "promocoes",
@@ -2572,7 +2572,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sense-sem-gas-5l",
-  name: "�gua Mineral Lindoya Ver�o Sense Sem G�s 5L",
+  name: "Água Mineral Lindoya Verão Sense Sem Gás 5L",
   unitPrice: 8.79,
   unit: "un",
   category: "promocoes",
@@ -2581,7 +2581,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-energy-ultra-watermelon-lata-473ml",
-  name: "Energ�tico Monster Energy Ultra Watermelon Lata 473ml",
+  name: "Energético Monster Energy Ultra Watermelon Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2617,7 +2617,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-peachy-keen-lata-473ml",
-  name: "Energ�tico Monster Ultra Peachy Keen Lata 473ml",
+  name: "Energético Monster Ultra Peachy Keen Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2635,7 +2635,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-seleta-ouro-1l",
-  name: "Cacha�a Seleta Ouro 1L",
+  name: "Cachaça Seleta Ouro 1L",
   unitPrice: 48.99,
   unit: "un",
   category: "promocoes",
@@ -2644,7 +2644,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-chandon-reserve-brut-750ml",
-  name: "Espumante Chandon R�serve Brut 750ml",
+  name: "Espumante Chandon Réserve Brut 750ml",
   unitPrice: 99.99,
   unit: "un",
   category: "promocoes",
@@ -2671,7 +2671,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cha-branco-feel-good-com-pitaya-1l",
-  name: "Ch� Branco Feel Good com Pitaya 1L",
+  name: "Chá Branco Feel Good com Pitaya 1L",
   unitPrice: 9.99,
   unit: "un",
   category: "promocoes",
@@ -2698,7 +2698,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-maracuja-e-melao-summer-edition-lata",
-  name: "Energ�tico Red Bull Energy Drink Maracuj� e Mel�o Summer Edition Lata 250ml",
+  name: "Energético Red Bull Energy Drink Maracujá e Melão Summer Edition Lata 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2761,7 +2761,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-prosecco-branco-sem-alcool-750ml",
-  name: "Espumante Garibaldi Prosecco Branco Sem �lcool 750ml",
+  name: "Espumante Garibaldi Prosecco Branco Sem Álcool 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2779,7 +2779,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-santa-carolina-reservado-rose-750ml",
-  name: "Vinho Santa Carolina Reservado Ros� 750ml",
+  name: "Vinho Santa Carolina Reservado Rosé 750ml",
   unitPrice: 21.99,
   unit: "un",
   category: "promocoes",
@@ -2806,7 +2806,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sem-gas-300ml",
-  name: "�gua Mineral Lindoya Ver�o Sem G�s 300ml",
+  name: "Água Mineral Lindoya Verão Sem Gás 300ml",
   unitPrice: 1.59,
   unit: "un",
   category: "promocoes",
@@ -2833,7 +2833,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-nectar-de-maracuja-sufresh-1l",
-  name: "N�ctar de Maracuj� Sufresh 1L",
+  name: "Néctar de Maracujá Sufresh 1L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2860,7 +2860,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-winter-edition-cereja-e-frutas-silve",
-  name: "Energ�tico Red Bull Energy Drink Winter Edition Cereja e Frutas Silvestres 250ml",
+  name: "Energético Red Bull Energy Drink Winter Edition Cereja e Frutas Silvestres 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2905,7 +2905,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-energy-lata-473ml",
-  name: "Energ�tico Monster Energy Lata 473ml",
+  name: "Energético Monster Energy Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2914,7 +2914,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cha-branco-feel-good-com-lichia-1l",
-  name: "Ch� Branco Feel Good com Lichia 1L",
+  name: "Chá Branco Feel Good com Lichia 1L",
   unitPrice: 9.99,
   unit: "un",
   category: "promocoes",
@@ -2923,7 +2923,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-moscato-rose-sem-alcool-750ml",
-  name: "Espumante Garibaldi Moscato Ros� Sem �lcool 750ml",
+  name: "Espumante Garibaldi Moscato Rosé Sem Álcool 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -2941,7 +2941,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-speciali-com-gas-300ml",
-  name: "�gua Mineral Lindoya Ver�o Speciali Com G�s 300ml",
+  name: "Água Mineral Lindoya Verão Speciali Com Gás 300ml",
   unitPrice: 1.99,
   unit: "un",
   category: "promocoes",
@@ -2950,7 +2950,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-nectar-de-uva-sufresh-1l",
-  name: "N�ctar de Uva Sufresh 1L",
+  name: "Néctar de Uva Sufresh 1L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -2968,7 +2968,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-saque-azuma-kirin-soft-seco-740ml",
-  name: "Saqu� Azuma Kirin Soft Seco 740ml",
+  name: "Saquê Azuma Kirin Soft Seco 740ml",
   unitPrice: 32.99,
   unit: "un",
   category: "promocoes",
@@ -2977,7 +2977,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-pack-com-12-un-refrigerante-guarana-antarctica-lata-350ml",
-  name: "Pack Econ�mico com 12 un. Refrigerante Guaran� Antarctica Lata 350ml",
+  name: "Pack Econômico com 12 un. Refrigerante Guaraná Antarctica Lata 350ml",
   unitPrice: 35.88,
   unit: "un",
   category: "promocoes",
@@ -2995,7 +2995,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-de-coco-kerococo-330-ml",
-  name: "�gua de Coco Kerococo 330 ml",
+  name: "Água de Coco Kerococo 330 ml",
   unitPrice: 7.99,
   unit: "un",
   category: "promocoes",
@@ -3013,7 +3013,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-nectar-de-laranja-sufresh-1l",
-  name: "N�ctar de Laranja Sufresh 1L",
+  name: "Néctar de Laranja Sufresh 1L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -3022,7 +3022,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-moscato-sem-alcoo-750ml",
-  name: "Espumante Garibaldi Moscato Sem �lcool 750ml",
+  name: "Espumante Garibaldi Moscato Sem Álcool 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -3058,7 +3058,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-nectar-de-morango-sufresh-1l",
-  name: "N�ctar de Morango Sufresh 1L",
+  name: "Néctar de Morango Sufresh 1L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -3103,7 +3103,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-protein-booster-pro-moving-limao-310ml",
-  name: "Protein Booster Pro Moving Lim�o 310ml",
+  name: "Protein Booster Pro Moving Limão 310ml",
   unitPrice: 7.99,
   unit: "un",
   category: "promocoes",
@@ -3121,7 +3121,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-drink-pronto-mascate-maracuja-caju-agua-de-coco-e-rum-362ml",
-  name: "Drink Pronto Mascate Maracuj�, Caju, �gua de Coco e Rum 362ml",
+  name: "Drink Pronto Mascate Maracujá, Caju, Água de Coco e Rum 362ml",
   unitPrice: 10.99,
   unit: "un",
   category: "promocoes",
@@ -3130,7 +3130,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-red-bull-energy-drink-maca-edition-sugarfree-250ml",
-  name: "Energ�tico Red Bull Energy Drink Ma�� Edition Sugarfree 250ml",
+  name: "Energético Red Bull Energy Drink Maçã Edition Sugarfree 250ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -3139,7 +3139,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-speciali-sem-gas-300ml",
-  name: "�gua Mineral Lindoya Ver�o Speciali Sem G�s 300ml",
+  name: "Água Mineral Lindoya Verão Speciali Sem Gás 300ml",
   unitPrice: 1.79,
   unit: "un",
   category: "promocoes",
@@ -3157,7 +3157,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-porteno-chardonnay-750ml",
-  name: "Vinho Porte�o Chardonnay 750ml",
+  name: "Vinho Porteño Chardonnay 750ml",
   unitPrice: 32.99,
   unit: "un",
   category: "promocoes",
@@ -3166,7 +3166,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-salinissima-prata-1l",
-  name: "Cacha�a Salin�ssima Prata 1L",
+  name: "Cachaça Salinéssima Prata 1L",
   unitPrice: 41.99,
   unit: "un",
   category: "promocoes",
@@ -3175,7 +3175,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cha-verde-feel-good-1l",
-  name: "Ch� Verde Feel Good 1L",
+  name: "Chá Verde Feel Good 1L",
   unitPrice: 9.99,
   unit: "un",
   category: "promocoes",
@@ -3211,7 +3211,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-protein-booster-pro-moving-abacaxi-e-hortela-310ml",
-  name: "Protein Booster Pro Moving Abacaxi e Hortel� 310ml",
+  name: "Protein Booster Pro Moving Abacaxi e Hortelã 310ml",
   unitPrice: 7.99,
   unit: "un",
   category: "promocoes",
@@ -3220,7 +3220,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-freixenet-zero-alcool-750ml",
-  name: "Espumante Freixenet Zero �lcool 750ml",
+  name: "Espumante Freixenet Zero Álcool 750ml",
   unitPrice: 79.99,
   unit: "un",
   category: "promocoes",
@@ -3247,7 +3247,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-aurora-rose-0-0-alcool-750ml",
-  name: "Espumante Aurora Ros� 0,0% �lcool 750ml",
+  name: "Espumante Aurora Rosé 0,0% Álcool 750ml",
   unitPrice: 22.99,
   unit: "un",
   category: "promocoes",
@@ -3256,7 +3256,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cha-vermelho-feel-good-com-amora-1l",
-  name: "Ch� Vermelho Feel Good com Amora 1L",
+  name: "Chá Vermelho Feel Good com Amora 1L",
   unitPrice: 9.99,
   unit: "un",
   category: "promocoes",
@@ -3265,7 +3265,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-de-coco-ducoco-200-ml",
-  name: "�gua de Coco Ducoco 200ml",
+  name: "Água de Coco Ducoco 200ml",
   unitPrice: 2.99,
   unit: "un",
   category: "promocoes",
@@ -3310,7 +3310,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-santa-carolina-reservado-carmenere-750ml",
-  name: "Vinho Santa Carolina Reservado Carmen�re 750ml",
+  name: "Vinho Santa Carolina Reservado Carmenère 750ml",
   unitPrice: 21.99,
   unit: "un",
   category: "promocoes",
@@ -3328,7 +3328,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-vida-sem-gas-copo-300ml",
-  name: "�gua Mineral Lind�ya Vida Sem G�s Copo 300ml",
+  name: "Água Mineral Lindóya Vida Sem Gás Copo 300ml",
   unitPrice: 0.96,
   unit: "un",
   category: "promocoes",
@@ -3337,7 +3337,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-pata-negra-oro-rose-750ml",
-  name: "Vinho Pata Negra Oro Ros� 750ml",
+  name: "Vinho Pata Negra Oro Rosé 750ml",
   unitPrice: 42.99,
   unit: "un",
   category: "promocoes",
@@ -3346,7 +3346,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-monster-juice-rio-punch-lata-473ml",
-  name: "Energ�tico Monster Juice Rio Punch Lata 473ml",
+  name: "Energético Monster Juice Rio Punch Lata 473ml",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -3364,7 +3364,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-weber-haus-premium-7-madeiras-750ml",
-  name: "Cacha�a Weber Haus Premium 7 Madeiras 750ml",
+  name: "Cachaça Weber Haus Premium 7 Madeiras 750ml",
   unitPrice: 99.99,
   unit: "un",
   category: "promocoes",
@@ -3391,7 +3391,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-weber-haus-ouro-premium-700-ml",
-  name: "Cacha�a Weber Haus Amburana Org�nica 700ml",
+  name: "Cachaça Weber Haus Amburana Orgânica 700ml",
   unitPrice: 79.99,
   unit: "un",
   category: "promocoes",
@@ -3400,7 +3400,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-freixenet-0-0-alcool-rose-750ml",
-  name: "Vinho Freixenet 0,0% �lcool Ros� 750ml",
+  name: "Vinho Freixenet 0,0% Álcool Rosé 750ml",
   unitPrice: 69.99,
   unit: "un",
   category: "promocoes",
@@ -3418,7 +3418,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-speciali-verao-com-gas-lata-310ml",
-  name: "�gua Mineral Lindoya Ver�o Speciali Com G�s Lata 310ml",
+  name: "Água Mineral Lindoya Verão Speciali Com Gás Lata 310ml",
   unitPrice: 3.49,
   unit: "un",
   category: "promocoes",
@@ -3472,7 +3472,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-freixenet-branco-demi-sec-0-0-alcool-750ml",
-  name: "Vinho Freixenet Branco Demi-Sec 0,0% �lcool 750ml",
+  name: "Vinho Freixenet Branco Demi-Sec 0,0% Álcool 750ml",
   unitPrice: 69.99,
   unit: "un",
   category: "promocoes",
@@ -3490,7 +3490,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-aurora-colheita-tardia-rose-500ml",
-  name: "Vinho Aurora Colheita Tardia Ros� 500ml",
+  name: "Vinho Aurora Colheita Tardia Rosé 500ml",
   unitPrice: 21.99,
   unit: "un",
   category: "promocoes",
@@ -3499,7 +3499,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-suco-de-uva-integral-nova-alianca-tinto-1l",
-  name: "Suco de Uva Integral Nova Alian�a Tinto 1L",
+  name: "Suco de Uva Integral Nova Aliança Tinto 1L",
   unitPrice: 11.99,
   unit: "un",
   category: "promocoes",
@@ -3508,7 +3508,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-lindoya-verao-sem-gas-510ml",
-  name: "�gua Mineral Lindoya Ver�o Sem G�s 510ml",
+  name: "Água Mineral Lindoya Verão Sem Gás 510ml",
   unitPrice: 1.49,
   unit: "un",
   category: "promocoes",
@@ -3517,7 +3517,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-espumante-garibaldi-primicias-moscatel-branco-660ml",
-  name: "Espumante Garibaldi Prim�cias Moscatel Branco 660ml",
+  name: "Espumante Garibaldi Primícias Moscatel Branco 660ml",
   unitPrice: 23.99,
   unit: "un",
   category: "promocoes",
@@ -3526,7 +3526,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-porteno-cabernet-sauvignon-750ml",
-  name: "Vinho Porte�o Cabernet Sauvignon 750ml",
+  name: "Vinho Porteño Cabernet Sauvignon 750ml",
   unitPrice: 32.99,
   unit: "un",
   category: "promocoes",
@@ -3589,7 +3589,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-suco-aurora-integral-de-maca-1-5l",
-  name: "Suco de Ma�� Integral Aurora 1,5L",
+  name: "Suco de Maçã Integral Aurora 1,5L",
   unitPrice: 18.99,
   unit: "un",
   category: "promocoes",
@@ -3598,7 +3598,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-agua-mineral-perrier-com-gas-200ml",
-  name: "�gua Mineral Perrier com G�s 200ml",
+  name: "Água Mineral Perrier com Gás 200ml",
   unitPrice: 9.49,
   unit: "un",
   category: "promocoes",
@@ -3616,7 +3616,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-vinho-cosecha-tarapaca-sauvignon-blanc-750ml",
-  name: "Vinho Cosecha Tarapac� Sauvignon Blanc 750ml",
+  name: "Vinho Cosecha Tarapacá Sauvignon Blanc 750ml",
   unitPrice: 29.99,
   unit: "un",
   category: "promocoes",
@@ -3625,7 +3625,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-energetico-baly-coco-e-acai-2l",
-  name: "Energ�tico Baly Coco e A�a� 2L",
+  name: "Energético Baly Coco e Açaí 2L",
   unitPrice: 8.99,
   unit: "un",
   category: "promocoes",
@@ -3634,7 +3634,7 @@ export const CATALOG: CatalogItem[] = [
  },
  {
   sku: "imigrantes-cachaca-seleta-prata-1l",
-  name: "Cacha�a Seleta Prata 1L",
+  name: "Cachaça Seleta Prata 1L",
   unitPrice: 41.99,
   unit: "un",
   category: "promocoes",

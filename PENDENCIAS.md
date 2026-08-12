@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-10._
+_Última atualização: 2026-08-11._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -181,6 +181,29 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (rápida):** os 3 fees ESTIMADOS (Carrefour/Petz/Boticário) no checkout real, e baixar
 > os limiares prováveis se quiser ser mais generoso (PM 149, Cobasi 199, RiHappy 399,
 > Kopenhagen 99).
+
+> **11/08 (3ª) — fim da linha livre (regra do dono).** Item sem preço = recusa honesta na
+> hora; todo fechamento sai com total na mesma resposta. Caminho manual do /ops = só
+> fallback técnico. Consequência estratégica: lacuna de catálogo agora aparece como "não
+> tenho" pro cliente — **ampliar a vitrine virou a alavanca de largura** (ex.: eletrônicos
+> básicos/Kalunga, itens de casa; o "adaptador hdmi" e a "camiseta de futebol" de casos
+> reais hoje são recusas). Rastrear recusas frequentes no log e somar loja/categoria.
+
+> **11/08 (2ª) — botão Cancelar sempre + abandono de 1h expira sozinho.** Regras do dono
+> pós-zumbi, implementadas e testadas: menu de pagamento com *Cancelar*, espera de cotação
+> com *Cancelar pedido*, e retorno após 1h+ de silêncio cancela o pedido não-cotado e
+> recomeça a conversa (pago/awaiting_payment intocados). Nada a configurar (TTL default
+> 60 min via `LIA_QUOTE_ABANDON_TTL_MS`).
+
+> **11/08 — alerta ao operador + card resistente a foto 404 (bug do pedido zumbi).** Pedido
+> de sábado ficou 2 dias em cotação manual sem aviso; a camiseta de hoje caiu dentro dele.
+> Alertas ao operador implementados (cotação nova, item adicionado, pedido pago).
+> **Pendências do dono:** (1) setar `LIA_OPERATOR_PHONE=+5511976366065` na Vercel
+> (Production) — sem ela o alerta fica mudo; (2) mandar "cancelar" no WhatsApp pra matar o
+> pedido zumbi `#CMSMCE` e pedir de novo (ração sozinha agora fecha com total na hora);
+> (3) autorizar o deploy deste lote. Limitação assumida: alerta usa mensagem comum — fora
+> da janela de 24h da Meta o envio pode falhar (fica no log `[operator-alert:failed]`);
+> template de operador é evolução futura se incomodar.
 
 > **10/08 (2ª) — diversidade nas opções + botão "Outras opções" + piso na paginação.** As 3
 > opções agora são produtos distintos (não o quase-mesmo em 3 tamanhos/cores); quem não

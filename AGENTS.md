@@ -297,6 +297,62 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**11/08 (3ª) — FIM DA LINHA LIVRE no fluxo do cliente (decisão do dono: "pede → preço →
+acabou; se não tem, fala que não tem").** O "Recebi seu pedido, vou cotar" deixou de
+existir no caminho normal. Regra nova: item sem preço nas 18 lojas é RECUSADO com
+honestidade na mesma resposta (`copy.itemsNotAvailable`, com convite a tentar outra
+marca/versão) e NUNCA entra na cesta; fechar a lista com escolha aberta pede pra
+confirmar o item (`finishChoiceFirst`) em vez de dobrar em linha livre. Consequência:
+toda cesta é 100% precificada e TODO fechamento sai com total na hora. O caminho manual
+(`awaiting_operator_quote`) vira fallback técnico (falha de frete/kill-switch
+`LIA_INSTANT_QUOTE=false`), cercado pelo alerta ao operador e pela expiração de 1h.
+`foldPendingIntoBasket`, `conciergeItemsNoted` e `conciergeSourcingNote` foram removidos;
+adicionar item DURANTE uma cotação manual (só no fallback) continua dobrando no pedido.
+Testes flipados para a regra nova em manual-concierge (helper `manualQuoteOrder` exercita
+o fallback com `LIA_INSTANT_QUOTE=false`). A largura agora É a vitrine (17 mil itens):
+lacuna de catálogo virou "não tenho" — ampliar catálogo é a resposta, não promessa de
+cotação. Bônus da rodagem viva: o seed do Imigrantes tinha 151 palavras com encoding
+corrompido ("�gua", "A��car") — corrigidas por dicionário; isso destravou 30 águas
+invisíveis e expôs que "Sem A��car" ESCAPAVA da penalidade de variante (a Coca sem
+açúcar vencia a original). "tonica"/"micelar"/"termal" entraram em PROCESSED_VARIANTS
+(água tônica/micelar/termal não é água de beber — caso golden da água cobrou). Placar
+golden mantido: 32/33 DET · 33/33 IA.
+
+**11/08 (2ª) — botão Cancelar sempre visível + cotação abandonada expira sozinha.** Duas
+regras do dono na sequência do zumbi: (1) "sempre tem que vir um botão cancelar" — o menu
+de pagamento ganhou o 3º botão *Cancelar* e TODA mensagem de espera de cotação
+(`operatorQuoteRequested`/`StillWorking`/`addedToPendingQuote`) sai como interativo com
+botão *Cancelar pedido* (`sendCancelableNotice`; o toque volta como o texto "cancelar" e
+cai no cancel contextual que já existia; fora do Meta, texto puro). (2) "sumiu por 1h =
+não quer mais" — `LIA_QUOTE_ABANDON_TTL_MS` (60 min): cliente que volta depois de 1h+ com
+pedido parado em `awaiting_operator_quote`/`awaiting_supplier_validation`/
+`awaiting_quote_confirmation` tem o pedido não-pago cancelado sozinho (nota "⏰ Cancelado
+automático" no /ops), a conversa recomeça do zero (endereço preservado,
+`copy.staleQuoteRestart` avisa que nada foi cobrado) e a mensagem nova é processada
+normalmente — a camiseta nunca mais cai dentro do pedido de sábado. Pedido PAGO nunca é
+tocado; `awaiting_payment` fica de fora de propósito (o cliente pode estar pagando o Pix
+naquele momento; cotação vencida já bloqueia pagamento velho). Complementa o TTL de
+carrinho de 30 min que já existia (aquele só cobria cesta em montagem, não pedido criado).
+Testes: E2E de abandono (viagem no tempo via SQL no `updatedAt`) + botões no adapter.
+
+**11/08 — pedido zumbi + alerta ao operador + card sem foto (bug real de produção).**
+"Quero uma camiseta de futebol" respondeu "anotei e já incluí na cotação" — o dono achou
+que era a busca; era um pedido REAL de sábado preso 2 dias em `awaiting_operator_quote`
+(nasceu 26 min ANTES do deploy da cotação instantânea, e a camiseta caiu dentro dele como
+linha livre, por desenho de 07/08). Diagnóstico via `tail-messages` + banco. Causa raiz
+sistêmica: NADA avisava o operador de que havia trabalho no /ops — cotação manual era "em
+instantes" que nunca chega. Fechado: `notifyOperator` (env `LIA_OPERATOR_PHONE`; sem env =
+silêncio; best-effort, nunca afeta o cliente) dispara no WhatsApp do operador em 3
+momentos: pedido caiu pra cotação manual, cliente adicionou item durante a cotação, e
+pedido PAGO (o mais urgente). Setar a env na Vercel + redeploy pra valer. No mesmo
+mergulho: o card da ração de sábado foi descartado pela Meta por **foto 404 no CDN**
+(erro assíncrono 131053 — classe nova, não é o encoding de 07/08); `sendMetaDeliveryChoices`
+agora faz pré-flight da imagem (Range 1 byte, timeout `LIA_MEDIA_PREFLIGHT_TIMEOUT_MS`
+1500ms; só 4xx definitivo derruba) e manda o card SEM foto em vez de perdê-lo — produto,
+preço e botões sobrevivem. Desbloqueio do pedido preso: o próprio cliente manda "cancelar"
+(cancela `awaiting_operator_quote` sem cobrança). Testes: alerta E2E em
+manual-concierge, card sem header em whatsapp-adapter.
+
 **10/08 (2ª rodada) — botão "Outras opções" + paginação cross-store.** Pedido do dono: quem
 não gosta de NENHUMA das 3 opções precisa de uma saída visível. O último card de produto no
 canal Meta ganhou um segundo botão **"Outras opções"** (id de máquina `opt:outras`, que volta

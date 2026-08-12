@@ -613,29 +613,20 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
 
 // ---------- concierge manual (largura + cotação do operador) ----------
 
-// Modo concierge: o cliente pede QUALQUER coisa (de qualquer lugar); a Lia anota,
-// confirma a lista e cota na sequência. Nada de "não achei no catálogo" — a graça é
-// justamente resolver o que os apps de loja única não resolvem.
-// Linha livre = o item NÃO está na vitrine das lojas parceiras. A copy precisa contar
-// que a busca aconteceu ("procurei e não tem pronto") — sem isso, o "Anotei" parece que
-// a Lia nem procurou o produto (feedback real do dono, 07/08).
-export function conciergeItemsNoted(items: string[], hadBasketBefore: boolean): string {
-  const list = items.map((i) => `• ${i}`).join("\n");
-  const abre = hadBasketBefore ? "Anotei mais:" : "Anotei! 📝";
+// Regra do dono (11/08): "se não tem, fala que não tem" — item sem preço nas 18 lojas
+// NUNCA vira espera de cotação. A resposta é honesta, na hora, e convida a tentar de
+// outro jeito (marca/versão) ou pedir outra coisa. A largura agora é a vitrine de 17 mil
+// itens, não o garimpo do operador.
+export function itemsNotAvailable(items: string[]): string {
+  if (items.length === 1) {
+    return `Procurei *${items[0]}* nas lojas parceiras e hoje eu não tenho como trazer 🙏 Se quiser, me diz uma marca ou versão diferente que eu tento de novo — ou me pede outra coisa!`;
+  }
   return [
-    `${abre}\n${list}`,
+    "Esses eu procurei nas lojas parceiras e hoje não tenho como trazer 🙏",
+    ...items.map((i) => `• ${i}`),
     "",
-    "Procurei nas minhas lojas parceiras e isso ainda não está na vitrine — mas consigo mesmo assim: nosso operador cota por fora e o preço entra no total. 🙂",
-    'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega.'
+    "Se quiser, me diz marcas ou versões diferentes que eu tento de novo — ou me pede outra coisa!"
   ].join("\n");
-}
-
-// Vitrine híbrida: itens que a Lia NÃO achou na vitrine viram linha livre e ela mesma
-// garimpa. Fica sem o convite de fechar a lista de propósito — esta mensagem vem junto com
-// opções para escolher, e o cliente precisa escolher antes.
-export function conciergeSourcingNote(items: string[]): string {
-  const list = items.map((i) => `• ${i}`).join("\n");
-  return `Anotei e vou garimpar pra você:\n${list}`;
 }
 
 // Depois de escolher as opções: a lista continua aberta (diferente do fluxo legado, onde
@@ -771,4 +762,27 @@ export function greetingMidOrder(step: string, itemCount: number): string {
 
 export function genericError(): string {
   return "Tive um probleminha aqui agora 🙏. Pode mandar de novo em instantes?";
+}
+
+// ---------- alertas ao OPERADOR (LIA_OPERATOR_PHONE — não são mensagens de cliente) ----------
+// Caso real 11/08: pedido ficou 2 dias em cotação manual porque nada avisava o operador;
+// pro cliente, o "te mando em instantes" virou nunca. O alerta é o que fecha esse ciclo.
+
+export function operatorQuoteAlert(shortId: string, items: string[]): string {
+  return [`🛎️ [operador] Pedido #${shortId} aguardando SUA cotação no /ops:`, ...items.map((i) => `• ${i}`)].join("\n");
+}
+
+export function operatorItemAddedAlert(shortId: string, items: string[]): string {
+  return `➕ [operador] Pedido #${shortId} ganhou item durante a cotação: ${items.join(", ")}`;
+}
+
+export function operatorPaidAlert(shortId: string, total: number): string {
+  return `💰 [operador] Pedido #${shortId} PAGO (${brl(total)}) — hora de comprar e acionar a entrega. Detalhes no /ops.`;
+}
+
+// Cotação abandonada (1h+ sem resposta antes do total sair) expirou sozinha na volta do
+// cliente: transparência curta — nada foi cobrado — e convite a recomeçar. A mensagem
+// nova dele é processada normalmente logo em seguida.
+export function staleQuoteRestart(shortId: string): string {
+  return `Aquele pedido *#${shortId}* ficou um tempão parado, então cancelei pra não te atrapalhar (não cobrei nada) 👍 Bora recomeçar!`;
 }

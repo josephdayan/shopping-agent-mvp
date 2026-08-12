@@ -7,11 +7,16 @@ const items = [
   { qty: 1, name: "Óleo de Soja Liza 900ml", displayLineTotal: 8.79 }
 ];
 
-test("concierge: itens anotados, cotação pedida e resumo manual", () => {
-  const noted = copy.conciergeItemsNoted(["1x carregador de celular", "2x cadernos"], false);
-  assert.match(noted, /Anotei/);
-  assert.match(noted, /carregador/);
-  assert.match(noted, /só isso/);
+test("concierge: recusa honesta, cotação pedida e resumo manual", () => {
+  // Regra 11/08: item sem preço = "não tenho" na hora, nunca "anotei, vou cotar".
+  const one = copy.itemsNotAvailable(["vedante de torneira"]);
+  assert.match(one, /não tenho como trazer/);
+  assert.match(one, /vedante de torneira/);
+  const many = copy.itemsNotAvailable(["vedante de torneira", "2x cadernos"]);
+  assert.match(many, /não tenho como trazer/);
+  assert.match(many, /cadernos/);
+  assert.doesNotMatch(many, /vou cotar|garimpar|Anotei/i);
+  const noted = many;
 
   const requested = copy.operatorQuoteRequested(["1x cabo usb-c", "1x vela"]);
   assert.match(requested, /cotar/i);
