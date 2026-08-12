@@ -192,6 +192,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **11/08 (6ª) — PUBLICADO.** Push `09f418a` → deploy `dpl_CvpvfSt2S5HmkhnSuHEiKp7z6Gri`
+> `READY` em Production (`liadelivery.com.br`); smoke verde (landing 200, /ops 200, webhook
+> GET 403 / POST sem assinatura 401). No ar: as 10 correções da revisão + o conserto da
+> conversa duplicada (upsert por id determinístico). Suíte 297/297.
+
 > **11/08 (5ª) — revisão de código do lote (6 P1 + 4 P2/P3) corrigida e testada.** Detalhe
 > por achado em [AGENTS.md](AGENTS.md). **Ação já feita:** o índice único parcial do dedupe
 > (`Message_inbound_provider_id_key`) foi aplicado no banco de produção e a migration
