@@ -77,6 +77,7 @@ test("Meta: onboarding, quantidade e pagamento usam botões com ids estáveis", 
     await whatsappAdapter.sendPaymentChoices("+5511999999999", 50, 52.63);
     await whatsappAdapter.sendCartActions("+5511999999999");
     await whatsappAdapter.sendCancelableNotice("+5511999999999", "Ainda estou cotando seu pedido");
+    await whatsappAdapter.sendQuoteSummary("+5511999999999", "🛒 Seu pedido: 1x Coca — Total R$ 22,28");
     assert.equal(bodies[0].interactive.action.buttons[0].reply.id, "cadastrar_endereco");
     assert.deepEqual(bodies[1].interactive.action.buttons.map((b: any) => b.reply.id), ["qty:1", "qty:2", "qty:3"]);
     // Saída sempre visível (11/08): o menu de pagamento leva Cancelar junto.
@@ -86,6 +87,9 @@ test("Meta: onboarding, quantidade e pagamento usam botões com ids estáveis", 
     // Aviso de cotação leva o botão "Cancelar pedido".
     assert.deepEqual(bodies[4].interactive.action.buttons.map((b: any) => b.reply.id), ["cancelar"]);
     assert.equal(bodies[4].interactive.action.buttons[0].reply.title, "Cancelar pedido");
+    // Resumo da cotação leva o botão "Trocar endereço" (ação em botão, não instrução).
+    assert.deepEqual(bodies[5].interactive.action.buttons.map((b: any) => b.reply.id), ["trocar_endereco"]);
+    assert.equal(bodies[5].interactive.action.buttons[0].reply.title, "Trocar endereço");
   } finally {
     process.env.WHATSAPP_PROVIDER = previous.provider;
     process.env.WHATSAPP_ACCESS_TOKEN = previous.token;

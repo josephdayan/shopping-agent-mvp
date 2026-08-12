@@ -680,6 +680,9 @@ export function manualQuoteSummary(input: {
   total: number;
   deliveryAddress?: string;
   sameHour?: boolean;
+  // true = a mensagem sai com o botão "Trocar endereço" (dono, 11/08: ação em botão,
+  // não instrução de digitar) — a dica de texto some porque o botão fala por ela.
+  addressButton?: boolean;
 }): string {
   const lines = input.items.map((item) => `• ${item.qty}x ${item.name}`);
   const prazo = input.deliveryPromise
@@ -696,7 +699,8 @@ export function manualQuoteSummary(input: {
     `*Total: ${brl(input.total)}*`
   ];
   if (input.deliveryAddress) {
-    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`, '_Confere o endereço? Para mudar, diga "trocar endereço"._');
+    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`);
+    if (!input.addressButton) out.push('_Confere o endereço? Para mudar, diga "trocar endereço"._');
   }
   out.push("", "Se estiver tudo certo, escolha abaixo como prefere pagar. 💚");
   return out.join("\n");

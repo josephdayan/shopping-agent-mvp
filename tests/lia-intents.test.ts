@@ -116,6 +116,10 @@ test("afirmação, rejeição e números", () => {
   assert.equal(kind("não gostei, tem outras?"), "reject");
   // toque atrasado no botão "Outras opções" fora da escolha: reject educado, nunca busca
   assert.equal(kind("opt:outras"), "reject");
+  // idem para "Escolher esse" por sku fora da escolha
+  assert.equal(kind("optsku:petz-123"), "reject");
+  // botão "Trocar endereço" do resumo (id de máquina com underscore)
+  assert.equal(kind("trocar_endereco"), "change_address");
   const n = detectIntent("2");
   assert.equal(n.kind, "number");
   assert.equal((n as { value: number }).value, 2);

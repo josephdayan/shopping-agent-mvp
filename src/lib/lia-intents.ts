@@ -446,6 +446,12 @@ export function detectIntent(text: string): Intent {
   // atrasado (fora da escolha) o reject responde "o que você prefere então?" em vez
   // de deixar `opt:outras` virar busca de produto.
   if (n === "opt:outras") return { kind: "reject" };
+  // Botão "Escolher esse" (id por sku). Na escolha, o handleChoosing resolve o sku
+  // ANTES de qualquer parser; fora dela, reject educado — nunca busca de produto.
+  if (/^optsku:/.test(n)) return { kind: "reject" };
+  // Botão "Trocar endereço" do resumo da cotação (o regex de texto não casa o
+  // underscore do id de máquina).
+  if (n === "trocar_endereco") return { kind: "change_address" };
 
   // Emoji sozinho: 👍/✅ = sim; 🙏/❤️/💚/😊/🙌 = obrigado; resto = um "oi" acenando.
   if (EMOJI_ONLY_RE.test(n)) {

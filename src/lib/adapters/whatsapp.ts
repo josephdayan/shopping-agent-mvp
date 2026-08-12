@@ -354,6 +354,14 @@ export const whatsappAdapter = {
     return sendMetaSimpleButtons(to, body, [{ id: "cancelar", title: "Cancelar pedido" }]);
   },
 
+  // Resumo da cotação com o botão "Trocar endereço" (dono, 11/08: ação em botão, não
+  // instrução de digitar). O toque volta como `trocar_endereco` e cai no fluxo de troca
+  // que já existia por texto. Fora do Meta retorna null → texto puro com a dica escrita.
+  async sendQuoteSummary(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [{ id: "trocar_endereco", title: "Trocar endereço" }]);
+  },
+
   // Confirmação de recompra com cartão salvo SEM a Payments API da Meta: botões comuns
   // de resposta. O toque volta como texto `cardpay:<attemptId>` / `cardother` e o fluxo
   // cobra pelo Pagar.me — nenhum dado de cartão passa pelo chat.

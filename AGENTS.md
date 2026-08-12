@@ -297,6 +297,20 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**11/08 (4ª) — teste real do dono pegou 2 bugs + 1 pedido de UX.** (1) **"Escolher esse"
+confirmava OUTRO produto**: o id do botão era a POSIÇÃO ("1"/"2"/"3"); depois de "Outras
+opções" a lista trocava por baixo e o toque num card antigo escolhia a posição equivalente
+da lista nova. Agora o id carrega o SKU (`optsku:<sku>`), `PendingChoice.shownOptions`
+guarda tudo que já foi mostrado, e o toque em QUALQUER card do histórico escolhe
+exatamente o produto daquele card (`confirmChosenOption` unifica número digitado, "mais
+barata", nome e toque; a loja é a do produto escolhido, não a da opção 1). Sku fora do
+histórico (card de outro item) → reapresenta a escolha, nunca chuta. (2) **"Outras" veio
+com 1 opção só**: o preenchimento até 3 se perdia quando o filtro de variantes esvaziava —
+agora completa do pool (pool mais fundo: 12/loja) e o eval trava 3. (3) Resumo da cotação
+ganhou o botão **"Trocar endereço"** (`trocar_endereco`; corpo ≤1024 chars, senão texto com
+a dica escrita de sempre). Testes: E2E do card antigo por sku, eval de 3-de-verdade,
+botões no adapter, intents dos ids de máquina.
+
 **11/08 (3ª) — FIM DA LINHA LIVRE no fluxo do cliente (decisão do dono: "pede → preço →
 acabou; se não tem, fala que não tem").** O "Recebi seu pedido, vou cotar" deixou de
 existir no caminho normal. Regra nova: item sem preço nas 18 lojas é RECUSADO com

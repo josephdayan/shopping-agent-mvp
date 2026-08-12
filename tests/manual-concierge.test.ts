@@ -449,3 +449,22 @@ test("concierge: cotação abandonada 1h+ expira sozinha e a conversa recomeça"
   // O leite seguiu como pedido NOVO (opções ou anotação — qualquer resposta de produto).
   assert.match(back, /leite/i);
 });
+
+test("card ANTIGO escolhe o produto do card, não a posição (ids por sku — bug real 11/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Produção: "Escolher esse" confirmava OUTRO produto se a lista tinha trocado por
+  // baixo ("outras"). O id agora carrega o sku e o toque resolve pelo histórico.
+  const c = await returningCustomer();
+  await c.send("quero refrigerante");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx1 = JSON.parse(convo!.context ?? "{}");
+  const firstBatch = ctx1.pending?.[0]?.options as Array<{ sku: string; name: string }>;
+  assert.ok(firstBatch?.length >= 2, "esperava opções na 1ª página");
+  const more = await c.send("outras");
+  assert.match(more, /Mais opções/);
+  // Toca num card da PRIMEIRA página (que já saiu da mesa).
+  const tapped = firstBatch[1];
+  const out = await c.send(`optsku:${tapped.sku}`);
+  const fragment = tapped.name.slice(0, 14).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(out, new RegExp(fragment, "i"), `esperava "${tapped.name}", veio: ${out.slice(0, 200)}`);
+});

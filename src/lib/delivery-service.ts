@@ -197,6 +197,10 @@ type PendingChoice = {
   // Every sku already shown for this item, so "tem outras?" never repeats one — robust
   // even if the underlying ranking shifts between turns (live scrape vs seed).
   shownSkus?: string[];
+  // TODA opção já mostrada (com dados completos), para o toque num card ANTIGO — de
+  // antes do "outras"/refino — continuar escolhendo exatamente o produto daquele card.
+  // Caso real 11/08: ids posicionais fizeram "Escolher esse" confirmar outro produto.
+  shownOptions?: ChoiceOption[];
 };
 
 // A frete option the customer can pick between (cheapest vs fastest courier).
@@ -581,8 +585,11 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
     try {
       const interactive = await whatsappAdapter.sendDeliveryChoices(
         phone,
-        p.options.map((o, i) => ({
-          id: String(i + 1),
+        // O id do botão carrega o SKU, não a posição: card antigo (de antes do
+        // "outras"/refino) tocado depois escolhe o produto DAQUELE card — id
+        // posicional confirmava outro produto quando a lista trocava por baixo.
+        p.options.map((o) => ({
+          id: `optsku:${o.sku}`,
           name: customerChoiceName(p, o),
           displayPrice: display(o.unitPrice),
           imageUrl: o.imageUrl
@@ -1866,6 +1873,35 @@ async function handleDeliveryAddress(
   await reply(phone, copy.addressSavedAskItems(address));
 }
 
+// Caminho único de confirmação de escolha (número digitado, "a mais barata", nome ou
+// toque no card por sku): tira o item da fila, pergunta quantidade quando falta, soma na
+// cesta e segue. A loja é a do PRODUTO escolhido — com opções cross-store, a opção 2
+// pode ser de outra loja que a opção 1.
+async function confirmChosenOption(
+  phone: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  userCep: string | null | undefined,
+  fallbackStore: StoreConnector,
+  current: PendingChoice,
+  chosen: ChoiceOption
+) {
+  const chosenStore = chosen.storeKey ? getStore(chosen.storeKey) : fallbackStore;
+  ctx.pending = ctx.pending!.slice(1);
+  if (current.qty === 1 && !current.qtyExplicit) {
+    await beginQuantityChoice(phone, convoId, ctx, chosenStore, chosen);
+    return;
+  }
+  ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, chosenStore)]);
+  if (ctx.pending.length) {
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.choiceConfirmed(chosen.name));
+    await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
+    return;
+  }
+  await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
+}
+
 async function handleChoosing(
   phone: string,
   userCep: string | null | undefined,
@@ -1876,6 +1912,24 @@ async function handleChoosing(
 ) {
   const current = ctx.pending![0];
   const store = getStore(current.options[0]?.storeKey ?? ctx.storeKey ?? orderStore(ctx).key);
+  // Toque em "Escolher esse": o id carrega o SKU do card, então mesmo um card ANTIGO
+  // (de antes do "outras"/refino) escolhe exatamente o produto mostrado nele. Vem antes
+  // de qualquer parser: é string de máquina, não linguagem.
+  const skuTap = text.trim().match(/^optsku:(.+)$/i);
+  if (skuTap) {
+    const wanted = skuTap[1].trim().toLowerCase();
+    const tapped =
+      current.options.find((o) => o.sku.toLowerCase() === wanted) ??
+      current.shownOptions?.find((o) => o.sku.toLowerCase() === wanted);
+    if (!tapped) {
+      // Card de outro item/conversa antiga: não chuta produto — reapresenta a escolha atual.
+      await reply(phone, copy.choiceNotUnderstood());
+      await sendChoices(phone, current);
+      return;
+    }
+    await confirmChosenOption(phone, convoId, ctx, userCep, store, current, tapped);
+    return;
+  }
   // "acha outras" pages; "tem essa em azul?"/"tem de 2kg?"/"quero uma maior" refine.
   // Both are checked AFTER an explicit pick ("2", "a colgate", "mais barato") but
   // BEFORE reject→skip — "não gostei, tem outras?" should show more, not drop the item.
@@ -1899,20 +1953,7 @@ async function handleChoosing(
         : parsed.type === "cheapest"
           ? current.options.reduce((best, o, i, arr) => (o.unitPrice < arr[best].unitPrice ? i : best), 0)
           : 0;
-    const chosen = current.options[index];
-    ctx.pending = ctx.pending!.slice(1);
-    if (current.qty === 1 && !current.qtyExplicit) {
-      await beginQuantityChoice(phone, convoId, ctx, store, chosen);
-      return;
-    }
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
-    if (ctx.pending.length) {
-      await writeCtx(convoId, ctx);
-      await reply(phone, copy.choiceConfirmed(chosen.name));
-      await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
-      return;
-    }
-    await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
+    await confirmChosenOption(phone, convoId, ctx, userCep, store, current, current.options[index]);
     return;
   }
 
@@ -1959,20 +2000,7 @@ async function handleChoosing(
   // entre as opções, não pedindo item novo. Uma só bate → escolhe; várias → estreita.
   const narrowed = narrowChoiceByName(text, current.options);
   if (narrowed.length === 1) {
-    const chosen = current.options[narrowed[0]];
-    ctx.pending = ctx.pending!.slice(1);
-    if (current.qty === 1 && !current.qtyExplicit) {
-      await beginQuantityChoice(phone, convoId, ctx, store, chosen);
-      return;
-    }
-    ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, store)]);
-    if (ctx.pending.length) {
-      await writeCtx(convoId, ctx);
-      await reply(phone, copy.choiceConfirmed(chosen.name));
-      await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
-      return;
-    }
-    await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
+    await confirmChosenOption(phone, convoId, ctx, userCep, store, current, current.options[narrowed[0]]);
     return;
   }
   if (narrowed.length > 1 && narrowed.length < current.options.length) {
@@ -2062,7 +2090,7 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
   const query = active.length ? (p.baseQuery ?? p.query) : p.query;
   let pool: ChoiceOption[];
   if (!ctx.storeKey && manualConciergeEnabled()) {
-    const candidates = await gatherCrossStoreCandidates(query, 40, 8);
+    const candidates = await gatherCrossStoreCandidates(query, 40, 12);
     pool = candidates.map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }));
   } else {
     pool = (await store.searchItems(query, 40)).map((item) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }));
@@ -2086,10 +2114,19 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
   // "outra opção". Só volta a valer se não sobrar mais nada de distinto.
   const fresh = pool.filter((o) => !p.options.some((cur) => sameProductVariant(p.query, cur, o)));
   const next = diversifyOptions(p.query, fresh.length ? fresh : pool, 3);
+  // "Outras" tem que vir com 3 de verdade (pedido do dono, 11/08): completa com o que
+  // sobrou no pool — variante repetida ainda atende melhor que uma opção solitária.
+  for (const option of pool) {
+    if (next.length >= 3) break;
+    if (!next.some((n) => n.sku === option.sku)) next.push(option);
+  }
   if (!next.length) {
     await reply(phone, copy.noMoreOptions(p.query));
     return;
   }
+  // Memória de TUDO que já foi mostrado: o toque num card antigo resolve por sku.
+  const remembered = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
+  p.shownOptions = [...(p.shownOptions ?? p.options), ...next.filter((o) => !remembered.has(o.sku))];
   p.options = next;
   p.shownSkus = [...shown, ...next.map((o) => o.sku)];
   await writeCtx(convoId, ctx);
@@ -2113,6 +2150,8 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   p.baseQuery = base;
   p.attrs = attrs;
   p.query = refined;
+  const remembered = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
+  p.shownOptions = [...(p.shownOptions ?? p.options), ...matches.filter((o) => !remembered.has(o.sku))];
   p.options = matches;
   p.shownSkus = matches.map((m) => m.sku);
   await writeCtx(convoId, ctx);
@@ -3149,19 +3188,28 @@ export async function opsPublishManualQuote(
     }
   }
 
-  await reply(
-    order.phone,
-    copy.manualQuoteSummary({
-      items: items.map((item) => ({ qty: item.qty, name: item.name })),
-      produtos,
-      frete: deliveryFee,
-      deliveryPromise: input.deliveryPromise,
-      etaMinutes: input.etaMinutes,
-      total,
-      deliveryAddress: order.deliveryAddress ?? undefined,
-      sameHour
-    })
-  );
+  const summaryInput = {
+    items: items.map((item) => ({ qty: item.qty, name: item.name })),
+    produtos,
+    frete: deliveryFee,
+    deliveryPromise: input.deliveryPromise,
+    etaMinutes: input.etaMinutes,
+    total,
+    deliveryAddress: order.deliveryAddress ?? undefined,
+    sameHour
+  };
+  // Resumo com botão "Trocar endereço" (dono, 11/08). Corpo interativo tem teto de 1024
+  // chars na Meta — resumo comprido (ou canal sem botão) cai no texto com a dica escrita.
+  let summarySent = false;
+  const buttonBody = copy.manualQuoteSummary({ ...summaryInput, addressButton: true });
+  if (summaryInput.deliveryAddress && buttonBody.length <= 1024) {
+    try {
+      summarySent = Boolean(await whatsappAdapter.sendQuoteSummary(order.phone, buttonBody));
+    } catch (error) {
+      console.warn("[whatsapp:quote-summary:fallback-text]", error instanceof Error ? error.message : error);
+    }
+  }
+  if (!summarySent) await reply(order.phone, copy.manualQuoteSummary(summaryInput));
   const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
   if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
   await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));

@@ -620,7 +620,10 @@ test("escolhendo: botão 'Outras opções' (opt:outras) pagina igual ao texto", 
   assert.ok(firstNames.length >= 2, `esperava opções: ${first.slice(0, 200)}`);
   const more = await c.send("opt:outras");
   assert.match(more, /Mais opções/, `botão não paginou: ${more.slice(0, 200)}`);
-  for (const name of optionNames(more)) {
+  const moreNames = optionNames(more);
+  // "Outras" tem que vir com 3 de verdade quando o catálogo dá (pedido do dono, 11/08).
+  assert.equal(moreNames.length, 3, `esperava 3 novas opções, vieram ${moreNames.length}: ${moreNames.join(" | ")}`);
+  for (const name of moreNames) {
     assert.ok(!firstNames.includes(name), `opção repetida na paginação: ${name}`);
   }
 });

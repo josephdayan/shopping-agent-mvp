@@ -192,6 +192,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **11/08 (4ª) — bugs do teste real: card por SKU, "outras" com 3, botão Trocar endereço.**
+> O id posicional dos cards era o bug do "escolhi um e veio outro" (lista trocava por baixo
+> na paginação); id agora é o sku e o histórico (`shownOptions`) resolve card antigo.
+> "Outras" completa até 3; resumo da cotação com botão "Trocar endereço". Pendente: novo
+> teste real do dono repetindo o cenário (pedir → outras → tocar num card da 1ª leva).
+
 > **11/08 (3ª) — fim da linha livre (regra do dono).** Item sem preço = recusa honesta na
 > hora; todo fechamento sai com total na mesma resposta. Caminho manual do /ops = só
 > fallback técnico. Consequência estratégica: lacuna de catálogo agora aparece como "não

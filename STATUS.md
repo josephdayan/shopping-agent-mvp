@@ -234,6 +234,12 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **11/08 (4ª) — teste real do dono: card escolhia produto errado (id posicional) + "outras"
+> com 1 opção + botão Trocar endereço.** "Escolher esse" agora carrega o SKU do card — toque
+> em card antigo (pós-paginação) escolhe o produto DAQUELE card, nunca a posição da lista
+> nova (`shownOptions` guarda o histórico). "Outras" completa até 3 do pool (12/loja).
+> Resumo da cotação com botão "Trocar endereço" no lugar da instrução de digitar.
+
 > **11/08 (3ª) — fim da linha livre: pede → preço na hora → acabou.** Decisão do dono: o
 > "vou cotar" não existe mais no fluxo normal. Item sem preço nas 18 lojas = "não tenho
 > como trazer" na mesma resposta (nunca entra na cesta); fechar com escolha aberta pede
