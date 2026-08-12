@@ -185,10 +185,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **11/08 — PUBLICADO.** Push `e8f6198` → deploy `dpl_6yDE7mcoJTwhTSPiuwS6ZDTV5Vq5` `READY`
 > em Production servindo `liadelivery.com.br`; smoke verde (landing 200, /ops 200, webhook
 > GET 403 / POST sem assinatura 401). No ar: fim da linha livre, alerta ao operador, botão
-> Cancelar sempre, abandono de 1h, card imune a foto 404, encoding Imigrantes. **Ações do
-> dono que seguem pendentes:** (1) `LIA_OPERATOR_PHONE=+5511976366065` na Vercel + redeploy
-> (sem ela o alerta fica mudo); (2) mandar "cancelar" no chat pra matar o zumbi `#CMSMCE`;
-> (3) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
+> Cancelar sempre, abandono de 1h, card imune a foto 404, encoding Imigrantes.
+> `LIA_OPERATOR_PHONE` foi configurada na Vercel pelo agente (CLI já autenticada) e o
+> redeploy `READY` reassumiu `liadelivery.com.br` — alerta ao operador ATIVO. **Ações do
+> dono que seguem pendentes:** (1) mandar "cancelar" no chat pra matar o zumbi `#CMSMCE`;
+> (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
 > **11/08 (3ª) — fim da linha livre (regra do dono).** Item sem preço = recusa honesta na
