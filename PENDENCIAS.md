@@ -182,6 +182,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > os limiares prováveis se quiser ser mais generoso (PM 149, Cobasi 199, RiHappy 399,
 > Kopenhagen 99).
 
+> **11/08 — PUBLICADO.** Push `e8f6198` → deploy `dpl_6yDE7mcoJTwhTSPiuwS6ZDTV5Vq5` `READY`
+> em Production servindo `liadelivery.com.br`; smoke verde (landing 200, /ops 200, webhook
+> GET 403 / POST sem assinatura 401). No ar: fim da linha livre, alerta ao operador, botão
+> Cancelar sempre, abandono de 1h, card imune a foto 404, encoding Imigrantes. **Ações do
+> dono que seguem pendentes:** (1) `LIA_OPERATOR_PHONE=+5511976366065` na Vercel + redeploy
+> (sem ela o alerta fica mudo); (2) mandar "cancelar" no chat pra matar o zumbi `#CMSMCE`;
+> (3) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
+> ("camiseta de futebol") → deve responder "não tenho como trazer".
+
 > **11/08 (3ª) — fim da linha livre (regra do dono).** Item sem preço = recusa honesta na
 > hora; todo fechamento sai com total na mesma resposta. Caminho manual do /ops = só
 > fallback técnico. Consequência estratégica: lacuna de catálogo agora aparece como "não
