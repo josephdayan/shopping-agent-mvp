@@ -201,10 +201,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > por achado em [AGENTS.md](AGENTS.md). **Ação já feita:** o índice único parcial do dedupe
 > (`Message_inbound_provider_id_key`) foi aplicado no banco de produção e a migration
 > marcada como aplicada — deploy do código sem esse índice NÃO teria dedupe. **Ação
-> pendente do dono:** conferir se o pedido mínimo do Carrefour (R$30, default de
-> `LIA_CARREFOUR_MIN_ORDER`) e os mínimos das outras 17 lojas batem com a realidade — a
-> regra agora BLOQUEIA o fechamento, então mínimo errado vira recusa indevida; as demais
-> vitrines estão com 0 (sem mínimo) e só o Carrefour tem valor.
+> pendente do dono:** ~~conferir o pedido mínimo do Carrefour~~ — **conferido em 11/08**:
+> a política publicada diz mínimo R$30, frete fixo R$14,90 e grátis acima de R$349, os
+> três iguais ao que já estava no código (nada a ajustar). As outras 17 vitrines seguem
+> com mínimo 0, o que só erra para o lado seguro (nunca recusa indevida; o risco é o
+> operador tomar recusa no checkout de uma loja que tenha mínimo não mapeado — se
+> acontecer, é só setar `LIA_<LOJA>_MIN_ORDER` na Vercel, sem deploy; toda vitrine já lê
+> essa env: CACAUSHOW, BOTICARIO, CARREFOUR, DECATHLON, DIVVINO, COBASI, DROGARAIA,
+> DROGARIASP, GIULIANAFLORES, IMIGRANTES, KOPENHAGEN, KALUNGA, NATURALDATERRA, OBA, PETZ,
+> PAGUEMENOS, RIHAPPY, SWIFT).
 
 > **11/08 (4ª) — bugs do teste real: card por SKU, "outras" com 3, botão Trocar endereço.**
 > O id posicional dos cards era o bug do "escolhi um e veio outro" (lista trocava por baixo

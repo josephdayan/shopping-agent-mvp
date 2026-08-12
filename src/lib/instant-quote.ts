@@ -75,7 +75,9 @@ export const SEED_STORE_FREIGHT: Record<string, { fee: number; freeAbove?: numbe
   kopenhagen: { fee: 15.9, freeAbove: 118 }, // RÁPIDA 1d útil · pago a R$98, grátis a R$117,60 (provável: R$99)
   rihappy: { fee: 18, freeAbove: 420 }, // até 2 dias · pago a R$342,93, grátis a R$419,97 (provável: R$399)
   // — Fonte B: política publicada (fee ESTIMADO — o site só mostra no checkout) —
-  carrefour: { fee: 14.9, freeAbove: 349 }, // mercado: mínimo R$30, grátis > R$349 (FAQ oficial); fee varia por CEP/agenda
+  // Carrefour reconferido em 11/08 na política publicada: mínimo R$30, frete fixo R$14,90,
+  // grátis acima de R$349 — os três valores batem com o que já estava semeado.
+  carrefour: { fee: 14.9, freeAbove: 349 }, // mercado: mínimo R$30, grátis > R$349; fee ainda varia por CEP/agenda no checkout
   petz: { fee: 9.9, freeAbove: 119 }, // grátis SP capital > R$119,01 (política oficial); fee típico VTEX pet
   boticario: { fee: 14.9, freeAbove: 229 } // grátis site R$199–229 (conservador: 229); fee varia por CEP
   // imigrantes (frete dinâmico por distância), naturaldaterra, kalunga, decathlon,

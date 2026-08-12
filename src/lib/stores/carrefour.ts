@@ -95,7 +95,10 @@ function mapCarrefourItem(raw: Record<string, unknown>): CatalogItem | null {
 export const carrefourStore: StoreConnector = {
   key: "carrefour",
   label: "Carrefour",
-  // Carrefour clique-e-retire requires a minimum order (~R$30 of products). Tunable.
+  // Mínimo do site/app do Carrefour: R$30 em produtos (política publicada, reconferida em
+  // 11/08). Desde 11/08 isto BLOQUEIA o fechamento no concierge (antes o cliente só
+  // descobriria no checkout da loja), então o valor precisa espelhar a loja de verdade.
+  // Ajustável sem deploy por LIA_CARREFOUR_MIN_ORDER.
   minOrder: Number(process.env.LIA_CARREFOUR_MIN_ORDER ?? 30),
 
   async searchItems(query: string, limit = 4): Promise<CatalogItem[]> {
