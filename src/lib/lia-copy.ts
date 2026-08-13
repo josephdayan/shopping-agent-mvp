@@ -796,3 +796,18 @@ export function staleQuoteRestart(shortId: string): string {
 export function quoteDroppedForNewAddress(): string {
   return "Beleza! Como o frete depende do endereço, cancelei essa cotação (não cobrei nada) e refaço com o endereço novo. 📍";
 }
+
+// Trocar endereço com Pix/cartão já emitidos: a cobrança vale um total calculado com
+// OUTRO frete — o caminho seguro é cancelar (nada foi pago) e refazer.
+export function addressChangeNeedsCancel(): string {
+  return "Seu pedido já está com o pagamento gerado pra esse endereço 😅 Me manda *cancelar* primeiro (não foi cobrado nada) e aí refazemos com o endereço novo.";
+}
+
+// Endereço trocado com o pedido ainda na fila de cotação: o pedido sobrevive.
+export function addressUpdatedQuoteContinues(address: string): string {
+  return `📍 Prontinho, endereço atualizado: ${address}. Sua cotação continua valendo — já avisei aqui e o total vem calculado pro endereço novo.`;
+}
+
+export function operatorAddressChangedAlert(shortId: string, address: string): string {
+  return `📍 [operador] Pedido #${shortId} trocou de endereço ANTES da cotação: ${address}. Cote com o frete do endereço novo.`;
+}

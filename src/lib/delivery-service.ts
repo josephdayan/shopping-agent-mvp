@@ -321,24 +321,57 @@ async function reply(phone: string, text: string) {
 }
 
 // Quando o cliente falou/agiu pela última vez ANTES desta mensagem. Base dos dois TTLs
-// (cesta parada, cotação abandonada). Usa a mensagem anterior da conversa, não só
-// `Conversation.updatedAt`: o updatedAt só se move quando o contexto é gravado, então
-// quem só pergunta ("já saiu o total?") parecia inativo e podia ser expirado no meio de
-// uma conversa viva. Fica com o MAIS RECENTE dos dois sinais.
-async function lastActivityAt(
-  convo: { id: string; updatedAt?: Date | null },
-  exceptMessageId?: string
-): Promise<Date | undefined> {
+// (cesta parada, cotação abandonada). Usa a mensagem anterior da conversa — NÃO o
+// `Conversation.updatedAt`: ele se move quando contexto é gravado E quando o lock de
+// turno é reivindicado, então nunca serviria de relógio de inatividade; já a mensagem
+// anterior é a atividade real (toda mensagem, do cliente ou da Lia, conta).
+async function lastActivityAt(convoId: string, exceptMessageId?: string): Promise<Date | undefined> {
   const previous = await prisma.message.findFirst({
-    where: { conversationId: convo.id, ...(exceptMessageId ? { id: { not: exceptMessageId } } : {}) },
+    where: { conversationId: convoId, ...(exceptMessageId ? { id: { not: exceptMessageId } } : {}) },
     orderBy: { createdAt: "desc" },
     select: { createdAt: true }
   });
-  const candidates = [previous?.createdAt, convo.updatedAt ? new Date(convo.updatedAt) : undefined].filter(
-    (date): date is Date => date instanceof Date
-  );
-  if (!candidates.length) return undefined;
-  return candidates.reduce((latest, date) => (date > latest ? date : latest));
+  return previous?.createdAt;
+}
+
+// Um turno POR VEZ por conversa (2ª revisão, 11/08). Duas mensagens simultâneas do
+// mesmo cliente liam a mesma cesta e cada uma gravava o contexto INTEIRO — a última
+// apagava o item da primeira. Lock cooperativo no banco (vale entre instâncias
+// serverless): claim atômico via updateMany; TTL de 60s liberta conversa de turno
+// travado; quem espera demais entra assim mesmo (o webhook não pode pendurar — melhor
+// a corrida rara de antes do que mensagem sem resposta).
+const TURN_LOCK_TTL_MS = 60_000;
+const TURN_LOCK_MAX_WAIT_MS = 15_000;
+
+async function acquireTurnLock(convoId: string): Promise<string> {
+  const token = `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+  const deadline = Date.now() + TURN_LOCK_MAX_WAIT_MS;
+  for (;;) {
+    const claimed = await prisma.conversation.updateMany({
+      where: {
+        id: convoId,
+        OR: [{ turnLock: null }, { turnLockAt: null }, { turnLockAt: { lt: new Date(Date.now() - TURN_LOCK_TTL_MS) } }]
+      },
+      data: { turnLock: token, turnLockAt: new Date() }
+    });
+    if (claimed.count) return token;
+    if (Date.now() >= deadline) {
+      console.warn("[turn-lock:barge]", convoId);
+      await prisma.conversation.updateMany({ where: { id: convoId }, data: { turnLock: token, turnLockAt: new Date() } });
+      return token;
+    }
+    await sleep(400);
+  }
+}
+
+async function releaseTurnLock(convoId: string, token: string) {
+  try {
+    // Só solta se o lock ainda é NOSSO — quem entrou por barge/TTL não pode ser solto
+    // por um turno velho terminando atrasado.
+    await prisma.conversation.updateMany({ where: { id: convoId, turnLock: token }, data: { turnLock: null, turnLockAt: null } });
+  } catch (error) {
+    console.warn("[turn-lock:release-failed]", error instanceof Error ? error.message : error);
+  }
 }
 
 // Mensagens de ESPERA de cotação sempre saem com o botão "Cancelar pedido" no Meta
@@ -876,6 +909,26 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     throw error;
   }
 
+  // Um turno por vez por conversa (ver acquireTurnLock). O dedupe fica ANTES do lock
+  // de propósito: retry do webhook sai na hora, sem esperar o turno original terminar.
+  const lockToken = await acquireTurnLock(convo.id);
+  try {
+    // Recarrega a conversa DEPOIS do lock: o turno anterior pode ter gravado contexto
+    // enquanto esperávamos — processar sobre o snapshot velho recriaria a corrida.
+    const freshConvo = (await prisma.conversation.findUnique({ where: { id: convo.id } })) ?? convo;
+    await handleDeliveryTurn(phone, text, user, freshConvo, inboundMessageId);
+  } finally {
+    await releaseTurnLock(convo.id, lockToken);
+  }
+}
+
+async function handleDeliveryTurn(
+  phone: string,
+  text: string,
+  user: Awaited<ReturnType<typeof getOrCreateConvo>>["user"],
+  convo: Awaited<ReturnType<typeof getOrCreateConvo>>["convo"],
+  inboundMessageId?: string
+) {
   const ctx = readCtx(convo.context);
   // Addresses saved through the legacy checkout are customer-entered and can be
   // reused safely by the delivery flow.
@@ -892,7 +945,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // ÚLTIMA ATIVIDADE REAL = a mensagem anterior da conversa. `Conversation.updatedAt` só
   // muda quando o contexto é gravado: quem só faz perguntas ("já saiu o total?") ficava
   // com o relógio parado e podia ser expirado no meio de uma conversa viva.
-  const idleSince = await lastActivityAt(convo, inboundMessageId);
+  const idleSince = await lastActivityAt(convo.id, inboundMessageId);
   const idleMs = idleSince ? Date.now() - idleSince.getTime() : 0;
   const stale = Boolean((ctx.basket?.length || ctx.pending?.length) && idleSince && idleMs > CART_TTL_MS);
   if (stale) {
@@ -1126,7 +1179,18 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
   // pagamento, podendo pagar uma cotação amarrada ao endereço velho). Como o frete foi
   // calculado pro endereço antigo, uma cotação em aberto cai antes de pedir o CEP novo.
   if (intent.kind === "change_address") {
-    if (ctx.deliveryOrderId && (ctx.step === "awaiting_quote_confirmation" || ctx.step === "awaiting_supplier_validation")) {
+    // Cobrança já emitida (Pix/cartão vivos): trocar o endereço agora deixaria uma
+    // cobrança válida amarrada a um total de outro frete — e a conversa órfã do pedido.
+    // O caminho honesto é cancelar primeiro (o cancel contextual estorna nada: não pago).
+    if (ctx.step === "awaiting_payment" || ctx.step === "payment_issuing") {
+      await reply(phone, copy.addressChangeNeedsCancel());
+      return;
+    }
+    // Pedido ainda SEM preço (fila do operador): sobrevive à troca — o deliveryOrderId
+    // fica no contexto e, quando o endereço novo for confirmado, o pedido é atualizado
+    // (antes ele ficava órfão no /ops com o endereço velho).
+    const keepOrder = ctx.step === "awaiting_operator_quote" && Boolean(ctx.deliveryOrderId);
+    if (!keepOrder && ctx.deliveryOrderId && (ctx.step === "awaiting_quote_confirmation" || ctx.step === "awaiting_supplier_validation")) {
       if (await cancelPendingRetailerQuote(ctx.deliveryOrderId)) {
         await reply(phone, copy.quoteDroppedForNewAddress());
       }
@@ -1135,7 +1199,7 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     ctx.deliveryAddress = undefined;
     ctx.deliveryAddressVerified = false;
     ctx.step = "need_cep";
-    ctx.deliveryOrderId = undefined;
+    if (!keepOrder) ctx.deliveryOrderId = undefined;
     await writeCtx(convo.id, ctx);
     await reply(phone, copy.askNewCep());
     return;
@@ -1841,6 +1905,7 @@ async function handleNewCep(
   const shownAddress = ctx.deliveryAddress ?? cep;
   const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress);
   ctx.pendingRequest = undefined;
+  if (await syncAwaitingQuoteOrderAddress(phone, convoId, ctx)) return;
   if (queued) {
     await reply(phone, savedMsg);
     await handleSearch(phone, convoId, null, ctx, queued);
@@ -1910,6 +1975,7 @@ async function handleDeliveryAddress(
     return;
   }
 
+  if (await syncAwaitingQuoteOrderAddress(phone, convoId, ctx)) return;
   ctx.step = "collecting";
 
   const queued = ctx.pendingRequest;
@@ -1927,6 +1993,31 @@ async function handleDeliveryAddress(
 
   await writeCtx(convoId, ctx);
   await reply(phone, copy.addressSavedAskItems(address));
+}
+
+// Endereço novo confirmado com um pedido AINDA na fila do operador (2ª revisão, 11/08):
+// o pedido segue vivo — atualiza cep/endereço NELE, avisa o /ops e devolve a conversa
+// pra espera da cotação. Antes, "trocar endereço" órfãva o pedido no /ops com o
+// endereço velho. Só vale pra awaiting_operator_quote (sem preço ainda); estados com
+// cotação/cobrança são tratados na entrada do change_address.
+async function syncAwaitingQuoteOrderAddress(phone: string, convoId: string, ctx: DeliveryContext): Promise<boolean> {
+  if (!ctx.deliveryOrderId || !ctx.deliveryAddress || !ctx.deliveryAddressVerified) return false;
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+  if (!order || order.status !== AWAITING_OPERATOR_QUOTE_STATUS) return false;
+  const updated = await prisma.deliveryOrder.updateMany({
+    where: { id: order.id, status: AWAITING_OPERATOR_QUOTE_STATUS },
+    data: {
+      cep: ctx.cep,
+      deliveryAddress: ctx.deliveryAddress,
+      notes: appendOrderNote(order.notes, `📍 Cliente trocou o endereço durante a cotação: ${ctx.deliveryAddress}`)
+    }
+  });
+  if (!updated.count) return false;
+  ctx.step = AWAITING_OPERATOR_QUOTE_STATUS;
+  await writeCtx(convoId, ctx);
+  await reply(phone, copy.addressUpdatedQuoteContinues(ctx.deliveryAddress));
+  await notifyOperator(copy.operatorAddressChangedAlert(order.id.slice(-6).toUpperCase(), ctx.deliveryAddress));
+  return true;
 }
 
 // Caminho único de confirmação de escolha (número digitado, "a mais barata", nome ou
@@ -3289,10 +3380,11 @@ export async function opsPublishManualQuote(
     deliveryAddress: order.deliveryAddress ?? undefined,
     sameHour
   };
-  // O pedido JÁ saiu de "aguardando cotação"; se o WhatsApp falhar daqui pra frente, o
-  // cliente nunca vê o total e o operador não consegue recotar (o /ops só cota pedido em
-  // awaiting_operator_quote). Então falha de envio DESFAZ a publicação e devolve o
-  // pedido para a fila do operador, com a nota do erro.
+  // O pedido JÁ saiu de "aguardando cotação". Se o RESUMO (a peça essencial) falhar, o
+  // cliente fica sem total nenhum e o operador sem poder recotar → rollback pra fila.
+  // Depois que o resumo saiu, NÃO se faz rollback: menu e aviso de validade são
+  // acessórios ("pix"/"cartão" por texto funcionam), e reverter aqui desalinharia
+  // pedido e conversa — o cliente pode já ter tocado num botão e o pedido avançado.
   try {
     // Resumo com botão "Trocar endereço" (dono, 11/08). Corpo interativo tem teto de 1024
     // chars na Meta — resumo comprido (ou canal sem botão) cai no texto com a dica escrita.
@@ -3306,13 +3398,10 @@ export async function opsPublishManualQuote(
       }
     }
     if (!summarySent) await reply(order.phone, copy.manualQuoteSummary(summaryInput));
-    const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
-    if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
-    await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
     console.error("[ops:publish-quote:send-failed]", detail);
-    await prisma.deliveryOrder.updateMany({
+    const rolled = await prisma.deliveryOrder.updateMany({
       where: { id: order.id, status: "awaiting_quote_confirmation" },
       data: {
         status: AWAITING_OPERATOR_QUOTE_STATUS,
@@ -3320,7 +3409,10 @@ export async function opsPublishManualQuote(
         notes: appendOrderNote(order.notes, `⚠️ Cotação revertida: falha ao enviar no WhatsApp (${detail.slice(0, 120)}). Tente cotar de novo.`)
       }
     });
-    if (order.conversationId) {
+    // A conversa só volta pra "aguardando cotação" se o PEDIDO de fato voltou — se ele
+    // já avançou (corrida com um toque de pagamento), reescrever o contexto aqui
+    // desalinharia os dois.
+    if (rolled.count && order.conversationId) {
       const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
       if (convo) {
         const ctx = readCtx(convo.context);
@@ -3328,6 +3420,14 @@ export async function opsPublishManualQuote(
       }
     }
     throw error;
+  }
+  try {
+    const interactive = await whatsappAdapter.sendPaymentChoices(order.phone, total, cardTotal(total));
+    if (!interactive) await reply(order.phone, copy.paymentMethod(total, cardTotal(total)));
+    await reply(order.phone, copy.quoteValidFor(quoteTtlMinutes()));
+  } catch (error) {
+    // Resumo já chegou: o cliente tem o total e "pix"/"cartão" por texto funcionam.
+    console.warn("[ops:publish-quote:followup-send-failed]", error instanceof Error ? error.message : error);
   }
   return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }

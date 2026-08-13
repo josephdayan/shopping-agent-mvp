@@ -234,6 +234,12 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência fechadas.** Lock de turno por
+> conversa (mensagens simultâneas não se apagam mais; colunas novas JÁ no banco);
+> trocar endereço com pedido na fila ATUALIZA o pedido (e com pagamento emitido orienta
+> a cancelar — nada fica órfão); falha parcial no envio da cotação não desalinha pedido
+> e conversa; eco da simulação VTEX validado item a item (id+quantidade+itemIndex).
+
 > **11/08 (6ª) — conversa duplicada dividia a cesta (achado ao consertar o dedupe).** Duas
 > mensagens simultâneas do mesmo número abriam DUAS conversas ativas — cesta dividida,
 > item sumindo, dedupe furado. Um número em produção tinha 86 conversas ativas. A criação

@@ -565,3 +565,94 @@ test("cliente ativo NÃO é expirado: o TTL mede a última mensagem, não só o 
   const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
   assert.equal(after!.status, "awaiting_operator_quote");
 });
+
+// ---------- 2ª revisão (11/08): corrida de contexto e troca de endereço ----------
+
+test("mensagens simultâneas DIFERENTES não se apagam: o lock de turno serializa", async (t) => {
+  if (!dbOk) return t.skip();
+  // Antes: as duas liam a mesma cesta e a última gravação apagava o item da primeira.
+  const c = await returningCustomer();
+  await Promise.all([
+    handleDeliveryMessage({ phone: c.phone, text: "quero coca cola", messageId: `race_a_${RUN}_${Date.now()}` }),
+    handleDeliveryMessage({ phone: c.phone, text: "quero arroz", messageId: `race_b_${RUN}_${Date.now()}` })
+  ]);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  const queries = [
+    ...(ctx.pending ?? []).map((p: { query: string }) => p.query),
+    ...(ctx.basket ?? []).map((b: { name: string }) => b.name)
+  ].join(" | ").toLowerCase();
+  assert.match(queries, /coca/, `coca sumiu: ${queries}`);
+  assert.match(queries, /arroz/, `arroz sumiu: ${queries}`);
+  // E o lock foi liberado no final (nada fica preso pro próximo turno).
+  assert.equal(convo!.turnLock, null);
+});
+
+test("trocar endereço com pedido na fila do operador ATUALIZA o pedido (não órfã)", async (t) => {
+  if (!dbOk) return t.skip();
+  const operator = "+5500999000222";
+  process.env.LIA_OPERATOR_PHONE = operator;
+  try {
+    const c = await returningCustomer();
+    const order = await manualQuoteOrder(c);
+    await c.send("trocar endereço");
+    await c.send("01310-200");
+    const done = await c.send("Av Paulista, 1578, Bela Vista, São Paulo - SP");
+    assert.match(done, /cotação continua/i, `resposta: ${done.slice(0, 200)}`);
+    const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+    // O pedido segue vivo, com o endereço NOVO e nota pro operador.
+    assert.equal(after!.status, "awaiting_operator_quote");
+    assert.match(after!.deliveryAddress ?? "", /Paulista/);
+    assert.match(after!.notes ?? "", /trocou o endereço/);
+    const alert = outbox.filter((m) => m.to === operator).map((m) => m.text).join("\n");
+    assert.match(alert, /trocou de endereço/);
+    // E a conversa voltou pra espera da cotação (item novo ainda cai no mesmo pedido).
+    const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+    assert.equal(JSON.parse(convo!.context ?? "{}").step, "awaiting_operator_quote");
+  } finally {
+    delete process.env.LIA_OPERATOR_PHONE;
+  }
+});
+
+test("trocar endereço com pagamento emitido orienta a cancelar (cobrança não fica órfã)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  await c.send("pix"); // emite a cobrança → awaiting_payment
+  const out = await c.send("trocar endereço");
+  assert.match(out, /cancelar/i, `resposta: ${out.slice(0, 200)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "awaiting_payment", "pedido não pode ser abandonado nem cancelado sozinho");
+  // A conversa continua vinculada ao pedido (nada de órfão).
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  assert.equal(JSON.parse(convo!.context ?? "{}").deliveryOrderId, order!.id);
+});
+
+test("falha PARCIAL no envio da cotação não desalinha pedido e conversa", async (t) => {
+  if (!dbOk) return t.skip();
+  // O resumo sai, o resto falha: o pedido FICA em awaiting_quote_confirmation ("pix"
+  // por texto funciona) — sem rollback que desalinharia os dois.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  const original = whatsappAdapter.sendMessage;
+  let sends = 0;
+  (whatsappAdapter as { sendMessage: unknown }).sendMessage = async (to: string, text: string) => {
+    sends += 1;
+    if (sends > 1) throw new Error("Graph 500 depois do resumo");
+    outbox.push({ to, text });
+    return { provider: "test", to, text };
+  };
+  try {
+    await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  } finally {
+    (whatsappAdapter as { sendMessage: unknown }).sendMessage = original;
+  }
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "awaiting_quote_confirmation");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  assert.equal(JSON.parse(convo!.context ?? "{}").step, "awaiting_quote_confirmation");
+  // E o pagamento por texto segue funcionando.
+  const pix = await c.send("pix");
+  assert.match(pix, /R\$/);
+});

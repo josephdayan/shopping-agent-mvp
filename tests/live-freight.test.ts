@@ -28,7 +28,7 @@ const ITEMS = [{ sku: "paguemenos-1639750", qty: 2 }];
 
 test("ao vivo: menor ENTREGA vence, retirada é ignorada, preço sai de centavos", async () => {
   mockResponse({
-    items: [{ id: "1639750" }],
+    items: [{ id: "1639750", quantity: 2 }],
     logisticsInfo: [
       {
         slas: [
@@ -45,7 +45,7 @@ test("ao vivo: menor ENTREGA vence, retirada é ignorada, preço sai de centavos
 
 test("ao vivo: resposta válida SEM entrega = site não atende o CEP (rota do operador)", async () => {
   mockResponse({
-    items: [{ id: "1639750" }],
+    items: [{ id: "1639750", quantity: 2 }],
     logisticsInfo: [{ slas: [{ name: "Retirar na Loja", price: 0, pickupStoreInfo: { isPickupStore: true } }] }]
   });
   assert.deepEqual(await liveStoreFreight("paguemenos", ITEMS, "01310100"), { kind: "no-delivery" });
@@ -65,7 +65,7 @@ test("ao vivo: sku fora do padrão, loja fora da lista, erro HTTP e exceção ca
 
 test("ao vivo: teto de sanidade e kill-switch", async () => {
   mockResponse({
-    items: [{ id: "1" }],
+    items: [{ id: "1639750", quantity: 2 }],
     logisticsInfo: [{ slas: [{ name: "Transportadora", price: 99000 }] }]
   });
   // R$990 estoura o teto (150 default) → tabela, não cobrança automática.
@@ -89,7 +89,7 @@ const TWO_ITEMS = [
 
 test("ao vivo: cesta com 2 itens soma o frete dos DOIS (não cobra só o mais barato)", async () => {
   mockResponse({
-    items: [{ id: "1639750", availability: "available" }, { id: "1639751", availability: "available" }],
+    items: [{ id: "1639750", quantity: 1, availability: "available" }, { id: "1639751", quantity: 2, availability: "available" }],
     logisticsInfo: [
       { slas: [{ name: "Econômica", price: 490, shippingEstimate: "1bd" }] },
       { slas: [{ name: "Expressa", price: 690, shippingEstimate: "3bd" }] }
@@ -102,7 +102,7 @@ test("ao vivo: cesta com 2 itens soma o frete dos DOIS (não cobra só o mais ba
 
 test("ao vivo: item indisponível na loja não vira frete de tabela — vai pro operador", async () => {
   mockResponse({
-    items: [{ id: "1639750", availability: "available" }, { id: "1639751", availability: "withoutStock" }],
+    items: [{ id: "1639750", quantity: 1, availability: "available" }, { id: "1639751", quantity: 2, availability: "withoutStock" }],
     logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }, { slas: [{ name: "Econômica", price: 490 }] }]
   });
   assert.deepEqual(await liveStoreFreight("paguemenos", TWO_ITEMS, "01310100"), { kind: "item-unavailable" });
@@ -110,7 +110,7 @@ test("ao vivo: item indisponível na loja não vira frete de tabela — vai pro 
 
 test("ao vivo: um item SEM entrega derruba a cesta inteira (não dá pra entregar em partes)", async () => {
   mockResponse({
-    items: [{ id: "1639750" }, { id: "1639751" }],
+    items: [{ id: "1639750", quantity: 1 }, { id: "1639751", quantity: 2 }],
     logisticsInfo: [
       { slas: [{ name: "Econômica", price: 490 }] },
       { slas: [{ name: "Retire em Loja", price: 0, pickupStoreInfo: { isPickupStore: true } }] }
@@ -120,18 +120,37 @@ test("ao vivo: um item SEM entrega derruba a cesta inteira (não dá pra entrega
 });
 
 test("ao vivo: resposta que não cobre a cesta inteira cai na tabela (nunca frete parcial)", async () => {
-  mockResponse({ items: [{ id: "1639750" }], logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }] });
+  mockResponse({ items: [{ id: "1639750", quantity: 1 }], logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }] });
   assert.equal((await liveStoreFreight("paguemenos", TWO_ITEMS, "01310100")).kind, "unavailable");
 });
 
 test("ao vivo: SLA sem preço não é frete grátis — é dado faltando", async () => {
   mockResponse({
-    items: [{ id: "1639750" }],
+    items: [{ id: "1639750", quantity: 2 }],
     logisticsInfo: [{ slas: [{ name: "Normal", shippingEstimate: "2bd" }] }]
   });
   // Sem preço não há entrega cobrável: cai pro operador em vez de virar R$ 0,00.
   assert.deepEqual(await liveStoreFreight("paguemenos", ITEMS, "01310100"), { kind: "no-delivery" });
   // Já `price: 0` explícito é frete grátis de verdade.
-  mockResponse({ items: [{ id: "1639750" }], logisticsInfo: [{ slas: [{ name: "Grátis", price: 0, shippingEstimate: "3bd" }] }] });
+  mockResponse({ items: [{ id: "1639750", quantity: 2 }], logisticsInfo: [{ slas: [{ name: "Grátis", price: 0, shippingEstimate: "3bd" }] }] });
   assert.deepEqual(await liveStoreFreight("paguemenos", ITEMS, "01310100"), { kind: "ok", fee: 0, estimate: "3bd" });
+});
+
+test("ao vivo: eco com id trocado, quantidade errada ou item repetido cai na tabela", async () => {
+  // Contar linhas não basta (2ª revisão): a resposta tem que ser a NOSSA cesta.
+  mockResponse({ items: [{ id: "9999999", quantity: 2 }], logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }] });
+  assert.equal((await liveStoreFreight("paguemenos", ITEMS, "01310100")).kind, "unavailable");
+  mockResponse({ items: [{ id: "1639750", quantity: 7 }], logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }] });
+  assert.equal((await liveStoreFreight("paguemenos", ITEMS, "01310100")).kind, "unavailable");
+  mockResponse({
+    items: [{ id: "1639750", quantity: 1 }, { id: "1639750", quantity: 1 }],
+    logisticsInfo: [{ slas: [{ name: "Econômica", price: 490 }] }, { slas: [{ name: "Econômica", price: 490 }] }]
+  });
+  assert.equal((await liveStoreFreight("paguemenos", TWO_ITEMS, "01310100")).kind, "unavailable");
+  // itemIndex repetido/fora da faixa = resposta malformada.
+  mockResponse({
+    items: [{ id: "1639750", quantity: 1 }, { id: "1639751", quantity: 2 }],
+    logisticsInfo: [{ itemIndex: 0, slas: [{ name: "Econômica", price: 490 }] }, { itemIndex: 0, slas: [{ name: "Econômica", price: 690 }] }]
+  });
+  assert.equal((await liveStoreFreight("paguemenos", TWO_ITEMS, "01310100")).kind, "unavailable");
 });

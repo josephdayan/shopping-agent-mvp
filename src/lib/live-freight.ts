@@ -53,8 +53,8 @@ function maxLiveFee(): number {
 }
 
 type Sla = { name?: string; price?: number; shippingEstimate?: string; pickupStoreInfo?: { isPickupStore?: boolean } };
-type SimItem = { availability?: string };
-type LogisticsInfo = { slas?: Sla[] };
+type SimItem = { id?: string | number; quantity?: number; availability?: string };
+type LogisticsInfo = { itemIndex?: number; slas?: Sla[] };
 
 // "3bd" (dias úteis), "2d", "6h", "45m" → minutos, para comparar prazos entre itens.
 // Dia útil vale 1 dia aqui: a comparação só serve para dizer QUAL item chega por
@@ -121,6 +121,20 @@ export async function liveStoreFreight(
     if (simulated.length !== simItems.length || logistics.length !== simItems.length) {
       return { kind: "unavailable" };
     }
+    // O ECO tem que ser a NOSSA cesta (2ª revisão, 11/08): contar linhas não basta —
+    // resposta com id trocado, quantidade errada ou item repetido produziria o frete de
+    // outra cesta. Compara o multiconjunto (id → quantidade total) pedido × devolvido.
+    const wanted = new Map<string, number>();
+    for (const item of simItems) wanted.set(item.id, (wanted.get(item.id) ?? 0) + item.quantity);
+    const echoed = new Map<string, number>();
+    for (const item of simulated) {
+      const id = String(item.id ?? "");
+      const qty = typeof item.quantity === "number" && Number.isFinite(item.quantity) ? item.quantity : NaN;
+      if (!id || !Number.isFinite(qty)) return { kind: "unavailable" };
+      echoed.set(id, (echoed.get(id) ?? 0) + qty);
+    }
+    if (echoed.size !== wanted.size) return { kind: "unavailable" };
+    for (const [id, qty] of wanted) if (echoed.get(id) !== qty) return { kind: "unavailable" };
     // Item que a loja não vende/não tem pra esse CEP: cobrar pela tabela venderia o que
     // ela não entrega. Vai pro operador. (`availability` ausente = a loja não informou;
     // não inventamos indisponibilidade.)
@@ -128,9 +142,19 @@ export async function liveStoreFreight(
       return { kind: "item-unavailable" };
     }
 
+    // logisticsInfo aponta pro item via itemIndex (quando presente); cada item precisa
+    // de exatamente UMA entrada de logística — índice fora da faixa ou repetido é
+    // resposta malformada e cai na tabela.
+    const infoByItem = new Map<number, LogisticsInfo>();
+    for (let i = 0; i < logistics.length; i++) {
+      const index = typeof logistics[i].itemIndex === "number" ? logistics[i].itemIndex! : i;
+      if (index < 0 || index >= simItems.length || infoByItem.has(index)) return { kind: "unavailable" };
+      infoByItem.set(index, logistics[i]);
+    }
+
     let fee = 0;
     const estimates: (string | undefined)[] = [];
-    for (const info of logistics) {
+    for (const info of infoByItem.values()) {
       const deliveries = (info.slas ?? []).filter(
         (sla) =>
           !sla.pickupStoreInfo?.isPickupStore &&

@@ -192,6 +192,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **11/08 (7ª) — 2ª revisão corrigida (4 lacunas de concorrência).** Lock de turno por
+> conversa (migration `20260811150000_conversation_turn_lock` **já aplicada no banco**),
+> troca de endereço por estado (fila do operador = atualiza o pedido; pagamento emitido =
+> orienta cancelar), rollback da cotação só quando o resumo falha, eco VTEX validado item
+> a item. Aguardando suíte completa + autorização do dono pra publicar.
+
 > **11/08 (6ª) — PUBLICADO.** Push `09f418a` → deploy `dpl_CvpvfSt2S5HmkhnSuHEiKp7z6Gri`
 > `READY` em Production (`liadelivery.com.br`); smoke verde (landing 200, /ops 200, webhook
 > GET 403 / POST sem assinatura 401). No ar: as 10 correções da revisão + o conserto da

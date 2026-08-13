@@ -297,6 +297,32 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência/consistência fechadas.**
+1. **Lock de turno por conversa** (colunas `turnLock`/`turnLockAt`, migration
+   20260811150000, **já aplicada no banco**): duas mensagens simultâneas do mesmo
+   cliente liam a mesma cesta e a última gravação de contexto apagava o item da
+   primeira. Agora `handleDeliveryMessage` reivindica o lock (claim atômico via
+   updateMany; TTL 60s; espera máx. 15s e entra assim mesmo — webhook nunca pendura),
+   recarrega a conversa DEPOIS do lock e processa em `handleDeliveryTurn`; release só
+   se o token ainda é o nosso. Dedupe fica ANTES do lock (retry sai na hora). Efeito
+   colateral: `lastActivityAt` deixou de olhar `Conversation.updatedAt` (o claim do
+   lock o bumparia a cada turno) — só a mensagem anterior conta como atividade.
+2. **Trocar endereço por estado**: com Pix/cartão emitidos (`awaiting_payment`/
+   `payment_issuing`) a troca é bloqueada com orientação de cancelar primeiro (cobrança
+   não fica órfã de conversa); com pedido AINDA na fila do operador, o pedido sobrevive
+   — `deliveryOrderId` atravessa o fluxo de endereço e, confirmado o novo,
+   `syncAwaitingQuoteOrderAddress` atualiza cep/endereço NO pedido, anota no /ops,
+   alerta o operador e devolve a conversa pra espera da cotação.
+3. **Falha parcial no envio da cotação**: rollback só quando o RESUMO falha (peça
+   essencial), e a reescrita do contexto só quando o rollback de fato flipou o status
+   (`rolled.count`) — menu/validade falhando depois do resumo apenas loga ("pix" por
+   texto funciona); reverter aí desalinharia pedido (avançado por um toque) e conversa.
+4. **Eco da simulação VTEX validado de verdade**: multiconjunto id→quantidade do eco
+   tem que ser idêntico ao pedido (id trocado, qty errada ou item repetido → tabela) e
+   `logisticsInfo` é alinhado por `itemIndex` (repetido/fora da faixa = malformado).
+Testes: corrida de mensagens diferentes (Promise.all), troca de endereço nos dois
+estados, falha parcial, eco malformado (live-freight 10/10).
+
 **11/08 (5ª) — revisão de código do lote: 6 P1 + 4 P2/P3 corrigidos.** Uma revisão
 independente dos 19 commits achou defeitos que a suíte verde não pegava (cada um virou
 teste):

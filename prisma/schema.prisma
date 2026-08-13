@@ -261,6 +261,12 @@ model Conversation {
   intent      String?
   currentStep String          @default("collecting_request")
   context     String?
+  // Lock cooperativo de TURNO (2ª revisão, 11/08): um turno por vez por conversa.
+  // Duas mensagens simultâneas liam a mesma cesta e a última gravação apagava o item
+  // da primeira. Claim atômico via updateMany; TTL no código (turnLockAt) evita que um
+  // turno travado prenda a conversa pra sempre. Funciona entre instâncias serverless.
+  turnLock    String?
+  turnLockAt  DateTime?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   user        User            @relation(fields: [userId], references: [id])

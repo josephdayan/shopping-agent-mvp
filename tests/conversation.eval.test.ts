@@ -220,6 +220,11 @@ test("opções antigas somem em silêncio no oi e a limpeza fica persistida", as
       })
     }
   });
+  // O relógio de inatividade é a última MENSAGEM (não o updatedAt, que o lock de turno
+  // bumpa a cada mensagem) — simula a conversa real de 1h atrás.
+  await prisma.message.create({
+    data: { conversationId: convo.id, sender: "user", text: "quero coca", createdAt: new Date(Date.now() - 60 * 60 * 1000) }
+  });
   const hello = await driver(phone).send("oi");
   assert.doesNotMatch(hello, /lista anterior|carrinho anterior|expirou/i);
   const saved = await prisma.conversation.findUniqueOrThrow({ where: { id: convo.id } });
