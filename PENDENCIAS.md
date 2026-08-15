@@ -192,6 +192,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **14/08 (3ª) — PUBLICADO.** Push `d9fab9a` → deploy `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`
+> `READY` em Production; smoke verde (landing 200, /ops 200, webhook 403/401). Os 7
+> consertos das 15 rodadas estão no ar. **Re-teste do dono:** rodadas 5 (esclarecimento
+> na escolha), 6 (presente até R$100), 13 (quatro caixas + "4" + "mais três do mesmo") e
+> 15 ("antes de pagar, quero entregar em BH").
+
 > **14/08 (2ª) — os 7 consertos das 15 rodadas implementados e testados.** Detalhe em
 > [AGENTS.md](AGENTS.md). O que ficou de fora COM REGISTRO: (a) latência ~15s no 1º turno
 > (cold start + 2 LLMs; medir no piloto antes de otimizar); (b) teto de orçamento vale por
