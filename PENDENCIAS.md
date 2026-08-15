@@ -192,6 +192,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **15/08 — re-teste (10 rodadas) → 6 consertos PUBLICADOS.** Push `4cbbaae` → deploy
+> `dpl_AW75PjcJaB44exEzNTLcaLirbZ1M` `READY`; smoke verde. Rodadas 5/6/15 passaram no
+> re-teste; os ruídos restantes ("três pacotes" acentuado, embalagem solta, "qualquer
+> time", adversativa escondendo urgência, confirmação sem quantidade, hidratante×sabonete)
+> estão corrigidos com golden/units/E2E. Decisão registrada: "o mais barato possível"
+> ORDENA (mais barata no topo) mas não esconde alternativas — restrição só com teto
+> explícito ("até X reais"). Suíte 314/314; golden 33/34 DET · 34/34 IA.
+
 > **14/08 (3ª) — PUBLICADO.** Push `d9fab9a` → deploy `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`
 > `READY` em Production; smoke verde (landing 200, /ops 200, webhook 403/401). Os 7
 > consertos das 15 rodadas estão no ar. **Re-teste do dono:** rodadas 5 (esclarecimento
