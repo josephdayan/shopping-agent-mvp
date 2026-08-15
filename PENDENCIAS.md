@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-11._
+_Última atualização: 2026-08-14._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -191,6 +191,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > dono que seguem pendentes:** (1) mandar "cancelar" no chat pra matar o zumbi `#CMSMCE`;
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
+
+> **14/08 (2ª) — os 7 consertos das 15 rodadas implementados e testados.** Detalhe em
+> [AGENTS.md](AGENTS.md). O que ficou de fora COM REGISTRO: (a) latência ~15s no 1º turno
+> (cold start + 2 LLMs; medir no piloto antes de otimizar); (b) teto de orçamento vale por
+> ITEM, não pela cesta somada (relatório reconhece a ambiguidade; com a linha fantasma
+> morta, 1 pedido = 1 item = teto efetivo); (c) rodadas 2/11 (carregador → manual): a
+> própria nota nova no /ops vai dizer a loja/motivo no próximo caso real. Pendente:
+> re-teste do dono nas rodadas 5, 6, 13 e 15 pós-deploy.
 
 > **14/08 — 2ª revisão PUBLICADA (4 lacunas de concorrência).** Push `1620450` → deploy
 > `dpl_6yCJWmRab5wp615Ra7L6RVfrRG8V` `READY` em Production; smoke verde (landing 200,

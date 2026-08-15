@@ -19,7 +19,8 @@ test("concierge: recusa honesta, cotação pedida e resumo manual", () => {
   const noted = many;
 
   const requested = copy.operatorQuoteRequested(["1x cabo usb-c", "1x vela"]);
-  assert.match(requested, /cotar/i);
+  // Explica POR QUE o total não saiu na hora (rodadas 2 e 11, 14/08) e o que acontece.
+  assert.match(requested, /conferência|confere/i);
   assert.doesNotMatch(requested, /Total: R\$/); // nunca inventa total antes da cotação
 
   const summary = copy.manualQuoteSummary({

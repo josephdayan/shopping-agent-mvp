@@ -656,3 +656,67 @@ test("falha PARCIAL no envio da cotação não desalinha pedido e conversa", asy
   const pix = await c.send("pix");
   assert.match(pix, /R\$/);
 });
+
+// ---------- 15 rodadas reais (14/08): concierge — quantidades e esclarecimento ----------
+
+test("rodada 13: 'quatro caixas' é quantidade, '4' ajusta e 'mais três do mesmo' repete o sku", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const opts = await c.send("queria quatro caixas de bombom, pode ser qualquer marca");
+  assert.match(opts, /opções de \*/i, `esperava opções: ${opts.slice(0, 200)}`);
+  const chosen = await c.send("1");
+  // Quantidade veio por extenso → explícita → NUNCA re-pergunta "Quantas unidades?".
+  assert.doesNotMatch(chosen, /quantas unidades/i, `re-perguntou quantidade: ${chosen.slice(0, 200)}`);
+  const convo1 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket1 = JSON.parse(convo1!.context ?? "{}").basket as Array<{ name: string; qty: number }>;
+  assert.equal(basket1[basket1.length - 1].qty, 4, `qty: ${JSON.stringify(basket1)}`);
+  // "mais três do mesmo" repete o MESMO produto (sku), sem nova busca.
+  const more = await c.send("quero mais três caixas do mesmo bombom, por favor");
+  assert.match(more, /agora são 7x/i, `não somou no mesmo item: ${more.slice(0, 200)}`);
+  const convo2 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket2 = JSON.parse(convo2!.context ?? "{}").basket as Array<{ name: string; qty: number }>;
+  assert.equal(basket2.length, basket1.length, "não pode abrir linha nova de outro bombom");
+  assert.equal(basket2[basket2.length - 1].qty, 7);
+  // Número solto depois do item ajusta a quantidade do último item.
+  const adjusted = await c.send("5");
+  assert.match(adjusted, /Ajustei: 5x/i, `número solto não ajustou: ${adjusted.slice(0, 200)}`);
+});
+
+test("rodada 5: esclarecimento durante a escolha refina o MESMO item, nunca duplica", async (t) => {
+  if (!dbOk) return t.skip();
+  // Caso real: "só shampoo normal, sem preferência de marca" no meio da escolha virou
+  // SEGUNDA linha e o cliente levou dois shampoos. Mesmo substantivo = refina, não soma.
+  const c = await returningCustomer();
+  const first = await c.send("quero uma coca cola, pode ser qualquer marca");
+  assert.match(first, /opções de \*/i, `esperava opções: ${first.slice(0, 200)}`);
+  const clarified = await c.send("pode ser coca zero");
+  // Continua UMA escolha (refinada para zero) — nada de fila com 2 refrigerantes.
+  assert.doesNotMatch(clarified, /Anotei \*/, `virou item novo: ${clarified.slice(0, 200)}`);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  assert.equal((ctx.pending ?? []).length, 1, `pendências: ${JSON.stringify((ctx.pending ?? []).map((p: { query: string }) => p.query))}`);
+  // Escolher agora deixa exatamente UM refrigerante na cesta.
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+  const convo2 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo2!.context ?? "{}").basket as Array<{ name: string }>;
+  assert.equal(basket.length, 1, `cesta: ${JSON.stringify(basket.map((b) => b.name))}`);
+});
+
+test("rodada 15: 'antes de pagar, quero entregar em BH' troca o destino — nunca mostra pagamento", async (t) => {
+  if (!dbOk) return t.skip();
+  // Caso real 14/08: o intent de pagamento venceu a troca de destino e a Lia mostrou
+  // o menu de pagamento do endereço ANTIGO. "pagar" em oração subordinada não decide.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  const out = await c.send("Antes de pagar, quero entregar em Belo Horizonte.");
+  assert.doesNotMatch(out, /Como prefere pagar/i, `mostrou pagamento: ${out.slice(0, 200)}`);
+  assert.match(out, /CEP/i, `esperava pedir o novo CEP: ${out.slice(0, 200)}`);
+  // A cotação amarrada ao endereço velho caiu junto.
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled");
+  // E o CEP de MG é recusado com lista de espera (guarda de UF já existente).
+  const bh = await c.send("30130-010");
+  assert.match(bh, /não chega|lista|região/i, `resposta ao CEP de BH: ${bh.slice(0, 200)}`);
+});

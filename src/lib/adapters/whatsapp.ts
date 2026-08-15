@@ -401,7 +401,9 @@ export const whatsappAdapter = {
   async sendChoiceFollowUp(to: string, body: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     return sendMetaSimpleButtons(to, body, [
-      { id: "pagar", title: "Pagar" },
+      // "Pagar" prometia cobrança imediata, mas o toque FECHA a lista e mostra o total
+      // com as formas — o rótulo agora diz o que realmente acontece (rodada 1, 14/08).
+      { id: "pagar", title: "Fechar e ver total" },
       { id: "adicionar_mais", title: "Adicionar mais itens" },
       { id: "cancelar", title: "Cancelar" }
     ]);

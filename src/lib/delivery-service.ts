@@ -46,6 +46,8 @@ import {
   isQuestion,
   asksRunningTotal,
   looksLikeMedicine,
+  sharesProductNoun,
+  stripMedicineNegation,
   narrowChoiceByName,
   normalizeMsg,
   parseBasketLines,
@@ -395,8 +397,12 @@ type ExtractedLines = { lines: ParsedLine[]; greetingOnly: boolean; containsMedi
 // splitter + medicine word-list covers OpenAI-off and OpenAI-error, so a remédio
 // never slips through as a plain search.
 async function extractLines(text: string): Promise<ExtractedLines> {
-  const extraction = await extractShoppingList(text);
-  const deterministic = parseBasketLines(text)
+  // "sem remédio"/"não quero remédio" é negação: sai da mensagem ANTES de qualquer
+  // detecção — senão a Lia avisa que removeu um medicamento que ninguém pediu
+  // (rodadas 4 e 14 dos testes reais de 14/08).
+  const sanitized = stripMedicineNegation(text);
+  const extraction = await extractShoppingList(sanitized);
+  const deterministic = parseBasketLines(sanitized)
     .filter((line) => queryTokens(line.phrase).length)
     .filter((line) => !looksLikeMedicine(line.phrase));
   if (extraction) {
@@ -404,15 +410,15 @@ async function extractLines(text: string): Promise<ExtractedLines> {
     return {
       lines: mergeShoppingLines(items.map((item) => ({ phrase: item.query, qty: item.qty })), deterministic),
       greetingOnly: extraction.greetingOnly,
-      containsMedicine: extraction.containsMedicine || looksLikeMedicine(text)
+      containsMedicine: extraction.containsMedicine || looksLikeMedicine(sanitized)
     };
   }
-  const raw = parseBasketLines(text).filter((line) => queryTokens(line.phrase).length);
+  const raw = parseBasketLines(sanitized).filter((line) => queryTokens(line.phrase).length);
   const safe = deterministic;
   return {
     lines: safe,
     greetingOnly: false,
-    containsMedicine: safe.length < raw.length || looksLikeMedicine(text)
+    containsMedicine: safe.length < raw.length || looksLikeMedicine(sanitized)
   };
 }
 
@@ -884,7 +890,17 @@ function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
   const produtos = Math.round(real * MARKUP * 100) / 100;
   const falta = Math.max(0, Math.round((displayMin - produtos) * 100) / 100);
   const scoped = { ...ctx, basket: (ctx.basket ?? []).filter((item) => item.storeKey === store.key) };
-  return copy.minimumOrder({ items: basketForCopy(scoped), produtos, displayMin, falta });
+  // O resto da cesta aparece junto: a mensagem parecia resumo COMPLETO e o cliente
+  // achava que os outros itens tinham sumido (rodadas 3 e 10, 14/08).
+  const others = { ...ctx, basket: (ctx.basket ?? []).filter((item) => item.storeKey !== store.key) };
+  return copy.minimumOrder({
+    items: basketForCopy(scoped),
+    produtos,
+    displayMin,
+    falta,
+    storeLabel: store.label,
+    otherItems: basketForCopy(others)
+  });
 }
 
 // ---------- the WhatsApp conversation state machine ----------
@@ -1172,6 +1188,26 @@ async function handleDeliveryTurn(
   }
   if (intent.kind === "cancel") {
     await handleCancel(phone, convo.id, user.id, user.cep, ctx, intent.explicitOrder ?? false);
+    return;
+  }
+  // "mais três do mesmo" repete o ÚLTIMO item da cesta pelo sku — nunca nova busca
+  // (a busca genérica podia trazer OUTRA marca; rodada 13 dos testes de 14/08).
+  if (intent.kind === "add_more_same") {
+    const last = ctx.basket?.[ctx.basket.length - 1];
+    if (last) {
+      last.qty = Math.min(50, last.qty + intent.qty);
+      last.lineTotal = Math.round(last.unitPrice * last.qty * 100) / 100;
+      // Cesta JÁ cotada (fluxo legado auto-cota após a escolha): quantidade nova muda o
+      // total — re-cota em vez de deixar um total velho parado no menu de pagamento.
+      if (ctx.step === "quoted" || ctx.step === "choosing_payment" || ctx.step === "choosing_courier") {
+        await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.moreOfSameAdded(intent.qty, last.name, last.qty));
+        return;
+      }
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.moreOfSameAdded(intent.qty, last.name, last.qty));
+      return;
+    }
+    await reply(phone, copy.askWhatYouWant());
     return;
   }
   // Trocar endereço vale em QUALQUER estado — inclusive nos de ESPERA, que abaixo
@@ -1633,6 +1669,17 @@ async function handleDeliveryTurn(
 
   // ---- a bare number with nothing to select ----
   if (intent.kind === "number") {
+    // "4" logo depois de um item entrar na cesta = ajuste de quantidade do ÚLTIMO item
+    // (rodada 13 dos testes de 14/08: o cliente tentou corrigir a quantidade assim e
+    // recebeu "não entendi"). Fora desse contexto, segue o honesto "não entendi".
+    const last = ctx.basket?.[ctx.basket.length - 1];
+    if (last && intent.value >= 1 && intent.value <= 50 && (ctx.step === "collecting" || ctx.step === undefined)) {
+      last.qty = intent.value;
+      last.lineTotal = Math.round(last.unitPrice * last.qty * 100) / 100;
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.qtyAdjusted(last.qty, last.name));
+      return;
+    }
     await reply(phone, copy.didNotUnderstand());
     return;
   }
@@ -2173,6 +2220,27 @@ async function handleChoosing(
   // as new products — re-show the options instead.
   if (intent.kind === "free_text" && !isQuestion(text)) {
     const added = await buildChoices(text);
+    // "Só shampoo normal, sem preferência de marca" ENQUANTO escolhe shampoo é
+    // esclarecimento do MESMO item — substitui as opções na mesa, nunca vira uma
+    // segunda linha (rodada 5 dos testes de 14/08: a linha duplicada fez o cliente
+    // escolher DOIS shampoos sem perceber e a cesta foi contraditória pro pagamento).
+    if (!added.autoAdded.length && added.pending.length === 1 && sharesProductNoun(added.pending[0].query, current.query)) {
+      const clarified = added.pending[0];
+      current.baseQuery = undefined;
+      current.attrs = undefined;
+      current.query = clarified.query;
+      if (clarified.qtyExplicit) {
+        current.qty = clarified.qty;
+        current.qtyExplicit = true;
+      }
+      const remembered = new Set((current.shownOptions ?? current.options).map((o) => o.sku));
+      current.shownOptions = [...(current.shownOptions ?? current.options), ...clarified.options.filter((o) => !remembered.has(o.sku))];
+      current.options = clarified.options;
+      current.shownSkus = [...new Set([...(current.shownSkus ?? []), ...clarified.options.map((o) => o.sku)])];
+      await writeCtx(convoId, ctx);
+      await sendChoices(phone, current, copy.narrowedChoices(current.query));
+      return;
+    }
     if (added.autoAdded.length || added.pending.length) {
       ctx.basket = mergeBaskets(ctx.basket ?? [], added.autoAdded);
       ctx.pending = [...(ctx.pending ?? []), ...added.pending];
@@ -2952,8 +3020,18 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
         const outcome = outcomes[i];
         console.log("[instant-quote:live]", freights[i].storeKey, outcome.kind, outcome.kind === "ok" ? outcome.fee : "");
         // Site não entrega nesse CEP, ou algum item da cesta está indisponível lá: nos
-        // dois casos não dá pra cobrar automático — o operador cota à mão.
-        if (outcome.kind === "no-delivery" || outcome.kind === "item-unavailable") return false;
+        // dois casos não dá pra cobrar automático — o operador cota à mão. A nota diz
+        // POR QUE (rodadas 2 e 11 de 14/08: o mesmo carregador caiu 2x no manual e
+        // ninguém sabia o motivo sem o runtime log de 1h).
+        if (outcome.kind === "no-delivery" || outcome.kind === "item-unavailable") {
+          const why = outcome.kind === "no-delivery" ? "site não entrega no CEP" : "item indisponível no site";
+          const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
+          await prisma.deliveryOrder.update({
+            where: { id: orderId },
+            data: { notes: appendOrderNote(current?.notes ?? null, `⚠️ Cotação instantânea abortada: ${freights[i].storeKey} — ${why}.`) }
+          });
+          return false;
+        }
         if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       }
     }

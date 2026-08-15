@@ -756,3 +756,21 @@ test("teto de preço na escolha: 'até X reais' filtra as opções pelo preço e
   assert.ok(kept.length >= 1, "alguma opção dentro do teto");
   assert.ok(kept.every((p) => p <= cap), `todas as opções devem caber no teto ${cap}: ${kept}`);
 });
+
+// ---------- 15 rodadas reais (14/08): restrições, quantidades e referências ----------
+
+test("rodada 6: orçamento nunca vira item — um pedido com teto é UMA escolha", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("quero uma coca cola, até uns 8 reais");
+  // Nada de "não tenho como trazer: até uns 8 reais" nem segunda linha de escolha.
+  assert.doesNotMatch(out, /não tenho como trazer/i, `fantasma de orçamento: ${out.slice(0, 200)}`);
+  assert.doesNotMatch(out, /2 itens/i);
+  assert.match(out, /opções de \*coca/i);
+  // Todas as opções mostradas respeitam o teto (preço exibido, com markup).
+  for (const m of out.matchAll(/R\$ (\d+),(\d{2})/g)) {
+    const price = Number(m[1]) + Number(m[2]) / 100;
+    assert.ok(price <= 8, `opção acima do teto de R$8: R$ ${m[1]},${m[2]}`);
+  }
+});
+

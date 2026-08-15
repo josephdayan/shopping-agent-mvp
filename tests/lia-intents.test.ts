@@ -8,6 +8,7 @@ import {
   parseBasketLines,
   parseChoiceReply,
   parseRefinement,
+  stripMedicineNegation,
   wantsMoreOptions
 } from "../src/lib/lia-intents";
 
@@ -286,4 +287,66 @@ test("escolha de opções: número, ordinal, qualquer, mais barato, marca, nenhu
   // review: "quero ver mais" não pode virar match de nome ("ver" não é token de produto)
   assert.equal(parseChoiceReply("quero ver mais", options), null);
   assert.equal(parseChoiceReply("acha outras", options), null);
+});
+
+// ---------- 15 rodadas reais (14/08): restrições, negação e referências ----------
+
+test("restrição nunca vira item: orçamento gruda como teto, resto some", () => {
+  // Rodada 6: "até uns 100 reais" virou segundo item e a cesta foi a R$167.
+  const gift = parseBasketLines("Preciso de um presente de aniversário para uma criança de 6 anos, até uns 100 reais.");
+  assert.equal(gift.length, 1, `linhas: ${gift.map((l) => l.phrase).join(" | ")}`);
+  assert.match(gift[0].phrase, /presente/);
+  assert.match(gift[0].phrase, /até 100 reais/);
+  // Rodada 5: "pode ser qualquer marca" não é item.
+  const shampoo = parseBasketLines("Quero um shampoo barato, pode ser qualquer marca.");
+  assert.equal(shampoo.length, 1, `linhas: ${shampoo.map((l) => l.phrase).join(" | ")}`);
+  assert.match(shampoo[0].phrase, /shampoo/);
+  // Rodada 12: urgência de entrega não é item.
+  const agua = parseBasketLines("Preciso de água com gás, e queria receber hoje se der.");
+  assert.equal(agua.length, 1, `linhas: ${agua.map((l) => l.phrase).join(" | ")}`);
+  assert.match(agua[0].phrase, /agua com gas|água com gás/i);
+  // Rodada 3: "de preferência o mais barato" não é item.
+  const leite = parseBasketLines("Quero leite sem lactose, de preferência o mais barato.");
+  assert.equal(leite.length, 1, `linhas: ${leite.map((l) => l.phrase).join(" | ")}`);
+  assert.match(leite[0].phrase, /leite sem lactose/);
+});
+
+test("quantidade por extenso é quantidade ('quatro caixas de bombom' = 4)", () => {
+  const lines = parseBasketLines("Queria quatro caixas de bombom, pode ser qualquer marca.");
+  assert.equal(lines.length, 1, `linhas: ${lines.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(lines[0].qty, 4);
+  assert.equal(lines[0].qtyExplicit, true);
+});
+
+test("'sem remédio' é negação — nunca alerta de medicamento", () => {
+  // Rodadas 4 e 14: a Lia avisava que removeu um remédio que ninguém pediu.
+  assert.equal(looksLikeMedicine(stripMedicineNegation("cotonete para cachorro, mas sem remédio")), false);
+  assert.equal(looksLikeMedicine(stripMedicineNegation("ração para gato adulto, sem remédio")), false);
+  assert.equal(looksLikeMedicine(stripMedicineNegation("não quero remédio, só um hidratante")), false);
+  // Pedido REAL de remédio continua detectado.
+  assert.equal(looksLikeMedicine(stripMedicineNegation("quero um remédio para dor de cabeça")), true);
+  assert.equal(looksLikeMedicine(stripMedicineNegation("me vê uma dipirona")), true);
+});
+
+test("'antes de pagar' não é decisão de pagar; 'entregar em <lugar>' troca endereço", () => {
+  // Rodada 15: quase pagou o frete do endereço velho.
+  assert.equal(kind("Antes de pagar, quero entregar em Belo Horizonte."), "change_address");
+  assert.equal(kind("Não vou pagar ainda"), "cancel");
+  assert.equal(kind("quero entregar em Campinas"), "change_address");
+  // "receber em casa" é o normal — não é troca.
+  assert.notEqual(kind("quero receber em casa"), "change_address");
+  // Pagamento de verdade continua pagamento.
+  assert.equal(kind("pagar"), "pay");
+  assert.equal(kind("pode fechar e me mostrar o total"), "pay");
+});
+
+test("'mais três do mesmo' referencia o último item, nunca nova busca", () => {
+  const intent = detectIntent("Quero mais três caixas do mesmo bombom, por favor.");
+  assert.equal(intent.kind, "add_more_same");
+  assert.equal((intent as { qty: number }).qty, 3);
+  const one = detectIntent("mais um igual");
+  assert.equal(one.kind, "add_more_same");
+  assert.equal((one as { qty: number }).qty, 1);
+  // "mais duas caixas de bombom Garoto" NÃO referencia ("Garoto" = busca nova).
+  assert.notEqual(detectIntent("coloca mais duas caixas de bombom Garoto").kind, "add_more_same");
 });

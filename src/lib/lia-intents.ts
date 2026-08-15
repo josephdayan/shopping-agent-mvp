@@ -44,6 +44,9 @@ export type Intent =
   // o item com carinho, nunca "não entendi seu pedido" nem disparar busca.
   | { kind: "want_items" }
   | { kind: "number"; value: number }
+  // "mais três do mesmo bombom" / "mais 2 iguais" — repetir o ÚLTIMO item da cesta,
+  // resolvido por sku (nunca nova busca, que podia trazer outra marca — rodada 13).
+  | { kind: "add_more_same"; qty: number }
   // Cartão salvo (modo sem Meta Payments): toque no botão "Pagar •••• 1234" volta como
   // id `cardpay:<attemptId>`; o texto humano equivalente vem sem o id. "Outro cartão"
   // troca a credencial (novo link de cadastro).
@@ -98,6 +101,31 @@ function expandShoppingShorthand(text: string): string {
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
   /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
+
+// Restrição/complemento que NUNCA é produto (15 rodadas reais, 14/08): orçamento
+// ("até uns 100 reais"), preferência vazia ("qualquer marca", "de preferência o mais
+// barato"), condição ("se tiver") e urgência de entrega ("queria receber hoje se der").
+// Sem este filtro, o merge com a IA "resgatava" esses segmentos como itens — nasceu a
+// cesta de R$167 num pedido "até 100 reais" e o "não tenho como trazer: se tiver".
+// O ORÇAMENTO não é jogado fora: vira teto de preço da linha anterior (parseBasketLines).
+const MODIFIER_SEGMENT_RE = new RegExp(
+  "^(" +
+    [
+      "(de )?(ate|abaixo de|menos de|no maximo|max(imo)?) ?(uns |umas )?(r\\$ ?)?\\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)?",
+      "(uns|umas) \\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)",
+      "(pode ser )?(de )?qualquer (marca|um|uma)",
+      "sem preferencia( de marca)?( nenhuma)?",
+      "de preferencia .*",
+      "(o |a )?mais barat[oa]( que tiver| possivel)?",
+      "se (tiver|der|for possivel|possivel|rolar|puder|achar|encontrar)( .*)?",
+      "((e )?(queria|quero|preciso|gostaria de|da pra|pode)( me)? )?(receber|entregar?|chegar|mandar|enviar)( ainda| ate| para| pra| em casa| o pedido)* (hoje|amanha|rapido|logo)( se der| se possivel| se rolar)?",
+      "p(a)?ra (hoje|amanha)( se der| se possivel)?",
+      "o quanto antes",
+      "urgente(mente)?",
+      "(entrega|entregam|entregue|entregando) (hoje|amanha|rapida|rapido)( .*)?"
+    ].join("|") +
+    ")$"
+);
 
 // Desabafo sobre o próprio estado ("to com dor de cabeça", "estou gripada", "to com
 // fome") — conversa, nunca item de compra. "to sem X" NÃO entra aqui: é pedido de X.
@@ -184,6 +212,16 @@ export function parseBasketLines(text: string): ParsedLine[] {
       if (prev) prev.phrase = `${prev.phrase} ${pron[1].trim()}`.replace(/\s+/g, " ");
       continue;
     }
+    // Restrição solta nunca vira item; orçamento gruda como teto no item anterior
+    // ("presente de aniversário, até uns 100 reais" → 1 item com cap de R$100).
+    if (MODIFIER_SEGMENT_RE.test(normalizeMsg(line.phrase))) {
+      const cap = parsePriceCap(line.phrase) ?? parsePriceCap(`até ${line.phrase}`);
+      const prev = merged[merged.length - 1];
+      if (cap != null && prev && parsePriceCap(prev.phrase) == null) {
+        prev.phrase = `${prev.phrase} até ${cap} reais`;
+      }
+      continue;
+    }
     merged.push(line);
   }
   return merged;
@@ -226,28 +264,35 @@ export function parseContextualQuantity(text: string): number | null {
 // omissão do modelo. Confere o resultado com o parser determinístico e acrescenta só
 // as linhas realmente ausentes. Sinônimos comuns são canonizados para não duplicar
 // "pasta de dente" quando a IA devolve "creme dental".
+// Duas frases falam do MESMO produto? (compartilham um token significativo, com os
+// sinônimos que o cliente realmente usa). Serve ao merge IA×determinístico e ao
+// esclarecimento durante a escolha ("só shampoo normal" enquanto escolhe shampoo).
+const PRODUCT_TOKEN_ALIASES: Record<string, string> = {
+  pasta: "creme",
+  dente: "dental",
+  refri: "refrigerante",
+  refrigerantes: "refrigerante",
+  coca: "coca",
+  lenco: "lenco",
+  bebe: "umedecido"
+};
+function meaningfulProductTokens(phrase: string): string[] {
+  return normalizeMsg(phrase)
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((token) => PRODUCT_TOKEN_ALIASES[token] ?? token)
+    .filter((token) => token.length >= 4 && !["para", "umas", "mais"].includes(token));
+}
+export function sharesProductNoun(a: string, b: string): boolean {
+  const aTokens = meaningfulProductTokens(a);
+  const bTokens = new Set(meaningfulProductTokens(b));
+  return aTokens.some((token) => bTokens.has(token));
+}
+
 export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]): ParsedLine[] {
   if (!ai.length) return deterministic;
-  const aliases: Record<string, string> = {
-    pasta: "creme",
-    dente: "dental",
-    refri: "refrigerante",
-    refrigerantes: "refrigerante",
-    coca: "coca",
-    lenco: "lenco",
-    bebe: "umedecido"
-  };
-  const meaningful = (phrase: string) =>
-    normalizeMsg(phrase)
-      .replace(/[^a-z0-9\s]/g, " ")
-      .split(/\s+/)
-      .map((token) => aliases[token] ?? token)
-      .filter((token) => token.length >= 4 && !["para", "umas", "mais"].includes(token));
-  const sameProduct = (a: string, b: string) => {
-    const aTokens = meaningful(a);
-    const bTokens = new Set(meaningful(b));
-    return aTokens.some((token) => bTokens.has(token));
-  };
+  const meaningful = meaningfulProductTokens;
+  const sameProduct = sharesProductNoun;
   // "um presente pra minha namorada, tipo um perfume": o LLM já transformou a
   // intenção em produto ("perfume feminino"); o segmento meta (presente + pessoa)
   // não pode ser "resgatado" como segundo item.
@@ -315,12 +360,26 @@ const MEDICINE_WORDS = [
   "tarja preta"
 ];
 
+// "sem remédio" / "não quero remédio" é NEGAÇÃO — o cliente está afastando remédio,
+// não pedindo (rodadas 4 e 14: a Lia avisava que tinha removido um medicamento que
+// nunca foi pedido). Remove a frase negada ANTES de qualquer detecção/extração.
+export function stripMedicineNegation(text: string): string {
+  return text
+    .replace(/[,;]?\s*(?:mas|porem|porém|so que|só que)?\s*(?:sem|n[aã]o\s+(?:quero|precisa(?:\s+de)?|pode\s+ser)|nada\s+de)\s+(?:nenhum\s+|nenhuma\s+)?(?:rem[eé]dios?|medicamentos?)\b/gi, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 export function looksLikeMedicine(text: string): boolean {
   const n = normalizeMsg(text);
   return MEDICINE_WORDS.some((word) =>
     word.includes(" ") ? n.includes(word) : new RegExp(`\\b${word}\\b`).test(n)
   );
 }
+
+// "quero receber em casa" não é troca de endereço — é o normal. Só "em/para <lugar
+// nomeado>" troca destino; "em casa"/"aqui"/"no meu endereço" ficam de fora.
+const PRODUCT_HINT_AFTER_DELIVER_RE = /\b(entregar|receber|mandar|enviar)\s+(em|para|pra|no|na)\s+(casa|minha casa|meu endereco|meu endereço|aqui)\b/;
 
 // ---------- intent detection ----------
 
@@ -531,6 +590,18 @@ export function detectIntent(text: string): Intent {
   if (REPEAT_RE.test(n)) return { kind: "repeat_last" };
   if (STATUS_RE.test(n)) return { kind: "status" };
 
+  // "quero mais três (caixas) do mesmo (bombom)" / "mais 2 iguais" / "outra igual":
+  // referência ao item que acabou de entrar — resolve pelo sku da cesta, sem nova
+  // busca (a busca genérica podia devolver OUTRA marca; caso real da rodada 13).
+  const moreSame = n.match(
+    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*(?:caixas?|unidades?|pacotes?|garrafas?|latas?|potes?|un)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desse(?: ai| mesmo)?\b|dessa(?: ai| mesma)?\b|dele\b|dela\b)/
+  );
+  if (moreSame) {
+    const rawQty = moreSame[1];
+    const qty = rawQty ? (WORD_QTY[rawQty] ?? Math.min(MAX_QTY, Math.max(1, Number(rawQty) || 1))) : 1;
+    return { kind: "add_more_same", qty };
+  }
+
   // Formas humanas do cartão salvo — ANTES do método genérico, senão "outro cartão"
   // viraria choose_payment(card) e cobraria de novo o cartão que o cliente quer trocar.
   if (/^(usar |pagar (com )?)?outro cart(a|ã)o[\s!.]*$/.test(n) || /^trocar (de |o )?cart(a|ã)o[\s!.]*$/.test(n)) {
@@ -541,7 +612,15 @@ export function detectIntent(text: string): Intent {
   }
 
   const method = paymentMethodIn(n);
-  if (PAY_RE.test(n) && !isQuestion(n)) return { kind: "pay", ...(method ? { method } : {}) };
+  // "Antes de pagar, quero entregar em Belo Horizonte" (rodada 15, 14/08): "pagar" em
+  // oração subordinada NÃO é decisão de pagar — e "entregar em <lugar>" é troca de
+  // destino, que precisa vencer o pagamento (o cliente quase pagou frete do endereço
+  // velho). A subordinação desarma o PAY_RE; o destino cai no change_address abaixo.
+  const paySubordinate = /\b(antes de|antes do|depois de|depois do|sem|quando|assim que|na hora de|apos|após)\s+(pagar|fechar|finalizar|o pagamento|pagamento)\b/.test(n);
+  if (/\b(quero|queria|preciso|gostaria de|da pra|dá pra|pode|vou querer)\s+(entregar|receber|mandar|enviar)\s+(em|para|pra|no|na)\s+\S/.test(n) && !PRODUCT_HINT_AFTER_DELIVER_RE.test(n)) {
+    return { kind: "change_address" };
+  }
+  if (PAY_RE.test(n) && !isQuestion(n) && !paySubordinate) return { kind: "pay", ...(method ? { method } : {}) };
   // "pix" / "no cartão" as a short reply (not buried inside a shopping list). A
   // QUESTION about a method ("quanto fica no cartão?") is not a decision to charge.
   if (method && n.split(" ").length <= 4 && !isQuestion(n)) return { kind: "choose_payment", method };

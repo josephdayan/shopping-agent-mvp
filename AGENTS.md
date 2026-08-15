@@ -297,6 +297,38 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**14/08 — 15 rodadas de teste real do dono → 7 consertos de NLU/fluxo.** Relatório em
+[docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md); diagnóstico
+refinado com as transcrições reais do banco (só o lado do cliente é persistido). A causa
+nº 1 não era a busca: era o RESGATE do merge IA×determinístico devolvendo fragmentos
+("até uns 100 reais", "qualquer marca", "se tiver", "queria receber hoje") como itens —
+daí a cesta de R$167 (rodada 6: o cliente escolheu opção para a linha fantasma sem
+perceber) e os "não tenho como trazer" contraditórios (3, 7, 10, 12).
+1. `MODIFIER_SEGMENT_RE` no parser determinístico: restrição nunca vira linha; ORÇAMENTO
+   gruda como teto na linha anterior ("presente… até uns 100 reais" → 1 item com cap,
+   filtrado pelo splitPriceCap de sempre). Prompt da extração ganhou a regra 7b.
+2. "Antes de pagar, quero entregar em Belo Horizonte" (rodada 15, a mais perigosa):
+   "pagar" em oração subordinada não dispara pay; "quero entregar/receber em <lugar>"
+   vira change_address (que já cancela cotação aberta); "receber em casa" fica de fora.
+3. "quatro caixas" por extenso já era qty no parser; o E2E agora trava o ciclo inteiro:
+   qty explícita não re-pergunta, número solto em collecting AJUSTA o último item
+   (copy.qtyAdjusted), e "mais três do mesmo" vira intent `add_more_same` que soma no
+   SKU do último item (nunca nova busca — que podia trazer outra marca). Em estado
+   cotado (fluxo legado), o ajuste RE-COTA em vez de deixar total velho no menu.
+4. Esclarecimento durante a escolha ("só shampoo normal, sem preferência" enquanto
+   escolhe shampoo): mesmo substantivo (`sharesProductNoun`) = REFINA a escolha atual,
+   nunca abre segunda linha (rodada 5: cliente levou 2 shampoos sem perceber).
+5. "sem remédio"/"não quero remédio" é negação (`stripMedicineNegation` antes de
+   qualquer detecção; prompt regra 7c) — some o falso "removi o medicamento" (4, 14).
+6. Mensagem de pedido mínimo mostra o RESTO da cesta ("o resto continua guardado") —
+   parecia resumo completo e o cliente achava que itens tinham sumido (3, 10).
+7. Fallback manual explica o porquê ao cliente (conferência de estoque/entrega) e anota
+   no /ops qual loja/motivo abortou a cotação instantânea (2, 11 — o runtime log de 1h
+   não sobrevivia pro diagnóstico). P3: "Pagar" → "Fechar e ver total"; endereço com
+   ponto final não gera mais "SP..".
+Latência de ~15s no 1º turno (rodada 1) ficou registrada sem conserto: é cold start +
+2 chamadas de LLM; otimizar só se o piloto mostrar recorrência.
+
 **11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência/consistência fechadas.**
 1. **Lock de turno por conversa** (colunas `turnLock`/`turnLockAt`, migration
    20260811150000, **já aplicada no banco**): duas mensagens simultâneas do mesmo

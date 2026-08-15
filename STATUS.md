@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-11. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-14. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -233,6 +233,15 @@ de hoje está em
 > 3 botões — **Pagar** (fecha e cota), **Adicionar mais itens** e **Cancelar** — via
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
+
+> **14/08 — 15 rodadas reais do dono → 7 consertos de NLU/fluxo.** Fragmento de frase
+> ("até 100 reais", "qualquer marca", "se tiver") nunca mais vira item — orçamento vira
+> teto de preço; "antes de pagar" não dispara pagamento e "entregar em <cidade>" troca o
+> destino (rodada 15, a mais perigosa); "mais três do mesmo" soma no sku do último item;
+> número solto ajusta quantidade; esclarecimento na escolha refina em vez de duplicar
+> (rodada 5); "sem remédio" é negação; mensagem de mínimo mostra a cesta inteira;
+> fallback manual explicado ao cliente e anotado no /ops. Relatório:
+> docs/testes-whatsapp-2026-08-14.md.
 
 > **11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência fechadas.** Lock de turno por
 > conversa (mensagens simultâneas não se apagam mais; colunas novas JÁ no banco);

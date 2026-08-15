@@ -79,16 +79,22 @@ export function notedAskCep(notedItems: string[]): string {
   return `✅ Anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\nAgora só falta seu *CEP* (ex.: 01310-100) 📍 que eu busco tudo.`;
 }
 
+// O cliente costuma terminar o endereço com ponto ("… São Paulo - SP.") — sem esta
+// limpeza a mensagem saía com pontuação dupla ("SP..", rodada 8 de 14/08).
+function cleanAddressForCopy(address: string): string {
+  return address.replace(/[\s.,;]+$/, "");
+}
+
 export function addressSavedAskItems(address: string): string {
-  return `📍 Endereço salvo: ${address}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
+  return `📍 Endereço salvo: ${cleanAddressForCopy(address)}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
 }
 
 export function addressSavedPrefix(address: string): string {
-  return `📍 Endereço salvo: ${address}.`;
+  return `📍 Endereço salvo: ${cleanAddressForCopy(address)}.`;
 }
 
 export function addressUpdated(address: string): string {
-  return `📍 Prontinho, endereço atualizado: ${address}.`;
+  return `📍 Prontinho, endereço atualizado: ${cleanAddressForCopy(address)}.`;
 }
 
 export function askFullDeliveryAddress(): string {
@@ -315,16 +321,35 @@ export function summary(input: SummaryInput): string {
   return out.join("\n");
 }
 
-export function minimumOrder(input: { items: CopyBasketItem[]; produtos: number; displayMin: number; falta: number }): string {
+export function minimumOrder(input: {
+  items: CopyBasketItem[];
+  produtos: number;
+  displayMin: number;
+  falta: number;
+  // A parte da cesta que NÃO conta pro mínimo desta loja. Sem mostrar isso, a mensagem
+  // parecia um resumo completo e o cliente achava que os outros itens tinham sumido
+  // (rodadas 3 e 10 dos testes reais de 14/08).
+  storeLabel?: string;
+  otherItems?: CopyBasketItem[];
+}): string {
   const lines = input.items.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`);
-  return [
-    "🛒 *Seu pedido até agora:*",
+  const store = input.storeLabel ?? "a loja";
+  const out = [
+    `🛒 *Itens de ${store}:*`,
     ...lines,
     "",
-    `Produtos: ${brl(input.produtos)}`,
+    `Produtos (${store}): ${brl(input.produtos)}`,
     "",
-    `A loja pede um mínimo de *${brl(input.displayMin)}* em produtos — falta só *${brl(input.falta)}*. Me manda mais um itenzinho que eu fecho pra você! 🙂`
-  ].join("\n");
+    `Essa loja pede um mínimo de *${brl(input.displayMin)}* em produtos — falta só *${brl(input.falta)}*. Me manda mais um itenzinho de lá que eu fecho pra você! 🙂`
+  ];
+  if (input.otherItems?.length) {
+    out.push(
+      "",
+      "_O resto da sua cesta continua guardado:_",
+      ...input.otherItems.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`)
+    );
+  }
+  return out.join("\n");
 }
 
 export function freteChoice(barato?: { fee: number; etaMinutes: number }, rapido?: { fee: number; etaMinutes: number }): string {
@@ -645,7 +670,7 @@ export function operatorQuoteRequested(items: string[]): string {
   const list = items.length ? `\n${items.map((i) => `• ${i}`).join("\n")}\n` : " ";
   return [
     `Fechado! Recebi seu pedido:${list}`,
-    "Vou cotar tudo agora — preço, entrega e prazo — e já te mando o total certinho por aqui pra você aprovar. Não cobro nada antes disso. 💚"
+    "Um dos itens precisa de uma conferência rápida de estoque/entrega na loja, então o total não sai automático desta vez — nossa equipe confere agora e te mando preço, entrega e prazo por aqui pra você aprovar. Não cobro nada antes disso. 💚"
   ].join("\n");
 }
 
@@ -810,4 +835,15 @@ export function addressUpdatedQuoteContinues(address: string): string {
 
 export function operatorAddressChangedAlert(shortId: string, address: string): string {
   return `📍 [operador] Pedido #${shortId} trocou de endereço ANTES da cotação: ${address}. Cote com o frete do endereço novo.`;
+}
+
+// "mais três do mesmo": o último item da cesta cresce pelo sku — confirmação com o
+// total de unidades pra não sobrar dúvida de que é o MESMO produto.
+export function moreOfSameAdded(added: number, name: string, totalQty: number): string {
+  return `✅ Adicionei mais ${added} — agora são ${totalQty}x ${name}. Quer mais alguma coisa? Quando fechar, é só dizer *"só isso"*. 🙂`;
+}
+
+// Número solto logo após um item entrar na cesta = ajuste de quantidade do último item.
+export function qtyAdjusted(qty: number, name: string): string {
+  return `✅ Ajustei: ${qty}x ${name}. Quer mais alguma coisa? Quando fechar, é só dizer *"só isso"*. 🙂`;
 }
