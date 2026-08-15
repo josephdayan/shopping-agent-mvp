@@ -234,6 +234,12 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **15/08 — re-teste (10 rodadas): prioridades passaram; 5 ruídos restantes fechados.**
+> "três pacotes" (acento no `\w`) e embalagem solta transferem quantidade; "qualquer
+> <coisa>" é preferência; adversativa não esconde modificador; confirmação mostra "✅ 4x";
+> "mais um desse café" mira pelo substantivo; "hidratante" não perde mais pro sabonete
+> hidratante (regra principial + caso golden, 34 casos).
+
 > **14/08 — 15 rodadas reais do dono → 7 consertos de NLU/fluxo.** Fragmento de frase
 > ("até 100 reais", "qualquer marca", "se tiver") nunca mais vira item — orçamento vira
 > teto de preço; "antes de pagar" não dispara pagamento e "entregar em <cidade>" troca o

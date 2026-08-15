@@ -119,6 +119,14 @@ export const GOLDEN_CASES: GoldenCase[] = [
 
   // ---- verticais ----
   { name: "perfume feminino vai pra beleza", query: "perfume feminino", top1Include: /colonia|perfume|eau de/, deterministic: true },
+  {
+    name: "hidratante é o produto, não o sabonete que hidrata",
+    query: "hidratante",
+    top1Include: /hidratante/,
+    top1Exclude: /sabonete/,
+    deterministic: true,
+    note: "re-teste 15/08 rodada 10: 'Sabonete Líquido Hidratante' vencia o hidratante corporal"
+  },
   { name: "cerveja da marca pedida", query: "cerveja heineken", top1Include: /heineken/, deterministic: true },
   { name: "vinho tinto", query: "vinho tinto", top1Include: /tinto/, deterministic: true },
   { name: "chocolate", query: "chocolate", top1Include: /chocolate|bombom|cacau/, deterministic: true },

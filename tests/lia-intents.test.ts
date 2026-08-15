@@ -350,3 +350,33 @@ test("'mais três do mesmo' referencia o último item, nunca nova busca", () => 
   // "mais duas caixas de bombom Garoto" NÃO referencia ("Garoto" = busca nova).
   assert.notEqual(detectIntent("coloca mais duas caixas de bombom Garoto").kind, "add_more_same");
 });
+
+// ---------- re-teste de 15/08: ruídos que sobraram ----------
+
+test("re-teste 15/08: embalagem solta transfere quantidade; qualificador nunca é item", () => {
+  // Rodada 9: "três pacotes" virava "não tenho como trazer: 3x pacotes".
+  const racao = parseBasketLines("Quero ração para gato adulto, três pacotes");
+  assert.equal(racao.length, 1, `linhas: ${racao.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(racao[0].qty, 3);
+  assert.equal(racao[0].qtyExplicit, true);
+  // Rodada 7: "quero dois pacotes" no meio da frase.
+  const papel = parseBasketLines("Estou sem papel higiênico, quero dois pacotes, e detergente neutro");
+  assert.equal(papel.length, 2, `linhas: ${papel.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(papel[0].qty, 2);
+  assert.match(papel[0].phrase, /papel/);
+  assert.match(papel[1].phrase, /detergente/);
+  // Rodada 6: "qualquer time" não é produto.
+  const camiseta = parseBasketLines("Quero uma camiseta de futebol, qualquer time.");
+  assert.equal(camiseta.length, 1, `linhas: ${camiseta.map((l) => l.phrase).join(" | ")}`);
+  assert.match(camiseta[0].phrase, /camiseta/);
+  // Rodada 5: "mas entrega hoje se der" (adversativa na frente do modificador).
+  const agua = parseBasketLines("Quero água com gás e café, mas entrega hoje se der");
+  assert.equal(agua.length, 2, `linhas: ${agua.map((l) => l.phrase).join(" | ")}`);
+});
+
+test("re-teste 15/08: 'mais um desse café' mira o item pelo substantivo", () => {
+  const intent = detectIntent("pode colocar mais um desse café");
+  assert.equal(intent.kind, "add_more_same");
+  assert.equal((intent as { qty: number }).qty, 1);
+  assert.equal((intent as { noun?: string }).noun, "cafe");
+});

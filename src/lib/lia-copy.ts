@@ -260,8 +260,11 @@ export function refineNoResult(refined: string): string {
   return `Procurei *${refined}* e não achei por aqui 🙏 O que eu tenho são essas:`;
 }
 
-export function choiceConfirmed(name: string): string {
-  return `✅ ${name}.`;
+// Confirmação da escolha SEMPRE mostra a quantidade quando ela já é conhecida —
+// "✅ Caixa de Bombom" depois de pedir "quatro caixas" parecia que o 4 se perdeu
+// (re-teste 15/08, rodadas 3, 7 e 9; o estado interno estava certo, o texto não).
+export function choiceConfirmed(name: string, qty = 1): string {
+  return qty > 1 ? `✅ ${qty}x ${name}.` : `✅ ${name}.`;
 }
 
 export function choiceSkipped(query: string): string {

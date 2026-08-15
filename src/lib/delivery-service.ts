@@ -1193,7 +1193,11 @@ async function handleDeliveryTurn(
   // "mais três do mesmo" repete o ÚLTIMO item da cesta pelo sku — nunca nova busca
   // (a busca genérica podia trazer OUTRA marca; rodada 13 dos testes de 14/08).
   if (intent.kind === "add_more_same") {
-    const last = ctx.basket?.[ctx.basket.length - 1];
+    // Com substantivo ("mais um desse CAFÉ"), mira o item da cesta que casa com ele;
+    // sem substantivo, o último item. Nunca vira nova busca.
+    const basket = ctx.basket ?? [];
+    const byNoun = intent.noun ? [...basket].reverse().find((item) => itemMatchesPhrase(intent.noun!, item)) : undefined;
+    const last = byNoun ?? basket[basket.length - 1];
     if (last) {
       last.qty = Math.min(50, last.qty + intent.qty);
       last.lineTotal = Math.round(last.unitPrice * last.qty * 100) / 100;
@@ -2089,11 +2093,11 @@ async function confirmChosenOption(
   ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, chosenStore)]);
   if (ctx.pending.length) {
     await writeCtx(convoId, ctx);
-    await reply(phone, copy.choiceConfirmed(chosen.name));
+    await reply(phone, copy.choiceConfirmed(chosen.name, current.qty));
     await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
     return;
   }
-  await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name));
+  await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name, current.qty));
 }
 
 async function handleChoosing(

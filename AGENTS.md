@@ -297,6 +297,21 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**15/08 — re-teste do dono (10 rodadas): 5, 6 e 15 PASSARAM; 5 ruídos restantes fechados.**
+Transcrições reais de novo como fonte. (1) "três pacotes" virava "3x pacotes indisponível":
+o branch de quantidade por extenso usava `\w` (ASCII) e "três" tem acento — corrigido; e
+segmento só-de-embalagem ("três pacotes", "2x pacotes") agora TRANSFERE a quantidade pra
+linha anterior em vez de virar linha. (2) "qualquer time" virou genérico: `qualquer <x>`
+como segmento é sempre preferência. (3) "mas entrega hoje se der": adversativas
+(mas/porém/só que/com) são limpas do começo do segmento antes do filtro de modificador.
+(4) Confirmação de escolha mostra a quantidade ("✅ 4x …") quando ela já é conhecida —
+o estado estava certo e o texto escondia (rodadas 3, 7, 9). (5) "mais um desse CAFÉ"
+mira o item da cesta pelo substantivo (não cegamente o último). Bônus de relevância com
+golden primeiro: "hidratante" não perde mais para "Sabonete Líquido Hidratante" — regra
+principial no scorer: substantivo de categoria DIFERENTE antes da palavra pedida no nome
+= penalidade (reordena; o sabonete segue como fallback). Golden 34 casos. Registrado sem
+conserto: "o mais barato possível" ordena mas não restringe (decisão de produto).
+
 **14/08 — 15 rodadas de teste real do dono → 7 consertos de NLU/fluxo.** Relatório em
 [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md); diagnóstico
 refinado com as transcrições reais do banco (só o lado do cliente é persistido). A causa

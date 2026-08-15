@@ -462,6 +462,21 @@ export function scoreCatalogMatch(query: string, item: CatalogItem): number {
     for (const neg of negs) {
       if (new RegExp(`\\b(sem|zero)\\s+${neg}\\b`).test(nameNorm)) score += 3;
     }
+    // "hidratante" achava "Sabonete Líquido HIDRATANTE" (re-teste 15/08, rodada 10):
+    // quando um substantivo de categoria DIFERENTE vem ANTES da palavra pedida no nome,
+    // o head real é o outro produto e a palavra pedida é adjetivo dele. Penaliza
+    // (reordena) — o hidratante de verdade passa na frente; o sabonete segue como
+    // fallback honesto quando não existe o produto puro.
+    if (effTokens.length === 1) {
+      const requested = effTokens[0];
+      const requestedIdx = nameWords.findIndex((w) => tokenMatchesWordSyn(requested, w));
+      if (
+        requestedIdx > 0 &&
+        nameWords.slice(0, requestedIdx).some((w) => CATEGORY_NOUNS.has(w) && !tokenMatchesWordSyn(requested, w))
+      ) {
+        score -= 2;
+      }
+    }
     // Staple-first: quem não pediu sachê/úmida/cápsula/fardo quer o produto básico.
     const wantsWet = effTokens.some((token) => WET_WORDS.has(token));
     // (PET_ANY_RE cobre "para Cães e Gatos", que deixa itemAnimal ambíguo)

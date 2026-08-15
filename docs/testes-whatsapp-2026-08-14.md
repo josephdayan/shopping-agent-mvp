@@ -35,3 +35,27 @@ Foram feitas 15 rodadas no chat da Lia pelo WhatsApp Web, simulando uma pessoa s
 3. Preservar e reconciliar a cesta e as escolhas pendentes ao usar “Outras opções”, adicionar itens ou atingir o mínimo.
 4. Reconhecer endereço/cidade fora de SP assim que o cliente mencionar o destino, antes de oferecer pagamento.
 5. Deixar explícito quando a cotação manual é o próximo passo e por que o pagamento ainda não aparece.
+
+## Re-teste pós-publicação — 15/08/2026 (10 rodadas)
+
+Após o deploy informado como `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`, foram feitas mais 10 rodadas no mesmo chat, sem acionar Pix/cartão. Toda rodada que chegou ao pagamento foi cancelada por texto e a Lia confirmou que nada foi cobrado.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Presente de aniversário para criança de 6 anos, até R$100 | **Sucesso no critério principal**: uma escolha exibida, R$96,79, sem tratar o orçamento como item; caiu em cotação manual explicada e foi cancelado | Confirmar se “uma escolha” é intencional quando só há um candidato dentro do teto; o fallback manual foi bem explicado. |
+| 2 | Shampoo barato; depois “só shampoo normal, sem preferência de marca” | **Sucesso**: as mesmas três opções foram refinadas, sem segunda escolha; uma unidade ficou na cesta; total R$17,86; cancelado | Nenhum problema funcional observado. |
+| 3 | Quatro caixas de bombom; depois +3 do mesmo; depois “5” | **Parcial**: estado correto de 4x → 7x → 5x do mesmo SKU e resumo final em 5x; a confirmação logo após a primeira escolha não mostrou “4x” | Exibir a quantidade solicitada também na confirmação intermediária, não apenas no resumo final. |
+| 4 | Cotação aberta; troca para Belo Horizonte e CEP 30130-010 | **Sucesso**: pediu o novo CEP antes de mostrar pagamento, recusou BH por cobertura SP e enviou à lista de espera | Nenhum problema funcional observado. |
+| 5 | Água com gás e café, com pedido de entrega hoje | **Parcial**: cesta mista, adição de quantidade e mensagem de mínimo preservando a cesta inteira funcionaram; total R$127,03; cancelado | “entrega hoje se der” virou uma falsa linha indisponível antes das opções; urgência precisa continuar sendo restrição, não produto. |
+| 6 | Camiseta de futebol, qualquer time | **Parcial**: recusou honestamente e não abriu pedido; porém criou também uma linha indisponível para “qualquer time” | “qualquer time” deve ser qualificativo de marca/time, não segundo item. |
+| 7 | Dois pacotes de papel higiênico e detergente neutro | **Parcial**: quantidades foram preservadas; depois ficou 4x papel + 2x detergente e o mínimo mostrou a cesta completa; cancelado | “2x pacotes” apareceu como indisponibilidade e a confirmação da escolha omitiu o 2x, apesar de o estado interno estar correto. |
+| 8 | Hidratante corporal sem perfume, o mais barato possível | **Sucesso funcional com ressalva**: opções sem perfume, mais barata no topo por R$24,19, total R$29,09; sem ruído de item inexistente; cancelado | A lista ainda mostrou uma alternativa mais cara (R$32,89) mesmo com “mais barato possível”; decidir se o filtro deve restringir ou apenas ordenar. |
+| 9 | Ração para gato adulto, três pacotes, sem remédio | **Parcial**: nenhum alerta indevido de medicamento, opções corretas, resumo final em 3x e total R$60,37; cancelado | “três pacotes” virou falsa indisponibilidade e a confirmação intermediária omitiu 3x; o resumo final preservou a quantidade. |
+| 10 | Hidratante e, se tivesse, dipirona para dor de cabeça | **Parcial**: recusou somente o medicamento, deixou-o fora e prosseguiu com o item comum; total R$10,70; cancelado | A busca por “hidratante” escolheu sabonete hidratante, não um hidratante corporal inequívoco; melhorar a relevância sem perder a separação segura do medicamento. |
+
+### Achados do re-teste
+
+- Os quatro cenários prioritários: rodadas 1, 2 e 4 passaram; a rodada 3 passou no estado da cesta, mas ainda falha na confirmação textual imediata da quantidade.
+- As correções de cesta, mínimo, cancelamento e troca de endereço se comportaram bem nos casos exercitados.
+- Persistem três famílias de ruído: quantidades vazando para linhas de “indisponível”; qualificadores (“entrega hoje”, “qualquer time”) sendo tratados como itens; e confirmação intermediária omitindo quantidades já capturadas.
+- O bloqueio de medicamento funcionou nas duas variações testadas: “sem remédio” não gerou aviso e um pedido explícito de dipirona foi recusado sem impedir o item comum.

@@ -46,7 +46,7 @@ export type Intent =
   | { kind: "number"; value: number }
   // "mais três do mesmo bombom" / "mais 2 iguais" — repetir o ÚLTIMO item da cesta,
   // resolvido por sku (nunca nova busca, que podia trazer outra marca — rodada 13).
-  | { kind: "add_more_same"; qty: number }
+  | { kind: "add_more_same"; qty: number; noun?: string }
   // Cartão salvo (modo sem Meta Payments): toque no botão "Pagar •••• 1234" volta como
   // id `cardpay:<attemptId>`; o texto humano equivalente vem sem o id. "Outro cartão"
   // troca a credencial (novo link de cadastro).
@@ -113,7 +113,7 @@ const MODIFIER_SEGMENT_RE = new RegExp(
     [
       "(de )?(ate|abaixo de|menos de|no maximo|max(imo)?) ?(uns |umas )?(r\\$ ?)?\\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)?",
       "(uns|umas) \\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)",
-      "(pode ser )?(de )?qualquer (marca|um|uma)",
+      "(pode ser )?(de )?qualquer [a-z]+( uma?)?",
       "sem preferencia( de marca)?( nenhuma)?",
       "de preferencia .*",
       "(o |a )?mais barat[oa]( que tiver| possivel)?",
@@ -167,8 +167,9 @@ export function parseBasketLines(text: string): ParsedLine[] {
         .replace(/^(ah+|hm+|hmm+|dai|tipo|ne|entao|ok+|okay|blz|beleza|ta|certo)\s+/i, "")
         // vocativo ("minha filha, quero…", "amiga, me vê…", "lia,…") não é produto
         .replace(/^((minha|meu)\s+(filha?|filho|querid[ao]|amor|anjo|bem)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|lia)[\s,!.]+/i, "")
-        // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri")
-        .replace(/^(e|mais)\s+/i, "")
+        // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri",
+        // "mas entrega hoje se der" — a adversativa escondia o modificador de urgência)
+        .replace(/^(e|mais|mas|porem|porém|so que|só que|com)\s+/i, "")
         // "to sem café" é jeito real de PEDIR café — o item é o que falta
         .replace(/^(?:eu\s+)?(?:t[oô]|tou|estou)\s+sem\s+/i, "")
         .replace(/\s+/g, " ")
@@ -191,7 +192,9 @@ export function parseBasketLines(text: string): ParsedLine[] {
       if (m) return { phrase: m[2].trim(), qty: Math.min(MAX_QTY, Math.max(1, Number(m[1]))), qtyExplicit: true };
 
       // "dois pães", "meia dúzia de ovo", "uma dúzia de banana"
-      const word = raw.match(/^(?:(meia)\s+d[uú]zia|(uma\s+)?d[uú]zia|(\w+))\s+(?:de\s+)?(.+)$/i);
+      // ([\wà-ú]+) e não (\w+): "três" tem acento e \w é ASCII — sem isso "três
+      // pacotes" não virava quantidade (re-teste 15/08, rodada 9).
+      const word = raw.match(/^(?:(meia)\s+d[uú]zia|(uma\s+)?d[uú]zia|([\wà-ú]+))\s+(?:de\s+)?(.+)$/i);
       if (word) {
         const n = normalizeMsg(word[3] ?? "");
         if (word[1]) return { phrase: word[4].trim(), qty: 6, qtyExplicit: true };
@@ -210,6 +213,20 @@ export function parseBasketLines(text: string): ParsedLine[] {
     if (pron) {
       const prev = merged[merged.length - 1];
       if (prev) prev.phrase = `${prev.phrase} ${pron[1].trim()}`.replace(/\s+/g, " ");
+      continue;
+    }
+    // "ração para gato, TRÊS PACOTES": o segmento é só quantidade+embalagem — a
+    // quantidade pertence ao item ANTERIOR, nunca vira "produto indisponível"
+    // (re-teste 15/08, rodadas 7 e 9).
+    if (
+      line.qtyExplicit &&
+      /^(?:de )?(pacotes?|caixas?|unidades?|garrafas?|latas?|potes?|rolos?|sacos?|pares?|frascos?|un)$/.test(normalizeMsg(line.phrase))
+    ) {
+      const prev = merged[merged.length - 1];
+      if (prev && !prev.qtyExplicit) {
+        prev.qty = line.qty;
+        prev.qtyExplicit = true;
+      }
       continue;
     }
     // Restrição solta nunca vira item; orçamento gruda como teto no item anterior
@@ -594,12 +611,13 @@ export function detectIntent(text: string): Intent {
   // referência ao item que acabou de entrar — resolve pelo sku da cesta, sem nova
   // busca (a busca genérica podia devolver OUTRA marca; caso real da rodada 13).
   const moreSame = n.match(
-    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*(?:caixas?|unidades?|pacotes?|garrafas?|latas?|potes?|un)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desse(?: ai| mesmo)?\b|dessa(?: ai| mesma)?\b|dele\b|dela\b)/
+    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*(?:caixas?|unidades?|pacotes?|garrafas?|latas?|potes?|un)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desse(?: ai| mesmo)?\b|dessa(?: ai| mesma)?\b|dele\b|dela\b)\s*([a-z][a-z ]{2,30})?/
   );
   if (moreSame) {
     const rawQty = moreSame[1];
     const qty = rawQty ? (WORD_QTY[rawQty] ?? Math.min(MAX_QTY, Math.max(1, Number(rawQty) || 1))) : 1;
-    return { kind: "add_more_same", qty };
+    const noun = moreSame[2]?.trim().replace(/\b(por favor|pfv|ai|aqui)\b/g, "").trim() || undefined;
+    return { kind: "add_more_same", qty, ...(noun ? { noun } : {}) };
   }
 
   // Formas humanas do cartão salvo — ANTES do método genérico, senão "outro cartão"
