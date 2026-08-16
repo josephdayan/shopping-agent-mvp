@@ -850,3 +850,8 @@ export function moreOfSameAdded(added: number, name: string, totalQty: number): 
 export function qtyAdjusted(qty: number, name: string): string {
   return `✅ Ajustei: ${qty}x ${name}. Quer mais alguma coisa? Quando fechar, é só dizer *"só isso"*. 🙂`;
 }
+
+// Toque em "Outra quantidade": pergunta aberta — o número vem digitado no chat.
+export function quantityAskFree(name: string): string {
+  return `Me diz quantas unidades de *${name}* você quer (de 1 a 50) 🙂`;
+}

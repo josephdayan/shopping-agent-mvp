@@ -100,7 +100,7 @@ function expandShoppingShorthand(text: string): string {
 
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
-  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
+  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|pensando bem|mudei de ideia|na verdade|alias|deixa (pra la|quieto)|quer saber|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
 
 // Restrição/complemento que NUNCA é produto (15 rodadas reais, 14/08): orçamento
 // ("até uns 100 reais"), preferência vazia ("qualquer marca", "de preferência o mais
@@ -120,7 +120,8 @@ const MODIFIER_SEGMENT_RE = new RegExp(
       "((e )?(queria|quero|preciso)( de)? )?(algo|alguma coisa) (bem |mais )?(barat[oa]|simples|bo[am]|em conta)( possivel)?",
       "sem precisar( de)? .*",
       "se (tiver|der|for possivel|possivel|rolar|puder|achar|encontrar)( .*)?",
-      "((e )?(queria|quero|preciso|gostaria de|da pra|pode)( me)? )?(receber|entregar?|chegar|mandar|enviar)( ainda| ate| para| pra| em casa| o pedido)* (hoje|amanha|rapido|logo)( se der| se possivel| se rolar)?",
+      "((e )?(se der[, ]*)?(queria|quero|preciso|gostaria de|da pra|pode)( me)? )?(receber|entregar?|chega(r|ndo)?|mandar|enviar)( ainda| ate| para| pra| em casa| o pedido)* (hoje|amanha|rapido|logo)( se der| se possivel| se rolar)?",
+      "(hoje|amanha)",
       "p(a)?ra (hoje|amanha)( se der| se possivel)?",
       "o quanto antes",
       "urgente(mente)?",
@@ -345,11 +346,16 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
   // determinístico, "1 coca" volta a re-perguntar "Quantas unidades?". qty>1 do LLM
   // é sempre dito (ninguém ganha 2 sem pedir); qty=1 herda a flag do determinístico.
   const flagged = ai.map((line) => {
-    if (line.qtyExplicit) return line;
-    if (line.qty > 1) return { ...line, qtyExplicit: true };
-    const det = deterministic.find((d) => d.qtyExplicit && sameProduct(d.phrase, line.phrase));
-    if (det) return { ...line, qty: Math.max(line.qty, det.qty), qtyExplicit: true };
-    return line;
+    // O TETO de preço vive no gêmeo determinístico (a IA remove preço da query por
+    // instrução): sem re-anexar, "até R$25 cada" era ordenação e as opções passavam
+    // do limite (rodada 10, 4º ciclo: card de R$29,69 com teto de R$25).
+    const twin = deterministic.find((d) => sameProduct(d.phrase, line.phrase));
+    const twinCap = twin ? parsePriceCap(twin.phrase) : null;
+    const phrase = twinCap != null && parsePriceCap(line.phrase) == null ? `${line.phrase} até ${twinCap} reais` : line.phrase;
+    if (line.qtyExplicit) return { ...line, phrase };
+    if (line.qty > 1) return { ...line, phrase, qtyExplicit: true };
+    if (twin?.qtyExplicit) return { ...line, phrase, qty: Math.max(line.qty, twin.qty), qtyExplicit: true };
+    return { ...line, phrase };
   });
   if (deterministic.length <= flagged.length) return flagged;
   const merged = [...flagged];
@@ -587,7 +593,9 @@ export function detectIntent(text: string): Intent {
   }
 
   // "tira a esponja" / "cancela o guaraná" — remove of a SPECIFIC item beats order-cancel.
-  if (REMOVE_START_RE.test(n)) {
+  // EXCEÇÃO: "sem remédio ..." é negação de categoria (rodada 9, 4º ciclo: virava
+  // "não achei pra tirar" e o shampoo do resto da frase se perdia) — segue como pedido.
+  if (REMOVE_START_RE.test(n) && !/^sem\s+(remedios?|medicamentos?)\b/.test(n)) {
     const rawTarget = n.replace(REMOVE_START_RE, "");
     // Multi-intenção: "tira o arroz E COLOCA feijão" — corta no verbo de adicionar;
     // a 1ª parte é o remove, a 2ª volta pro fluxo como item novo. Sem isto o target
@@ -661,6 +669,10 @@ export function detectIntent(text: string): Intent {
   // velho). A subordinação desarma o PAY_RE; o destino cai no change_address abaixo.
   const paySubordinate = /\b(antes de|antes do|depois de|depois do|sem|quando|assim que|na hora de|apos|após)\s+(pagar|fechar|finalizar|o pagamento|pagamento)\b/.test(n);
   if (/\b(quero|queria|preciso|gostaria de|da pra|dá pra|pode|vou(?: querer)?)\s+(entregar|receber|mandar|enviar)\s+(em|para|pra|no|na)\s+\S/.test(n) && !PRODUCT_HINT_AFTER_DELIVER_RE.test(n)) {
+    // "vou entregar em São Paulo, CEP 01310-100": o CEP JÁ VEIO — consumir direto em
+    // vez de responder "me manda o CEP" (rodada 8, 4º ciclo).
+    const embeddedCep = extractCep(n);
+    if (embeddedCep) return { kind: "cep", cep: embeddedCep, bare: true };
     return { kind: "change_address" };
   }
   if (PAY_RE.test(n) && !isQuestion(n) && !paySubordinate) return { kind: "pay", ...(method ? { method } : {}) };

@@ -79,7 +79,9 @@ test("Meta: onboarding, quantidade e pagamento usam botões com ids estáveis", 
     await whatsappAdapter.sendCancelableNotice("+5511999999999", "Ainda estou cotando seu pedido");
     await whatsappAdapter.sendQuoteSummary("+5511999999999", "🛒 Seu pedido: 1x Coca — Total R$ 22,28");
     assert.equal(bodies[0].interactive.action.buttons[0].reply.id, "cadastrar_endereco");
-    assert.deepEqual(bodies[1].interactive.action.buttons.map((b: any) => b.reply.id), ["qty:1", "qty:2", "qty:3"]);
+    // "Outra quantidade" no lugar do 3 (dono, 16/08): abre a pergunta livre.
+    assert.deepEqual(bodies[1].interactive.action.buttons.map((b: any) => b.reply.id), ["qty:1", "qty:2", "qty:other"]);
+    assert.equal(bodies[1].interactive.action.buttons[2].reply.title, "Outra quantidade");
     // Saída sempre visível (11/08): o menu de pagamento leva Cancelar junto.
     assert.deepEqual(bodies[2].interactive.action.buttons.map((b: any) => b.reply.id), ["pix", "cartao", "cancelar"]);
     assert.match(bodies[2].interactive.footer.text, /Pix R\$ 50,00/);

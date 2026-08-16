@@ -84,3 +84,29 @@ Foram feitas mais 10 rodadas rebuscadas e encadeadas após o deploy `4cbbaae`. N
 - O principal risco restante é a extração de modificadores: “sem pimenta”, “não veicular”, “qualquer tema”, “cada” e negações compostas ainda podem virar falsos produtos.
 - A troca de endereço por frase natural continua crítica: a palavra/ação explícita “trocar endereço” funciona, mas a intenção natural ainda pode deixar o pagamento antigo visível.
 - O bloqueio de medicamento permaneceu seguro: a dipirona foi excluída sem bloquear shampoo e escova.
+
+## Nova rodada exploratória ao vivo — 15/08/2026 (sem alterações de código)
+
+Foram executados 10 cenários novos no WhatsApp, simulando uma pessoa sem conhecimento
+prévio do catálogo. Nenhum Pix ou cartão foi acionado. As cestas que chegaram ao pagamento
+foram canceladas antes da cobrança, e a Lia confirmou que nada foi cobrado.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Lanche para quatro pessoas: quatro pães de queijo, suco de laranja, guardanapo e “sem canudo”; depois itens extras para testar o mínimo | **Parcial**: separou os três itens, capturou 4x pão de queijo e ignorou “sem canudo” como item; o mínimo do Carrefour impediu o fechamento automático e preservou o restante da cesta | O mínimo foi explicado de forma honesta, mas a experiência exige descobrir e adicionar itens da mesma loja para avançar. |
+| 2 | Presente para a mãe: perfume floral, qualquer marca, nada muito doce | **Sucesso**: opções florais relevantes, “qualquer marca” não virou produto, a preferência “sem muito doce” foi mantida; caiu em cotação manual explicada e foi cancelado | Nenhum problema funcional observado. |
+| 3 | Cabo USB-C de 2 metros para celular, não veicular, mais barato possível | **Falha de relevância**: retornou um carregador de parede, não um cabo de 2 m; “não veicular” foi respeitado, mas o tipo e o comprimento não | Exigir correspondência de categoria e comprimento antes de aceitar o candidato; não deixar “carregador” substituir “cabo”. |
+| 4 | Leite sem lactose, qualquer marca; depois “pode colocar mais dois leites” | **Sucesso**: mostrou opções sem lactose e transformou o pedido relativo em 3x do mesmo SKU; o mínimo apareceu sem perder o item; cancelado | Nenhum problema funcional observado. |
+| 5 | Iogurte natural e granola; depois “pensando bem, troca a granola por aveia em flocos” | **Falha de extração**: a troca funcionou e a cesta ficou com iogurte + aveia, mas “pensando bem” foi emitido como item indisponível | Filler conversacional (“pensando bem”) deve ser descartado antes da busca, inclusive em frases de troca. |
+| 6 | Três lembrancinhas infantis, até R$30 cada, qualquer tema, sem brinquedo barulhento | **Parcial**: preservou 3x e as restrições, sem abrir linhas fantasmas; não encontrou opção compatível no catálogo | Diferenciar recusa honesta por lacuna de catálogo de falha de extração; ampliar a vitrine se essa categoria for relevante. |
+| 7 | Dois sacos de lixo reforçados de 30 litros, qualquer marca; depois “mais um desses” | **Sucesso**: opção exata de 30 litros, 2x → 3x do mesmo SKU, chegou ao pagamento e foi cancelado sem cobrança | Uma das três opções iniciais não exibia 30 litros; o filtro de atributo deve valer para todos os cards, não só para a escolha feita. |
+| 8 | Com pagamento aberto: “Antes de pagar, vou entregar em São Paulo, CEP 01310-100” | **Falha parcial**: cancelou a cotação antiga e não cobrou, mas ignorou o CEP já presente e pediu o CEP novamente; depois processou o CEP, pediu endereço completo e salvou o endereço público de teste | Consumir cidade/CEP embutidos na frase natural antes de responder com “mande o CEP”; manter a proteção que esconde o pagamento antigo. |
+| 9 | “Sem remédio hoje; quero um shampoo normal, qualquer marca” | **Falha de roteamento**: não exibiu alerta indevido de medicamento, mas interpretou “sem remédio” como tentativa de remover item inexistente e não buscou shampoo | “Sem remédio” precisa ser uma preferência/negação de categoria, não um comando de remoção quando vem junto de um novo pedido. |
+| 10 | Dois cafés moídos até R$25 cada, qualquer marca, não descafeinado e, se der, entrega amanhã | **Parcial**: capturou 2x café e permitiu chegar ao pagamento; porém “chega amanhã” virou linha indisponível e também exibiu alternativas de R$29,69 acima do teto explícito | Urgência deve virar modificador de entrega, nunca item; teto explícito deve excluir cards acima do limite, não apenas ordenar. |
+
+### Síntese da nova rodada
+
+- Acertos confirmados: quantidade relativa por SKU, preservação de restrições, bloqueio seguro de pagamento e cancelamento sem cobrança.
+- Falhas novas ou persistentes: categoria/atributo do produto (“cabo de 2 m”), fillers (“pensando bem”), negação “sem remédio” no início de pedido, urgência (“chega amanhã”) e teto explícito aparecendo acima do limite.
+- A troca de endereço ficou segura contra cobrança no endereço velho, mas ainda não interpreta o CEP quando ele já vem na mesma frase.
+- Esta rodada é evidência de comportamento ao vivo, não de correção implementada; nenhum arquivo de código foi alterado.

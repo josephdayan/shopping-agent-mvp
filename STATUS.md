@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-14. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-15. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -234,6 +234,13 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **16/08 — 4º ciclo (10 rodadas): 6 consertos + botão "Outra quantidade".** Cabo ≠
+> carregador (golden `none` + prompt; catálogo não tem cabo USB-C — lacuna registrada);
+> teto de preço sobrevive ao merge com a IA (era o "R$29,69 acima do teto"); tamanho
+> pedido filtra TODOS os cards; "sem remédio" no começo não é remoção; "pensando bem"/
+> "chega amanhã" são filler/urgência; destino com CEP embutido consome o CEP. Botões de
+> quantidade: 1 · 2 · Outra quantidade (abre pergunta livre).
+
 > **15/08 (2ª) — 3º ciclo (10 rodadas): 6 consertos.** Preferência negativa ("sem
 > pimenta", "não veicular") vira atributo `sem X` do item anterior; "até R$30 cada" é
 > teto; "vou entregar em Campinas" + CEP com pagamento aberto derruba a cotação velha e
@@ -254,6 +261,14 @@ de hoje está em
 > (rodada 5); "sem remédio" é negação; mensagem de mínimo mostra a cesta inteira;
 > fallback manual explicado ao cliente e anotado no /ops. Relatório:
 > docs/testes-whatsapp-2026-08-14.md.
+
+> **15/08 — nova rodada ao vivo, sem alteração de código.** Em 10 cenários, passaram a
+> adição relativa por SKU, a preservação de restrições e o cancelamento antes da cobrança.
+> Permaneceram falhas observáveis: “cabo USB-C de 2 metros” retornou carregador de parede;
+> “pensando bem”, “chega amanhã” e “sem remédio” foram mal roteados; cards acima de teto
+> explícito apareceram; e o CEP embutido na frase de troca de endereço foi pedido novamente.
+> A troca de endereço ainda derrubou a cotação velha antes do pagamento e nenhum Pix/cartão
+> foi acionado. Evidência detalhada em `docs/testes-whatsapp-2026-08-14.md`.
 
 > **11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência fechadas.** Lock de turno por
 > conversa (mensagens simultâneas não se apagam mais; colunas novas JÁ no banco);

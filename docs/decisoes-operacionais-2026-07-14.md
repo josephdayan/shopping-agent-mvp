@@ -668,3 +668,14 @@ substituição depois do pagamento; estornar o item faltante; avisar atraso. Con
 documentação de se o desenho exige NF-e, NFS-e ou outro documento e como registrar a taxa,
 além da rotação dos segredos expostos. O estorno parcial ainda é manual e deve guardar a
 referência do provedor.
+
+## Validação ao vivo — 15/08/2026
+
+Foi executada uma rodada adicional de 10 cenários no WhatsApp, sem mudança de código e sem
+acionar Pix ou cartão. A experiência confirmou quantidade relativa pelo SKU, preservação da
+cesta e cancelamento pré-pagamento. Como evidência negativa, a versão observada ainda pode
+confundir “cabo USB-C de 2 metros” com carregador, transformar “pensando bem”/“chega amanhã”
+em item indisponível, interpretar “sem remédio” como remoção, exibir opção acima de teto
+explícito e pedir novamente um CEP que já veio na frase de troca de endereço. No último caso,
+a cotação antiga foi cancelada antes de qualquer cobrança. O detalhe está em
+`docs/testes-whatsapp-2026-08-14.md`; estes achados permanecem pendentes de decisão e correção.

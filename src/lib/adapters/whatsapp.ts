@@ -329,11 +329,13 @@ export const whatsappAdapter = {
 
   async sendQuantityChoices(to: string, productName: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    // "Outra quantidade" no lugar do 3 (pedido do dono, 16/08): o toque volta como
+    // qty:other e a Lia pede o número — digitar direto no chat continua valendo.
     return sendMetaSimpleButtons(to, `Quantas unidades de *${productName}*?`, [
       { id: "qty:1", title: "1 unidade" },
       { id: "qty:2", title: "2 unidades" },
-      { id: "qty:3", title: "3 unidades" }
-    ], "Para outra quantidade, digite o número.");
+      { id: "qty:other", title: "Outra quantidade" }
+    ], "Ou digita a quantidade direto aqui.");
   },
 
   async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {

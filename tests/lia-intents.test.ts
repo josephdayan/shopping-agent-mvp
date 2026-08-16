@@ -6,6 +6,7 @@ import {
   isBareCep,
   looksLikeMedicine,
   parseBasketLines,
+  mergeShoppingLines,
   parseChoiceReply,
   parseRefinement,
   stripMedicineNegation,
@@ -413,4 +414,35 @@ test("3º ciclo: 'mais um saco de lixo desses' referencia com o substantivo comp
   const intent = detectIntent("Coloca mais um saco de lixo desses.");
   assert.equal(intent.kind, "add_more_same");
   assert.match((intent as { noun?: string }).noun ?? "", /lixo/);
+});
+
+// ---------- 4º ciclo (16/08): fillers, remoção falsa, teto no merge, CEP embutido ----------
+
+test("4º ciclo: 'sem remédio' no começo é negação, nunca remoção", () => {
+  const intent = detectIntent("Sem remédio hoje; quero um shampoo normal, qualquer marca.");
+  assert.notEqual(intent.kind, "remove_item", `virou ${intent.kind}`);
+  const lines = parseBasketLines(stripMedicineNegation("Sem remédio hoje; quero um shampoo normal, qualquer marca."));
+  assert.equal(lines.length, 1, `linhas: ${lines.map((l) => l.phrase).join(" | ")}`);
+  assert.match(lines[0].phrase, /shampoo/);
+});
+
+test("4º ciclo: 'pensando bem' e 'chega amanhã' nunca são itens", () => {
+  const swapBefore = parseBasketLines("quero iogurte natural e granola; pensando bem,");
+  assert.equal(swapBefore.length, 2, `linhas: ${swapBefore.map((l) => l.phrase).join(" | ")}`);
+  const cafe = parseBasketLines("dois pacotes de café moído, e se der, chega amanhã");
+  assert.equal(cafe.length, 1, `linhas: ${cafe.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(cafe[0].qty, 2);
+});
+
+test("4º ciclo: teto de preço sobrevive ao merge com a IA (a IA tira o preço da query)", () => {
+  const det = parseBasketLines("dois pacotes de café moído até 25 reais cada, qualquer marca");
+  const merged = mergeShoppingLines([{ phrase: "café moído", qty: 2, qtyExplicit: true }], det);
+  assert.equal(merged.length, 1, `linhas: ${merged.map((l) => l.phrase).join(" | ")}`);
+  assert.match(merged[0].phrase, /até 25 reais/);
+});
+
+test("4º ciclo: destino com CEP embutido consome o CEP direto", () => {
+  const intent = detectIntent("Antes de pagar, vou entregar em São Paulo, CEP 01310-100.");
+  assert.equal(intent.kind, "cep");
+  assert.equal((intent as { cep: string }).cep, "01310-100");
 });

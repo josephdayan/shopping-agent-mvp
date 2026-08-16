@@ -317,3 +317,12 @@ O Boticário permanece uma fonte possível de beleza, mas não está completamen
 busca e carrinho/subtotal têm cobertura automatizada, enquanto o comprador ainda não extrai frete
 nem promessa. A suíte de 210 testes passou (168 aprovados, 42 integrações de banco puladas), sem
 checkout Browserbase vivo nesta rodada.
+
+## Validação de conversa — 15/08/2026
+
+Uma rodada ao vivo de 10 cenários foi feita no WhatsApp sem cobrança. O fluxo de pagamento e
+cancelamento se comportou com segurança, e a adição de quantidade ao mesmo SKU funcionou.
+Ainda há evidência operacional para tratar como caso de produto: atributos de cabo/comprimento,
+fillers e urgência sendo interpretados como itens, “sem remédio” confundido com remoção, teto
+explícito não filtrando todos os cards e CEP já informado sendo solicitado novamente. O registro
+completo está em `docs/testes-whatsapp-2026-08-14.md`.

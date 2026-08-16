@@ -506,6 +506,14 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
         candidates = (await lineStore.searchItems(searchPhrase, 12)).map((item) => ({ store: lineStore, item }));
       }
       if (cap != null) candidates = candidates.filter((c) => display(c.item.unitPrice) <= cap);
+      // Tamanho/volume pedido ("30 litros", "2kg") vale para TODOS os cards, não só a
+      // escolha (rodada 7, 4º ciclo: 1 das 3 opções não era de 30l). Se ao menos um
+      // candidato tem o atributo, os que não têm saem da vitrine.
+      const sizeAsk = searchPhrase.match(/\d+(?:[.,]\d+)?\s*(?:kg|ml|lt?s?|litros?|g(?![a-z]))\b/i)?.[0];
+      if (sizeAsk) {
+        const sized = candidates.filter((c) => attrMatchesItem(sizeAsk, c.item));
+        if (sized.length) candidates = sized;
+      }
       // Recompra: o que o cliente já escolheu antes sobe (sort estável preserva o
       // ranking de relevância entre itens sem histórico).
       candidates.sort((a, b) => (preferredSkus?.get(b.item.sku) ?? 0) - (preferredSkus?.get(a.item.sku) ?? 0));
@@ -1041,6 +1049,11 @@ async function handleDeliveryTurn(
   }
 
   if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
+    // Botão "Outra quantidade": abre a pergunta livre — o cliente digita o número.
+    if (normalizeMsg(text) === "qty:other") {
+      await reply(phone, copy.quantityAskFree(ctx.quantityChoice.option.name));
+      return;
+    }
     const typedQty = parseContextualQuantity(text);
     if (typedQty != null) {
       await finishQuantityChoice(phone, user.cep, convo.id, ctx, typedQty);

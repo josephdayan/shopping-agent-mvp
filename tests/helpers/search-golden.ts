@@ -135,6 +135,13 @@ export const GOLDEN_CASES: GoldenCase[] = [
   { name: "whisky", query: "whisky", top1Include: /whisky|whiskey/, deterministic: true },
 
   // ---- honestidade: fora de catálogo → nenhuma opção (linha livre) ----
+  {
+    name: "cabo usb-c não vira carregador (carregador não é cabo)",
+    query: "cabo usb c 2 metros",
+    none: true,
+    deterministic: true,
+    note: "4º ciclo 15/08: o catálogo não tem cabo USB-C e o rerank servia carregador de parede"
+  },
   { name: "conserto de torneira não vira espumante", query: "conserto de torneira", none: true, deterministic: true, note: "fuzzy conserto≈concerto; caso real do piso do concierge" },
   { name: "parafusadeira fora de catálogo é linha livre", query: "parafusadeira", none: true, deterministic: true },
 

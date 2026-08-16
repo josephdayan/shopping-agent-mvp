@@ -761,3 +761,17 @@ test("3º ciclo: 'troca X por Y' numa lista NOVA corrige a própria mensagem", a
   assert.match(out.toLowerCase(), /detergente/, `sem detergente: ${out.slice(0, 250)}`);
   assert.match(out.toLowerCase(), /saco|lixo/, `sem saco de lixo: ${out.slice(0, 250)}`);
 });
+
+test("botão 'Outra quantidade' abre a pergunta livre e o número digitado vale", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  assert.match(afterChoice, /quantas unidades/i, `esperava pergunta de quantidade: ${afterChoice.slice(0, 150)}`);
+  const other = await c.send("qty:other");
+  assert.match(other, /quantas unidades|1 a 50/i, `esperava pergunta livre: ${other.slice(0, 150)}`);
+  await c.send("7");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ qty: number }>;
+  assert.equal(basket[basket.length - 1].qty, 7);
+});

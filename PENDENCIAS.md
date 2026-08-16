@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-14._
+_Última atualização: 2026-08-15._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -208,6 +208,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > estão corrigidos com golden/units/E2E. Decisão registrada: "o mais barato possível"
 > ORDENA (mais barata no topo) mas não esconde alternativas — restrição só com teto
 > explícito ("até X reais"). Suíte 314/314; golden 33/34 DET · 34/34 IA.
+
+> **15/08 — nova rodada exploratória ao vivo, sem conserto.** Dez cenários foram executados
+> no WhatsApp e cancelados antes de qualquer cobrança. A adição relativa por SKU, o estado
+> da cesta e o cancelamento pré-pagamento passaram. Novos casos para priorizar: cabo de 2 m
+> confundido com carregador; “pensando bem”/“chega amanhã” virando item indisponível; “sem
+> remédio” confundido com remoção; teto explícito exibindo opções acima do limite; e frase
+> natural com CEP pedindo o CEP novamente. O relatório está em
+> `docs/testes-whatsapp-2026-08-14.md`; nenhum item é marcado como corrigido por esta rodada.
 
 > **14/08 (3ª) — PUBLICADO.** Push `d9fab9a` → deploy `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`
 > `READY` em Production; smoke verde (landing 200, /ops 200, webhook 403/401). Os 7

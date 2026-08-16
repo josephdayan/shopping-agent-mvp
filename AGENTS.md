@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-06._
+_Última atualização: 2026-08-15._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -296,6 +296,33 @@ novos/marcados: "carregador usb", "racao para cachorro", "carregador de celular"
 pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só a IA resolve por
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
+
+**16/08 (2ª) — 4º ciclo de testes (10 rodadas): 6 consertos.** Perfume floral, leite sem
+lactose relativo, sacos 30l e a guarda de remédio passaram; fechados:
+1. **"cabo usb-c de 2 metros" devolvia carregador de parede**: o catálogo NÃO tem cabo
+   USB-C — a resposta certa é "não tenho". Caso golden `none` (cabo ≠ carregador) +
+   regra explícita no prompt do rerank: a recíproca de "carregador aceita cabo" NÃO
+   vale; sem cabo de verdade, lista vazia. Lacuna de vitrine registrada (cabos/eletro).
+2. **Teto de preço sobrevivia só no caminho determinístico**: a IA remove o preço da
+   query (por instrução), e o merge descartava o gêmeo determinístico que carregava o
+   "até R$25" — as opções passavam do limite (card de R$29,69). O merge agora re-anexa
+   o cap do gêmeo. É o conserto REAL do "teto excedido"; o filtro em si sempre existiu.
+3. **Tamanho vale para TODOS os cards**: "30 litros" filtra as 3 opções (antes 1 delas
+   vinha sem o atributo); mesmo `attrMatchesItem` do refinamento.
+4. **"Sem remédio" no COMEÇO da frase virava remoção** (REMOVE_START começa com "sem"):
+   exceção pra negação de categoria — a frase segue como pedido e o shampoo é buscado.
+5. **"pensando bem" e "chega amanhã/hoje" secos** viram filler/urgência (NOISE e
+   MODIFIER); o swap sintetizado não emite mais "não tenho: pensando bem".
+6. **Destino com CEP embutido** ("vou entregar em São Paulo, CEP 01310-100") consome o
+   CEP direto (intent cep bare) — nada de "me manda o CEP" redundante.
+
+**16/08 — botões de quantidade: "Outra quantidade" no lugar do 3 (pedido do dono).** Os
+botões da pergunta de quantidade viraram *1 unidade · 2 unidades · Outra quantidade*
+(id `qty:other`); o toque abre a pergunta livre (`copy.quantityAskFree`, "de 1 a 50") e
+o número digitado no chat continua valendo em qualquer momento. O perfil do WhatsApp
+(nome + CNPJ visíveis no contato) NÃO é código: edita-se no WhatsApp Manager da Meta —
+o dono foi orientado; o nome legal verificado pela Meta não é removível, mas
+descrição/sobre são.
 
 **15/08 (2ª) — 3º ciclo de testes (10 rodadas): 6 consertos.** Quantidades, referência
 por substantivo, cartão antigo por sku e guarda de remédio passaram; sobraram:
@@ -1200,6 +1227,18 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - runbook do piloto: `docs/operacao-piloto-needs-human-estorno.md`;
 - schema: `prisma/schema.prisma`;
 - testes: `tests/`.
+
+## Validação ao vivo — 15/08/2026
+
+Uma nova rodada de 10 cenários foi executada no WhatsApp contra a versão já publicada,
+sem alteração de código e sem cobrança. Passaram de forma clara a adição relativa pelo
+SKU, a preservação da cesta e o cancelamento antes do pagamento. Permaneceram observados
+em produção: cabo de 2 m retornando carregador de parede; fillers como “pensando bem” e
+“chega amanhã” virando linhas indisponíveis; “sem remédio” sendo confundido com remoção;
+cards acima de teto explícito; e CEP embutido na frase de troca de endereço sendo pedido
+novamente. O relatório detalhado está em
+[docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md). Isso é evidência
+de comportamento ao vivo, não registro de conserto ou de novo deploy.
 
 ## Regras para continuar o trabalho
 
