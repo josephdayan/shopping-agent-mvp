@@ -446,3 +446,47 @@ test("4º ciclo: destino com CEP embutido consome o CEP direto", () => {
   assert.equal(intent.kind, "cep");
   assert.equal((intent as { cep: string }).cep, "01310-100");
 });
+
+// ---------- 5º ciclo (16/08): contexto/ocasião, plural no merge, adição na mesma mensagem ----------
+
+test("5º ciclo: 'Para domingo'/'Para uma viagem'/'barato' nunca são itens", () => {
+  const cafe = parseBasketLines("Para domingo, dois cafés moídos até R$25 cada, qualquer marca, não descafeinado; se der, entrega amanhã.");
+  assert.equal(cafe.length, 1, `linhas: ${cafe.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(cafe[0].qty, 2);
+  assert.match(cafe[0].phrase, /at[eé] (uns )?(r\$ ?)?25/i);
+  assert.match(cafe[0].phrase, /sem descafeinado/);
+  const viagem = parseBasketLines("Para uma viagem, quero uma escova de dentes macia e pasta de dente.");
+  assert.equal(viagem.length, 2, `linhas: ${viagem.map((l) => l.phrase).join(" | ")}`);
+  const cabo = parseBasketLines("Quero um cabo USB-C de 2 metros para celular, não veicular, barato.");
+  assert.equal(cabo.length, 1, `linhas: ${cabo.map((l) => l.phrase).join(" | ")}`);
+});
+
+test("5º ciclo: plural não duplica no merge ('cafés moídos' casa 'café moído')", () => {
+  const det = parseBasketLines("dois cafés moídos até 25 reais cada, não descafeinado");
+  const merged = mergeShoppingLines([{ phrase: "café moído", qty: 2, qtyExplicit: true }], det);
+  assert.equal(merged.length, 1, `linhas: ${merged.map((l) => l.phrase).join(" | ")}`);
+  assert.match(merged[0].phrase, /até 25 reais/);
+});
+
+test("5º ciclo: adição relativa na MESMA mensagem soma na linha anterior", () => {
+  // Rodada 5: "...30 litros, qualquer marca; mais um desses" → 3x, uma linha.
+  const sacos = parseBasketLines("Quero dois sacos de lixo reforçados de 30 litros, qualquer marca; mais um desses.");
+  assert.equal(sacos.length, 1, `linhas: ${sacos.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(sacos[0].qty, 3);
+  // Rodada 8: "leite sem lactose; mais dois leites" → 3x na linha rica.
+  const leite = parseBasketLines("Leite sem lactose, qualquer marca; mais dois leites.");
+  assert.equal(leite.length, 1, `linhas: ${leite.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(leite[0].qty, 3);
+  assert.match(leite[0].phrase, /sem lactose/);
+  // E o lado da IA: linha nua com qty explícita se dobra na rica.
+  const merged = mergeShoppingLines(
+    [{ phrase: "leite sem lactose", qty: 1 }, { phrase: "leite", qty: 2, qtyExplicit: true }],
+    parseBasketLines("Leite sem lactose, qualquer marca; mais dois leites.")
+  );
+  assert.equal(merged.length, 1, `linhas: ${merged.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(merged[0].qty, 3);
+  // "mais um desses" no MEIO da mensagem não vira mais intent solto.
+  assert.equal(detectIntent("Quero dois sacos de lixo de 30 litros, qualquer marca; mais um desses.").kind, "free_text");
+  // Sozinho, continua funcionando.
+  assert.equal(detectIntent("Mais três desses.").kind, "add_more_same");
+});

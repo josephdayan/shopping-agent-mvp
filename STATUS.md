@@ -270,6 +270,18 @@ de hoje está em
 > A troca de endereço ainda derrubou a cotação velha antes do pagamento e nenhum Pix/cartão
 > foi acionado. Evidência detalhada em `docs/testes-whatsapp-2026-08-14.md`.
 
+> **15/08 — nome público do WhatsApp em revisão.** Para o número conectado da Lia
+> (`+55 11 97844-4813`), foi enviado no WhatsApp Manager o novo nome visível **Lia Delivery**,
+> removendo o sufixo com CNPJ e nome pessoal. A Meta registrou **In Review**; o texto antigo
+> continua público até a aprovação. Não houve alteração de código, número ou pagamento.
+
+> **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
+> conversa limpa, sem cobrança. Passaram troca de item, shampoo com “sem remédio”, presente
+> até R$100 e sequência 4x → 7x → 5x de bombom. Persistiram ruídos quando “barato”, “Para
+> domingo” ou “Para uma viagem” aparecem junto do pedido, quando leite e “mais dois” vêm na
+> mesma mensagem, e a cesta não é retomada automaticamente após salvar novo endereço.
+> Registro completo em `docs/testes-whatsapp-2026-08-14.md`.
+
 > **11/08 (7ª) — 2ª revisão: 4 lacunas de concorrência fechadas.** Lock de turno por
 > conversa (mensagens simultâneas não se apagam mais; colunas novas JÁ no banco);
 > trocar endereço com pedido na fila ATUALIZA o pedido (e com pagamento emitido orienta

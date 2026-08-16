@@ -231,6 +231,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > pessoal. O WhatsApp Manager mostra **In Review**; conferir o perfil no WhatsApp após a Meta
 > aprovar antes de encerrar esta pendência de privacidade/branding.
 
+> **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
+> conversa limpa. Passaram troca de item, “sem remédio” com shampoo, presente dentro de
+> R$100 e 4x → 7x → 5x do mesmo bombom. Permanecem casos para priorizar: fillers/contexto
+> (“Para domingo”, “Para uma viagem”), preferência “barato”, combinação de itens e
+> preservação da cesta após salvar novo endereço. Registro em
+> `docs/testes-whatsapp-2026-08-14.md`.
+
 > **14/08 (3ª) — PUBLICADO.** Push `d9fab9a` → deploy `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`
 > `READY` em Production; smoke verde (landing 200, /ops 200, webhook 403/401). Os 7
 > consertos das 15 rodadas estão no ar. **Re-teste do dono:** rodadas 5 (esclarecimento

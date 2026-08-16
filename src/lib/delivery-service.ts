@@ -1244,8 +1244,11 @@ async function handleDeliveryTurn(
     // (antes ele ficava órfão no /ops com o endereço velho).
     const keepOrder = ctx.step === "awaiting_operator_quote" && Boolean(ctx.deliveryOrderId);
     if (!keepOrder && ctx.deliveryOrderId && (ctx.step === "awaiting_quote_confirmation" || ctx.step === "awaiting_supplier_validation")) {
+      const openOrder = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
       if (await cancelPendingRetailerQuote(ctx.deliveryOrderId)) {
         await reply(phone, copy.quoteDroppedForNewAddress());
+        // Cesta preservada: com o endereço novo salvo, o fluxo re-cota sozinho.
+        ctx.basket = ((openOrder?.items as unknown as BasketItem[]) ?? []).filter((item) => item.unitPrice > 0);
       }
     }
     // A new CEP must never inherit the previous door number/address.
@@ -1331,6 +1334,10 @@ async function handleDeliveryTurn(
         if (await cancelPendingRetailerQuote(order.id)) {
           await reply(phone, copy.quoteDroppedForNewAddress());
         }
+        // A CESTA volta do pedido cancelado pro contexto: depois do endereço novo, o
+        // fluxo re-cota sozinho (5º ciclo, rodada 6: a Lia "esquecia" a cesta e pedia
+        // pra começar de novo).
+        ctx.basket = ((order.items as unknown as BasketItem[]) ?? []).filter((item) => item.unitPrice > 0);
         ctx.deliveryOrderId = undefined;
         ctx.deliveryAddress = undefined;
         ctx.deliveryAddressVerified = false;

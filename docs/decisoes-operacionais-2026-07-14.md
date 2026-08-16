@@ -679,3 +679,18 @@ em item indisponível, interpretar “sem remédio” como remoção, exibir op�
 explícito e pedir novamente um CEP que já veio na frase de troca de endereço. No último caso,
 a cotação antiga foi cancelada antes de qualquer cobrança. O detalhe está em
 `docs/testes-whatsapp-2026-08-14.md`; estes achados permanecem pendentes de decisão e correção.
+
+## Perfil público do WhatsApp — 15/08/2026
+
+Foi submetida no WhatsApp Manager a mudança do display name do número conectado da Lia para
+**Lia Delivery**, retirando CNPJ e nome pessoal. A Meta marcou o pedido como **In Review**;
+até a aprovação, o perfil pode continuar mostrando o nome anterior. Não houve mudança de
+telefone, cobrança ou código.
+
+## Nova validação independente — 15/08/2026
+
+Outra rodada de 10 conversas foi executada sem cobrança e sem alteração de código. Passaram
+troca de item, shampoo com “sem remédio”, presente até R$100 e ajuste de bombom 4x → 7x →
+5x. Permaneceram ruídos de contexto (“Para domingo”/“Para uma viagem”), preferência de
+preço, combinação de itens na mesma mensagem e retomada da cesta depois de trocar o endereço.
+O detalhe está em `docs/testes-whatsapp-2026-08-14.md`.

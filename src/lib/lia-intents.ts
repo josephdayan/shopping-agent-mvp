@@ -117,6 +117,8 @@ const MODIFIER_SEGMENT_RE = new RegExp(
       "sem preferencia( de marca)?( nenhuma)?",
       "de preferencia .*",
       "(o |a )?mais barat[oa]( que tiver| possivel)?",
+      "(bem )?barat[oa]s?( demais)?",
+      "p(a)?ra ((o|a|um|uma) )?(domingo|segunda|terca|quarta|quinta|sexta|sabado|hoje|amanha|semana|festa|viagem|casa|churrasco|almoco|jantar|cafe da manha|lanche|feriado|natal|pascoa|aniversario)( .*)?",
       "((e )?(queria|quero|preciso)( de)? )?(algo|alguma coisa) (bem |mais )?(barat[oa]|simples|bo[am]|em conta)( possivel)?",
       "sem precisar( de)? .*",
       "se (tiver|der|for possivel|possivel|rolar|puder|achar|encontrar)( .*)?",
@@ -218,6 +220,21 @@ export function parseBasketLines(text: string): ParsedLine[] {
       if (prev) prev.phrase = `${prev.phrase} ${pron[1].trim()}`.replace(/\s+/g, " ");
       continue;
     }
+    // Adição RELATIVA dentro da MESMA mensagem: "…30 litros, qualquer marca; mais um
+    // desses" e "leite sem lactose; mais dois leites" somam na linha ANTERIOR — nunca
+    // viram linha nova nem "recomeço" (5º ciclo, rodadas 5 e 8). O "mais" já foi
+    // limpo pelo map; sobra "um desses" / "dois leites".
+    if (merged.length) {
+      const prev = merged[merged.length - 1];
+      const bareRef = /^(?:um |uma )?(?:desses?|dessas?|d[oa] mesm[oa]s?|iguais?)$/.test(normalizeMsg(line.phrase));
+      const bareNoun =
+        line.qtyExplicit && meaningfulProductTokens(line.phrase).length === 1 && sharesProductNoun(line.phrase, prev.phrase);
+      if (bareRef || bareNoun) {
+        prev.qty = Math.min(MAX_QTY, prev.qty + Math.max(1, line.qty));
+        prev.qtyExplicit = true;
+        continue;
+      }
+    }
     // Preferência NEGATIVA como segmento ("sem pimenta", "não veicular", "não quero
     // brinquedo barulhento", "não quero os muito amargos"): vira atributo "sem <alvo>"
     // do item ANTERIOR — o matcher já exclui por negação (negatedWords). Nunca vira
@@ -316,8 +333,11 @@ function meaningfulProductTokens(phrase: string): string[] {
   return normalizeMsg(phrase)
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
+    // Singulariza ANTES do alias: "cafés moídos" tem que casar com "café moído" — sem
+    // isso o merge com a IA duplicava a linha (5º ciclo, rodada 4).
+    .map((token) => (token.length >= 5 ? token.replace(/s$/, "") : token))
     .map((token) => PRODUCT_TOKEN_ALIASES[token] ?? token)
-    .filter((token) => token.length >= 4 && !["para", "umas", "mais"].includes(token));
+    .filter((token) => token.length >= 4 && !["para", "umas", "mais", "cada"].includes(token));
 }
 export function sharesProductNoun(a: string, b: string): boolean {
   const aTokens = meaningfulProductTokens(a);
@@ -345,7 +365,24 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
   // O LLM não devolve "quantidade foi DITA" — sem propagar o qtyExplicit do parser
   // determinístico, "1 coca" volta a re-perguntar "Quantas unidades?". qty>1 do LLM
   // é sempre dito (ninguém ganha 2 sem pedir); qty=1 herda a flag do determinístico.
-  const flagged = ai.map((line) => {
+  // "leite sem lactose; mais dois leites": quando a própria IA devolve a linha nua
+  // ("leite", qty 2) ao lado da rica ("leite sem lactose"), a nua com quantidade dita
+  // se dobra na rica ANTES da herança de quantidade do gêmeo determinístico — depois
+  // dela contaria duas vezes (o gêmeo já traz o total somado).
+  const foldedAi: ParsedLine[] = [];
+  for (const line of ai) {
+    const saidQty = line.qtyExplicit || line.qty > 1;
+    const host = saidQty && meaningfulProductTokens(line.phrase).length === 1
+      ? foldedAi.find((c) => sameProduct(line.phrase, c.phrase) && meaningfulProductTokens(c.phrase).length > 1)
+      : undefined;
+    if (host) {
+      host.qty = Math.min(MAX_QTY, host.qty + Math.max(1, line.qty));
+      host.qtyExplicit = true;
+      continue;
+    }
+    foldedAi.push({ ...line });
+  }
+  const flagged = foldedAi.map((line) => {
     // O TETO de preço vive no gêmeo determinístico (a IA remove preço da query por
     // instrução): sem re-anexar, "até R$25 cada" era ordenação e as opções passavam
     // do limite (rodada 10, 4º ciclo: card de R$29,69 com teto de R$25).
@@ -637,7 +674,7 @@ export function detectIntent(text: string): Intent {
   // referência ao item que acabou de entrar — resolve pelo sku da cesta, sem nova
   // busca (a busca genérica podia devolver OUTRA marca; caso real da rodada 13).
   const moreSame = n.match(
-    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*([a-z][a-z ]{2,30}?)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desses?(?: ai| mesmos?)?\b|dessas?(?: ai| mesmas?)?\b|dele\b|dela\b)\s*([a-z][a-z ]{2,30})?/
+    /^(?:(?:oi|ola|pode|coloca|poe|bota|adiciona|acrescenta|quero|queria|vou querer|me ve|manda|e|so|só|colocar|adicionar)\s+)*(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*([a-z][a-z ]{2,30}?)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desses?(?: ai| mesmos?)?\b|dessas?(?: ai| mesmas?)?\b|dele\b|dela\b)\s*([a-z][a-z ]{2,30})?/
   );
   if (moreSame) {
     const rawQty = moreSame[1];

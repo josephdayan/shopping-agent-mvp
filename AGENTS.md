@@ -1240,6 +1240,22 @@ novamente. O relatório detalhado está em
 [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md). Isso é evidência
 de comportamento ao vivo, não registro de conserto ou de novo deploy.
 
+### Perfil público do WhatsApp — 15/08/2026
+
+No WhatsApp Manager da conta conectada `+55 11 97844-4813`, foi solicitada a troca do nome
+visível de `Lia Delivery by 67.742.955 Joseph Carlos Dayan` para **Lia Delivery**. O painel
+marcou o número como **In Review**. Até a aprovação da Meta, o CNPJ e o nome anterior ainda
+podem aparecer no WhatsApp; não há nova ação de código ou de pagamento associada.
+
+### Validação independente — 15/08/2026
+
+Outra rodada de 10 cenários foi executada sem alteração de código. Passaram a troca
+“granola → aveia”, “sem remédio” com shampoo, presente dentro de R$100 e 4x → 7x → 5x
+do mesmo bombom. Ainda foram observados fillers/contexto (“Para domingo”, “Para uma
+viagem”), preço (“barato”), combinação de itens na mesma mensagem, e perda da cesta
+depois de salvar um novo endereço. O detalhe está no relatório de testes; isto é validação
+ao vivo, não conserto nem novo deploy.
+
 ## Regras para continuar o trabalho
 
 - Preserve mudanças existentes: o worktree pode estar sujo e contém trabalho do usuário.

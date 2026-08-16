@@ -110,3 +110,29 @@ foram canceladas antes da cobrança, e a Lia confirmou que nada foi cobrado.
 - Falhas novas ou persistentes: categoria/atributo do produto (“cabo de 2 m”), fillers (“pensando bem”), negação “sem remédio” no início de pedido, urgência (“chega amanhã”) e teto explícito aparecendo acima do limite.
 - A troca de endereço ficou segura contra cobrança no endereço velho, mas ainda não interpreta o CEP quando ele já vem na mesma frase.
 - Esta rodada é evidência de comportamento ao vivo, não de correção implementada; nenhum arquivo de código foi alterado.
+
+## Nova rodada independente ao vivo — 15/08/2026
+
+Depois das alterações informadas pelo operador, foram executados 10 cenários independentes,
+sem usar a rodada anterior como estado de conversa. Nenhum Pix ou cartão foi acionado; os
+casos que chegaram à cotação foram cancelados antes da cobrança.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Cabo USB-C de 2 m para celular, não veicular e barato | **Falha**: não trouxe opções e separou “barato” como uma linha indisponível adicional; listou “cabo usb-c 2 metros para celular sem veicular” como não disponível | Preferência de preço não pode virar item; quando não houver cabo compatível, a recusa deve ser uma só e explicar o tipo/comprimento. |
+| 2 | Iogurte natural + granola; troca por aveia “pensando bem” | **Sucesso**: encontrou os dois itens corretos, descartou granola, não criou item para “pensando bem”, confirmou 1x + 1x e foi cancelado | Nenhum problema funcional observado. |
+| 3 | “Sem remédio hoje; quero um shampoo normal, qualquer marca” | **Sucesso**: pesquisou shampoo, não exibiu alerta indevido de medicamento, mostrou opções e permitiu escolher; cancelado | A confirmação de uma unidade implícita não mostra “1x”, mas o fluxo ficou correto. |
+| 4 | Dois cafés até R$25 cada, não descafeinado, “se der entrega amanhã” | **Falha de extração**: “Para domingo” virou busca indisponível e o pedido foi dividido em “café moído” e “cafés moídos cada sem descafeinado”; não chegou a uma cesta coerente | Contexto temporal, “cada” e urgência precisam permanecer como modificadores do café, não criar consultas/itens. |
+| 5 | Dois sacos de lixo 30 L, qualquer marca; “mais um desses” na mesma mensagem | **Falha**: respondeu com mensagem genérica de recomeço e não interpretou a cesta | Aceitar quantidade, atributo e adição relativa na mesma mensagem, ou responder claramente qual parte não foi entendida. |
+| 6 | Dois sacos 30 L; depois +3; fechar; mudar para Campinas com CEP na frase | **Parcial**: opções passaram a respeitar 30 L; 2x → 5x funcionou; ao dizer “Antes de pagar, vou entregar em Campinas, CEP 13010-100”, cancelou a cotação antiga sem repetir o CEP e pediu endereço completo; após salvar o endereço, voltou a pedir o que comprar e não retomou automaticamente a cesta | A troca de endereço ficou segura, mas precisa preservar/recalcular a cesta depois do endereço completo. |
+| 7 | Lembrancinha para criança de 6 anos, até R$100, sem brinquedo barulhento | **Sucesso**: uma opção dentro do teto, restrição negativa preservada, sem linha fantasma; escolhido e cancelado | Nenhum problema funcional observado. |
+| 8 | Leite sem lactose, qualquer marca; “mais dois leites” na mesma mensagem | **Parcial**: encontrou leite sem lactose, mas criou uma segunda linha genérica “leite” em vez de herdar a restrição para os dois adicionais | Resolver a referência relativa dentro da mesma mensagem, não apenas quando ela vem em turno separado. |
+| 9 | Quatro bombons; +3 do mesmo; número solto “5” | **Sucesso**: confirmou 4x, passou para 7x, ajustou para 5x do mesmo SKU, chegou ao pagamento e foi cancelado sem cobrança | Nenhum problema funcional observado. |
+| 10 | Escova macia e pasta de dente “para uma viagem”, sem remédio | **Parcial**: encontrou escova e creme dental, não alertou sobre medicamento, mas criou “Para uma viagem” como terceiro item | Motivo/contexto (“para uma viagem”) deve ser ignorado na extração, sem afetar os dois produtos válidos. |
+
+### Síntese da rodada independente
+
+- 4 casos passaram plenamente; 3 foram parciais; 3 tiveram falha clara de extração ou roteamento.
+- Quantidade relativa por SKU, troca de item, teto de presente e bloqueio de medicamento funcionaram em parte dos casos.
+- Os problemas mais claros agora são: contexto inicial (“Para domingo”, “Para uma viagem”), preferência (“barato”), composição de uma mesma mensagem e preservação da cesta após troca de endereço.
+- Todos os pagamentos foram evitados e nenhum código foi alterado durante esta rodada.

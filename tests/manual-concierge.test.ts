@@ -775,3 +775,17 @@ test("botão 'Outra quantidade' abre a pergunta livre e o número digitado vale"
   const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ qty: number }>;
   assert.equal(basket[basket.length - 1].qty, 7);
 });
+
+test("5º ciclo: trocar endereço com cotação na mesa PRESERVA a cesta e re-cota sozinho", async (t) => {
+  if (!dbOk) return t.skip();
+  // Rodada 6: depois do endereço novo a Lia "esquecia" a cesta e pedia pra recomeçar.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  const drop = await c.send("Antes de pagar, vou entregar em São Paulo, CEP 01310-100.");
+  assert.doesNotMatch(drop, /Como prefere pagar/i);
+  const done = await c.send("Avenida Paulista, 1000, Bela Vista, São Paulo - SP");
+  // A cesta voltou e o fechamento re-cotou: total na resposta, sem "me diz o que você quer".
+  assert.match(done, /Total|Recebi seu pedido/i, `não re-cotou: ${done.slice(0, 250)}`);
+  assert.doesNotMatch(done, /me diz o que você quer/i, `esqueceu a cesta: ${done.slice(0, 250)}`);
+});

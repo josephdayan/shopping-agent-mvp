@@ -326,3 +326,17 @@ Ainda há evidência operacional para tratar como caso de produto: atributos de 
 fillers e urgência sendo interpretados como itens, “sem remédio” confundido com remoção, teto
 explícito não filtrando todos os cards e CEP já informado sendo solicitado novamente. O registro
 completo está em `docs/testes-whatsapp-2026-08-14.md`.
+
+## Perfil público do WhatsApp — 15/08/2026
+
+Foi enviado ao WhatsApp Manager o novo display name **Lia Delivery** para o número conectado,
+sem o sufixo com CNPJ e nome pessoal. A alteração está **In Review** pela Meta e só passa a
+aparecer no WhatsApp depois da aprovação.
+
+## Nova validação de conversa — 15/08/2026
+
+Em 10 cenários independentes, nenhum pagamento foi acionado. A operação confirmou que a
+troca de item, a negação “sem remédio”, o teto de presente e as quantidades relativas de
+bombom funcionam. Ainda há ruído quando contexto ou preço vêm na mesma frase do pedido e a
+cesta não é retomada automaticamente após um novo endereço. Registro em
+`docs/testes-whatsapp-2026-08-14.md`.
