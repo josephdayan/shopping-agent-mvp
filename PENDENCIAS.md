@@ -192,6 +192,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **16/08 (2ª) — 5º ciclo (10 rodadas) → 4 consertos PUBLICADOS.** Push `8cff5c1` →
+> deploy `Ready` (smoke verde: landing 200, /ops 200, webhook 403). No ar: ocasião/dia e
+> "barato" seco como modificadores; plural não duplica no merge; adição relativa na
+> mesma mensagem; cesta preservada + re-cotação automática na troca de endereço. Gate
+> focado (tsc + 38 units + golden 35/35 + 6 E2E dos fluxos tocados) — decisão do dono.
+> Re-teste: as 4 frases exatas do ciclo, em especial a sequência completa da rodada 6.
+
 > **16/08 — 4º ciclo (10 rodadas) → 6 consertos + botão "Outra quantidade" PUBLICADOS.**
 > Push `00981df` → deploy `Ready` (smoke verde). No ar: cabo ≠ carregador (golden none),
 > teto de preço sobrevivendo ao merge com a IA, tamanho filtrando todos os cards,

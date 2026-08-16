@@ -234,6 +234,12 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **16/08 (2ª) — 5º ciclo (10 rodadas): 4 consertos.** Ocasião/dia ("Para domingo",
+> "Para uma viagem") e "barato" seco viram modificadores; plural não duplica no merge
+> ("cafés moídos" ≈ "café moído"); adição relativa na mesma mensagem soma na linha
+> anterior; trocar endereço com cotação na mesa preserva a cesta e re-cota sozinho.
+> Gate de publicação agora é focado (decisão do dono).
+
 > **16/08 — 4º ciclo (10 rodadas): 6 consertos + botão "Outra quantidade".** Cabo ≠
 > carregador (golden `none` + prompt; catálogo não tem cabo USB-C — lacuna registrada);
 > teto de preço sobrevive ao merge com a IA (era o "R$29,69 acima do teto"); tamanho

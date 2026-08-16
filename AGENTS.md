@@ -297,6 +297,21 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**16/08 (3ª) — 5º ciclo de testes (10 rodadas): 4 consertos + gate focado.** Granola→aveia,
+"sem remédio"+shampoo, presente≤R$100 e 4x→7x→5x passaram; fechados:
+1. "Para domingo"/"Para uma viagem" (ocasião/dia) e "barato" seco = modificadores.
+2. PLURAL no merge: "cafés moídos" não casava "café moído" e o gêmeo determinístico era
+   resgatado como linha duplicada — `meaningfulProductTokens` singulariza; "cada" ignorado.
+3. Adição relativa na MESMA mensagem ("…30 litros; mais um desses", "leite sem lactose;
+   mais dois leites"): soma na linha anterior no parser; a linha nua da IA se dobra na
+   rica ANTES da herança do gêmeo (depois contaria 2x); MORE_SAME ancorado no começo da
+   mensagem (não sequestra mensagem que contém lista).
+4. Trocar endereço com cotação na mesa PRESERVA a cesta (restaurada de `order.items` ao
+   cancelar) e re-cota sozinho após o endereço novo.
+Processo: a partir daqui o gate de publicação é FOCADO (tsc + units + golden + E2E dos
+fluxos tocados); `npm test` completo só em mudança de core, antes de ciclo de teste do
+dono, ou a pedido — decisão do dono em 16/08 (memória persistida).
+
 **16/08 (2ª) — 4º ciclo de testes (10 rodadas): 6 consertos.** Perfume floral, leite sem
 lactose relativo, sacos 30l e a guarda de remédio passaram; fechados:
 1. **"cabo usb-c de 2 metros" devolvia carregador de parede**: o catálogo NÃO tem cabo
