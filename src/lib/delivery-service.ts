@@ -10,6 +10,7 @@ import {
   type StoreConnector
 } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
+import { mercadoLivreEnabled } from "@/lib/stores/mercadolivre";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import {
   attrMatchesItem,
@@ -168,7 +169,7 @@ type BasketItem = {
   productUrl?: string;
 };
 
-type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; storeKey?: string; storeLabel?: string };
+type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; storeKey?: string; storeLabel?: string; delivery?: string };
 type StoreFulfillment = {
   storeKey: string;
   storeLabel: string;
@@ -380,6 +381,16 @@ async function releaseTurnLock(convoId: string, token: string) {
 // Mensagens de ESPERA de cotação sempre saem com o botão "Cancelar pedido" no Meta
 // (pedido do dono, 11/08: a saída tem que estar visível, não escondida num comando).
 // Sem Meta (ou em falha), cai no texto puro — "cancelar" digitado funciona igual.
+// Dispara "estou procurando" só se a busca passar de LIA_SEARCH_NOTICE_MS (2,5s) —
+// busca de catálogo local (instantânea) nunca chega a mandar a mensagem.
+function searchNoticeTimer(phone: string): { cancel: () => void } {
+  const delay = Number(process.env.LIA_SEARCH_NOTICE_MS ?? 2500);
+  const timer = setTimeout(() => {
+    void reply(phone, copy.searchingWider()).catch(() => {});
+  }, delay);
+  return { cancel: () => clearTimeout(timer) };
+}
+
 async function replyQuoteNotice(phone: string, text: string) {
   try {
     if (await whatsappAdapter.sendCancelableNotice(phone, text)) return;
@@ -624,7 +635,7 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
 function choicesTextFor(p: PendingChoice, header?: string): string {
   return copy.choicesText(
     p.query,
-    p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice) })),
+    p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice), delivery: o.delivery })),
     header
   );
 }
@@ -637,10 +648,12 @@ function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
 }
 
 function toChoiceOption(
-  o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string },
+  o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string },
   storeRef?: { storeKey?: string; storeLabel?: string }
 ): ChoiceOption {
-  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, ...storeRef };
+  // Vitrine ao vivo do ML manda o prazo do anúncio em `category` ("chega hoje").
+  const delivery = storeRef?.storeKey === "mercadolivre" ? o.category : undefined;
+  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, ...storeRef, ...(delivery ? { delivery } : {}) };
 }
 
 async function replyPhoto(phone: string, text: string, imageUrl?: string) {
@@ -694,7 +707,7 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   await reply(phone, header ?? copy.choicesHeader(p.query));
   for (let i = 0; i < p.options.length; i++) {
     const o = p.options[i];
-    await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice)), o.imageUrl);
+    await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice), o.delivery), o.imageUrl);
     if (gapMs > 0 && i < p.options.length - 1) await sleep(gapMs);
   }
   await reply(phone, copy.choicesAsk(p.options.length));
@@ -2661,7 +2674,11 @@ async function handleConciergeRequest(
   // Sem travar loja (`lockedStoreKey` fica indefinido): no concierge quem compra é o
   // operador, que vai em quantas lojas precisar. A cesta pode ser mista, diferente do fluxo
   // legado, onde um pedido = uma loja = uma entrega do varejista.
-  const raw = await buildChoices(text);
+  // ML ligado = a busca pode custar ~25s numa consulta fria (medido 16/08). O cliente
+  // não pode ficar no silêncio: avisa ANTES e as opções chegam na mensagem seguinte.
+  // Busca quente (cache) não avisa — responde na hora, como sempre.
+  const slowSearchNotice = mercadoLivreEnabled() ? searchNoticeTimer(phone) : undefined;
+  const raw = await buildChoices(text).finally(() => slowSearchNotice?.cancel());
   // Piso de relevância próprio do concierge: opção que não responde pelo que o cliente
   // escreveu é descartada e a linha volta a ser livre. Sugerir errado é pior que não
   // sugerir, porque a linha livre resolve o pedido de verdade.

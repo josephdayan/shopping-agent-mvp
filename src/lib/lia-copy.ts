@@ -237,8 +237,11 @@ export function nextChoiceHeader(query: string, remaining: number): string {
   return `Agora vamos escolher *${query}*.${tail}`;
 }
 
-export function choiceLine(index: number, name: string, displayPrice: number): string {
-  return `*${index + 1})* ${name} — ${brl(displayPrice)}`;
+export function choiceLine(index: number, name: string, displayPrice: number, delivery?: string): string {
+  // `delivery` só existe em vitrine que informa o prazo por anúncio (Mercado Livre):
+  // é a promessa da PRÓPRIA loja ("chega hoje"), nunca uma estimativa nossa.
+  const prazo = delivery ? ` · _${delivery}_` : "";
+  return `*${index + 1})* ${name} — ${brl(displayPrice)}${prazo}`;
 }
 
 export function choicesAsk(count: number): string {
@@ -248,10 +251,10 @@ export function choicesAsk(count: number): string {
     : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho, *outras* que eu mostro mais, ou *pula* pra deixar de fora. 🙂`;
 }
 
-export function choicesText(query: string, options: { name: string; displayPrice: number }[], header?: string): string {
+export function choicesText(query: string, options: { name: string; displayPrice: number; delivery?: string }[], header?: string): string {
   return [
     header ?? choicesHeader(query),
-    ...options.map((o, i) => choiceLine(i, o.name, o.displayPrice)),
+    ...options.map((o, i) => choiceLine(i, o.name, o.displayPrice, o.delivery)),
     "",
     choicesAsk(options.length)
   ].join("\n");
@@ -863,4 +866,10 @@ export function qtyAdjusted(qty: number, name: string): string {
 // Toque em "Outra quantidade": pergunta aberta — o número vem digitado no chat.
 export function quantityAskFree(name: string): string {
   return `Me diz quantas unidades de *${name}* você quer (de 1 a 50) 🙂`;
+}
+
+// Busca que passou de ~2,5s (vitrine de cauda longa ao vivo): o cliente ouve que a Lia
+// está procurando ANTES de esperar — silêncio de 25s parece travamento (16/08).
+export function searchingWider(): string {
+  return "🔎 Não achei isso nas lojas do dia a dia — deixa eu procurar num fornecedor maior. Já te mando as opções!";
 }

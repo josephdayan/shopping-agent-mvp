@@ -234,6 +234,13 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **16/08 (3ª) — Mercado Livre como vitrine de cauda longa, ATRÁS DE FLAG.** Decisão do
+> dono: com compra manual, o motivo de abandonar o ML (automatizar checkout) não existe
+> mais — e as recusas dos 7 ciclos eram justamente cauda longa. Actor validado ao vivo
+> (22–25s, 48 itens, ~R$0,03/busca, com prazo do anúncio). Conector desligado por padrão
+> (`LIA_ENABLE_MERCADOLIVRE`), cache 6h, aviso antes de busca lenta, prazo do anúncio no
+> card, guarda ANVISA aplicada. Suíte 338/338.
+
 > **16/08 (2ª) — 5º ciclo (10 rodadas): 4 consertos.** Ocasião/dia ("Para domingo",
 > "Para uma viagem") e "barato" seco viram modificadores; plural não duplica no merge
 > ("cafés moídos" ≈ "café moído"); adição relativa na mesma mensagem soma na linha

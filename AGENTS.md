@@ -297,6 +297,31 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**16/08 (5ª) — MERCADO LIVRE volta como vitrine de cauda longa (atrás de flag).**
+Pergunta do dono: "o fluxo é manual, por que não uso o ML que tem tudo?". Procede — o
+motivo histórico de abandonar o ML era AUTOMATIZAR o checkout (sem API de comprador,
+robô = banimento); com compra manual pelo operador esse bloqueio não existe. E os 7
+ciclos de teste real mostraram que as recusas recorrentes eram justamente cauda longa
+(cabo USB-C, camiseta, lancheira). O dono também apontou que a entrega das lojas locais
+é D+1 na maioria dos casos (só Oba é same-day de verdade), então "hoje" não era o
+diferencial que eu supunha — o diferencial é a CONVERSA.
+**Validação antes de codar (16/08, actor real karamelo/mercadolivre-scraper):** 22,7s
+("cabo usb-c 2 metros") e 25,1s ("camiseta futebol"), 48 itens cada, ~R$0,03/busca, com
+título, preço, link, foto, estoque, flag de patrocinado E o campo `envio` — que traz o
+PRAZO DO ANÚNCIO ("Chegará grátis hoje Enviado pelo FULL").
+Desenho (`src/lib/stores/mercadolivre.ts`): 19ª vitrine, **desligada por padrão**
+(`LIA_ENABLE_MERCADOLIVRE=true` liga; `false` volta atrás sem deploy); último no
+registry (lojas locais decidem o "hoje"); cache de 6h no `SearchCache` que já existia;
+aviso ao cliente se a busca passar de 2,5s (`copy.searchingWider`) porque 25s de
+silêncio parece travamento; prazo do anúncio no card (`choiceLine` ganhou `delivery`) —
+nunca estimativa nossa; descarta patrocinado/sem preço/sem estoque; e **guarda ANVISA
+aplicada** (o ML vende dipirona — sem `withoutMedicine` a Lia venderia remédio).
+Testes: 5 do conector, incluindo pipeline completo com o payload REAL do actor mockado
+na rede. Pinado `false` no load-env (suíte nunca vai à rede). Suíte 338/338.
+**Pendente (gate 2, não bloqueia piloto):** política do ML sobre muitas compras da mesma
+conta para endereços diferentes — irrelevante em 5–10 pedidos, a verificar antes de
+escalar.
+
 **16/08 (4ª) — 6º ciclo (10 rodadas): 7 sucessos, 3 consertos.** A régua: 15→7→6→6→4→3.
 1. "Para uma viagem" vazava pelo lado da IA (o determinístico já filtrava):
    `isRequestModifier` exportado e aplicado aos itens da extração em extractLines.

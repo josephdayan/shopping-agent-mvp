@@ -23,6 +23,9 @@ process.env.LIA_SEND_PHOTOS = "false";
 // Frete ao vivo consulta a rede (checkout das lojas) — nos testes fica desligado para
 // os E2E de cotação instantânea serem determinísticos (tabela semeada).
 process.env.LIA_LIVE_FREIGHT_OFF = "true";
+// Mercado Livre é vitrine AO VIVO (rede + custo por busca): fica desligado nos testes,
+// como em produção por padrão. Seus próprios testes vivem em mercadolivre-store.test.ts.
+process.env.LIA_ENABLE_MERCADOLIVRE = "false";
 // The conversation evals assert NLU/choice/payment behavior, not the store roster, and
 // were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
 // Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba

@@ -18,6 +18,7 @@ import { imigrantesStore } from "./imigrantes";
 import { naturalDaTerraStore } from "./naturaldaterra";
 import { cobasiStore } from "./cobasi";
 import { giulianaFloresStore } from "./giulianaflores";
+import { mercadoLivreEnabled, mercadoLivreStore } from "./mercadolivre";
 
 // Store registry. Adding a supply source = write one connector file and register it
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
@@ -54,7 +55,11 @@ const STORES: Record<string, StoreConnector> = {
   ...(process.env.LIA_ENABLE_IMIGRANTES !== "false" ? { [imigrantesStore.key]: imigrantesStore } : {}),
   ...(process.env.LIA_ENABLE_NATURALDATERRA !== "false" ? { [naturalDaTerraStore.key]: naturalDaTerraStore } : {}),
   ...(process.env.LIA_ENABLE_COBASI !== "false" ? { [cobasiStore.key]: cobasiStore } : {}),
-  ...(process.env.LIA_ENABLE_GIULIANAFLORES !== "false" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {})
+  ...(process.env.LIA_ENABLE_GIULIANAFLORES !== "false" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {}),
+  // Mercado Livre: vitrine de CAUDA LONGA, ao vivo (decisão do dono 16/08). Fica por
+  // ÚLTIMO no registry de propósito: as lojas locais decidem o "hoje"; o ML entra pra
+  // resolver o que ninguém tem. Desligado por padrão — LIA_ENABLE_MERCADOLIVRE=true.
+  ...(mercadoLivreEnabled() ? { [mercadoLivreStore.key]: mercadoLivreStore } : {}),
 };
 
 // Pick the single store for an order (one order = one store, one retailer delivery). For each
