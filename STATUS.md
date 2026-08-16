@@ -242,7 +242,10 @@ de hoje está em
 > card, guarda ANVISA aplicada. Review pré-ativação corrigiu dois desvios: o ML agora só
 > roda quando nenhuma das 18 vitrines locais tem match forte (item cotidiano não espera
 > actor pago/lento), e o prazo chega também ao card interativo da Meta. Suíte completa
-> 340/340, tsc, lint e build verdes.
+> 340/340, tsc, lint e build verdes. **Ativado em Production em 16/08:** flag Sensitive
+> `true`, commit `5040813`, deploy `dpl_9j9Yyn2fFWoCCWEUGDb8Bax7DMxZ` `READY`; smoke
+> verde e sem erros novos. Falta apenas o primeiro pedido frio no WhatsApp provar a
+> integração runtime com o token Sensitive.
 
 > **16/08 (2ª) — 5º ciclo (10 rodadas): 4 consertos.** Ocasião/dia ("Para domingo",
 > "Para uma viagem") e "barato" seco viram modificadores; plural não duplica no merge

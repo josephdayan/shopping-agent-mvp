@@ -323,6 +323,11 @@ foram corrigidos e travados: aviso só começa quando o fallback realmente dispa
 prazo atravessa `PendingChoice` + `sendDeliveryChoices`. Testes: 6 do conector, incluindo
 pipeline completo com o payload REAL do actor mockado na rede. Pinado `false` no load-env
 (suíte nunca vai à rede). Suíte completa 340/340, tsc, lint e build verdes.
+**Ativação em Production (16/08):** `LIA_ENABLE_MERCADOLIVRE=true` foi criada como
+Sensitive somente em Production e o commit corretivo `5040813` foi publicado no deploy
+`dpl_9j9Yyn2fFWoCCWEUGDb8Bax7DMxZ` (`READY`, domínio reassumido). Smoke: landing 200,
+`/ops` 200, webhook 403/401 sem assinatura e zero erro novo no scan de logs. O primeiro
+pedido frio no WhatsApp ainda é a prova da integração runtime com o token Sensitive.
 **Pendente (gate 2, não bloqueia piloto):** política do ML sobre muitas compras da mesma
 conta para endereços diferentes — irrelevante em 5–10 pedidos, a verificar antes de
 escalar.

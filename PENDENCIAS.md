@@ -205,7 +205,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > review pré-ativação, o fallback foi tornado estrito: as 18 vitrines locais rodam
 > primeiro; o ML só é chamado sem match forte local, e o aviso de espera só nasce nesse
 > momento. O prazo também foi propagado até os cards interativos da Meta. Gate completo:
-> 340/340, tsc, lint e build verdes. **Gate 2 (não bloqueia 5–10 pedidos):** confirmar a
+> 340/340, tsc, lint e build verdes. **Ativado em Production:** flag Sensitive `true`,
+> commit `5040813`, deploy `dpl_9j9Yyn2fFWoCCWEUGDb8Bax7DMxZ` `READY`, smoke verde e
+> zero erro novo. **Pendente:** primeiro pedido frio no WhatsApp (prova runtime do token
+> Sensitive). **Gate 2 (não bloqueia 5–10 pedidos):** confirmar a
 > política do ML para muitas compras da mesma conta destinadas a endereços diferentes.
 
 > **16/08 (3ª) — 6º ciclo (10 rodadas, 7 sucessos) → 3 consertos PUBLICADOS.** Push
