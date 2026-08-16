@@ -192,6 +192,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **16/08 (4ª) — 7º ciclo (13 cenários, 12 ok) → conserto de display PUBLICADO.** Push
+> `20052dc` → deploy `Ready` (smoke verde). A confirmação de endereço agora mostra o CEP
+> processado ("… — CEP 13010-050"). Com isso a lista de achados dos 7 ciclos está
+> ZERADA (15→7→6→6→4→3→1→0) e as guardas de dinheiro/endereço/remédio não falharam desde
+> o 3º ciclo. **Recomendação em pé:** piloto com 5–10 pedidos REAIS de gente de fora
+> (dono no /ops, alertas ativos) — é o único teste que valida titularidade/NF, frete ao
+> vivo com IP da Vercel, prazos reais e pós-venda.
+
 > **16/08 (3ª) — 6º ciclo (10 rodadas, 7 sucessos) → 3 consertos PUBLICADOS.** Push
 > `95db8bf` → deploy `Ready` (smoke verde). No ar: filtro de contexto também nos itens
 > da IA ("Para uma viagem"), escopo da negação corrigido no prompt (o exemplo da 7d
