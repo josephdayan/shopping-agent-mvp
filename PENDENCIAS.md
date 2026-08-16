@@ -192,6 +192,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **16/08 — 4º ciclo (10 rodadas) → 6 consertos + botão "Outra quantidade" PUBLICADOS.**
+> Push `00981df` → deploy `Ready` (smoke verde). No ar: cabo ≠ carregador (golden none),
+> teto de preço sobrevivendo ao merge com a IA, tamanho filtrando todos os cards,
+> "sem remédio" no começo sem virar remoção, fillers/urgência secos, CEP embutido
+> consumido, botões 1 · 2 · Outra quantidade. Suíte 326/326; golden 34/35 · 35/35.
+> **Segue com o dono:** limpar CNPJ/nome do perfil no WhatsApp Manager (Descrição/Sobre)
+> — não é código. **Lacuna de vitrine recorrente:** cabos/acessórios de eletrônicos
+> (3 recusas honestas em 4 ciclos) — candidata nº 1 pra próxima loja/categoria.
+
 > **15/08 (2ª) — 3º ciclo (10 rodadas) → 6 consertos PUBLICADOS.** Push `3356cbc` →
 > deploy `READY` em Production (smoke verde: landing 200, /ops 200, webhook 403/401).
 > No ar: negação vira atributo `sem X`, "até R$30 cada", destino com CEP no meio do
@@ -216,6 +225,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > remédio” confundido com remoção; teto explícito exibindo opções acima do limite; e frase
 > natural com CEP pedindo o CEP novamente. O relatório está em
 > `docs/testes-whatsapp-2026-08-14.md`; nenhum item é marcado como corrigido por esta rodada.
+
+> **15/08 — perfil público do WhatsApp: aguardando aprovação externa.** Foi submetida para o
+> número conectado da Lia a mudança do display name para **Lia Delivery**, sem CNPJ nem nome
+> pessoal. O WhatsApp Manager mostra **In Review**; conferir o perfil no WhatsApp após a Meta
+> aprovar antes de encerrar esta pendência de privacidade/branding.
 
 > **14/08 (3ª) — PUBLICADO.** Push `d9fab9a` → deploy `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`
 > `READY` em Production; smoke verde (landing 200, /ops 200, webhook 403/401). Os 7
