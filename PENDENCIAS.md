@@ -200,6 +200,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (dono no /ops, alertas ativos) — é o único teste que valida titularidade/NF, frete ao
 > vivo com IP da Vercel, prazos reais e pós-venda.
 
+> **16/08 (5ª) — Mercado Livre reaberto como cauda longa, atrás de flag.** O conector
+> usa o actor real validado, cache de 6h, guarda ANVISA e prazo do próprio anúncio. No
+> review pré-ativação, o fallback foi tornado estrito: as 18 vitrines locais rodam
+> primeiro; o ML só é chamado sem match forte local, e o aviso de espera só nasce nesse
+> momento. O prazo também foi propagado até os cards interativos da Meta. Gate completo:
+> 340/340, tsc, lint e build verdes. **Gate 2 (não bloqueia 5–10 pedidos):** confirmar a
+> política do ML para muitas compras da mesma conta destinadas a endereços diferentes.
+
 > **16/08 (3ª) — 6º ciclo (10 rodadas, 7 sucessos) → 3 consertos PUBLICADOS.** Push
 > `95db8bf` → deploy `Ready` (smoke verde). No ar: filtro de contexto também nos itens
 > da IA ("Para uma viagem"), escopo da negação corrigido no prompt (o exemplo da 7d

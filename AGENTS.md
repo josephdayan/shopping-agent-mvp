@@ -310,14 +310,19 @@ diferencial que eu supunha — o diferencial é a CONVERSA.
 título, preço, link, foto, estoque, flag de patrocinado E o campo `envio` — que traz o
 PRAZO DO ANÚNCIO ("Chegará grátis hoje Enviado pelo FULL").
 Desenho (`src/lib/stores/mercadolivre.ts`): 19ª vitrine, **desligada por padrão**
-(`LIA_ENABLE_MERCADOLIVRE=true` liga; `false` volta atrás sem deploy); último no
-registry (lojas locais decidem o "hoje"); cache de 6h no `SearchCache` que já existia;
+(`LIA_ENABLE_MERCADOLIVRE=true` liga; `false` volta atrás sem deploy); fallback estrito
+— as 18 lojas locais são consultadas primeiro e o actor só roda quando nenhuma delas
+tem match forte; cache de 6h no `SearchCache` que já existia;
 aviso ao cliente se a busca passar de 2,5s (`copy.searchingWider`) porque 25s de
 silêncio parece travamento; prazo do anúncio no card (`choiceLine` ganhou `delivery`) —
 nunca estimativa nossa; descarta patrocinado/sem preço/sem estoque; e **guarda ANVISA
 aplicada** (o ML vende dipirona — sem `withoutMedicine` a Lia venderia remédio).
-Testes: 5 do conector, incluindo pipeline completo com o payload REAL do actor mockado
-na rede. Pinado `false` no load-env (suíte nunca vai à rede). Suíte 338/338.
+O review antes da ativação pegou dois desvios do primeiro commit: `Promise.all` esperava
+o ML até para item local e o prazo se perdia antes dos cards interativos da Meta. Ambos
+foram corrigidos e travados: aviso só começa quando o fallback realmente dispara, e o
+prazo atravessa `PendingChoice` + `sendDeliveryChoices`. Testes: 6 do conector, incluindo
+pipeline completo com o payload REAL do actor mockado na rede. Pinado `false` no load-env
+(suíte nunca vai à rede). Suíte completa 340/340, tsc, lint e build verdes.
 **Pendente (gate 2, não bloqueia piloto):** política do ML sobre muitas compras da mesma
 conta para endereços diferentes — irrelevante em 5–10 pedidos, a verificar antes de
 escalar.

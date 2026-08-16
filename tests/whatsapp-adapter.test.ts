@@ -32,7 +32,7 @@ test("Meta: cada produto vira uma mensagem com foto e botão Escolher esse", asy
   }) as typeof fetch;
   try {
     const result = await whatsappAdapter.sendDeliveryChoices("+5511999999999", [
-      { id: "1", name: "Coca-Cola Lata 350 ml", displayPrice: 4.83, imageUrl: "https://example.com/coca.jpg" },
+      { id: "1", name: "Coca-Cola Lata 350 ml", displayPrice: 4.83, imageUrl: "https://example.com/coca.jpg", delivery: "chega hoje" },
       { id: "2", name: "Coca-Cola Pet 600 ml", displayPrice: 6.03, imageUrl: "https://example.com/coca-600.jpg" }
     ]);
     assert.equal(result?.mode, "delivery_choice_cards");
@@ -41,6 +41,7 @@ test("Meta: cada produto vira uma mensagem com foto e botão Escolher esse", asy
     assert.equal(bodies[0].interactive.action.buttons[0].reply.id, "1");
     assert.equal(bodies[0].interactive.action.buttons[0].reply.title, "Escolher esse");
     assert.match(bodies[0].interactive.body.text, /R\$ 4,83/);
+    assert.match(bodies[0].interactive.body.text, /Entrega: chega hoje/);
     assert.equal(bodies[0].interactive.action.buttons.length, 1);
     assert.equal(bodies[1].interactive.header.type, "image");
     assert.equal(bodies[1].interactive.action.buttons[0].reply.title, "Escolher esse");

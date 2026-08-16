@@ -498,7 +498,12 @@ type ChoicesResult = {
 // Like buildBasket, but instead of auto-picking the top match it returns up to 3
 // OPTIONS per item so the customer chooses (numbered list — tappable buttons need an
 // approved WhatsApp Business sender).
-async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus?: Map<string, number>): Promise<ChoicesResult> {
+async function buildChoices(
+  text: string,
+  lockedStoreKey?: string,
+  preferredSkus?: Map<string, number>,
+  onLongTailSearch?: () => void
+): Promise<ChoicesResult> {
   const { lines, greetingOnly, containsMedicine } = await extractLines(text);
 
   // Candidatos por linha. No concierge sem loja travada a busca é LARGA (todas as
@@ -514,7 +519,7 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
       const { phrase: searchPhrase, cap } = splitPriceCap(line.phrase);
       let candidates: StoreCandidate[];
       if (crossStore) {
-        candidates = await gatherCrossStoreCandidates(searchPhrase, 12);
+        candidates = await gatherCrossStoreCandidates(searchPhrase, 12, 4, { onLongTailSearch });
       } else {
         const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
         candidates = (await lineStore.searchItems(searchPhrase, 12)).map((item) => ({ store: lineStore, item }));
@@ -580,7 +585,9 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
       query: line.phrase,
       qty: line.qty,
       ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
-      options: options.slice(0, 3).map(({ store, item: o }) => ({ sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, storeKey: store.key, storeLabel: store.label }))
+      options: options.slice(0, 3).map(({ store, item }) =>
+        toChoiceOption(item, { storeKey: store.key, storeLabel: store.label })
+      )
     });
   }
   return {
@@ -593,6 +600,18 @@ async function buildChoices(text: string, lockedStoreKey?: string, preferredSkus
     greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
     containsMedicine
   };
+}
+
+async function buildChoicesWithSearchNotice(
+  phone: string,
+  text: string,
+  lockedStoreKey?: string,
+  preferredSkus?: Map<string, number>
+): Promise<ChoicesResult> {
+  let notice: ReturnType<typeof searchNoticeTimer> | undefined;
+  return buildChoices(text, lockedStoreKey, preferredSkus, () => {
+    notice ??= searchNoticeTimer(phone);
+  }).finally(() => notice?.cancel());
 }
 
 // The store an in-progress order belongs to (picked when the basket was built).
@@ -683,7 +702,8 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
           id: `optsku:${o.sku}`,
           name: customerChoiceName(p, o),
           displayPrice: display(o.unitPrice),
-          imageUrl: o.imageUrl
+          imageUrl: o.imageUrl,
+          delivery: o.delivery
         }))
       );
       if (interactive) return;
@@ -2276,7 +2296,7 @@ async function handleChoosing(
   // Questions about the shown options ("qual é a desnatada?") must NOT be searched
   // as new products — re-show the options instead.
   if (intent.kind === "free_text" && !isQuestion(text)) {
-    const added = await buildChoices(text);
+    const added = await buildChoicesWithSearchNotice(phone, text);
     // "Só shampoo normal, sem preferência de marca" ENQUANTO escolhe shampoo é
     // esclarecimento do MESMO item — substitui as opções na mesa, nunca vira uma
     // segunda linha (rodada 5 dos testes de 14/08: a linha duplicada fez o cliente
@@ -2677,8 +2697,9 @@ async function handleConciergeRequest(
   // ML ligado = a busca pode custar ~25s numa consulta fria (medido 16/08). O cliente
   // não pode ficar no silêncio: avisa ANTES e as opções chegam na mensagem seguinte.
   // Busca quente (cache) não avisa — responde na hora, como sempre.
-  const slowSearchNotice = mercadoLivreEnabled() ? searchNoticeTimer(phone) : undefined;
-  const raw = await buildChoices(text).finally(() => slowSearchNotice?.cancel());
+  const raw = mercadoLivreEnabled()
+    ? await buildChoicesWithSearchNotice(phone, text)
+    : await buildChoices(text);
   // Piso de relevância próprio do concierge: opção que não responde pelo que o cliente
   // escreveu é descartada e a linha volta a ser livre. Sugerir errado é pior que não
   // sugerir, porque a linha livre resolve o pedido de verdade.

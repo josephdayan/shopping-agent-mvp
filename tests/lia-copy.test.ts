@@ -78,6 +78,13 @@ test("opções: numeradas com preço e instrução de resposta", () => {
   assert.match(text, /Responde \*1\* ou \*2\*/);
 });
 
+test("opções: prazo do anúncio aparece quando a vitrine o informa", () => {
+  const text = copy.choicesText("cabo usb-c", [
+    { name: "Cabo USB-C 2 m", displayPrice: 18.68, delivery: "chega hoje" }
+  ]);
+  assert.match(text, /chega hoje/);
+});
+
 test("pagamento: pix sem taxa, cartão com taxa, totais distintos", () => {
   const text = copy.paymentMethod(100, 105.25);
   assert.match(text, /Pix — R\$ 100,00/);

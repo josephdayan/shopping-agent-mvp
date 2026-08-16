@@ -239,7 +239,10 @@ de hoje está em
 > mais — e as recusas dos 7 ciclos eram justamente cauda longa. Actor validado ao vivo
 > (22–25s, 48 itens, ~R$0,03/busca, com prazo do anúncio). Conector desligado por padrão
 > (`LIA_ENABLE_MERCADOLIVRE`), cache 6h, aviso antes de busca lenta, prazo do anúncio no
-> card, guarda ANVISA aplicada. Suíte 338/338.
+> card, guarda ANVISA aplicada. Review pré-ativação corrigiu dois desvios: o ML agora só
+> roda quando nenhuma das 18 vitrines locais tem match forte (item cotidiano não espera
+> actor pago/lento), e o prazo chega também ao card interativo da Meta. Suíte completa
+> 340/340, tsc, lint e build verdes.
 
 > **16/08 (2ª) — 5º ciclo (10 rodadas): 4 consertos.** Ocasião/dia ("Para domingo",
 > "Para uma viagem") e "barato" seco viram modificadores; plural não duplica no merge

@@ -1,5 +1,5 @@
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { sameProductVariant, scoreCatalogMatch, variantCount } from "./types";
+import { conciergeMatchIsStrong, sameProductVariant, scoreCatalogMatch, variantCount } from "./types";
 import { petzStore } from "./petz";
 import { boticarioStore } from "./boticario";
 import { obaStore } from "./oba";
@@ -76,7 +76,9 @@ const DRINK_HINT_RE = /\b(vinho|cerveja|whisky|whiskey|vodka|gin|cachaca|espuman
 const FLOWER_HINT_RE = /\b(flor|flores|buque|buques|rosa|rosas|girassol|girassois|orquidea|orquideas|lirio|lirios|arranjo|floricultura|ramalhete)\b/;
 
 export async function pickStoreForQueries(queries: string[]): Promise<StoreConnector> {
-  const stores = listStores();
+  // Mercado Livre is a manual-concierge long-tail fallback, never the locked store
+  // for the legacy one-store/automated flow.
+  const stores = listStores().filter((store) => store.key !== mercadoLivreStore.key);
   if (stores.length <= 1 || queries.length === 0) return stores[0] ?? getStore();
   const wins = new Map<string, number>(stores.map((s) => [s.key, 0]));
   for (const q of queries) {
@@ -140,14 +142,35 @@ export function allUnits(): StoreUnit[] {
 // Search EVERY registered store and tag each hit with the store that carries it.
 // This is the foundation of the "qualquer coisa, de qualquer loja, num WhatsApp só"
 // moat — the three active verticals spread automatically through this registry.
-export async function searchAcrossStores(query: string, limitPerStore = 4) {
+async function searchSelectedStores(stores: StoreConnector[], query: string, limitPerStore: number) {
   const perStore = await Promise.all(
-    listStores().map(async (store) => {
+    stores.map(async (store) => {
       const items = await store.searchItems(query, limitPerStore);
       return items.map((item) => ({ store, item }));
     })
   );
   return perStore.flat();
+}
+
+export async function searchAcrossStores(query: string, limitPerStore = 4) {
+  return searchSelectedStores(listStores(), query, limitPerStore);
+}
+
+function rankStoreCandidates(query: string, hits: StoreCandidate[]): StoreCandidate[] {
+  return hits
+    .map((hit) => ({ hit, score: scoreCatalogMatch(query, hit.item) }))
+    .filter((entry) => entry.score > 0)
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        variantCount(query, a.hit.item) - variantCount(query, b.hit.item) ||
+        a.hit.item.unitPrice - b.hit.item.unitPrice
+    )
+    .map((entry) => entry.hit);
+}
+
+export function needsLongTailSearch(query: string, localCandidates: StoreCandidate[]): boolean {
+  return !localCandidates.some((candidate) => conciergeMatchIsStrong(query, candidate.item));
 }
 
 // Candidatos LARGOS para uma linha do pedido, vindos de TODAS as vitrines. Existe
@@ -156,21 +179,27 @@ export async function searchAcrossStores(query: string, limitPerStore = 4) {
 // veiculares) com o carregador de parede USB-C parado na Pague Menos. Quem decide o
 // que aparece é a camada de cima (rerank semântico; fallback = este ranking global).
 export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
-export async function gatherCrossStoreCandidates(query: string, limit = 12, perStore = 4): Promise<StoreCandidate[]> {
-  const hits = await searchAcrossStores(query, perStore);
-  const ranked = hits
-    .map((hit) => ({ hit, score: scoreCatalogMatch(query, hit.item) }))
-    .filter((entry) => entry.score > 0)
-    .sort(
-      (a, b) =>
-        b.score - a.score ||
-        // Mesmos desempates do rankCatalog dentro da loja: produto básico (menos
-        // variantes não pedidas) antes do mais barato — senão "leite sem lactose"
-        // perde para o desnatado de outra vitrine só porque ele custa menos.
-        variantCount(query, a.hit.item) - variantCount(query, b.hit.item) ||
-        a.hit.item.unitPrice - b.hit.item.unitPrice
-    )
-    .map((entry) => entry.hit);
+export async function gatherCrossStoreCandidates(
+  query: string,
+  limit = 12,
+  perStore = 4,
+  options?: { onLongTailSearch?: () => void }
+): Promise<StoreCandidate[]> {
+  const stores = listStores();
+  const longTail = stores.find((store) => store.key === mercadoLivreStore.key);
+  const localStores = stores.filter((store) => store.key !== mercadoLivreStore.key);
+  const localHits = await searchSelectedStores(localStores, query, perStore);
+  const localRanked = rankStoreCandidates(query, localHits);
+
+  // The ML actor is slow and paid. It only runs when no local candidate clears the
+  // concierge relevance floor; registry order alone would still await it through
+  // Promise.all on every everyday query.
+  let ranked = localRanked;
+  if (longTail && needsLongTailSearch(query, localRanked)) {
+    options?.onLongTailSearch?.();
+    const longTailHits = await searchSelectedStores([longTail], query, perStore);
+    ranked = rankStoreCandidates(query, [...localHits, ...longTailHits]);
+  }
   // Variantes do mesmo produto (cada loja manda seu top-4, que costuma ser a mesma
   // ração em 4 tamanhos) não podem esgotar as vagas: produtos DISTINTOS ocupam as
   // vagas primeiro e as variantes só preenchem o que sobrar — senão nem o rerank de

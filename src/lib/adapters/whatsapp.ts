@@ -87,6 +87,7 @@ export type WhatsAppDeliveryChoice = {
   name: string;
   displayPrice: number;
   imageUrl?: string;
+  delivery?: string;
 };
 
 function minorAmount(value: number) {
@@ -514,7 +515,13 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
     }
     const interactive: Record<string, unknown> = {
       type: "button",
-      body: { text: `${option.name}\n*${formatBRL(option.displayPrice)}*`.slice(0, 1024) },
+      body: {
+        text: [
+          option.name,
+          `*${formatBRL(option.displayPrice)}*`,
+          option.delivery ? `Entrega: ${option.delivery}` : null
+        ].filter(Boolean).join("\n").slice(0, 1024)
+      },
       action: { buttons }
     };
     if (imageAlive[index]) {

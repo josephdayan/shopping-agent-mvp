@@ -4,6 +4,8 @@ import assert from "node:assert/strict";
 
 import { deliveryLabelFrom, mercadoLivreEnabled, searchMercadoLivre } from "../src/lib/stores/mercadolivre";
 import { withoutMedicine } from "../src/lib/stores/anvisa";
+import { needsLongTailSearch, type StoreCandidate } from "../src/lib/stores";
+import type { StoreConnector } from "../src/lib/stores/types";
 
 // Mercado Livre = vitrine de cauda longa ao vivo (16/08). O que estes testes travam:
 // (1) o flag é a única chave — desligado, o conector é inerte e não toca a rede;
@@ -51,6 +53,20 @@ test("ML: prazo mostrado é o do anúncio (nunca estimado por nós)", () => {
   // Sem informação de envio, NÃO inventa prazo.
   assert.equal(deliveryLabelFrom(""), undefined);
   assert.equal(deliveryLabelFrom(undefined), undefined);
+});
+
+test("ML: só entra quando nenhuma vitrine local tem match forte", () => {
+  const localStore = { key: "local", label: "Local" } as StoreConnector;
+  const leite: StoreCandidate[] = [{
+    store: localStore,
+    item: { sku: "local-leite", name: "Leite Integral 1L", unitPrice: 5.9 }
+  }];
+  const falsoCabo: StoreCandidate[] = [{
+    store: localStore,
+    item: { sku: "local-carregador", name: "Carregador de Parede USB-C 20W", unitPrice: 59.9 }
+  }];
+  assert.equal(needsLongTailSearch("leite", leite), false);
+  assert.equal(needsLongTailSearch("cabo usb c 2 metros", falsoCabo), true);
 });
 
 test("ML: guarda ANVISA vale para a vitrine ao vivo (o ML vende remédio)", () => {
