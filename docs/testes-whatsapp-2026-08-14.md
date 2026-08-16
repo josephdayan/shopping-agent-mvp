@@ -59,3 +59,28 @@ Após o deploy informado como `dpl_EUQX9nHBBpYRQGHaSSmkb4wfT3n4`, foram feitas m
 - As correções de cesta, mínimo, cancelamento e troca de endereço se comportaram bem nos casos exercitados.
 - Persistem três famílias de ruído: quantidades vazando para linhas de “indisponível”; qualificadores (“entrega hoje”, “qualquer time”) sendo tratados como itens; e confirmação intermediária omitindo quantidades já capturadas.
 - O bloqueio de medicamento funcionou nas duas variações testadas: “sem remédio” não gerou aviso e um pedido explícito de dipirona foi recusado sem impedir o item comum.
+
+## Re-teste pós-publicação — deploy `dpl_AW75PjcJaB44exEzNTLcaLirbZ1M` — 15/08/2026
+
+Foram feitas mais 10 rodadas rebuscadas e encadeadas após o deploy `4cbbaae`. Nenhum Pix/cartão foi acionado; toda cesta que chegou ao pagamento foi cancelada antes da cobrança.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Churrasco: 2 kg de linguiça, carvão, pão de alho e “sem pimenta” | **Parcial**: montou 2x linguiça, 1x carvão e 1x pão de alho; confirmou quantidades e total de R$150,76 | “sem pimenta” ainda virou uma falsa linha indisponível. |
+| 2 | Lancheira infantil, qualquer marca, até R$80, com preferência por espaço para garrafa; depois refinamento | **Falha de busca/refino**: não encontrou lancheira e o refinamento “sem precisar de espaço específico” virou outro item indisponível | Restrições negativas ou relaxamentos (“sem precisar de…”) precisam permanecer como modificadores. |
+| 3 | Detergente + esponja, seguido de “troca a esponja por saco de lixo 30 litros” | **Parcial**: a troca em uma lista nova funcionou; o mínimo mostrou a cesta inteira, mas “mais um saco desses” reabriu busca genérica e perdeu os 30 litros | Diferenciar troca em lista nova de remoção em cesta existente e preservar tamanho/atributos em adições relativas. |
+| 4 | 2 cafés em pó e leite sem lactose; depois “mais um desse café” | **Sucesso**: confirmação em 2x, adição correta para 3x do mesmo SKU, 1x leite sem lactose; total R$113,26 | Nenhum problema funcional observado. |
+| 5 | Carregador USB-C não veicular, barato; “Outras opções” e seleção do cartão original | **Parcial**: o cartão antigo foi escolhido corretamente; “não veicular” e “algo barato” viraram ruído/segundo item, chegando a mostrar algodão | Preferências e preço precisam ser excluídos da lista de produtos antes do rerank. |
+| 6 | Cotação aberta; “Antes de pagar, vou entregar em Campinas, CEP 13010-100” | **Falha de prioridade**: mostrou pagamento do endereço antigo; só “trocar endereço” interrompeu a cotação, pediu CEP e salvou o endereço completo | Reconhecer cidade/CEP e intenção de mudança antes do bloco de pagamento, mesmo em frase natural. |
+| 7 | Três lembrancinhas infantis, até R$30 cada, qualquer tema, sem brinquedo barulhento | **Falha de extração**: “3x lembrancinha”, “cada” e “não brinquedo barulhento” viraram linhas/consultas separadas; opções não respeitaram claramente a restrição | Tratar “cada”, “qualquer tema” e negações compostas como quantidade/preferência, nunca como itens. |
+| 8 | Cesta: 2 leites sem lactose, pão integral e manteiga sem sal; depois “mais um leite” | **Parcial**: cesta inicial correta, 2x confirmado e mínimo preservou todos os itens; “mais um leite” abriu busca genérica e adicionou leite integral separado | Adição relativa deve herdar a preferência do item referido quando houver contexto claro. |
+| 9 | Quatro caixas de bombom, qualquer marca; +3 do mesmo; ajuste para 5x | **Sucesso**: confirmou 4x imediatamente, depois 7x e 5x do mesmo SKU; total R$125,85 | “não quero os muito amargos” ainda gerou uma falsa indisponibilidade auxiliar. |
+| 10 | Viagem: shampoo, escova de dentes e dipirona | **Sucesso**: recusou somente a dipirona, manteve os dois itens comuns, fechou em 1x + 1x e total R$32,75 | Nenhum problema funcional observado. |
+
+### Síntese desta rodada
+
+- As correções de quantidade, referência por substantivo e confirmação imediata funcionaram nos casos mais importantes: rodadas 1, 4, 8 e 9 preservaram as quantidades; a rodada 9 repetiu 4x → 7x → 5x sem regressão.
+- A seleção de cartão antigo após “Outras opções” também passou.
+- O principal risco restante é a extração de modificadores: “sem pimenta”, “não veicular”, “qualquer tema”, “cada” e negações compostas ainda podem virar falsos produtos.
+- A troca de endereço por frase natural continua crítica: a palavra/ação explícita “trocar endereço” funciona, mas a intenção natural ainda pode deixar o pagamento antigo visível.
+- O bloqueio de medicamento permaneceu seguro: a dipirona foi excluída sem bloquear shampoo e escova.

@@ -234,6 +234,12 @@ de hoje está em
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
 
+> **15/08 (2ª) — 3º ciclo (10 rodadas): 6 consertos.** Preferência negativa ("sem
+> pimenta", "não veicular") vira atributo `sem X` do item anterior; "até R$30 cada" é
+> teto; "vou entregar em Campinas" + CEP com pagamento aberto derruba a cotação velha e
+> troca o destino; "mais um leite" herda o sku da cesta (não vira leite integral novo);
+> "troca X por Y" em lista nova corrige a própria mensagem; lancheira recusa limpa.
+
 > **15/08 — re-teste (10 rodadas): prioridades passaram; 5 ruídos restantes fechados.**
 > "três pacotes" (acento no `\w`) e embalagem solta transferem quantidade; "qualquer
 > <coisa>" é preferência; adversativa não esconde modificador; confirmação mostra "✅ 4x";

@@ -297,6 +297,26 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**15/08 (2ª) — 3º ciclo de testes (10 rodadas): 6 consertos.** Quantidades, referência
+por substantivo, cartão antigo por sku e guarda de remédio passaram; sobraram:
+1. **Preferência negativa vira atributo, nunca linha**: "sem pimenta", "não veicular",
+   "não quero brinquedo barulhento" → o segmento vira `sem <alvo>` grudado no item
+   anterior (o matcher já exclui por `negatedWords`). Prompt da extração ganhou a 7d.
+2. **"até R$30 cada"**: o "cada/por unidade" não quebra mais o padrão de orçamento;
+   "queria algo barato" e "sem precisar de …" viraram modificadores descartáveis.
+3. **"Antes de pagar, VOU entregar em Campinas, CEP 13010-100"** (crítica recorrente):
+   "vou" entrou no deliver-to; e CEP chegando com o menu de pagamento aberto agora
+   DERRUBA a cotação do endereço velho e segue pro fluxo de endereço — antes qualquer
+   texto que não fosse pix/cartão devolvia o menu antigo.
+4. **Adição relativa herda o item**: "Pode colocar mais um leite" com leite sem lactose
+   na cesta incrementa O MESMO sku (a busca genérica adicionava leite integral novo);
+   "mais um saco de lixo desses" captura o substantivo composto antes do marcador.
+5. **"troca X por Y" numa lista NOVA** (mesma mensagem: "quero A e B; pensando bem,
+   troca B por C"): com cesta vazia, a autocorreção vale pra própria mensagem — busca
+   A + C, descarta B (antes: "não achei pra tirar").
+6. Lancheira fora de catálogo agora recusa LIMPO (o "sem precisar de…" era o ruído);
+   lacuna de vitrine registrada. Golden inalterado; unit + E2E dos três fluxos.
+
 **15/08 — re-teste do dono (10 rodadas): 5, 6 e 15 PASSARAM; 5 ruídos restantes fechados.**
 Transcrições reais de novo como fonte. (1) "três pacotes" virava "3x pacotes indisponível":
 o branch de quantidade por extenso usava `\w` (ASCII) e "três" tem acento — corrigido; e

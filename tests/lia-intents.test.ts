@@ -380,3 +380,37 @@ test("re-teste 15/08: 'mais um desse café' mira o item pelo substantivo", () =>
   assert.equal((intent as { qty: number }).qty, 1);
   assert.equal((intent as { noun?: string }).noun, "cafe");
 });
+
+// ---------- 3º ciclo (15/08 noite): negações, "cada", adições relativas ----------
+
+test("3º ciclo: preferência negativa vira atributo 'sem X' do item anterior", () => {
+  // Rodada 1: "sem pimenta" virava linha indisponível.
+  const churrasco = parseBasketLines("2kg de linguiça, carvão, pão de alho, sem pimenta");
+  assert.equal(churrasco.length, 3, `linhas: ${churrasco.map((l) => l.phrase).join(" | ")}`);
+  assert.match(churrasco[2].phrase, /sem pimenta/);
+  // Rodada 5: "não veicular" idem.
+  const carregador = parseBasketLines("Preciso de um carregador USB-C para celular, não veicular, e queria algo barato.");
+  assert.equal(carregador.length, 1, `linhas: ${carregador.map((l) => l.phrase).join(" | ")}`);
+  assert.match(carregador[0].phrase, /sem veicular/);
+  // Rodada 7: "até R$30 cada" é teto; "qualquer tema" e a negação não são itens.
+  const lembrancinha = parseBasketLines("Preciso de três lembrancinhas para crianças, até R$30 cada, qualquer tema, mas não quero brinquedo barulhento.");
+  assert.equal(lembrancinha.length, 1, `linhas: ${lembrancinha.map((l) => l.phrase).join(" | ")}`);
+  assert.equal(lembrancinha[0].qty, 3);
+  assert.match(lembrancinha[0].phrase, /até 30 reais/);
+  assert.match(lembrancinha[0].phrase, /sem barulhento/);
+  // Rodada 2: relaxamento "sem precisar de..." some.
+  const lancheira = parseBasketLines("Pode ser qualquer lancheira infantil até R$80, sem precisar de espaço específico para garrafinha.");
+  assert.equal(lancheira.length, 1, `linhas: ${lancheira.map((l) => l.phrase).join(" | ")}`);
+  assert.doesNotMatch(lancheira[0].phrase, /garrafinha/);
+});
+
+test("3º ciclo: 'vou entregar em' troca destino e CEP no meio nunca é pagamento", () => {
+  assert.equal(kind("vou entregar em Campinas"), "change_address");
+  assert.notEqual(kind("Antes de pagar, vou entregar em Campinas, CEP 13010-100."), "pay");
+});
+
+test("3º ciclo: 'mais um saco de lixo desses' referencia com o substantivo composto", () => {
+  const intent = detectIntent("Coloca mais um saco de lixo desses.");
+  assert.equal(intent.kind, "add_more_same");
+  assert.match((intent as { noun?: string }).noun ?? "", /lixo/);
+});

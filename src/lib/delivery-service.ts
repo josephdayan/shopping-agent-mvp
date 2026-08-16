@@ -1310,8 +1310,22 @@ async function handleDeliveryTurn(
         await reply(phone, copy.quoteExpired());
         return;
       }
-      await reply(phone, copy.paymentMethod(order.total, cardTotal(order.total)));
-      return;
+      // CEP no meio do menu de pagamento ("Antes de pagar, vou entregar em Campinas,
+      // CEP 13010-100") é troca de DESTINO — a cotação do endereço velho cai e o CEP
+      // segue pro fluxo normal de endereço. Antes, qualquer texto que não fosse
+      // pix/cartão devolvia o menu do endereço antigo (3º ciclo, rodada 6).
+      if (intent.kind === "cep") {
+        if (await cancelPendingRetailerQuote(order.id)) {
+          await reply(phone, copy.quoteDroppedForNewAddress());
+        }
+        ctx.deliveryOrderId = undefined;
+        ctx.deliveryAddress = undefined;
+        ctx.deliveryAddressVerified = false;
+        // segue para a seção de CEP abaixo, que salva e pede o endereço completo
+      } else {
+        await reply(phone, copy.paymentMethod(order.total, cardTotal(order.total)));
+        return;
+      }
     }
   }
   if (intent.kind === "clear_cart") {
@@ -1647,7 +1661,7 @@ async function handleDeliveryTurn(
 
   // ---- edit the basket: swap / remove ----
   if (intent.kind === "swap_item") {
-    await handleSwap(phone, convo.id, user.cep, ctx, intent.from, intent.to);
+    await handleSwap(phone, convo.id, user.cep, ctx, intent.from, intent.to, text);
     return;
   }
   if (intent.kind === "remove_item") {
@@ -2497,9 +2511,29 @@ async function handleSwap(
   userCep: string | null | undefined,
   ctx: DeliveryContext,
   from: string,
-  to: string
+  to: string,
+  rawText?: string
 ) {
   const basket = ctx.basket ?? [];
+  // "quero A e B; pensando bem, troca B por C" numa LISTA NOVA (cesta vazia): não há o
+  // que remover — a autocorreção vale para a PRÓPRIA mensagem. Monta a lista corrigida
+  // (linhas antes do "troca", menos o B, mais o C) e segue o fluxo normal de busca
+  // (3º ciclo de testes 15/08, rodada 3: respondia "não achei pra tirar").
+  if (!basket.length && !(ctx.pending?.length)) {
+    const before = (rawText ?? "").split(/\b(?:troca|trocar|substitui|substituir|muda|mudar)\b/i)[0] ?? "";
+    const keptLines = parseBasketLines(before).filter(
+      (l) => queryTokens(l.phrase).length && !itemMatchesPhrase(from, { sku: l.phrase, name: l.phrase, unitPrice: 0 })
+    );
+    const corrected = [...keptLines.map((l) => (l.qtyExplicit && l.qty > 1 ? `${l.qty} ${l.phrase}` : l.phrase)), to]
+      .filter(Boolean)
+      .join(", ");
+    if (corrected.trim()) {
+      await handleSearch(phone, convoId, userCep, ctx, corrected);
+      return;
+    }
+    await reply(phone, copy.removeNotFound());
+    return;
+  }
   if (!basket.length) {
     await reply(phone, copy.removeNotFound());
     return;
@@ -2573,6 +2607,27 @@ async function handleConciergeRequest(
   ctx: DeliveryContext,
   text: string
 ) {
+  // "Pode colocar mais um leite": adição RELATIVA a um item que já está na cesta herda
+  // o item exato (sku) — a busca genérica perdia o atributo ("sem lactose" virava leite
+  // integral; 3º ciclo de testes 15/08, rodadas 3 e 8).
+  const moreOf = normalizeMsg(text).match(
+    /^(?:(?:pode|coloca|poe|bota|adiciona|acrescenta|quero|queria|me ve|manda|e)\s+)*(?:colocar\s+|adicionar\s+)?mais\s+(.+)$/
+  );
+  if (moreOf && ctx.basket?.length) {
+    const lines = parseBasketLines(moreOf[1]).filter((l) => queryTokens(l.phrase).length);
+    if (lines.length === 1) {
+      const target = [...ctx.basket].reverse().find((item) => itemMatchesPhrase(lines[0].phrase, item));
+      if (target) {
+        const add = Math.max(1, lines[0].qty);
+        target.qty = Math.min(50, target.qty + add);
+        target.lineTotal = Math.round(target.unitPrice * target.qty * 100) / 100;
+        await writeCtx(convoId, ctx);
+        await reply(phone, copy.moreOfSameAdded(add, target.name, target.qty));
+        return;
+      }
+    }
+  }
+
   // Vitrine híbrida: procura o que o cliente pediu nas 18 lojas e mostra até 3 opções com
   // foto para ele escolher. O que NÃO tiver match vira linha livre, como antes — a largura
   // ("qualquer coisa, de qualquer lugar") continua sendo o moat e nada é recusado.

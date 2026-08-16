@@ -111,12 +111,14 @@ const NOISE_SEGMENT_RE =
 const MODIFIER_SEGMENT_RE = new RegExp(
   "^(" +
     [
-      "(de )?(ate|abaixo de|menos de|no maximo|max(imo)?) ?(uns |umas )?(r\\$ ?)?\\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)?",
-      "(uns|umas) \\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)",
+      "(de )?(ate|abaixo de|menos de|no maximo|max(imo)?) ?(uns |umas )?(r\\$ ?)?\\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)?( cada( uma?)?| por unidade)?",
+      "(uns|umas) \\d+([.,]\\d{1,2})? ?(reais|real|conto|contos|pila|pilas)( cada( uma?)?| por unidade)?",
       "(pode ser )?(de )?qualquer [a-z]+( uma?)?",
       "sem preferencia( de marca)?( nenhuma)?",
       "de preferencia .*",
       "(o |a )?mais barat[oa]( que tiver| possivel)?",
+      "((e )?(queria|quero|preciso)( de)? )?(algo|alguma coisa) (bem |mais )?(barat[oa]|simples|bo[am]|em conta)( possivel)?",
+      "sem precisar( de)? .*",
       "se (tiver|der|for possivel|possivel|rolar|puder|achar|encontrar)( .*)?",
       "((e )?(queria|quero|preciso|gostaria de|da pra|pode)( me)? )?(receber|entregar?|chegar|mandar|enviar)( ainda| ate| para| pra| em casa| o pedido)* (hoje|amanha|rapido|logo)( se der| se possivel| se rolar)?",
       "p(a)?ra (hoje|amanha)( se der| se possivel)?",
@@ -214,6 +216,22 @@ export function parseBasketLines(text: string): ParsedLine[] {
       const prev = merged[merged.length - 1];
       if (prev) prev.phrase = `${prev.phrase} ${pron[1].trim()}`.replace(/\s+/g, " ");
       continue;
+    }
+    // Preferência NEGATIVA como segmento ("sem pimenta", "não veicular", "não quero
+    // brinquedo barulhento", "não quero os muito amargos"): vira atributo "sem <alvo>"
+    // do item ANTERIOR — o matcher já exclui por negação (negatedWords). Nunca vira
+    // linha própria (3º ciclo de testes, 15/08: virava "não tenho como trazer").
+    const negSeg = line.phrase.match(
+      /^(?:mas\s+|porem\s+)?(?:sem|n(?:a|\u00e3)o(?:\s+(?:quero|gosto de|pode ser|precisa(?: de)?))?)\s+(?:de\s+)?(?:os\s+|as\s+|um\s+|uma\s+)?(?:muito\s+|tao\s+|t\u00e3o\s+)?(.{2,40})$/i
+    );
+    if (negSeg && merged.length) {
+      const targetTokens = normalizeMsg(negSeg[1]).split(" ").filter(Boolean);
+      const target = targetTokens[targetTokens.length - 1];
+      if (target && target.length >= 3) {
+        const prev = merged[merged.length - 1];
+        prev.phrase = `${prev.phrase} sem ${target}`.replace(/\s+/g, " ");
+        continue;
+      }
     }
     // "ração para gato, TRÊS PACOTES": o segmento é só quantidade+embalagem — a
     // quantidade pertence ao item ANTERIOR, nunca vira "produto indisponível"
@@ -611,12 +629,19 @@ export function detectIntent(text: string): Intent {
   // referência ao item que acabou de entrar — resolve pelo sku da cesta, sem nova
   // busca (a busca genérica podia devolver OUTRA marca; caso real da rodada 13).
   const moreSame = n.match(
-    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*(?:caixas?|unidades?|pacotes?|garrafas?|latas?|potes?|un)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desse(?: ai| mesmo)?\b|dessa(?: ai| mesma)?\b|dele\b|dela\b)\s*([a-z][a-z ]{2,30})?/
+    /\b(?:mais|outr[ao]s?)\s+(\d+|uma?|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)?\s*([a-z][a-z ]{2,30}?)?\s*(?:d[oa] mesm[oa]\b|iguais\b|igual\b|desses?(?: ai| mesmos?)?\b|dessas?(?: ai| mesmas?)?\b|dele\b|dela\b)\s*([a-z][a-z ]{2,30})?/
   );
   if (moreSame) {
     const rawQty = moreSame[1];
     const qty = rawQty ? (WORD_QTY[rawQty] ?? Math.min(MAX_QTY, Math.max(1, Number(rawQty) || 1))) : 1;
-    const noun = moreSame[2]?.trim().replace(/\b(por favor|pfv|ai|aqui)\b/g, "").trim() || undefined;
+    // Substantivo antes OU depois do marcador ("mais um SACO DE LIXO desses" /
+    // "mais três caixas do mesmo BOMBOM") — limpo de embalagem/cortesia.
+    const rawNoun = (moreSame[2] ?? moreSame[3])
+      ?.trim()
+      .replace(/\b(por favor|pfv|ai|aqui|caixas?|unidades?|pacotes?|garrafas?|latas?|potes?|sacos?|rolos?|frascos?|un|de|do|da)\b/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const noun = rawNoun || undefined;
     return { kind: "add_more_same", qty, ...(noun ? { noun } : {}) };
   }
 
@@ -635,7 +660,7 @@ export function detectIntent(text: string): Intent {
   // destino, que precisa vencer o pagamento (o cliente quase pagou frete do endereço
   // velho). A subordinação desarma o PAY_RE; o destino cai no change_address abaixo.
   const paySubordinate = /\b(antes de|antes do|depois de|depois do|sem|quando|assim que|na hora de|apos|após)\s+(pagar|fechar|finalizar|o pagamento|pagamento)\b/.test(n);
-  if (/\b(quero|queria|preciso|gostaria de|da pra|dá pra|pode|vou querer)\s+(entregar|receber|mandar|enviar)\s+(em|para|pra|no|na)\s+\S/.test(n) && !PRODUCT_HINT_AFTER_DELIVER_RE.test(n)) {
+  if (/\b(quero|queria|preciso|gostaria de|da pra|dá pra|pode|vou(?: querer)?)\s+(entregar|receber|mandar|enviar)\s+(em|para|pra|no|na)\s+\S/.test(n) && !PRODUCT_HINT_AFTER_DELIVER_RE.test(n)) {
     return { kind: "change_address" };
   }
   if (PAY_RE.test(n) && !isQuestion(n) && !paySubordinate) return { kind: "pay", ...(method ? { method } : {}) };

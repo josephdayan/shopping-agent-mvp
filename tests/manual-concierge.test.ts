@@ -720,3 +720,44 @@ test("rodada 15: 'antes de pagar, quero entregar em BH' troca o destino — nunc
   const bh = await c.send("30130-010");
   assert.match(bh, /não chega|lista|região/i, `resposta ao CEP de BH: ${bh.slice(0, 200)}`);
 });
+
+// ---------- 3º ciclo (15/08 noite): adição relativa, CEP na cotação, swap em lista nova ----------
+
+test("3º ciclo: 'mais um leite' herda o item da cesta (sku), nunca busca genérica", async (t) => {
+  if (!dbOk) return t.skip();
+  // Rodada 8: "mais um leite" abria busca e adicionava leite INTEGRAL separado.
+  const c = await returningCustomer();
+  await c.send("quero leite sem lactose");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("2");
+  const more = await c.send("Pode colocar mais um leite.");
+  assert.match(more, /agora são 3x/i, `não herdou o item: ${more.slice(0, 200)}`);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ name: string; qty: number }>;
+  assert.equal(basket.length, 1, `cesta: ${JSON.stringify(basket.map((b) => b.name))}`);
+  assert.equal(basket[0].qty, 3);
+});
+
+test("3º ciclo: CEP no meio do menu de pagamento troca o destino (nunca re-mostra pagamento)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Rodada 6: "Antes de pagar, vou entregar em Campinas, CEP 13010-100" devolvia o
+  // menu de pagamento do endereço antigo.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
+  const out = await c.send("Antes de pagar, vou entregar em Campinas, CEP 13010-100.");
+  assert.doesNotMatch(out, /Como prefere pagar/i, `re-mostrou pagamento: ${out.slice(0, 250)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled", "a cotação do endereço velho tem que cair");
+});
+
+test("3º ciclo: 'troca X por Y' numa lista NOVA corrige a própria mensagem", async (t) => {
+  if (!dbOk) return t.skip();
+  // Rodada 3: com a cesta vazia, o swap respondia "não achei pra tirar".
+  const c = await returningCustomer();
+  const out = await c.send("Quero detergente neutro e esponja de cozinha; pensando bem, troca a esponja por saco de lixo reforçado de 30 litros");
+  assert.doesNotMatch(out, /não achei.*tirar|não encontrei.*remover/i, `virou remoção: ${out.slice(0, 200)}`);
+  // A lista corrigida busca detergente e saco de lixo — a esponja fica de fora.
+  assert.match(out.toLowerCase(), /detergente/, `sem detergente: ${out.slice(0, 250)}`);
+  assert.match(out.toLowerCase(), /saco|lixo/, `sem saco de lixo: ${out.slice(0, 250)}`);
+});
