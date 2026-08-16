@@ -297,6 +297,16 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**16/08 (4ª) — 6º ciclo (10 rodadas): 7 sucessos, 3 consertos.** A régua: 15→7→6→6→4→3.
+1. "Para uma viagem" vazava pelo lado da IA (o determinístico já filtrava):
+   `isRequestModifier` exportado e aplicado aos itens da extração em extractLines.
+2. "sem pimenta" contaminando o pão de alho: o EXEMPLO da regra 7d do prompt ensinava o
+   erro ('pão de alho sem pimenta' como par). Exemplo reescrito com o escopo certo —
+   negação vale só pro vizinho imediato; os demais itens ficam intactos.
+3. CEP órfão: endereço com "CEP 13010-050" no fim salvava "… - SP, CEP." depois de
+   remover os dígitos — a palavra "cep" solta agora sai junto na captura.
+Gate focado: tsc + 40 units + E2E da sequência da rodada 8 (endereço com CEP repetido).
+
 **16/08 (3ª) — 5º ciclo de testes (10 rodadas): 4 consertos + gate focado.** Granola→aveia,
 "sem remédio"+shampoo, presente≤R$100 e 4x→7x→5x passaram; fechados:
 1. "Para domingo"/"Para uma viagem" (ocasião/dia) e "barato" seco = modificadores.

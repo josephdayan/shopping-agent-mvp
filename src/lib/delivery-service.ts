@@ -46,6 +46,7 @@ import {
   isQuestion,
   asksRunningTotal,
   looksLikeMedicine,
+  isRequestModifier,
   sharesProductNoun,
   stripMedicineNegation,
   narrowChoiceByName,
@@ -406,7 +407,9 @@ async function extractLines(text: string): Promise<ExtractedLines> {
     .filter((line) => queryTokens(line.phrase).length)
     .filter((line) => !looksLikeMedicine(line.phrase));
   if (extraction) {
-    const items = extraction.items.filter((item) => !looksLikeMedicine(item.query));
+    // A IA às vezes devolve contexto como item ("Para uma viagem") — o mesmo filtro de
+    // modificador do parser determinístico vale pra ela (6º ciclo, rodada 1).
+    const items = extraction.items.filter((item) => !looksLikeMedicine(item.query) && !isRequestModifier(item.query));
     return {
       lines: mergeShoppingLines(items.map((item) => ({ phrase: item.query, qty: item.qty })), deterministic),
       greetingOnly: extraction.greetingOnly,
@@ -1968,6 +1971,9 @@ async function handleNewCep(
     // motoboy precisa ler. Só cai no `restItems` normalizado se o raw não sobreviver.
     const fromRaw = (rawText ?? "")
       .replace(/\b\d{5}-?\d{3}\b/, " ")
+      // A palavra "CEP" órfã depois de remover os dígitos ("… - SP, CEP .") não pode
+      // sobrar no endereço salvo (6º ciclo, rodada 8: exibia "CEP." sem números).
+      .replace(/[,;]?\s*\bcep\b\s*[.:]?\s*/gi, " ")
       .replace(/\s*[,;]\s*$/, "")
       .replace(/\s{2,}/g, " ")
       .trim()

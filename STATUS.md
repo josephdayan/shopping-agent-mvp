@@ -784,3 +784,13 @@ legados ou parceiros courier autorizados. Cancelamento pago usa `refund_pending 
 O review profundo de conversa (115 achados) resultou em uma reconstrução de NLU, matcher,
 copy e máquina de estados. A documentação completa, com sequência do trabalho e comandos
 de validação, está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
+
+### Validação ao vivo pós-deploy — 2026-08-16
+
+No deploy informado como `8cff5c1`, uma rodada manual de 10 cenários no WhatsApp confirmou
+7 sucessos, 2 resultados parciais e 1 falha clara. Quantidades, pluralização, adição relativa
+na mesma mensagem e a sequência 4x → 7x → 5x passaram. A troca de endereço cancelou a cotação
+antiga sem cobrança e recotou preservando a cesta, mas perdeu os dígitos do CEP no endereço
+atualizado. Permanecem dois riscos de NLU: “para uma viagem” ainda pode virar produto e
+“sem pimenta” pode atingir item vizinho. Nenhum pagamento foi feito e nenhum código foi
+alterado nessa validação; detalhes em [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md).

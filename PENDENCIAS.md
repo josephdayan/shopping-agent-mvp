@@ -879,3 +879,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - **2026-07-19:** Boticário foi reavaliado. A suíte de 210 testes terminou sem falhas (168 aprovados,
   42 integrações de banco puladas), mas o comprador atual só revalida SKU, quantidade e subtotal.
   Frete e promessa ainda precisam ser implementados e validados em Browserbase vivo.
+
+- **2026-08-16:** rodada manual pós-deploy `8cff5c1` (10 cenários) confirmou os consertos de
+  quantidade/pluralização e adição relativa, além de preservação da cesta ao trocar endereço.
+  Pendências observadas ao vivo: contexto “para uma viagem” ainda pode virar item, “sem pimenta”
+  pode contaminar o produto vizinho e a recotação exibiu o CEP novo sem os dígitos. Nenhum
+  pagamento foi feito; evidências completas em `docs/testes-whatsapp-2026-08-14.md`.

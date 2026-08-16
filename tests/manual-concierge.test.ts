@@ -784,8 +784,11 @@ test("5º ciclo: trocar endereço com cotação na mesa PRESERVA a cesta e re-co
   await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
   const drop = await c.send("Antes de pagar, vou entregar em São Paulo, CEP 01310-100.");
   assert.doesNotMatch(drop, /Como prefere pagar/i);
-  const done = await c.send("Avenida Paulista, 1000, Bela Vista, São Paulo - SP");
-  // A cesta voltou e o fechamento re-cotou: total na resposta, sem "me diz o que você quer".
+  // Endereço com CEP repetido no fim — o "CEP" órfão não pode sobrar sem dígitos
+  // (6º ciclo, rodada 8: salvava "… - SP, CEP." depois de remover os números).
+  const done = await c.send("Avenida Paulista, 1000, Bela Vista, São Paulo - SP, CEP 01310-100.");
   assert.match(done, /Total|Recebi seu pedido/i, `não re-cotou: ${done.slice(0, 250)}`);
   assert.doesNotMatch(done, /me diz o que você quer/i, `esqueceu a cesta: ${done.slice(0, 250)}`);
+  assert.doesNotMatch(done, /CEP\s*[.,]/, `CEP órfão no endereço: ${done.slice(0, 250)}`);
+  assert.match(done, /Avenida Paulista, 1000/, `endereço perdido: ${done.slice(0, 250)}`);
 });

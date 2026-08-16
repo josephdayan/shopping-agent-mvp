@@ -137,6 +137,13 @@ const MODIFIER_SEGMENT_RE = new RegExp(
 const STATE_SEGMENT_RE =
   /^(eu )?(to|tou|estou|ando) ((com|meio|toda?|todo) )?(dor(es)?|febre|fome|sede|gripe|enxaqueca|preguica|pressa|frio|calor|sono|correria|doente|gripad\w*|resfriad\w*|cansad\w*|exaust\w*|passando mal|mal|pessim\w*|apertad\w*|atrasad\w*)\b/;
 
+// Uma frase inteira é só restrição/contexto ("Para uma viagem", "qualquer marca")?
+// Usado também para FILTRAR itens vindos da extração por IA — o determinístico já
+// descarta, mas a IA às vezes devolve o contexto como item (6º ciclo, rodada 1).
+export function isRequestModifier(phrase: string): boolean {
+  return MODIFIER_SEGMENT_RE.test(normalizeMsg(phrase));
+}
+
 export function parseBasketLines(text: string): ParsedLine[] {
   let source = expandShoppingShorthand(text);
   // Lista enumerada ("1 arroz\n2 feijão\n3 óleo"): índices sequenciais a partir de 1 em

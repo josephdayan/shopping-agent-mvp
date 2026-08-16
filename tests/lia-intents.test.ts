@@ -4,6 +4,7 @@ import {
   detectIntent,
   extractCep,
   isBareCep,
+  isRequestModifier,
   looksLikeMedicine,
   parseBasketLines,
   mergeShoppingLines,
@@ -489,4 +490,21 @@ test("5º ciclo: adição relativa na MESMA mensagem soma na linha anterior", ()
   assert.equal(detectIntent("Quero dois sacos de lixo de 30 litros, qualquer marca; mais um desses.").kind, "free_text");
   // Sozinho, continua funcionando.
   assert.equal(detectIntent("Mais três desses.").kind, "add_more_same");
+});
+
+// ---------- 6º ciclo (16/08): contexto na IA, escopo da negação, CEP órfão ----------
+
+test("6º ciclo: isRequestModifier pega contexto que a IA deixa vazar", () => {
+  assert.equal(isRequestModifier("Para uma viagem"), true);
+  assert.equal(isRequestModifier("para o churrasco de sábado"), true);
+  assert.equal(isRequestModifier("qualquer marca"), true);
+  assert.equal(isRequestModifier("pão de alho"), false);
+  assert.equal(isRequestModifier("linguiça sem pimenta"), false);
+});
+
+test("6º ciclo: negação inline fica no item dela — vizinhos intactos", () => {
+  const churrasco = parseBasketLines("Para um churrasco de sábado, quero carvão, pão de alho e linguiça sem pimenta; coloca mais um carvão.");
+  const phrases = churrasco.map((l) => l.phrase.toLowerCase());
+  assert.ok(phrases.some((p) => /lingui/.test(p) && /sem pimenta/.test(p)), `linhas: ${phrases.join(" | ")}`);
+  assert.ok(phrases.some((p) => /p[aã]o de alho/.test(p) && !/pimenta/.test(p)), `pão contaminado: ${phrases.join(" | ")}`);
 });

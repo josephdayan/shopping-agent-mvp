@@ -136,3 +136,38 @@ casos que chegaram à cotação foram cancelados antes da cobrança.
 - Quantidade relativa por SKU, troca de item, teto de presente e bloqueio de medicamento funcionaram em parte dos casos.
 - Os problemas mais claros agora são: contexto inicial (“Para domingo”, “Para uma viagem”), preferência (“barato”), composição de uma mesma mensagem e preservação da cesta após troca de endereço.
 - Todos os pagamentos foram evitados e nenhum código foi alterado durante esta rodada.
+
+## Próxima rodada pós-deploy — 16/08/2026 (`8cff5c1`)
+
+Após o deploy informado como `8cff5c1`, foram executados 10 cenários novos no chat da Lia,
+com mensagens naturais e combinações de quantidade, preferências, contexto e troca de
+endereço. Nenhum Pix ou cartão foi acionado. Toda cotação que chegou ao pagamento foi
+cancelada antes da cobrança; a Lia confirmou que nada foi cobrado.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Escova macia e pasta de dente “para uma viagem”, sem remédio | **Falha**: encontrou escova e creme dental, não alertou sobre medicamento, mas registrou “Para uma viagem” como terceiro item | Contexto (“para uma viagem”) ainda precisa ser descartado antes da extração de produtos. |
+| 2 | Dois cafés moídos até R$25 cada, qualquer marca, não descafeinado, para domingo | **Sucesso**: apresentou uma opção dentro do teto e, após a escolha, confirmou 2x do mesmo café; não criou linha para domingo, “cada” ou “qualquer marca” | Nenhum defeito funcional observado neste cenário. |
+| 3 | Cabo USB-C de 2 m para celular, não veicular e barato | **Sucesso de segurança da busca**: recusou honestamente por falta de opção compatível, sem trazer carregador/algodão e sem transformar “barato” em item | Se houver catálogo compatível, ainda vale validar o filtro de comprimento e tipo; neste caso a recusa foi limpa. |
+| 4 | Saco de lixo reforçado de 30 L; “mais um desses” na mesma mensagem | **Sucesso**: escolheu a opção exata e confirmou 2x do mesmo SKU, preservando os 30 litros | Nenhum problema funcional observado. |
+| 5 | Leite sem lactose; “mais dois leites” na mesma mensagem | **Sucesso**: mostrou apenas opções sem lactose e confirmou 3x do mesmo leite, sem abrir uma linha integral genérica | Nenhum problema funcional observado. |
+| 6 | Dois pães de queijo e dois sucos de laranja para o café da manhã | **Sucesso**: identificou 2 itens, confirmou 2x de cada e não gerou linhas duplicadas; cancelado | Nenhum problema funcional observado. |
+| 7 | Quatro caixas de bombom; depois +3 do mesmo; depois “5” | **Sucesso**: confirmou 4x, passou para 7x e ajustou para 5x do mesmo SKU; cancelado | Nenhum problema funcional observado. |
+| 8 | Com pagamento aberto, mudar para Campinas com CEP 13010-100 e depois informar endereço completo | **Parcial**: cancelou a cotação antiga antes de qualquer pagamento, pediu endereço completo e recotou mantendo 2x do café; porém armazenou/exibiu o novo endereço como “CEP.”, sem os dígitos informados | Preservar a cesta funcionou; corrigir a captura e a exibição do CEP na recotação. |
+| 9 | Duas caixas de bombom e uma lembrancinha até R$100, sem brinquedo barulhento | **Sucesso com indisponibilidade honesta**: recusou somente a lembrancinha sem criar linha fantasma, mostrou bombom e confirmou 2x do item disponível; cancelado | Quando um item não estiver no catálogo, manter a recusa única e deixar claro que os demais pedidos continuam disponíveis. |
+| 10 | Churrasco: carvão, pão de alho e linguiça sem pimenta; “mais um carvão” | **Parcial**: contexto de churrasco não virou item, confirmou 2x carvão e encontrou os 3 produtos; mas propagou “sem pimenta” também para pão de alho, embora a frase qualificasse a linguiça | Restringir a negação ao substantivo/segmento correto; não espalhar “sem X” para itens vizinhos. |
+
+### Síntese da rodada de 16/08
+
+- **7 sucessos, 2 parciais e 1 falha clara**.
+- Os consertos de quantidade e adição relativa passaram nos casos prioritários: 2x → 3x
+  no saco, 1x → 3x no leite dentro da mesma mensagem e 4x → 7x → 5x no bombom.
+- O plural em uma cesta com dois produtos também passou: 2x pão de queijo + 2x suco,
+  sem linha duplicada.
+- A troca de endereço ficou protegida contra pagamento no endereço antigo e a cesta foi
+  preservada na recotação. O defeito restante é de parsing/exibição do CEP, que perdeu os
+  dígitos no endereço atualizado.
+- Persistem dois riscos de NLU: contexto inicial (“para uma viagem”) tratado como produto e
+  escopo de negação (“sem pimenta”) aplicado a mais de um item.
+- Esta é uma observação de comportamento ao vivo contra o deploy informado pelo operador;
+  nenhum arquivo de código foi alterado durante a rodada.
