@@ -192,6 +192,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **15/08 (2ª) — 3º ciclo (10 rodadas) → 6 consertos PUBLICADOS.** Push `3356cbc` →
+> deploy `READY` em Production (smoke verde: landing 200, /ops 200, webhook 403/401).
+> No ar: negação vira atributo `sem X`, "até R$30 cada", destino com CEP no meio do
+> pagamento derruba a cotação velha, "mais um leite" herda o sku, "troca X por Y" em
+> lista nova, lancheira recusa limpa. Suíte 320/320; golden 33/34 DET · 34/34 IA.
+> **Re-teste sugerido:** churrasco com "sem pimenta"; carregador "não veicular, algo
+> barato"; "Antes de pagar, vou entregar em Campinas, CEP 13010-100" com pagamento
+> aberto; "mais um leite" após leite sem lactose; a mensagem do detergente/esponja/saco.
+
 > **15/08 — re-teste (10 rodadas) → 6 consertos PUBLICADOS.** Push `4cbbaae` → deploy
 > `dpl_AW75PjcJaB44exEzNTLcaLirbZ1M` `READY`; smoke verde. Rodadas 5/6/15 passaram no
 > re-teste; os ruídos restantes ("três pacotes" acentuado, embalagem solta, "qualquer
