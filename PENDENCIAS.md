@@ -192,6 +192,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **16/08 (3ª) — 6º ciclo (10 rodadas, 7 sucessos) → 3 consertos PUBLICADOS.** Push
+> `95db8bf` → deploy `Ready` (smoke verde). No ar: filtro de contexto também nos itens
+> da IA ("Para uma viagem"), escopo da negação corrigido no prompt (o exemplo da 7d
+> ensinava a contaminar o vizinho), e CEP órfão limpo na captura do endereço. Régua dos
+> ciclos: 15→7→6→6→4→3. Recomendação registrada: próximo ciclo limpo = abrir o piloto
+> pra gente de fora.
+
 > **16/08 (2ª) — 5º ciclo (10 rodadas) → 4 consertos PUBLICADOS.** Push `8cff5c1` →
 > deploy `Ready` (smoke verde: landing 200, /ops 200, webhook 403). No ar: ocasião/dia e
 > "barato" seco como modificadores; plural não duplica no merge; adição relativa na
