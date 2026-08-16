@@ -794,3 +794,12 @@ antiga sem cobrança e recotou preservando a cesta, mas perdeu os dígitos do CE
 atualizado. Permanecem dois riscos de NLU: “para uma viagem” ainda pode virar produto e
 “sem pimenta” pode atingir item vizinho. Nenhum pagamento foi feito e nenhum código foi
 alterado nessa validação; detalhes em [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md).
+
+### Reteste do 6º ciclo — 2026-08-16
+
+Contra o deploy informado como `95db8bf`, foram feitos 10 cenários novos e 3 retestes exatos:
+12 passaram no critério principal e 1 foi parcial. “Para uma viagem” não criou linha de
+contexto; “sem pimenta” ficou somente na linguiça; e a cesta sobreviveu à recotação de
+Campinas. O artefato “CEP.” desapareceu, mas os dígitos do CEP fornecido não apareceram na
+confirmação, então a persistência estruturada ainda precisa ser confirmada. Nenhum pagamento
+foi feito; evidências em [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md).

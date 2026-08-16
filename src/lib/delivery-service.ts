@@ -1994,7 +1994,7 @@ async function handleNewCep(
   }
 
   const shownAddress = ctx.deliveryAddress ?? cep;
-  const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedPrefix(shownAddress);
+  const savedMsg = hadCepBefore ? copy.addressUpdated(shownAddress, ctx.cep) : copy.addressSavedPrefix(shownAddress, ctx.cep);
   ctx.pendingRequest = undefined;
   if (await syncAwaitingQuoteOrderAddress(phone, convoId, ctx)) return;
   if (queued) {
@@ -2019,7 +2019,7 @@ async function handleNewCep(
   }
   ctx.step = "collecting";
   await writeCtx(convoId, ctx);
-  await reply(phone, hadCepBefore ? copy.addressUpdated(shownAddress) : copy.addressSavedAskItems(shownAddress));
+  await reply(phone, hadCepBefore ? copy.addressUpdated(shownAddress, ctx.cep) : copy.addressSavedAskItems(shownAddress));
 }
 
 // Uma mensagem é o ENDEREÇO de entrega (e não um pedido de produto)? Marcador de
@@ -2072,13 +2072,13 @@ async function handleDeliveryAddress(
   const queued = ctx.pendingRequest;
   ctx.pendingRequest = undefined;
   if (queued) {
-    await reply(phone, copy.addressUpdated(address));
+    await reply(phone, copy.addressUpdated(address, ctx.cep));
     await handleSearch(phone, convoId, null, ctx, queued);
     return;
   }
 
   if (ctx.basket?.length) {
-    await continueAfterBasket(phone, convoId, ctx, userCep, copy.addressUpdated(address));
+    await continueAfterBasket(phone, convoId, ctx, userCep, copy.addressUpdated(address, ctx.cep));
     return;
   }
 

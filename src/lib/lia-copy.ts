@@ -89,12 +89,21 @@ export function addressSavedAskItems(address: string): string {
   return `📍 Endereço salvo: ${cleanAddressForCopy(address)}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
 }
 
-export function addressSavedPrefix(address: string): string {
-  return `📍 Endereço salvo: ${cleanAddressForCopy(address)}.`;
+// O CEP entra na confirmação quando é conhecido e não está no texto do endereço —
+// 7º ciclo (16/08): o cliente corrigiu o CEP no fim do endereço, o fluxo processou
+// certo, mas a confirmação não mostrava o número e parecia perdido.
+function withCep(address: string, cep?: string): string {
+  const clean = cleanAddressForCopy(address);
+  if (!cep || clean.includes(cep)) return clean;
+  return `${clean} — CEP ${cep}`;
 }
 
-export function addressUpdated(address: string): string {
-  return `📍 Prontinho, endereço atualizado: ${cleanAddressForCopy(address)}.`;
+export function addressSavedPrefix(address: string, cep?: string): string {
+  return `📍 Endereço salvo: ${withCep(address, cep)}.`;
+}
+
+export function addressUpdated(address: string, cep?: string): string {
+  return `📍 Prontinho, endereço atualizado: ${withCep(address, cep)}.`;
 }
 
 export function askFullDeliveryAddress(): string {

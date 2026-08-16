@@ -169,3 +169,12 @@ test("pós-venda: limpa antes do pagamento, sem cancelamento ou substituição d
   assert.match(copy.complaintAck(), /não fazemos substituições/);
   assert.doesNotMatch(copy.help(), /cancelar/);
 });
+
+test("7º ciclo: confirmação de endereço mostra o CEP quando ele não está no texto", () => {
+  assert.match(copy.addressUpdated("Rua Conceição, 233, Centro, Campinas - SP", "13010-050"), /13010-050/);
+  // CEP já presente no texto não duplica.
+  const dup = copy.addressUpdated("Rua X, 1, Centro, Campinas - SP, 13010-050", "13010-050");
+  assert.equal((dup.match(/13010-050/g) ?? []).length, 1);
+  // Sem CEP conhecido, mensagem de sempre.
+  assert.doesNotMatch(copy.addressUpdated("Rua Y, 2, São Paulo - SP"), /CEP/);
+});

@@ -892,3 +892,7 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   Pendências observadas ao vivo: contexto “para uma viagem” ainda pode virar item, “sem pimenta”
   pode contaminar o produto vizinho e a recotação exibiu o CEP novo sem os dígitos. Nenhum
   pagamento foi feito; evidências completas em `docs/testes-whatsapp-2026-08-14.md`.
+- **2026-08-16:** reteste do 6º ciclo `95db8bf` passou os dois bugs de NLU anunciados e os
+  cenários adicionais de refinamento, troca, quantidade, medicamento e cobertura geográfica.
+  A recotação de Campinas preservou a cesta e eliminou “CEP.”, mas a UI não exibiu os dígitos
+  de `13010-050`; confirmar o campo estruturado antes de considerar o caso totalmente fechado.

@@ -791,4 +791,6 @@ test("5º ciclo: trocar endereço com cotação na mesa PRESERVA a cesta e re-co
   assert.doesNotMatch(done, /me diz o que você quer/i, `esqueceu a cesta: ${done.slice(0, 250)}`);
   assert.doesNotMatch(done, /CEP\s*[.,]/, `CEP órfão no endereço: ${done.slice(0, 250)}`);
   assert.match(done, /Avenida Paulista, 1000/, `endereço perdido: ${done.slice(0, 250)}`);
+  // O CEP processado aparece na confirmação (7º ciclo: era salvo mas invisível).
+  assert.match(done, /01310-100/, `CEP sumiu da confirmação: ${done.slice(0, 250)}`);
 });

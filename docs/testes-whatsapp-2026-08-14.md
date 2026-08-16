@@ -171,3 +171,42 @@ cancelada antes da cobrança; a Lia confirmou que nada foi cobrado.
   escopo de negação (“sem pimenta”) aplicado a mais de um item.
 - Esta é uma observação de comportamento ao vivo contra o deploy informado pelo operador;
   nenhum arquivo de código foi alterado durante a rodada.
+
+## Rodada pós-deploy do 6º ciclo — 16/08/2026 (`95db8bf`)
+
+Foram executados 10 cenários novos e, ao final, os 3 retestes exatos anunciados para o
+deploy `95db8bf`. A conversa foi tratada como a de um cliente comum, sem conhecimento do
+catálogo. Nenhum Pix ou cartão foi acionado; toda cotação que chegou ao pagamento foi
+cancelada antes da cobrança.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | Café da manhã: 3 iogurtes naturais, granola sem açúcar e bananas | **Sucesso**: separou 3 itens, confirmou 3x do iogurte, granola zero açúcar e banana; nenhum contexto virou produto | Nenhum problema funcional observado. |
+| 2 | Sabonete líquido para as mãos; depois refinamento para “sem perfume” | **Sucesso**: refinou a lista existente, não abriu uma segunda escolha e confirmou um único sabonete | Nenhum problema funcional observado. |
+| 3 | Detergente neutro + esponja; troca da esponja por saco reforçado de 30 L | **Sucesso**: removeu a esponja, preservou o detergente e buscou saco de lixo com 30 L; “pensando bem” não virou item | Nenhum problema funcional observado. |
+| 4 | Carregador USB-C de parede, não veicular e sem marca | **Sucesso**: trouxe carregador de parede USB-C relevante, sem veículo, algodão ou linha fantasma; cancelado | Nenhum problema funcional observado. |
+| 5 | Presente para criança de 6 anos, até R$100 e sem brinquedo barulhento | **Sucesso de extração segura**: recusou honestamente a combinação por falta de opção, sem transformar teto/contexto/negação em produtos | Se essa categoria for importante, ampliar o catálogo; o comportamento observado foi uma recusa única e limpa. |
+| 6 | Dois pacotes de arroz 5 kg, até R$30 cada, entrega hoje se possível | **Sucesso**: opções ficaram em até R$30, confirmou 2x do mesmo arroz e não criou linha para sábado, “cada” ou urgência | Nenhum problema funcional observado. |
+| 7 | “Sem remédio”, shampoo normal e algodão para limpar um corte | **Sucesso**: encontrou shampoo e algodão, não exibiu alerta indevido de medicamento e não criou item para “sem remédio” | Nenhum problema funcional observado. |
+| 8 | Com cotação aberta, mudar para Belo Horizonte, CEP 30130-010 | **Sucesso**: cancelou a cotação antiga antes do pagamento, reconheceu a UF fora de SP e enviou o contato para lista de espera | Nenhum problema funcional observado. |
+| 9 | Água sem gás; depois “mais duas garrafas dessa água” | **Sucesso**: adicionou 2x ao mesmo SKU, totalizando 3x da água sem gás, sem trocar para água com gás | A referência “dessa água” prevaleceu sobre o substantivo genérico “garrafas”, como esperado. |
+| 10 | Ração para cachorro adulto 10 kg, sem frango, até R$100, qualquer marca | **Sucesso de extração segura**: não encontrou combinação compatível e recusou uma única consulta, sem linha para peso, teto, marca ou negação | Ampliar catálogo se esse pedido precisar ser atendido; não houve produto errado. |
+| 11 | Reteste exato: escova macia e pasta “para uma viagem”, sem remédio | **Sucesso**: respondeu “Encontrei os 2 itens”, escova e creme dental; “Para uma viagem” não apareceu como terceiro produto e não houve alerta de medicamento | O bug de contexto observado no ciclo anterior não se reproduziu. |
+| 12 | Reteste exato: churrasco com carvão, pão de alho, linguiça sem pimenta e “mais um carvão” | **Sucesso**: identificou 3 produtos, confirmou 2x carvão e qualificou “sem pimenta” somente na linguiça; pão de alho ficou intacto | O bug de escopo da negação não se reproduziu. |
+| 13 | Reteste exato de endereço: cotação → Campinas/CEP 13010-100 → endereço completo com CEP 13010-050 | **Parcial**: cancelou a cotação antiga, pediu endereço completo, preservou 2x café e recotou; a confirmação ficou limpa, sem “CEP.” órfão, mas também não exibiu os dígitos do CEP fornecido | Confirmar que o CEP 13010-050 foi salvo no campo estruturado, não apenas removê-lo da mensagem exibida. |
+
+### Síntese do 6º ciclo
+
+- **12 sucessos no critério principal e 1 resultado parcial**.
+- Os dois bugs de NLU anunciados foram reproduzidos e passaram no reteste exato:
+  contexto de viagem deixou de virar item e “sem pimenta” ficou restrito à linguiça.
+- Os testes adicionais passaram por refinamento, troca de item, categoria de carregador,
+  teto/preço, urgência, quantidade composta, bloqueio de medicamento, cobertura geográfica
+  e referências relativas por SKU.
+- A proteção financeira continuou íntegra: mudança para BH cancelou a cotação antiga e
+  nenhum pagamento foi emitido ou cobrado.
+- A troca de endereço preservou a cesta e recotou automaticamente. O texto agora não tem
+  o artefato “CEP.”, mas o CEP informado não aparece na confirmação; isso permanece como
+  evidência incompleta de persistência correta do CEP.
+- Nenhum arquivo de código foi alterado durante os testes; esta seção registra somente
+  comportamento observado ao vivo contra o deploy informado pelo operador.
