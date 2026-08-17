@@ -176,6 +176,18 @@ async function storeItems(queryKey: string, query: string, items: MlCatalogItem[
   }
 }
 
+// Buscas frias IDÊNTICAS em voo compartilham UM run do actor (o prefetch dispara a
+// mesma query que a busca real vai pedir segundos depois; sem isto seriam dois runs
+// pagos e o segundo ainda esperaria do zero).
+const inflight = new Map<string, Promise<MlCatalogItem[]>>();
+
+// Começa a busca fria AGORA, sem esperar o resultado. O chamador segue o fluxo (IA,
+// vitrines locais) e quando `searchItems` rodar de verdade, o run já está no meio do
+// caminho — a espera percebida cai da soma (IA + ML) para o máximo dos dois.
+export function prefetchMercadoLivre(query: string): void {
+  void searchMercadoLivre(query, 4).catch(() => {});
+}
+
 // Busca ao vivo no ML (com cache). NUNCA lança: qualquer falha vira lista vazia e o
 // fluxo segue exatamente como se o ML não existisse.
 export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCatalogItem[]> {
@@ -187,13 +199,27 @@ export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCa
   const cached = await cachedItems(queryKey);
   if (cached) return rankMercadoLivre(query, cached, limit);
 
+  let run = inflight.get(queryKey);
+  if (!run) {
+    run = coldSearch(queryKey, normalized).finally(() => inflight.delete(queryKey));
+    inflight.set(queryKey, run);
+  }
+  return rankMercadoLivre(query, await run, limit);
+}
+
+async function coldSearch(queryKey: string, normalized: string): Promise<MlCatalogItem[]> {
   try {
     const token = process.env.APIFY_API_TOKEN!;
     const items = await runApifyActor(
       ACTOR.replace("/", "~"),
       token,
       { keyword: normalized, search: normalized, query: normalized, maxItems: 24, scrapeOfertas: false },
-      Number(process.env.LIA_ML_MAX_WAIT_MS ?? 40000)
+      {
+        maxWaitMs: Number(process.env.LIA_ML_MAX_WAIT_MS ?? 40000),
+        // 4GB derruba o run de ~28,5s para ~21s (medido 17/08; 8GB só dá mais ~1s).
+        // Actor pay-per-event: o compute extra é conta do desenvolvedor, não nossa.
+        memoryMbytes: Number(process.env.LIA_ML_MEMORY_MB ?? 4096)
+      }
     );
     if (!items?.length) return [];
     // GUARDA ANVISA: o ML vende medicamento — a vitrine ao vivo passa pelo mesmo filtro
@@ -206,7 +232,7 @@ export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCa
     ).slice(0, 24);
     if (!catalog.length) return [];
     await storeItems(queryKey, normalized, catalog);
-    return rankMercadoLivre(query, catalog, limit);
+    return catalog;
   } catch (error) {
     console.warn("[ml:search:failed]", error instanceof Error ? error.message : error);
     return [];

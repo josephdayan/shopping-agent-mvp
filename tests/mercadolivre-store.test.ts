@@ -147,6 +147,52 @@ test("ML: pipeline completo com o payload REAL do actor (rede mockada)", async (
   }
 });
 
+test("ML: buscas frias idênticas em voo compartilham UM run (prefetch + busca real)", async () => {
+  // O prefetch dispara a query antes da extração de IA; a busca de verdade chega
+  // segundos depois com a MESMA query. Sem dedupe em voo seriam dois runs pagos.
+  const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN, fetch: global.fetch, poll: process.env.APIFY_MERCADO_LIVRE_POLL_MS };
+  process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.APIFY_API_TOKEN = "token-de-teste";
+  process.env.APIFY_MERCADO_LIVRE_POLL_MS = "1";
+  let runsStarted = 0;
+  global.fetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("/runs?")) {
+      runsStarted += 1;
+      return new Response(JSON.stringify({ data: { id: "run1", defaultDatasetId: "ds1", status: "SUCCEEDED" } }), { status: 200 });
+    }
+    if (url.includes("/datasets/"))
+      return new Response(
+        JSON.stringify([
+          {
+            eTituloProduto: "Violão Acústico Nylon Natural",
+            novoPreco: "290,70",
+            zProdutoLink: "https://www.mercadolivre.com.br/violao/p/MLB1",
+            patrocinado: "",
+            is_inStock: true,
+            idPublicacao: "MLB1"
+          }
+        ]),
+        { status: 200 }
+      );
+    throw new Error(`url inesperada: ${url}`);
+  }) as typeof fetch;
+  try {
+    const query = `violao dedupe teste ${Date.now()}`;
+    const [a, b] = await Promise.all([searchMercadoLivre(query, 3), searchMercadoLivre(query, 3)]);
+    assert.equal(a.length, 1);
+    assert.equal(b.length, 1);
+    assert.equal(runsStarted, 1, `duas buscas simultâneas iguais dispararam ${runsStarted} runs`);
+    // `waitForFinish` no start: status SUCCEEDED já na resposta do POST = zero polling
+    // (nenhuma chamada a /actor-runs/ aconteceu — o mock lançaria em url inesperada).
+  } finally {
+    process.env.LIA_ENABLE_MERCADOLIVRE = previous.flag;
+    process.env.APIFY_API_TOKEN = previous.token;
+    process.env.APIFY_MERCADO_LIVRE_POLL_MS = previous.poll;
+    global.fetch = previous.fetch;
+  }
+});
+
 test("ML→Meta: foto do ML sai em JPG (a Meta recusa WebP e descarta o card)", () => {
   // Caso real 16/08: 3 camisetas encontradas, cards enviados, Meta respondeu
   // "131053 — WebP image uploads are not currently supported" e NENHUM card chegou;

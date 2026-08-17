@@ -5,12 +5,13 @@ import {
   DEFAULT_STORE_KEY,
   pickStoreForQueries,
   gatherCrossStoreCandidates,
+  prefetchLongTailIfNeeded,
   allUnits,
   type StoreCandidate,
   type StoreConnector
 } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
-import { mercadoLivreEnabled } from "@/lib/stores/mercadolivre";
+import { mercadoLivreEnabled, prefetchMercadoLivre } from "@/lib/stores/mercadolivre";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import {
   attrMatchesItem,
@@ -505,6 +506,18 @@ async function buildChoices(
   onLongTailSearch?: () => void,
   forceLongTail?: boolean
 ): Promise<ChoicesResult> {
+  // Enquanto a IA extrai a lista (~2-5s), o parser determinístico já sabe quais linhas
+  // não têm match local forte — o run frio do ML (~21s) começa AGORA e roda em paralelo.
+  // A busca de verdade lá embaixo se acopla ao mesmo run (dedupe em voo no conector).
+  const crossStore = !lockedStoreKey && manualConciergeEnabled();
+  if (crossStore && !forceLongTail && mercadoLivreEnabled()) {
+    const sanitized = stripMedicineNegation(text);
+    for (const line of parseBasketLines(sanitized)) {
+      if (!queryTokens(line.phrase).length || looksLikeMedicine(line.phrase)) continue;
+      void prefetchLongTailIfNeeded(splitPriceCap(line.phrase).phrase).catch(() => {});
+    }
+  }
+
   const { lines, greetingOnly, containsMedicine } = await extractLines(text);
 
   // Candidatos por linha. No concierge sem loja travada a busca é LARGA (todas as
@@ -512,7 +525,6 @@ async function buildChoices(
   // empate a ordem do registry decidia, e "carregador usb c" caía na Petz (veicular)
   // com o carregador de parede USB-C parado na Pague Menos. No fluxo legado vale
   // "one order = one store", então a linha continua buscando numa loja só.
-  const crossStore = !lockedStoreKey && manualConciergeEnabled();
   const perLine = await Promise.all(
     lines.map(async (line) => {
       // "vinho até 40 reais": o teto NÃO é termo de busca — vira filtro sobre o
@@ -2734,6 +2746,9 @@ async function handleConciergeRequest(
   // brinquedo (certíssimo) e o cliente ficava sem violão. Custo do ML só é pago aqui,
   // no exato caso em que a alternativa era recusar.
   if (notFoundLines.length && mercadoLivreEnabled()) {
+    // O retry vai re-extrair e re-rankear (~3-6s de IA); o run do ML começa já, com a
+    // frase determinística, e a busca do retry se acopla a ele (dedupe em voo).
+    for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
     const retryText = notFoundLines.map((line) => line.phrase).join(", ");
     const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
     const rescued: PendingChoice[] = [];

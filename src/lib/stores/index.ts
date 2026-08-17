@@ -18,7 +18,7 @@ import { imigrantesStore } from "./imigrantes";
 import { naturalDaTerraStore } from "./naturaldaterra";
 import { cobasiStore } from "./cobasi";
 import { giulianaFloresStore } from "./giulianaflores";
-import { mercadoLivreEnabled, mercadoLivreStore } from "./mercadolivre";
+import { mercadoLivreEnabled, mercadoLivreStore, prefetchMercadoLivre } from "./mercadolivre";
 
 // Store registry. Adding a supply source = write one connector file and register it
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
@@ -171,6 +171,19 @@ function rankStoreCandidates(query: string, hits: StoreCandidate[]): StoreCandid
 
 export function needsLongTailSearch(query: string, localCandidates: StoreCandidate[]): boolean {
   return !localCandidates.some((candidate) => conciergeMatchIsStrong(query, candidate.item));
+}
+
+// Larga a busca fria do ML ANTES da extração de IA, quando o parser determinístico já
+// mostra que a linha vai precisar de cauda longa. A busca local é em memória (ms), então
+// o palpite custa quase nada; o run do actor (~21s) roda em paralelo com a IA e o
+// `searchItems` de verdade se acopla ao MESMO run (dedupe em voo no conector). Se a IA
+// reescrever a frase, o prefetch se perde — aceitável: a frase determinística e a da IA
+// coincidem na maioria dos casos.
+export async function prefetchLongTailIfNeeded(query: string): Promise<void> {
+  if (!mercadoLivreEnabled()) return;
+  const localStores = listStores().filter((store) => store.key !== mercadoLivreStore.key);
+  const localHits = await searchSelectedStores(localStores, query, 4);
+  if (needsLongTailSearch(query, rankStoreCandidates(query, localHits))) prefetchMercadoLivre(query);
 }
 
 // Candidatos LARGOS para uma linha do pedido, vindos de TODAS as vitrines. Existe

@@ -297,6 +297,22 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (2ª) — busca fria do ML: ~30s → ~20-22s (pedido do dono: "mais rápido").** O teto
+é o próprio actor; medições reais de 17/08: karamelo em 1GB = 28,5s, **4GB = 21,1s**, 8GB =
+19,7s (marginal) — na Apify CPU escala com memória, e em actor pay-per-event o compute é
+conta do desenvolvedor, então 4GB é de graça pra nós. Alternativas testadas e DESCARTADAS:
+gio21/mercado-livre-scraper (35s, voltou bloqueado com 1 warning), riseandcode (35,6s, 5
+itens), fetch direto de lista.mercadolivre.com.br (200 mas "suspicious-traffic-frontend"),
+API oficial `api.mercadolibre.com/sites/MLB/search` (403 sem token de app). Três cortes:
+(1) `memory=4096` no run (`LIA_ML_MEMORY_MB`); (2) `waitForFinish` no POST do run — o
+polling de 2,5s virou fallback; (3) **prefetch em paralelo**: `buildChoices` dispara o run
+frio ANTES da extração de IA quando o parser determinístico já vê linha sem match local
+forte (`prefetchLongTailIfNeeded`), e o retry de última chance pré-dispara com a frase
+determinística — buscas idênticas em voo compartilham UM run (`inflight` no conector).
+Para chegar em 10-15s ou menos só com a **API oficial do ML** (token de app via
+client_credentials, ~1s/busca, grátis): exige o dono criar um aplicativo em
+developers.mercadolivre.com.br — registrado em PENDENCIAS.
+
 **17/08 — match local ERRADO bloqueava a cauda longa (caso "violão").** O dono pediu um
 violão e ouviu "não tenho como trazer" — com o ML ligado, que tem violões aos milhares
 (verificado no actor: Tagima R$1.389, Giannini, Vogga R$290). Causa: o gate

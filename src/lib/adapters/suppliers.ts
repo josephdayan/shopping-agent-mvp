@@ -402,13 +402,28 @@ async function runApifyActorCached(actorId: string, token: string, query: string
 // unreliable for the Mercado Livre scraper — on a cold start it returns 502 or a
 // 200 with an EMPTY dataset (the run is aborted before it scrapes), which is what
 // made production return "Não encontrei uma opção boa para essa busca".
+//
+// `waitForFinish` no START (até 60s) faz o POST bloquear até o run terminar: o loop de
+// polling abaixo vira só fallback, cortando os ~2-4s de quantização do poll. E
+// `memoryMbytes` sobe a CPU do actor (na Apify CPU escala com memória): medido em
+// 17/08 no scraper do ML, 1GB = 28,5s vs 4GB = 21,1s — e em actor pay-per-event o
+// compute é conta do desenvolvedor, então a memória extra não custa nada pra nós.
+type RunApifyOptions = { maxWaitMs?: number; memoryMbytes?: number };
+
 export async function runApifyActor(
   actorId: string,
   token: string,
   input: unknown,
-  maxWaitOverrideMs?: number
+  maxWaitOverride?: number | RunApifyOptions
 ): Promise<ApifyProduct[] | null> {
-  const startResponse = await fetch(`https://api.apify.com/v2/acts/${actorId}/runs?token=${token}`, {
+  const options: RunApifyOptions =
+    typeof maxWaitOverride === "number" ? { maxWaitMs: maxWaitOverride } : maxWaitOverride ?? {};
+  const maxWaitMs = options.maxWaitMs ?? Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 90000);
+  const startUrl = new URL(`https://api.apify.com/v2/acts/${actorId}/runs`);
+  startUrl.searchParams.set("token", token);
+  startUrl.searchParams.set("waitForFinish", String(Math.min(60, Math.max(0, Math.floor(maxWaitMs / 1000)))));
+  if (options.memoryMbytes) startUrl.searchParams.set("memory", String(options.memoryMbytes));
+  const startResponse = await fetch(startUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json", "User-Agent": "lia/0.1" },
     body: JSON.stringify(input),
@@ -420,7 +435,9 @@ export async function runApifyActor(
     return null;
   }
 
-  const startPayload = (await startResponse.json()) as { data?: { id?: string; defaultDatasetId?: string } };
+  const startPayload = (await startResponse.json()) as {
+    data?: { id?: string; defaultDatasetId?: string; status?: string };
+  };
   const runId = startPayload.data?.id;
   const datasetId = startPayload.data?.defaultDatasetId;
   if (!runId || !datasetId) {
@@ -428,12 +445,11 @@ export async function runApifyActor(
     return null;
   }
 
-  const maxWaitMs = maxWaitOverrideMs ?? Number(process.env.APIFY_MERCADO_LIVRE_MAX_WAIT_MS ?? 90000);
   const pollEveryMs = Number(process.env.APIFY_MERCADO_LIVRE_POLL_MS ?? 2500);
   const deadline = Date.now() + (Number.isFinite(maxWaitMs) ? maxWaitMs : 45000);
-  let status = "READY";
+  let status = startPayload.data?.status ?? "READY";
 
-  while (Date.now() < deadline) {
+  while (!["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT", "TIMING-OUT"].includes(status) && Date.now() < deadline) {
     await delay(pollEveryMs);
     const runResponse = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`, { cache: "no-store" });
     if (!runResponse.ok) continue;
