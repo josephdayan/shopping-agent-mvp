@@ -297,6 +297,29 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (6ª) — RAPPI DESCARTADO como vitrine (decisão do dono, com evidência) + frete do
+anúncio do ML.** O dono quis o Rappi "tipo o ML no fluxo". Investigação (17/08, tudo
+testado): o site do Rappi é SSR e a busca DENTRO de uma loja funciona com fetch puro —
+`rappi.com.br/lojas/<slug>/s?term=<q>` devolve produtos no `__NEXT_DATA__`
+(`fallback["storefront/<slug>/search/<termo>"].products`): 40 itens em 1,2s, com preço,
+foto, estoque, e a página da loja ainda traz `delivery_price`/`eta_value`. Seria a
+integração mais barata do projeto — **mas só vale para lojas do Rappi Mall** (e-commerce
+nacional: Nespresso, Kalunga, Granado). Os SUPERMERCADOS (Carrefour/PdA/Extra, o turbo de
+1h — o único motivo de querer Rappi) exigem localização definida no CLIENTE: slug de
+mercado cai em landing genérica, `lat/lng` em URL e cookie não mudam nada, a API interna
+responde 401 e o edge bloqueia sondagem (403 PATH_NOT_ALLOWED). Só com navegador — que
+foi removido do produto de propósito (03/08). E o que é raspável (Mall) é entrega em
+dias, ou seja, o trabalho que o ML já faz melhor. Actors de Rappi no Apify são de
+RESTAURANTE (~US$0,5 só o start) e não fazem busca de produto em mercado.
+**Conclusão do dono: "não precisa do Rappi se não ajuda em nada".** Rappi segue como
+CANAL DE COMPRA manual do operador (tag ⚡), nunca como vitrine — não reabrir sem fato
+novo (ex.: API de parceiro). No mesmo turno, o achado colateral virou conserto: item do
+ML caía na tarifa padrão R$18 porque o ML não tem política de loja — taxa fantasma sobre
+anúncio que estampa "Chegará grátis". Agora `CatalogItem.freeShipping` (do `freteGratis`/
+texto do anúncio) viaja até `computeStoreFreights`: loja cujos itens são TODOS de frete
+grátis sai com fee 0; um item pago no meio traz a política de volta (nunca cobrar a
+menos). Testes: instant-quote 5/5, ML 11/11, live-freight, tsc.
+
 **17/08 (5ª) — card do ML: slot de entrega é PRAZO, não benefício de frete.** Reclamação
 do dono: "tá vindo frete grátis mas é pra vir prazo de entrega". Investigação no dataset
 real: quando o anúncio não publica data, o actor devolve `envio: "Frete grátis"` ou vazio

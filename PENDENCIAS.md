@@ -192,6 +192,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **17/08 (4ª) — Rappi FECHADO como vitrine + frete do anúncio do ML.** Decisão do dono
+> depois da investigação: o SSR do Rappi só entrega as lojas do Mall (e-commerce
+> nacional, entrega em dias — o que o ML já cobre); os supermercados de 1h exigem
+> localização no cliente (401 na API, 403 no edge) e só sairiam com navegador, removido
+> do produto de propósito. **Rappi = canal de compra manual (tag ⚡), não vitrine**; não
+> reabrir sem fato novo. Junto: item do ML não cobra mais tarifa padrão R$18 quando o
+> anúncio dá frete grátis (flag `freeShipping` do anúncio → cotação instantânea; item
+> pago na mesma loja restaura a política). Gate: instant-quote 5/5, ML 11/11, tsc.
+
 > **17/08 (3ª) — card do ML: slot de entrega é PRAZO (reclamação do dono) — PUBLICADO.**
 > Deploy `shopping-agent-8yc44yeis` `Ready`, smoke verde. "Frete grátis" sem data não
 > ocupa mais o slot (sem data = sem rótulo; o prazo oficial é a cotação), anúncio

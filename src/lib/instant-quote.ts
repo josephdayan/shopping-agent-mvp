@@ -18,6 +18,8 @@ export type InstantQuoteItem = {
   unitPrice: number;
   storeKey?: string;
   storeLabel?: string;
+  // A própria oferta dá frete grátis (anúncio do ML). Ver computeStoreFreights.
+  freeShipping?: boolean;
 };
 
 export type StoreFreight = {
@@ -104,15 +106,24 @@ export function storeFreight(storeKey: string, storeLabel: string, subtotal: num
 }
 
 export function computeStoreFreights(items: InstantQuoteItem[]): InstantFreights {
-  const stores = new Map<string, { label: string; subtotal: number }>();
+  const stores = new Map<string, { label: string; subtotal: number; allFree: boolean }>();
   for (const item of items) {
     if (!item.storeKey) continue;
-    const entry = stores.get(item.storeKey) ?? { label: item.storeLabel ?? item.storeKey, subtotal: 0 };
+    const entry = stores.get(item.storeKey) ?? { label: item.storeLabel ?? item.storeKey, subtotal: 0, allFree: true };
     entry.subtotal += item.unitPrice * item.qty;
+    entry.allFree = entry.allFree && Boolean(item.freeShipping);
     stores.set(item.storeKey, entry);
   }
   const freights: StoreFreight[] = [];
-  for (const [storeKey, { label, subtotal }] of stores) {
+  for (const [storeKey, { label, subtotal, allFree }] of stores) {
+    // Frete declarado pela PRÓPRIA oferta manda sobre a política da loja: no ML cada
+    // anúncio é um checkout, e cobrar tarifa padrão (R$18) por cima de um "Chegará
+    // grátis hoje" é taxa fantasma pro cliente (17/08). Um item sem a flag na mesma
+    // loja derruba a isenção — nunca cobra a menos.
+    if (allFree) {
+      freights.push({ storeKey, storeLabel: label, subtotal: Math.round(subtotal * 100) / 100, fee: 0, source: "loja" });
+      continue;
+    }
     freights.push(storeFreight(storeKey, label, Math.round(subtotal * 100) / 100));
   }
   return {

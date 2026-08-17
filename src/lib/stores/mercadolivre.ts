@@ -57,6 +57,7 @@ type ApifyMlItem = {
   eCompraInternacional?: boolean | string | null;
   enviadoDe?: string;
   envio?: string;
+  freteGratis?: boolean | null;
   idPublicacao?: string;
   SKU?: string;
   // Sinais de POPULARIDADE que o ML publica no resultado. Sem eles, a vitrine ordenava
@@ -137,6 +138,8 @@ function toCatalogItem(raw: ApifyMlItem): MlCatalogItem | null {
     category: delivery,
     imageUrl: mlImageAsJpg(raw.imagemLink),
     productUrl,
+    // O anúncio é a autoridade do próprio frete (o texto de envio diz "Chegará GRÁTIS").
+    ...(raw.freteGratis === true || /gratis|grátis/i.test(raw.envio ?? "") ? { freeShipping: true } : {}),
     mlTrust: trustScore(raw),
     mlPosition: typeof raw.posicaoItem === "number" ? raw.posicaoItem : 999
   };

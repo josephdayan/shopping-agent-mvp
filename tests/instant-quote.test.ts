@@ -70,3 +70,25 @@ test("elegibilidade: só cesta 100% vitrine com preço; linha livre ou vazia cae
   process.env.LIA_INSTANT_QUOTE = "false";
   assert.equal(instantQuoteEligible([vitrine], "concierge"), false);
 });
+
+test("frete grátis do próprio anúncio (ML) vence a tarifa padrão — e um item pago derruba a isenção", () => {
+  // Caso real 17/08: violão do ML com "Chegará grátis hoje" saía na cotação com R$18 de
+  // tarifa padrão (o ML não tem política de loja) — taxa fantasma, o anúncio entrega grátis.
+  const anuncioGratis = { qty: 1, unitPrice: 319, storeKey: "mercadolivre", storeLabel: "Mercado Livre", freeShipping: true };
+  const so = computeStoreFreights([anuncioGratis]);
+  assert.equal(so.totalFee, 0, "anúncio com frete grátis não pode cobrar frete");
+
+  // Dois anúncios grátis continuam grátis.
+  const dois = computeStoreFreights([anuncioGratis, { ...anuncioGratis, unitPrice: 90 }]);
+  assert.equal(dois.totalFee, 0);
+
+  // Conservador: um item SEM frete grátis na mesma loja traz a política de volta
+  // (nunca cobrar a menos — o operador é quem paga a diferença).
+  const misto = computeStoreFreights([anuncioGratis, { qty: 1, unitPrice: 40, storeKey: "mercadolivre", storeLabel: "Mercado Livre" }]);
+  assert.ok(misto.totalFee > 0, `esperava frete de volta, veio ${misto.totalFee}`);
+
+  // Outras lojas seguem com a política delas mesmo quando o ML está grátis.
+  const duasLojas = computeStoreFreights([anuncioGratis, { qty: 1, unitPrice: 30, storeKey: "oba", storeLabel: "Oba" }]);
+  assert.equal(duasLojas.freights.find((f) => f.storeKey === "mercadolivre")?.fee, 0);
+  assert.ok((duasLojas.freights.find((f) => f.storeKey === "oba")?.fee ?? 0) > 0);
+});

@@ -169,9 +169,12 @@ type BasketItem = {
   storeKey: string;
   storeLabel: string;
   productUrl?: string;
+  // A oferta escolhida declarava frete grátis (anúncio do ML) — a cotação não cobra
+  // frete por cima do que o próprio anúncio dá de graça.
+  freeShipping?: boolean;
 };
 
-type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; storeKey?: string; storeLabel?: string; delivery?: string };
+type ChoiceOption = { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; storeKey?: string; storeLabel?: string; delivery?: string; freeShipping?: boolean };
 type StoreFulfillment = {
   storeKey: string;
   storeLabel: string;
@@ -670,7 +673,8 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
     lineTotal: Math.round(o.unitPrice * qty * 100) / 100,
     storeKey: selectedStore.key,
     storeLabel: o.storeLabel ?? selectedStore.label,
-    ...(o.productUrl ? { productUrl: o.productUrl } : {})
+    ...(o.productUrl ? { productUrl: o.productUrl } : {}),
+    ...(o.freeShipping ? { freeShipping: true } : {})
   };
 }
 
@@ -691,12 +695,22 @@ function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
 }
 
 function toChoiceOption(
-  o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string },
+  o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string; freeShipping?: boolean },
   storeRef?: { storeKey?: string; storeLabel?: string }
 ): ChoiceOption {
   // Vitrine ao vivo do ML manda o prazo do anúncio em `category` ("chega hoje").
   const delivery = storeRef?.storeKey === "mercadolivre" ? o.category : undefined;
-  return { sku: o.sku, name: o.name, brand: o.brand, unitPrice: o.unitPrice, imageUrl: o.imageUrl, productUrl: o.productUrl, ...storeRef, ...(delivery ? { delivery } : {}) };
+  return {
+    sku: o.sku,
+    name: o.name,
+    brand: o.brand,
+    unitPrice: o.unitPrice,
+    imageUrl: o.imageUrl,
+    productUrl: o.productUrl,
+    ...storeRef,
+    ...(delivery ? { delivery } : {}),
+    ...(o.freeShipping ? { freeShipping: true } : {})
+  };
 }
 
 async function replyPhoto(phone: string, text: string, imageUrl?: string) {

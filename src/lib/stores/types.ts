@@ -15,6 +15,11 @@ export type CatalogItem = {
   // Lets /ops open the exact
   // item instead of a name search.
   productUrl?: string;
+  // A PRÓPRIA oferta declara frete grátis (vitrine ao vivo do ML: cada anúncio é um
+  // checkout separado, com regra de frete própria — a política por loja não descreve
+  // isso). Sem a flag, a cotação cobrava tarifa padrão R$18 num anúncio que estampa
+  // "Chegará grátis hoje" (17/08).
+  freeShipping?: boolean;
 };
 
 export type StoreUnit = {
