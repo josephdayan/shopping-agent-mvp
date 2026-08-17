@@ -183,7 +183,7 @@ export async function gatherCrossStoreCandidates(
   query: string,
   limit = 12,
   perStore = 4,
-  options?: { onLongTailSearch?: () => void }
+  options?: { onLongTailSearch?: () => void; forceLongTail?: boolean }
 ): Promise<StoreCandidate[]> {
   const stores = listStores();
   const longTail = stores.find((store) => store.key === mercadoLivreStore.key);
@@ -194,8 +194,13 @@ export async function gatherCrossStoreCandidates(
   // The ML actor is slow and paid. It only runs when no local candidate clears the
   // concierge relevance floor; registry order alone would still await it through
   // Promise.all on every everyday query.
+  // `forceLongTail`: a linha JÁ falhou no pipeline completo (piso/rerank descartaram
+  // tudo) e o cliente ia ouvir "não tenho". Aí o ML entra mesmo havendo match local
+  // "forte" — caso real 17/08: "violão" casava com "Brinquedo Musical Violão Patrulha
+  // Canina" (Ri Happy), o gate achava que a busca local resolveu, o rerank descartava o
+  // brinquedo com razão e o cliente ficava sem violão nenhum.
   let ranked = localRanked;
-  if (longTail && needsLongTailSearch(query, localRanked)) {
+  if (longTail && (options?.forceLongTail || needsLongTailSearch(query, localRanked))) {
     options?.onLongTailSearch?.();
     const longTailHits = await searchSelectedStores([longTail], query, perStore);
     ranked = rankStoreCandidates(query, [...localHits, ...longTailHits]);

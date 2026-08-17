@@ -176,3 +176,19 @@ test("ML: ranking prioriza o que o mercado validou (vendas/avaliações), não o
   const especifico = rankMercadoLivre("camiseta corinthians", items, 3).map((i) => i.sku);
   assert.equal(especifico[0], "ml-b", `ordem específica: ${especifico.join(" > ")}`);
 });
+
+test("ML: match local ERRADO não pode bloquear a cauda longa (caso violão)", async () => {
+  // Caso real 17/08: "violão" casava com "Brinquedo Musical - Violão - Patrulha Canina"
+  // (Ri Happy). O gate via match local "forte" e nem consultava o ML; o rerank depois
+  // descartava o brinquedo (com razão) e o cliente ouvia "não tenho como trazer".
+  const { needsLongTailSearch } = await import("../src/lib/stores");
+  const brinquedo = { sku: "rihappy-1", name: "Brinquedo Musical - Violão - Patrulha Canina", unitPrice: 89.9 };
+  const local = [{ store: { key: "rihappy" } as never, item: brinquedo }];
+  // O gate SOZINHO continua achando que está resolvido — por isso ele não pode ser a
+  // única porta: quem decide de verdade é o resultado final (forceLongTail no retry).
+  assert.equal(needsLongTailSearch("violão", local), false);
+  // E o brinquedo realmente não sobrevive ao piso quando o cliente quer o instrumento:
+  // é essa combinação (passa no gate, morre no piso) que deixava a linha órfã.
+  const { conciergeMatchIsStrong } = await import("../src/lib/stores/types");
+  assert.equal(conciergeMatchIsStrong("violao acustico", brinquedo), false);
+});

@@ -872,8 +872,10 @@ export function quantityAskFree(name: string): string {
   return `Me diz quantas unidades de *${name}* você quer (de 1 a 50) 🙂`;
 }
 
-// Busca que passou de ~2,5s (vitrine de cauda longa ao vivo): o cliente ouve que a Lia
-// está procurando ANTES de esperar — silêncio de 25s parece travamento (16/08).
+// Busca que passou de ~2,5s: o cliente precisa saber que a Lia está trabalhando —
+// silêncio de 25s parece travamento. Curta e SEM expor a mecânica interna (feedback do
+// dono, 17/08: "essa msg de procurei nas lojas parceiras e não achei é péssima, só
+// deixa procurando"). O cliente não quer saber quantos fornecedores existem.
 export function searchingWider(): string {
-  return "🔎 Não achei isso nas lojas do dia a dia — deixa eu procurar num fornecedor maior. Já te mando as opções!";
+  return "🔎 Procurando as melhores opções pra você…";
 }

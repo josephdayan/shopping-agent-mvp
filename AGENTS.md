@@ -297,6 +297,22 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 — match local ERRADO bloqueava a cauda longa (caso "violão").** O dono pediu um
+violão e ouviu "não tenho como trazer" — com o ML ligado, que tem violões aos milhares
+(verificado no actor: Tagima R$1.389, Giannini, Vogga R$290). Causa: o gate
+`needsLongTailSearch` só perguntava "existe match local forte?" e **"violão" casa com
+"Brinquedo Musical - Violão - Patrulha Canina" (Ri Happy)** — o ML nem era consultado; o
+rerank depois descartava o brinquedo (com razão) e a linha ficava órfã. Conserto: o ML
+deixa de ser decidido por HEURÍSTICA PRÉVIA e passa a ser a ÚLTIMA CHANCE — quando o
+pipeline inteiro (piso + rerank) esvazia a linha e o cliente ia ouvir "não tenho", roda
+`buildChoices` de novo só para essas linhas com `forceLongTail`. O custo do ML é pago
+exatamente quando a alternativa era recusar. Vale para a família toda do problema
+(violão/brinquedo, microfone/karaokê infantil, panela/brinquedo de cozinha), não só o
+caso relatado. A quantidade pedida na mensagem original é preservada no resgate.
+Também: `searchingWider` virou "🔎 Procurando as melhores opções pra você…" — a versão
+anterior expunha a mecânica ("procurei nas lojas parceiras e não achei, vou procurar em
+outro lugar"), que o dono classificou como péssima. Suíte 344/344.
+
 **16/08 (7ª) — ML entregou; 2 ajustes do 1º teste bem-sucedido.** O dono comprou o fluxo
 até o resumo (camiseta R$120,89 com foto e prazo). Duas críticas dele, ambas certas:
 1. **"Trouxe umas coisas estranhas"** — o actor publica `quantidadeVendida`,

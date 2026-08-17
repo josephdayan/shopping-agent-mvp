@@ -502,7 +502,8 @@ async function buildChoices(
   text: string,
   lockedStoreKey?: string,
   preferredSkus?: Map<string, number>,
-  onLongTailSearch?: () => void
+  onLongTailSearch?: () => void,
+  forceLongTail?: boolean
 ): Promise<ChoicesResult> {
   const { lines, greetingOnly, containsMedicine } = await extractLines(text);
 
@@ -519,7 +520,7 @@ async function buildChoices(
       const { phrase: searchPhrase, cap } = splitPriceCap(line.phrase);
       let candidates: StoreCandidate[];
       if (crossStore) {
-        candidates = await gatherCrossStoreCandidates(searchPhrase, 12, 4, { onLongTailSearch });
+        candidates = await gatherCrossStoreCandidates(searchPhrase, 12, 4, { onLongTailSearch, forceLongTail });
       } else {
         const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
         candidates = (await lineStore.searchItems(searchPhrase, 12)).map((item) => ({ store: lineStore, item }));
@@ -606,12 +607,19 @@ async function buildChoicesWithSearchNotice(
   phone: string,
   text: string,
   lockedStoreKey?: string,
-  preferredSkus?: Map<string, number>
+  preferredSkus?: Map<string, number>,
+  forceLongTail?: boolean
 ): Promise<ChoicesResult> {
   let notice: ReturnType<typeof searchNoticeTimer> | undefined;
-  return buildChoices(text, lockedStoreKey, preferredSkus, () => {
-    notice ??= searchNoticeTimer(phone);
-  }).finally(() => notice?.cancel());
+  return buildChoices(
+    text,
+    lockedStoreKey,
+    preferredSkus,
+    () => {
+      notice ??= searchNoticeTimer(phone);
+    },
+    forceLongTail
+  ).finally(() => notice?.cancel());
 }
 
 // The store an in-progress order belongs to (picked when the basket was built).
@@ -2716,8 +2724,38 @@ async function handleConciergeRequest(
     if (strong.length) pending.push({ ...choice, options: strong });
     else weakLines.push({ phrase: choice.query, qty: choice.qty, ...(choice.qtyExplicit ? { qtyExplicit: true } : {}) });
   }
-  const notFoundLines = [...raw.notFoundLines, ...weakLines];
+  let notFoundLines = [...raw.notFoundLines, ...weakLines];
   const { greetingOnly, containsMedicine } = raw;
+
+  // ÚLTIMA CHANCE antes de dizer "não tenho": as linhas que o pipeline inteiro
+  // descartou (piso + rerank) vão ao fornecedor de cauda longa mesmo que alguma
+  // vitrine local tenha "casado" — caso real 17/08: "violão" batia no brinquedo da
+  // Patrulha Canina, o gate achava que estava resolvido, o rerank descartava o
+  // brinquedo (certíssimo) e o cliente ficava sem violão. Custo do ML só é pago aqui,
+  // no exato caso em que a alternativa era recusar.
+  if (notFoundLines.length && mercadoLivreEnabled()) {
+    const retryText = notFoundLines.map((line) => line.phrase).join(", ");
+    const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
+    const rescued: PendingChoice[] = [];
+    for (const choice of retry.pending) {
+      const strong = retry.reranked
+        ? choice.options
+        : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
+      if (strong.length) rescued.push({ ...choice, options: strong });
+    }
+    if (rescued.length) {
+      // A linha resgatada sai de "não tenho" e vira escolha normal, com a quantidade
+      // que o cliente pediu na mensagem original.
+      const rescuedQueries = new Set(rescued.map((choice) => normalizeMsg(choice.query)));
+      notFoundLines = notFoundLines.filter((line) => !rescuedQueries.has(normalizeMsg(line.phrase)));
+      for (const choice of rescued) {
+        const original = [...raw.notFoundLines, ...weakLines].find(
+          (line) => normalizeMsg(line.phrase) === normalizeMsg(choice.query)
+        );
+        pending.push(original?.qtyExplicit ? { ...choice, qty: original.qty, qtyExplicit: true } : choice);
+      }
+    }
+  }
   if (greetingOnly && !pending.length && !notFoundLines.length) {
     await reply(phone, copy.greeting());
     return;
