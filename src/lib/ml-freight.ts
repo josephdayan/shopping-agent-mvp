@@ -183,9 +183,15 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
   const estimates: string[] = [];
   for (const { item, itemId, outcome } of outcomes) {
     if (outcome.kind === "ok") {
-      // Cada unidade do MESMO anúncio costuma ir na mesma remessa — o frete do anúncio é
-      // por remessa, não por unidade. Multiplicar por qty inflaria a cobrança.
-      fee += outcome.fee;
+      // Anúncio que ESTAMPA "Chegará grátis" nunca vira frete cobrado, mesmo quando a
+      // consulta devolve um valor: a consulta é feita como comprador anônimo (nível 1) e
+      // a conta do operador tem benefício de frete, então cobrar por cima do "grátis" que
+      // o cliente vê no ML seria a taxa fantasma reprovada em 17/08. A diferença, se
+      // existir, é conta nossa — é o mesmo risco já aceito quando a flag foi criada.
+      // Cada unidade do MESMO anúncio vai na mesma remessa: o frete é por remessa, não por
+      // unidade, então qty não multiplica.
+      fee += item.freeShipping === true ? 0 : outcome.fee;
+      // A data continua sendo a real daquele CEP (é o dado que o cliente quer).
       if (outcome.estimate) estimates.push(outcome.estimate);
       continue;
     }

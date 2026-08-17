@@ -124,6 +124,18 @@ test("cesta do ML: 2 anúncios = 2 fretes somados, e a data é a do ÚLTIMO a ch
   assert.equal(outcome.estimate, "25/08");
 });
 
+test("anúncio que estampa 'grátis' nunca vira frete cobrado — mas a data real é usada", async () => {
+  // A consulta é feita como comprador anônimo (nível 1) e a conta do operador tem
+  // benefício de frete: cobrar por cima do "Chegará grátis" que o cliente vê no ML seria a
+  // taxa fantasma reprovada em 17/08. A data, sim, vem da consulta.
+  mockFetch(200, RESPOSTA_REAL);
+  const outcome = await mlBasketFreight(
+    [{ qty: 2, productUrl: "https://produto.mercadolivre.com.br/MLB-111111111-a-_JM", freeShipping: true }],
+    "01310100"
+  );
+  assert.deepEqual(outcome, { kind: "ok", fee: 0, estimate: "25/08" });
+});
+
 test("cesta do ML: item sem número real derruba a cotação automática (vai pro operador)", async () => {
   mockFetch(200, RESPOSTA_REAL);
   const semId = await mlBasketFreight([{ qty: 1, productUrl: "https://www.mercadolivre.com.br/x/p/MLB75605670" }], "01310100");
