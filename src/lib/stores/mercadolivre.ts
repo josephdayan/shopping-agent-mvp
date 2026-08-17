@@ -66,6 +66,17 @@ function parsePrice(value: string | number | undefined): number | null {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }
 
+// O CDN do ML entrega .webp por padrão — e a Meta RECUSA WebP no card
+// ("131053 — WebP image uploads are not currently supported", caso real 16/08: os 3
+// cards de camiseta foram descartados e a conversa ficou presa esperando escolha).
+// O mesmo arquivo existe em JPG trocando a extensão (verificado: 206 image/jpeg), do
+// mesmo jeito que o Boticário força f_jpg no Cloudinary por causa do AVIF.
+export function mlImageAsJpg(url: string | undefined): string | undefined {
+  const raw = (url ?? "").trim();
+  if (!raw) return undefined;
+  return raw.replace(/\.webp(\?|$)/i, ".jpg$1");
+}
+
 function toCatalogItem(raw: ApifyMlItem): CatalogItem | null {
   const name = (raw.eTituloProduto ?? "").trim();
   const unitPrice = parsePrice(raw.novoPreco);
@@ -84,7 +95,7 @@ function toCatalogItem(raw: ApifyMlItem): CatalogItem | null {
     // O prazo do anúncio viaja como categoria: é o que a copy mostra no card e o que o
     // operador confere ao comprar. Nunca inventamos prazo para item de ML.
     category: delivery,
-    imageUrl: (raw.imagemLink ?? "").trim() || undefined,
+    imageUrl: mlImageAsJpg(raw.imagemLink),
     productUrl
   };
 }

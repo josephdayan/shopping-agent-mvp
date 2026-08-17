@@ -129,7 +129,8 @@ test("Meta: imagem 404 derruba só a FOTO do card, nunca o card (erro assíncron
   global.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
     if (url.includes("dead.jpg")) return new Response("nope", { status: 404 });
-    if (url.includes("ok.jpg")) return new Response("x", { status: 206 });
+    // content-type real: desde 16/08 o pré-flight também valida o FORMATO.
+    if (url.includes("ok.jpg")) return new Response("x", { status: 206, headers: { "content-type": "image/jpeg" } });
     bodies.push(JSON.parse(String(init?.body)));
     return new Response(JSON.stringify({ messages: [{ id: `m${bodies.length}` }] }), { status: 200 });
   }) as typeof fetch;
@@ -145,6 +146,45 @@ test("Meta: imagem 404 derruba só a FOTO do card, nunca o card (erro assíncron
     assert.match(bodies[1].interactive.body.text, /Produto Foto Morta/);
     assert.equal(bodies[1].interactive.action.buttons[0].reply.id, "2");
     assert.equal(bodies[1].interactive.action.buttons[1].reply.id, "opt:outras");
+  } finally {
+    process.env.WHATSAPP_PROVIDER = previous.provider;
+    process.env.WHATSAPP_ACCESS_TOKEN = previous.token;
+    process.env.WHATSAPP_PHONE_NUMBER_ID = previous.phoneId;
+    global.fetch = previous.fetch;
+  }
+});
+
+test("Meta: imagem WebP é recusada no pré-flight (card vai sem foto, nunca some)", async () => {
+  // Caso real 16/08 (Mercado Livre): a Graph aceitou os cards e a Meta descartou todos
+  // com "131053 — WebP image uploads are not currently supported". O pré-flight antigo
+  // só checava se a URL respondia; agora checa o CONTENT-TYPE também.
+  const previous = {
+    provider: process.env.WHATSAPP_PROVIDER,
+    token: process.env.WHATSAPP_ACCESS_TOKEN,
+    phoneId: process.env.WHATSAPP_PHONE_NUMBER_ID,
+    fetch: global.fetch
+  };
+  const bodies: Record<string, any>[] = [];
+  process.env.WHATSAPP_PROVIDER = "meta";
+  process.env.WHATSAPP_ACCESS_TOKEN = "test-token";
+  process.env.WHATSAPP_PHONE_NUMBER_ID = "phone-id";
+  global.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
+    const url = String(input);
+    if (url.includes("foto.webp")) return new Response("x", { status: 206, headers: { "content-type": "image/webp" } });
+    if (url.includes("foto.jpg")) return new Response("x", { status: 206, headers: { "content-type": "image/jpeg" } });
+    bodies.push(JSON.parse(String(init?.body)));
+    return new Response(JSON.stringify({ messages: [{ id: `m${bodies.length}` }] }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    await whatsappAdapter.sendDeliveryChoices("+5511999999999", [
+      { id: "optsku:ml-1", name: "Camiseta Corinthians", displayPrice: 89.9, imageUrl: "https://http2.mlstatic.com/foto.webp" },
+      { id: "optsku:ml-2", name: "Camiseta Corinthians II", displayPrice: 99.9, imageUrl: "https://http2.mlstatic.com/foto.jpg" }
+    ]);
+    assert.equal(bodies.length, 2, "os DOIS cards têm que sair — o formato só derruba a foto");
+    assert.equal(bodies[0].interactive.header, undefined, "card com WebP deve ir sem header de imagem");
+    assert.match(bodies[0].interactive.body.text, /Camiseta Corinthians/);
+    assert.equal(bodies[0].interactive.action.buttons[0].reply.id, "optsku:ml-1");
+    assert.equal(bodies[1].interactive.header.type, "image", "JPG continua com foto");
   } finally {
     process.env.WHATSAPP_PROVIDER = previous.provider;
     process.env.WHATSAPP_ACCESS_TOKEN = previous.token;

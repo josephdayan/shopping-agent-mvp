@@ -297,6 +297,24 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**16/08 (6ª) — 1º teste real do ML: busca OK, cards descartados por WebP.** O dono ligou
+a flag e pediu camiseta: a busca levou ~28s e achou 3 camisetas reais do Corinthians com
+preço, link e "chega amanhã" — e NENHUM card chegou. Causa (diagnóstico do dono):
+`131053 — WebP image uploads are not currently supported`. O CDN do ML serve `.webp` e a
+Meta recusa; como a falha é ASSÍNCRONA (a Graph aceita e descarta depois), o try/catch
+não caía no fallback de texto e a conversa ficava presa em `choosing` esperando escolha
+de opções invisíveis. Dois consertos, um específico e um genérico:
+1. `mlImageAsJpg`: o mesmo arquivo existe em JPG trocando a extensão — verificado ao
+   vivo nas 3 URLs que falharam (206 `image/jpeg`). Mesmo padrão do Boticário, que força
+   `f_jpg` no Cloudinary por causa do AVIF.
+2. **Pré-flight passa a validar o CONTENT-TYPE**, não só se a URL responde
+   (`META_IMAGE_TYPES` = jpeg/png). Formato recusado → card SEM foto em vez de card
+   descartado. Isso protege qualquer vitrine futura, não só o ML.
+**Lição de método (a mais importante):** o teste do ML usava WebP e o teste dos cards da
+Meta usava JPG — cada um passava sozinho e o defeito vivia no VÃO entre eles. Agora há
+teste CRUZADO ML→Meta (foto WebP derruba só a foto; os dois cards saem) e o mock do
+teste antigo, que devolvia `text/plain` como se fosse imagem boa, foi corrigido.
+
 **16/08 (5ª) — MERCADO LIVRE volta como vitrine de cauda longa (atrás de flag).**
 Pergunta do dono: "o fluxo é manual, por que não uso o ML que tem tudo?". Procede — o
 motivo histórico de abandonar o ML era AUTOMATIZAR o checkout (sem API de comprador,

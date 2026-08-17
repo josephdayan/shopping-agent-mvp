@@ -2,7 +2,7 @@ import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { deliveryLabelFrom, mercadoLivreEnabled, searchMercadoLivre } from "../src/lib/stores/mercadolivre";
+import { deliveryLabelFrom, mercadoLivreEnabled, mlImageAsJpg, searchMercadoLivre } from "../src/lib/stores/mercadolivre";
 import { withoutMedicine } from "../src/lib/stores/anvisa";
 import { needsLongTailSearch, type StoreCandidate } from "../src/lib/stores";
 import type { StoreConnector } from "../src/lib/stores/types";
@@ -136,6 +136,8 @@ test("ML: pipeline completo com o payload REAL do actor (rede mockada)", async (
     assert.equal(first.category, "chega hoje");
     assert.match(first.productUrl ?? "", /mercadolivre\.com\.br/);
     assert.match(first.imageUrl ?? "", /mlstatic\.com/);
+  // A foto tem que sair em JPG — WebP faz a Meta descartar o card inteiro (16/08).
+  assert.match(first.imageUrl ?? "", /\.jpg$/, `foto em formato que a Meta recusa: ${first.imageUrl}`);
     assert.match(first.sku, /^ml-/);
   } finally {
     process.env.LIA_ENABLE_MERCADOLIVRE = previous.flag;
@@ -143,4 +145,18 @@ test("ML: pipeline completo com o payload REAL do actor (rede mockada)", async (
     process.env.APIFY_MERCADO_LIVRE_POLL_MS = previous.poll;
     global.fetch = previous.fetch;
   }
+});
+
+test("ML→Meta: foto do ML sai em JPG (a Meta recusa WebP e descarta o card)", () => {
+  // Caso real 16/08: 3 camisetas encontradas, cards enviados, Meta respondeu
+  // "131053 — WebP image uploads are not currently supported" e NENHUM card chegou;
+  // a conversa ficou presa em `choosing` esperando escolha de opções invisíveis.
+  const webp = "https://http2.mlstatic.com/D_NQ_NP_869026-MLB115903230515_082026-O.webp";
+  assert.equal(mlImageAsJpg(webp), "https://http2.mlstatic.com/D_NQ_NP_869026-MLB115903230515_082026-O.jpg");
+  // Com querystring (o CDN às vezes assina a URL).
+  assert.match(mlImageAsJpg(`${webp}?v=2`) ?? "", /\.jpg\?v=2$/);
+  // JPG já correto não é tocado; vazio continua indefinido.
+  const jpg = "https://http2.mlstatic.com/D_NQ_NP_1.jpg";
+  assert.equal(mlImageAsJpg(jpg), jpg);
+  assert.equal(mlImageAsJpg(""), undefined);
 });

@@ -469,10 +469,17 @@ async function sendMetaSimpleButtons(
   });
 }
 
-// Pré-flight da imagem do card (caso real 09/08: foto de catálogo 404 no CDN → a Meta
-// aceita o envio e descarta o card INTEIRO depois, em silêncio — erro assíncrono 131053).
-// Só um 4xx definitivo derruba a foto; timeout/erro de rede mantém (não punir CDN lento).
-// O card degradado vai SEM header de imagem — o produto, o preço e o botão sobrevivem.
+// Formatos que a Meta aceita como imagem de card. WebP e AVIF NÃO entram: a Graph API
+// aceita a mensagem e descarta o card DEPOIS, em silêncio (erro assíncrono 131053,
+// "WebP image uploads are not currently supported" — caso real 16/08 com as fotos do
+// Mercado Livre, que o CDN serve em .webp).
+const META_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+// Pré-flight da imagem do card (caso real 09/08: foto 404 no CDN; 16/08: foto WebP).
+// Verifica DUAS coisas, porque só "a URL responde" não basta: status e CONTENT-TYPE.
+// Só um 4xx definitivo (ou formato recusado) derruba a foto; timeout/erro de rede
+// mantém (não punir CDN lento). O card degradado vai SEM header de imagem — produto,
+// preço e botão sobrevivem, que é sempre melhor que card nenhum.
 async function mediaLinkAlive(url: string): Promise<boolean> {
   try {
     const res = await fetch(url, {
@@ -481,7 +488,14 @@ async function mediaLinkAlive(url: string): Promise<boolean> {
       cache: "no-store"
     });
     res.body?.cancel().catch(() => {});
-    return res.status < 400 || res.status >= 500;
+    if (res.status >= 400 && res.status < 500) return false;
+    const contentType = (res.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
+    // Content-type ausente = CDN econômico; não dá pra provar que é ruim → mantém.
+    if (contentType && !META_IMAGE_TYPES.includes(contentType)) {
+      console.warn("[whatsapp:meta:image-format-rejected]", contentType, url.slice(0, 120));
+      return false;
+    }
+    return true;
   } catch {
     return true;
   }
