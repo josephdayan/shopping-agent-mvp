@@ -78,10 +78,40 @@ test("ponto de retirada não serve: concierge entrega no endereço do cliente", 
   assert.equal(outcome.fee, 19.9, "retirada grátis não pode virar o frete cobrado");
 });
 
-test("anúncio grátis pro CEP devolve frete zero", async () => {
+test("anúncio grátis pro CEP devolve frete zero e não inventa opção rápida", async () => {
   mockFetch(200, { options: [{ cost: 0, shipping_option_type: "address", estimated_delivery_time: { date: "2026-08-18T00:00:00-03:00" } }] });
   const outcome = await mlItemFreight("MLB111111111", "01310100");
-  assert.deepEqual(outcome, { kind: "ok", fee: 0, estimate: "18/08" });
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 0);
+  assert.equal(outcome.estimate, "18/08");
+  // Uma opção só não é escolha: sem alternativa mais rápida, não se pergunta nada.
+  assert.equal(outcome.faster, undefined);
+});
+
+test("duas opções = escolha real: barata/lenta como padrão e a rápida/cara como alternativa", async () => {
+  mockFetch(200, RESPOSTA_REAL);
+  const outcome = await mlItemFreight("MLB111111111", "01310100");
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 14.99);
+  assert.equal(outcome.estimate, "25/08");
+  assert.deepEqual(outcome.faster, { fee: 25.99, estimate: "20/08", isoDate: "2026-08-20" });
+});
+
+test("opção mais cara que NÃO chega antes não vira escolha", async () => {
+  mockFetch(200, {
+    options: [
+      { cost: 14.99, shipping_option_type: "address", estimated_delivery_time: { date: "2026-08-25T00:00:00-03:00" } },
+      // Mais caro e chega no MESMO dia: oferecer isso seria vender vento.
+      { cost: 22.9, shipping_option_type: "address", estimated_delivery_time: { date: "2026-08-25T00:00:00-03:00" } }
+    ]
+  });
+  const outcome = await mlItemFreight("MLB111111111", "01310100");
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 14.99);
+  assert.equal(outcome.faster, undefined);
 });
 
 test("sem estoque/sem entrega pro CEP nunca vira cobrança", async () => {
@@ -133,7 +163,29 @@ test("anúncio que estampa 'grátis' nunca vira frete cobrado — mas a data rea
     [{ qty: 2, productUrl: "https://produto.mercadolivre.com.br/MLB-111111111-a-_JM", freeShipping: true }],
     "01310100"
   );
-  assert.deepEqual(outcome, { kind: "ok", fee: 0, estimate: "25/08" });
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 0, "grátis declarado não vira cobrança");
+  assert.equal(outcome.estimate, "25/08");
+  // Pagar pra chegar antes continua oferecido: aí é o CLIENTE escolhendo, não taxa oculta.
+  assert.deepEqual(outcome.faster, { fee: 25.99, estimate: "20/08", isoDate: "2026-08-20" });
+});
+
+test("cesta com escolha: versão rápida soma a opção que chega antes de cada anúncio", async () => {
+  mockFetch(200, RESPOSTA_REAL);
+  const outcome = await mlBasketFreight(
+    [
+      { qty: 1, productUrl: "https://produto.mercadolivre.com.br/MLB-111111111-a-_JM" },
+      { qty: 1, productUrl: "https://produto.mercadolivre.com.br/MLB-222222222-b-_JM" }
+    ],
+    "01310100"
+  );
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 29.98, "barata: 14,99 + 14,99");
+  assert.equal(outcome.estimate, "25/08");
+  assert.equal(outcome.faster?.fee, 51.98, "rápida: 25,99 + 25,99");
+  assert.equal(outcome.faster?.estimate, "20/08");
 });
 
 test("cesta do ML: item sem número real derruba a cotação automática (vai pro operador)", async () => {

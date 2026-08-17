@@ -185,3 +185,20 @@ test("7º ciclo: confirmação de endereço mostra o CEP quando ele não está n
   // Sem CEP conhecido, mensagem de sempre.
   assert.doesNotMatch(copy.addressUpdated("Rua Y, 2, São Paulo - SP"), /CEP/);
 });
+
+test("escolha de entrega: mostra TOTAL de cada opção com a data, e cobre anúncio sem data", () => {
+  // O número que decide é o total (produtos com markup + frete), não o frete solto: é o que
+  // sai da conta do cliente (dono, 17/08: perguntar caro-rápido × barato-demorado).
+  const texto = copy.shippingSpeedChoice(
+    { total: 365.88, estimate: "25/08" },
+    { total: 376.88, estimate: "20/08" }
+  );
+  assert.match(texto, /Mais barata — R\$ 365,88 · chega até 25\/08/);
+  assert.match(texto, /Mais rápida — R\$ 376,88 · chega até 20\/08/);
+  assert.match(texto, /Toca no botão ou responde \*1\* ou \*2\*/);
+
+  // Sem data publicada a Lia não inventa prazo — regra antiga do projeto.
+  const semData = copy.shippingSpeedChoice({ total: 100, estimate: "30/08" }, { total: 130 });
+  assert.match(semData, /sem data publicada/);
+  assert.doesNotMatch(semData, /chega até undefined/);
+});

@@ -227,6 +227,7 @@ type DeliveryContext = {
     | "choosing_quantity"
     | "quoted"
     | "choosing_courier"
+    | "choosing_freight"
     | "choosing_payment"
     | "awaiting_operator_quote"
     | "awaiting_supplier_validation"
@@ -237,6 +238,16 @@ type DeliveryContext = {
   pending?: PendingChoice[];
   quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string };
   courierOptions?: CourierOption[];
+  // Cotação instantânea PARADA esperando o cliente escolher a entrega (barata/lenta ×
+  // rápida/cara do anúncio). Nada é cobrado antes do toque; os dois totais já estão
+  // calculados, então a resposta publica a cotação na hora.
+  freightChoice?: {
+    orderId: string;
+    itemsSubtotal: number;
+    stores: number;
+    barato: { fee: number; estimate?: string };
+    rapido: { fee: number; estimate?: string };
+  };
   storeKey?: string;
   notFound?: string[];
   // Pedido em texto cru aguardando o CEP do onboarding — vira busca COM OPÇÕES depois.
@@ -1322,7 +1333,10 @@ async function handleDeliveryTurn(
     // Pedido ainda SEM preço (fila do operador): sobrevive à troca — o deliveryOrderId
     // fica no contexto e, quando o endereço novo for confirmado, o pedido é atualizado
     // (antes ele ficava órfão no /ops com o endereço velho).
-    const keepOrder = ctx.step === "awaiting_operator_quote" && Boolean(ctx.deliveryOrderId);
+    // `choosing_freight` também é pedido SEM preço na fila do operador (a cotação está
+    // calculada mas não publicada), então sobrevive à troca do mesmo jeito — e o frete novo
+    // sai pelo CEP novo quando a lista re-cotar.
+    const keepOrder = (ctx.step === "awaiting_operator_quote" || ctx.step === "choosing_freight") && Boolean(ctx.deliveryOrderId);
     if (!keepOrder && ctx.deliveryOrderId && (ctx.step === "awaiting_quote_confirmation" || ctx.step === "awaiting_supplier_validation")) {
       const openOrder = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
       if (await cancelPendingRetailerQuote(ctx.deliveryOrderId)) {
@@ -1450,6 +1464,49 @@ async function handleDeliveryTurn(
   // ---- step need_cep: um número curto ("1", "08") é tentativa de CEP, não escolha ----
   if (ctx.step === "need_cep" && intent.kind === "number") {
     await reply(phone, copy.cepNotFound(text.trim()));
+    return;
+  }
+
+  // ---- step: cliente escolhendo a ENTREGA do anúncio (barata/lenta × rápida/cara) ----
+  // A cotação está calculada e PARADA (nada cobrado): o toque — ou "1"/"2", ou "mais
+  // rápido" por texto — publica na hora. Fica ANTES do onboarding de endereço porque lá o
+  // texto não reconhecido vira lista de compras, e o toque `frete:barato` acabaria virando
+  // item da cesta. Cancelar e trocar endereço são tratados acima e não chegam aqui.
+  if (ctx.step === "choosing_freight" && ctx.freightChoice) {
+    const n = normalizeMsg(text);
+    const choice = ctx.freightChoice;
+    let picked: { fee: number; estimate?: string } | undefined;
+    let label = "";
+    if (n === "frete:barato" || (intent.kind === "number" && intent.value === 1) || /\bbarat|econom|em conta|demorad|devagar/.test(n)) {
+      picked = choice.barato;
+      label = "mais barata";
+    } else if (n === "frete:rapido" || (intent.kind === "number" && intent.value === 2) || /\brapid|urgent|antes|logo|hoje/.test(n)) {
+      picked = choice.rapido;
+      label = "mais rápida";
+    }
+    if (!picked) {
+      await reply(phone, copy.choiceNotUnderstood());
+      await sendFreightChoice(phone, choice);
+      return;
+    }
+    // A escolha vai pra nota ANTES de publicar: é ela que diz ao operador qual opção de
+    // envio comprar no anúncio (comprar a errada quebraria a data prometida ao cliente).
+    const current = await prisma.deliveryOrder.findUnique({ where: { id: choice.orderId }, select: { notes: true } });
+    await prisma.deliveryOrder.update({
+      where: { id: choice.orderId },
+      data: {
+        notes: appendOrderNote(
+          current?.notes ?? null,
+          `🚚 Cliente escolheu a entrega ${label} (frete ${copy.brl(picked.fee)}${picked.estimate ? `, chega até ${picked.estimate}` : ""}) — comprar ESSA opção de envio no anúncio.`
+        )
+      }
+    });
+    await publishInstantQuote(choice.orderId, {
+      itemsSubtotal: choice.itemsSubtotal,
+      fee: picked.fee,
+      estimate: picked.estimate,
+      stores: choice.stores
+    });
     return;
   }
 
@@ -3194,8 +3251,9 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
 
   if (instantQuoteEligible((ctx.basket ?? []) as InstantQuoteItem[], CONCIERGE_STORE_KEY) && ctx.cep) {
-    const published = await tryPublishInstantQuote(order.id, phone, ctx, prefix);
-    if (published) return;
+    // `true` = a Lia resolveu o turno (publicou a cotação OU parou na escolha de entrega).
+    const handled = await tryPublishInstantQuote(order.id, phone, ctx, prefix, convoId);
+    if (handled) return;
   }
 
   if (prefix) await reply(phone, prefix);
@@ -3208,7 +3266,13 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
 // cliente e menu de pagamento são EXATAMENTE os mesmos da cotação manual. Qualquer erro
 // (frete incalculável, endereço longe demais, corrida com o /ops) devolve false e o
 // fluxo cai no caminho manual de sempre: nunca quebra o fechamento da lista.
-async function tryPublishInstantQuote(orderId: string, phone: string, ctx: DeliveryContext, prefix?: string): Promise<boolean> {
+async function tryPublishInstantQuote(
+  orderId: string,
+  phone: string,
+  ctx: DeliveryContext,
+  prefix?: string,
+  convoId?: string
+): Promise<boolean> {
   try {
     const items = ctx.basket ?? [];
     // A entrega é pelo SITE de cada loja (o operador compra lá e a loja entrega), então
@@ -3221,6 +3285,10 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
     // substitui a tarifa padrão de R$18 (reprovada pelo dono, 17/08). Sem número real, o
     // pedido inteiro vai pro operador em vez de fechar com chute.
     let mlEstimate: string | undefined;
+    // Alternativa "chega antes pagando mais" do anúncio: vira PERGUNTA com botão ao
+    // cliente (dono, 17/08) em vez de decisão nossa.
+    let mlFaster: { fee: number; estimate?: string } | undefined;
+    let mlCheapFee = 0;
     for (let i = 0; i < freights.length; i++) {
       if (!PER_AD_FREIGHT_STORES.has(freights[i].storeKey)) continue;
       const mlItems = items.filter((item) => item.storeKey === freights[i].storeKey);
@@ -3236,6 +3304,8 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
       }
       freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       mlEstimate = outcome.estimate;
+      mlCheapFee = outcome.fee;
+      mlFaster = outcome.faster ? { fee: outcome.faster.fee, estimate: outcome.faster.estimate } : undefined;
     }
     // Precisão final: consulta AO VIVO no checkout de cada loja (cesta + CEP reais), em
     // PARALELO com timeout curto — o fechamento nunca espera mais que um timeout. Site
@@ -3279,20 +3349,65 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
       data: { notes: `Cotação instantânea (vitrine, entrega pelo site). Frete por loja: ${breakdown}.` }
     });
     if (prefix) await reply(phone, prefix);
-    // A data vem do próprio anúncio pro CEP do cliente (consulta do ML) — é promessa da
-    // loja, não estimativa nossa. Sem data publicada, a frase segue sem prazo.
-    const base = freights.length > 1 ? `pela própria loja (${freights.length} entregas)` : "pela própria loja";
-    await opsPublishManualQuote(orderId, {
-      itemsSubtotal,
-      deliveryFee: totalFee,
-      deliveryMode: "retailer_delivery",
-      deliveryPromise: mlEstimate ? `${base} · chega até ${mlEstimate}` : base
-    });
+
+    // Duas formas de entrega no anúncio: QUEM ESCOLHE É O CLIENTE (dono, 17/08 — "tem q
+    // perguntar se ele quer o mais rápido e caro ou mais demorado e barato e tem q ter
+    // botão"). A cotação fica parada aqui, sem cobrar nada, até o toque; os dois totais já
+    // estão calculados, então a resposta publica na hora — não é espera, é escolha.
+    if (mlFaster && convoId) {
+      const rapidoFee = roundMoney(totalFee - mlCheapFee + mlFaster.fee);
+      const choice = {
+        orderId,
+        itemsSubtotal,
+        stores: freights.length,
+        barato: { fee: totalFee, estimate: mlEstimate },
+        rapido: { fee: rapidoFee, estimate: mlFaster.estimate }
+      };
+      await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: orderId, step: "choosing_freight", freightChoice: choice });
+      await sendFreightChoice(phone, choice);
+      return true;
+    }
+
+    await publishInstantQuote(orderId, { itemsSubtotal, fee: totalFee, estimate: mlEstimate, stores: freights.length });
     return true;
   } catch (error) {
     console.warn("[instant-quote:fallback-manual]", error instanceof Error ? error.message : error);
     return false;
   }
+}
+
+// Publica a cotação instantânea. A data vem do próprio anúncio pro CEP do cliente (consulta
+// do ML) — é promessa da loja, não estimativa nossa. Sem data publicada, a frase segue sem
+// prazo (inventar prazo segue proibido).
+async function publishInstantQuote(
+  orderId: string,
+  input: { itemsSubtotal: number; fee: number; estimate?: string; stores: number }
+) {
+  const base = input.stores > 1 ? `pela própria loja (${input.stores} entregas)` : "pela própria loja";
+  await opsPublishManualQuote(orderId, {
+    itemsSubtotal: input.itemsSubtotal,
+    deliveryFee: input.fee,
+    deliveryMode: "retailer_delivery",
+    deliveryPromise: input.estimate ? `${base} · chega até ${input.estimate}` : base
+  });
+}
+
+// A pergunta da entrega com BOTÃO (dono, 17/08). Os totais mostrados são o que o cliente
+// vai pagar de verdade: produtos com markup + o frete de cada opção.
+type FreightChoiceState = NonNullable<DeliveryContext["freightChoice"]>;
+
+async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
+  const totalFor = (fee: number) => roundMoney(choice.itemsSubtotal * MARKUP + fee);
+  const barato = { total: totalFor(choice.barato.fee), estimate: choice.barato.estimate };
+  const rapido = { total: totalFor(choice.rapido.fee), estimate: choice.rapido.estimate };
+  const body = copy.shippingSpeedChoice(barato, rapido);
+  try {
+    const interactive = await whatsappAdapter.sendShippingChoices(phone, body, choice.barato, choice.rapido);
+    if (interactive) return;
+  } catch (error) {
+    console.warn("[whatsapp:shipping-choice:fallback-text]", error instanceof Error ? error.message : error);
+  }
+  await reply(phone, body);
 }
 
 function roundMoney(value: number): number {

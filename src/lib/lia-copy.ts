@@ -371,10 +371,29 @@ export function minimumOrder(input: {
   return out.join("\n");
 }
 
+// Escolha de entrega do MARKETPLACE (pedido do dono, 17/08: "tem q perguntar se ele quer o
+// mais rápido e caro ou mais demorado e barato e tem q ter botão"). Aqui o trade-off é
+// preço × DATA — o anúncio publica data, não minutos —, e o número que decide é o TOTAL,
+// não o frete solto: é o que vai sair da conta do cliente. Os botões vão junto no canal
+// Meta; esta lista numerada é o fallback (e o que o cliente lê pra comparar).
+export function shippingSpeedChoice(
+  barato: { total: number; estimate?: string },
+  rapido: { total: number; estimate?: string }
+): string {
+  const quando = (estimate?: string) => (estimate ? `chega até ${estimate}` : "sem data publicada");
+  return [
+    "Tem duas formas de entrega. Qual você prefere?",
+    `*1)* Mais barata — ${brl(barato.total)} · ${quando(barato.estimate)}`,
+    `*2)* Mais rápida — ${brl(rapido.total)} · ${quando(rapido.estimate)}`,
+    "",
+    "Toca no botão ou responde *1* ou *2*."
+  ].join("\n");
+}
+
 export function freteChoice(barato?: { fee: number; etaMinutes: number }, rapido?: { fee: number; etaMinutes: number }): string {
-  const lines = ["Como prefere a entrega? 🛵"];
-  if (barato) lines.push(`*1)* Mais barata — ${brl(barato.fee)} · chega em ~${barato.etaMinutes} min`);
-  if (rapido) lines.push(`*2)* Mais rápida — ${brl(rapido.fee)} · chega em ~${rapido.etaMinutes} min`);
+  const lines = ["Como prefere a entrega?"];
+  if (barato) lines.push(`*1)* Mais barata — ${brl(barato.fee)} · ~${barato.etaMinutes} min`);
+  if (rapido) lines.push(`*2)* Mais rápida — ${brl(rapido.fee)} · ~${rapido.etaMinutes} min`);
   lines.push("", "Responde *1* ou *2*.");
   return lines.join("\n");
 }

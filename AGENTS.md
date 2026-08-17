@@ -326,6 +326,23 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (8ª) — quem escolhe a entrega é o CLIENTE, com botão.** Dono, na sequência do frete
+real: "tem q perguntar se ele quer o mais rápido e caro ou mais demorado e barato e tem q ter
+botão". Quando o anúncio oferece uma opção que chega ANTES pagando MAIS, a cotação
+instantânea **para** (nada cobrado) e a Lia pergunta com dois botões — `frete:barato` /
+`frete:rapido`, título com a DATA (`Mais barato · 25/08`, 19 dos 20 chars que a Meta
+permite) e `Cancelar` sempre visível. Os dois totais já vêm calculados, então o toque
+publica a cotação na hora: é escolha, não espera. `1`/`2`, "mais rápido", "mais em conta"
+etc. funcionam por texto (fallback é a lista numerada). Detalhes que são regra, não acaso:
+(a) só é escolha quando a opção realmente chega antes E custa mais — mais cara no mesmo dia
+não é oferecida; (b) o novo passo `choosing_freight` fica ANTES do onboarding de endereço no
+roteador, senão o toque `frete:barato` viraria item de cesta na varredura de lista;
+(c) trocar endereço nesse passo preserva o pedido (é pedido sem preço na fila), como no
+`awaiting_operator_quote`; (d) a escolha vai pra nota do /ops ("comprar ESSA opção de envio
+no anúncio") — comprar a errada quebraria a data prometida. Testes: ml-freight 12/12,
+adapter 7/7 (o teto de 20 chars do botão é teste, porque passar dele derruba a mensagem
+inteira e o cliente fica esperando), copy 12/12, instant-quote 6/6, intents 41/41, tsc.
+
 **17/08 (7ª) — FRETE REAL POR ANÚNCIO do ML (fim do R$18 chute), via API pública que não
 pede token.** Dono: "os 18 automático tá péssimo (...) pensa que eu tô comprando uma
 mochila, no app aparece 10,99 entrega até amanhã, grátis a partir de depois de amanhã — ele

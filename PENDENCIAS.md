@@ -192,6 +192,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **17/08 (6ª) — escolha de entrega com BOTÃO (rápida/cara × barata/demorada).** Pedido do
+> dono. Quando o anúncio tem opção que chega antes pagando mais, a Lia pergunta antes de
+> cobrar: botões `Mais barato · 25/08` / `Mais rápido · 20/08` + `Cancelar`, com os dois
+> totais no corpo; o toque publica a cotação na hora e a escolha vira instrução na nota do
+> /ops ("comprar ESSA opção de envio"). Texto ("1", "mais rápido") continua valendo. Gate:
+> ml-freight 12/12, adapter 7/7, copy 12/12, instant-quote 6/6, intents 41/41, tsc.
+> **NÃO PUBLICADO** — no teste real conferir: (1) os dois botões chegam e o toque publica;
+> (2) o total do botão escolhido é o cobrado; (3) a nota do /ops diz qual envio comprar.
+
 > **17/08 (5ª) — frete+prazo REAIS por anúncio do ML (o R$18 automático morreu).**
 > Reclamação do dono ("os 18 automático tá péssimo... no app aparece 10,99 entrega até
 > amanhã, ele tem que saber isso direto"). Achado testado ao vivo, **sem credencial**:

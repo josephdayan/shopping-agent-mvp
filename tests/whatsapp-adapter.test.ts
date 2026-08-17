@@ -192,3 +192,52 @@ test("Meta: imagem WebP é recusada no pré-flight (card vai sem foto, nunca som
     global.fetch = previous.fetch;
   }
 });
+
+test("Meta: botões de entrega barata/rápida levam a DATA e respeitam o teto de 20 chars", async () => {
+  // O título de botão tem teto de 20 caracteres na Meta; passar do teto derruba a mensagem
+  // INTEIRA (e o cliente fica sem a pergunta, esperando). Por isso o teto é teste, não
+  // confiança: "Mais barato · 25/08" tem 19.
+  const previous = {
+    provider: process.env.WHATSAPP_PROVIDER,
+    token: process.env.WHATSAPP_ACCESS_TOKEN,
+    phoneId: process.env.WHATSAPP_PHONE_NUMBER_ID,
+    fetch: global.fetch
+  };
+  const bodies: Record<string, any>[] = [];
+  process.env.WHATSAPP_PROVIDER = "meta";
+  process.env.WHATSAPP_ACCESS_TOKEN = "test-token";
+  process.env.WHATSAPP_PHONE_NUMBER_ID = "phone-id";
+  global.fetch = (async (_input: string | URL | Request, init?: RequestInit) => {
+    bodies.push(JSON.parse(String(init?.body)));
+    return new Response(JSON.stringify({ messages: [{ id: `m${bodies.length}` }] }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    await whatsappAdapter.sendShippingChoices(
+      "+5511999999999",
+      "Tem duas formas de entrega. Qual você prefere?",
+      { estimate: "25/08" },
+      { estimate: "20/08" }
+    );
+    const buttons = bodies[0].interactive.action.buttons;
+    assert.equal(buttons[0].reply.id, "frete:barato");
+    assert.equal(buttons[1].reply.id, "frete:rapido");
+    assert.equal(buttons[0].reply.title, "Mais barato · 25/08");
+    assert.equal(buttons[1].reply.title, "Mais rápido · 20/08");
+    // A saída sempre visível, como nos outros menus.
+    assert.equal(buttons[2].reply.id, "cancelar");
+    for (const button of buttons) {
+      assert.ok(button.reply.title.length <= 20, `título "${button.reply.title}" passou de 20 chars`);
+    }
+
+    // Anúncio sem data publicada: botão sem data, nunca com data inventada.
+    bodies.length = 0;
+    await whatsappAdapter.sendShippingChoices("+5511999999999", "corpo", {}, {});
+    assert.equal(bodies[0].interactive.action.buttons[0].reply.title, "Mais barato");
+    assert.equal(bodies[0].interactive.action.buttons[1].reply.title, "Mais rápido");
+  } finally {
+    process.env.WHATSAPP_PROVIDER = previous.provider;
+    process.env.WHATSAPP_ACCESS_TOKEN = previous.token;
+    process.env.WHATSAPP_PHONE_NUMBER_ID = previous.phoneId;
+    global.fetch = previous.fetch;
+  }
+});

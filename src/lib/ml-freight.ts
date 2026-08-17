@@ -25,9 +25,15 @@ function roundMoney(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
+// Uma alternativa de entrega: quanto custa e quando chega. `isoDate` fica pra ordenar
+// datas sem ambiguidade de virada de ano; `estimate` é o rótulo curto ("25/08").
+export type MlFreightOption = { fee: number; estimate?: string; isoDate?: string };
+
 export type MlFreightOutcome =
   // Frete real daquele anúncio pra aquele CEP (`fee` 0 = anúncio entrega grátis).
-  | { kind: "ok"; fee: number; estimate?: string }
+  // `faster` só existe quando o anúncio oferece uma opção que chega ANTES pagando MAIS —
+  // é o trade-off que o cliente escolhe com botão (pedido do dono, 17/08).
+  | { kind: "ok"; fee: number; estimate?: string; isoDate?: string; faster?: MlFreightOption }
   // O ML respondeu que não entrega nesse CEP, ou o anúncio está sem estoque: nos dois
   // casos não há número pra cobrar — quem chama manda pro operador.
   | { kind: "no-delivery" }
@@ -92,22 +98,52 @@ function estimateLabel(option: MlShippingOption): string | undefined {
   return `${match[3]}/${match[2]}`;
 }
 
-// Entre as opções, a que o OPERADOR vai escolher: entrega no endereço (não em ponto de
-// retirada) e a mais barata. Cobrar a mais barata nunca cobra a menos do que o operador
-// paga se ele subir pra uma opção mais rápida — essa diferença é decisão dele, não do
-// cliente.
-function cheapestHomeDelivery(options: MlShippingOption[]): MlShippingOption | null {
-  const home = options.filter(
+// Opções que servem ao concierge: entrega no ENDEREÇO (ponto de retirada não serve — quem
+// recebe é o cliente, em casa) e com custo numérico.
+function homeDeliveryOptions(options: MlShippingOption[]): MlShippingOption[] {
+  return options.filter(
     (option) =>
       typeof option.cost === "number" &&
       Number.isFinite(option.cost) &&
       option.cost >= 0 &&
-      // `address` = entrega no endereço. Ponto de retirada (`pickup`) não serve pro
-      // concierge: quem recebe é o cliente, em casa.
       (option.shipping_option_type ?? "address") === "address"
   );
-  if (!home.length) return null;
-  return home.reduce((best, option) => (option.cost! < best.cost! ? option : best));
+}
+
+// "2026-08-20T00:00:00-03:00" → "2026-08-20" (ordenável como texto).
+function isoDay(option: MlShippingOption): string | undefined {
+  return option.estimated_delivery_time?.date?.slice(0, 10) || undefined;
+}
+
+// A opção padrão da cotação: a mais barata; empate no preço, a que chega antes.
+function cheapest(options: MlShippingOption[]): MlShippingOption | null {
+  if (!options.length) return null;
+  return options.reduce((best, option) => {
+    if (option.cost! !== best.cost!) return option.cost! < best.cost! ? option : best;
+    const a = isoDay(option);
+    const b = isoDay(best);
+    if (a && b && a !== b) return a < b ? option : best;
+    return best;
+  });
+}
+
+// A alternativa "chega antes pagando mais" — só conta se realmente chegar ANTES e custar
+// MAIS que a barata (senão não é escolha, é a mesma coisa com outro nome). Entre as que
+// chegam antes, a que chega mais cedo; empate na data, a mais barata delas.
+function fasterThan(options: MlShippingOption[], base: MlShippingOption): MlShippingOption | null {
+  const baseDay = isoDay(base);
+  if (!baseDay) return null;
+  const earlier = options.filter((option) => {
+    const day = isoDay(option);
+    return Boolean(day) && day! < baseDay && option.cost! > base.cost!;
+  });
+  if (!earlier.length) return null;
+  return earlier.reduce((best, option) => {
+    const a = isoDay(option)!;
+    const b = isoDay(best)!;
+    if (a !== b) return a < b ? option : best;
+    return option.cost! < best.cost! ? option : best;
+  });
 }
 
 function normalizeCep(cep: string): string | null {
@@ -143,7 +179,8 @@ export async function mlItemFreight(itemId: string, cep: string): Promise<MlFrei
     // Respondeu sem nenhuma opção = o ML não entrega nesse CEP.
     if (!options.length) return { kind: "no-delivery" };
 
-    const chosen = cheapestHomeDelivery(options);
+    const home = homeDeliveryOptions(options);
+    const chosen = cheapest(home);
     if (!chosen) return { kind: "no-delivery" };
 
     const fee = roundMoney(chosen.cost!);
@@ -151,7 +188,19 @@ export async function mlItemFreight(itemId: string, cep: string): Promise<MlFrei
       console.warn("[ml:freight:above-cap]", itemId, fee);
       return { kind: "unavailable" };
     }
-    return { kind: "ok", fee, estimate: estimateLabel(chosen) };
+
+    // A opção rápida também respeita o teto: acima dele não se oferece o que não se cobra.
+    const quicker = fasterThan(home, chosen);
+    const quickerFee = quicker ? roundMoney(quicker.cost!) : null;
+    return {
+      kind: "ok",
+      fee,
+      estimate: estimateLabel(chosen),
+      isoDate: isoDay(chosen),
+      ...(quicker && quickerFee != null && quickerFee <= maxFee()
+        ? { faster: { fee: quickerFee, estimate: estimateLabel(quicker), isoDate: isoDay(quicker) } }
+        : {})
+    };
   } catch (error) {
     console.warn("[ml:freight:failed]", itemId, error instanceof Error ? error.message : error);
     return { kind: "unavailable" };
@@ -163,7 +212,8 @@ export type MlFreightItem = { qty: number; productUrl?: string; freeShipping?: b
 export type MlBasketFreight =
   // Soma do frete de cada anúncio (no ML cada anúncio é um checkout próprio, então dois
   // anúncios = dois fretes) + a data mais distante, que é quando a cesta toda chega.
-  | { kind: "ok"; fee: number; estimate?: string }
+  // `faster` presente = existe escolha real pro cliente (chega antes, custa mais).
+  | { kind: "ok"; fee: number; estimate?: string; faster?: MlFreightOption }
   | { kind: "manual"; reason: string };
 
 // Frete da parte-ML da cesta. Exige sucesso em TODOS os anúncios: um item sem número
@@ -180,7 +230,13 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
   );
 
   let fee = 0;
-  const estimates: string[] = [];
+  const days: (string | undefined)[] = [];
+  // Cesta na versão RÁPIDA: cada anúncio na opção que chega antes (quem não tem, fica na
+  // dele). `hasChoice` evita oferecer "escolha" quando as duas versões são idênticas.
+  let fastFee = 0;
+  const fastDays: (string | undefined)[] = [];
+  let hasChoice = false;
+
   for (const { item, itemId, outcome } of outcomes) {
     if (outcome.kind === "ok") {
       // Anúncio que ESTAMPA "Chegará grátis" nunca vira frete cobrado, mesmo quando a
@@ -192,7 +248,12 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
       // unidade, então qty não multiplica.
       fee += item.freeShipping === true ? 0 : outcome.fee;
       // A data continua sendo a real daquele CEP (é o dado que o cliente quer).
-      if (outcome.estimate) estimates.push(outcome.estimate);
+      days.push(outcome.isoDate);
+      // Versão rápida: paga a opção que chega antes NESTE anúncio, se houver. Aqui o
+      // "grátis declarado" não isenta — o cliente está escolhendo pagar pra chegar antes.
+      fastFee += outcome.faster ? outcome.faster.fee : item.freeShipping === true ? 0 : outcome.fee;
+      fastDays.push(outcome.faster?.isoDate ?? outcome.isoDate);
+      if (outcome.faster) hasChoice = true;
       continue;
     }
     if (outcome.kind === "no-delivery") {
@@ -208,12 +269,24 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
     kind: "ok",
     fee: roundMoney(fee),
     // A cesta chega quando o ÚLTIMO item chega.
-    estimate: estimates.length ? estimates.sort((a, b) => mlDateOrder(a) - mlDateOrder(b)).pop() : undefined
+    estimate: latestLabel(days),
+    ...(hasChoice
+      ? { faster: { fee: roundMoney(fastFee), estimate: latestLabel(fastDays), isoDate: latestIso(fastDays) } }
+      : {})
   };
 }
 
-// "25/08" → 825 (mês*100+dia) só pra ordenar datas do mesmo ano-corrente.
-function mlDateOrder(label: string): number {
-  const [day, month] = label.split("/").map(Number);
-  return (month ?? 0) * 100 + (day ?? 0);
+// A data da cesta é a do item que chega POR ÚLTIMO (ordenação por ISO, sem confusão de
+// virada de ano).
+function latestIso(days: (string | undefined)[]): string | undefined {
+  const known = days.filter((day): day is string => Boolean(day));
+  return known.length ? known.sort().pop() : undefined;
+}
+
+// "2026-08-25" → "25/08".
+function latestLabel(days: (string | undefined)[]): string | undefined {
+  const iso = latestIso(days);
+  if (!iso) return undefined;
+  const [, month, day] = iso.split("-");
+  return `${day}/${month}`;
 }

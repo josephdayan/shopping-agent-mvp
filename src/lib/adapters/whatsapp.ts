@@ -342,11 +342,31 @@ export const whatsappAdapter = {
   async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     // A saída sempre visível (pedido do dono, 11/08): dá pra desistir sem digitar nada.
-    return sendMetaSimpleButtons(to, "Escolha como prefere pagar:", [
-      { id: "pix", title: "Pagar com Pix" },
-      { id: "cartao", title: "Pagar com cartão" },
+    return sendMetaSimpleButtons(to, "Como prefere pagar?", [
+      { id: "pix", title: "Pix" },
+      { id: "cartao", title: "Cartão" },
       { id: "cancelar", title: "Cancelar" }
     ], `Pix ${formatBRL(pixTotal)} · Cartão ${formatBRL(cardTotal)}`);
+  },
+
+  // Escolha de entrega barata/lenta × rápida/cara (dono, 17/08: "tem q ter botão"). O
+  // toque volta como o texto `frete:barato` / `frete:rapido`. O título do botão tem teto de
+  // 20 caracteres no WhatsApp, então preço fica no corpo e a DATA vai no botão — é a
+  // informação que diferencia as duas na hora do toque. Fora do Meta retorna null e o
+  // chamador manda a lista numerada.
+  async sendShippingChoices(
+    to: string,
+    body: string,
+    barato: { estimate?: string },
+    rapido: { estimate?: string }
+  ) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    const title = (prefix: string, estimate?: string) => (estimate ? `${prefix} · ${estimate}` : prefix);
+    return sendMetaSimpleButtons(to, body, [
+      { id: "frete:barato", title: title("Mais barato", barato.estimate) },
+      { id: "frete:rapido", title: title("Mais rápido", rapido.estimate) },
+      { id: "cancelar", title: "Cancelar" }
+    ]);
   },
 
   // Aviso de espera de cotação com a saída SEMPRE visível (pedido do dono, 11/08): botão
