@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-17.__
+_Última atualização: 2026-08-17._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
