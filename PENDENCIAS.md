@@ -192,6 +192,13 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **17/08 (3ª) — card do ML: slot de entrega é PRAZO (reclamação do dono) — PUBLICADO.**
+> Deploy `shopping-agent-8yc44yeis` `Ready`, smoke verde. "Frete grátis" sem data não
+> ocupa mais o slot (sem data = sem rótulo; o prazo oficial é a cotação), anúncio
+> internacional ("enviado da China", semanas) é descartado na entrada, e no empate o
+> anúncio com prazo publicado vence — na prática os cards saem "chega hoje/amanhã".
+> Cache do ML versionado (v2) pro conserto valer imediatamente. Conector 11/11.
+
 > **17/08 (2ª) — vitrine fit/congelados PUBLICADA (caso "sorvete que não engorda").**
 > Commit `8619f9a`: a colheita VTEX ganhou varredura complementar por termo (`--ft`) e os
 > 3 mercados agora carregam o nicho fit que o top-vendas escondia — Sorvete Zero Nestlé,

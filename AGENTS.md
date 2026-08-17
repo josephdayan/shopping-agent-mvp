@@ -297,6 +297,18 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (5ª) — card do ML: slot de entrega é PRAZO, não benefício de frete.** Reclamação
+do dono: "tá vindo frete grátis mas é pra vir prazo de entrega". Investigação no dataset
+real: quando o anúncio não publica data, o actor devolve `envio: "Frete grátis"` ou vazio
+(`Tiempo` é timestamp da raspagem, `disponivelEm` é variação de cor — não há prazo
+escondido em outro campo), e os sem-data são com frequência anúncios INTERNACIONAIS
+("enviado da China"). Três consertos em `mercadolivre.ts`: (1) `deliveryLabelFrom` não
+devolve mais "frete grátis" — sem data publicada, sem rótulo (inventar prazo segue
+proibido; o contrato é a cotação do operador); (2) `toCatalogItem` descarta
+`eCompraInternacional`/`enviadoDe: China` na entrada; (3) `rankMercadoLivre` desempata
+por TEM-PRAZO antes de vendas/avaliações — anúncio FULL publica prazo e agora domina os
+3 cards. Cache versionado (`ml:v2:`) para valer sem esperar o TTL de 6h. Conector 11/11.
+
 **17/08 (4ª) — vitrine fit/congelados: o gargalo do "sorvete que não engorda" era prateleira.**
 Pergunta do dono: "quero um sorvete bom e que não engorda pra agora — ele resolve?".
 Diagnóstico com dado: entender ele vai (rerank já julga contra a mensagem original), mas
