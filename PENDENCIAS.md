@@ -192,6 +192,21 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **17/08 (5ª) — frete+prazo REAIS por anúncio do ML (o R$18 automático morreu).**
+> Reclamação do dono ("os 18 automático tá péssimo... no app aparece 10,99 entrega até
+> amanhã, ele tem que saber isso direto"). Achado testado ao vivo, **sem credencial**:
+> `api.mercadolibre.com/items/<MLB...>/shipping_options?zip_code=<CEP>` devolve 200 em
+> ~0,35s com custo e data de cada opção (padrão R$14,99 chega 25/08 · Sedex R$25,99 chega
+> 20/08, Av. Paulista). É a única rota aberta do ML — `/items`, `/products` e a busca dão
+> 403 —, então **não depende do app do DevCenter** (o item abaixo segue valendo só pra
+> deixar a BUSCA rápida). Novo `src/lib/ml-freight.ts` cobra a opção mais barata de
+> entrega no endereço, soma por anúncio, manda a data pro cliente ("chega até 25/08") e
+> cai pro operador quando não há número real (catálogo sem id de anúncio, sem estoque,
+> falha). Gate: ml-freight 8/8, instant-quote 6/6, tsc. **NÃO PUBLICADO** — falta deploy
+> e um teste real com pedido de cauda longa (ex.: mochila) conferindo frete e data no
+> /ops. ⚠️ Cobertura parcial conhecida: anúncio de CATÁLOGO (`/p/`, `/up/`) sem `wid` no
+> link não tem id de anúncio; medir no primeiro teste real quantos caem no manual.
+
 > **17/08 (4ª) — Rappi FECHADO como vitrine + frete do anúncio do ML.** Decisão do dono
 > depois da investigação: o SSR do Rappi só entrega as lojas do Mall (e-commerce
 > nacional, entrega em dias — o que o ML já cobre); os supermercados de 1h exigem
@@ -207,6 +222,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > internacional ("enviado da China", semanas) é descartado na entrada, e no empate o
 > anúncio com prazo publicado vence — na prática os cards saem "chega hoje/amanhã".
 > Cache do ML versionado (v2) pro conserto valer imediatamente. Conector 11/11.
+
+> **17/08 — app Mercado Livre: bloqueio externo antes da criação.** O DevCenter foi acessado
+> na conta operacional, mas a tela oficial de primeira aplicação retornou
+> `OPT02-EN1XAJYDKPNW` e voltou ao início após retry. Não houve app, segredo, token ou
+> alteração de conta. O proprietário precisa validar a elegibilidade/dados do titular com o
+> suporte do ML e só então criar uma única app exclusiva da Lia. O código local OAuth já está
+> preparado, mas requer migration + deploy posterior; ele usa a API apenas para busca rápida e
+> mantém Apify como fallback — nunca compra nem acompanha pedidos de comprador.
 
 > **17/08 (2ª) — vitrine fit/congelados PUBLICADA (caso "sorvete que não engorda").**
 > Commit `8619f9a`: a colheita VTEX ganhou varredura complementar por termo (`--ft`) e os

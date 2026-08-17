@@ -39,9 +39,11 @@ import {
   computeStoreFreights,
   freightBreakdownLabel,
   instantQuoteEligible,
+  PER_AD_FREIGHT_STORES,
   type InstantQuoteItem
 } from "@/lib/instant-quote";
 import { liveFreightEnabled, liveStoreFreight } from "@/lib/live-freight";
+import { mlBasketFreight } from "@/lib/ml-freight";
 import {
   detectIntent,
   detectPaymentMethod,
@@ -3214,6 +3216,27 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
     const seeded = computeStoreFreights(items as InstantQuoteItem[]);
     let freights = seeded.freights;
     if (!freights.length) return false;
+    // Mercado Livre: o frete é do ANÚNCIO + CEP, não da loja — a consulta pública do
+    // próprio ML (`shipping_options`, ~0,35s) devolve custo e data reais. É o que
+    // substitui a tarifa padrão de R$18 (reprovada pelo dono, 17/08). Sem número real, o
+    // pedido inteiro vai pro operador em vez de fechar com chute.
+    let mlEstimate: string | undefined;
+    for (let i = 0; i < freights.length; i++) {
+      if (!PER_AD_FREIGHT_STORES.has(freights[i].storeKey)) continue;
+      const mlItems = items.filter((item) => item.storeKey === freights[i].storeKey);
+      const outcome = await mlBasketFreight(mlItems, ctx.cep!);
+      console.log("[instant-quote:ml-freight]", outcome.kind, outcome.kind === "ok" ? outcome.fee : outcome.reason);
+      if (outcome.kind === "manual") {
+        const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
+        await prisma.deliveryOrder.update({
+          where: { id: orderId },
+          data: { notes: appendOrderNote(current?.notes ?? null, `⚠️ Cotação instantânea abortada: Mercado Livre — ${outcome.reason}.`) }
+        });
+        return false;
+      }
+      freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
+      mlEstimate = outcome.estimate;
+    }
     // Precisão final: consulta AO VIVO no checkout de cada loja (cesta + CEP reais), em
     // PARALELO com timeout curto — o fechamento nunca espera mais que um timeout. Site
     // respondeu → frete exato daquele endereço (grátis incluso). Site sem entrega pro
@@ -3256,12 +3279,14 @@ async function tryPublishInstantQuote(orderId: string, phone: string, ctx: Deliv
       data: { notes: `Cotação instantânea (vitrine, entrega pelo site). Frete por loja: ${breakdown}.` }
     });
     if (prefix) await reply(phone, prefix);
+    // A data vem do próprio anúncio pro CEP do cliente (consulta do ML) — é promessa da
+    // loja, não estimativa nossa. Sem data publicada, a frase segue sem prazo.
+    const base = freights.length > 1 ? `pela própria loja (${freights.length} entregas)` : "pela própria loja";
     await opsPublishManualQuote(orderId, {
       itemsSubtotal,
       deliveryFee: totalFee,
       deliveryMode: "retailer_delivery",
-      deliveryPromise:
-        freights.length > 1 ? `pela própria loja (${freights.length} entregas)` : "pela própria loja"
+      deliveryPromise: mlEstimate ? `${base} · chega até ${mlEstimate}` : base
     });
     return true;
   } catch (error) {

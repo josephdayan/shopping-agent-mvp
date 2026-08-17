@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-15._
+_Última atualização: 2026-08-17._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -16,6 +16,35 @@ projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
 
 Em caso de conflito, prevalece a decisão mais recente documentada neste arquivo e no
 registro de 14/07/2026. Não ressuscite uma premissa histórica sem nova evidência.
+
+## Régua de copy vigente (2026-08-17) — leia antes de escrever qualquer mensagem
+
+Revisão do dono sobre as ~110 mensagens automáticas. O levantamento com antes/depois de
+cada uma está em [docs/todas-as-mensagens-da-lia.md](docs/todas-as-mensagens-da-lia.md);
+o texto vive em `src/lib/lia-copy.ts` (cabeçalho do arquivo repete estas regras).
+
+1. Verbo na frente, resultado primeiro.
+2. Sem preâmbulo de simpatia: "Prontinho", "Opa", "Deixa comigo", "Poxa", "Claro!",
+   "Fechado!", "Sem problema" — todos fora.
+3. Sem explicar a mecânica interna (quantas lojas parceiras, como o frete é calculado,
+   que a Pagar.me tokeniza o cartão, por que a cotação venceu).
+4. No máximo 1 emoji, e só onde carrega informação (📍 endereço, 🛵 entrega, ✅ ok). O 💚
+   está limitado a 2 mensagens no produto inteiro (`greeting` e `thanks`) — não somar mais.
+5. Uma saída por mensagem: nunca oferecer 3 caminhos quando 1 resolve.
+6. Sem lista de exemplos de produto. A constante `EXAMPLES` foi removida; não recriar.
+7. Sem endereço ou CEP fictício de exemplo — descrever os campos ("rua, número,
+   complemento, bairro, cidade e CEP"), nunca inventar um endereço.
+
+**Prazo — regra dura, não é questão de tom.** Quem manda no prazo é o checkout da loja e
+ele varia: às vezes é no mesmo dia, às vezes leva dias. Nenhuma mensagem genérica pode
+dizer "chega hoje", "no mesmo dia", "em ~1h" ou "1 a 2 horas". O prazo aparece **uma vez
+só**, na linha de entrega do resumo (`deliveryLine`), e **somente com dado real da loja** —
+os fallbacks `etaMinutes ?? 40` e `?? 90` foram removidos de propósito; sem prazo, a linha
+sai só com o valor. Antes de cotar, a Lia diz que *mostra* o prazo, nunca qual é.
+Ao somar mensagem nova, não reintroduza promessa de same-day em lugar nenhum.
+
+⚠️ A landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`) ainda anuncia
+"entrega no mesmo dia" e continua pendente da mesma revisão.
 
 ## Decisão vigente — remodelagem concierge (2026-07-20)
 
@@ -296,6 +325,38 @@ novos/marcados: "carregador usb", "racao para cachorro", "carregador de celular"
 pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só a IA resolve por
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
+
+**17/08 (7ª) — FRETE REAL POR ANÚNCIO do ML (fim do R$18 chute), via API pública que não
+pede token.** Dono: "os 18 automático tá péssimo (...) pensa que eu tô comprando uma
+mochila, no app aparece 10,99 entrega até amanhã, grátis a partir de depois de amanhã — ele
+tem que saber isso direto". No ML o frete é do ANÚNCIO + CEP, não política de loja, então
+`LIA_FREIGHT_DEFAULT` ali sempre foi chute (fantasma pra cima, margem comida pra baixo).
+**Descoberta que resolve** (testada ao vivo em 17/08, sem credencial nenhuma):
+`GET api.mercadolibre.com/items/<MLB...>/shipping_options?zip_code=<CEP>` responde **HTTP
+200 em ~0,35s** com exatamente o que o app do ML mostra — cada opção com `cost` e
+`estimated_delivery_time.date` (Av. Paulista: padrão R$14,99 chegando 25/08, Sedex R$25,99
+chegando 20/08; mesmo anúncio em Campinas R$14,99). É a única rota aberta: `/items/<id>`,
+`/products/<id>` e `/sites/MLB/search` dão 403 PolicyAgent, e a página do anúncio cai no
+"suspicious traffic" — ou seja, **isto NÃO depende do app do DevCenter** que está em
+PENDENCIAS (esse segue valendo só pra busca rápida).
+Implementação em `src/lib/ml-freight.ts` (novo): `mlItemIdFrom` tira o id do ANÚNCIO do
+link (`produto.mercadolivre.com.br/MLB-123...`, ou `wid=`/`item_id=` em link de catálogo);
+`mlItemFreight` consulta e escolhe a opção **mais barata de entrega no endereço** (ponto de
+retirada não serve ao concierge; opção mais rápida é decisão do operador, não conta do
+cliente), com teto de sanidade (`LIA_ML_FREIGHT_MAX` 150), timeout 3s e kill-switch
+`LIA_ML_LIVE_FREIGHT_OFF`; `mlBasketFreight` soma por anúncio (cada anúncio é um checkout;
+qty NÃO multiplica frete) e devolve a data do último item a chegar, que vira o
+`deliveryPromise` do cliente ("chega até 25/08"). Invariante preservada: **nada é cobrado
+sem número real** — anúncio sem estoque/sem entrega pro CEP, link só de catálogo (a rota
+produto→anúncio é 403) ou consulta falhando derrubam a cotação instantânea e o pedido vai
+pro operador com o motivo na nota do /ops. Anúncio que declara frete grátis segue fechando
+na hora mesmo sem consulta (grátis nunca cobra a menos).
+Auditoria de markup do mesmo turno: 10% confirmado em TODOS os caminhos vivos (cards, teto
+"até X reais", cotação instantânea/manual, mínimo de loja, order_details) — único furo é o
+pipeline LEGADO do ML (`/api/apify/mercadolivre/callback` → chat-service), que manda preço
+cru; é inalcançável em produção (o webhook só chama `handleDeliveryMessage`), mas se voltar
+precisa passar pelo `display()`. Testes: ml-freight 8/8, instant-quote 6/6, tsc limpo (o
+eval E2E não rodou: o Postgres remoto está em ~2,6s por query e a suíte não termina).
 
 **17/08 (6ª) — RAPPI DESCARTADO como vitrine (decisão do dono, com evidência) + frete do
 anúncio do ML.** O dono quis o Rappi "tipo o ML no fluxo". Investigação (17/08, tudo
@@ -1450,6 +1511,21 @@ do mesmo bombom. Ainda foram observados fillers/contexto (“Para domingo”, �
 viagem”), preço (“barato”), combinação de itens na mesma mensagem, e perda da cesta
 depois de salvar um novo endereço. O detalhe está no relatório de testes; isto é validação
 ao vivo, não conserto nem novo deploy.
+
+### Atualização 17/08/2026 — API oficial do Mercado Livre (em preparo, não ativada)
+
+O DevCenter foi acessado com a conta operacional, mas a rota oficial de criação da primeira
+aplicação retornou `OPT02-EN1XAJYDKPNW` e voltou à página inicial mesmo após o retry sugerido
+pelo próprio site. Portanto **nenhuma aplicação, chave, token, notificação, compra ou mudança
+de conta foi criada**. O ML informa que contas brasileiras precisam ter os dados do titular
+validados antes de criar aplicação e podem ter limite de uma app; o próximo passo externo é
+regularizar isso no suporte/DevCenter e só então criar uma app exclusiva da Lia.
+
+O código local foi preparado, mas não implantado: `ML_CLIENT_ID`/`ML_CLIENT_SECRET` Sensitive,
+callback fixo `https://liadelivery.com.br/api/mercadolivre/oauth/callback`, state anti-CSRF e
+tokens cifrados no Postgres. A API oficial será uma busca rápida de vitrine de cauda longa;
+Apify segue fallback. Ela **não** é API de compra nem de acompanhamento dos pedidos que a Lia
+faz como compradora; não cadastrar `orders_v2`/`shipments` com essa expectativa.
 
 ## Regras para continuar o trabalho
 

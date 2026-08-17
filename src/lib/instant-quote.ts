@@ -13,6 +13,8 @@
 //   2. Sem política configurada: tarifa padrão `LIA_FREIGHT_DEFAULT`.
 //
 // Linha livre (item sem preço) NUNCA entra aqui: não se cobra o que não tem preço.
+import { mlItemIdFrom } from "./ml-freight";
+
 export type InstantQuoteItem = {
   qty: number;
   unitPrice: number;
@@ -20,6 +22,8 @@ export type InstantQuoteItem = {
   storeLabel?: string;
   // A própria oferta dá frete grátis (anúncio do ML). Ver computeStoreFreights.
   freeShipping?: boolean;
+  // Link do anúncio: é dele que sai o id usado na consulta de frete por anúncio.
+  productUrl?: string;
 };
 
 export type StoreFreight = {
@@ -50,11 +54,27 @@ export function instantQuoteEnabled(): boolean {
   return process.env.LIA_INSTANT_QUOTE !== "false";
 }
 
+// Marketplace onde o frete é DO ANÚNCIO, não da loja: cada anúncio é um checkout com
+// frete próprio, então não existe política de site pra semear nem env que acerte. A
+// tarifa padrão de R$18 aqui era chute (fantasma pra cima ou margem comida pra baixo,
+// reprovado pelo dono em 17/08) — quem responde é `mlItemFreight`, a consulta pública de
+// frete+prazo do próprio anúncio. Sem número real, cai pro operador.
+export const PER_AD_FREIGHT_STORES = new Set(["mercadolivre"]);
+
 // Elegível = cesta não-vazia onde TODO item veio da vitrine com preço real. O storeKey
-// "concierge" marca linha livre (sem preço) e derruba a elegibilidade.
+// "concierge" marca linha livre (sem preço) e derruba a elegibilidade. Item de
+// marketplace (frete por anúncio) precisa de um caminho pro frete REAL: link com id de
+// anúncio (a consulta ao vivo resolve) ou frete grátis declarado pelo próprio anúncio.
+// Link só de catálogo, sem nenhum dos dois, é frete desconhecido → cotação do operador.
 export function instantQuoteEligible(items: InstantQuoteItem[], conciergeStoreKey: string): boolean {
   if (!instantQuoteEnabled() || !items.length) return false;
-  return items.every((item) => item.unitPrice > 0 && item.storeKey && item.storeKey !== conciergeStoreKey);
+  return items.every(
+    (item) =>
+      item.unitPrice > 0 &&
+      item.storeKey &&
+      item.storeKey !== conciergeStoreKey &&
+      (!PER_AD_FREIGHT_STORES.has(item.storeKey) || item.freeShipping === true || mlItemIdFrom(item) !== null)
+  );
 }
 
 // Políticas de frete PESQUISADAS dos sites (SP capital, CEP 01310-100, 10/08/2026) —

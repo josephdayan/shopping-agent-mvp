@@ -71,6 +71,23 @@ test("elegibilidade: só cesta 100% vitrine com preço; linha livre ou vazia cae
   assert.equal(instantQuoteEligible([vitrine], "concierge"), false);
 });
 
+test("marketplace: anúncio do ML sem frete grátis não é cobrado no automático (frete desconhecido → operador)", () => {
+  // Dono, 17/08: cobrar R$18 de tarifa padrão sobre anúncio do ML é chute — o frete é
+  // do anúncio, não da loja. Sem frete grátis declarado, a cotação vai pro operador.
+  const mlGratis = { qty: 1, unitPrice: 319, storeKey: "mercadolivre", storeLabel: "Mercado Livre", freeShipping: true };
+  // Link só de CATÁLOGO: não dá id de anúncio, então não há como consultar o frete real.
+  const mlPago = { qty: 1, unitPrice: 40, storeKey: "mercadolivre", storeLabel: "Mercado Livre", productUrl: "https://www.mercadolivre.com.br/cabo/p/MLB75605670" };
+  // Link de ANÚNCIO: a consulta ao vivo (`shipping_options`) resolve custo e prazo reais,
+  // então a cesta pode fechar na hora — quem valida o número é o `tryPublishInstantQuote`.
+  const mlAnuncio = { qty: 1, unitPrice: 40, storeKey: "mercadolivre", storeLabel: "Mercado Livre", productUrl: "https://produto.mercadolivre.com.br/MLB-1385716686-mochila-_JM" };
+  const vitrine = { qty: 1, unitPrice: 9.9, storeKey: "carrefour", storeLabel: "Carrefour" };
+  assert.equal(instantQuoteEligible([mlGratis], "concierge"), true, "anúncio frete grátis segue instantâneo");
+  assert.equal(instantQuoteEligible([mlPago], "concierge"), false, "frete do anúncio desconhecido → manual");
+  assert.equal(instantQuoteEligible([mlAnuncio], "concierge"), true, "link de anúncio permite frete real → instantâneo");
+  assert.equal(instantQuoteEligible([mlGratis, mlPago], "concierge"), false, "um item pago derruba a cesta toda");
+  assert.equal(instantQuoteEligible([vitrine, mlGratis], "concierge"), true, "loja com política + ML grátis seguem instantâneos");
+});
+
 test("frete grátis do próprio anúncio (ML) vence a tarifa padrão — e um item pago derruba a isenção", () => {
   // Caso real 17/08: violão do ML com "Chegará grátis hoje" saía na cotação com R$18 de
   // tarifa padrão (o ML não tem política de loja) — taxa fantasma, o anúncio entrega grátis.
