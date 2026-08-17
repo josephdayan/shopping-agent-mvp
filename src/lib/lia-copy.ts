@@ -71,7 +71,7 @@ export function askMoreItems(): string {
 
 // Re-pedido de CEP (2ª+ vez) — curto, sem repetir a apresentação inteira.
 export function askCepAgain(): string {
-  return "Só preciso do seu *CEP* pra continuar (ex.: 01310-100) 📍 — com ele eu calculo a entrega certinha.";
+  return "Só falta o *endereço completo com o CEP* pra eu calcular a entrega — ex.: _Rua Beta, 221, ap 13, Pinheiros, São Paulo - SP, 01233-020_. 📍";
 }
 
 // Itens anotados quando a Lia JÁ se apresentou — confirma curto e pede só o CEP.
@@ -107,15 +107,19 @@ export function addressUpdated(address: string, cep?: string): string {
 }
 
 export function askFullDeliveryAddress(): string {
-  return "Pra calcular o frete certinho, me manda seu *endereço completo*: rua, número, bairro e cidade. 📍";
+  return "Perfeito! Só falta o resto do endereço pro entregador achar você: *rua, número e complemento* (ex.: _Rua Beta, 221, ap 13_). 📍";
 }
 
 export function addressSavedAskCep(): string {
-  return "📍 Endereço salvo. Agora me manda seu *CEP* (ex.: 01310-100) para eu calcular o frete certinho. Depois não vou pedir o endereço de novo — só confirmo no resumo. 🙂";
+  return "📍 Endereço salvo! Só falta o *CEP* (ex.: 01310-100) — é com ele que eu calculo o frete. Depois não peço mais nada disso: uso o mesmo em todos os pedidos. 🙂";
 }
 
+// UMA pergunta, não duas (feedback do dono, 16/08: "por que pede o CEP e depois o
+// endereço?"). Os dois são necessários — CEP decide cobertura/frete, o endereço com
+// número e complemento é o que o entregador usa — mas cabem na MESMA mensagem, e o
+// parser já sabe ler endereço+CEP juntos desde 06/08.
 export function askNewCep(): string {
-  return "Claro! Me manda o novo *CEP* (ex.: 01310-100) que eu atualizo. 📍";
+  return "Claro! Me manda o *endereço completo com o CEP* — ex.: _Rua Beta, 221, ap 13, Pinheiros, São Paulo - SP, 01233-020_. 📍";
 }
 
 export function askCepForQuote(items: string[]): string {

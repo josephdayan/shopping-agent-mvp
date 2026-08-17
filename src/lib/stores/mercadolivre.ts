@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
-import { rankCatalog } from "./types";
+import { scoreCatalogMatch } from "./types";
 import { runApifyActor } from "@/lib/adapters/suppliers";
 import { withoutMedicine } from "./anvisa";
 
@@ -55,7 +55,39 @@ type ApifyMlItem = {
   envio?: string;
   idPublicacao?: string;
   SKU?: string;
+  // Sinais de POPULARIDADE que o ML publica no resultado. Sem eles, a vitrine ordenava
+  // só por semelhança de texto e subia anúncio obscuro com zero venda — foi o "trouxe
+  // umas coisas estranhas" do 1º teste real (16/08).
+  quantidadeVendida?: number | string | null;
+  numeroAvaliacoes?: number | string | null;
+  produtoReviews?: number | string | null;
+  posicaoItem?: number | null;
+  lojaOficial?: boolean | null;
 };
+
+// Item do ML guarda os sinais junto (sobrevive ao cache, que serializa o objeto).
+type MlCatalogItem = CatalogItem & { mlTrust?: number; mlPosition?: number };
+
+function toNumber(value: number | string | null | undefined): number {
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  const parsed = Number(String(value ?? "").replace(/[^\d.,]/g, "").replace(",", "."));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+// Quanto o MERCADO confia neste anúncio: vendas e avaliações em escala log (a diferença
+// entre 100 e 100.000 vendas importa, mas não pode esmagar a relevância), nota acima de
+// 4 como bônus pequeno e loja oficial como desempate. Anúncio sem venda e sem avaliação
+// fica com 0 e vai para o fim da lista — que é exatamente onde ele deve estar.
+function trustScore(raw: ApifyMlItem): number {
+  const sold = toNumber(raw.quantidadeVendida);
+  const reviews = toNumber(raw.numeroAvaliacoes);
+  const rating = toNumber(raw.produtoReviews);
+  const soldPoints = sold > 0 ? Math.log10(1 + sold) : 0;
+  const reviewPoints = reviews > 0 ? Math.log10(1 + reviews) : 0;
+  const ratingPoints = rating >= 4 ? (rating - 4) * 2 : 0;
+  const officialPoints = raw.lojaOficial ? 1 : 0;
+  return Math.round((soldPoints + reviewPoints + ratingPoints + officialPoints) * 100) / 100;
+}
 
 // "18,68" → 18.68. Preço quebrado ou zero é anúncio inválido pra nós (o operador não
 // consegue comprar por um preço que não existe) — vira null e o item é descartado.
@@ -77,7 +109,7 @@ export function mlImageAsJpg(url: string | undefined): string | undefined {
   return raw.replace(/\.webp(\?|$)/i, ".jpg$1");
 }
 
-function toCatalogItem(raw: ApifyMlItem): CatalogItem | null {
+function toCatalogItem(raw: ApifyMlItem): MlCatalogItem | null {
   const name = (raw.eTituloProduto ?? "").trim();
   const unitPrice = parsePrice(raw.novoPreco);
   const productUrl = (raw.zProdutoLink ?? "").trim();
@@ -96,23 +128,43 @@ function toCatalogItem(raw: ApifyMlItem): CatalogItem | null {
     // operador confere ao comprar. Nunca inventamos prazo para item de ML.
     category: delivery,
     imageUrl: mlImageAsJpg(raw.imagemLink),
-    productUrl
+    productUrl,
+    mlTrust: trustScore(raw),
+    mlPosition: typeof raw.posicaoItem === "number" ? raw.posicaoItem : 999
   };
 }
 
-async function cachedItems(queryKey: string): Promise<CatalogItem[] | null> {
+// Ranking da vitrine ML: relevância manda (quem pediu "camiseta do corinthians" quer o
+// Corinthians, não a polo mais vendida), mas entre itens igualmente relevantes decide o
+// que o mercado já validou — vendas/avaliações — e só então a ordem do próprio ML.
+export function rankMercadoLivre<T extends MlCatalogItem>(query: string, items: T[], limit: number): T[] {
+  return items
+    .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
+    .filter((entry) => entry.score > 0)
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        (b.item.mlTrust ?? 0) - (a.item.mlTrust ?? 0) ||
+        (a.item.mlPosition ?? 999) - (b.item.mlPosition ?? 999) ||
+        a.item.unitPrice - b.item.unitPrice
+    )
+    .slice(0, limit)
+    .map((entry) => entry.item);
+}
+
+async function cachedItems(queryKey: string): Promise<MlCatalogItem[] | null> {
   try {
     const row = await prisma.searchCache.findUnique({ where: { queryKey } });
     if (!row) return null;
     if (Date.now() - new Date(row.updatedAt).getTime() > CACHE_TTL_MS) return null;
-    return row.items as unknown as CatalogItem[];
+    return row.items as unknown as MlCatalogItem[];
   } catch (error) {
     console.warn("[ml:cache:read-failed]", error instanceof Error ? error.message : error);
     return null;
   }
 }
 
-async function storeItems(queryKey: string, query: string, items: CatalogItem[]) {
+async function storeItems(queryKey: string, query: string, items: MlCatalogItem[]) {
   try {
     await prisma.searchCache.upsert({
       where: { queryKey },
@@ -126,14 +178,14 @@ async function storeItems(queryKey: string, query: string, items: CatalogItem[])
 
 // Busca ao vivo no ML (com cache). NUNCA lança: qualquer falha vira lista vazia e o
 // fluxo segue exatamente como se o ML não existisse.
-export async function searchMercadoLivre(query: string, limit = 4): Promise<CatalogItem[]> {
+export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCatalogItem[]> {
   if (!mercadoLivreEnabled()) return [];
   const normalized = query.trim().toLowerCase().replace(/\s+/g, " ");
   if (!normalized) return [];
   const queryKey = `ml:${normalized}`;
 
   const cached = await cachedItems(queryKey);
-  if (cached) return rankCatalog(query, cached, limit);
+  if (cached) return rankMercadoLivre(query, cached, limit);
 
   try {
     const token = process.env.APIFY_API_TOKEN!;
@@ -150,11 +202,11 @@ export async function searchMercadoLivre(query: string, limit = 4): Promise<Cata
     const catalog = withoutMedicine(
       (items as unknown as ApifyMlItem[])
         .map(toCatalogItem)
-        .filter((item): item is CatalogItem => Boolean(item))
+        .filter((item): item is MlCatalogItem => Boolean(item))
     ).slice(0, 24);
     if (!catalog.length) return [];
     await storeItems(queryKey, normalized, catalog);
-    return rankCatalog(query, catalog, limit);
+    return rankMercadoLivre(query, catalog, limit);
   } catch (error) {
     console.warn("[ml:search:failed]", error instanceof Error ? error.message : error);
     return [];

@@ -2,7 +2,7 @@ import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { deliveryLabelFrom, mercadoLivreEnabled, mlImageAsJpg, searchMercadoLivre } from "../src/lib/stores/mercadolivre";
+import { deliveryLabelFrom, mercadoLivreEnabled, mlImageAsJpg, rankMercadoLivre, searchMercadoLivre } from "../src/lib/stores/mercadolivre";
 import { withoutMedicine } from "../src/lib/stores/anvisa";
 import { needsLongTailSearch, type StoreCandidate } from "../src/lib/stores";
 import type { StoreConnector } from "../src/lib/stores/types";
@@ -159,4 +159,20 @@ test("ML→Meta: foto do ML sai em JPG (a Meta recusa WebP e descarta o card)", 
   const jpg = "https://http2.mlstatic.com/D_NQ_NP_1.jpg";
   assert.equal(mlImageAsJpg(jpg), jpg);
   assert.equal(mlImageAsJpg(""), undefined);
+});
+
+test("ML: ranking prioriza o que o mercado validou (vendas/avaliações), não o obscuro", () => {
+  // Dados REAIS do run de 16/08 ("camiseta futebol", dataset cgyJEMS1gLYfwdA37) — o
+  // item sem venda e sem avaliação era o que aparecia como "coisa estranha" no card.
+  const items = [
+    { sku: "ml-a", name: "Conjunto De Camiseta De Futebol Branca Respirável", unitPrice: 42.53, mlTrust: 0, mlPosition: 3 },
+    { sku: "ml-b", name: "Camiseta Futebol Corinthians Masculina Listrada Oficial", unitPrice: 104.99, mlTrust: 4.2, mlPosition: 8 },
+    { sku: "ml-c", name: "Camiseta Futebol Dry Fit Masculina Treino", unitPrice: 63.9, mlTrust: 3.7, mlPosition: 2 }
+  ];
+  const ranked = rankMercadoLivre("camiseta futebol", items, 3).map((i) => i.sku);
+  // Entre relevâncias equivalentes, o anúncio sem venda/avaliação vai para o FIM.
+  assert.equal(ranked[ranked.length - 1], "ml-a", `ordem: ${ranked.join(" > ")}`);
+  // E pedido específico continua mandando: "corinthians" traz o Corinthians em 1º.
+  const especifico = rankMercadoLivre("camiseta corinthians", items, 3).map((i) => i.sku);
+  assert.equal(especifico[0], "ml-b", `ordem específica: ${especifico.join(" > ")}`);
 });

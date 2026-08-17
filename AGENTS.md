@@ -297,6 +297,23 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**16/08 (7ª) — ML entregou; 2 ajustes do 1º teste bem-sucedido.** O dono comprou o fluxo
+até o resumo (camiseta R$120,89 com foto e prazo). Duas críticas dele, ambas certas:
+1. **"Trouxe umas coisas estranhas"** — o actor publica `quantidadeVendida`,
+   `numeroAvaliacoes`, `produtoReviews`, `lojaOficial` e `posicaoItem`, e a vitrine
+   ordenava só por semelhança de texto: no resultado real dele, o 3º card era um
+   anúncio com ZERO venda e ZERO avaliação. `rankMercadoLivre`: relevância manda
+   primeiro (pedido específico continua vencendo), depois `trustScore` (vendas e
+   avaliações em log10, nota >4 como bônus, loja oficial no desempate), depois a ordem
+   do próprio ML. Anúncio não-validado vai pro fim. Sinais viajam no item (`mlTrust`,
+   `mlPosition`), então sobrevivem ao cache.
+2. **"Por que pede CEP e depois endereço?"** — os DOIS são necessários (CEP decide
+   cobertura/frete; número+complemento é o que o entregador usa), mas cabiam numa
+   pergunta só: `askNewCep`/`askCepAgain` agora pedem "endereço completo com o CEP" com
+   exemplo, e o parser já lia os dois juntos desde 06/08. Quando só o CEP chega, a
+   pergunta seguinte explica o PORQUÊ ("pro entregador achar você") em vez de parecer
+   burocracia.
+
 **16/08 (6ª) — 1º teste real do ML: busca OK, cards descartados por WebP.** O dono ligou
 a flag e pediu camiseta: a busca levou ~28s e achou 3 camisetas reais do Corinthians com
 preço, link e "chega amanhã" — e NENHUM card chegou. Causa (diagnóstico do dono):
