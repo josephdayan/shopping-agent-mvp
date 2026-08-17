@@ -49,10 +49,48 @@ test("ML: prazo mostrado é o do anúncio (nunca estimado por nós)", () => {
   assert.equal(deliveryLabelFrom("Chegará grátis hoje Enviado pelo FULL"), "chega hoje");
   assert.equal(deliveryLabelFrom("Chegará grátis amanhã Enviado pelo FULL"), "chega amanhã");
   assert.equal(deliveryLabelFrom("Chegará em 3 dias"), "chega em 3 dias");
-  assert.equal(deliveryLabelFrom("Frete grátis"), "frete grátis");
+  // O slot do card é PRAZO (dono, 17/08): "Frete grátis" sem data não o ocupa.
+  assert.equal(deliveryLabelFrom("Frete grátis"), undefined);
   // Sem informação de envio, NÃO inventa prazo.
   assert.equal(deliveryLabelFrom(""), undefined);
   assert.equal(deliveryLabelFrom(undefined), undefined);
+});
+
+test("ML: anúncio com prazo publicado vence o sem prazo no empate (e internacional cai fora)", async () => {
+  const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN, fetch: global.fetch, poll: process.env.APIFY_MERCADO_LIVRE_POLL_MS };
+  process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.APIFY_API_TOKEN = "token-de-teste";
+  process.env.APIFY_MERCADO_LIVRE_POLL_MS = "1";
+  global.fetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("/runs?"))
+      return new Response(JSON.stringify({ data: { id: "run1", defaultDatasetId: "ds1", status: "SUCCEEDED" } }), { status: 200 });
+    if (url.includes("/datasets/"))
+      return new Response(
+        JSON.stringify([
+          // Sem prazo publicado, MUITO vendido — ainda assim fica atrás do que tem prazo.
+          { eTituloProduto: "Guarda Chuva Reforçado Premium", novoPreco: "39,90", zProdutoLink: "https://x/p/MLB1", patrocinado: "", is_inStock: true, idPublicacao: "MLB1", envio: "Frete grátis", quantidadeVendida: 50000 },
+          // Com prazo do anúncio.
+          { eTituloProduto: "Guarda Chuva Reforçado Automático", novoPreco: "42,90", zProdutoLink: "https://x/p/MLB2", patrocinado: "", is_inStock: true, idPublicacao: "MLB2", envio: "Chegará grátis hoje Enviado pelo FULL", quantidadeVendida: 800 },
+          // Internacional ("enviado da China") leva semanas: nunca vira opção.
+          { eTituloProduto: "Guarda Chuva Dobrável Importado", novoPreco: "19,90", zProdutoLink: "https://x/p/MLB3", patrocinado: "", is_inStock: true, idPublicacao: "MLB3", eCompraInternacional: true, enviadoDe: "China" }
+        ]),
+        { status: 200 }
+      );
+    throw new Error(`url inesperada: ${url}`);
+  }) as typeof fetch;
+  try {
+    const items = await searchMercadoLivre(`guarda chuva prazo teste ${Date.now()}`, 3);
+    assert.equal(items.length, 2, `internacional devia cair: ${items.map((i) => i.name).join(" | ")}`);
+    assert.match(items[0].name, /Automático/, `sem-prazo venceu o com-prazo: ${items.map((i) => i.name).join(" | ")}`);
+    assert.equal(items[0].category, "chega hoje");
+    assert.equal(items[1].category, undefined); // "Frete grátis" não vira prazo no card
+  } finally {
+    process.env.LIA_ENABLE_MERCADOLIVRE = previous.flag;
+    process.env.APIFY_API_TOKEN = previous.token;
+    process.env.APIFY_MERCADO_LIVRE_POLL_MS = previous.poll;
+    global.fetch = previous.fetch;
+  }
 });
 
 test("ML: só entra quando nenhuma vitrine local tem match forte", () => {

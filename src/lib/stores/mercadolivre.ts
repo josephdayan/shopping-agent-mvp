@@ -32,6 +32,9 @@ export function mercadoLivreEnabled(): boolean {
 
 // Formas que o actor usa para dizer o prazo. Guardamos a frase do anúncio como veio
 // (é a promessa da PRÓPRIA loja) e derivamos só um rótulo curto pro card.
+// O slot do card é PRAZO DE ENTREGA (reclamação do dono, 17/08: "tá vindo frete grátis
+// mas é pra vir prazo"): "Frete grátis" sem data não entra — anúncio sem prazo publicado
+// sai sem rótulo, e o prazo oficial é o da cotação do operador. Nunca inventamos data.
 export function deliveryLabelFrom(envio: string | undefined): string | undefined {
   const raw = (envio ?? "").trim();
   if (!raw) return undefined;
@@ -40,7 +43,6 @@ export function deliveryLabelFrom(envio: string | undefined): string | undefined
   if (n.includes("amanha") || n.includes("amanhã")) return "chega amanhã";
   const days = n.match(/(\d+)\s*dias?/)?.[1];
   if (days) return `chega em ${days} dias`;
-  if (n.includes("gratis") || n.includes("grátis")) return "frete grátis";
   return undefined;
 }
 
@@ -52,6 +54,8 @@ type ApifyMlItem = {
   produtoMarca?: string;
   patrocinado?: string;
   is_inStock?: boolean | null;
+  eCompraInternacional?: boolean | string | null;
+  enviadoDe?: string;
   envio?: string;
   idPublicacao?: string;
   SKU?: string;
@@ -117,6 +121,10 @@ function toCatalogItem(raw: ApifyMlItem): MlCatalogItem | null {
   // Anúncio patrocinado é publicidade, não a melhor opção — fica de fora.
   if ((raw.patrocinado ?? "").trim()) return null;
   if (raw.is_inStock === false) return null;
+  // Compra internacional ("enviado da China") leva SEMANAS — incompatível com um
+  // concierge de entrega em dias. Fora, sempre (17/08).
+  if (raw.eCompraInternacional === true || raw.eCompraInternacional === "true") return null;
+  if (/china|internacional/i.test(raw.enviadoDe ?? "")) return null;
   const id = (raw.idPublicacao ?? raw.SKU ?? productUrl.split("/").pop() ?? name).toString().replace(/\W+/g, "").slice(0, 40);
   const delivery = deliveryLabelFrom(raw.envio);
   return {
@@ -135,8 +143,9 @@ function toCatalogItem(raw: ApifyMlItem): MlCatalogItem | null {
 }
 
 // Ranking da vitrine ML: relevância manda (quem pediu "camiseta do corinthians" quer o
-// Corinthians, não a polo mais vendida), mas entre itens igualmente relevantes decide o
-// que o mercado já validou — vendas/avaliações — e só então a ordem do próprio ML.
+// Corinthians, não a polo mais vendida); no empate, anúncio com PRAZO PUBLICADO ("chega
+// hoje/amanhã", em `category`) vem antes do sem prazo — o card existe pra responder
+// "quando chega" (dono, 17/08) — e só então vendas/avaliações e a ordem do próprio ML.
 export function rankMercadoLivre<T extends MlCatalogItem>(query: string, items: T[], limit: number): T[] {
   return items
     .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
@@ -144,6 +153,7 @@ export function rankMercadoLivre<T extends MlCatalogItem>(query: string, items: 
     .sort(
       (a, b) =>
         b.score - a.score ||
+        Number(Boolean(b.item.category)) - Number(Boolean(a.item.category)) ||
         (b.item.mlTrust ?? 0) - (a.item.mlTrust ?? 0) ||
         (a.item.mlPosition ?? 999) - (b.item.mlPosition ?? 999) ||
         a.item.unitPrice - b.item.unitPrice
@@ -194,7 +204,9 @@ export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCa
   if (!mercadoLivreEnabled()) return [];
   const normalized = query.trim().toLowerCase().replace(/\s+/g, " ");
   if (!normalized) return [];
-  const queryKey = `ml:${normalized}`;
+  // v2 (17/08): invalida o cache anterior — itens antigos carregavam "frete grátis" no
+  // slot de prazo e anúncios internacionais que agora são descartados na entrada.
+  const queryKey = `ml:v2:${normalized}`;
 
   const cached = await cachedItems(queryKey);
   if (cached) return rankMercadoLivre(query, cached, limit);
