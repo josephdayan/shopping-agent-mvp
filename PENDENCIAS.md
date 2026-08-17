@@ -192,6 +192,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
 
+> **17/08 (2ª) — vitrine fit/congelados PUBLICADA (caso "sorvete que não engorda").**
+> Commit `8619f9a`: a colheita VTEX ganhou varredura complementar por termo (`--ft`) e os
+> 3 mercados agora carregam o nicho fit que o top-vendas escondia — Sorvete Zero Nestlé,
+> Açaí Zero, YoPRO, whey, sem lactose/glúten. NdT 904→1.543 itens; Oba caiu a 1.000 (a
+> API da loja parou em `_from=1000`; essenciais preservados). "saborizada" virou variante
+> processada (água seca continua mineral). Golden 40/40. Rappi ao vivo continua
+> só-se-o-piloto-provar-demanda; a compra urgente via Rappi já funciona manual (tag ⚡).
+
 > **17/08 — busca fria do ML ~30% mais rápida + tag "⚡ quer HOJE" PUBLICADOS.** Commits
 > `dc0424a` + `ed797b2`, deploy `shopping-agent-asazb5e8i` `Ready`, smoke verde (landing
 > e /ops 200). Velocidade: actor com 4GB (28,5s→21,1s medido), `waitForFinish` no lugar

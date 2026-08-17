@@ -297,6 +297,23 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (4ª) — vitrine fit/congelados: o gargalo do "sorvete que não engorda" era prateleira.**
+Pergunta do dono: "quero um sorvete bom e que não engorda pra agora — ele resolve?".
+Diagnóstico com dado: entender ele vai (rerank já julga contra a mensagem original), mas
+as vitrines só tinham sorvete comum — e a FONTE tinha o produto: a API da Natural da
+Terra vende Sorvete Napolitano Zero Açúcar Nestlé, Açaí Zero Frooty, Yamo Zero; YoPRO
+existe em 3 mercados. O top-vendas da colheita nunca traz esse nicho. Conserto
+estrutural: `--ft=<termo;termo>` no `harvest-vtex-catalog.mts` (varreduras complementares
+por texto, mesmo dedupe/deny) + lista `GROCER_FT` (sorvete; açaí; zero açúcar; proteico;
+yopro; whey; diet; light; sem lactose; sem glúten) nos 3 mercados do refresh. Resultado:
+NdT 904→1.543 itens, Swift 920→968; **Oba caiu 1.494→1.000** (a API passou a parar em
+`_from=1000` — não é regressão nossa; água mineral e essenciais continuam). Efeito
+colateral pego pelo golden: "água" seca passou a devolver saborizada → "saborizada"
+entrou em `PROCESSED_VARIANTS` (só vale se pedida). Verificado no roster de produção:
+"sorvete zero açúcar" → Nestlé Zero R$32,99 em 1º; "açaí zero" → 3 opções de 3 lojas.
+Gate: catalog-gaps + golden 40/40, tsc. A "vitrine Rappi ao vivo" segue registrada como
+projeto só-se-o-piloto-provar-demanda (actors atuais são de restaurante, ~R$3/busca).
+
 **17/08 (3ª) — tag "⚡ quer HOJE" no /ops (pedido do dono) + direções registradas.**
 Contexto: o dono quer usar o **Rappi como canal de entrega urgente** (compra manual do
 operador com o endereço do cliente — zero código, igual ao ML) e perguntou "como separar"
