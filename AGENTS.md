@@ -297,6 +297,22 @@ pós-mudança: **32/33 determinístico · 33/33 com IA** (o × é o caso que só
 desenho). A regra "3 opções ainda que repetidas > lista curta" continua: variantes
 preenchem quando o catálogo não tem 3 produtos distintos.
 
+**17/08 (3ª) — tag "⚡ quer HOJE" no /ops (pedido do dono) + direções registradas.**
+Contexto: o dono quer usar o **Rappi como canal de entrega urgente** (compra manual do
+operador com o endereço do cliente — zero código, igual ao ML) e perguntou "como separar"
+urgente de não-urgente. O NLU já detectava urgência ("urgente", "pra hoje", "queria
+receber hoje") mas JOGAVA FORA a informação. Agora: `hasUrgencySignal` (lia-intents, puro,
+unit-testado — "carregador rápido"/"carga rápida" NÃO contam, é atributo de produto),
+`ctx.urgent` marcado em qualquer mensagem do turno (depois dos dois resets de TTL, senão a
+marca morre na mesma mensagem), nota `⚡ URGENTE: cliente quer receber hoje.` no pedido
+(criação e update), alerta do operador com prefixo ⚡ e **badge laranja "⚡ quer HOJE"**
+no card do /ops. Nada muda para o cliente. A escolha do canal continua DO OPERADOR na
+cotação (atenção à margem: preço dentro do Rappi é ~10-20% acima da gôndola + taxas —
+conferir o total no Rappi antes de cotar urgência). Direção registrada (passo maior,
+sem código ainda): **busca consultiva** — "quero algo pra X" (ex.: dor nas costas) deve
+virar recomendação assessorada, não match literal; o dono sabe que remédio continua
+proibido, o exemplo era ilustrativo.
+
 **17/08 (2ª) — busca fria do ML: ~30s → ~20-22s (pedido do dono: "mais rápido").** O teto
 é o próprio actor; medições reais de 17/08: karamelo em 1GB = 28,5s, **4GB = 21,1s**, 8GB =
 19,7s (marginal) — na Apify CPU escala com memória, e em actor pay-per-event o compute é

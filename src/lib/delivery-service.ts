@@ -48,6 +48,7 @@ import {
   isQuestion,
   asksRunningTotal,
   looksLikeMedicine,
+  hasUrgencySignal,
   isRequestModifier,
   sharesProductNoun,
   stripMedicineNegation,
@@ -257,6 +258,9 @@ type DeliveryContext = {
   fulfillments?: StoreFulfillment[];
   quoteUnavailable?: boolean;
   deliveryOrderId?: string;
+  // Cliente sinalizou que quer receber HOJE/agora ("urgente", "pra hoje"). Vira a tag
+  // "⚡ URGENTE" no pedido do /ops — o operador escolhe o canal por isso na cotação.
+  urgent?: boolean;
 };
 
 const ACTIVE_ORDER_STATUSES = ACTIVE_DELIVERY_ORDER_STATUSES;
@@ -1086,6 +1090,10 @@ async function handleDeliveryTurn(
       if (canceledShortId) await reply(phone, copy.staleQuoteRestart(canceledShortId));
     }
   }
+
+  // Depois dos dois resets acima, para a marca não morrer na mesma mensagem que a criou.
+  // Persistida pelo writeCtx do handler que tratar a mensagem (toda rota de pedido grava).
+  if (!ctx.urgent && hasUrgencySignal(text)) ctx.urgent = true;
 
   const savedCep = user.cep ?? ctx.cep;
 
@@ -3120,15 +3128,26 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   const basket = (ctx.basket ?? []) as unknown as object;
   const itemNames = (ctx.basket ?? []).map((item) => `${item.qty}x ${item.name}`);
 
+  // Tag de urgência (pedido do dono, 17/08): o cliente disse "urgente"/"pra hoje" em
+  // algum momento da conversa — o operador decide o canal por isso (Rappi/retirada
+  // agora vs. ML/dia seguinte). Só marca o pedido; nada muda para o cliente.
+  const URGENT_NOTE = "⚡ URGENTE: cliente quer receber hoje.";
+
   const existing = await prisma.deliveryOrder.findFirst({
     where: { conversationId: convoId, status: AWAITING_OPERATOR_QUOTE_STATUS },
     orderBy: { createdAt: "desc" }
   });
   let order;
   if (existing) {
+    const addUrgent = ctx.urgent && !(existing.notes ?? "").includes(URGENT_NOTE);
     order = await prisma.deliveryOrder.update({
       where: { id: existing.id },
-      data: { items: basket, cep: ctx.cep, deliveryAddress: ctx.deliveryAddress }
+      data: {
+        items: basket,
+        cep: ctx.cep,
+        deliveryAddress: ctx.deliveryAddress,
+        ...(addUrgent ? { notes: appendOrderNote(existing.notes, URGENT_NOTE) } : {})
+      }
     });
   } else {
     order = await prisma.deliveryOrder.create({
@@ -3149,7 +3168,9 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
         deliveryFee: 0,
         serviceFee: 0,
         total: 0,
-        notes: "Pedido concierge aguardando cotação do operador.",
+        notes: ctx.urgent
+          ? `${URGENT_NOTE}\nPedido concierge aguardando cotação do operador.`
+          : "Pedido concierge aguardando cotação do operador.",
         status: AWAITING_OPERATOR_QUOTE_STATUS
       }
     });
@@ -3163,7 +3184,8 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
 
   if (prefix) await reply(phone, prefix);
   await replyQuoteNotice(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
-  await notifyOperator(copy.operatorQuoteAlert(order.id.slice(-6).toUpperCase(), itemNames));
+  const alert = copy.operatorQuoteAlert(order.id.slice(-6).toUpperCase(), itemNames);
+  await notifyOperator(ctx.urgent ? `⚡ URGENTE — ${alert}` : alert);
 }
 
 // Publica a cotação instantânea reutilizando opsPublishManualQuote — status, mensagem ao

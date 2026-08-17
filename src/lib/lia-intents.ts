@@ -144,6 +144,32 @@ export function isRequestModifier(phrase: string): boolean {
   return MODIFIER_SEGMENT_RE.test(normalizeMsg(phrase));
 }
 
+// Urgência de ENTREGA na mensagem ("preciso pra hoje", "urgente", "o quanto antes").
+// Não muda a busca nem a resposta ao cliente: vira a tag "⚡ URGENTE" no pedido, pro
+// operador escolher o canal na cotação (Rappi/retirada agora vs. ML/dia seguinte).
+// "rapido" solto NÃO conta — "carregador rápido"/"carga rápida" é atributo de produto;
+// só vale atrelado a um verbo de entrega ("chegar rápido") ou como "entrega rápida".
+const URGENCY_RE = new RegExp(
+  "\\b(" +
+    [
+      "urgente(mente)?",
+      "urgencia",
+      "o quanto antes",
+      "(pra|para) (hoje|agora|ja)",
+      "ainda hoje",
+      "hoje sem falta",
+      "(preciso|quero|queria) (disso |dele |dela )?(hoje|agora)",
+      "(receber|chega\\w*|entrega\\w*|mandar?|enviar?)( [a-z0-9]+){0,3} (hoje|agora|rapido|rapidinho)",
+      "entrega (rapida|expressa|imediata)",
+      "(to|tou|estou) com (muita )?pressa",
+      "o mais rapido possivel"
+    ].join("|") +
+    ")\\b"
+);
+export function hasUrgencySignal(text: string): boolean {
+  return URGENCY_RE.test(normalizeMsg(text));
+}
+
 export function parseBasketLines(text: string): ParsedLine[] {
   let source = expandShoppingShorthand(text);
   // Lista enumerada ("1 arroz\n2 feijão\n3 óleo"): índices sequenciais a partir de 1 em

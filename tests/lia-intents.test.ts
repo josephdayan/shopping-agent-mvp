@@ -5,6 +5,7 @@ import {
   extractCep,
   isBareCep,
   isRequestModifier,
+  hasUrgencySignal,
   looksLikeMedicine,
   parseBasketLines,
   mergeShoppingLines,
@@ -507,4 +508,32 @@ test("6º ciclo: negação inline fica no item dela — vizinhos intactos", () =
   const phrases = churrasco.map((l) => l.phrase.toLowerCase());
   assert.ok(phrases.some((p) => /lingui/.test(p) && /sem pimenta/.test(p)), `linhas: ${phrases.join(" | ")}`);
   assert.ok(phrases.some((p) => /p[aã]o de alho/.test(p) && !/pimenta/.test(p)), `pão contaminado: ${phrases.join(" | ")}`);
+});
+
+test("urgência: sinal de entrega-hoje detectado, atributo de produto não", () => {
+  // Vira a tag "⚡ URGENTE" no /ops — o operador escolhe o canal por isso.
+  for (const msg of [
+    "preciso pra hoje",
+    "é urgente!!",
+    "me manda o quanto antes",
+    "queria receber hoje se der",
+    "2 pilhas AA, pra agora",
+    "tem como chegar ainda hoje?",
+    "quero uma coca gelada e entrega rápida por favor",
+    "tô com muita pressa",
+    "quero um bolo de chocolate para hoje"
+  ]) {
+    assert.ok(hasUrgencySignal(msg), `devia marcar urgência: "${msg}"`);
+  }
+  // "rápido"/"hoje" como parte do PRODUTO ou de conversa comum não é urgência.
+  for (const msg of [
+    "carregador rápido usb-c",
+    "cabo de carga rápida 2 metros",
+    "hoje não, deixa pra amanhã",
+    "quero um teste rápido de gravidez",
+    "arroz, feijão e óleo",
+    "pode entregar amanhã de manhã"
+  ]) {
+    assert.ok(!hasUrgencySignal(msg), `falso positivo de urgência: "${msg}"`);
+  }
 });

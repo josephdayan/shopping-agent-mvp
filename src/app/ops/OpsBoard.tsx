@@ -251,6 +251,7 @@ export default function OpsBoard() {
       {orders.map((o) => {
         const cancelRequested = hasCancelRequest(o.notes);
         const refundPending = hasPendingRefund(o.notes) || o.status === "refund_pending";
+        const urgent = (o.notes ?? "").includes("⚡ URGENTE");
         const isCard = isCardCharge(o);
         const retailerDelivery = isRetailerDeliveryOrder(o);
         const primaryFulfillment = o.fulfillments?.[0];
@@ -273,6 +274,7 @@ export default function OpsBoard() {
                 <span style={{ color: "#98a2b3", fontWeight: 400, fontSize: 12 }}>{ageLabel(o.paidAt ?? o.createdAt)}</span>
               </strong>
               <span>
+                {urgent && <span style={urgentBadge}>⚡ quer HOJE</span>}{" "}
                 <span style={badge}>{STATUS_LABEL[o.status] ?? o.status}</span>{" "}
                 <span style={payBadge}>{isCard ? "💳 cartão" : "⚡ Pix"}</span>
               </span>
@@ -631,6 +633,9 @@ const refundBanner: React.CSSProperties = {
   fontWeight: 600
 };
 const badge: React.CSSProperties = { fontSize: 12, color: "#0f3d3a", background: "#d6fbf4", borderRadius: 999, padding: "2px 10px" };
+// Urgência: o cliente falou "urgente"/"pra hoje" — decide o canal da compra (Rappi/
+// retirada agora vs. ML/dia seguinte). Laranja para saltar aos olhos na fila.
+const urgentBadge: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#93370d", background: "#ffead5", borderRadius: 999, padding: "2px 10px" };
 const payBadge: React.CSSProperties = { fontSize: 12, color: "#475467", background: "#f2f4f7", borderRadius: 999, padding: "2px 10px" };
 const input: React.CSSProperties = { padding: "8px 10px", border: "1px solid #d0d5dd", borderRadius: 8, fontSize: 14, minWidth: 180 };
 const primary: React.CSSProperties = { padding: "8px 14px", background: "#0f3d3a", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, cursor: "pointer" };
