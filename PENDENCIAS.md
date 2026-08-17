@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-15._
+_Última atualização: 2026-08-17.__
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -191,6 +191,19 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > dono que seguem pendentes:** (1) mandar "cancelar" no chat pra matar o zumbi `#CMSMCE`;
 > (2) teste real: "quero um carregador" → tocar "Outras opções"; e um item inexistente
 > ("camiseta de futebol") → deve responder "não tenho como trazer".
+
+> **17/08 — busca fria do ML ~30% mais rápida + tag "⚡ quer HOJE" PUBLICADOS.** Commits
+> `dc0424a` + `ed797b2`, deploy `shopping-agent-asazb5e8i` `Ready`, smoke verde (landing
+> e /ops 200). Velocidade: actor com 4GB (28,5s→21,1s medido), `waitForFinish` no lugar
+> do polling e prefetch do ML em paralelo com a IA (buscas idênticas em voo compartilham
+> um run) — busca fria ~30s → ~20-22s; para 10-15s só com a API oficial do ML
+> (**pendência do dono**: criar app em developers.mercadolivre.com.br; aí integramos com
+> fallback pro Apify). Urgência: "urgente"/"pra hoje" agora vira nota `⚡ URGENTE`,
+> alerta com ⚡ e badge laranja no /ops — o operador decide o canal (Rappi/retirada
+> agora vs. ML). Gate: tsc, ML 10/10, NLU 41/41, concierge E2E 36/36. Direções
+> registradas sem código: busca consultiva ("algo pra X" → 2-3 categorias na extração)
+> e vitrine Rappi ao vivo (actors atuais são de restaurante e caros ~R$3/busca; validar
+> com 1 run só se o piloto provar demanda urgente/perecível).
 
 > **16/08 (4ª) — 7º ciclo (13 cenários, 12 ok) → conserto de display PUBLICADO.** Push
 > `20052dc` → deploy `Ready` (smoke verde). A confirmação de endereço agora mostra o CEP

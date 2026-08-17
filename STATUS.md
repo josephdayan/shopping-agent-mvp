@@ -4,7 +4,7 @@
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-15. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-17. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional
@@ -233,6 +233,19 @@ de hoje está em
 > 3 botões — **Pagar** (fecha e cota), **Adicionar mais itens** e **Cancelar** — via
 > `sendChoiceFollowUp` (ids caem nos ramos já existentes: "pagar", "adicionar_mais",
 > "cancelar"); fallback = texto de sempre quando não é Meta ou o interativo falha.
+
+> **17/08 — busca fria do ML mais rápida + tag de urgência no /ops (PUBLICADOS).**
+> Pedido do dono ("30s → 10-15s?"): o teto é o actor. Medido: 4GB de memória derruba o
+> run de 28,5s pra 21,1s (grátis — actor pay-per-event), `waitForFinish` elimina o
+> polling e o prefetch dispara o ML em paralelo com a extração de IA (runs idênticos em
+> voo são compartilhados). Busca fria ~30s → ~20-22s; cache 6h continua instantâneo.
+> 10-15s ou menos exige a API oficial do ML (403 sem token de app) — o dono precisa
+> criar um aplicativo em developers.mercadolivre.com.br. Alternativas descartadas com
+> teste: outros actors (35s, piores) e fetch direto (bloqueio anti-bot). Também no ar:
+> "urgente"/"pra hoje" vira nota `⚡ URGENTE` no pedido, alerta ⚡ e badge laranja
+> "⚡ quer HOJE" no /ops — o operador escolhe o canal (Rappi/retirada agora vs. ML).
+> Commits `dc0424a`+`ed797b2`, deploy `shopping-agent-asazb5e8i` `Ready`, smoke verde.
+> Gate: tsc, ML 10/10, NLU 41/41, concierge E2E 36/36.
 
 > **16/08 (3ª) — Mercado Livre como vitrine de cauda longa, ATRÁS DE FLAG.** Decisão do
 > dono: com compra manual, o motivo de abandonar o ML (automatizar checkout) não existe
