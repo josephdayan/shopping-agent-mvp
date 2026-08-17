@@ -24,6 +24,12 @@ type Source = {
   /** Farmácia: allowlist de categorias seguras (ANVISA). Ver src/lib/stores/README.md. */
   categories?: string;
   deny?: string;
+  /**
+   * Varreduras complementares por busca de texto (separadas por ";"). O top-vendas
+   * esconde nicho que cliente real pede — caso 17/08: "sorvete que não engorda" existia
+   * na Natural da Terra (Sorvete Zero Nestlé/Yamo) e nunca entrava no top 1000.
+   */
+  ft?: string;
 };
 
 // O deny-regex de medicamento é o mesmo das duas farmácias. A terceira guarda
@@ -33,13 +39,16 @@ const PHARMACY_DENY =
   "comprimido|c[aá]psula|dipirona|paracetamol|ibuprofeno|amoxicilina|antibi[oó]tico|xarope|" +
   "anti-inflamat|analg[eé]sico|antit[eé]rmico|insulina|soro fisiol|teste de|exame";
 
+// Termos "fit/congelados" dos mercados: demanda real que o top-vendas não cobre.
+const GROCER_FT = "sorvete;acai;zero acucar;sem acucar;proteico;yopro;whey;diet;light;sem lactose;sem gluten";
+
 const SOURCES: Source[] = [
-  { key: "oba", origin: "https://secure.obahortifruti.com.br", max: 1500 },
+  { key: "oba", origin: "https://secure.obahortifruti.com.br", max: 1500, ft: GROCER_FT },
   { key: "divvino", origin: "https://www.divvino.com.br", max: 1000 },
-  { key: "naturaldaterra", origin: "https://www.naturaldaterra.com.br", max: 1000 },
+  { key: "naturaldaterra", origin: "https://www.naturaldaterra.com.br", max: 1000, ft: GROCER_FT },
   { key: "cobasi", origin: "https://www.cobasi.com.br", max: 1000 },
   { key: "rihappy", origin: "https://www.rihappy.com.br", max: 1200 },
-  { key: "swift", origin: "https://loja.swift.com.br", max: 1000 },
+  { key: "swift", origin: "https://loja.swift.com.br", max: 1000, ft: GROCER_FT },
   { key: "kopenhagen", origin: "https://www.kopenhagen.com.br", max: 300 },
   {
     key: "paguemenos",
@@ -154,6 +163,7 @@ for (const source of SOURCES) {
   const args = [source.origin, source.key, out, String(source.max)];
   if (source.categories) args.push(`--categories=${source.categories}`);
   if (source.deny) args.push(`--deny=${source.deny}`);
+  if (source.ft) args.push(`--ft=${source.ft}`);
   if (!run("scripts/harvest-vtex-catalog.mts", args)) {
     failed.push(source.key);
     continue;

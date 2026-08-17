@@ -228,7 +228,9 @@ const PET_SPECIES_RE = /\b(caes|cao|cachorros?|gatos?|felinos?|caninos?|aquario|
 // "tonica"/"micelar"/"termal" entraram em 11/08: o conserto do encoding do Imigrantes
 // destravou 30 águas antes invisíveis e a Água Tônica empatou com a mineral no pedido
 // "agua" — mesma classe da sanitária/oxigenada (água que não é água de beber).
-const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada", "tonica", "micelar", "termal"]);
+// "saborizada" entrou em 17/08: a varredura fit da colheita trouxe águas saborizadas
+// zero pro catálogo e "água" seca passou a devolver maracujá em vez de mineral (golden).
+const PROCESSED_VARIANTS = new Set(["condensado", "condensada", "soluvel", "sache", "saches", "capsula", "capsulas", "fermentado", "fermentada", "vegetal", "sanitaria", "oxigenada", "tonica", "micelar", "termal", "saborizada", "saborizado"]);
 // "Leite DE COCO" é tão pouco "leite" quanto o de soja: quem pede leite quer o de vaca.
 // A lista existia mas estava incompleta, e o coco (barato, 200ml) vencia o desempate de
 // preço — pedir "leite" devolvia leite de coco.

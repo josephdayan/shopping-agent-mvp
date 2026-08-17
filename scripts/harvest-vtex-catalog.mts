@@ -10,6 +10,11 @@
 // Both exist for the pharmacy vitrines: selling medicine is forbidden (ANVISA), and a
 // pharmacy's top-sellers are mostly medicine, so we allowlist safe categories AND keep the
 // deny regex as a second, independent guard.
+//
+// --ft=<termo;termo> roda varreduras COMPLEMENTARES por busca de texto depois da varredura
+// principal (mesmo dedupe). Existe porque o top-vendas esconde nicho que cliente real pede:
+// "sorvete zero açúcar" existe na loja e nunca entra no top 1000 (caso real 17/08 — "quero
+// um sorvete que não engorda" ia virar recusa com o produto NA PRATELEIRA da fonte).
 import { writeFileSync } from "node:fs";
 
 const argv = process.argv.slice(2);
@@ -24,6 +29,9 @@ if (!origin || !storeKey || !outFile) {
 const MAX = Number(maxArg ?? 1200);
 const flagValue = (name: string) => flags.find((f) => f.startsWith(`--${name}=`))?.slice(name.length + 3);
 const CATEGORIES = (flagValue("categories") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+// ";" como separador: termos de busca podem conter vírgula/espaço ("zero acucar").
+const FT_TERMS = (flagValue("ft") ?? "").split(";").map((s) => s.trim()).filter(Boolean);
+const FT_MAX_PER_TERM = 150;
 const denyArg = flagValue("deny");
 const DENY = denyArg ? new RegExp(denyArg, "i") : null;
 
@@ -47,9 +55,10 @@ function slugCategory(categories: string[] | undefined): string {
     .replace(/[̀-ͯ]/g, "");
 }
 
-async function page(from: number, to: number, category?: string): Promise<Product[]> {
+async function page(from: number, to: number, category?: string, ft?: string): Promise<Product[]> {
   const fq = category ? `&fq=C:/${category}/` : "";
-  const url = `${origin}/api/catalog_system/pub/products/search?_from=${from}&_to=${to}&O=OrderByTopSaleDESC${fq}`;
+  const search = ft ? `&ft=${encodeURIComponent(ft)}` : "";
+  const url = `${origin}/api/catalog_system/pub/products/search?_from=${from}&_to=${to}&O=OrderByTopSaleDESC${fq}${search}`;
   const res = await fetch(url, { headers: HEADERS });
   if (res.status === 206 || res.ok) return (await res.json()) as Product[];
   throw new Error(`HTTP ${res.status} em ${url}`);
@@ -58,6 +67,34 @@ async function page(from: number, to: number, category?: string): Promise<Produc
 const out: { sku: string; name: string; brand?: string; unitPrice: number; unit: string; category: string; imageUrl?: string; productUrl: string }[] = [];
 const seen = new Set<string>();
 let denied = 0;
+
+function absorb(products: Product[]) {
+  for (const product of products) {
+    const item = product.items?.[0];
+    const seller = item?.sellers?.find((s) => (s.commertialOffer?.AvailableQuantity ?? 0) > 0 && (s.commertialOffer?.Price ?? 0) > 0);
+    const price = seller?.commertialOffer?.Price;
+    const link = product.link ?? (product.linkText ? `${origin}/${product.linkText}/p` : undefined);
+    const id = item?.itemId;
+    if (!id || !price || !link || seen.has(id)) continue;
+    const name = (item.nameComplete || item.name || product.productName || `Produto ${id}`).replace(/\s+/g, " ").trim();
+    const categoryLabel = slugCategory(product.categories);
+    if (DENY && (DENY.test(name) || DENY.test(categoryLabel) || DENY.test((product.categories ?? []).join(" ")))) {
+      denied += 1;
+      continue;
+    }
+    seen.add(id);
+    out.push({
+      sku: `${storeKey}-${id}`,
+      name,
+      brand: product.brand || undefined,
+      unitPrice: Math.round(price * 100) / 100,
+      unit: "un",
+      category: categoryLabel,
+      imageUrl: item.images?.[0]?.imageUrl,
+      productUrl: new URL(link, origin).toString()
+    });
+  }
+}
 
 // One sweep per allowlisted category, or a single top-sales sweep when none was given.
 for (const category of CATEGORIES.length ? CATEGORIES : [undefined]) {
@@ -70,35 +107,29 @@ for (const category of CATEGORIES.length ? CATEGORIES : [undefined]) {
       break;
     }
     if (!products.length) break;
-    for (const product of products) {
-      const item = product.items?.[0];
-      const seller = item?.sellers?.find((s) => (s.commertialOffer?.AvailableQuantity ?? 0) > 0 && (s.commertialOffer?.Price ?? 0) > 0);
-      const price = seller?.commertialOffer?.Price;
-      const link = product.link ?? (product.linkText ? `${origin}/${product.linkText}/p` : undefined);
-      const id = item?.itemId;
-      if (!id || !price || !link || seen.has(id)) continue;
-      const name = (item.nameComplete || item.name || product.productName || `Produto ${id}`).replace(/\s+/g, " ").trim();
-      const categoryLabel = slugCategory(product.categories);
-      if (DENY && (DENY.test(name) || DENY.test(categoryLabel) || DENY.test((product.categories ?? []).join(" ")))) {
-        denied += 1;
-        continue;
-      }
-      seen.add(id);
-      out.push({
-        sku: `${storeKey}-${id}`,
-        name,
-        brand: product.brand || undefined,
-        unitPrice: Math.round(price * 100) / 100,
-        unit: "un",
-        category: categoryLabel,
-        imageUrl: item.images?.[0]?.imageUrl,
-        productUrl: new URL(link, origin).toString()
-      });
-    }
+    absorb(products);
     process.stdout.write(`\r${out.length} produtos…`);
     // Be polite to the public API.
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
+}
+
+// Varreduras complementares por termo (--ft): garantem o nicho que o top-vendas esconde.
+for (const term of FT_TERMS) {
+  const before = out.length;
+  for (let from = 0; from < FT_MAX_PER_TERM; from += 50) {
+    let products: Product[] = [];
+    try {
+      products = await page(from, Math.min(from + 49, FT_MAX_PER_TERM - 1), undefined, term);
+    } catch (error) {
+      console.warn(`\nparada no ft "${term}" em _from=${from}: ${error instanceof Error ? error.message : error}`);
+      break;
+    }
+    if (!products.length) break;
+    absorb(products);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  console.log(`\nft "${term}": +${out.length - before} produtos novos`);
 }
 if (DENY) console.log(`\n${denied} itens descartados pelo --deny`);
 
