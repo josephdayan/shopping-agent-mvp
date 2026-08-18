@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
   <title id="title">Lia — foto de perfil do WhatsApp</title>
-  <rect width="1024" height="1024" fill="#E4F3EF"/>
+  <!-- Paleta "Berinjela & lima" da landing (18/08): fundo lima #D9FF5B + símbolo roxo #3A225E. -->
+  <rect width="1024" height="1024" fill="#D9FF5B"/>
   <!-- O L oficial fica no centro do corte circular; a estrela permanece como detalhe à direita. -->
   <g transform="translate(512 512) scale(1.15) translate(-512 -512)">
-    <g transform="translate(242.25 289) scale(4.95)" fill="#0F3D3A">
-      <polyline points="38,25 38,72 71,72" fill="none" stroke="#0F3D3A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(242.25 289) scale(4.95)" fill="#3A225E">
+      <polyline points="38,25 38,72 71,72" fill="none" stroke="#3A225E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z"/>
     </g>
   </g>

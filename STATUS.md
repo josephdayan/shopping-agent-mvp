@@ -48,9 +48,10 @@ de hoje está em
 > `paymentConfirmed`). Também saiu o "sem mensalidade, sem taxa escondida" da FAQ (dono
 > vetou em 18/08 — o markup embutido tornaria a frase falsa). Visual: paleta **Berinjela &
 > lima** (roxo `#3A225E` + papel lilás `#F7F4FB` + lima `#D9FF5B`), escolhida pelo dono no
-> seletor de paleta ao vivo (`palette-tester.tsx`, renderiza só em dev); CTAs e mock do
-> celular em roxo/lima. O avatar `LiaWhatsAppAvatar` e o favicon continuam a arte da foto
-> de perfil do WhatsApp (menta `#E4F3EF` + petróleo `#0F3D3A`).
+> seletor de paleta ao vivo (seletor temporário, removido após a escolha); CTAs e mock do
+> celular em roxo/lima. O avatar `LiaWhatsAppAvatar`, o favicon e a arte da foto de perfil
+> do WhatsApp foram refeitos em lima `#D9FF5B` + roxo `#3A225E` (o PNG novo foi entregue
+> ao dono pra subir no app).
 
 > **Remodelagem 2026-07-20 — concierge manual (fluxo ativo).** O produto passou a ser um
 > concierge de WhatsApp com **largura** (pede qualquer coisa, de qualquer lugar), **cotação e

@@ -3,7 +3,6 @@ import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import { LiaSymbol, LiaWhatsAppAvatar } from "@/components/lia-brand";
 import PhoneMock from "@/components/landing/phone-mock";
 import TypingComposer from "@/components/landing/typing-composer";
-import PaletteTester from "@/components/landing/palette-tester";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -197,7 +196,6 @@ const FAQ = [
 export default function Home() {
   return (
     <main className={`${bricolage.variable} ${instrument.variable} min-h-screen bg-papel font-body text-tinta`}>
-      {process.env.NODE_ENV !== "production" && <PaletteTester />}
       {/* ——— Header ——— */}
       <header className="sticky top-0 z-50 border-b-2 border-tinta bg-papel">
         <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5 sm:px-8">
