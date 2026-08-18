@@ -6,8 +6,9 @@
 
 :root {
   color-scheme: light;
-  /* paleta do logo do WhatsApp: menta #E4F3EF + petróleo #0F3D3A + aqua #28FEE5 */
-  --c-poster: 15 61 58;
+  /* paleta do logo do WhatsApp: menta #E4F3EF + petróleo #0F3D3A + aqua #28FEE5;
+     pôster no verde do app WhatsApp (#075E54) por escolha do dono (18/08). */
+  --c-poster: 7 94 84;
   --c-tinta: 10 42 40;
   --c-papel: 228 243 239;
   --c-acento: 40 254 229;
