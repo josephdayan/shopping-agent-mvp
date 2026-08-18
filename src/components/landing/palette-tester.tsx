@@ -13,12 +13,12 @@ type Palette = {
 };
 
 const PALETTES: Palette[] = [
-  { name: "Verde WhatsApp (atual)", poster: "7 94 84", tinta: "10 42 40", papel: "228 243 239", acento: "40 254 229" },
+  { name: "Berinjela & lima (atual)", poster: "58 34 94", tinta: "34 22 51", papel: "247 244 251", acento: "217 255 91" },
+  { name: "Verde WhatsApp", poster: "7 94 84", tinta: "10 42 40", papel: "228 243 239", acento: "40 254 229" },
   { name: "Petróleo (original)", poster: "11 42 51", tinta: "11 33 40", papel: "243 242 237", acento: "45 212 191" },
   { name: "Grafite & creme", poster: "30 35 34", tinta: "26 29 28", papel: "246 242 234", acento: "255 209 102" },
   { name: "Marinho & manteiga", poster: "20 33 61", tinta: "22 32 51", papel: "247 245 239", acento: "255 209 102" },
-  { name: "Café da esquina", poster: "62 42 26", tinta: "43 28 18", papel: "250 244 235", acento: "255 179 92" },
-  { name: "Berinjela & lima", poster: "58 34 94", tinta: "34 22 51", papel: "247 244 251", acento: "217 255 91" }
+  { name: "Café da esquina", poster: "62 42 26", tinta: "43 28 18", papel: "250 244 235", acento: "255 179 92" }
 ];
 
 const STORAGE_KEY = "lia-palette-test";

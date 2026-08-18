@@ -68,7 +68,7 @@ export default function TypingComposer({ href }: { href: string }) {
         </span>
       </span>
       <span
-        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white transition-colors group-hover:bg-[#1FBF5B]"
+        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-acento text-[#221633] transition-colors group-hover:bg-[#C9F23F]"
         aria-hidden="true"
       >
         <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6" fill="currentColor">

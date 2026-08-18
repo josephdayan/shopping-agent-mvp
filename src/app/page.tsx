@@ -97,9 +97,9 @@ function OrderBubble({ cat, text }: { cat: string; text: string }) {
       href={waLink(`oi Lia! ${text}`)}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-fit rounded-2xl rounded-br-[4px] border-[1.5px] border-tinta/15 bg-[#D9FDD3] px-4 py-3 transition-colors hover:border-[#25D366]"
+      className="block w-fit rounded-2xl rounded-br-[4px] border-[1.5px] border-tinta/15 bg-[#F2FFC4] px-4 py-3 transition-colors hover:border-[#8FAF1B]"
     >
-      <span className="mb-1.5 block border-l-[3px] border-[#25D366] pl-2 text-[13px] font-semibold leading-none text-tinta/60">
+      <span className="mb-1.5 block border-l-[3px] border-[#8FAF1B] pl-2 text-[13px] font-semibold leading-none text-tinta/60">
         {cat}
       </span>
       <span className="block text-[16px] italic leading-snug text-tinta">“{text}”</span>
@@ -178,7 +178,7 @@ const FAQ = [
   },
   {
     q: "Quanto custa?",
-    a: "O preço dos produtos mais o frete da loja. O total aparece fechado no chat antes de você pagar — sem mensalidade, sem taxa escondida."
+    a: "O preço dos produtos mais o frete da loja. O total aparece fechado no chat antes de você pagar."
   },
   {
     q: "Como eu pago?",
@@ -206,7 +206,7 @@ export default function Home() {
             <span className="leading-none">
               <span className="font-display block text-[21px] font-extrabold leading-none">Lia</span>
               <span className="mt-0.5 flex items-center gap-1 text-[11px] leading-none text-tinta/55">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#25D366]" aria-hidden="true" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#8FAF1B]" aria-hidden="true" />
                 online
               </span>
             </span>
@@ -226,7 +226,7 @@ export default function Home() {
             href={WA_CTA}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-4 font-display text-[15px] font-bold text-[#04331B] transition-colors hover:bg-[#1FBF5B]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-acento px-4 font-display text-[15px] font-bold text-[#221633] transition-colors hover:bg-[#C9F23F]"
           >
             <WhatsAppIcon className="h-4 w-4" />
             <span className="hidden sm:inline">Chamar no WhatsApp</span>
@@ -256,7 +256,7 @@ export default function Home() {
                 href={WA_CTA}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-16 items-center gap-3 rounded-2xl bg-[#25D366] px-8 font-display text-[18px] font-bold text-[#04331B] transition-colors hover:bg-[#1FBF5B]"
+                className="inline-flex h-16 items-center gap-3 rounded-2xl bg-acento px-8 font-display text-[18px] font-bold text-[#221633] transition-colors hover:bg-[#C9F23F]"
               >
                 <WhatsAppIcon className="h-6 w-6" />
                 Chamar a Lia no WhatsApp
@@ -387,7 +387,7 @@ export default function Home() {
                   aria-hidden="true"
                   style={{
                     backgroundImage:
-                      "repeating-linear-gradient(90deg, #0F3D3A 0 2px, transparent 2px 4px, #0F3D3A 4px 7px, transparent 7px 8px, #0F3D3A 8px 9px, transparent 9px 13px)"
+                      "repeating-linear-gradient(90deg, #221633 0 2px, transparent 2px 4px, #221633 4px 7px, transparent 7px 8px, #221633 8px 9px, transparent 9px 13px)"
                   }}
                 />
                 <p className="mt-2 text-center text-[11px] text-tinta/45">liadelivery.com.br</p>
@@ -419,7 +419,7 @@ export default function Home() {
                 href={waLink("oi Lia! tenho uma dúvida")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-4 font-display text-[15px] font-bold text-[#04331B] transition-colors hover:bg-[#1FBF5B]"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-acento px-4 font-display text-[15px] font-bold text-[#221633] transition-colors hover:bg-[#C9F23F]"
               >
                 <WhatsAppIcon className="h-4 w-4" />
                 Perguntar no WhatsApp

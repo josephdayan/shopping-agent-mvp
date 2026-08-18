@@ -45,9 +45,12 @@ de hoje está em
 > só como "aparece antes de pagar", FAQ "Quando chega?" honesta), "paga no Pix" virou "Pix ou
 > cartão" em todo lugar, e o letreiro perdeu os preços inventados. O mock usa as mensagens
 > reais de `lia-copy.ts` (resumo com frete/prazo da loja, Pix em mensagem separada,
-> `paymentConfirmed`). Visual: paleta e logo iguais aos do WhatsApp (menta `#E4F3EF` +
-> petróleo `#0F3D3A` + aqua `#28FEE5`; avatar `LiaWhatsAppAvatar` = foto de perfil), favicon
-> `lia-icon.svg` idem.
+> `paymentConfirmed`). Também saiu o "sem mensalidade, sem taxa escondida" da FAQ (dono
+> vetou em 18/08 — o markup embutido tornaria a frase falsa). Visual: paleta **Berinjela &
+> lima** (roxo `#3A225E` + papel lilás `#F7F4FB` + lima `#D9FF5B`), escolhida pelo dono no
+> seletor de paleta ao vivo (`palette-tester.tsx`, renderiza só em dev); CTAs e mock do
+> celular em roxo/lima. O avatar `LiaWhatsAppAvatar` e o favicon continuam a arte da foto
+> de perfil do WhatsApp (menta `#E4F3EF` + petróleo `#0F3D3A`).
 
 > **Remodelagem 2026-07-20 — concierge manual (fluxo ativo).** O produto passou a ser um
 > concierge de WhatsApp com **largura** (pede qualquer coisa, de qualquer lugar), **cotação e

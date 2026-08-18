@@ -35,7 +35,7 @@ function Bubble({
     <div className={`bubble flex ${isOut ? "justify-end" : "justify-start"}`} style={{ animationDelay: `${delay}ms` }}>
       <div
         className={`relative max-w-[86%] rounded-xl px-3 py-2 text-[13px] leading-snug text-[#111B21] shadow-[0_1px_1px_rgba(0,0,0,0.08)] ${
-          isOut ? "rounded-tr-sm bg-[#D9FDD3]" : "rounded-tl-sm bg-white"
+          isOut ? "rounded-tr-sm bg-[#EDFFC2]" : "rounded-tl-sm bg-white"
         }`}
       >
         <div className="whitespace-pre-line">{children}</div>
@@ -54,13 +54,13 @@ function Bubble({
 export default function PhoneMock() {
   return (
     <div className="relative mx-auto w-[300px] sm:w-[330px]">
-      <div className="relative overflow-hidden rounded-[2.4rem] border-[6px] border-[#0B1F1D] bg-[#0B1F1D] shadow-[0_32px_80px_-24px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
+      <div className="relative overflow-hidden rounded-[2.4rem] border-[6px] border-[#1C1030] bg-[#1C1030] shadow-[0_32px_80px_-24px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
         {/* WhatsApp header */}
-        <div className="flex items-center gap-3 bg-[#075E54] px-4 pb-3 pt-5">
+        <div className="flex items-center gap-3 bg-[#3A225E] px-4 pb-3 pt-5">
           <LiaWhatsAppAvatar className="h-9 w-9 rounded-full" />
           <div className="leading-tight">
             <div className="text-[15px] font-semibold text-white">Lia</div>
-            <div className="text-[11px] text-[#B5DFD9]">online</div>
+            <div className="text-[11px] text-[#CFC2E6]">online</div>
           </div>
           <div className="ml-auto flex items-center gap-4 text-white/80" aria-hidden="true">
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
@@ -75,9 +75,9 @@ export default function PhoneMock() {
         </div>
 
         {/* Chat */}
-        <div className="space-y-2 bg-[#ECE5DD] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.55),transparent_45%),radial-gradient(circle_at_85%_70%,rgba(255,255,255,0.4),transparent_40%)] px-3 pb-4 pt-3">
+        <div className="space-y-2 bg-[#F0ECF7] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.55),transparent_45%),radial-gradient(circle_at_85%_70%,rgba(255,255,255,0.4),transparent_40%)] px-3 pb-4 pt-3">
           <div className="bubble flex justify-center" style={{ animationDelay: "100ms" }}>
-            <span className="rounded-md bg-[#D5EFE6] px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-[#54695F]">
+            <span className="rounded-md bg-[#E6DDF4] px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-[#5C4A80]">
               hoje
             </span>
           </div>
@@ -118,11 +118,11 @@ export default function PhoneMock() {
         </div>
 
         {/* Input bar */}
-        <div className="flex items-center gap-2 bg-[#ECE5DD] px-3 pb-4">
+        <div className="flex items-center gap-2 bg-[#F0ECF7] px-3 pb-4">
           <div className="flex h-9 flex-1 items-center rounded-full bg-white px-4 text-[12px] text-[#8696A0]">
             Mensagem
           </div>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#075E54] text-white" aria-hidden="true">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#3A225E] text-white" aria-hidden="true">
             <svg viewBox="0 0 24 24" className="ml-0.5 h-4 w-4" fill="currentColor">
               <path d="M3.4 20.4 21.2 12 3.4 3.6l-.01 6.53L14 12 3.39 13.87Z" />
             </svg>

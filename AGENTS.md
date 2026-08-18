@@ -45,8 +45,11 @@ Ao somar mensagem nova, não reintroduza promessa de same-day em lugar nenhum.
 
 ✅ A landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`, mock do celular)
 passou pela mesma revisão em 2026-08-18: sem promessa de prazo, "Pix ou cartão" em vez de
-"paga no Pix", letreiro sem preço inventado, mock com as mensagens reais de `lia-copy.ts`
-e visual na paleta/logo do WhatsApp (menta `#E4F3EF` + petróleo `#0F3D3A` + aqua `#28FEE5`).
+"paga no Pix", letreiro sem preço inventado, sem "sem taxa escondida" (dono vetou) e mock
+com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor ao vivo
+(`palette-tester.tsx`, só em dev): **Berinjela & lima** — roxo `#3A225E` + papel lilás
+`#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon continua o da foto de
+perfil do WhatsApp (menta `#E4F3EF` + petróleo `#0F3D3A`).
 
 ## Decisão vigente — remodelagem concierge (2026-07-20)
 

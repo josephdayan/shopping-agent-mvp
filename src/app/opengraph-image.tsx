@@ -31,7 +31,7 @@ export default async function OgImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 88px 0",
-          backgroundColor: "#075E54",
+          backgroundColor: "#3A225E",
           fontFamily: displayFont ? "Bricolage" : "sans-serif"
         }}
       >
@@ -40,12 +40,12 @@ export default async function OgImage() {
             <polyline
               points="38,25 38,72 71,72"
               fill="none"
-              stroke="#28FEE5"
+              stroke="#D9FF5B"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="16"
             />
-            <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z" fill="#28FEE5" />
+            <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z" fill="#D9FF5B" />
           </svg>
           <div style={{ fontSize: 52, fontWeight: 800, color: "#FFFFFF" }}>Lia</div>
         </div>
@@ -66,7 +66,7 @@ export default async function OgImage() {
             }}
           >
             <span>Manda um</span>
-            <span style={{ display: "flex", marginLeft: 24, color: "#28FEE5" }}>zap.</span>
+            <span style={{ display: "flex", marginLeft: 24, color: "#D9FF5B" }}>zap.</span>
           </div>
           <div style={{ marginTop: 30, fontSize: 27, color: "rgba(255,255,255,0.72)", fontWeight: 400 }}>
             Qualquer coisa, total fechado, Pix ou cartão — tudo sem sair do WhatsApp
@@ -83,7 +83,7 @@ export default async function OgImage() {
             fontSize: 24
           }}
         >
-          <span style={{ color: "#28FEE5" }}>liadelivery.com.br</span>
+          <span style={{ color: "#D9FF5B" }}>liadelivery.com.br</span>
           <span style={{ color: "rgba(255,255,255,0.55)" }}>Estado de São Paulo · do pedido ao pagamento no chat</span>
         </div>
       </div>

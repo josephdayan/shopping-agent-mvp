@@ -6,12 +6,13 @@
 
 :root {
   color-scheme: light;
-  /* paleta do logo do WhatsApp: menta #E4F3EF + petróleo #0F3D3A + aqua #28FEE5;
-     pôster no verde do app WhatsApp (#075E54) por escolha do dono (18/08). */
-  --c-poster: 7 94 84;
-  --c-tinta: 10 42 40;
-  --c-papel: 228 243 239;
-  --c-acento: 40 254 229;
+  /* paleta "Berinjela & lima", escolhida pelo dono em 18/08 no seletor ao vivo:
+     roxo #3A225E + papel lilás #F7F4FB + lima #D9FF5B. O logo/avatar continua o da
+     foto de perfil do WhatsApp (menta + petróleo) e os CTAs seguem verde-WhatsApp. */
+  --c-poster: 58 34 94;
+  --c-tinta: 34 22 51;
+  --c-papel: 247 244 251;
+  --c-acento: 217 255 91;
   background: rgb(var(--c-papel));
 }
 
