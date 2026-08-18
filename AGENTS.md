@@ -43,8 +43,10 @@ os fallbacks `etaMinutes ?? 40` e `?? 90` foram removidos de propósito; sem pra
 sai só com o valor. Antes de cotar, a Lia diz que *mostra* o prazo, nunca qual é.
 Ao somar mensagem nova, não reintroduza promessa de same-day em lugar nenhum.
 
-⚠️ A landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`) ainda anuncia
-"entrega no mesmo dia" e continua pendente da mesma revisão.
+✅ A landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`, mock do celular)
+passou pela mesma revisão em 2026-08-18: sem promessa de prazo, "Pix ou cartão" em vez de
+"paga no Pix", letreiro sem preço inventado, mock com as mensagens reais de `lia-copy.ts`
+e visual na paleta/logo do WhatsApp (menta `#E4F3EF` + petróleo `#0F3D3A` + aqua `#28FEE5`).
 
 ## Decisão vigente — remodelagem concierge (2026-07-20)
 

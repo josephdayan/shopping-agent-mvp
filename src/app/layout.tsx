@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s · Lia"
   },
   description:
-    "Manda a lista no WhatsApp, a Lia monta a cesta com preço fechado, você paga no Pix e recebe em casa no mesmo dia, no estado de São Paulo.",
+    "Pede qualquer coisa no WhatsApp, a Lia mostra o total com frete e prazo, você paga por Pix ou cartão e recebe em casa, no estado de São Paulo.",
   icons: {
     icon: "/brand/lia-icon.svg"
   },
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Lia Delivery",
     title: "Lia — compras do dia a dia pelo WhatsApp",
     description:
-      "Manda a lista, a Lia monta a cesta, você paga no Pix e recebe em casa no mesmo dia, no estado de São Paulo."
+      "Pede qualquer coisa, a Lia mostra o total com frete e prazo, você paga por Pix ou cartão e recebe em casa, no estado de São Paulo."
   }
 };
 

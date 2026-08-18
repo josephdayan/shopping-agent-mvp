@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
   <title id="title">Lia</title>
-  <rect width="1024" height="1024" rx="246" fill="#0F3D3A"/>
-  <polyline points="389,256 389,737 727,737" fill="none" stroke="#28FEE5" stroke-width="164" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M758 164 Q758 307 901 307 Q758 307 758 451 Q758 307 614 307 Q758 307 758 164 Z" fill="#28FEE5"/>
+  <!-- Mesmas cores da foto de perfil do WhatsApp: menta + petróleo. -->
+  <rect width="1024" height="1024" rx="246" fill="#E4F3EF"/>
+  <polyline points="389,256 389,737 727,737" fill="none" stroke="#0F3D3A" stroke-width="164" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M758 164 Q758 307 901 307 Q758 307 758 451 Q758 307 614 307 Q758 307 758 164 Z" fill="#0F3D3A"/>
 </svg>

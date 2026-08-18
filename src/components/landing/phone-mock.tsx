@@ -1,4 +1,4 @@
-import { LiaAppIcon } from "@/components/lia-brand";
+import { LiaWhatsAppAvatar } from "@/components/lia-brand";
 
 function DoubleCheck({ read = true }: { read?: boolean }) {
   return (
@@ -34,7 +34,7 @@ function Bubble({
   return (
     <div className={`bubble flex ${isOut ? "justify-end" : "justify-start"}`} style={{ animationDelay: `${delay}ms` }}>
       <div
-        className={`relative max-w-[82%] rounded-xl px-3 py-2 text-[13px] leading-snug text-[#111B21] shadow-[0_1px_1px_rgba(0,0,0,0.08)] ${
+        className={`relative max-w-[86%] rounded-xl px-3 py-2 text-[13px] leading-snug text-[#111B21] shadow-[0_1px_1px_rgba(0,0,0,0.08)] ${
           isOut ? "rounded-tr-sm bg-[#D9FDD3]" : "rounded-tl-sm bg-white"
         }`}
       >
@@ -48,13 +48,16 @@ function Bubble({
   );
 }
 
+// A conversa do mock usa as mensagens REAIS da Lia (src/lib/lia-copy.ts): resumo com
+// frete e prazo da loja, Pix em mensagem separada e confirmação — nada de promessa
+// de "chega hoje" que o produto não faz.
 export default function PhoneMock() {
   return (
     <div className="relative mx-auto w-[300px] sm:w-[330px]">
       <div className="relative overflow-hidden rounded-[2.4rem] border-[6px] border-[#0B1F1D] bg-[#0B1F1D] shadow-[0_32px_80px_-24px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
         {/* WhatsApp header */}
         <div className="flex items-center gap-3 bg-[#075E54] px-4 pb-3 pt-5">
-          <LiaAppIcon className="h-9 w-9 rounded-full" />
+          <LiaWhatsAppAvatar className="h-9 w-9 rounded-full" />
           <div className="leading-tight">
             <div className="text-[15px] font-semibold text-white">Lia</div>
             <div className="text-[11px] text-[#B5DFD9]">online</div>
@@ -80,19 +83,27 @@ export default function PhoneMock() {
           </div>
 
           <Bubble side="out" delay={350} time="16:02">
-            oi lia! me manda arroz, creme dental e um cabo USB-C barato
+            oi lia! me vê arroz 5kg, sabão em pó e uma ração 10kg
           </Bubble>
 
-          <Bubble side="in" delay={900} time="16:02">
-            {"Deixa comigo! 🛒 Achei tudo:\n• Arroz 5kg — R$ 27,90\n• Creme dental — R$ 6,90\n• Cabo USB-C simples — R$ 19,90\n\nTotal com entrega: R$ 64,60. Fecho o pedido?"}
+          <Bubble side="in" delay={900} time="16:04">
+            {"🛒 "}
+            <strong>Seu pedido:</strong>
+            {"\n• 1x Arroz 5kg — R$ 27,90\n• 1x Sabão em pó — R$ 24,50\n• 1x Ração 10kg — R$ 112,90\n\nProdutos: R$ 165,30\nEntrega: R$ 12,90 · chega até quinta\n"}
+            <strong>Total: R$ 178,20</strong>
+            {"\n\nComo prefere pagar: Pix ou cartão?"}
           </Bubble>
 
-          <Bubble side="out" delay={1450} time="16:03">
-            fecha! 🙌
+          <Bubble side="out" delay={1450} time="16:05">
+            pix
           </Bubble>
 
-          <Bubble side="in" delay={1950} time="16:03">
-            {"Fechado ✅ Segue o Pix copia-e-cola 👇\nAssim que cair, preparo tudo por aqui."}
+          <Bubble side="in" delay={1950} time="16:05">
+            {"Total "}
+            <strong>R$ 178,20</strong>
+            {" no Pix.\n\nO código vem na próxima mensagem — copia ela inteira e cola no "}
+            <strong>Pix copia e cola</strong>
+            {" do seu banco 👇"}
           </Bubble>
 
           <div className="bubble flex justify-center" style={{ animationDelay: "2450ms" }}>
@@ -102,7 +113,7 @@ export default function PhoneMock() {
           </div>
 
           <Bubble side="in" delay={2900} time="16:07">
-            {"Pagamento confirmado! 💚 Seu pedido sai pra entrega ainda hoje — te aviso quando o motoboy estiver a caminho 🛵"}
+            ✅ Pagamento confirmado. Já estou separando — te aviso quando sair pra entrega.
           </Bubble>
         </div>
 

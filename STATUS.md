@@ -40,8 +40,14 @@ de hoje está em
 > linha de entrega sai só com o valor, nunca com um número inventado. O prazo aparece uma vez
 > só, no resumo, e sempre com o dado que a loja devolveu.
 >
-> ⚠️ **Pendente:** a landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`) ainda
-> anuncia "entrega no mesmo dia" — mesma promessa que saiu do chat. Precisa da mesma revisão.
+> ✅ **Landing revisada (2026-08-18):** `page.tsx`, `layout.tsx`, `opengraph-image.tsx` e o
+> mock do celular passaram pela mesma régua: zero "entrega no mesmo dia"/"chega hoje" (prazo
+> só como "aparece antes de pagar", FAQ "Quando chega?" honesta), "paga no Pix" virou "Pix ou
+> cartão" em todo lugar, e o letreiro perdeu os preços inventados. O mock usa as mensagens
+> reais de `lia-copy.ts` (resumo com frete/prazo da loja, Pix em mensagem separada,
+> `paymentConfirmed`). Visual: paleta e logo iguais aos do WhatsApp (menta `#E4F3EF` +
+> petróleo `#0F3D3A` + aqua `#28FEE5`; avatar `LiaWhatsAppAvatar` = foto de perfil), favicon
+> `lia-icon.svg` idem.
 
 > **Remodelagem 2026-07-20 — concierge manual (fluxo ativo).** O produto passou a ser um
 > concierge de WhatsApp com **largura** (pede qualquer coisa, de qualquer lugar), **cotação e

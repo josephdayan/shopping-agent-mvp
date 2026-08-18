@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
-import { LiaSymbol, LiaAppIcon } from "@/components/lia-brand";
+import { LiaSymbol, LiaWhatsAppAvatar } from "@/components/lia-brand";
 import PhoneMock from "@/components/landing/phone-mock";
 import TypingComposer from "@/components/landing/typing-composer";
 
@@ -20,7 +20,7 @@ const instrument = Instrument_Sans({
 export const metadata: Metadata = {
   title: "Lia — compras do dia a dia sem sair do WhatsApp",
   description:
-    "Lista, preço fechado, Pix e entrega no mesmo dia — tudo sem sair do WhatsApp. A Lia resolve suas compras do dia a dia no estado de São Paulo."
+    "Pede qualquer coisa numa mensagem: a Lia mostra o total com frete e prazo reais, você paga por Pix ou cartão e ela cuida de tudo até chegar. Estado de São Paulo."
 };
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_LIA_WHATSAPP_NUMBER ?? "14155238886";
@@ -48,38 +48,40 @@ function Sparkle({ className = "" }: { className?: string }) {
 }
 
 /* ——— marquee: letreiro comprável ——— */
+/* Sem preço inventado: no concierge o preço é o da cotação, não uma tabela nossa. */
 
-const MARQUEE_ITEMS: Array<{ t: string; p: string }> = [
-  { t: "arroz 5kg", p: "R$ 27,90" },
-  { t: "creme dental", p: "R$ 6,90" },
-  { t: "cabo USB-C", p: "R$ 19,90" },
-  { t: "ração 15kg", p: "R$ 89,90" },
-  { t: "vitamina C", p: "R$ 14,90" },
-  { t: "pilha AA", p: "R$ 12,90" },
-  { t: "papel higiênico 12un", p: "R$ 21,90" },
-  { t: "café 500g", p: "R$ 18,90" },
-  { t: "fone barato", p: "R$ 29,90" },
-  { t: "areia de gato", p: "R$ 24,90" },
-  { t: "detergente", p: "R$ 2,99" },
-  { t: "fralda M", p: "R$ 49,90" }
+const MARQUEE_ITEMS: string[] = [
+  "arroz 5kg",
+  "creme dental",
+  "cabo USB-C",
+  "ração 15kg",
+  "perfume de presente",
+  "pilha AA",
+  "papel higiênico 12un",
+  "café 500g",
+  "caderno e caneta",
+  "areia de gato",
+  "detergente",
+  "fralda M",
+  "protetor solar",
+  "chocolate"
 ];
 
 function MarqueeGroup({ ariaHidden = false }: { ariaHidden?: boolean }) {
   return (
     <div className="flex items-center" aria-hidden={ariaHidden}>
       {MARQUEE_ITEMS.map((item) => (
-        <span key={item.t} className="flex items-center">
+        <span key={item} className="flex items-center">
           <a
-            href={waLink(`oi Lia! quero ${item.t}`)}
+            href={waLink(`oi Lia! quero ${item}`)}
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={ariaHidden ? -1 : undefined}
-            className="flex items-baseline gap-2.5 px-5 font-display text-[17px] font-bold uppercase leading-none text-white/85 transition-opacity hover:opacity-60"
+            className="px-5 font-display text-[17px] font-bold uppercase leading-none text-white/85 transition-opacity hover:opacity-60"
           >
-            <span>{item.t}</span>
-            <span className="text-[14px] font-bold text-acento [font-variant-numeric:tabular-nums]">{item.p}</span>
+            {item}
           </a>
-          <Sparkle className="h-2.5 w-2.5 shrink-0 text-white/25" />
+          <Sparkle className="h-2.5 w-2.5 shrink-0 text-acento/50" />
         </span>
       ))}
     </div>
@@ -94,7 +96,7 @@ function OrderBubble({ cat, text }: { cat: string; text: string }) {
       href={waLink(`oi Lia! ${text}`)}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-fit rounded-2xl rounded-br-[4px] border-[1.5px] border-tinta/15 bg-[#25D366]/15 px-4 py-3 transition-colors hover:border-[#25D366]"
+      className="block w-fit rounded-2xl rounded-br-[4px] border-[1.5px] border-tinta/15 bg-[#D9FDD3] px-4 py-3 transition-colors hover:border-[#25D366]"
     >
       <span className="mb-1.5 block border-l-[3px] border-[#25D366] pl-2 text-[13px] font-semibold leading-none text-tinta/60">
         {cat}
@@ -137,31 +139,31 @@ function CupomLine({ item, price }: { item: string; price: string }) {
 const STEPS = [
   {
     n: "1",
-    title: "Manda a lista",
-    text: "“arroz, creme dental e um cabo USB-C”. Do seu jeito, numa mensagem só — sem app, sem cadastro, sem menu."
+    title: "Manda o pedido",
+    text: "“arroz, ração e um perfume de presente”. Qualquer coisa, do seu jeito, numa mensagem só — sem app, sem cadastro, sem menu."
   },
   {
     n: "2",
-    title: "Confirma e paga",
-    text: "A Lia mostra cada item com preço fechado, entrega inclusa. Pix copia-e-cola ou cartão, ali mesmo no chat."
+    title: "Vê o total e paga",
+    text: "A Lia responde com o total fechado: produtos, frete e prazo reais da loja. Aprovou? Pix copia-e-cola ou cartão, ali mesmo no chat."
   },
   {
     n: "3",
-    title: "Recebe hoje",
-    text: "Motoboy na sua porta ainda hoje. A Lia te avisa a cada passo do pedido."
+    title: "Recebe em casa",
+    text: "A Lia compra pra você e te avisa a cada passo, até a entrega bater na sua porta."
   }
 ];
 
 const BUBBLES_LEFT = [
-  { cat: "Comida", text: "arroz, feijão, café e banana" },
-  { cat: "Farmácia", text: "creme dental, vitamina C e protetor solar" },
-  { cat: "Eletrônico barato", text: "cabo USB-C, pilhas e fone simples" }
+  { cat: "Mercado", text: "arroz, feijão, café e sabão em pó" },
+  { cat: "Higiene e beleza", text: "creme dental, shampoo e protetor solar" },
+  { cat: "Pet", text: "ração pro cachorro e areia de gato" }
 ];
 
 const BUBBLES_RIGHT = [
-  { cat: "Higiene", text: "papel higiênico, shampoo e desodorante" },
-  { cat: "Pet", text: "ração pro cachorro e areia de gato" },
-  { cat: "Conveniência", text: "gelo, fita adesiva e carregador barato" }
+  { cat: "Presente", text: "perfume e uma caixa de bombom" },
+  { cat: "Papelaria", text: "caderno, caneta e papel sulfite" },
+  { cat: "Eletrônico barato", text: "cabo USB-C, pilhas e fone simples" }
 ];
 
 const FAQ = [
@@ -170,16 +172,24 @@ const FAQ = [
     a: "A Lia opera somente no estado de São Paulo: capital, Grande São Paulo e cidades do interior como Campinas, Santos, Ribeirão Preto, São José dos Campos, Sorocaba e mais. Manda seu CEP no WhatsApp que eu confirmo na hora se já chego aí. 📍"
   },
   {
+    q: "O que dá pra pedir?",
+    a: "Quase tudo que se compra em loja: mercado, higiene e beleza, pet, papelaria, presente, eletrônico… Só não trabalho com remédio (regra da ANVISA). Na dúvida, pede mesmo assim que eu coto."
+  },
+  {
     q: "Quanto custa?",
-    a: "O preço dos produtos mais a entrega, calculada pela distância. O total aparece fechado no chat antes de você pagar — sem mensalidade, sem taxa escondida."
+    a: "O preço dos produtos mais o frete da loja. O total aparece fechado no chat antes de você pagar — sem mensalidade, sem taxa escondida."
   },
   {
     q: "Como eu pago?",
-    a: "Pix copia-e-cola direto no chat, ou cartão por link seguro do Mercado Pago."
+    a: "Pix copia-e-cola direto no chat, ou cartão por link seguro do Mercado Pago. Nada é cobrado antes de você aprovar o total."
+  },
+  {
+    q: "Quando chega?",
+    a: "Depende da loja e do seu endereço — às vezes no mesmo dia, às vezes em alguns dias. O prazo real aparece junto com o total, antes de você pagar. A Lia não promete prazo que a loja não confirmou."
   },
   {
     q: "E se faltar um item na loja?",
-    a: "A Lia te avisa e sugere uma troca parecida. Nada muda sem você concordar."
+    a: "Antes de pagar, a Lia te avisa e você decide se troca ou tira. Se a loja falhar depois do pagamento, ela devolve o valor daquele item."
   }
 ];
 
@@ -235,9 +245,9 @@ export default function Home() {
               </span>
             </h1>
             <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/75 lg:text-[18px]">
-              Você manda a lista, a Lia responde com o preço fechado e você paga no
-              Pix{"\u00A0"}— <strong className="font-semibold text-white">tudo <span className="whitespace-nowrap">sem sair do WhatsApp</span></strong>. Motoboy
-              entrega hoje, no estado de São Paulo.
+              Você pede qualquer coisa numa mensagem, a Lia mostra o total com frete e prazo, e você paga por
+              Pix ou cartão{"\u00A0"}— <strong className="font-semibold text-white">tudo <span className="whitespace-nowrap">sem sair do WhatsApp</span></strong>. Ela
+              compra pra você e avisa a cada passo, no estado de São Paulo.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
               <a
@@ -261,8 +271,9 @@ export default function Home() {
             <PhoneMock />
           </div>
           <p className="border-t border-white/15 pt-4 text-[15px] text-white/55 lg:col-span-12">
-            <span className="whitespace-nowrap">Estado de São Paulo · entrega no mesmo dia</span> ·{" "}
-            <span className="whitespace-nowrap">tudo pelo WhatsApp</span>
+            <span className="whitespace-nowrap">Estado de São Paulo</span> ·{" "}
+            <span className="whitespace-nowrap">qualquer coisa, numa mensagem só</span> ·{" "}
+            <span className="whitespace-nowrap">Pix ou cartão no chat</span>
           </p>
         </div>
       </section>
@@ -316,9 +327,9 @@ export default function Home() {
                 <OrderBubble key={b.cat} cat={b.cat} text={b.text} />
               ))}
               <div className="mt-2 flex items-end gap-2">
-                <LiaAppIcon className="h-7 w-7 shrink-0 rounded-full" />
+                <LiaWhatsAppAvatar className="h-7 w-7 shrink-0" />
                 <div className="rounded-2xl rounded-bl-[4px] border-[1.5px] border-tinta/10 bg-white px-4 py-3">
-                  <span className="text-[16px] leading-snug">pode mandar do seu jeito que eu entendo 😉</span>
+                  <span className="text-[16px] leading-snug">pede do seu jeito — se dá pra comprar, eu coto 😉</span>
                 </div>
               </div>
             </div>
@@ -335,7 +346,7 @@ export default function Home() {
             </h2>
             <p className="mt-5 max-w-[44ch] text-[17px] leading-relaxed text-white/70">
               O total aparece no WhatsApp antes de você pagar — e o que a Lia fecha com você, ela cumpre. Preço
-              fechado, pagamento pelo Mercado Pago e aviso a cada passo, até o motoboy tocar a campainha.
+              fechado, frete e prazo da loja, pagamento pelo Mercado Pago e aviso a cada passo, até a entrega chegar.
             </p>
           </div>
           <div className="lg:col-span-7 lg:justify-self-center">
@@ -349,14 +360,14 @@ export default function Home() {
                 <div className="my-4 border-t-2 border-dashed border-tinta/20" />
                 <div className="space-y-1.5">
                   <CupomLine item="Arroz 5kg" price="27,90" />
-                  <CupomLine item="Creme dental" price="6,90" />
-                  <CupomLine item="Cabo USB-C simples" price="19,90" />
-                  <CupomLine item="Entrega de motoboy" price="9,90" />
+                  <CupomLine item="Sabão em pó" price="24,50" />
+                  <CupomLine item="Ração 10kg" price="112,90" />
+                  <CupomLine item="Entrega" price="12,90" />
                 </div>
                 <div className="my-4 border-t-2 border-dashed border-tinta/20" />
                 <div className="flex items-baseline justify-between font-display text-[16px] font-bold">
                   <span>TOTAL</span>
-                  <span className="[font-variant-numeric:tabular-nums]">R$ 64,60</span>
+                  <span className="[font-variant-numeric:tabular-nums]">R$ 178,20</span>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-[13px] text-tinta/60">
                   <span>pago pelo chat, antes da compra</span>
@@ -374,7 +385,7 @@ export default function Home() {
                   aria-hidden="true"
                   style={{
                     backgroundImage:
-                      "repeating-linear-gradient(90deg, #082523 0 2px, transparent 2px 4px, #082523 4px 7px, transparent 7px 8px, #082523 8px 9px, transparent 9px 13px)"
+                      "repeating-linear-gradient(90deg, #0F3D3A 0 2px, transparent 2px 4px, #0F3D3A 4px 7px, transparent 7px 8px, #0F3D3A 8px 9px, transparent 9px 13px)"
                   }}
                 />
                 <p className="mt-2 text-center text-[11px] text-tinta/45">liadelivery.com.br</p>
@@ -423,7 +434,7 @@ export default function Home() {
             Manda a <span className="text-acento">lista.</span>
           </h2>
           <p className="mt-4 text-[17px] text-white/70">
-            Preço fechado, Pix no chat, entrega hoje. Sem sair do WhatsApp.
+            Total fechado antes de pagar, Pix ou cartão no chat, e a Lia cuida do resto.
           </p>
           <div className="mt-8">
             <TypingComposer href={WA_CTA} />
@@ -431,7 +442,7 @@ export default function Home() {
           <p className="mt-4 text-[15px] text-white/55">A primeira resposta chega antes de você largar o celular.</p>
           <footer className="mt-20 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 py-8 sm:grid sm:grid-cols-3">
             <span className="flex items-center gap-2">
-              <LiaSymbol className="h-5 w-5 text-acento" />
+              <LiaWhatsAppAvatar className="h-6 w-6" />
               <span className="font-display text-[16px] font-bold text-white">Lia</span>
             </span>
             <a

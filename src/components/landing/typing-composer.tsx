@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 
 const LISTAS = [
-  "arroz, feijão e creme dental",
+  "arroz, feijão e sabão em pó",
   "cabo USB-C, pilhas e fone barato",
   "ração 15kg e areia de gato",
-  "protetor solar e desodorante",
+  "perfume pra dar de presente",
+  "caderno, caneta e papel sulfite",
   "papel toalha, detergente e café"
 ];
 

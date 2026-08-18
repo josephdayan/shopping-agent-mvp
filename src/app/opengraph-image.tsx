@@ -31,7 +31,7 @@ export default async function OgImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 88px 0",
-          backgroundColor: "#082523",
+          backgroundColor: "#0F3D3A",
           fontFamily: displayFont ? "Bricolage" : "sans-serif"
         }}
       >
@@ -69,7 +69,7 @@ export default async function OgImage() {
             <span style={{ display: "flex", marginLeft: 24, color: "#28FEE5" }}>zap.</span>
           </div>
           <div style={{ marginTop: 30, fontSize: 27, color: "rgba(255,255,255,0.72)", fontWeight: 400 }}>
-            Lista, preço fechado, Pix e entrega hoje — tudo sem sair do WhatsApp
+            Qualquer coisa, total fechado, Pix ou cartão — tudo sem sair do WhatsApp
           </div>
         </div>
 
@@ -84,7 +84,7 @@ export default async function OgImage() {
           }}
         >
           <span style={{ color: "#28FEE5" }}>liadelivery.com.br</span>
-          <span style={{ color: "rgba(255,255,255,0.55)" }}>Estado de São Paulo · entrega no mesmo dia</span>
+          <span style={{ color: "rgba(255,255,255,0.55)" }}>Estado de São Paulo · do pedido ao pagamento no chat</span>
         </div>
       </div>
     ),

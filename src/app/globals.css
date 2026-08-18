@@ -6,11 +6,11 @@
 
 :root {
   color-scheme: light;
-  /* paleta Petróleo */
-  --c-poster: 11 42 51;
-  --c-tinta: 11 33 40;
-  --c-papel: 243 242 237;
-  --c-acento: 45 212 191;
+  /* paleta do logo do WhatsApp: menta #E4F3EF + petróleo #0F3D3A + aqua #28FEE5 */
+  --c-poster: 15 61 58;
+  --c-tinta: 10 42 40;
+  --c-papel: 228 243 239;
+  --c-acento: 40 254 229;
   background: rgb(var(--c-papel));
 }
 
