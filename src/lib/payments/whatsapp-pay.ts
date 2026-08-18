@@ -282,7 +282,7 @@ async function markAttemptCaptured(attemptId: string, provider: { orderId?: stri
   if (!attempt) return { handled: false };
   if (changed.count === 1) {
     await sendOrderStatus(attempt.deliveryOrder.phone, attempt.id, {
-      body: "Pagamento aprovado. Já estamos preparando seu pedido.",
+      body: "Pagamento aprovado. Preparando seu pedido.",
       orderStatus: "processing",
       paymentStatus: "captured"
     });

@@ -10,10 +10,10 @@ const items = [
 test("concierge: recusa honesta, cotação pedida e resumo manual", () => {
   // Regra 11/08: item sem preço = "não tenho" na hora, nunca "anotei, vou cotar".
   const one = copy.itemsNotAvailable(["vedante de torneira"]);
-  assert.match(one, /não tenho como trazer/);
+  assert.match(one, /não consigo trazer/);
   assert.match(one, /vedante de torneira/);
   const many = copy.itemsNotAvailable(["vedante de torneira", "2x cadernos"]);
-  assert.match(many, /não tenho como trazer/);
+  assert.match(many, /não consigo trazer/);
   assert.match(many, /cadernos/);
   assert.doesNotMatch(many, /vou cotar|garimpar|Anotei/i);
   const noted = many;
@@ -169,11 +169,14 @@ test("todas as mensagens simples são não-vazias e sem placeholders", () => {
 test("pós-venda: limpa antes do pagamento, sem cancelamento ou substituição depois", () => {
   const beforePayment = copy.cancelHowTo(false);
   const afterPayment = copy.cancelHowTo(true);
-  assert.match(beforePayment, /Antes do pagamento/);
-  assert.match(afterPayment, /não oferecemos cancelamento/);
-  assert.match(afterPayment, /estornamos o valor dele/);
+  assert.match(beforePayment, /Antes de pagar/);
+  assert.match(afterPayment, /não dá pra cancelar/);
+  assert.match(afterPayment, /estorno o valor dele/);
   assert.match(afterPayment, /atras/i);
-  assert.match(copy.complaintAck(), /não fazemos substituições/);
+  // A reclamação continua prometendo o estorno do item que faltou — o que saiu foi só a
+  // frase "não fazemos substituições" (revisão de copy 17/08): é regra que só cabe quando
+  // o cliente PEDE substituição, não em toda reclamação.
+  assert.match(copy.complaintAck(), /estorno o valor dele/);
   assert.doesNotMatch(copy.help(), /cancelar/);
 });
 
@@ -184,6 +187,22 @@ test("7º ciclo: confirmação de endereço mostra o CEP quando ele não está n
   assert.equal((dup.match(/13010-050/g) ?? []).length, 1);
   // Sem CEP conhecido, mensagem de sempre.
   assert.doesNotMatch(copy.addressUpdated("Rua Y, 2, São Paulo - SP"), /CEP/);
+});
+
+test("acompanhamento: link do pedido na loja aparece já no aviso de compra", () => {
+  // 17/08 (dono: "ele tem que poder ver e acompanhar"): nos pedidos que a LOJA entrega,
+  // o operador não sabe a hora em que o pacote sai — então o rastreio tem que sair já na
+  // compra, senão o cliente nunca recebe link nenhum.
+  const url = "https://www.mercadolivre.com.br/vendas/123456/detalhe";
+  for (const status of ["retailer_preparing", "operator_buying"]) {
+    const comLink = copy.orderStatusLine({ shortId: "ABC123", status, trackingUrl: url });
+    assert.ok(comLink.includes(url), `${status} devia mostrar o link: ${comLink}`);
+    assert.match(comLink, /acompanha/i);
+    // Sem link, a mensagem antiga continua valendo (nada de "Acompanha:" vazio).
+    const semLink = copy.orderStatusLine({ shortId: "ABC123", status });
+    assert.doesNotMatch(semLink, /acompanha|undefined|null/i);
+    assert.match(semLink, /aviso quando sair/i);
+  }
 });
 
 test("escolha de entrega: mostra TOTAL de cada opção com a data, e cobre anúncio sem data", () => {

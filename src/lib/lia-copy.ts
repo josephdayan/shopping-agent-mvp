@@ -1,7 +1,23 @@
 // Every customer-facing message Lia sends, in one place. Pure functions over plain
 // data (no prisma/adapters) so tone, wording and formatting stay consistent and are
-// unit-testable. Voice: warm, brazilian, short sentences, at most ~1 emoji per
-// message, never robotic, never blames the customer.
+// unit-testable.
+//
+// Voice (revisão do dono, 17/08/2026 — ver docs/todas-as-mensagens-da-lia.md):
+//   1. Verbo na frente, resultado primeiro.
+//   2. Sem preâmbulo de simpatia ("Prontinho", "Opa", "Claro!", "Fechado!", "Poxa").
+//   3. Sem explicar a mecânica interna (quantas lojas, como o frete é calculado,
+//      que a Pagar.me tokeniza o cartão, por que a cotação venceu).
+//   4. No máximo 1 emoji, e só onde carrega informação (📍 endereço, 🛵 entrega, ✅ ok).
+//   5. Uma saída por mensagem.
+//   6. Sem lista de exemplos de produto — a pergunta aberta basta.
+//   7. Sem endereço/CEP fictício de exemplo: descrever os campos, não inventar um.
+//   8. NUNCA prometer prazo antes de cotar (regra abaixo).
+//
+// PRAZO — a regra que não pode ser quebrada: quem manda no prazo é o checkout da loja,
+// e ele varia (às vezes é no mesmo dia, às vezes leva dias). Nenhuma mensagem genérica
+// diz "chega hoje" / "no mesmo dia" / "em ~1h". O prazo aparece uma vez só, no resumo do
+// pedido, e SOMENTE com o valor real que a loja devolveu — sem número inventado de
+// fallback. Antes disso a Lia diz que MOSTRA o prazo, nunca qual é.
 
 export function brl(value: number): string {
   return `R$ ${Number(value ?? 0).toFixed(2).replace(".", ",")}`;
@@ -9,74 +25,78 @@ export function brl(value: number): string {
 
 export type CopyBasketItem = { qty: number; name: string; displayLineTotal: number };
 
-// Os exemplos ENSINAM a largura: três categorias que nenhuma loja única cobre. É assim
-// que o cliente aprende que pode pedir qualquer coisa, de qualquer lugar, numa mensagem.
-const EXAMPLES = `*"arroz, ração do meu cachorro e um carregador de iPhone"*`;
-
 // ---------- social ----------
 
 export function greeting(): string {
-  return `Oi! 💚 Sou a Lia — você me pede *qualquer coisa* por aqui (mercado, pet, farmácia sem remédio, papelaria, presente…), eu compro e chega na sua casa hoje mesmo, em qualquer endereço do estado de São Paulo.\n\nMe diz o que você precisa — ex.: ${EXAMPLES}.`;
+  return "Oi! Sou a Lia 💚 Me pede qualquer coisa que eu compro e entrego para você.";
 }
 
 export function thanks(): string {
-  return "Imagina! 💚 Qualquer coisa é só chamar.";
+  return "Imagina! Qualquer coisa é só chamar 💚";
 }
 
 export function help(): string {
   return [
-    "Eu compro *qualquer coisa* pra você — mercado, pet, beleza, farmácia (sem remédio), papelaria, eletrônicos, presente… — e entrego hoje dentro do estado de São Paulo. 💚 Funciona assim:",
+    "Funciona assim:",
     "",
-    `1. Me diz o que precisa — ex.: ${EXAMPLES}`,
-    "2. Eu mostro o total com frete",
+    "1. Você me diz o que precisa",
+    "2. Eu mostro o total, o frete e o prazo",
     "3. Você paga por Pix ou cartão",
-    "4. Chega na sua casa em ~1h 🛵",
+    "4. Eu compro e acompanho até chegar 🛵",
     "",
-    "Também entendo *status* (acompanhar o pedido), *trocar endereço*, *tira o item X* e *repete o de sempre*. Antes de pagar, você pode limpar a lista."
+    "Também entendo *status*, *trocar endereço*, *tira o item X* e *repete o de sempre*.",
+    "",
+    "O que você precisa?"
   ].join("\n");
 }
 
 export function didNotUnderstand(): string {
-  return `Não entendi seu pedido 🤔. Me diz os itens que você quer, ex.: ${EXAMPLES}.`;
+  return "Não entendi. Me diz os itens que você quer.";
 }
 
-// "quero" / "queria comprar" sem dizer o quê — convite caloroso, não "não entendi".
+// "quero" / "queria comprar" sem dizer o quê — pergunta aberta, não "não entendi".
 export function askWhatYouWant(): string {
-  return `Opa, deixa comigo! 🙂 Me diz o que você precisa — ex.: ${EXAMPLES}.`;
+  return "Me diz o que você precisa.";
 }
 
 // ---------- onboarding / address ----------
 
+// A apresentação é a MESMA da `greeting` (sem o 💚, que fica só na saudação pura), pra
+// Lia não se apresentar de três jeitos diferentes dependendo do caminho de entrada.
+const INTRO = "Oi! Sou a Lia. Me pede qualquer coisa que eu compro e entrego para você.";
+
 export function welcomeAskCep(notedItems?: string[]): string {
-  const note = notedItems?.length ? `Já anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\n` : "";
-  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa no estado de São Paulo. ${note}Pra começar, me manda seu *CEP*? Configuro uma vez só e uso em todos os pedidos. 📍`;
+  const note = notedItems?.length ? `\n\nJá anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}` : "";
+  return `${INTRO}${note}\n\nMe manda seu *CEP*? Só peço uma vez. 📍`;
 }
 
 export function welcomeAddressButton(): string {
-  return "Oi! 💚 Sou a Lia. Eu busco suas compras e entrego hoje mesmo no estado de São Paulo. Pra começar, vamos cadastrar e verificar seu endereço — você só faz isso uma vez.";
+  return `${INTRO}\n\nCadastra seu endereço aí embaixo — só uma vez.`;
 }
 
 export function welcomeAskFullDeliveryAddress(notedItems?: string[]): string {
-  const note = notedItems?.length ? `Já anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\n` : "";
-  return `Oi! 💚 Sou a Lia — faço suas compras do dia a dia e entrego em casa no estado de São Paulo. ${note}Antes do primeiro pedido, me manda seu *endereço completo* (rua, número, bairro e cidade). Eu salvo uma vez e só confirmo no resumo dos próximos pedidos. 📍`;
+  const note = notedItems?.length ? `\n\nJá anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}` : "";
+  return `${INTRO}${note}\n\nMe manda seu *endereço completo* com CEP — rua, número, bairro e cidade. Só peço uma vez. 📍`;
 }
 
+// Fallback em texto dos botões 1 / 2 / Outra quantidade — por isso os números ficam:
+// o texto tem que espelhar as mesmas opções que o canal com botões oferece.
 export function quantityAsk(name: string): string {
-  return `Quantas unidades de *${name}*? Responde *1*, *2*, *3* ou digita outra quantidade.`;
+  return `Quantas unidades de *${name}*? Responde *1*, *2* ou outro número.`;
 }
 
 export function askMoreItems(): string {
-  return "Claro! Sua cesta continua salva. Me diz o que mais você quer adicionar. 🙂";
+  return "Sua cesta está salva. O que mais você quer?";
 }
 
-// Re-pedido de CEP (2ª+ vez) — curto, sem repetir a apresentação inteira.
+// Re-pedido de endereço (2ª+ vez) — sem repetir a apresentação.
 export function askCepAgain(): string {
-  return "Só falta o *endereço completo com o CEP* pra eu calcular a entrega — ex.: _Rua Beta, 221, ap 13, Pinheiros, São Paulo - SP, 01233-020_. 📍";
+  return "Falta seu *endereço completo com CEP* — rua, número, complemento, bairro, cidade e CEP 📍";
 }
 
 // Itens anotados quando a Lia JÁ se apresentou — confirma curto e pede só o CEP.
 export function notedAskCep(notedItems: string[]): string {
-  return `✅ Anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\nAgora só falta seu *CEP* (ex.: 01310-100) 📍 que eu busco tudo.`;
+  return `✅ Anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}\n\nFalta seu *CEP* 📍`;
 }
 
 // O cliente costuma terminar o endereço com ponto ("… São Paulo - SP.") — sem esta
@@ -86,7 +106,7 @@ function cleanAddressForCopy(address: string): string {
 }
 
 export function addressSavedAskItems(address: string): string {
-  return `📍 Endereço salvo: ${cleanAddressForCopy(address)}. Vou usar ele em todos os seus pedidos (se mudar, é só dizer "trocar endereço").\n\nAgora me diz o que você quer — ex.: ${EXAMPLES}.`;
+  return `📍 Endereço salvo: ${cleanAddressForCopy(address)}\n_Pra mudar depois, é só dizer "trocar endereço"._\n\nO que você quer?`;
 }
 
 // O CEP entra na confirmação quando é conhecido e não está no texto do endereço —
@@ -99,19 +119,22 @@ function withCep(address: string, cep?: string): string {
 }
 
 export function addressSavedPrefix(address: string, cep?: string): string {
-  return `📍 Endereço salvo: ${withCep(address, cep)}.`;
+  return `📍 Endereço salvo: ${withCep(address, cep)}`;
 }
 
 export function addressUpdated(address: string, cep?: string): string {
-  return `📍 Prontinho, endereço atualizado: ${withCep(address, cep)}.`;
+  return `📍 Endereço atualizado: ${withCep(address, cep)}`;
 }
 
+// Encurtar não pode custar o SUBSTANTIVO: "Falta rua, número e complemento" chega logo
+// depois de o cliente mandar um produto em vez do endereço, e sem a palavra "endereço" a
+// frase não diz de que assunto ela é (eval manual-concierge, 17/08).
 export function askFullDeliveryAddress(): string {
-  return "Perfeito! Só falta o resto do endereço pro entregador achar você: *rua, número e complemento* (ex.: _Rua Beta, 221, ap 13_). 📍";
+  return "Falta o *endereço*: rua, número e complemento 📍";
 }
 
 export function addressSavedAskCep(): string {
-  return "📍 Endereço salvo! Só falta o *CEP* (ex.: 01310-100) — é com ele que eu calculo o frete. Depois não peço mais nada disso: uso o mesmo em todos os pedidos. 🙂";
+  return "📍 Endereço salvo. Falta o *CEP*.";
 }
 
 // UMA pergunta, não duas (feedback do dono, 16/08: "por que pede o CEP e depois o
@@ -119,126 +142,124 @@ export function addressSavedAskCep(): string {
 // número e complemento é o que o entregador usa — mas cabem na MESMA mensagem, e o
 // parser já sabe ler endereço+CEP juntos desde 06/08.
 export function askNewCep(): string {
-  return "Claro! Me manda o *endereço completo com o CEP* — ex.: _Rua Beta, 221, ap 13, Pinheiros, São Paulo - SP, 01233-020_. 📍";
+  return "Manda o *endereço novo com CEP* — rua, número, complemento, bairro, cidade e CEP 📍";
 }
 
 export function askCepForQuote(items: string[]): string {
-  return `Anotei:\n${items.map((i) => `• ${i}`).join("\n")}\n\nQual seu *CEP*? Assim calculo o frete e o prazo certinhos. 📦`;
+  return `Anotei:\n${items.map((i) => `• ${i}`).join("\n")}\n\nQual seu *CEP*? 📍`;
 }
 
 export function cepNotFound(cep: string): string {
-  return `Hmm, não achei o CEP ${cep} 🤔. Confere se está certinho (ex.: 01310-100) e me manda de novo?`;
+  return `Não achei o CEP ${cep}. Confere e manda de novo.`;
 }
 
 // Fora da área que a Lia atende hoje: nunca aceita um pedido que não consegue entregar —
 // guarda o contato e promete avisar. `areaLabel` vem da config de cobertura (coverage.ts).
+// A área CONTINUA aparecendo aqui (e em `tooFarForDelivery` e `serviceAnswer:area`): sem
+// dizer até onde a Lia vai, a recusa vira um "não" sem informação nenhuma.
 export function outsideCoverage(city: string | undefined, areaLabel: string): string {
-  const onde = city ? `em ${city}` : "aí ainda";
+  const onde = city ? `em ${city}` : "aí";
   return [
-    `Ah, que pena — a Lia ainda não chega ${onde} 😔.`,
-    `Por enquanto eu entrego só em *${areaLabel}*.`,
+    `Ainda não chego ${onde} — hoje entrego só em *${areaLabel}* 😔`,
     "",
-    "Mas já anotei seu contato aqui 📍 — assim que a gente chegar na sua região, te chamo na hora! 💚"
+    "Anotei seu contato: quando eu chegar na sua região, te chamo."
   ].join("\n");
 }
 
 // Cidade É atendida, mas o endereço ficou longe demais de qualquer loja parceira hoje.
 // Cuidado: NÃO dizer "não atendo sua cidade" (atendo!) — é questão de loja perto ainda.
 export function tooFarForDelivery(city: string | undefined, areaLabel: string): string {
-  const onde = city ? `em ${city}` : "no seu endereço";
+  const onde = city ? city : "seu endereço";
   return [
-    `Eu até atendo ${onde}, mas ele ficou longe demais das lojas parceiras que eu tenho por perto 😔.`,
-    "Assim eu não conseguiria te entregar hoje sem te cobrar um frete que não vale a pena.",
+    `Atendo ${onde}, mas seu endereço ficou longe demais das lojas que tenho por perto — o frete não valeria a pena 😔`,
     "",
-    "Já anotei seu contato 📍 — assim que abrir uma loja mais pertinho de você, te chamo na hora! 💚"
+    "Anotei seu contato: quando abrir uma loja mais perto, te chamo."
   ].join("\n");
 }
 
 // ---------- search / basket ----------
 
 export function searching(): string {
-  return "🔎 Procurando aqui, um instante…";
+  return "🔎 Procurando…";
 }
 
 export function deliveryQuoteUnavailable(): string {
-  return "Não consegui confirmar o valor da entrega agora 🙏. Não vou te mostrar um frete estimado. Tenta de novo em instantes que eu faço uma nova cotação em tempo real.";
+  return "Não consegui confirmar o valor da entrega agora — e não quero te passar um valor chutado. Tenta de novo em instantes.";
 }
 
 export function itemsNotFound(items: string[]): string {
-  return `Não achei ${items.join(", ")} no catálogo de hoje 🤔. Se quiser, me manda uma marca, tamanho ou versão específica que eu tento de novo.`;
+  return `Não achei ${items.join(", ")}. Me diz uma marca ou tamanho que eu tento de novo.`;
 }
 
 export function noMedicine(): string {
-  return "Remédio eu não consigo trazer (por lei, só farmácia pode vender) 🙏. Mas fora isso eu busco de tudo: mercado, higiene, beleza, pet, papelaria, eletrônicos, presente, bebida… — o que você precisa?";
+  return "Remédio eu não posso vender — por lei, só farmácia pode. Fora isso eu trago de tudo. O que mais você precisa?";
 }
 
 export function medicineSkippedNote(): string {
-  return "_Só não consigo trazer remédio (por lei, só farmácia vende) — deixei ele de fora._";
+  return "_Remédio eu não posso vender, então deixei ele de fora._";
 }
 
 export function cartCleared(): string {
-  return "Prontinho, limpei seu carrinho! 🧹 Me diz o que você quer agora.";
+  return "Carrinho limpo. O que você quer agora?";
 }
 
 export function removedItems(names: string, basketEmpty: boolean): string {
-  return basketEmpty
-    ? `Pronto, tirei ${names}. Sua cesta ficou vazia — me diz o que você quer. 🙂`
-    : `Pronto, tirei ${names}.`;
+  return basketEmpty ? `Tirei ${names}. Sua cesta ficou vazia — o que você quer?` : `Tirei ${names}.`;
 }
 
 export function removeNotFound(): string {
-  return "Não achei esse item na sua cesta 🤔. Me diz o nome como está na lista que eu tiro pra você.";
+  return "Não achei esse item na sua cesta. Me diz o nome como está na lista.";
 }
 
 export function swapAskWhat(from: string): string {
-  return `Trocar ${from} por qual produto? Me diz que eu busco. 🙂`;
+  return `Trocar ${from} por qual?`;
 }
 
 export function swapRemovedPrefix(from: string): string {
-  return `Troquei: tirei ${from}.`;
+  return `Tirei ${from}.`;
 }
 
 export function swappedFor(from: string, to: string): string {
-  return `Troquei ${from} por ${to}. ✅`;
+  return `✅ Troquei ${from} por ${to}.`;
 }
 
 // "só isso" com a cesta ABAIXO do mínimo da loja: sem loop — explica e dá saída.
 export function minimumDeadEnd(displayMin: number, falta: number): string {
   return [
-    `Entendi! Só que a loja não fecha pedido abaixo de *${brl(displayMin)}* em produtos — falta *${brl(falta)}* 😕`,
+    `A loja não fecha abaixo de *${brl(displayMin)}* — faltam *${brl(falta)}*.`,
     "",
-    "Me manda mais um itenzinho barato (um sal, um fósforo, um biscoito…) que eu fecho — ou responde *cancelar* se preferir deixar pra depois. 🙂"
+    "Manda mais um item barato que eu fecho, ou responde *cancelar*."
   ].join("\n");
 }
 
 export function finishOrderFirst(): string {
-  return "Você ainda não fechou esse pedido 🙂 Responde *pagar* que eu te passo o código na hora.";
+  return "Esse pedido ainda não foi fechado. Responde *pagar* que eu mando o código.";
 }
 
 export function emptyCartPay(): string {
-  return `Sua cesta ainda está vazia 🙂. Me diz o que você quer — ex.: ${EXAMPLES} — e eu já te passo o total.`;
+  return "Sua cesta está vazia. Me diz o que você quer.";
 }
 
 export function rejectedAskAgain(): string {
-  return "Sem problema! Me diz de outro jeito o que você procura (marca, tamanho…) que eu acho a opção certa. 🙂";
+  return "Me diz de outro jeito — marca, tamanho — que eu procuro.";
 }
 
 // ---------- choices ----------
 
 export function choicesHeader(query: string): string {
-  return `Achei essas opções de *${query}*:`;
+  return `Opções de *${query}*:`;
 }
 
 export function choiceSequence(queries: string[]): string {
-  return `Encontrei os ${queries.length} itens. Vou te mostrar um de cada vez pra ficar fácil — primeiro *${queries[0]}* e depois ${queries
+  return `Achei os ${queries.length} itens. Vamos um de cada vez: *${queries[0]}*, depois ${queries
     .slice(1)
     .map((q) => `*${q}*`)
-    .join(", ")}.`;
+    .join(" e ")}.`;
 }
 
 export function nextChoiceHeader(query: string, remaining: number): string {
-  const tail = remaining > 1 ? ` Depois ainda falta escolher ${remaining - 1}.` : "";
-  return `Agora vamos escolher *${query}*.${tail}`;
+  const tail = remaining > 1 ? ` — depois faltam ${remaining - 1}` : "";
+  return `Agora *${query}*${tail}.`;
 }
 
 export function choiceLine(index: number, name: string, displayPrice: number, delivery?: string): string {
@@ -248,11 +269,13 @@ export function choiceLine(index: number, name: string, displayPrice: number, de
   return `*${index + 1})* ${name} — ${brl(displayPrice)}${prazo}`;
 }
 
+// O comando *qualquer* continua valendo no parser; saiu só do texto, que oferecia
+// quatro saídas de uma vez (dono, 17/08: "uma pergunta por mensagem").
 export function choicesAsk(count: number): string {
   const nums = Array.from({ length: count }, (_, i) => i + 1);
   return count <= 1
-    ? "Responde *1* pra confirmar — ou *qualquer* que eu escolho, *outras* que eu mostro mais, ou *pula* pra deixar de fora. 🙂"
-    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *qualquer* que eu escolho, *outras* que eu mostro mais, ou *pula* pra deixar de fora. 🙂`;
+    ? "Responde *1* pra confirmar, *outras* pra ver mais, ou *pula* pra deixar de fora."
+    : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *outras* pra ver mais, *pula* pra deixar de fora.`;
 }
 
 export function choicesText(query: string, options: { name: string; displayPrice: number; delivery?: string }[], header?: string): string {
@@ -265,38 +288,39 @@ export function choicesText(query: string, options: { name: string; displayPrice
 }
 
 export function moreChoicesHeader(query: string): string {
-  return `Claro! Mais opções de *${query}*:`;
+  return `Mais opções de *${query}*:`;
 }
 
 export function noMoreOptions(query: string): string {
-  return `Essas são todas as opções de *${query}* que eu tenho por aqui 🙏 Se alguma servir, responde o número — ou *pula* que eu sigo sem esse item.`;
+  return `Essas são todas as opções de *${query}* que eu tenho. Responde o número, ou *pula* pra seguir sem esse item.`;
 }
 
 export function refineNoResult(refined: string): string {
-  return `Procurei *${refined}* e não achei por aqui 🙏 O que eu tenho são essas:`;
+  return `Não achei *${refined}*. O que eu tenho é isso:`;
 }
 
 // Confirmação da escolha SEMPRE mostra a quantidade quando ela já é conhecida —
 // "✅ Caixa de Bombom" depois de pedir "quatro caixas" parecia que o 4 se perdeu
 // (re-teste 15/08, rodadas 3, 7 e 9; o estado interno estava certo, o texto não).
 export function choiceConfirmed(name: string, qty = 1): string {
-  return qty > 1 ? `✅ ${qty}x ${name}.` : `✅ ${name}.`;
+  return qty > 1 ? `✅ ${qty}x ${name}` : `✅ ${name}`;
 }
 
 export function choiceSkipped(query: string): string {
-  return `Tranquilo, deixei *${query}* de fora. Se quiser, me diz de outro jeito que eu procuro de novo.`;
+  return `Deixei *${query}* de fora. Se quiser, me diz de outro jeito que eu procuro.`;
 }
 
+// Dizia só "Não peguei qual você quer" e deixava o cliente sem próximo passo.
 export function choiceNotUnderstood(): string {
-  return "Não peguei qual você quer 🤔.";
+  return "Não peguei qual você quer. Responde o número.";
 }
 
 export function autoAddedNote(items: string[]): string {
-  return `✅ Já anotei: ${items.join(", ")}.`;
+  return `✅ Anotei: ${items.join(", ")}`;
 }
 
 export function notFoundNote(items: string[]): string {
-  return `_Não achei: ${items.join(", ")} — me fala de outro jeito que eu procuro._`;
+  return `_Não achei: ${items.join(", ")}. Me fala de outro jeito que eu procuro._`;
 }
 
 // ---------- quote / summary ----------
@@ -313,6 +337,15 @@ export type SummaryInput = {
   pickupCount?: number;
 };
 
+// O prazo do resumo é o ÚNICO lugar onde a Lia fala em tempo — e só quando existe dado
+// real. Antes havia `?? 40` / `?? 90` de fallback: sem prazo da loja, a Lia escrevia
+// "chega em ~40 min" sem base nenhuma (dono, 17/08: "para de mentir q sempre chega no
+// mesmo dia pq n eh verdade as vezes"). Sem dado, a linha sai só com o valor.
+function deliveryLine(frete: number, deliveryPromise?: string, etaMinutes?: number): string {
+  const prazo = deliveryPromise ?? (etaMinutes ? `chega em ~${etaMinutes} min` : null);
+  return `Entrega: ${brl(frete)}${prazo ? ` · ${prazo}` : ""}`;
+}
+
 export function summary(input: SummaryInput): string {
   const lines = input.items.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`);
   const out = [
@@ -320,22 +353,22 @@ export function summary(input: SummaryInput): string {
     ...lines,
     "",
     `Produtos: ${brl(input.produtos)}`,
-    `📦 Entrega: ${brl(input.frete)}${input.deliveryPromise ? ` · ${input.deliveryPromise}` : ` · chega em ~${input.etaMinutes ?? 40} min`}`,
+    deliveryLine(input.frete, input.deliveryPromise, input.etaMinutes),
     `*Total: ${brl(input.total)}*`
   ];
   if (input.notFound?.length) {
     out.push("", notFoundNote(input.notFound));
   }
   if ((input.pickupCount ?? 1) > 1) {
-    out.push("", `_Este pedido usa ${input.pickupCount} lojas. O frete acima já soma as ${input.pickupCount} retiradas._`);
+    out.push("", `_Frete de ${input.pickupCount} lojas já somado._`);
   }
   if (input.deliveryAddress) {
-    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`, '_Confere este endereço? Para mudar, diga "trocar endereço"._');
+    out.push("", `📍 ${input.deliveryAddress}`, '_Pra mudar, diz "trocar endereço"._');
   }
   out.push(
     "",
-    "Se estiver tudo certo, escolha abaixo como prefere pagar. 💚",
-    "_Quer mudar algo antes? \"tira o arroz\", \"troca X por Y\" ou simplesmente manda mais itens._"
+    "Escolhe abaixo como quer pagar.",
+    '_Quer ajustar? "tira o arroz", "troca X por Y", ou manda mais itens._'
   );
   return out.join("\n");
 }
@@ -359,7 +392,7 @@ export function minimumOrder(input: {
     "",
     `Produtos (${store}): ${brl(input.produtos)}`,
     "",
-    `Essa loja pede um mínimo de *${brl(input.displayMin)}* em produtos — falta só *${brl(input.falta)}*. Me manda mais um itenzinho de lá que eu fecho pra você! 🙂`
+    `A ${store} tem pedido mínimo de *${brl(input.displayMin)}* — faltam *${brl(input.falta)}*. Manda mais um item de lá que eu fecho.`
   ];
   if (input.otherItems?.length) {
     out.push(
@@ -402,11 +435,11 @@ export function freteChoice(barato?: { fee: number; etaMinutes: number }, rapido
 
 export function paymentMethod(totalPix: number, totalCard: number): string {
   return [
-    "Como prefere pagar? 💳",
-    `*1)* Pix — ${brl(totalPix)} _(sem taxa, cai na hora)_`,
-    `*2)* Cartão — ${brl(totalCard)} _(com a taxa da maquininha)_`,
+    "Como prefere pagar?",
+    `*1)* Pix — ${brl(totalPix)} _(sem taxa)_`,
+    `*2)* Cartão — ${brl(totalCard)} _(com taxa da maquininha)_`,
     "",
-    "Responde *pix* ou *cartão* (ou 1/2)."
+    "Responde *pix* ou *cartão*."
   ].join("\n");
 }
 
@@ -414,22 +447,22 @@ export function paymentMethod(totalPix: number, totalCard: number): string {
 // copia a mensagem inteira — se tiver prosa junto, o Pix não cola no banco.
 export function pixInstructions(total: number, mock: boolean): string {
   return [
-    `Fechado! Total *${brl(total)}* no Pix.`,
+    `Total *${brl(total)}* no Pix.`,
     "",
-    "Vou te mandar o código na próxima mensagem — é só segurar nela, copiar e colar no *Pix copia e cola* do seu banco. 👇",
+    "O código vem na próxima mensagem — copia ela inteira e cola no *Pix copia e cola* do seu banco 👇",
     "",
-    mock ? sandboxHint() : "Assim que o Pix cair eu já começo a separar tudo e te aviso por aqui. 💚"
+    mock ? sandboxHint() : "Assim que cair, eu começo a separar."
   ].join("\n");
 }
 
 export function cardInstructions(total: number, link: string, mock: boolean): string {
   return [
-    `Fechado! Total *${brl(total)}* no cartão _(taxa da maquininha já incluída)_.`,
+    `Total *${brl(total)}* no cartão _(taxa da maquininha incluída)_.`,
     "",
-    "Paga com cartão por este link seguro 👇",
+    "Paga por este link 👇",
     link,
     "",
-    mock ? sandboxHint() : "Assim que o pagamento aprovar eu já começo a separar tudo e te aviso por aqui. 💚"
+    mock ? sandboxHint() : "Assim que aprovar, eu começo a separar."
   ].join("\n");
 }
 
@@ -437,109 +470,110 @@ export function cardInstructions(total: number, link: string, mock: boolean): st
 // Reorders never use this link; they use WhatsApp's native payment confirmation.
 export function cardEnrollmentInstructions(total: number, link: string, mock: boolean): string {
   return [
-    `Fechado! Total *${brl(total)}* no cartão _(taxa da maquininha já incluída)_.`,
+    `Total *${brl(total)}* no cartão _(taxa da maquininha incluída)_.`,
     "",
-    "Na primeira vez preciso cadastrar seu cartão num link seguro. Depois as próximas compras você confirma aqui mesmo no WhatsApp. 👇",
+    "Na primeira compra você cadastra o cartão neste link seguro. Nas próximas, confirma aqui mesmo 👇",
     link,
     "",
-    mock ? sandboxHint() : "O cartão é tokenizado pelo Pagar.me; a Lia não recebe número nem CVV."
+    mock ? sandboxHint() : "_Eu não recebo o número nem o CVV do seu cartão._"
   ].join("\n");
 }
 
 export function cardPaymentProcessing(): string {
-  return "Seu pagamento por cartão já está sendo processado. Assim que confirmar eu te aviso aqui. 💚";
+  return "Pagamento em processamento. Te aviso assim que confirmar.";
 }
 
 // Body rendered inside Meta's native order_details payment bubble. The card number
 // is never sent or stored here; WhatsApp only shows the last four digits we supply.
 export function orderDetailsBody(total: number, last4: string): string {
-  return `Confira seu pedido de *${brl(total)}*. Para pagar com o cartão final *${last4}*, toque em *Revisar e pagar* abaixo. 💳`;
+  return `Seu pedido: *${brl(total)}*. Toque em *Revisar e pagar* pra cobrar no cartão final *${last4}*.`;
 }
 
 // Fallback em texto quando os botões interativos não estão disponíveis (provider de
 // teste). Aceita as formas humanas que o parser entende: "usar cartão" / "outro cartão".
 export function savedCardOffer(total: number, last4: string): string {
   return [
-    `Pagar *${brl(total)}* com o cartão salvo final *${last4}*? 💳`,
+    `Pagar *${brl(total)}* no cartão salvo final *${last4}*?`,
     "",
-    'Responde *usar cartão* que eu cobro nele, ou *outro cartão* para cadastrar um novo.',
-    "_Cobrança segura via Pagar.me — seus dados não passam pelo chat._"
+    "Responde *usar cartão*, ou *outro cartão* pra cadastrar outro."
   ].join("\n");
 }
 
 export function savedCardCharging(last4: string): string {
-  return `Cobrando no cartão final *${last4}*… te confirmo aqui em instantes. 💳`;
+  return `Cobrando no cartão final *${last4}*. Te confirmo em instantes.`;
 }
 
 export function savedCardNothingPending(): string {
-  return 'Não achei uma cobrança de cartão em aberto. Me diz *pagar* que eu gero uma nova. 🙂';
+  return "Não tem cobrança em aberto. Responde *pagar* que eu gero uma nova.";
 }
 
 export function cardChargeFailed(last4: string): string {
-  return `Não consegui aprovar o cartão final *${last4}* agora. Posso seguir por Pix ou te mandar um link seguro de cartão. 💳`;
+  return `O cartão final *${last4}* não aprovou. Responde *pix*, ou *cartão* que eu mando um link novo.`;
 }
 
 export function cardAttemptExpired(): string {
-  return "Esse pedido de cartão venceu antes da confirmação. Me pede para pagar de novo que eu gero uma cobrança nova. 💳";
+  return "Essa cobrança venceu. Responde *pagar* que eu gero uma nova.";
 }
 
 export function paymentConfirmed(): string {
-  return "Pagamento confirmado! ✅ Já estou separando seu pedido — te aviso assim que sair pra entrega. 🛵";
+  return "✅ Pagamento confirmado. Já estou separando — te aviso quando sair pra entrega.";
 }
 
 export function paymentConfirmedSupplierCheck(): string {
-  return "Pagamento confirmado! ✅ Agora estou confirmando os itens na loja e preparando seu pedido. Te aviso assim que ele avançar. 🛒";
+  return "✅ Pagamento confirmado. Confirmando os itens na loja agora — te aviso quando avançar.";
 }
 
 export function supplierValidationStarted(): string {
-  return "Perfeito — estou confirmando agora itens, frete, prazo e total direto na loja. Assim que o carrinho estiver validado, te mostro a cotação final antes do pagamento. 🛒";
+  return "Confirmando itens, frete e prazo na loja. Te mostro o total final antes do pagamento.";
 }
 
 export function supplierValidationPending(): string {
-  return "Ainda estou confirmando o carrinho na loja. Não precisa pagar nada agora — te aviso assim que estiver pronto. 🛒";
+  return "Ainda confirmando na loja. Não precisa pagar nada agora — te aviso quando estiver pronto.";
 }
 
 export function quoteExpired(): string {
-  return "Essa cotação venceu porque preço, estoque e prazo da loja podem mudar rápido. Vou montar uma nova antes de cobrar qualquer valor. 🙂";
+  return "Essa cotação venceu. Monto uma nova antes de cobrar qualquer coisa.";
 }
 
 export function quoteValidFor(minutes: number): string {
-  return `Essa cotação fica válida por ${minutes} min. Se estiver tudo certo, escolhe Pix ou cartão para eu gerar o pagamento. 💚`;
+  return `Cotação válida por ${minutes} min. Escolhe Pix ou cartão pra eu gerar o pagamento.`;
 }
 
 export function pixNotSeenYet(): string {
-  return "Ainda não apareceu aqui — o Pix costuma cair em segundos. 🙂 Assim que confirmar eu te aviso na hora. Se demorar mais de 5 min, me chama!";
+  return "O Pix ainda não caiu aqui. Assim que cair, te aviso na hora. Se passar de 5 min, me chama.";
 }
 
 export function cardPending(): string {
-  return "A aprovação do cartão chega automática pra mim — assim que confirmar, te aviso na hora por aqui. 🙂";
+  return "Ainda não aprovou. Assim que confirmar, te aviso na hora.";
 }
 
 export function alreadyPaid(): string {
-  return "Pode ficar tranquilo, seu pagamento já está confirmado por aqui! ✅ Estou cuidando do seu pedido — quer saber como está, é só perguntar *status*.";
+  return "✅ Seu pagamento já está confirmado. Pra acompanhar, responde *status*.";
 }
 
 // Intro do reenvio — o código em si vai na mensagem seguinte, sozinho (copiável).
 export function resendPix(): string {
-  return "Claro! Segue seu código Pix na próxima mensagem 👇 É só copiar ela inteira e colar no *Pix copia e cola* do banco. 💚";
+  return "Segue o código na próxima mensagem — copia ela inteira e cola no *Pix copia e cola* 👇";
 }
 
 export function resendCard(link: string): string {
-  return ["Claro! Seu link de pagamento é este 👇", link].join("\n");
+  return ["Seu link de pagamento 👇", link].join("\n");
 }
 
 export function paymentSwitched(method: "pix" | "card", total: number): string {
   return method === "pix"
-    ? `Sem problema, troquei pra Pix — o total fica *${brl(total)}* (sem taxa). Segue o código 👇`
-    : `Sem problema, troquei pro cartão — o total fica *${brl(total)}* (com a taxa da maquininha). Segue o link 👇`;
+    ? `Troquei pra Pix — total *${brl(total)}*, sem taxa. Segue o código 👇`
+    : `Troquei pro cartão — total *${brl(total)}*, com taxa da maquininha. Segue o link 👇`;
 }
 
 export function sandboxHint(): string {
-  return "_(sandbox: responda *paguei* pra simular o pagamento)_";
+  return "_(sandbox: responda *paguei* pra simular)_";
 }
 
 // ---------- order lifecycle ----------
 
+// O "Seu pedido" que abria as 14 variantes saiu: o `#id` em negrito já abre a linha e
+// economiza uma linha inteira na tela do celular.
 export function orderStatusLine(input: {
   shortId: string;
   status: string;
@@ -550,127 +584,140 @@ export function orderStatusLine(input: {
   const id = `*#${input.shortId}*`;
   switch (input.status) {
     case "awaiting_operator_quote":
-      return `Seu pedido ${id} está sendo cotado agora. 🧮 Já te mando o total com a entrega pra você aprovar — sem cobrar nada antes.`;
+      return `${id} em cotação. Mando o total com a entrega pra você aprovar — nada é cobrado antes.`;
     case "awaiting_supplier_validation":
     case "payment_issuing":
-      return `Seu pedido ${id} está sendo confirmado na loja antes do pagamento. 🛒 Te aviso assim que o carrinho estiver pronto.`;
+      return `${id} em confirmação na loja. Te aviso quando o carrinho estiver pronto.`;
     case "awaiting_payment":
-      return `Seu pedido ${id} está só esperando o pagamento. 💳 Se precisar do código de novo, responde *pagar*.`;
+      return `${id} aguardando pagamento. Responde *pagar* que eu mando o código de novo.`;
     case "paid":
-      return `Seu pedido ${id} está confirmado e já estou separando os itens. 🛒 Te aviso quando sair pra entrega!`;
+      return `${id} confirmado, separando os itens. Te aviso quando sair pra entrega.`;
+    // Com link de acompanhamento (o operador cola o do próprio pedido na loja/ML ao marcar
+    // a compra), o cliente vê o andamento na FONTE em vez de depender de a gente marcar
+    // "saiu pra entrega" — nos pedidos que a loja entrega, o operador não sabe a hora
+    // certa disso e o cliente ficava no escuro (dono, 17/08).
     case "retailer_preparing":
-      return `Seu pedido ${id} já foi comprado e está sendo preparado pela loja. 📦 Te aviso quando sair pra entrega!`;
+      return input.trackingUrl
+        ? `${id} comprado, a loja está preparando 📦\nAcompanha: ${input.trackingUrl}`
+        : `${id} comprado, a loja está preparando. Te aviso quando sair pra entrega.`;
     case "retailer_out_for_delivery":
-      return `Seu pedido ${id} saiu para entrega pela loja! 🚚${input.trackingUrl ? `\nAcompanha por aqui: ${input.trackingUrl}` : ""}`;
+      return `${id} saiu pra entrega pela loja 🚚${input.trackingUrl ? `\nAcompanha: ${input.trackingUrl}` : ""}`;
     case "operator_buying":
-      return `Seu pedido ${id} já foi comprado e está sendo preparado. 📦 Te aviso quando sair pra entrega!`;
+      return input.trackingUrl
+        ? `${id} comprado e em preparação 📦\nAcompanha: ${input.trackingUrl}`
+        : `${id} comprado e em preparação. Te aviso quando sair pra entrega.`;
     case "ready_for_pickup":
-      return `Seu pedido ${id} está pronto para retirada pelo parceiro autorizado. 📦`;
+      return `${id} pronto pra retirada.`;
     case "dispatched":
-      return `Seu pedido ${id} saiu pra entrega! 🛵${input.trackingUrl ? `\nAcompanha por aqui: ${input.trackingUrl}` : ""}`;
+      return `${id} saiu pra entrega 🛵${input.trackingUrl ? `\nAcompanha: ${input.trackingUrl}` : ""}`;
     case "delivered":
-      return `Seu pedido ${id} foi entregue! 🎉 Se precisar de mais alguma coisa é só chamar.`;
+      return `${id} entregue ✅ Precisando de algo, é só chamar.`;
     case "refund_pending":
-      return `Seu pedido ${id} foi cancelado e o estorno ainda está pendente de confirmação. Te aviso assim que for concluído.`;
+      return `${id} cancelado. O estorno ainda está pendente — te aviso quando concluir.`;
     case "refunded":
-      return `Seu pedido ${id} foi cancelado e o estorno já foi confirmado. ✅`;
+      return `${id} cancelado e estornado ✅`;
     case "canceled":
-      return `Seu pedido ${id} foi cancelado. Se pagou algo, o estorno já está a caminho. Quer pedir de novo? 💚`;
+      return `${id} cancelado. Se pagou, o estorno está a caminho. Quer pedir de novo?`;
     default:
-      return `Seu pedido ${id} está em andamento. Qualquer novidade eu te aviso por aqui!`;
+      return `${id} em andamento. Qualquer novidade eu aviso.`;
   }
 }
 
 export function noOrdersYet(): string {
-  return "Você ainda não tem pedidos por aqui. 🙂 Me diz o que precisa que eu monto o primeiro!";
+  return "Você ainda não tem pedidos. Me diz o que precisa que eu monto o primeiro.";
 }
 
 export function canceledUnpaid(): string {
-  return "Prontinho, cancelei — como o pagamento não tinha caído, não foi cobrado nada. 🙂 Quando quiser, é só pedir de novo!";
+  return "Cancelado. Nada foi cobrado. Quando quiser, é só pedir de novo.";
 }
 
+// Mesma regra em três entradas diferentes (pedido pago, "cancelar" tarde demais e a
+// pergunta "como cancelo?") — o texto é um só, de propósito.
+const NO_CANCEL_AFTER_PAYMENT =
+  "Depois do pagamento não dá pra cancelar. Se faltar item, estorno o valor dele; se atrasar, eu aviso.";
+
 export function cancelRequestedPaid(): string {
-  return "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se houver atraso, eu aviso. 🙏";
+  return NO_CANCEL_AFTER_PAYMENT;
 }
 
 export function cancelTooLate(): string {
-  return "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se houver atraso, eu aviso.";
+  return NO_CANCEL_AFTER_PAYMENT;
 }
 
 export function nothingToCancel(): string {
-  return "Não achei nenhum pedido em andamento pra cancelar 🙂. Se quiser começar um novo, me diz o que precisa!";
+  return "Não tem pedido em andamento pra cancelar. Quer começar um novo?";
 }
 
 export function noPreviousOrder(): string {
-  return "Ainda não tenho um pedido anterior seu pra repetir. Me diz o que você quer que eu monto rapidinho. 🙂";
+  return "Você ainda não tem um pedido pra repetir. Me diz o que quer que eu monto.";
 }
 
 export function dispatched(trackingUrl?: string | null): string {
-  return `🛵 Saiu pra entrega!${trackingUrl ? `\nAcompanha em tempo real: ${trackingUrl}` : ""} Te aviso quando chegar.`;
+  return `🛵 Saiu pra entrega. Te aviso quando chegar.${trackingUrl ? `\nAcompanha: ${trackingUrl}` : ""}`;
 }
 
 export function retailerOutForDelivery(trackingUrl?: string | null): string {
-  return `🚚 Seu pedido saiu para entrega pela loja!${trackingUrl ? `\nAcompanha por aqui: ${trackingUrl}` : ""} Te aviso quando chegar.`;
+  return `🚚 Seu pedido saiu pra entrega. Te aviso quando chegar.${trackingUrl ? `\nAcompanha: ${trackingUrl}` : ""}`;
 }
 
 export function delivered(): string {
-  return "Entregue! 🎉 Espero que esteja tudo certinho. Da próxima é só mandar *repete o de sempre*. 💚";
+  return "Entregue ✅ Da próxima, é só mandar *repete o de sempre*.";
 }
 
 export function refundRequested(): string {
-  return "O estorno ficou pendente de processamento pela equipe — eu te aviso quando for confirmado. 🙏";
+  return "Estorno solicitado. Te aviso quando for confirmado.";
 }
 
 export function refundConfirmed(): string {
-  return "Seu estorno foi confirmado. ✅ Se precisar de ajuda com o prazo do banco, me chama por aqui.";
+  return "✅ Estorno confirmado. Qualquer dúvida sobre o prazo do banco, me chama.";
 }
 
 export function finishChoiceFirst(): string {
-  return "Só me confirma esse item primeiro que aí eu fecho tudo. 🙂";
+  return "Confirma esse item primeiro que aí eu fecho.";
 }
 
 // "coca" com Fanta+2 Cocas na mesa → estreitou pras que batem.
 export function narrowedChoices(query: string): string {
-  return `Boa, ficou entre essas de *${query}*:`;
+  return `Ficou entre essas de *${query}*:`;
 }
 
 // "só isso"/"fechado" quando o pedido já está fechado e só falta a forma de pagamento —
 // nunca responder "não peguei qual você quer" (copy de escolha de produto).
 export function donePickPayment(): string {
-  return "Fechado, pedido completo! 🙌";
+  return "Pedido completo. Escolhe abaixo como quer pagar.";
 }
 
 // "algum até X reais?" e nenhuma das opções na mesa cabe no teto.
 export function nonePriceCap(cap: number): string {
-  return `Dessas aqui, nenhuma sai por até ${brl(cap)} 😕 Responde *mais barato* que eu pego a mais em conta, ou *mais opções* que eu procuro outras.`;
+  return `Nenhuma dessas sai por até ${brl(cap)}. Responde *mais barato* ou *mais opções*.`;
 }
 
 // Item novo anotado ENQUANTO o cliente ainda escolhe outro — sem isto o item entra
 // mudo na fila e o cliente acha que a Lia ignorou.
 export function queuedItemsNote(queries: string[]): string {
-  return `Anotei ${queries.map((q) => `*${q}*`).join(", ")} pra gente escolher já já 😉`;
+  return `Anotei ${queries.map((q) => `*${q}*`).join(", ")} — a gente escolhe em seguida.`;
 }
 
 // "vai mudar o frete?" com pedido já cotado → o número real, não a explicação genérica.
 export function currentFee(fee: number): string {
-  return `No seu pedido atual a entrega tá em *${brl(fee)}* 🛵 Se mudar o endereço ou a cesta, eu recalculo e te mostro de novo.`;
+  return `A entrega do seu pedido está em *${brl(fee)}*. Se mudar endereço ou cesta, eu recalculo.`;
 }
 
 // "quanto deu?" com cobrança aberta → total fechado + caminho pro código.
 export function totalAwaitingPayment(total: number): string {
-  return `O total ficou em *${brl(total)}* — só falta o pagamento 🙂 Quer o código de novo? Responde *pix* (ou *cartão*, se preferir o link).`;
+  return `Total: *${brl(total)}* — só falta pagar. Responde *pix* ou *cartão* que eu mando de novo.`;
 }
 
 // "quanto deu tudo?" no meio das escolhas/coleta → parcial honesto, sem inventar frete.
 export function partialTotal(items: CopyBasketItem[], produtos: number, pendingCount: number): string {
   if (!items.length) {
-    return "Ainda não fechamos nenhum item 🙂 Me responde as opções que eu te passo o total certinho, com a entrega.";
+    return "Nenhum item fechado ainda. Responde as opções que eu mando o total.";
   }
   const lines = items.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`);
   const tail =
     pendingCount > 0
-      ? `_Falta escolher ${pendingCount === 1 ? "1 item" : `${pendingCount} itens`} — aí te passo o total com a entrega._`
-      : '_Te passo o total com a entrega quando você fechar — é só dizer *"só isso"*._';
+      ? `_${pendingCount === 1 ? "Falta 1 item" : `Faltam ${pendingCount} itens`} pra escolher. Aí sai o total com a entrega._`
+      : '_Diz *"só isso"* que eu mando o total com a entrega._';
   return ["🛒 *Até agora:*", ...lines, "", `Produtos: ${brl(produtos)}`, tail].join("\n");
 }
 
@@ -678,28 +725,27 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
 
 // Regra do dono (11/08): "se não tem, fala que não tem" — item sem preço nas 18 lojas
 // NUNCA vira espera de cotação. A resposta é honesta, na hora, e convida a tentar de
-// outro jeito (marca/versão) ou pedir outra coisa. A largura agora é a vitrine de 17 mil
-// itens, não o garimpo do operador.
+// outro jeito (marca/versão) ou pedir outra coisa.
 export function itemsNotAvailable(items: string[]): string {
   if (items.length === 1) {
-    return `Procurei *${items[0]}* nas lojas parceiras e hoje eu não tenho como trazer 🙏 Se quiser, me diz uma marca ou versão diferente que eu tento de novo — ou me pede outra coisa!`;
+    return `*${items[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;
   }
   return [
-    "Esses eu procurei nas lojas parceiras e hoje não tenho como trazer 🙏",
+    "Esses eu não consigo trazer hoje:",
     ...items.map((i) => `• ${i}`),
     "",
-    "Se quiser, me diz marcas ou versões diferentes que eu tento de novo — ou me pede outra coisa!"
+    "Me diz outras marcas ou versões que eu tento de novo."
   ].join("\n");
 }
 
 // Depois de escolher as opções: a lista continua aberta (diferente do fluxo legado, onde
 // escolher já ia direto pra cotação).
 export function conciergeKeepAdding(): string {
-  return 'Quer mais alguma coisa? Manda que eu somo. Quando fechar a lista, é só dizer *"só isso"* que eu coto o total com a entrega. 🙂';
+  return 'Quer mais alguma coisa? Quando fechar, diz *"só isso"* que eu mando o total.';
 }
 
 export function conciergeAskWhatYouWant(): string {
-  return `Deixa comigo! 🙂 Me diz o que você precisa — pode ser de qualquer lugar, junto numa mensagem só. Ex.: ${EXAMPLES}.`;
+  return "Me diz o que você precisa.";
 }
 
 // "só isso" no concierge: o pedido foi para a fila de cotação do operador. A Lia NÃO
@@ -707,28 +753,28 @@ export function conciergeAskWhatYouWant(): string {
 export function operatorQuoteRequested(items: string[]): string {
   const list = items.length ? `\n${items.map((i) => `• ${i}`).join("\n")}\n` : " ";
   return [
-    `Fechado! Recebi seu pedido:${list}`,
-    "Um dos itens precisa de uma conferência rápida de estoque/entrega na loja, então o total não sai automático desta vez — nossa equipe confere agora e te mando preço, entrega e prazo por aqui pra você aprovar. Não cobro nada antes disso. 💚"
+    `Recebi seu pedido:${list}`,
+    "Um dos itens precisa de conferência na loja, então o total não sai automático. Mando preço, entrega e prazo em instantes pra você aprovar — nada é cobrado antes disso."
   ].join("\n");
 }
 
 // Cliente escreve enquanto o operador ainda está cotando.
 export function operatorQuoteStillWorking(): string {
-  return "Ainda estou cotando seu pedido 🙂 Já te mando o total com a entrega e o prazo em instantes — segura aí!";
+  return "Ainda estou cotando. Mando o total com entrega e prazo em instantes.";
 }
 
 // Corpo da confirmação pós-escolha quando os BOTÕES (Pagar / Adicionar mais itens /
 // Cancelar) vão junto — o texto não repete o que os botões já dizem. O fallback sem
 // botões continua sendo conciergeKeepAdding().
 export function conciergeChooseNext(): string {
-  return "Quer fechar e pagar, somar mais itens ou cancelar? É só tocar embaixo — ou mandar o próximo item direto. 🙂";
+  return "Escolhe aí embaixo — ou manda o próximo item direto.";
 }
 
 // Item pedido ENQUANTO a cotação do operador está em andamento: entra no mesmo pedido
 // (a cotação ainda não saiu), nunca é engolido nem exige cancelar pra pedir de novo.
 export function addedToPendingQuote(items: string[]): string {
   const list = items.map((i) => `• ${i}`).join("\n");
-  return [`Anotei e já incluí na cotação: 📝\n${list}`, "", "Te mando o total com tudo junto em instantes! 🙂"].join("\n");
+  return [`Incluí na cotação:\n${list}`, "", "Mando o total com tudo junto em instantes."].join("\n");
 }
 
 // Resumo da cotação manual: itens por nome (o operador informa o custo total dos
@@ -748,24 +794,19 @@ export function manualQuoteSummary(input: {
   addressButton?: boolean;
 }): string {
   const lines = input.items.map((item) => `• ${item.qty}x ${item.name}`);
-  const prazo = input.deliveryPromise
-    ? input.deliveryPromise
-    : input.sameHour
-      ? `chega em ~${input.etaMinutes ?? 90} min 🛵`
-      : `chega em ~${input.etaMinutes ?? 90} min`;
   const out = [
     "🛒 *Seu pedido:*",
     ...lines,
     "",
     `Produtos: ${brl(input.produtos)}`,
-    `📦 Entrega: ${brl(input.frete)} · ${prazo}`,
+    deliveryLine(input.frete, input.deliveryPromise, input.etaMinutes),
     `*Total: ${brl(input.total)}*`
   ];
   if (input.deliveryAddress) {
-    out.push("", `📍 *Entrega em:* ${input.deliveryAddress}`);
-    if (!input.addressButton) out.push('_Confere o endereço? Para mudar, diga "trocar endereço"._');
+    out.push("", `📍 ${input.deliveryAddress}`);
+    if (!input.addressButton) out.push('_Pra mudar, diz "trocar endereço"._');
   }
-  out.push("", "Se estiver tudo certo, escolha abaixo como prefere pagar. 💚");
+  out.push("", "Escolhe abaixo como quer pagar.");
   return out.join("\n");
 }
 
@@ -781,59 +822,61 @@ export function serviceAnswer(
   switch (topic) {
     case "area":
       return ctx?.hasCep
-        ? `A Lia atende ${areaLabel} 📍 Seu endereço já tá salvo e coberto — e se quiser conferir outro lugar, me manda o CEP que eu confirmo na hora!`
-        : `A Lia atende ${areaLabel} 📍 Me manda seu *CEP* que eu confirmo na hora se chego até você!`;
+        ? `Atendo ${areaLabel} 📍 Seu endereço já está salvo e coberto. Pra conferir outro, me manda o CEP.`
+        : `Atendo ${areaLabel} 📍 Me manda seu *CEP* que eu confirmo se chego até você.`;
     case "fee":
       if (ctx?.hasBasket)
-        return "A entrega é por motoboy e o frete sai pela distância até você 🛵 Te mostro o valor certinho junto com o total, assim que a gente fechar a cesta — sem surpresa.";
+        return "O frete depende da distância até você 🛵 Te mostro o valor exato junto com o total quando fechar a cesta.";
       if (ctx?.hasCep)
-        return "A entrega é por motoboy e o frete sai pela distância até você 🛵 Me diz o que precisa que eu já te mostro o total certinho, sem surpresa.";
-      return "A entrega é feita por motoboy e o frete é calculado na hora, pela distância até você 🛵 Me diz o que precisa + seu CEP que eu já te mostro o total certinho, sem surpresa.";
+        return "O frete depende da distância até você 🛵 Me diz o que precisa que eu mando o total exato.";
+      return "O frete depende da distância até você 🛵 Me diz o que precisa e seu CEP que eu mando o total exato.";
     case "eta":
-      return "A entrega é no mesmo dia — normalmente em 1 a 2 horas depois do pagamento, dependendo da distância 🛵 Quando você fizer o pedido eu te mostro a previsão certinha.";
+      // NÃO prometer same-day: o prazo é do checkout da loja e varia por item/endereço.
+      return "O prazo depende da loja e do seu endereço — tem item que chega em horas, tem item que leva alguns dias. Me diz o que você precisa que eu mostro o prazo exato junto com o total, antes de você pagar.";
     case "payment":
-      return "Você paga *Pix* (copia-e-cola, sem taxa) ou *cartão* (link seguro do Mercado Pago) — tudo aqui pelo chat mesmo. 💳 Vale-refeição por enquanto não consigo aceitar. 🙏";
+      return "*Pix* (sem taxa) ou *cartão* (link seguro) — tudo aqui pelo chat. Vale-refeição ainda não aceito.";
     default:
-      return "Boa pergunta! Eu faço suas compras do dia a dia e entrego no mesmo dia por motoboy — você paga por Pix ou cartão aqui no chat. Me diz o que você precisa que eu resolvo. 💚";
+      return "Eu compro o que você precisar e entrego no seu endereço. Você paga por Pix ou cartão aqui no chat, e eu mostro o prazo antes. O que você precisa?";
   }
 }
 
 export function humanHandoff(): string {
-  return "Claro! Já chamei alguém da equipe pra falar com você por aqui mesmo — pode escrever o que precisa que a mensagem chega. 💚 Enquanto isso, se for sobre um pedido, me pergunta *status* que eu te adianto.";
+  return "Chamei alguém da equipe — pode escrever aqui mesmo que a mensagem chega. Se for sobre um pedido, responde *status* que eu já adianto.";
 }
 
 export function complaintAck(): string {
-  return "Poxa, sinto muito por isso 😔 Já passei sua mensagem pra equipe. Se faltar algum item, estornamos o valor dele; se houver atraso, eu te aviso. Por enquanto não fazemos substituições.";
+  return "Sinto muito. Já passei pra equipe. Se faltou item, estorno o valor dele; se atrasou, eu aviso.";
 }
 
 export function cancelHowTo(hasPaidOrder: boolean): string {
   return hasPaidOrder
-    ? "Depois do pagamento, não oferecemos cancelamento. Se faltar item, estornamos o valor dele; se atrasar, eu aviso."
-    : "Antes do pagamento, você pode limpar a lista a qualquer momento. Depois que pagar, não oferecemos cancelamento. 🙂";
+    ? NO_CANCEL_AFTER_PAYMENT
+    : "Antes de pagar, você pode limpar a lista quando quiser. Depois do pagamento não dá pra cancelar.";
 }
 
 export function cartExpired(): string {
-  return "_Sua lista anterior expirou, então comecei uma nova pra evitar erro. Seu endereço continua salvo._";
+  return "_Sua lista anterior expirou — comecei uma nova. Seu endereço continua salvo._";
 }
 
 export function orderReopened(): string {
-  return "Deixa comigo! Atualizei seu pedido com o item novo — o total anterior não vale mais, segue o novo resumo 👇";
+  return "Atualizei seu pedido. O total anterior não vale mais — segue o novo 👇";
 }
 
 export function greetingMidOrder(step: string, itemCount: number): string {
-  const base = "Oi de novo! 💚";
-  if (step === "awaiting_payment") return `${base} Seu pedido está só esperando o pagamento — responde *pagar* se precisar do código de novo.`;
-  if (itemCount > 0) return `${base} Sua cesta tem ${itemCount} ${itemCount === 1 ? "item" : "itens"} — me diz o que mais precisa, ou responde *pagar* pra fechar.`;
-  return `${base} Me diz o que você precisa hoje — ex.: ${EXAMPLES}.`;
+  if (step === "awaiting_payment") return "Oi! Seu pedido só falta pagar. Responde *pagar* que eu mando o código.";
+  if (itemCount > 0)
+    return `Oi! Sua cesta tem ${itemCount} ${itemCount === 1 ? "item" : "itens"}. Manda mais algum, ou responde *pagar* pra fechar.`;
+  return "Oi! O que você precisa hoje?";
 }
 
 export function genericError(): string {
-  return "Tive um probleminha aqui agora 🙏. Pode mandar de novo em instantes?";
+  return "Deu um erro aqui. Manda de novo em instantes?";
 }
 
 // ---------- alertas ao OPERADOR (LIA_OPERATOR_PHONE — não são mensagens de cliente) ----------
 // Caso real 11/08: pedido ficou 2 dias em cotação manual porque nada avisava o operador;
 // pro cliente, o "te mando em instantes" virou nunca. O alerta é o que fecha esse ciclo.
+// Estes NÃO seguem a régua de tom do cliente — são operacionais, densos de propósito.
 
 export function operatorQuoteAlert(shortId: string, items: string[]): string {
   return [`🛎️ [operador] Pedido #${shortId} aguardando SUA cotação no /ops:`, ...items.map((i) => `• ${i}`)].join("\n");
@@ -851,24 +894,24 @@ export function operatorPaidAlert(shortId: string, total: number): string {
 // cliente: transparência curta — nada foi cobrado — e convite a recomeçar. A mensagem
 // nova dele é processada normalmente logo em seguida.
 export function staleQuoteRestart(shortId: string): string {
-  return `Aquele pedido *#${shortId}* ficou um tempão parado, então cancelei pra não te atrapalhar (não cobrei nada) 👍 Bora recomeçar!`;
+  return `Cancelei o pedido *#${shortId}* por inatividade — nada foi cobrado. Bora recomeçar.`;
 }
 
 // Trocar endereço com cotação na mesa: o frete foi calculado pro endereço antigo, então
 // a cotação cai e a Lia recota depois do endereço novo. Nada foi cobrado.
 export function quoteDroppedForNewAddress(): string {
-  return "Beleza! Como o frete depende do endereço, cancelei essa cotação (não cobrei nada) e refaço com o endereço novo. 📍";
+  return "Cancelei a cotação anterior — nada foi cobrado. Já refaço com o endereço novo 📍";
 }
 
 // Trocar endereço com Pix/cartão já emitidos: a cobrança vale um total calculado com
 // OUTRO frete — o caminho seguro é cancelar (nada foi pago) e refazer.
 export function addressChangeNeedsCancel(): string {
-  return "Seu pedido já está com o pagamento gerado pra esse endereço 😅 Me manda *cancelar* primeiro (não foi cobrado nada) e aí refazemos com o endereço novo.";
+  return "O pagamento já foi gerado pro endereço antigo. Responde *cancelar* (nada foi cobrado) que eu refaço com o novo.";
 }
 
 // Endereço trocado com o pedido ainda na fila de cotação: o pedido sobrevive.
 export function addressUpdatedQuoteContinues(address: string): string {
-  return `📍 Prontinho, endereço atualizado: ${address}. Sua cotação continua valendo — já avisei aqui e o total vem calculado pro endereço novo.`;
+  return `📍 Endereço atualizado: ${address}\nSua cotação continua valendo — o total já sai pro endereço novo.`;
 }
 
 export function operatorAddressChangedAlert(shortId: string, address: string): string {
@@ -878,17 +921,19 @@ export function operatorAddressChangedAlert(shortId: string, address: string): s
 // "mais três do mesmo": o último item da cesta cresce pelo sku — confirmação com o
 // total de unidades pra não sobrar dúvida de que é o MESMO produto.
 export function moreOfSameAdded(added: number, name: string, totalQty: number): string {
-  return `✅ Adicionei mais ${added} — agora são ${totalQty}x ${name}. Quer mais alguma coisa? Quando fechar, é só dizer *"só isso"*. 🙂`;
+  return `✅ Agora são ${totalQty}x ${name}. Quer mais alguma coisa? Quando fechar, diz *"só isso"*.`;
 }
 
 // Número solto logo após um item entrar na cesta = ajuste de quantidade do último item.
+// O "Ajustei" fica: sem ele a mensagem vira sósia do `choiceConfirmed` ("✅ 5x Bombom") e o
+// cliente não distingue CORREÇÃO de item novo — encurtar não pode custar o sentido.
 export function qtyAdjusted(qty: number, name: string): string {
-  return `✅ Ajustei: ${qty}x ${name}. Quer mais alguma coisa? Quando fechar, é só dizer *"só isso"*. 🙂`;
+  return `✅ Ajustei: ${qty}x ${name}. Quer mais alguma coisa? Quando fechar, diz *"só isso"*.`;
 }
 
 // Toque em "Outra quantidade": pergunta aberta — o número vem digitado no chat.
 export function quantityAskFree(name: string): string {
-  return `Me diz quantas unidades de *${name}* você quer (de 1 a 50) 🙂`;
+  return `Quantas unidades de *${name}*? (de 1 a 50)`;
 }
 
 // Busca que passou de ~2,5s: o cliente precisa saber que a Lia está trabalhando —
@@ -896,5 +941,5 @@ export function quantityAskFree(name: string): string {
 // dono, 17/08: "essa msg de procurei nas lojas parceiras e não achei é péssima, só
 // deixa procurando"). O cliente não quer saber quantos fornecedores existem.
 export function searchingWider(): string {
-  return "🔎 Procurando as melhores opções pra você…";
+  return "🔎 Procurando as melhores opções…";
 }

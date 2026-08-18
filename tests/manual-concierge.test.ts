@@ -116,7 +116,7 @@ test("regra 11/08: item sem preço é recusado NA HORA — nunca 'anotei, vou co
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const out = await c.send("quero um vedante pra torneira");
-  assert.match(out, /não tenho como trazer/i);
+  assert.match(out, /não consigo trazer/i);
   assert.match(out.toLowerCase(), /vedante/);
   assert.doesNotMatch(out, /anotei|vou cotar|garimpar/i);
   const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId } });
@@ -135,7 +135,7 @@ test("vitrine: item com preço vira opção; item sem preço é recusado na mesm
   assert.match(out, /op(ç|c)(õ|o)es/i);
   assert.match(out.toLowerCase(), /coca/);
   // O vedante não existe → recusa honesta na hora (regra 11/08), nunca "vou cotar".
-  assert.match(out, /não tenho como trazer/i);
+  assert.match(out, /não consigo trazer/i);
   assert.match(out.toLowerCase(), /vedante|torneira/);
   assert.doesNotMatch(out, /garimpar|vou cotar/i);
 });
@@ -238,7 +238,7 @@ test("cotação instantânea: item sem preço é recusado na entrada e o resto f
   const first = await c.send("quero 10 coca cola e uma vela de aniversário");
   // Regra 11/08: a vela (sem preço) é recusada JÁ na entrada — nunca arrasta o pedido
   // inteiro pra cotação manual.
-  assert.match(first, /não tenho como trazer/i);
+  assert.match(first, /não consigo trazer/i);
   assert.match(first.toLowerCase(), /vela/);
   const afterChoice = await c.send("1");
   if (/quantas unidades/i.test(afterChoice)) await c.send("10");
@@ -305,10 +305,27 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   assert.equal(paid!.status, "paid");
 
   // 6. Operador compra à mão e marca. Concierge → operator_buying (não retirada de loja).
-  await opsMarkBought(pending!.id, "");
+  // Link de acompanhamento colado na COMPRA (17/08): é a hora em que o operador tem a
+  // página do pedido aberta — e nos pedidos entregues pela loja ele não sabe quando o
+  // pacote sai, então esse é o único momento garantido de dar rastreio ao cliente.
+  const TRACKING = "https://www.mercadolivre.com.br/vendas/123456/detalhe";
+  // Link inseguro é recusado ANTES de escrever (o pedido continua pago e comprável).
+  await assert.rejects(() => opsMarkBought(pending!.id, "", "http://inseguro.com/x"), /https/i);
+  const stillPaid = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
+  assert.equal(stillPaid!.status, "paid", "recusa do link não pode mexer no pedido");
+  const beforeBought = outbox.length;
+  await opsMarkBought(pending!.id, "", TRACKING);
   const bought = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal(bought!.status, "operator_buying");
   assert.equal(isOperatorCourierOrder(bought!), true);
+  // O cliente é avisado da compra (17/08): silêncio entre "pago" e "saiu pra entrega"
+  // é onde nasce o "cadê meu pedido?".
+  const boughtMsgs = outbox.slice(beforeBought);
+  assert.ok(boughtMsgs.length >= 1, "compra tem que avisar o cliente");
+  const boughtText = boughtMsgs[boughtMsgs.length - 1].text;
+  assert.match(boughtText, /compr|prepar|separ/i);
+  assert.ok(boughtText.includes(TRACKING), `aviso de compra tem que levar o link: ${boughtText}`);
+  assert.equal(bought!.courierTrackingUrl, TRACKING, "link fica guardado no pedido");
 
   // 7. Despacha o motoboy — sai da BASE do operador, não de uma loja. Não pode lançar.
   await opsDispatchCourier(pending!.id);
@@ -446,7 +463,7 @@ test("concierge: cotação abandonada 1h+ expira sozinha e a conversa recomeça"
   await prisma.$executeRaw`UPDATE "Message" SET "createdAt" = NOW() - INTERVAL '2 hours' WHERE "conversationId" IN (SELECT id FROM "Conversation" WHERE "userId" = ${c.userId})`;
   await prisma.$executeRaw`UPDATE "Conversation" SET "updatedAt" = NOW() - INTERVAL '2 hours' WHERE "userId" = ${c.userId}`;
   const back = await c.send("quero um leite");
-  assert.match(back, /cancelei pra não te atrapalhar/, `sem aviso de recomeço: ${back.slice(0, 200)}`);
+  assert.match(back, /por inatividade — nada foi cobrado/, `sem aviso de recomeço: ${back.slice(0, 200)}`);
   assert.doesNotMatch(back, /já incluí na cotação/, "a mensagem nova NÃO pode cair no pedido velho");
   const after = await prisma.deliveryOrder.findUnique({ where: { id: stuck!.id } });
   assert.equal(after?.status, "canceled");

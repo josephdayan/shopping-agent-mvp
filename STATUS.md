@@ -1,5 +1,14 @@
 # Lia — Status do Projeto
 
+## Atualização 17/08/2026 — OAuth Mercado Livre em preparo
+
+Foi preparada localmente uma integração OAuth segura para a API oficial de busca do Mercado
+Livre: tokens cifrados no banco, callback de `liadelivery.com.br` com state anti-CSRF e fallback
+para Apify. A criação da app **não aconteceu**: o DevCenter autenticado devolveu
+`OPT02-EN1XAJYDKPNW` e retornou ao início após retry. Não houve deploy, migration aplicada,
+segredo, token, compra ou notificação. O próximo passo é o dono regularizar a elegibilidade da
+conta no DevCenter/suporte; a API não serve para compras ou rastreio de pedidos como comprador.
+
 > Memória canônica para agentes: [AGENTS.md](AGENTS.md). Progresso e próximos passos:
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
@@ -12,6 +21,27 @@ de hoje está em
 [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md)._
 
 ---
+
+> **Revisão de copy 2026-08-17 — tom direto e prazo honesto.** O dono revisou as ~110
+> mensagens automáticas de uma vez (levantamento completo em
+> [docs/todas-as-mensagens-da-lia.md](docs/todas-as-mensagens-da-lia.md), com o texto antigo
+> ao lado do novo). Régua vigente, aplicada em `src/lib/lia-copy.ts`: verbo na frente, sem
+> preâmbulo de simpatia ("Prontinho", "Opa", "Fechado!", "Deixa comigo"), sem explicar a
+> mecânica interna, no máximo 1 emoji, uma saída por mensagem, **sem lista de exemplos de
+> produto** e **sem endereço/CEP fictício** (descrever os campos, nunca inventar um). O 💚
+> caiu de 8 para 2 ocorrências. A apresentação da Lia agora é uma frase só, idêntica nos
+> quatro pontos de entrada.
+>
+> **Regra que não pode ser quebrada: nada de prazo antes de cotar.** Quem manda no prazo é o
+> checkout da loja e ele varia — às vezes é no mesmo dia, às vezes leva dias. Saiu "chega
+> hoje" / "no mesmo dia" / "em ~1h" / "1 a 2 horas" de toda mensagem genérica (`help`,
+> `serviceAnswer:eta`, `serviceAnswer:generic`). Junto disso caíram os fallbacks
+> `etaMinutes ?? 40` e `?? 90` do `summary`/`manualQuoteSummary`: sem prazo real da loja, a
+> linha de entrega sai só com o valor, nunca com um número inventado. O prazo aparece uma vez
+> só, no resumo, e sempre com o dado que a loja devolveu.
+>
+> ⚠️ **Pendente:** a landing (`src/app/page.tsx`, `layout.tsx`, `opengraph-image.tsx`) ainda
+> anuncia "entrega no mesmo dia" — mesma promessa que saiu do chat. Precisa da mesma revisão.
 
 > **Remodelagem 2026-07-20 — concierge manual (fluxo ativo).** O produto passou a ser um
 > concierge de WhatsApp com **largura** (pede qualquer coisa, de qualquer lugar), **cotação e

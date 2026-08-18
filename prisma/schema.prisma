@@ -398,6 +398,22 @@ model SearchCache {
   @@index([updatedAt])
 }
 
+// OAuth da única conta operacional da Lia no Mercado Livre. Os tokens nunca vão para
+// env, logs ou browser: ficam cifrados no banco com uma chave derivada do Client
+// Secret, que só existe no runtime da Vercel.
+model MercadoLivreOAuthCredential {
+  id                   String   @id
+  mercadoLivreUserId   String?
+  accessTokenEncrypted String
+  refreshTokenEncrypted String
+  expiresAt            DateTime
+  scope                String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+
 // Demand from outside the current delivery area. When a customer sends a CEP we don't
 // cover yet, the brain saves the lead here instead of taking a paid order it can't
 // fulfil — and the /ops "lista de espera" turns these into a demand map (expand where

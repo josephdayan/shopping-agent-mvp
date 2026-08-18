@@ -395,7 +395,7 @@ export const whatsappAdapter = {
       `Pagar ${formatBRL(input.total)} com o cartão salvo final ${input.last4}?`,
       [
         { id: `cardpay:${input.attemptId}`, title: `Pagar •••• ${input.last4}` },
-        { id: "cardother", title: "Usar outro cartão" }
+        { id: "cardother", title: "Outro cartão" }
       ],
       "Cobrança segura via Pagar.me — seus dados não passam pelo chat."
     );
@@ -426,15 +426,15 @@ export const whatsappAdapter = {
     return sendMetaSimpleButtons(to, body, [
       // "Pagar" prometia cobrança imediata, mas o toque FECHA a lista e mostra o total
       // com as formas — o rótulo agora diz o que realmente acontece (rodada 1, 14/08).
-      { id: "pagar", title: "Fechar e ver total" },
-      { id: "adicionar_mais", title: "Adicionar mais itens" },
+      { id: "pagar", title: "Ver total" },
+      { id: "adicionar_mais", title: "Adicionar mais" },
       { id: "cancelar", title: "Cancelar" }
     ]);
   },
 
   async sendCartActions(to: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
-    return sendMetaSimpleButtons(to, "Quer ajustar o pedido antes de pagar?", [
+    return sendMetaSimpleButtons(to, "Quer ajustar antes de pagar?", [
       { id: "adicionar_mais", title: "Adicionar mais" },
       { id: "cancelar", title: "Cancelar pedido" }
     ]);

@@ -1158,7 +1158,7 @@ async function handleDeliveryTurn(
     // Só o que realmente não faz sentido re-pergunta; "cancelar"/"status"/"pagar"
     // etc. seguem pro roteador normal — a pergunta de quantidade não é uma prisão.
     if (intent.kind === "free_text" || intent.kind === "number") {
-      await reply(phone, "Me diz uma quantidade entre 1 e 50 🙂");
+      await reply(phone, "Só consigo de 1 a 50 unidades. Quantas?");
       return;
     }
   }
@@ -1397,7 +1397,7 @@ async function handleDeliveryTurn(
     return;
   }
   if (ctx.step === "payment_issuing") {
-    await reply(phone, "O carrinho já foi confirmado e estou gerando seu pagamento agora. Só um instante. 💳");
+    await reply(phone, "Gerando seu pagamento agora. Um instante.");
     return;
   }
   if (ctx.step === "awaiting_quote_confirmation" && ctx.deliveryOrderId) {
@@ -3862,20 +3862,48 @@ export async function opsPublishManualQuote(
   return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }
 
-export async function opsMarkBought(orderId: string, storeOrderNumber: string) {
+export async function opsMarkBought(orderId: string, storeOrderNumber: string, trackingUrl?: string) {
   const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!current) throw new Error("Order not found");
   if (current.status !== "paid") throw new Error("Somente um pedido pago pode ser marcado como comprado.");
-  return prisma.deliveryOrder.update({
+  // Link de acompanhamento do pedido NA LOJA (ML e afins), colado já na compra — que é
+  // quando o operador tem a página aberta. Sem isso o cliente só recebia rastreio no
+  // "saiu pra entrega", instante que nos pedidos entregues pela loja o operador não tem
+  // como saber (dono, 17/08: "ele tem que poder ver e acompanhar").
+  const safeTrackingUrl = (trackingUrl ?? "").trim();
+  if (safeTrackingUrl && !/^https:\/\//i.test(safeTrackingUrl)) {
+    throw new Error("O link de acompanhamento precisa ser uma URL https.");
+  }
+  const updated = await prisma.deliveryOrder.update({
     where: { id: orderId },
     // Blank input stays null so legacy pickupInstructions' "—" fallback works if
     // this is an authorized-courier order.
     data: {
       status: statusAfterStorePurchase(current),
       storeOrderNumber: storeOrderNumber.trim() || null,
+      // Coluna legada de courier = link de rastreio genérico voltado ao cliente (mesma
+      // usada por opsMarkRetailerOutForDelivery). Só sobrescreve quando veio link novo.
+      ...(safeTrackingUrl ? { courierTrackingUrl: safeTrackingUrl } : {}),
       notes: appendOrderNote(current.notes, `🧾 Compra marcada pelo operador em ${new Date().toISOString()}.`)
     }
   });
+  // O cliente era o único que não sabia da compra (17/08): entre "pagamento confirmado" e
+  // "saiu pra entrega" ele ficava no silêncio, que num pedido de loja pode durar horas —
+  // e silêncio depois de pagar é onde nasce o "cadê meu pedido?". Falha de envio não
+  // desfaz a compra: o status já mudou e o /ops é a fonte da verdade.
+  try {
+    await reply(
+      updated.phone,
+      copy.orderStatusLine({
+        shortId: updated.id.slice(-6).toUpperCase(),
+        status: updated.status,
+        trackingUrl: updated.courierTrackingUrl
+      })
+    );
+  } catch (error) {
+    console.warn("[ops:mark-bought:notify-failed]", error instanceof Error ? error.message : error);
+  }
+  return updated;
 }
 
 export async function opsDispatchCourier(orderId: string) {

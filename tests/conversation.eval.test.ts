@@ -191,11 +191,11 @@ test("multi-item ambíguo avisa que vai escolher um de cada vez e preserva o seg
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const first = await c.send("quero uma coca e uma escova de dente");
-  assert.match(first, /Encontrei os 2 itens/i);
-  assert.match(first, /primeiro[\s\S]*coca[\s\S]*depois[\s\S]*escova/i);
+  assert.match(first, /Achei os 2 itens/i);
+  assert.match(first, /um de cada vez[\s\S]*coca[\s\S]*depois[\s\S]*escova/i);
   assert.match(first, /opções de \*coca\*/i);
   const second = await c.send("1");
-  assert.match(second, /Agora vamos escolher \*escova de dente\*/i);
+  assert.match(second, /Agora \*escova de dente\*/i);
   assert.match(second, /Escova de Dente/i);
 });
 
@@ -253,7 +253,7 @@ test("produto ambíguo: mostra opções numeradas; 'mais barato' escolhe a mais 
   assert.ok(ambiguous, "nenhuma query ambígua no catálogo?");
   const c = await returningCustomer();
   const offer = await c.send(`quero ${ambiguous}`);
-  assert.match(offer, /opções/);
+  assert.match(offer, /opções/i);
   assert.match(offer, /\*1\)\*/);
   const cheapest = options.reduce((best, o) => (o.unitPrice < best.unitPrice ? o : best));
   const picked = await c.send("o mais barato");
@@ -356,7 +356,7 @@ test("trocar item: 'troca X por Y' remove e busca o novo", async (t) => {
   await c.sendAndResolve("2 arroz");
   const swapped = await c.sendAndResolve("troca o arroz por feijao");
   assert.match(swapped, /Troquei|tirei/i);
-  assert.match(swapped, /feij|Feij|Seu pedido|opções/);
+  assert.match(swapped, /feij|Feij|Seu pedido|op(ç|c)ões/i);
 });
 
 test("pedido mínimo: item barato + 'pagar' avisa quanto falta", async (t) => {
@@ -374,7 +374,7 @@ test("pedido mínimo: 'pix' abaixo do mínimo recebe a saída honesta, não o nu
   await c.sendAndResolve(await cheapItemQuery());
   await c.send("so isso");
   const pix = await c.send("pix");
-  assert.match(pix, /não fecha pedido abaixo/);
+  assert.match(pix, /não fecha abaixo/);
   assert.match(pix, /cancelar/);
 });
 
@@ -387,7 +387,7 @@ test("pergunta de quantidade não prende 'só isso' nem 'cancelar' (ciclo 2)", a
   assert.match(qtyAsk, /Quantas unidades/);
   // "só isso" na pergunta de quantidade = 1 unidade e segue o fluxo
   const done = await c.send("so isso");
-  assert.doesNotMatch(done, /quantidade entre 1 e 50/);
+  assert.doesNotMatch(done, /de 1 a 50 unidades/);
   assert.match(done, /1x/);
   await c.send("limpar carrinho");
 
@@ -397,8 +397,8 @@ test("pergunta de quantidade não prende 'só isso' nem 'cancelar' (ciclo 2)", a
   assert.match(qa, /Quantas unidades/);
   // "cancelar" na pergunta de quantidade não pode ficar em loop de re-pergunta
   const cancel = await d.send("cancelar");
-  assert.doesNotMatch(cancel, /quantidade entre 1 e 50/);
-  assert.match(cancel, /limpei|cancel/i);
+  assert.doesNotMatch(cancel, /de 1 a 50 unidades/);
+  assert.match(cancel, /limp(ei|o)|cancel/i);
 });
 
 test("'quero' sozinho recebe convite caloroso, não 'não entendi'", async (t) => {
@@ -473,7 +473,7 @@ test("cancelar antes de pagar: cancela na hora sem cobrança", async (t) => {
   await c.send("pagar");
   await c.send("pix");
   const cancel = await c.send("cancelar");
-  assert.match(cancel, /cancelei/i);
+  assert.match(cancel, /cancel(ei|ado)/i);
   const order = await prisma.deliveryOrder.findFirst({
     where: { phone: c.phone },
     orderBy: { createdAt: "desc" }
@@ -737,17 +737,17 @@ test("item novo no meio de uma escolha é reconhecido, não entra mudo na fila",
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const first = await c.send("arroz");
-  assert.match(first, /opções de \*arroz\*/);
+  assert.match(first, /opções de \*arroz\*/i);
   const add = await c.send("e feijao tambem");
   assert.match(add, /Anotei \*feijao\*/);
-  assert.match(add, /opções de \*arroz\*/); // continua na escolha atual
+  assert.match(add, /opções de \*arroz\*/i); // continua na escolha atual
 });
 
 test("teto de preço na escolha: 'até X reais' filtra as opções pelo preço exibido", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const first = await c.send("arroz");
-  assert.match(first, /opções de \*arroz\*/);
+  assert.match(first, /opções de \*arroz\*/i);
   const prices = [...first.matchAll(/R\$ (\d+,\d{2})/g)].map((m) => Number(m[1].replace(",", ".")));
   assert.ok(prices.length >= 2, "precisa de 2+ opções pra filtrar");
   const cap = Math.floor((prices[0] + prices[prices.length - 1]) / 2); // entre a mais barata e a mais cara
@@ -764,7 +764,7 @@ test("rodada 6: orçamento nunca vira item — um pedido com teto é UMA escolha
   const c = await returningCustomer();
   const out = await c.send("quero uma coca cola, até uns 8 reais");
   // Nada de "não tenho como trazer: até uns 8 reais" nem segunda linha de escolha.
-  assert.doesNotMatch(out, /não tenho como trazer/i, `fantasma de orçamento: ${out.slice(0, 200)}`);
+  assert.doesNotMatch(out, /não consigo trazer/i, `fantasma de orçamento: ${out.slice(0, 200)}`);
   assert.doesNotMatch(out, /2 itens/i);
   assert.match(out, /opções de \*coca/i);
   // Todas as opções mostradas respeitam o teto (preço exibido, com markup).

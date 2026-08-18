@@ -221,7 +221,7 @@ está em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
 - `TWILIO_PHONE_NUMBER`: numero Twilio principal em formato E.164.
 - `TWILIO_VOICE_PUBLIC_DOMAIN`: dominio publico para voz/ConversationRelay, se ativar voz.
 - `MERCADO_LIVRE_REAL_SEARCH`: `true` para tentar busca real no Mercado Livre.
-- `MERCADO_LIVRE_ACCESS_TOKEN`: token OAuth do Mercado Livre. Sem ele, a API de listings pode responder 403 e o app cai no mock.
+- `ML_CLIENT_ID` / `ML_CLIENT_SECRET`: chaves Sensitive da aplicação Mercado Livre exclusiva da Lia. Após publicar a migration, abra `/api/mercadolivre/oauth/authorize` uma vez com a conta operacional; o token fica cifrado no banco e é renovado automaticamente. Não coloque token OAuth em env nem no chat.
 - `MERCADO_LIVRE_SEARCH_LIMIT`: quantidade de resultados buscados antes do ranking. Padrao: `8`.
 - `MERCADO_LIVRE_DEFAULT_SHIPPING`: frete estimado quando a API nao traz frete. Padrao: `12.90`.
 - `MERCADO_LIVRE_DEFAULT_DELIVERY_HOURS`: prazo estimado usado no ranking. Padrao: `48`.
@@ -256,7 +256,7 @@ Importante: a API publica de search pode retornar `403` mesmo com credenciais OA
 - `automationLevel`: `real_search_manual_checkout`, `real_apify_search`, `real_external_search` ou `real_catalog_manual_checkout`
 - `fulfillmentMode`: `marketplace_native` ou `manual_operator`
 
-Isso ainda nao compra automaticamente. A etapa de compra/checkout real precisara de OAuth, regras comerciais e provavelmente operacao manual ou API autorizada.
+Isso ainda nao compra automaticamente. A etapa de compra/checkout continua manual pelo operador: a API do ML não é uma API de compra para a conta compradora. A conexão OAuth apenas acelera a vitrine de cauda longa, com fallback automático para a busca Apify.
 
 ## Como integrar Mercado Pago/PIX
 

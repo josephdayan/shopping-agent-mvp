@@ -433,11 +433,26 @@ export default function OpsBoard() {
                     onChange={(e) => setNumbers((n) => ({ ...n, [o.id]: e.target.value }))}
                     style={input}
                   />
+                  {/* Link de acompanhamento colado JÁ na compra (a página do pedido no ML
+                      está aberta nessa hora): o cliente recebe junto com o aviso de compra
+                      e passa a ver o andamento na fonte, sem depender de marcação nossa. */}
+                  <input
+                    placeholder="link https de acompanhamento (opcional)"
+                    value={tracking[o.id] ?? ""}
+                    onChange={(e) => setTracking((current) => ({ ...current, [o.id]: e.target.value }))}
+                    style={{ ...input, minWidth: 240 }}
+                    title="Cole aqui a página do pedido na loja (ex.: Mercado Livre). A Lia manda esse link pro cliente ao avisar da compra."
+                  />
                   {operatorCourier ? (
                     <button
                       style={primary}
                       disabled={busy === `${o.id}:bought_and_dispatch`}
-                      onClick={() => act(o.id, "bought_and_dispatch", { storeOrderNumber: numbers[o.id] ?? "" })}
+                      onClick={() =>
+                        act(o.id, "bought_and_dispatch", {
+                          storeOrderNumber: numbers[o.id] ?? "",
+                          trackingUrl: tracking[o.id] ?? ""
+                        })
+                      }
                       title="Marca como comprado e já chama o motoboy na sua base, num passo só."
                     >
                       🛵 Comprei — despachar motoboy
@@ -446,7 +461,9 @@ export default function OpsBoard() {
                     <button
                       style={primary}
                       disabled={busy === `${o.id}:bought`}
-                      onClick={() => act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "" })}
+                      onClick={() =>
+                        act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "", trackingUrl: tracking[o.id] ?? "" })
+                      }
                     >
                       {retailerDelivery ? "Confirmar compra no varejista" : "Marquei como comprado"}
                     </button>

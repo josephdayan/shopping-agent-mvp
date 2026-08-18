@@ -161,7 +161,7 @@ test("cartão salvo DB: 'outro cartão' expira a cobrança e manda link novo de 
     const attempt = await createCardAttempt(data.order, { id: data.credential.id, last4: data.credential.last4 });
     await send(data.phone, "outro cartão");
     assert.equal((await prisma.paymentAttempt.findUniqueOrThrow({ where: { id: attempt.id } })).status, "expired");
-    assert.match(textsFor(data.phone), /cadastrar seu cart(ã|a)o num link seguro/i);
+    assert.match(textsFor(data.phone), /cadastra o cart(ã|a)o neste link seguro/i);
     assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: data.order.id } })).status, "awaiting_payment");
   } finally {
     await cleanup(data);
@@ -173,7 +173,7 @@ test("cartão salvo DB: toque sem nada pendente responde honesto", async (t) => 
   const data = await makeCardOrder();
   try {
     await send(data.phone, "usar cartão");
-    assert.match(textsFor(data.phone), /N(ã|a)o achei uma cobran(ç|c)a de cart(ã|a)o em aberto/i);
+    assert.match(textsFor(data.phone), /N(ã|a)o tem cobran(ç|c)a em aberto/i);
   } finally {
     await cleanup(data);
   }

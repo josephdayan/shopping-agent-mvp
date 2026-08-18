@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { scoreCatalogMatch } from "./types";
 import { runApifyActor } from "@/lib/adapters/suppliers";
+import { getMercadoLivreAccessToken } from "@/lib/mercadolivre-oauth";
 import { withoutMedicine } from "./anvisa";
 
 // Mercado Livre como VITRINE DE CAUDA LONGA (decisão do dono, 16/08/2026).
@@ -69,6 +70,18 @@ type ApifyMlItem = {
   posicaoItem?: number | null;
   lojaOficial?: boolean | null;
 };
+
+type OfficialMlItem = {
+  id?: string;
+  title?: string;
+  price?: number;
+  thumbnail?: string;
+  permalink?: string;
+  shipping?: { free_shipping?: boolean };
+  seller?: { nickname?: string };
+};
+
+type OfficialMlSearchResponse = { results?: OfficialMlItem[] };
 
 // Item do ML guarda os sinais junto (sobrevive ao cache, que serializa o objeto).
 type MlCatalogItem = CatalogItem & { mlTrust?: number; mlPosition?: number };
@@ -189,6 +202,48 @@ async function storeItems(queryKey: string, query: string, items: MlCatalogItem[
   }
 }
 
+// The official endpoint returns in around a second when the operator has linked
+// a DevCenter application. Apify remains the resilient fallback: a 401, 403,
+// timeout or empty response must never turn a valid long-tail request into a refusal.
+async function searchMercadoLivreOfficial(query: string, limit: number): Promise<MlCatalogItem[]> {
+  const token = await getMercadoLivreAccessToken();
+  if (!token) return [];
+  try {
+    const url = new URL("https://api.mercadolibre.com/sites/MLB/search");
+    url.searchParams.set("q", query);
+    url.searchParams.set("limit", String(Math.max(limit * 4, 12)));
+    const response = await fetch(url, {
+      headers: { Accept: "application/json", Authorization: `Bearer ${token}`, "User-Agent": "lia/1.0" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(4_000)
+    });
+    if (!response.ok) {
+      console.warn("[mercado-livre:official-search]", response.status);
+      return [];
+    }
+    const payload = (await response.json()) as OfficialMlSearchResponse;
+    const catalog = withoutMedicine(
+      (payload.results ?? []).flatMap((raw): MlCatalogItem[] => {
+        if (!raw.id || !raw.title || !raw.price || !raw.permalink) return [];
+        return [{
+          sku: `ml-${raw.id}`,
+          name: raw.title,
+          brand: raw.seller?.nickname,
+          unitPrice: raw.price,
+          imageUrl: mlImageAsJpg(raw.thumbnail),
+          productUrl: raw.permalink,
+          ...(raw.shipping?.free_shipping ? { freeShipping: true } : {}),
+          mlPosition: 999
+        }];
+      })
+    );
+    return rankMercadoLivre(query, catalog, limit);
+  } catch (error) {
+    console.warn("[mercado-livre:official-search:error]", error instanceof Error ? error.message : error);
+    return [];
+  }
+}
+
 // Buscas frias IDÊNTICAS em voo compartilham UM run do actor (o prefetch dispara a
 // mesma query que a busca real vai pedir segundos depois; sem isto seriam dois runs
 // pagos e o segundo ainda esperaria do zero).
@@ -213,6 +268,12 @@ export async function searchMercadoLivre(query: string, limit = 4): Promise<MlCa
 
   const cached = await cachedItems(queryKey);
   if (cached) return rankMercadoLivre(query, cached, limit);
+
+  const official = await searchMercadoLivreOfficial(query, limit);
+  if (official.length) {
+    await storeItems(queryKey, normalized, official);
+    return official;
+  }
 
   let run = inflight.get(queryKey);
   if (!run) {

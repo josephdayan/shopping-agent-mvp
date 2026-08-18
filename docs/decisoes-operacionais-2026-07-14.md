@@ -1,5 +1,14 @@
 # Decisões operacionais — 14 de julho de 2026
 
+## Registro 17/08/2026 — Mercado Livre: busca oficial, sem compra por API
+
+Foi confirmado que a eventual aplicação do DevCenter será usada somente para reduzir a latência
+da busca da vitrine Mercado Livre, sempre com fallback para Apify. Ela não autoriza a Lia a
+comprar nem a receber rastreio dos pedidos feitos pela conta como compradora; portanto
+`orders_v2`/`shipments` não são parte desta integração. A tentativa de abrir a primeira
+aplicação na conta operacional parou no erro `OPT02-EN1XAJYDKPNW`, sem criar credencial ou
+alterar conta. A elegibilidade/validação do titular é um bloqueio externo a resolver no ML.
+
 Este documento registra as conclusões obtidas em 14/07/2026 após validar o checkout real
 da Petz e revisar as políticas oficiais de retirada da Petz, Carrefour e Uber Direct.
 Ele substitui a premissa anterior de que uma compra comum em `clique-e-retire` poderia ser
