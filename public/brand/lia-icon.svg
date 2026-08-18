@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
   <title id="title">Lia</title>
   <!-- Mesmas cores da foto de perfil do WhatsApp: lima + roxo (Berinjela & lima). -->
-  <rect width="1024" height="1024" rx="246" fill="#D9FF5B"/>
-  <polyline points="389,256 389,737 727,737" fill="none" stroke="#3A225E" stroke-width="164" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M758 164 Q758 307 901 307 Q758 307 758 451 Q758 307 614 307 Q758 307 758 164 Z" fill="#3A225E"/>
+  <rect width="1024" height="1024" rx="246" fill="#3A225E"/>
+  <polyline points="389,256 389,737 727,737" fill="none" stroke="#D9FF5B" stroke-width="164" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M758 164 Q758 307 901 307 Q758 307 758 451 Q758 307 614 307 Q758 307 758 164 Z" fill="#D9FF5B"/>
 </svg>

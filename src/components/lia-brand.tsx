@@ -42,22 +42,22 @@ export function LiaSymbol({ className = "" }: { className?: string }) {
 }
 
 // Mesma arte da foto de perfil do WhatsApp (public/brand/lia-whatsapp-profile.svg):
-// círculo lima #D9FF5B com o L+estrela em roxo #3A225E (paleta "Berinjela & lima").
+// círculo roxo #3A225E com o L+estrela em lima #D9FF5B (paleta "Berinjela & lima").
 // O anel fino mantém o círculo legível sobre fundos claros.
 export function LiaWhatsAppAvatar({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" className={className}>
-      <circle cx="50" cy="50" r="49" fill="#D9FF5B" stroke="#3A225E" strokeOpacity="0.2" strokeWidth="2" />
+      <circle cx="50" cy="50" r="49" fill="#3A225E" stroke="#D9FF5B" strokeOpacity="0.2" strokeWidth="2" />
       <g transform="translate(19.7 25) scale(0.556)">
         <polyline
           points="38,25 38,72 71,72"
           fill="none"
-          stroke="#3A225E"
+          stroke="#D9FF5B"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="16"
         />
-        <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z" fill="#3A225E" />
+        <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z" fill="#D9FF5B" />
       </g>
     </svg>
   );
