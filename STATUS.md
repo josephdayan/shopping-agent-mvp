@@ -1,5 +1,14 @@
 # Lia — Status do Projeto
 
+## Atualização 19/08/2026 — /admin com login de usuário e senha
+
+Revisão completa pré-lançamento: `/admin`, `/api/admin/*` e `/api/conversations/*` (legado
+do `/chat`) estavam sem autenticação em produção. Agora exigem login (`ADMIN_USER`/
+`ADMIN_PASSWORD`, Sensitive na Vercel, falha fechado quando ausentes); sessão por cookie
+httpOnly de 30 dias. O `/ops` continua com `OPS_TOKEN`, inalterado. Achados restantes da
+revisão em andamento em sessões paralelas: Pix mock quando o Mercado Pago falha com
+credenciais reais, e conversa presa após `opsCancelRefund` + `choosing_freight` sem TTL.
+
 ## Atualização 17/08/2026 — OAuth Mercado Livre em preparo
 
 Foi preparada localmente uma integração OAuth segura para a API oficial de busca do Mercado

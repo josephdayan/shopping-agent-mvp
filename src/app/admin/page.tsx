@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, CircleDollarSign, FastForward, ListTodo, Users } from "lucide-react";
+import { cookies } from "next/headers";
 import { getAdminSnapshot } from "@/lib/admin-service";
+import { ADMIN_COOKIE, isAdminSession } from "@/lib/admin-auth";
+import AdminLogin from "@/components/admin-login";
 import AdminActions from "@/components/admin-actions";
 import ProductActions from "@/components/product-actions";
 import LiaBrand from "@/components/lia-brand";
@@ -8,6 +11,9 @@ import LiaBrand from "@/components/lia-brand";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  if (!isAdminSession(cookies().get(ADMIN_COOKIE)?.value)) {
+    return <AdminLogin />;
+  }
   const data = await getAdminSnapshot();
   const paid = data.orders.filter((order) => order.paymentStatus === "approved").length;
   const pending = data.orders.filter((order) => order.paymentStatus === "awaiting_payment").length;

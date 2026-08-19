@@ -6,6 +6,16 @@ Este é o painel canônico de progresso do projeto. Marque um item com `[x]` som
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
 [AGENTS.md](AGENTS.md) e [STATUS.md](STATUS.md).
 
+> **19/08 — revisão completa pré-amigos-e-família.** Quatro bloqueadores achados; o 1º já
+> fechado: `/admin` + rotas legadas exigem login usuário/senha (`ADMIN_USER`/`ADMIN_PASSWORD`
+> Sensitive na Vercel; falha fechado). Em andamento em sessões paralelas: (2) Pix mock em
+> falha do MP com credenciais reais; (3) conversa presa após cancelamento no /ops +
+> `choosing_freight` sem expiração. (4) landing antiga com promessas vetadas sai do ar com o
+> deploy deste lote (6 commits locais publicados). Recomendados antes de abrir: timeout nas
+> chamadas OpenAI/MP, webhook MP devolver 5xx em erro transitório, guards fail-closed quando
+> segredo faltar, e as 3 verificações reais pendentes (botões de frete, pedido frio ML,
+> zumbi `#CMSMCE`).
+
 > **Remodelagem concierge (2026-07-20).** O produto ativo virou um concierge manual no
 > WhatsApp (largura + cotação/compra do operador + motoboy saindo da base do operador).
 > Racional e contrato em [AGENTS.md](AGENTS.md) (topo). Muitos itens abaixo, escritos para a

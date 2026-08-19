@@ -51,6 +51,20 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 19/08/2026 — /admin fechado com login (revisão pré-lançamento)
+
+A revisão completa pré-amigos-e-família achou o painel `/admin` e as rotas `/api/admin/*`
+e legadas `/api/conversations/*` **abertas em produção** (PII de clientes + estorno/aprovação
+sem token; confirmado ao vivo com 200 sem auth). Decisão do dono: login por **usuário e
+senha** (token na URL incomoda). Implementado em `src/lib/admin-auth.ts`: cookie httpOnly
+`admin_session` (HMAC derivado da senha — trocar `ADMIN_PASSWORD` derruba todas as sessões),
+form em `/admin`, guarda `requireAdminSession` nas 12 rotas e o `/chat` de demonstração
+atrás do mesmo login. **Falha fechado**: sem `ADMIN_USER`/`ADMIN_PASSWORD` no ambiente,
+ninguém entra (o `dev:demo` exporta demo/demo). Credenciais Sensitive criadas em
+Production/Preview na Vercel. Os demais achados da revisão (Pix mock em falha do MP;
+conversa presa após cancelamento no /ops + `choosing_freight` sem TTL) estão em sessões
+paralelas próprias; landing revisada publicada junto deste deploy.
+
 ## Decisão vigente — remodelagem concierge (2026-07-20)
 
 O produto foi remodelado para um **concierge de WhatsApp com largura**, comprado e
