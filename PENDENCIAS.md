@@ -201,6 +201,17 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > **NÃO PUBLICADO** — no teste real conferir: (1) os dois botões chegam e o toque publica;
 > (2) o total do botão escolhido é o cobrado; (3) a nota do /ops diz qual envio comprar.
 
+> **19/08 — conversa presa em pedido morto e frete velho CORRIGIDOS.** Revisão dupla
+> independente do `delivery-service.ts`: (1) `opsCancelRefund` cancelava/estornava sem
+> resetar o contexto — o cliente ouvia "ainda estou cotando" de pedido cancelado e, em
+> `choosing_freight`, o botão de frete virava erro genérico em loop (única saída: "trocar
+> endereço"); (2) `choosing_freight` não expirava nunca — toque dias depois publicava frete
+> e data do anúncio já vencidos, numa cotação pagável. Agora o cancelamento reseta a
+> conversa (helper compartilhado com o pagamento), `handleCancel` limpa ponteiro morto,
+> `awaiting_operator_quote` se cura sozinho, e a escolha de entrega entrou no TTL de
+> abandono de 1h + carimbo `quotedAt`. Gate: `tsc` + `tests/manual-concierge.test.ts`.
+> **NÃO PUBLICADO** — deploy depende de autorização do dono.
+
 > **17/08 (5ª) — frete+prazo REAIS por anúncio do ML (o R$18 automático morreu).**
 > Reclamação do dono ("os 18 automático tá péssimo... no app aparece 10,99 entrega até
 > amanhã, ele tem que saber isso direto"). Achado testado ao vivo, **sem credencial**:

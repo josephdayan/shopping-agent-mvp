@@ -811,3 +811,127 @@ test("5º ciclo: trocar endereço com cotação na mesa PRESERVA a cesta e re-co
   // O CEP processado aparece na confirmação (7º ciclo: era salvo mas invisível).
   assert.match(done, /01310-100/, `CEP sumiu da confirmação: ${done.slice(0, 250)}`);
 });
+
+// ---------- revisão dupla (18/08): pedido morto na mão do operador e frete velho ----------
+
+// Coloca a conversa parada na escolha de entrega (barata × rápida) sem depender da
+// consulta ao vivo do anúncio: o pedido é real (fila do operador) e só o contexto é
+// montado à mão, exatamente como o fluxo instantâneo o grava.
+async function parkOnFreightChoice(c: { userId: string }, orderId: string, quotedAt: number) {
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  await prisma.conversation.update({
+    where: { id: convo!.id },
+    data: {
+      currentStep: "choosing_freight",
+      context: JSON.stringify({
+        ...ctx,
+        step: "choosing_freight",
+        deliveryOrderId: orderId,
+        basket: undefined,
+        pending: undefined,
+        freightChoice: {
+          orderId,
+          itemsSubtotal: 30,
+          stores: 1,
+          quotedAt,
+          barato: { fee: 10, estimate: "quinta, 21/08" },
+          rapido: { fee: 22, estimate: "terça, 19/08" }
+        }
+      })
+    }
+  });
+  return convo!.id;
+}
+
+async function ctxOf(userId: string) {
+  const convo = await prisma.conversation.findFirst({ where: { userId } });
+  return JSON.parse(convo!.context ?? "{}") as { step?: string; deliveryOrderId?: string; freightChoice?: unknown };
+}
+
+test("cancelamento do operador solta a conversa (nada de 'ainda estou cotando' de pedido morto)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Revisão 18/08: opsCancelRefund cancelava o pedido e deixava o contexto em
+  // awaiting_operator_quote — o cliente ouvia "estou cotando" para sempre e "cancelar"
+  // respondia "não tem pedido" sem limpar nada.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsCancelRefund(order!.id);
+  const cleared = await ctxOf(c.userId);
+  assert.equal(cleared.deliveryOrderId, undefined, `contexto ainda preso no pedido: ${JSON.stringify(cleared)}`);
+  assert.notEqual(cleared.step, "awaiting_operator_quote");
+  const back = await c.send("e aí, já saiu o total?");
+  assert.doesNotMatch(back, /já.*cotando|cotando agora|segura a[ií]/i, `respondeu de pedido morto: ${back.slice(0, 200)}`);
+});
+
+test("'cancelar' com pedido já morto limpa o contexto (não repete 'não tem pedido')", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  // Pedido cancelado por fora (qualquer caminho que não passe pela conversa).
+  await prisma.deliveryOrder.update({ where: { id: order!.id }, data: { status: "canceled" } });
+  const out = await c.send("cancelar");
+  assert.match(out, /não tem pedido em andamento/i, `resposta inesperada: ${out.slice(0, 200)}`);
+  const after = await ctxOf(c.userId);
+  assert.equal(after.deliveryOrderId, undefined, `ponteiro morto sobreviveu: ${JSON.stringify(after)}`);
+  assert.notEqual(after.step, "awaiting_operator_quote");
+  // E a conversa volta a funcionar do zero.
+  const novo = await c.send("quero coca cola");
+  assert.doesNotMatch(novo, /não tem pedido/i);
+  assert.match(novo.toLowerCase(), /coca/, `não recomeçou: ${novo.slice(0, 200)}`);
+});
+
+test("botão de frete de dias atrás não publica cotação com data vencida", async (t) => {
+  if (!dbOk) return t.skip();
+  // Revisão 18/08: `choosing_freight` não expirava nunca. O toque tardio publicava frete
+  // e promessa de entrega consultados dias antes — possivelmente já no passado — e a
+  // cotação saía pagável.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await parkOnFreightChoice(c, order!.id, Date.now() - 3 * 24 * 60 * 60 * 1000);
+  const out = await c.send("frete:barato");
+  assert.match(out, /inatividade|venceu/i, `publicou ou travou: ${out.slice(0, 250)}`);
+  assert.doesNotMatch(out, /Total/i, `publicou cotação velha: ${out.slice(0, 250)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled");
+  const ctx = await ctxOf(c.userId);
+  assert.equal(ctx.step, undefined, `contexto ficou preso: ${JSON.stringify(ctx)}`);
+  assert.equal(ctx.freightChoice, undefined);
+});
+
+test("escolha de frete recém-cotada continua publicando na hora", async (t) => {
+  if (!dbOk) return t.skip();
+  // Contraprova da trava acima: o toque normal (segundos depois) não pode ser barrado.
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await parkOnFreightChoice(c, order!.id, Date.now() - 5_000);
+  const out = await c.send("frete:rapido");
+  assert.match(out, /Total/i, `não publicou a cotação: ${out.slice(0, 250)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "awaiting_quote_confirmation");
+  assert.match(after!.notes ?? "", /escolheu a entrega mais rápida/i);
+  assert.equal(after!.deliveryFee, 22);
+});
+
+test("cliente que some na escolha de frete: 1h+ cancela o pedido e não vira lista de compras", async (t) => {
+  if (!dbOk) return t.skip();
+  // O TTL de abandono passou a cobrir `choosing_freight`; o toque velho não pode ser
+  // reprocessado como texto ("frete:barato" virando item de cesta).
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await parkOnFreightChoice(c, order!.id, Date.now() - 2 * 60 * 60 * 1000);
+  await prisma.$executeRaw`UPDATE "Message" SET "createdAt" = NOW() - INTERVAL '2 hours' WHERE "conversationId" IN (SELECT id FROM "Conversation" WHERE "userId" = ${c.userId})`;
+  await prisma.$executeRaw`UPDATE "Conversation" SET "updatedAt" = NOW() - INTERVAL '2 hours' WHERE "userId" = ${c.userId}`;
+  const out = await c.send("frete:barato");
+  assert.match(out, /inatividade — nada foi cobrado|venceu/i, `sem aviso de recomeço: ${out.slice(0, 250)}`);
+  assert.doesNotMatch(out, /não consigo trazer|frete:barato/i, `o toque virou lista de compras: ${out.slice(0, 250)}`);
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled");
+  const ctx = await ctxOf(c.userId);
+  assert.equal(ctx.deliveryOrderId, undefined);
+});

@@ -1549,6 +1549,31 @@ tokens cifrados no Postgres. A API oficial será uma busca rápida de vitrine de
 Apify segue fallback. Ela **não** é API de compra nem de acompanhamento dos pedidos que a Lia
 faz como compradora; não cadastrar `orders_v2`/`shipments` com essa expectativa.
 
+### Correção 18–19/08/2026 — conversa presa em pedido morto e escolha de frete velha
+
+Revisão dupla independente do `src/lib/delivery-service.ts` achou dois defeitos ligados,
+ambos corrigidos e cobertos por eval E2E em `tests/manual-concierge.test.ts`:
+
+1. **Cancelar/estornar no /ops não soltava a conversa.** `opsCancelRefund` fechava o pedido
+   e deixava o contexto apontando pra ele: o cliente ouvia "ainda estou cotando" de um
+   pedido cancelado e "cancelar" respondia "não tem pedido em andamento" sem limpar nada.
+   Em `choosing_freight` era pior — o toque no botão de frete chamava
+   `opsPublishManualQuote` num pedido cancelado, que lança, e a resposta virava erro
+   genérico em loop; a única saída era "trocar endereço". Agora `opsCancelRefund` reseta o
+   contexto (mesmo helper do pagamento, `resetConversationForClosedOrder`, que preserva
+   cesta/pedido novo), `handleCancel` limpa o ponteiro morto antes de responder
+   "não tem pedido", e o passo `awaiting_operator_quote` se cura sozinho quando o pedido
+   não está mais na fila.
+2. **`choosing_freight` não expirava nunca.** O cliente sumia dias e o toque em
+   `frete:barato` publicava frete e promessa de data do anúncio consultados no passado
+   (possivelmente já vencidos), numa cotação pagável. O passo entrou no TTL de abandono
+   (`LIA_QUOTE_ABANDON_TTL_MS`, 1h) e a escolha passou a carregar `quotedAt`: toque mais
+   velho que o TTL cancela o pedido não-cotado e recomeça, em vez de publicar. Toque em
+   botão vencido não é reprocessado como lista de compras.
+
+Gate: `tsc` limpo + suíte `tests/manual-concierge.test.ts`. Não publicado — deploy depende
+de autorização do dono.
+
 ## Regras para continuar o trabalho
 
 - Preserve mudanças existentes: o worktree pode estar sujo e contém trabalho do usuário.
