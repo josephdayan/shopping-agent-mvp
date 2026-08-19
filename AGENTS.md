@@ -61,7 +61,11 @@ senha** (token na URL incomoda). Implementado em `src/lib/admin-auth.ts`: cookie
 form em `/admin`, guarda `requireAdminSession` nas 12 rotas e o `/chat` de demonstração
 atrás do mesmo login. **Falha fechado**: sem `ADMIN_USER`/`ADMIN_PASSWORD` no ambiente,
 ninguém entra (o `dev:demo` exporta demo/demo). Credenciais Sensitive criadas em
-Production/Preview na Vercel. Os demais achados da revisão (Pix mock em falha do MP;
+Production/Preview na Vercel. Na sequência, os guards de `src/lib/auth.ts`
+(API_TOKEN, webhook, assinaturas Twilio/Meta) passaram a **falhar fechado em deploy
+Vercel** quando o segredo estiver ausente (localmente seguem liberando, pro dev:demo e
+testes); os quatro segredos foram conferidos presentes em Production antes do deploy.
+Os demais achados da revisão (Pix mock em falha do MP;
 conversa presa após cancelamento no /ops + `choosing_freight` sem TTL) estão em sessões
 paralelas próprias; landing revisada publicada junto deste deploy.
 

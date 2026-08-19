@@ -2,9 +2,18 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import twilio from "twilio";
 
+// Em deploy (Vercel), segredo ausente é erro de configuração, nunca porta aberta: a
+// checagem FALHA FECHADO. Localmente (dev/demo/testes) a ausência continua liberando,
+// que é o que o dev:demo e a suíte esperam.
+function missingSecret(name: string) {
+  if (!process.env.VERCEL) return null;
+  console.error(`[auth:missing-secret] ${name} não configurado — negando por segurança`);
+  return NextResponse.json({ error: "Server auth not configured" }, { status: 401 });
+}
+
 export function requireApiToken(request: Request) {
   const expected = process.env.API_TOKEN;
-  if (!expected) return null;
+  if (!expected) return missingSecret("API_TOKEN");
 
   const authorization = request.headers.get("authorization");
   const token = authorization?.replace(/^Bearer\s+/i, "").trim();
@@ -18,7 +27,7 @@ export function requireApiToken(request: Request) {
 
 export function requireWebhookSecret(request: Request) {
   const expected = process.env.WHATSAPP_WEBHOOK_SECRET;
-  if (!expected) return null;
+  if (!expected) return missingSecret("WHATSAPP_WEBHOOK_SECRET");
 
   const secret = request.headers.get("x-webhook-secret");
   if (secret !== expected) {
@@ -30,7 +39,7 @@ export function requireWebhookSecret(request: Request) {
 
 export function requireTwilioSignature(request: Request, params: Record<string, unknown>) {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
-  if (!authToken) return null;
+  if (!authToken) return missingSecret("TWILIO_AUTH_TOKEN");
 
   const signature = request.headers.get("x-twilio-signature");
   if (!signature) {
@@ -51,7 +60,7 @@ export function requireTwilioSignature(request: Request, params: Record<string, 
 
 export function requireMetaSignature(request: Request, rawBody: string) {
   const appSecret = process.env.WHATSAPP_APP_SECRET;
-  if (!appSecret) return null;
+  if (!appSecret) return missingSecret("WHATSAPP_APP_SECRET");
 
   const signature = request.headers.get("x-hub-signature-256");
   if (!signature?.startsWith("sha256=")) {
