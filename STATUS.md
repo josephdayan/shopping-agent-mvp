@@ -37,6 +37,24 @@ segue valendo sem credencial (dev/testes). Coberto por
 `fetch` quebrado). `tsc` limpo e testes focados verdes. **Sem deploy** — publicação
 depende de autorização do dono.
 
+## Atualização 19/08/2026 — conversa não fica mais presa em pedido morto
+
+Duas correções de conversa saíram de uma revisão dupla independente do
+`src/lib/delivery-service.ts` (achados de 18/08):
+
+- Cancelamento/estorno pelo operador (`opsCancelRefund`) agora **reseta o contexto da
+  conversa**, como o pagamento já fazia. Antes, o cliente continuava ouvindo "ainda estou
+  cotando" de um pedido cancelado; e, se a conversa estivesse na escolha de entrega, o
+  toque no botão de frete caía em erro genérico repetido, sem saída além de "trocar
+  endereço". `handleCancel` também limpa o ponteiro morto ao responder "não tem pedido".
+- A escolha de entrega (`choosing_freight`) **expira**: entrou no TTL de abandono de 1h
+  (`LIA_QUOTE_ABANDON_TTL_MS`) e a própria escolha guarda quando o frete foi consultado
+  (`quotedAt`). Toque tardio cancela o pedido não-cotado em vez de publicar frete e data
+  vencidos numa cotação pagável.
+
+Cobertura nova em `tests/manual-concierge.test.ts`. Gate focado (`tsc` + suíte do
+concierge) verde. **Sem deploy** — publicação depende de autorização do dono.
+
 ## Atualização 17/08/2026 — OAuth Mercado Livre em preparo
 
 Foi preparada localmente uma integração OAuth segura para a API oficial de busca do Mercado

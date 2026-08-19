@@ -244,6 +244,9 @@ type DeliveryContext = {
   freightChoice?: {
     orderId: string;
     itemsSubtotal: number;
+    // Quando o frete/data foram consultados no anúncio (epoch ms). É o que permite
+    // recusar um toque de botão feito dias depois, com promessa de entrega já vencida.
+    quotedAt?: number;
     stores: number;
     barato: { fee: number; estimate?: string };
     rapido: { fee: number; estimate?: string };
@@ -339,6 +342,40 @@ function addressOnlyCtx(ctx: DeliveryContext, userCep?: string | null): Delivery
     deliveryAddress: ctx.deliveryAddress,
     deliveryAddressVerified: ctx.deliveryAddressVerified
   };
+}
+
+// TTL de abandono: cotação parada + cliente sumido = ele não quer mais aquilo. Lido a
+// cada chamada (e não uma vez no módulo) porque os evals ajustam o env em tempo de teste.
+function quoteAbandonTtlMs(): number {
+  const configured = Number(process.env.LIA_QUOTE_ABANDON_TTL_MS ?? 60 * 60 * 1000);
+  return Number.isFinite(configured) && configured > 0 ? configured : 60 * 60 * 1000;
+}
+
+// Toque nos botões da escolha de entrega (barata × rápida).
+function isFreightChoicePayload(text: string): boolean {
+  return /^frete:(barato|rapido)$/.test(normalizeMsg(text));
+}
+
+// A conversa não pode continuar apontando para um pedido que FECHOU (pago, cancelado,
+// estornado): o cliente ouvia "ainda estou cotando" de um pedido morto e, em
+// `choosing_freight`, o botão de frete caía num erro sem saída. Se ele JÁ começou outra
+// cesta/outro pedido aqui, o contexto novo vale mais e nada é apagado.
+async function resetConversationForClosedOrder(
+  order: { id: string; conversationId?: string | null },
+  tag: string
+) {
+  if (!order.conversationId) return;
+  try {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    if (!convo) return;
+    const ctx = readCtx(convo.context);
+    const movedOn = Boolean(ctx.deliveryOrderId) && ctx.deliveryOrderId !== order.id;
+    const hasNewBasket = (ctx.basket?.length ?? 0) > 0 && ctx.deliveryOrderId !== order.id;
+    if (movedOn || hasNewBasket) return;
+    await writeCtx(convo.id, addressOnlyCtx(ctx));
+  } catch (error) {
+    console.warn(`[delivery:${tag}:ctx-reset]`, error instanceof Error ? error.message : error);
+  }
 }
 
 async function reply(phone: string, text: string) {
@@ -1084,8 +1121,16 @@ async function handleDeliveryTurn(
   // awaiting_operator_quote, camiseta caindo dentro) não pode se repetir. Pedido PAGO
   // nunca é tocado; awaiting_payment também não (o cliente pode estar pagando o Pix
   // agora mesmo — e a cotação vencida já bloqueia pagamento velho por conta própria).
-  const QUOTE_ABANDON_TTL_MS = Number(process.env.LIA_QUOTE_ABANDON_TTL_MS ?? 60 * 60 * 1000);
-  const quoteWaitSteps: Array<DeliveryContext["step"]> = ["awaiting_operator_quote", "awaiting_supplier_validation", "awaiting_quote_confirmation"];
+  // `choosing_freight` entra na lista (revisão 18/08): a escolha da entrega ficava VIVA
+  // pra sempre — o cliente sumia dias e o toque publicava frete e data consultados no
+  // passado, já vencidos, numa cotação pagável.
+  const QUOTE_ABANDON_TTL_MS = quoteAbandonTtlMs();
+  const quoteWaitSteps: Array<DeliveryContext["step"]> = [
+    "awaiting_operator_quote",
+    "awaiting_supplier_validation",
+    "awaiting_quote_confirmation",
+    "choosing_freight"
+  ];
   if (quoteWaitSteps.includes(ctx.step) && idleSince && idleMs > QUOTE_ABANDON_TTL_MS) {
     let canceledShortId: string | undefined;
     // O operador pode ter publicado a cotação no exato instante em que o cliente voltou.
@@ -1115,6 +1160,12 @@ async function handleDeliveryTurn(
       Object.assign(ctx, fresh);
       await writeCtx(convo.id, ctx);
       if (canceledShortId) await reply(phone, copy.staleQuoteRestart(canceledShortId));
+      // Toque num BOTÃO velho não é mensagem nova pra processar: sem isso "frete:barato"
+      // seguiria adiante como se fosse uma lista de compras.
+      if (isFreightChoicePayload(text)) {
+        if (!canceledShortId) await reply(phone, copy.quoteExpired());
+        return;
+      }
     }
   }
 
@@ -1355,6 +1406,20 @@ async function handleDeliveryTurn(
     return;
   }
   if (ctx.step === "awaiting_operator_quote") {
+    // O pedido pode ter morrido por fora (cancelado/estornado no /ops): sem isso a
+    // conversa respondia "ainda estou cotando" de um pedido que não existe mais. Limpa e
+    // deixa a mensagem seguir como pedido novo.
+    if (ctx.deliveryOrderId) {
+      const openOrder = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+      if (!openOrder || openOrder.status !== AWAITING_OPERATOR_QUOTE_STATUS) {
+        const fresh = addressOnlyCtx(ctx, user.cep);
+        for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
+        Object.assign(ctx, fresh);
+        await writeCtx(convo.id, ctx);
+      }
+    }
+  }
+  if (ctx.step === "awaiting_operator_quote") {
     // Pedido NOVO enquanto o operador cota não pode ser engolido (caso real de produção,
     // 07/08: "quero um cotonete" → "segura aí" e o item sumia; o cliente teve que
     // CANCELAR pra conseguir pedir). A cotação ainda não saiu, então item novo entra no
@@ -1475,6 +1540,45 @@ async function handleDeliveryTurn(
   if (ctx.step === "choosing_freight" && ctx.freightChoice) {
     const n = normalizeMsg(text);
     const choice = ctx.freightChoice;
+    // O frete e a DATA vieram da consulta ao anúncio no instante da cotação. Publicar isso
+    // muito depois entrega promessa vencida (data possivelmente no passado) numa cotação
+    // pagável — e, se o pedido já morreu por fora, `opsPublishManualQuote` lançaria erro a
+    // cada toque (loop de genericError, sem saída além de "trocar endereço").
+    // Contexto sem `quotedAt` é anterior a esta trava: tratado como velho, porque não dá
+    // pra provar que é fresco.
+    const quoteAgeMs = choice.quotedAt ? Date.now() - choice.quotedAt : Number.POSITIVE_INFINITY;
+    const openOrder = await prisma.deliveryOrder.findUnique({
+      where: { id: choice.orderId },
+      select: { status: true, notes: true }
+    });
+    const quotable = openOrder?.status === AWAITING_OPERATOR_QUOTE_STATUS;
+    if (!quotable || quoteAgeMs > quoteAbandonTtlMs()) {
+      const canceled = quotable
+        ? await prisma.deliveryOrder.updateMany({
+            where: { id: choice.orderId, status: AWAITING_OPERATOR_QUOTE_STATUS },
+            data: {
+              status: "canceled",
+              notes: appendOrderNote(
+                openOrder?.notes ?? null,
+                "⏰ Cancelado automático: entrega escolhida muito depois da cotação — frete e data do anúncio já vencidos."
+              )
+            }
+          })
+        : { count: 0 };
+      // Só limpa a conversa se ela AINDA estiver parada nesta escolha: o operador pode ter
+      // publicado a cotação neste exato instante, e o contexto dele (recém-escrito) vale
+      // mais que o nosso, que já nasceu velho.
+      const stored = readCtx(
+        (await prisma.conversation.findUnique({ where: { id: convo.id }, select: { context: true } }))?.context ?? null
+      );
+      if (stored.step !== "choosing_freight" || stored.freightChoice?.orderId !== choice.orderId) return;
+      await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
+      await reply(
+        phone,
+        canceled.count ? copy.staleQuoteRestart(choice.orderId.slice(-6).toUpperCase()) : copy.quoteExpired()
+      );
+      return;
+    }
     let picked: { fee: number; estimate?: string } | undefined;
     let label = "";
     if (n === "frete:barato" || (intent.kind === "number" && intent.value === 1) || /\bbarat|econom|em conta|demorad|devagar/.test(n)) {
@@ -1999,6 +2103,21 @@ async function handleCancel(
       orderBy: { createdAt: "desc" }
     }));
   if (!order || !ACTIVE_ORDER_STATUSES.includes(order.status)) {
+    // O contexto ainda aponta pra um pedido que não está mais ativo (cancelado/estornado
+    // no /ops): "não tem pedido pra cancelar" não podia deixar o passo velho vivo — o
+    // cliente ficava preso ouvindo "ainda estou cotando", ou sem saída na escolha de frete.
+    if (ctx.deliveryOrderId) {
+      const fresh = addressOnlyCtx(ctx, userCep);
+      // Lista em montagem sobrevive: quem disse "cancela o PEDIDO" não pediu pra apagá-la.
+      if (ctx.pending?.length) {
+        fresh.pending = ctx.pending;
+        fresh.step = "choosing";
+      } else if (ctx.basket?.length) {
+        fresh.basket = ctx.basket;
+        fresh.step = "collecting";
+      }
+      await writeCtx(convoId, fresh);
+    }
     await reply(phone, copy.nothingToCancel());
     return;
   }
@@ -3472,6 +3591,7 @@ async function tryPublishInstantQuote(
         orderId,
         itemsSubtotal,
         stores: freights.length,
+        quotedAt: Date.now(),
         barato: { fee: totalFee, estimate: mlEstimate },
         rapido: { fee: rapidoFee, estimate: mlFaster.estimate }
       };
@@ -3802,18 +3922,7 @@ export async function markDeliveryOrderPaid(orderId: string) {
   // basket instead of resurrecting the awaiting_payment step. If the customer has
   // ALREADY started a new basket in this conversation, leave it alone — the async
   // webhook must not wipe an in-flight order.
-  if (order.conversationId) {
-    try {
-      const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
-      if (convo) {
-        const ctx = readCtx(convo.context);
-        const hasNewBasket = (ctx.basket?.length ?? 0) > 0 && ctx.deliveryOrderId !== orderId;
-        if (!hasNewBasket) await writeCtx(convo.id, addressOnlyCtx(ctx));
-      }
-    } catch (error) {
-      console.warn("[delivery:paid:ctx-reset]", error instanceof Error ? error.message : error);
-    }
-  }
+  await resetConversationForClosedOrder(order, "paid");
   // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
   // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
   await reply(order.phone, copy.paymentConfirmed());
@@ -4188,6 +4297,10 @@ export async function opsCancelRefund(orderId: string) {
       }
     })
   ]);
+  // O pedido fechou: a conversa não pode continuar presa nele (revisão 18/08 — cliente
+  // ouvia "ainda estou cotando" de pedido cancelado e, em `choosing_freight`, o botão de
+  // frete não tinha saída).
+  await resetConversationForClosedOrder(order, paymentReceived ? "refund" : "cancel");
   await reply(order.phone, paymentReceived ? copy.refundRequested() : copy.canceledUnpaid());
   return order;
 }
