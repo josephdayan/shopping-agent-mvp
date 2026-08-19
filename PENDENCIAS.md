@@ -1,6 +1,6 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-17._
+_Última atualização: 2026-08-19._
 
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
@@ -534,6 +534,12 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   retorna o despacho existente. Coberto por teste do concierge.
 - [x] Impedir nova tentativa automática quando o resultado financeiro for incerto; a regra está
   no runbook de `needs_human` e nos guards de compra.
+- [x] **Falha do provedor de pagamento nunca vira cobrança mock (18/08).** Com
+  `MERCADO_PAGO_ACCESS_TOKEN` setado, erro do Mercado Pago lança `PaymentProviderError`: o
+  cliente é avisado de que nada foi cobrado, o pedido segue aguardando (repetir *pix*/*cartão*
+  reemite), a falha é anotada no `/ops` e o operador recebe alerta. Fechado o furo em que um
+  Pix mock (`mockpix_...`) num pedido real permitia "paguei" marcar o pedido como pago sem
+  dinheiro. Coberto por `tests/payment-issue-failure.test.ts`.
 
 ### Compra segura
 

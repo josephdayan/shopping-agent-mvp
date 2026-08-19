@@ -200,12 +200,21 @@ async function sendOrderStatus(
 }
 
 async function sendCardFallback(order: CardOrder, last4: string) {
-  const link = await checkoutAdapter.createLink({
-    orderId: order.id,
-    amount: order.total,
-    description: `Lia · pedido ${order.id.slice(-6)}`,
-    method: "card"
-  });
+  let link;
+  try {
+    link = await checkoutAdapter.createLink({
+      orderId: order.id,
+      amount: order.total,
+      description: `Lia · pedido ${order.id.slice(-6)}`,
+      method: "card"
+    });
+  } catch (error) {
+    // Mercado Pago fora do ar (com credencial real, não existe link mock). A recusa em
+    // si já foi avisada logo acima e o texto dela ("responde *pix*, ou *cartão*") é a
+    // saída — só o link novo é que não sai agora.
+    console.error("[whatsapp-pay:card-fallback:link-failed]", order.id, error instanceof Error ? error.message : error);
+    return;
+  }
   await prisma.deliveryOrder.update({
     where: { id: order.id },
     data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }

@@ -23,7 +23,7 @@ import {
   scoreCatalogMatch
 } from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
-import { checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
+import { PaymentProviderError, checkoutAdapter, paymentsAreMocked, pixAdapter } from "@/lib/payments/mercadopago";
 import {
   cardOnFileEnabled,
   confirmSavedCardTap,
@@ -1947,7 +1947,9 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
     }
     return;
   }
-  const isMock = (order.pixId ?? "").startsWith("mock");
+  // Cobrança mock só existe sem credencial (dev/testes). Com token real, um id "mock"
+  // é resíduo — nunca autorização de pagamento: cai na verificação normal abaixo.
+  const isMock = paymentsAreMocked() && (order.pixId ?? "").startsWith("mock");
   if (isMock) {
     await markDeliveryOrderPaid(order.id);
     await writeCtx(convoId, addressOnlyCtx(ctx));
@@ -3056,12 +3058,18 @@ async function handleSavedCardOther(phone: string, userId: string) {
   await expireOpenPaymentAttempts(order.id);
   if (await sendFirstCardEnrollment(order)) return;
   // Sem cadastro disponível → link Checkout Pro, o fallback permanente de cartão.
-  const link = await checkoutAdapter.createLink({
-    orderId: order.id,
-    amount: order.total,
-    description: `Lia · pedido ${order.id.slice(-6)}`,
-    method: "card"
-  });
+  let link;
+  try {
+    link = await checkoutAdapter.createLink({
+      orderId: order.id,
+      amount: order.total,
+      description: `Lia · pedido ${order.id.slice(-6)}`,
+      method: "card"
+    });
+  } catch (error) {
+    await reportChargeIssueFailure(phone, order, error);
+    return;
+  }
   await prisma.deliveryOrder.update({
     where: { id: order.id },
     data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }
@@ -3075,6 +3083,100 @@ function methodFromIntent(intent: Intent): "pix" | "card" | undefined {
   if (intent.kind === "pay") return intent.method;
   if (intent.kind === "number") return intent.value === 1 ? "pix" : intent.value === 2 ? "card" : undefined;
   return undefined;
+}
+
+// Mercado Pago com credencial real caiu na hora de emitir a cobrança. Com o fallback
+// mock removido, o pedido fica SEM cobrança em vez de ganhar um Pix falso que o
+// "paguei" aprovaria de graça. O pedido continua aguardando (o cliente repete
+// *pix*/*cartão* e a Lia tenta de novo), a falha vira nota no /ops e o operador é
+// avisado na hora. Nunca lança — a conversa não pode morrer por causa do aviso.
+async function reportChargeIssueFailure(
+  phone: string,
+  order: { id: string; notes?: string | null },
+  error: unknown
+) {
+  const detail = error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido";
+  console.error("[payment:issue:failed]", order.id, detail);
+  try {
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { notes: appendOrderNote(order.notes ?? null, `⚠️ Falha ao gerar a cobrança: ${detail}`) }
+    });
+  } catch (err) {
+    console.error("[payment:issue:failed:note]", err);
+  }
+  await reply(phone, copy.paymentIssueFailed());
+  await notifyOperator(copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), detail));
+}
+
+// Emite a cobrança de um pedido JÁ criado e aguardando pagamento (Pix copia-e-cola ou
+// link de cartão). Usada na criação e na RETENTATIVA — quando o Mercado Pago falha, o
+// pedido fica sem `pixCopiaECola` e o próximo "pagar" volta aqui em vez de reenviar um
+// código que não existe. Devolve false quando a cobrança não saiu (cliente já avisado).
+async function issueChargeForOrder(
+  phone: string,
+  order: {
+    id: string;
+    userId: string;
+    phone: string;
+    total: number;
+    deliveryFee: number;
+    items: unknown;
+    status: string;
+    notes?: string | null;
+  },
+  method: "pix" | "card",
+  total: number
+): Promise<boolean> {
+  const description = `Lia · pedido ${order.id.slice(-6)}`;
+  if (method === "card") {
+    const credential = await getOneClickCredential(order.userId);
+    if (credential) {
+      try {
+        await createCardAttempt(order, credential);
+        return true;
+      } catch (error) {
+        // The order itself is already durable. If Meta refuses the native payload,
+        // retain the well-tested Checkout Pro route instead of leaving it unpaid.
+        console.warn("[whatsapp-pay:create:fallback-checkout]", error instanceof Error ? error.message : error);
+      }
+    }
+    if (await sendFirstCardEnrollment(order)) return true;
+    // Card → a Checkout Pro link (MP-hosted card page). Reuse the nullable columns:
+    // pixId = preference id, pixCopiaECola = the link. Webhook reconciles by order id.
+    let link;
+    try {
+      link = await checkoutAdapter.createLink({ orderId: order.id, amount: total, description, method: "card" });
+    } catch (error) {
+      await reportChargeIssueFailure(phone, order, error);
+      return false;
+    }
+    await prisma.deliveryOrder.update({
+      where: { id: order.id },
+      data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }
+    });
+    await reply(phone, copy.cardInstructions(total, link.initPoint, link.mock));
+    return true;
+  }
+
+  // Pix → the raw copia-e-cola generated ON THE SPOT, paid inside the bank app (no
+  // leaving WhatsApp for a hosted page). Webhook reconciles by external_reference = order id.
+  let charge;
+  try {
+    charge = await pixAdapter.createPix({ orderId: order.id, amount: total, description });
+  } catch (error) {
+    await reportChargeIssueFailure(phone, order, error);
+    return false;
+  }
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
+  });
+  // Intro + código em mensagens SEPARADAS: no WhatsApp copia-se a mensagem inteira —
+  // com prosa junto, o copia-e-cola não cola no banco.
+  await reply(phone, copy.pixInstructions(total, charge.mock));
+  await reply(phone, charge.copiaECola);
+  return true;
 }
 
 // Re-send the open charge (card link or Pix code) for an awaiting_payment order.
@@ -3100,12 +3202,22 @@ async function resendCharge(phone: string, order: {
       return;
     }
     if (await sendFirstCardEnrollment(order)) return;
-    await reply(phone, copy.resendCard(order.pixCopiaECola ?? ""));
+    // Sem link salvo = a emissão anterior falhou (Mercado Pago fora do ar). Emitir de
+    // novo, em vez de reenviar um link vazio.
+    if (!order.pixCopiaECola) {
+      await issueChargeForOrder(phone, order, "card", order.total);
+      return;
+    }
+    await reply(phone, copy.resendCard(order.pixCopiaECola));
+    return;
+  }
+  if (!order.pixCopiaECola) {
+    await issueChargeForOrder(phone, order, "pix", order.total);
     return;
   }
   // Pix: intro + código em mensagem SEPARADA — copiar a mensagem inteira tem que colar.
   await reply(phone, copy.resendPix());
-  if (order.pixCopiaECola) await reply(phone, order.pixCopiaECola);
+  await reply(phone, order.pixCopiaECola);
 }
 
 // Anota um aviso do cliente (reclamação / pedido de humano) no pedido mais recente,
@@ -3432,6 +3544,18 @@ async function cancelPendingRetailerQuote(orderId: string): Promise<boolean> {
   return true;
 }
 
+// Volta a conversa pro menu de pagamento da cotação depois de uma falha ao emitir a
+// cobrança: sem isso o contexto fica em awaiting_payment (passo do pedido já cobrado)
+// enquanto o pedido voltou pra awaiting_quote_confirmation, e o cliente não consegue
+// repetir *pix*/*cartão*.
+async function setQuoteConversationAwaitingConfirmation(order: { id: string; conversationId?: string | null }) {
+  if (!order.conversationId) return;
+  const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+  if (!convo) return;
+  const ctx = readCtx(convo.context);
+  if (ctx.deliveryOrderId === order.id) await writeCtx(convo.id, { ...ctx, step: "awaiting_quote_confirmation" });
+}
+
 async function setQuoteConversationAwaitingPayment(order: { id: string; conversationId?: string | null }) {
   if (!order.conversationId) return;
   const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
@@ -3498,6 +3622,17 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
       where: { id: order.id },
       data: { status: "awaiting_quote_confirmation", notes: [notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n") }
     });
+    await setQuoteConversationAwaitingConfirmation(order);
+    // Mercado Pago fora do ar: a cotação continua de pé (o TTL ainda vale), então o
+    // cliente repete *pix*/*cartão* e a Lia tenta emitir de novo. Não relança — isso
+    // devolveria 500 pro webhook do WhatsApp e o cliente ficaria sem resposta nenhuma.
+    if (error instanceof PaymentProviderError) {
+      await reply(order.phone, copy.paymentIssueFailed());
+      await notifyOperator(
+        copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), error.message.slice(0, 180))
+      );
+      return { expired: false };
+    }
     throw error;
   }
 }
@@ -3551,50 +3686,10 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
     step: "awaiting_payment"
   });
 
-  if (isCard) {
-    const credential = await getOneClickCredential(userId);
-    if (credential) {
-      try {
-        await createCardAttempt(order, credential);
-        return;
-      } catch (error) {
-        // The order itself is already durable. If Meta refuses the native payload,
-        // retain the well-tested Checkout Pro route instead of leaving it unpaid.
-        console.warn("[whatsapp-pay:create:fallback-checkout]", error instanceof Error ? error.message : error);
-      }
-    }
-    if (await sendFirstCardEnrollment(order)) return;
-    // Card → a Checkout Pro link (MP-hosted card page). Reuse the nullable columns:
-    // pixId = preference id, pixCopiaECola = the link. Webhook reconciles by order id.
-    const link = await checkoutAdapter.createLink({
-      orderId: order.id,
-      amount: order.total,
-      description: `Lia · pedido ${order.id.slice(-6)}`,
-      method: "card"
-    });
-    await prisma.deliveryOrder.update({
-      where: { id: order.id },
-      data: { pixId: link.preferenceId, pixCopiaECola: link.initPoint }
-    });
-    await reply(phone, copy.cardInstructions(total, link.initPoint, link.mock));
-    return;
-  }
-
-  // Pix → the raw copia-e-cola generated ON THE SPOT, paid inside the bank app (no
-  // leaving WhatsApp for a hosted page). Webhook reconciles by external_reference = order id.
-  const charge = await pixAdapter.createPix({
-    orderId: order.id,
-    amount: order.total,
-    description: `Lia · pedido ${order.id.slice(-6)}`
-  });
-  await prisma.deliveryOrder.update({
-    where: { id: order.id },
-    data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
-  });
-  // Intro + código em mensagens SEPARADAS: no WhatsApp copia-se a mensagem inteira —
-  // com prosa junto, o copia-e-cola não cola no banco.
-  await reply(phone, copy.pixInstructions(total, charge.mock));
-  await reply(phone, charge.copiaECola);
+  // A cobrança em si (e a falha do Mercado Pago) vive em issueChargeForOrder: o pedido
+  // já está durável em awaiting_payment, então uma falha só o deixa sem cobrança —
+  // o cliente repete *pix*/*cartão* e a Lia emite de novo.
+  await issueChargeForOrder(phone, order, isCard ? "card" : "pix", total);
 }
 
 // The customer changed their mind about how to pay while the charge is still open:
@@ -3651,7 +3746,15 @@ async function switchPaymentMethod(
       await reply(phone, copy.paymentSwitched(method, total));
       return;
     }
-    const link = await checkoutAdapter.createLink({ orderId: order.id, amount: total, description, method: "card" });
+    let link;
+    try {
+      link = await checkoutAdapter.createLink({ orderId: order.id, amount: total, description, method: "card" });
+    } catch (error) {
+      // O pedido já está com o total/notas do cartão e sem cobrança: repetir *cartão*
+      // reemite pelo resendCharge. O que não pode é sair link de mentira.
+      await reportChargeIssueFailure(phone, { id: order.id, notes }, error);
+      return;
+    }
     await prisma.deliveryOrder.update({
       where: { id: order.id },
       data: { total, notes, pixId: link.preferenceId, pixCopiaECola: link.initPoint }
@@ -3661,11 +3764,19 @@ async function switchPaymentMethod(
   }
 
   await expireOpenPaymentAttempts(order.id);
-  const charge = await pixAdapter.createPix({ orderId: order.id, amount: total, description }).then((pix) => ({
-    pixId: pix.pixId,
-    payload: pix.copiaECola,
-    mock: pix.mock
-  }));
+  let charge;
+  try {
+    charge = await pixAdapter.createPix({ orderId: order.id, amount: total, description }).then((pix) => ({
+      pixId: pix.pixId,
+      payload: pix.copiaECola,
+      mock: pix.mock
+    }));
+  } catch (error) {
+    // Nada foi gravado ainda: o pedido continua na forma de pagamento anterior e
+    // aguardando. Um Pix mock aqui viraria "paguei" aprovado sem dinheiro.
+    await reportChargeIssueFailure(phone, order, error);
+    return;
+  }
   await prisma.deliveryOrder.update({
     where: { id: order.id },
     data: { total, notes, pixId: charge.pixId, pixCopiaECola: charge.payload }

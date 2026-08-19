@@ -566,6 +566,13 @@ export function paymentSwitched(method: "pix" | "card", total: number): string {
     : `Troquei pro cartão — total *${brl(total)}*, com taxa da maquininha. Segue o link 👇`;
 }
 
+// Mercado Pago fora do ar com credencial real: NUNCA cai num Pix de mentira. O pedido
+// continua aguardando e o cliente tem uma saída clara — repetir a forma de pagamento.
+// "nada foi cobrado" é a informação que tira o medo de pagar duas vezes.
+export function paymentIssueFailed(): string {
+  return "Não consegui gerar seu pagamento agora — nada foi cobrado. Responde *pix* ou *cartão* que eu tento de novo.";
+}
+
 export function sandboxHint(): string {
   return "_(sandbox: responda *paguei* pra simular)_";
 }
@@ -884,6 +891,13 @@ export function operatorQuoteAlert(shortId: string, items: string[]): string {
 
 export function operatorItemAddedAlert(shortId: string, items: string[]): string {
   return `➕ [operador] Pedido #${shortId} ganhou item durante a cotação: ${items.join(", ")}`;
+}
+
+// Falha ao emitir a cobrança (Mercado Pago fora do ar) com credencial real: o cliente
+// ficou sem Pix/link e o pedido parado. O operador precisa saber NA HORA — é dinheiro
+// que não entrou por falha nossa, não por desistência.
+export function operatorPaymentFailedAlert(shortId: string, detail: string): string {
+  return `🚨 [operador] Pedido #${shortId}: o Mercado Pago falhou ao gerar a cobrança (${detail}). Cliente avisado, pedido aguardando — confira no /ops.`;
 }
 
 export function operatorPaidAlert(shortId: string, total: number): string {

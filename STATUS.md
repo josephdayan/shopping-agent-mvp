@@ -9,6 +9,34 @@ httpOnly de 30 dias. O `/ops` continua com `OPS_TOKEN`, inalterado. Achados rest
 revisão em andamento em sessões paralelas: Pix mock quando o Mercado Pago falha com
 credenciais reais, e conversa presa após `opsCancelRefund` + `choosing_freight` sem TTL.
 
+## Atualização 18/08/2026 — falha do Mercado Pago não vira mais cobrança de mentira
+
+Corrigido um furo de dinheiro em `src/lib/payments/mercadopago.ts`: com
+`MERCADO_PAGO_ACCESS_TOKEN` setado, um erro na chamada real (timeout/5xx) caía num
+`catch` que logava `[pix:create:fallback-mock]` e devolvia um Pix **mock**
+(`mockpix_...`) para um pedido real. Duas consequências: o cliente recebia um
+copia-e-cola incolável com a dica de sandbox ("responda *paguei*") e, como
+`delivery-service` trata pixId iniciado em "mock" como sandbox, esse "paguei" chamava
+`markDeliveryOrderPaid` — pedido **pago sem dinheiro nenhum**. O mesmo padrão existia no
+`createCheckoutLink` (link `https://mock.lia/...` enviado ao cliente).
+
+Agora, com credencial real, o adapter lança `PaymentProviderError` (logs
+`[pix:create:failed]` / `[checkout:create:failed]`). O cérebro trata a falha em vez de
+disfarçá-la: avisa o cliente com `copy.paymentIssueFailed()` ("Não consegui gerar seu
+pagamento agora — nada foi cobrado. Responde *pix* ou *cartão* que eu tento de novo."),
+**mantém o pedido em `awaiting_payment`** (ou devolve a cotação para
+`awaiting_quote_confirmation`, com o contexto da conversa junto), anota
+`⚠️ Falha ao gerar a cobrança` no `/ops` e alerta o operador no WhatsApp
+(`copy.operatorPaymentFailedAlert`). Repetir *pix*/*cartão* reemite a cobrança de
+verdade: `resendCharge` passou a detectar pedido sem `pixCopiaECola` e reemitir pelo novo
+`issueChargeForOrder` (usado também na criação do pedido), em vez de reenviar um código
+que não existe. `handlePaidClaim` só aceita o atalho de sandbox quando
+`paymentsAreMocked()`, então um pixId "mock" residual em produção não aprova nada. Mock
+segue valendo sem credencial (dev/testes). Coberto por
+`tests/payment-issue-failure.test.ts` (8 casos: adapter puro + evals com banco real e
+`fetch` quebrado). `tsc` limpo e testes focados verdes. **Sem deploy** — publicação
+depende de autorização do dono.
+
 ## Atualização 17/08/2026 — OAuth Mercado Livre em preparo
 
 Foi preparada localmente uma integração OAuth segura para a API oficial de busca do Mercado
@@ -22,7 +50,7 @@ conta no DevCenter/suporte; a API não serve para compras ou rastreio de pedidos
 > [PENDENCIAS.md](PENDENCIAS.md). Leia ambos antes de interpretar este status ou tomar
 > decisões de produto.
 
-_Última atualização: 2026-08-17. Doc de leitura rápida do estado atual. O histórico de
+_Última atualização: 2026-08-19. Doc de leitura rápida do estado atual. O histórico de
 decisões ("por que esse modelo") está no [CLAUDE.md](CLAUDE.md); os ciclos recentes estão
 em [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md) e
 [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md). A revisão operacional

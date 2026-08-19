@@ -3,7 +3,8 @@ import { randomUUID } from "crypto";
 // Pix money-in. Real Mercado Pago is wired but INERT until
 // MERCADO_PAGO_ACCESS_TOKEN is set — until then it returns a mock copia-e-cola so
 // the flow runs end-to-end in sandbox. external_reference = DeliveryOrder.id so the
-// webhook can reconcile.
+// webhook can reconcile. WITH the token set, a failed call throws PaymentProviderError —
+// it never falls back to the mock (that would "pay" a real order with fake money).
 
 export type PixCharge = {
   pixId: string;
@@ -37,6 +38,23 @@ function hasCreds() {
   return Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN);
 }
 
+// True only in dev/tests (no access token): the mock charges below are safe ONLY here.
+export function paymentsAreMocked(): boolean {
+  return !hasCreds();
+}
+
+// Raised when Mercado Pago is configured for real money but the call failed
+// (timeout, 5xx, malformed answer). It must NEVER degrade into a mock charge: a
+// mock code is uncopiable, carries the sandbox hint, and the brain approves a
+// "mockpix_" order on the customer's word alone — i.e. a real order marked paid
+// with no money in. Callers keep the order waiting and tell customer + operator.
+export class PaymentProviderError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "PaymentProviderError";
+  }
+}
+
 export const pixAdapter = {
   async createPix(input: {
     orderId: string;
@@ -45,10 +63,13 @@ export const pixAdapter = {
     payerEmail?: string;
   }): Promise<PixCharge> {
     if (hasCreds()) {
+      // Real credentials → real charge or nothing. No mock fallback (see PaymentProviderError).
       try {
         return await realCreatePix(input);
       } catch (error) {
-        console.warn("[pix:create:fallback-mock]", error instanceof Error ? error.message : error);
+        const detail = error instanceof Error ? error.message : String(error);
+        console.error("[pix:create:failed]", input.orderId, detail);
+        throw new PaymentProviderError(detail);
       }
     }
     const pixId = `mockpix_${randomUUID()}`;
@@ -172,10 +193,14 @@ export const checkoutAdapter = {
     method?: CheckoutMethod;
   }): Promise<CheckoutLink> {
     if (hasCreds()) {
+      // Real credentials → real preference or nothing. Same rule as Pix: a mock link
+      // ("https://mock.lia/...") sent to a real customer is a dead end, not a payment.
       try {
         return await realCreateCheckout(input);
       } catch (error) {
-        console.warn("[checkout:create:fallback-mock]", error instanceof Error ? error.message : error);
+        const detail = error instanceof Error ? error.message : String(error);
+        console.error("[checkout:create:failed]", input.orderId, detail);
+        throw new PaymentProviderError(detail);
       }
     }
     return {

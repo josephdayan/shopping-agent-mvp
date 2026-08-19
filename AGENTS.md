@@ -1,6 +1,6 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-17._
+_Última atualização: 2026-08-19._
 
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
@@ -1407,6 +1407,20 @@ seguinte. Isso não é SLA: sempre cotar ao vivo.
 - Em 18/07, o operador optou por não trocar a senha Carrefour neste momento. Nenhuma alteração
   de senha foi iniciada; a credencial continua tratada como exposta e bloqueia o uso do Context
   Carrefour e qualquer piloto até que seja rotacionada pelo titular.
+- **Cobrança mock só existe SEM credencial (18/08).** Com `MERCADO_PAGO_ACCESS_TOKEN`
+  setado, uma falha do Mercado Pago (timeout/5xx) NUNCA pode virar Pix/link de mentira. O
+  bug corrigido em 18/08: `createPix`/`createLink` engoliam o erro, logavam
+  `[pix:create:fallback-mock]` e devolviam `mockpix_...` para um pedido real — o cliente
+  recebia um código incolável com a dica de sandbox e, como o cérebro trata pixId iniciado
+  em "mock" como sandbox, um "paguei" marcava o pedido como PAGO sem dinheiro nenhum. Hoje
+  o adapter lança `PaymentProviderError`; o cérebro avisa o cliente
+  (`copy.paymentIssueFailed`, "nada foi cobrado — responde *pix* ou *cartão*"), mantém o
+  pedido aguardando, anota a falha no `/ops` e alerta o operador
+  (`copy.operatorPaymentFailedAlert`). Repetir *pix*/*cartão* reemite a cobrança. Além
+  disso, `handlePaidClaim` só aceita o atalho de sandbox quando `paymentsAreMocked()` — um
+  pixId "mock" residual em produção não aprova nada. Travado por
+  `tests/payment-issue-failure.test.ts`. **Não reintroduzir fallback mock em caminho de
+  dinheiro real.**
 - Manter idempotência, hash do carrinho e revalidação imediatamente antes de qualquer
   aprovação.
 - Em 16/07, foi criado `OPS_TOKEN` dedicado (Sensitive, Production e Preview) sem
