@@ -8,10 +8,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 
 > **19/08 — revisão completa pré-amigos-e-família.** Quatro bloqueadores achados; o 1º já
 > fechado: `/admin` + rotas legadas exigem login usuário/senha (`ADMIN_USER`/`ADMIN_PASSWORD`
-> Sensitive na Vercel; falha fechado). Em andamento em sessões paralelas: (2) Pix mock em
-> falha do MP com credenciais reais; (3) conversa presa após cancelamento no /ops +
-> `choosing_freight` sem expiração. (4) landing antiga com promessas vetadas sai do ar com o
-> deploy deste lote (6 commits locais publicados). Recomendados antes de abrir: timeout nas
+> Sensitive na Vercel; falha fechado). **Todos os 4 estão PUBLICADOS em 19/08** (smoke verde):
+> (2) Pix mock em falha do MP morto (`b9dbcfc`, 8 testes); (3) conversa presa após
+> cancelamento no /ops + `choosing_freight` sem expiração mortos (`dac57f5`, E2E 41/41);
+> (4) landing revisada no ar (zero promessa vetada no HTML servido). Bônus da revisão
+> adversarial: guards de `auth.ts` falham fechado em deploy (`075fd5f`). Recomendados antes de abrir: timeout nas
 > chamadas OpenAI/MP, webhook MP devolver 5xx em erro transitório, guards fail-closed quando
 > segredo faltar, e as 3 verificações reais pendentes (botões de frete, pedido frio ML,
 > zumbi `#CMSMCE`).
