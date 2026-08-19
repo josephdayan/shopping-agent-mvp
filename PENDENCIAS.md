@@ -513,6 +513,10 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Definir quem opera o piloto: decisão do dono em 02/08 — **ele mesmo opera** os
   primeiros pedidos (cotação, compra e despacho no `/ops`). Contratação de operador fica
   para depois do piloto, se houver volume.
+- [ ] **19/08 — achar um operador (decisão do dono).** O dono sinalizou que precisa
+  contratar um operador para a operação (cotar/comprar/despachar no `/ops` seguindo o
+  [runbook](docs/operador-runbook.md)). Perfil e formato a definir; o dono ainda opera os
+  primeiros pedidos de amigos-e-família enquanto procura.
 - [x] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
   misturar a publicação com o trabalho paralelo do Oba.
 - [x] Limpar os preflights internos sem pagamento de Production após autorização explícita:
