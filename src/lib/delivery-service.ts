@@ -3049,7 +3049,7 @@ async function handleConciergeRequest(
   // brinquedo (certíssimo) e o cliente ficava sem violão. Custo do ML só é pago aqui,
   // no exato caso em que a alternativa era recusar.
   const turnElapsedMs = Date.now() - (turnStartedAt.get(phone) ?? Date.now());
-  const rescueBudgetMs = Number(process.env.LIA_RESCUE_BUDGET_MS ?? 90000);
+  const rescueBudgetMs = Number(process.env.LIA_RESCUE_BUDGET_MS ?? 120000);
   if (notFoundLines.length && mercadoLivreEnabled() && turnElapsedMs > rescueBudgetMs) {
     // O resgate custa mais uma rodada inteira (extração + actor + rerank, ~40-70s). Com
     // o turno já estourado, recusar honesto AGORA vence morrer no teto da função em

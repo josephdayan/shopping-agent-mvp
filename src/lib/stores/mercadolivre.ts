@@ -298,7 +298,10 @@ async function coldSearch(queryKey: string, normalized: string): Promise<MlCatal
       token,
       { keyword: normalized, search: normalized, query: normalized, maxItems: 24, scrapeOfertas: false },
       {
-        maxWaitMs: Number(process.env.LIA_ML_MAX_WAIT_MS ?? 40000),
+        // 20/08: run real da "mochila saco pequena" levou 44,8s e o teto de 40s
+        // descartava um resultado que chegaria 5s depois — duas vezes seguidas. O
+        // watchdog do turno avisa o cliente aos 45s, então esperar até 75s é honesto.
+        maxWaitMs: Number(process.env.LIA_ML_MAX_WAIT_MS ?? 75000),
         // 4GB derruba o run de ~28,5s para ~21s (medido 17/08; 8GB só dá mais ~1s).
         // Actor pay-per-event: o compute extra é conta do desenvolvedor, não nossa.
         memoryMbytes: Number(process.env.LIA_ML_MEMORY_MB ?? 4096)

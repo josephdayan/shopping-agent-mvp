@@ -457,6 +457,11 @@ export async function runApifyActor(
     status = runPayload.data?.status ?? status;
     if (["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT", "TIMING-OUT"].includes(status)) break;
   }
+  if (!["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT", "TIMING-OUT"].includes(status)) {
+    // Desistimos de um run que ainda está rodando (o resultado chega e ninguém lê).
+    // 20/08: era invisível — o diagnóstico só saiu porque o run foi reproduzido à mão.
+    console.warn("[ml:apify:wait-timeout]", runId, `status=${status} após ${Math.round(maxWaitMs / 1000)}s`);
+  }
 
   if (status !== "SUCCEEDED") {
     // Still read whatever landed in the dataset — partial real results beat none.

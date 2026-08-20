@@ -51,6 +51,21 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 20/08/2026 (2ª) — recusa da "mochila saco pequena": o actor chegava 5s atrasado
+
+Reteste pós-watchdog: a Lia avisou aos 45s (camada 1 funcionou) mas terminou em recusa
+honesta — errada, porque o ML TEM o produto. Diagnóstico com prova: reproduzi o run do
+actor com a query exata (`UqcgaIfRnXkHV9IqU`): **SUCCEEDED com 24 mochilas em 44,8s** —
+contra teto de espera de 40s em produção. A Lia desistiu 5s antes do resultado, nos dois
+turnos (zero entradas no cache). Agravante: prefetch (frase crua) + busca (frase extraída)
++ resgate = até 3 runs de 4GB simultâneos = 12GB > 8GB da conta Apify → runs enfileiram e
+o teto estoura em cascata. Consertos: `LIA_ML_MAX_WAIT_MS` 40s→**75s** (o watchdog já
+avisou o cliente aos 45s; esperar é honesto), `LIA_RESCUE_BUDGET_MS` 90s→**120s** (com o
+run completando e gravando no cache, o resgate da mesma query vira acerto de cache em vez
+de 3º run), e log `[ml:apify:wait-timeout]` quando um run vivo é abandonado (era
+invisível — o diagnóstico de hoje só saiu reproduzindo o run à mão). Copy do watchdog
+ajustada a pedido do dono: "Ainda procurando — já te respondo."
+
 ## Atualização 20/08/2026 — silêncio absoluto no teste da mochila: garantias anti-silêncio
 
 Reteste do dono ("Oi quero uma mochila saco pequena barata", 11:16): a Lia mandou
