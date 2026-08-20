@@ -350,10 +350,16 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > natural com CEP pedindo o CEP novamente. O relatório está em
 > `docs/testes-whatsapp-2026-08-14.md`; nenhum item é marcado como corrigido por esta rodada.
 
-> **15/08 — perfil público do WhatsApp: aguardando aprovação externa.** Foi submetida para o
-> número conectado da Lia a mudança do display name para **Lia Delivery**, sem CNPJ nem nome
-> pessoal. O WhatsApp Manager mostra **In Review**; conferir o perfil no WhatsApp após a Meta
-> aprovar antes de encerrar esta pendência de privacidade/branding.
+> **19/08 — perfil público do WhatsApp: nome segue pendente.** A foto oficial foi salva no
+> WhatsApp Manager para o número conectado da Lia. Na conferência posterior, o display name
+> ainda era `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, status **Approved**, e não
+> **Lia Delivery**. O Activity log contém `Name verification requested` em 17/08 e nenhum
+> evento de aprovação ou rejeição. Para encerrar a pendência de branding/privacidade, o dono
+> precisa decidir se quer reenviar a solicitação de nome ou manter o nome legal atual; não
+> alterar sem essa orientação. A versão HD da foto (PNG 2048×2048, símbolo 30% maior e
+> estrela alinhada à ponta direita do “L”) está pronta em
+> `public/brand/lia-whatsapp-profile-hd.png`; falta apenas o dono confirmar a troca no
+> WhatsApp Manager.
 
 > **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
 > conversa limpa. Passaram troca de item, “sem remédio” com shampoo, presente dentro de

@@ -696,6 +696,18 @@ Foi submetida no WhatsApp Manager a mudança do display name do número conectad
 até a aprovação, o perfil pode continuar mostrando o nome anterior. Não houve mudança de
 telefone, cobrança ou código.
 
+### Atualização — 19/08/2026
+
+A foto de perfil oficial (monograma lima sobre fundo berinjela) foi enviada e salva no
+WhatsApp Manager do número `+55 11 97844-4813`. A verificação posterior mostrou que o
+nome público ainda é `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, com status
+**Approved**. O Activity log registra `Name verification requested` em 17/08, sem
+aprovação ou rejeição registrada. Assim, a solicitação de **Lia Delivery** não se refletiu;
+a próxima ação exige nova decisão do dono e não envolve código, cobrança ou troca de número.
+Também foi preparada uma foto de perfil HD em PNG 2048×2048, derivada do vetor oficial com
+o símbolo 30% maior e a ponta direita da estrela alinhada à perna do “L”; a versão ainda não
+foi enviada ao perfil.
+
 ## Nova validação independente — 15/08/2026
 
 Outra rodada de 10 conversas foi executada sem cobrança e sem alteração de código. Passaram

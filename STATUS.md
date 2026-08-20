@@ -411,6 +411,15 @@ de hoje está em
 > removendo o sufixo com CNPJ e nome pessoal. A Meta registrou **In Review**; o texto antigo
 > continua público até a aprovação. Não houve alteração de código, número ou pagamento.
 
+> **19/08 — foto salva; nome ainda antigo.** A foto de perfil oficial (monograma lima em
+> fundo berinjela) foi enviada e salva no WhatsApp Manager para `+55 11 97844-4813`.
+> A checagem posterior mostrou o display name `Lia Delivery by 67.742.955 Joseph Carlos
+> Dayan`, status **Approved**: a troca para **Lia Delivery** não está refletida. Não houve
+> alteração de código, número ou cobrança. O Activity log registra `Name verification
+> requested` em 17/08, sem evento de aprovação ou rejeição. Uma nova foto HD foi preparada
+> em PNG 2048×2048, direto do vetor, com o símbolo 30% maior e a estrela alinhada à ponta
+> direita do “L”; a substituição no perfil ainda depende de confirmação do dono.
+
 > **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
 > conversa limpa, sem cobrança. Passaram troca de item, shampoo com “sem remédio”, presente
 > até R$100 e sequência 4x → 7x → 5x de bombom. Persistiram ruídos quando “barato”, “Para
