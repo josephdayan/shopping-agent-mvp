@@ -51,6 +51,38 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 19/08/2026 (2ª) — teste real da mochila: 5 defeitos de conversa fechados
+
+Teste real do dono ("Oi quero uma mochila de academia sacola", screenshots) expôs cinco
+defeitos num fluxo só; todos fechados no mesmo dia:
+
+1. **"Procurando as melhores opções…" saía DUAS vezes** (busca inicial + resgate de
+   última chance criam timers separados). `searchNoticeTimer` agora deduplica por
+   telefone (90s): um aviso por rajada.
+2. **"sacola eu não consigo trazer hoje" seguido dos cards de mochila lia como
+   contradição.** Quando outras linhas da MESMA mensagem acharam opções, a recusa usa
+   copy com escopo (`itemsNotAvailableWithOptions`): "*sacola* eu não achei — o resto
+   achei e tá logo abaixo."
+3. **"Mais barata" seco ESCOLHIA a mais barata da mesa e punha no carrinho** — o cliente
+   estava rejeitando as 3. Regra nova: preferência de preço só escolhe com verbo de pegar
+   ("quero o mais barato") ou artigo definido ("o mais barato"); seca, ela NAVEGA —
+   `parseChoiceReply` devolve `cheaper`/`pricier` e `showPriceSortedOptions` mostra o
+   pool ordenado por preço (distintos primeiro, variantes preenchem). Nunca compra.
+4. **"Outras opções" tocado com a escolha já fechada caía no "Me diz de outro jeito"**
+   (`opt:outras` fora da escolha era `reject`). Agora é intent `more_options`: o contexto
+   guarda a última escolha concluída (`ctx.lastChoice`, com o sku escolhido) e o toque
+   REABRE ela (`reopenLastChoice`) — pageMoreOptions segue dali; o novo pick SUBSTITUI o
+   item na cesta (`PendingChoice.replaceSku`), nunca soma um segundo. Só vale no passo
+   `collecting`; com cotação/pagamento na mesa não mexe.
+5. **"Mais barato" digitado depois disso caía no "não entendi"** (virava modificador
+   vazio). Seco e sozinho, vira `more_options{cheaper}` → reabre a última escolha
+   ordenada por preço.
+
+Latência (~2 min até os cards) é limitação conhecida do actor do ML (busca fria 20-25s
+×2 quando há resgate); o caminho pra ~1s é a API oficial (pendência do dono no
+DevCenter). Testes: units de intents (54) + 2 E2E novos (navegar por preço sem comprar;
+reabrir e substituir). Golden intacto (scorer não mudou).
+
 ## Atualização 19/08/2026 — /admin fechado com login (revisão pré-lançamento)
 
 A revisão completa pré-amigos-e-família achou o painel `/admin` e as rotas `/api/admin/*`
@@ -1556,6 +1588,19 @@ No WhatsApp Manager da conta conectada `+55 11 97844-4813`, foi solicitada a tro
 visível de `Lia Delivery by 67.742.955 Joseph Carlos Dayan` para **Lia Delivery**. O painel
 marcou o número como **In Review**. Até a aprovação da Meta, o CNPJ e o nome anterior ainda
 podem aparecer no WhatsApp; não há nova ação de código ou de pagamento associada.
+
+### Atualização do perfil público — 19/08/2026
+
+A foto de perfil com o monograma lima “L” em fundo berinjela foi enviada e salva no
+WhatsApp Manager para o número conectado `+55 11 97844-4813`. Na conferência feita logo
+depois, o nome visível continuava `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, com
+status **Approved**. O histórico registra `Name verification requested` em 17/08, mas não
+registra aprovação nem rejeição. Portanto, a troca para **Lia Delivery** ainda não se
+refletiu no perfil; não reenviar nem alterar outros campos sem orientação do dono. Uma
+versão nova da foto foi preparada em `public/brand/lia-whatsapp-profile-hd.svg` e PNG
+2048×2048, renderizada diretamente do vetor com o símbolo 30% maior e a ponta direita da
+estrela alinhada à ponta da perna do “L”; ainda não foi enviada ao WhatsApp Manager e
+depende da confirmação do dono.
 
 ### Validação independente — 15/08/2026
 

@@ -19,6 +19,17 @@ function kind(text: string) {
   return detectIntent(text).kind;
 }
 
+test("outras opções / mais barato fora da escolha reabrem a última (19/08)", () => {
+  assert.equal(kind("opt:outras"), "more_options");
+  assert.equal(kind("outras opções"), "more_options");
+  assert.equal(kind("outras"), "more_options");
+  assert.deepEqual(detectIntent("mais barato"), { kind: "more_options", cheaper: true });
+  assert.deepEqual(detectIntent("Mais barata"), { kind: "more_options", cheaper: true });
+  assert.deepEqual(detectIntent("tem mais barato?"), { kind: "more_options", cheaper: true });
+  // com item junto NÃO é reabertura — é pedido/modificador de busca normal
+  assert.notEqual(kind("leite mais barato"), "more_options");
+});
+
 test("saudações e social", () => {
   assert.equal(kind("oi"), "greeting");
   assert.equal(kind("Olá!"), "greeting");
@@ -119,7 +130,8 @@ test("afirmação, rejeição e números", () => {
   assert.equal(kind("não era isso"), "reject");
   assert.equal(kind("não gostei, tem outras?"), "reject");
   // toque atrasado no botão "Outras opções" fora da escolha: reject educado, nunca busca
-  assert.equal(kind("opt:outras"), "reject");
+  // 19/08: opt:outras fora da escolha deixou de ser reject — reabre a última escolha.
+  assert.equal(kind("opt:outras"), "more_options");
   // idem para "Escolher esse" por sku fora da escolha
   assert.equal(kind("optsku:petz-123"), "reject");
   // botão "Trocar endereço" do resumo (id de máquina com underscore)
@@ -272,6 +284,14 @@ test("escolha de opções: número, ordinal, qualquer, mais barato, marca, nenhu
   assert.deepEqual(parseChoiceReply("qualquer", options), { type: "any" });
   assert.deepEqual(parseChoiceReply("tanto faz", options), { type: "any" });
   assert.deepEqual(parseChoiceReply("o mais barato", options), { type: "cheapest" });
+  assert.deepEqual(parseChoiceReply("quero o mais barato", options), { type: "cheapest" });
+  // 19/08 (teste real): "mais barato" SECO não escolhe — navega pras mais baratas.
+  // O cliente disse "Mais barata" rejeitando as 3 da mesa e a Lia comprou uma delas.
+  assert.deepEqual(parseChoiceReply("mais barata", options), { type: "cheaper" });
+  assert.deepEqual(parseChoiceReply("tem mais barato?", options), { type: "cheaper" });
+  assert.deepEqual(parseChoiceReply("mais em conta", options), { type: "cheaper" });
+  assert.deepEqual(parseChoiceReply("mais caro", options), { type: "pricier" });
+  assert.deepEqual(parseChoiceReply("o mais caro", options), { type: "pick", index: 2 });
   assert.deepEqual(parseChoiceReply("o parmalat", options), { type: "pick", index: 2 });
   assert.deepEqual(parseChoiceReply("nenhuma dessas", options), { type: "skip" });
   // um novo pedido não pode ser interpretado como escolha

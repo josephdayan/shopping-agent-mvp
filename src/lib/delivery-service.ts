@@ -212,6 +212,9 @@ type PendingChoice = {
   // antes do "outras"/refino — continuar escolhendo exatamente o produto daquele card.
   // Caso real 11/08: ids posicionais fizeram "Escolher esse" confirmar outro produto.
   shownOptions?: ChoiceOption[];
+  // Escolha REABERTA ("Outras opções" depois de já ter escolhido): o novo pick
+  // SUBSTITUI esta linha da cesta em vez de somar uma segunda mochila.
+  replaceSku?: string;
 };
 
 // A frete option the customer can pick between (cheapest vs fastest courier).
@@ -253,6 +256,10 @@ type DeliveryContext = {
   };
   storeKey?: string;
   notFound?: string[];
+  // Última escolha CONCLUÍDA (com o sku escolhido): "Outras opções"/"mais barato" fora
+  // da escolha reabrem ela — o toque num card antigo não pode cair no "me diz de outro
+  // jeito" (teste real 19/08).
+  lastChoice?: PendingChoice & { chosenSku: string };
   // Pedido em texto cru aguardando o CEP do onboarding — vira busca COM OPÇÕES depois.
   pendingRequest?: string;
   cep?: string;
@@ -441,9 +448,16 @@ async function releaseTurnLock(convoId: string, token: string) {
 // Sem Meta (ou em falha), cai no texto puro — "cancelar" digitado funciona igual.
 // Dispara "estou procurando" só se a busca passar de LIA_SEARCH_NOTICE_MS (2,5s) —
 // busca de catálogo local (instantânea) nunca chega a mandar a mensagem.
+const lastSearchNoticeAt = new Map<string, number>();
+
 function searchNoticeTimer(phone: string): { cancel: () => void } {
   const delay = Number(process.env.LIA_SEARCH_NOTICE_MS ?? 2500);
   const timer = setTimeout(() => {
+    // Um aviso por rajada: a busca inicial e o resgate de última chance criam timers
+    // separados e o cliente via "Procurando…" DUAS vezes (teste real 19/08).
+    const last = lastSearchNoticeAt.get(phone) ?? 0;
+    if (Date.now() - last < 90_000) return;
+    lastSearchNoticeAt.set(phone, Date.now());
     void reply(phone, copy.searchingWider()).catch(() => {});
   }, delay);
   return { cancel: () => clearTimeout(timer) };
@@ -1934,6 +1948,13 @@ async function handleDeliveryTurn(
     return;
   }
 
+  // ---- "Outras opções"/"mais barato" com a escolha já fechada: reabre a última ----
+  if (intent.kind === "more_options") {
+    if (await reopenLastChoice(phone, convo.id, ctx, intent.cheaper ? "cheaper" : "more")) return;
+    await reply(phone, copy.rejectedAskAgain());
+    return;
+  }
+
   // ---- "não era isso" outside the choice step ----
   if (intent.kind === "reject") {
     await reply(phone, copy.rejectedAskAgain());
@@ -2381,6 +2402,13 @@ async function confirmChosenOption(
 ) {
   const chosenStore = chosen.storeKey ? getStore(chosen.storeKey) : fallbackStore;
   ctx.pending = ctx.pending!.slice(1);
+  // Memória da escolha concluída: "Outras opções"/"mais barato" depois dela reabrem
+  // esta mesma escolha (e o novo pick substitui o item na cesta, não soma outro).
+  const { replaceSku, ...lastBase } = current;
+  ctx.lastChoice = { ...lastBase, chosenSku: chosen.sku };
+  if (replaceSku && replaceSku !== chosen.sku) {
+    ctx.basket = (ctx.basket ?? []).filter((item) => item.sku !== replaceSku);
+  }
   if (current.qty === 1 && !current.qtyExplicit) {
     await beginQuantityChoice(phone, convoId, ctx, chosenStore, chosen);
     return;
@@ -2438,6 +2466,12 @@ async function handleChoosing(
       ctx.pending = ctx.pending!.slice(1);
       await reply(phone, copy.choiceSkipped(current.query));
       await advancePending(phone, convoId, ctx, userCep);
+      return;
+    }
+    // "mais barato"/"mais caro" SEM verbo de escolha: mostrar opções nessa faixa —
+    // nunca colocar no carrinho o que o cliente não pediu (teste real 19/08).
+    if (parsed.type === "cheaper" || parsed.type === "pricier") {
+      await showPriceSortedOptions(phone, convoId, ctx, store, parsed.type === "cheaper" ? "asc" : "desc");
       return;
     }
     const index =
@@ -2620,6 +2654,69 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
 // "acha outras" (ou o botão "Outras opções"): show the NEXT 3 catalog matches for the
 // same item — never repeat a sku already shown. When the pool is exhausted, say so
 // honestly.
+// "mais barato"/"mais caro" na escolha: reordena o pool conhecido (tudo que já foi
+// mostrado + candidatos frescos) por preço e mostra os 3 primeiros — produtos
+// distintos primeiro, variantes preenchem. É navegação, nunca compra.
+async function showPriceSortedOptions(
+  phone: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  store: StoreConnector,
+  dir: "asc" | "desc"
+) {
+  const p = ctx.pending![0];
+  const known = new Map<string, ChoiceOption>();
+  for (const o of [...(p.shownOptions ?? []), ...p.options]) known.set(o.sku, o);
+  try {
+    for (const o of await choiceCandidates(store, ctx, p)) if (!known.has(o.sku)) known.set(o.sku, o);
+  } catch (error) {
+    console.warn("[choice:price-sort:pool-failed]", error instanceof Error ? error.message : error);
+  }
+  const pool = [...known.values()].sort((a, b) => (dir === "asc" ? a.unitPrice - b.unitPrice : b.unitPrice - a.unitPrice));
+  const picked: ChoiceOption[] = [];
+  for (const o of pool) {
+    if (picked.length >= 3) break;
+    if (!picked.some((cur) => sameProductVariant(p.query, cur, o))) picked.push(o);
+  }
+  for (const o of pool) {
+    if (picked.length >= 3) break;
+    if (!picked.some((cur) => cur.sku === o.sku)) picked.push(o);
+  }
+  if (!picked.length) {
+    await sendChoices(phone, p);
+    return;
+  }
+  const remembered = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
+  p.shownOptions = [...(p.shownOptions ?? p.options), ...picked.filter((o) => !remembered.has(o.sku))];
+  p.shownSkus = [...new Set([...(p.shownSkus ?? p.options.map((o) => o.sku)), ...picked.map((o) => o.sku)])];
+  p.options = picked;
+  await writeCtx(convoId, ctx);
+  await sendChoices(phone, p, copy.priceSortedHeader(p.query, dir === "asc"));
+}
+
+// "Outras opções"/"mais barato" FORA da escolha (ela já fechou — inclusive por uma
+// escolha que o cliente não quis): reabre a última escolha; o novo pick SUBSTITUI o
+// item na cesta. Só vale no passo de coleta — com cotação/pagamento na mesa, não mexe.
+async function reopenLastChoice(
+  phone: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  mode: "more" | "cheaper"
+): Promise<boolean> {
+  const last = ctx.lastChoice;
+  if (!last) return false;
+  if (ctx.step && ctx.step !== "collecting") return false;
+  const { chosenSku, ...pendingBase } = last;
+  const restored: PendingChoice = { ...pendingBase, replaceSku: chosenSku };
+  ctx.pending = [restored, ...(ctx.pending ?? [])];
+  ctx.step = "choosing";
+  await writeCtx(convoId, ctx);
+  const store = getStore(restored.options[0]?.storeKey ?? ctx.storeKey ?? orderStore(ctx).key);
+  if (mode === "cheaper") await showPriceSortedOptions(phone, convoId, ctx, store, "asc");
+  else await pageMoreOptions(phone, convoId, ctx, store);
+  return true;
+}
+
 async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector) {
   const p = ctx.pending![0];
   const shown = p.shownSkus ?? p.options.map((o) => o.sku);
@@ -3000,8 +3097,9 @@ async function handleConciergeRequest(
     await writeCtx(convoId, ctx);
     const notes: string[] = [];
     if (containsMedicine) notes.push(copy.medicineSkippedNote());
-    // Os itens sem preço são recusados ANTES das opções — resposta honesta, sem promessa.
-    if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+    // Os itens sem preço são recusados ANTES das opções — mas com escopo explícito:
+    // "não achei X — o resto tá abaixo" (a copy global parecia contradição, 19/08).
+    if (unavailable.length) notes.push(copy.itemsNotAvailableWithOptions(unavailable));
     if (notes.length) await reply(phone, notes.join("\n"));
     if (pending.length > 1) await reply(phone, copy.choiceSequence(pending.map((p) => p.query)));
     await sendChoices(phone, pending[0]);

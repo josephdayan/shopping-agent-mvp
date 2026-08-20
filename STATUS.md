@@ -1,5 +1,14 @@
 # Lia — Status do Projeto
 
+## 19/08 (2ª) — teste real da mochila: 5 defeitos de conversa fechados
+
+"Mais barata" seco não compra mais nada (navega pras mais baratas); "Outras opções"
+com escolha fechada reabre a última escolha e o novo pick SUBSTITUI o item na cesta;
+"mais barato" solto reabre ordenado por preço; aviso "Procurando…" sai uma vez só; e a
+recusa de uma linha com opções das outras na mesma mensagem ganhou escopo ("*sacola* eu
+não achei — o resto achei e tá logo abaixo"). Detalhe e racional em AGENTS.md (entrada
+19/08 2ª). Latência da busca fria do ML segue limitação conhecida do actor.
+
 ## Atualização 19/08/2026 — /admin com login de usuário e senha
 
 Revisão completa pré-lançamento: `/admin`, `/api/admin/*` e `/api/conversations/*` (legado

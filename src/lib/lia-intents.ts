@@ -26,6 +26,9 @@ export type Intent =
   | { kind: "choose_payment"; method: "pix" | "card" }
   | { kind: "affirm" }
   | { kind: "reject" }
+  // "Outras opções" (botão ou texto) fora da escolha ativa; cheaper=true quando o
+  // cliente pediu "mais barato" seco — reabre a última escolha ordenada por preço.
+  | { kind: "more_options"; cheaper?: boolean }
   // "só isso", "mais nada", "é só" — fechar a lista e seguir pro total.
   | { kind: "done" }
   // Pergunta operacional (frete/prazo/área/pagamento) — responder com copy, nunca buscar produto.
@@ -612,10 +615,17 @@ export function detectIntent(text: string): Intent {
   if (savedCardTap) return { kind: "saved_card_pay", attemptId: savedCardTap[1] };
   if (n === "cardother") return { kind: "saved_card_other" };
   // Botão "Outras opções" do último card de produto. No fluxo de escolha, o
-  // handleChoosing pagina via wantsMoreOptions ANTES de tratar reject; num toque
-  // atrasado (fora da escolha) o reject responde "o que você prefere então?" em vez
-  // de deixar `opt:outras` virar busca de produto.
-  if (n === "opt:outras") return { kind: "reject" };
+  // handleChoosing pagina via wantsMoreOptions ANTES do intent; num toque atrasado
+  // (fora da escolha) o roteador reabre a ÚLTIMA escolha em vez de responder "me diz
+  // de outro jeito" (teste real 19/08: o toque no card antigo caía no reject).
+  if (n === "opt:outras") return { kind: "more_options" };
+  // "outras"/"outras opções"/"mais opções" secos fora da escolha: mesma coisa.
+  if (/^(outr[ao]s( opcoes)?|mais opcoes)[\s!.]*$/.test(n)) return { kind: "more_options" };
+  // "mais barato"/"mais em conta" seco fora da escolha: reabrir a última escolha
+  // ordenada por preço — antes virava modificador vazio e caía no "não entendi".
+  if (/^(tem )?(o |a |algo )?(mais barat[oa]s?|mais em conta|menor preco)( que tiver| possivel)?[\s?!.]*$/.test(n)) {
+    return { kind: "more_options", cheaper: true };
+  }
   // Botão "Escolher esse" (id por sku). Na escolha, o handleChoosing resolve o sku
   // ANTES de qualquer parser; fora dela, reject educado — nunca busca de produto.
   if (/^optsku:/.test(n)) return { kind: "reject" };
@@ -924,8 +934,19 @@ export type ChoiceReply =
   | { type: "pick"; index: number }
   | { type: "any" }
   | { type: "cheapest" }
+  // "mais barato"/"mais caro" SEM verbo de escolha: o cliente quer VER opções nessa
+  // faixa, não comprar a mais barata da mesa (teste real 19/08: "Mais barata" pós-cards
+  // colocou um produto no carrinho que o cliente não quis).
+  | { type: "cheaper" }
+  | { type: "pricier" }
   | { type: "skip" }
   | null;
+
+// O que transforma preferência de preço em ESCOLHA: verbo de pegar ("quero o mais
+// barato") OU artigo definido apontando pra mesa ("o mais barato" = escolha elíptica).
+// "mais barato" seco, sem verbo nem artigo, só mostra opções mais baratas.
+const CHOICE_PICK_VERB_RE =
+  /\b(quero|prefiro|peg[ao]|pegue|manda|me ve|me da|vou (?:de|no|na|com)|fico com|pode ser|vai de|escolho|leva|levo|compra)\b|(^|\s)[oa] mais (barat|car)/;
 
 const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "dessa", "desse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela", "tem", "cor", "versao", "tamanho", "tipo", "ver", "acha", "ache", "mostra", "procura", "busca", "outra", "outro", "outras", "outros", "alguma", "algum", "opcoes", "opcao"]);
 
@@ -944,6 +965,7 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
   if (/\b(ultim[ao])\b/.test(n)) return { type: "pick", index: options.length - 1 };
   if (/\b(d[oe] meio)\b/.test(n) && options.length === 3) return { type: "pick", index: 1 };
   if (/\b(mais car[ao])\b/.test(n)) {
+    if (!CHOICE_PICK_VERB_RE.test(n)) return { type: "pricier" };
     const idx = options.reduce((best, o, i) => (o.unitPrice > options[best].unitPrice ? i : best), 0);
     return { type: "pick", index: idx };
   }
@@ -959,7 +981,9 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
   if (/\b(nenhum[a]?|pula|deixa (pra la|esse|essa)|esquece (esse|essa|ess[ea]s)?|sem esse|nao quero (ess[ea]|nenhum))\b/.test(n)) {
     return { type: "skip" };
   }
-  if (/\b(mais barat[ao]|mais em conta|menor preco|baratinh[ao]|economic[ao])\b/.test(n)) return { type: "cheapest" };
+  if (/\b(mais barat[ao]|mais em conta|menor preco|baratinh[ao]|economic[ao])\b/.test(n)) {
+    return CHOICE_PICK_VERB_RE.test(n) ? { type: "cheapest" } : { type: "cheaper" };
+  }
 
   // Digit surrounded only by filler ("quero o 2 por favor", "pode ser a 2") — a pick.
   // A digit next to real words ("2 cocas") is NOT: that's a new item with a quantity.

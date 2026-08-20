@@ -491,6 +491,54 @@ test("card ANTIGO escolhe o produto do card, não a posição (ids por sku — b
   assert.match(out, new RegExp(fragment, "i"), `esperava "${tapped.name}", veio: ${out.slice(0, 200)}`);
 });
 
+test("'mais barata' seca NUNCA escolhe — mostra as mais baratas (caso real 19/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Produção: cliente olhando 3 cards disse "Mais barata" e a Lia COMPROU a mais
+  // barata da mesa. Preferência sem verbo/artigo agora navega, nunca escolhe.
+  const c = await returningCustomer();
+  await c.send("quero refrigerante");
+  const out = await c.send("Mais barata");
+  assert.doesNotMatch(out, /✅/, `não pode confirmar escolha: ${out.slice(0, 200)}`);
+  assert.match(out, /mais baratas de/i, `esperava navegação por preço: ${out.slice(0, 200)}`);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  assert.equal(ctx.step, "choosing", "a escolha continua aberta");
+  assert.ok(!(ctx.basket?.length), "nada pode entrar na cesta");
+  // As opções mostradas vêm ordenadas da mais barata pra mais cara.
+  const prices = (ctx.pending?.[0]?.options ?? []).map((o: { unitPrice: number }) => o.unitPrice);
+  assert.ok(prices.length >= 2, "esperava opções na mesa");
+  assert.deepEqual(prices, [...prices].sort((a: number, b: number) => a - b));
+});
+
+test("'Outras opções' com escolha já fechada REABRE — e o novo pick substitui na cesta (19/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  // Produção: depois de uma escolha fechada, o toque em "Outras opções" caía no
+  // "Me diz de outro jeito — marca, tamanho" e "mais barato" no "não entendi".
+  const c = await returningCustomer();
+  await c.send("quero refrigerante");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("2");
+  const convo0 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx0 = JSON.parse(convo0!.context ?? "{}");
+  assert.equal(ctx0.basket?.length, 1, "a 1ª escolha entra na cesta");
+  const firstSku = ctx0.basket[0].sku as string;
+  const reopened = await c.send("opt:outras");
+  assert.doesNotMatch(reopened, /outro jeito/i, `não pode cair no reject: ${reopened.slice(0, 200)}`);
+  assert.match(reopened, /op(ç|c)(õ|o)es de/i, `esperava opções de novo: ${reopened.slice(0, 200)}`);
+  const convo1 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx1 = JSON.parse(convo1!.context ?? "{}");
+  assert.equal(ctx1.step, "choosing");
+  const options = ctx1.pending?.[0]?.options as Array<{ sku: string }>;
+  assert.ok(options?.length, "esperava opções reabertas");
+  const afterSwap = await c.send(`optsku:${options[0].sku}`);
+  if (/quantas unidades/i.test(afterSwap)) await c.send("2");
+  const convo2 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx2 = JSON.parse(convo2!.context ?? "{}");
+  assert.equal(ctx2.basket?.length, 1, `substitui, não soma: ${JSON.stringify(ctx2.basket?.map((i: { name: string }) => i.name))}`);
+  assert.equal(ctx2.basket[0].sku, options[0].sku);
+  assert.notEqual(ctx2.basket[0].sku, firstSku, "o item antigo saiu da cesta");
+});
+
 // ---------- achados da revisão de código (11/08) ----------
 
 test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {

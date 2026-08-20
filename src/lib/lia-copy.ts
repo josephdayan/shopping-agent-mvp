@@ -291,6 +291,10 @@ export function moreChoicesHeader(query: string): string {
   return `Mais opções de *${query}*:`;
 }
 
+export function priceSortedHeader(query: string, cheapest: boolean): string {
+  return cheapest ? `As mais baratas de *${query}*:` : `As mais caras de *${query}*:`;
+}
+
 export function noMoreOptions(query: string): string {
   return `Essas são todas as opções de *${query}* que eu tenho. Responde o número, ou *pula* pra seguir sem esse item.`;
 }
@@ -733,6 +737,16 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
 // Regra do dono (11/08): "se não tem, fala que não tem" — item sem preço nas 18 lojas
 // NUNCA vira espera de cotação. A resposta é honesta, na hora, e convida a tentar de
 // outro jeito (marca/versão) ou pedir outra coisa.
+// Recusa quando OUTRAS linhas da mesma mensagem acharam opções (elas vêm logo abaixo):
+// escopo explícito pra não ler como recusa do pedido inteiro (teste real 19/08: "sacola
+// eu não consigo trazer" seguido de cards de mochila pareceu contradição).
+export function itemsNotAvailableWithOptions(items: string[]): string {
+  if (items.length === 1) {
+    return `*${items[0]}* eu não achei — o resto achei e tá logo abaixo.`;
+  }
+  return [`Esses eu não achei: ${items.join(", ")}.`, "O resto achei e tá logo abaixo."].join("\n");
+}
+
 export function itemsNotAvailable(items: string[]): string {
   if (items.length === 1) {
     return `*${items[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;
