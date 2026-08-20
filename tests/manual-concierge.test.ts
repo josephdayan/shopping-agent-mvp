@@ -135,7 +135,8 @@ test("vitrine: item com preço vira opção; item sem preço é recusado na mesm
   assert.match(out, /op(ç|c)(õ|o)es/i);
   assert.match(out.toLowerCase(), /coca/);
   // O vedante não existe → recusa honesta na hora (regra 11/08), nunca "vou cotar".
-  assert.match(out, /não consigo trazer/i);
+  // 19/08: com opções na mesma resposta, a recusa ganhou escopo ("não achei — o resto tá abaixo").
+  assert.match(out, /eu não achei/i);
   assert.match(out.toLowerCase(), /vedante|torneira/);
   assert.doesNotMatch(out, /garimpar|vou cotar/i);
 });
@@ -237,8 +238,8 @@ test("cotação instantânea: item sem preço é recusado na entrada e o resto f
   const c = await returningCustomer();
   const first = await c.send("quero 10 coca cola e uma vela de aniversário");
   // Regra 11/08: a vela (sem preço) é recusada JÁ na entrada — nunca arrasta o pedido
-  // inteiro pra cotação manual.
-  assert.match(first, /não consigo trazer/i);
+  // inteiro pra cotação manual. (19/08: copy com escopo quando há opções junto.)
+  assert.match(first, /eu não achei/i);
   assert.match(first.toLowerCase(), /vela/);
   const afterChoice = await c.send("1");
   if (/quantas unidades/i.test(afterChoice)) await c.send("10");
