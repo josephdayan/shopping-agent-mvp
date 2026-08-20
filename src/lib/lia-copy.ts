@@ -972,7 +972,7 @@ export function quantityAskFree(name: string): string {
 // silêncio absoluto). Honesto, sem prazo e sem mecânica; se as opções chegarem logo
 // depois, a sequência continua fazendo sentido.
 export function turnStillWorking(): string {
-  return "Tá demorando mais que o normal aqui. Já te respondo — não precisa mandar de novo.";
+  return "Ainda procurando — já te respondo.";
 }
 
 export function searchingWider(): string {
