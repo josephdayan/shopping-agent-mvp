@@ -2,6 +2,12 @@
 
 _Última atualização: 2026-08-19._
 
+> **Rodada adversarial ao vivo — 19/08.** Oito cenários difíceis foram executados sem
+> cobrança: 5 passaram, 1 foi parcial e 2 falharam. Reabrir a validação de “mais barata”
+> seco (não deve selecionar) e “Outras opções” (deve reabrir e substituir) porque a sessão
+> de produção ainda mostrou o comportamento antigo. Evidência detalhada em
+> [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md).
+
 Este é o painel canônico de progresso do projeto. Marque um item com `[x]` somente quando
 o critério descrito estiver comprovado. Quando uma decisão mudar, atualize também
 [AGENTS.md](AGENTS.md) e [STATUS.md](STATUS.md).
@@ -357,9 +363,9 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > evento de aprovação ou rejeição. Para encerrar a pendência de branding/privacidade, o dono
 > precisa decidir se quer reenviar a solicitação de nome ou manter o nome legal atual; não
 > alterar sem essa orientação. A versão HD da foto (PNG 2048×2048, símbolo 30% maior e
-> estrela alinhada à ponta direita do “L”) está pronta em
-> `public/brand/lia-whatsapp-profile-hd.png`; falta apenas o dono confirmar a troca no
-> WhatsApp Manager.
+> estrela na posição original escolhida pelo dono) foi enviada e salva no WhatsApp Manager
+> em 19/08; a Meta avisou que pode levar alguns minutos para aparecer. A pendência desta
+> seção agora é somente o display name.
 
 > **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
 > conversa limpa. Passaram troca de item, “sem remédio” com shampoo, presente dentro de

@@ -210,3 +210,34 @@ cancelada antes da cobrança.
   evidência incompleta de persistência correta do CEP.
 - Nenhum arquivo de código foi alterado durante os testes; esta seção registra somente
   comportamento observado ao vivo contra o deploy informado pelo operador.
+
+## Rodada adversarial ao vivo — 19/08/2026 (sem alteração de código)
+
+Foram executados 8 cenários difíceis no WhatsApp, começando com a cesta anterior limpa.
+O teste priorizou cauda longa, preferências ambíguas, trocas, negações, quantidades e o
+caminho até a cotação. A rodada terminou com **5 sucessos plenos, 1 parcial e 2 falhas**.
+No único caso que chegou ao pagamento, a cotação foi cancelada pelo botão; a Lia confirmou
+que nada foi cobrado.
+
+| Rodada | Cenário | Resultado | Melhoria observada |
+|---|---|---|---|
+| 1 | “Quero uma mochila de academia sacola, qualquer marca.” → “mais barata” | **Falha**: a busca trouxe opções reais de mochila/sacola e um único aviso de busca, mas “mais barata” seco escolheu a opção de R$23,09 e colocou-a na cesta | “Mais barata” sem verbo de compra deve apenas reabrir a lista ordenada por preço; só “quero a mais barata” pode selecionar. |
+| 2 | Shampoo normal → escolher → botão “Outras opções” | **Falha**: após a escolha, “Outras opções” enviou uma escolha citada de outro shampoo e a Lia respondeu “Me diz de outro jeito”, sem reabrir a escolha | Reabrir a última escolha no mesmo contexto e fazer o novo pick substituir o SKU anterior, sem segunda linha. |
+| 3 | Churrasco: carvão, pão de alho, linguiça sem pimenta; “mais um carvão” | **Sucesso**: 3 produtos; carvão virou 2x; pão de alho e linguiça ficaram separados; “sem pimenta” ficou só na linguiça | Nenhum defeito funcional observado. |
+| 4 | Violão acústico para iniciante, até R$500, qualquer marca | **Sucesso**: cauda longa trouxe 3 violões reais entre R$285,99 e R$440,52, todos dentro do teto; escolha chegou ao resumo de R$285,99 e ao pagamento, cancelado sem cobrança | Nenhum pagamento foi acionado; manter a busca de cauda longa atrás da validação de categoria e prazo real. |
+| 5 | Detergente neutro + esponja; troca por saco reforçado de 30 L; “mais um saco desses” | **Sucesso**: a esponja desapareceu, detergente foi preservado e o saco de 30 L virou 2x do mesmo SKU | Nenhum defeito funcional observado. |
+| 6 | “Sem remédio”, camiseta de futebol, qualquer time, tamanho M → “4” | **Parcial**: não houve alerta de medicamento nem produto “qualquer time”; a quantidade solta ajustou para 4x, mas uma alternativa era camiseta dry fit genérica, não claramente de futebol | Manter “qualquer time” como preferência e endurecer a relevância da categoria “camiseta de futebol”. |
+| 7 | Presente de aniversário para criança de 6 anos, até R$100, sem brinquedo barulhento | **Sucesso**: uma única opção real de R$96,79, dentro do teto, sem linha fantasma e sem alerta indevido | Nenhum defeito funcional observado. |
+| 8 | Quatro caixas de bombom → “mais três do mesmo” → “5” | **Sucesso**: confirmou 4x sem pedir quantidade de novo; passou a 7x do mesmo SKU e o “5” ajustou para 5x | Nenhum defeito funcional observado. |
+
+### Síntese da rodada adversarial
+
+- Os dois pontos mais recentes da mochila **não passaram no comportamento ao vivo**: “mais
+  barata” ainda compra e “Outras opções” ainda não reabre a escolha. Eles devem ser tratados
+  como regressão/versão não refletida na sessão de produção, apesar de a documentação de
+  produto descrevê-los como fechados.
+- Passaram os fluxos de negação de medicamento, preferência vaga, escopo de “sem pimenta”,
+  troca na mesma mensagem, adição relativa, quantidade explícita e número solto.
+- A cauda longa do violão funcionou com teto de preço e chegou ao pagamento sem cobrança.
+- Nenhum arquivo de código foi alterado durante esta rodada; este registro é evidência de
+  comportamento observado ao vivo.

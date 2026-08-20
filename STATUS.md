@@ -1,5 +1,27 @@
 # Lia — Status do Projeto
 
+## 20/08 — silêncio absoluto não existe mais (watchdog + timeouts em camadas)
+
+O reteste da mochila morreu em silêncio (teto da função dentro do waitUntil; OpenAI sem
+timeout na 2ª extração do resgate; token ML de 55 dias custando 4s/busca). Agora:
+watchdog de 45s avisa o cliente que a Lia continua no pedido; OpenAI e Mercado Pago com
+timeout de 10s; resgate de última chance respeita orçamento de 90s do turno; rota
+oficial do ML de castigo após 401 e env do token morto removida. Detalhe em AGENTS.md.
+**Ação do dono (1 min):** conferir Fluid Compute ativo no projeto da Vercel.
+
+## 19/08/2026 — rodada adversarial ao vivo: 5 sucessos, 1 parcial, 2 falhas
+
+Foram testados 8 cenários difíceis no WhatsApp, sem alteração de código e sem cobrança.
+Passaram churrasco com negação escopada, cauda longa de violão até R$500, troca de item,
+presente com teto de R$100 e quantidade 4x → 7x → 5x em bombons. “Sem remédio” e “qualquer
+time” não viraram produtos; “4” solto ajustou a quantidade.
+
+Dois achados importantes contradizem o comportamento esperado documentado em 19/08: o
+“mais barata” seco ainda escolheu o menor preço em vez de apenas navegar, e “Outras opções”
+após uma escolha não reabriu a busca — respondeu pedindo para reformular. Repetir esses dois
+casos depois de confirmar qual versão está servindo a sessão. A única rodada que chegou ao
+pagamento foi cancelada antes da cobrança; a Lia confirmou que nada foi cobrado.
+
 ## 19/08 (2ª) — teste real da mochila: 5 defeitos de conversa fechados
 
 "Mais barata" seco não compra mais nada (navega pras mais baratas); "Outras opções"
@@ -417,8 +439,9 @@ de hoje está em
 > Dayan`, status **Approved**: a troca para **Lia Delivery** não está refletida. Não houve
 > alteração de código, número ou cobrança. O Activity log registra `Name verification
 > requested` em 17/08, sem evento de aprovação ou rejeição. Uma nova foto HD foi preparada
-> em PNG 2048×2048, direto do vetor, com o símbolo 30% maior e a estrela alinhada à ponta
-> direita do “L”; a substituição no perfil ainda depende de confirmação do dono.
+> em PNG 2048×2048, direto do vetor e com o símbolo 30% maior. O dono escolheu a composição
+> anterior, com a estrela um pouco além da ponta do “L”; ela foi enviada e salva no WhatsApp
+> Manager em 19/08. A Meta informou que a atualização pode levar alguns minutos para aparecer.
 
 > **15/08 — nova rodada independente de conversa.** Dez cenários foram repetidos em uma
 > conversa limpa, sem cobrança. Passaram troca de item, shampoo com “sem remédio”, presente

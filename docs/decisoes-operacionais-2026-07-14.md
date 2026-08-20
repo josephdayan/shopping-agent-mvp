@@ -705,8 +705,9 @@ nome público ainda é `Lia Delivery by 67.742.955 Joseph Carlos Dayan`, com sta
 aprovação ou rejeição registrada. Assim, a solicitação de **Lia Delivery** não se refletiu;
 a próxima ação exige nova decisão do dono e não envolve código, cobrança ou troca de número.
 Também foi preparada uma foto de perfil HD em PNG 2048×2048, derivada do vetor oficial com
-o símbolo 30% maior e a ponta direita da estrela alinhada à perna do “L”; a versão ainda não
-foi enviada ao perfil.
+o símbolo 30% maior. O dono escolheu a composição anterior, com a estrela um pouco além da
+ponta direita do “L”. Essa versão foi enviada e salva no perfil em 19/08; a Meta informou
+que a propagação no WhatsApp pode levar alguns minutos.
 
 ## Nova validação independente — 15/08/2026
 

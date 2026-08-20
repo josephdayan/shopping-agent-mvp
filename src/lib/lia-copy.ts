@@ -968,6 +968,13 @@ export function quantityAskFree(name: string): string {
 // silêncio de 25s parece travamento. Curta e SEM expor a mecânica interna (feedback do
 // dono, 17/08: "essa msg de procurei nas lojas parceiras e não achei é péssima, só
 // deixa procurando"). O cliente não quer saber quantos fornecedores existem.
+// Watchdog do turno (19/08: busca morreu no teto da função e o cliente ficou no
+// silêncio absoluto). Honesto, sem prazo e sem mecânica; se as opções chegarem logo
+// depois, a sequência continua fazendo sentido.
+export function turnStillWorking(): string {
+  return "Tá demorando mais que o normal aqui. Já te respondo — não precisa mandar de novo.";
+}
+
 export function searchingWider(): string {
   return "🔎 Procurando as melhores opções…";
 }

@@ -157,7 +157,8 @@ async function realCreatePix(input: { orderId: string; amount: number; descripti
       "X-Idempotency-Key": input.orderId
     },
     body: JSON.stringify(body),
-    cache: "no-store"
+    cache: "no-store",
+    signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
   });
   if (!res.ok) {
     // Surface MP's actual error body (it names the offending field) so a 400 is
@@ -266,7 +267,8 @@ async function realCreateCheckout(input: { orderId: string; amount: number; desc
       "X-Idempotency-Key": `pref_${input.orderId}`
     },
     body: JSON.stringify(body),
-    cache: "no-store"
+    cache: "no-store",
+    signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
   });
   if (!res.ok) {
     // Surface MP's actual error body (it names the offending field) so a 400 is
@@ -289,7 +291,8 @@ async function realGetStatus(pixId: string): Promise<PixStatus> {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
   const res = await fetch(`https://api.mercadopago.com/v1/payments/${pixId}`, {
     headers: { Authorization: `Bearer ${token}` },
-    cache: "no-store"
+    cache: "no-store",
+    signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
   });
   if (!res.ok) return "unknown";
   const data = (await res.json()) as { status?: string };

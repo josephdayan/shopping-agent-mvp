@@ -205,7 +205,13 @@ async function storeItems(queryKey: string, query: string, items: MlCatalogItem[
 // The official endpoint returns in around a second when the operator has linked
 // a DevCenter application. Apify remains the resilient fallback: a 401, 403,
 // timeout or empty response must never turn a valid long-tail request into a refusal.
+// Depois de um 401/403 (token morto — o env legado tem 55 dias e o token do ML dura
+// 6h), a rota oficial fica de castigo por 10 min: cada tentativa custava 4s de timeout
+// em TODA busca fria (caso real 19/08) para um erro garantido.
+let officialAuthFailedAt = 0;
+
 async function searchMercadoLivreOfficial(query: string, limit: number): Promise<MlCatalogItem[]> {
+  if (Date.now() - officialAuthFailedAt < 10 * 60 * 1000) return [];
   const token = await getMercadoLivreAccessToken();
   if (!token) return [];
   try {
@@ -219,6 +225,7 @@ async function searchMercadoLivreOfficial(query: string, limit: number): Promise
     });
     if (!response.ok) {
       console.warn("[mercado-livre:official-search]", response.status);
+      if (response.status === 401 || response.status === 403) officialAuthFailedAt = Date.now();
       return [];
     }
     const payload = (await response.json()) as OfficialMlSearchResponse;

@@ -51,6 +51,34 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 20/08/2026 — silêncio absoluto no teste da mochila: garantias anti-silêncio
+
+Reteste do dono ("Oi quero uma mochila saco pequena barata", 11:16): a Lia mandou
+"Procurando…" e depois NADA — nem opções, nem erro. Evidência dos logs: a mensagem
+chegou, `[mercado-livre:official-search] 401` (token legado de 55 dias na Vercel; token
+do ML dura 6h) e o turno morreu sem log de erro — morte pelo teto de duração da função
+dentro do `waitUntil`, onde o catch do webhook não alcança. O caminho sem limite eram os
+fetches da OpenAI (extração roda 2x quando há resgate de última chance) sem timeout.
+
+Cinco garantias, em camadas:
+1. **Watchdog do turno** (webhook): processamento passou de `LIA_TURN_DEADLINE_MS` (45s)
+   → o cliente recebe `copy.turnStillWorking()` ("Tá demorando mais que o normal aqui.
+   Já te respondo — não precisa mandar de novo."). Se a resposta real chegar depois, a
+   sequência continua coerente; se a função morrer, o silêncio absoluto não existe mais.
+2. **Timeout em TODAS as chamadas OpenAI** (`LIA_AI_TIMEOUT_MS`, 10s) — pendurada vira o
+   fallback determinístico que já existia. O rerank mantém os 6s próprios.
+3. **Timeout nas chamadas do Mercado Pago** (`LIA_MP_TIMEOUT_MS`, 10s) — mesma classe.
+4. **Orçamento do resgate** (`LIA_RESCUE_BUDGET_MS`, 90s): turno que já queimou o
+   orçamento NÃO roda a 2ª rodada de ML (extração+actor+rerank ~40-70s) — recusa honesta
+   agora vence morrer no teto em silêncio.
+5. **Rota oficial do ML de castigo 10 min após 401/403** — o token morto custava 4s de
+   timeout em toda busca fria. O env `MERCADO_LIVRE_ACCESS_TOKEN` (55 dias, inválido por
+   definição) foi REMOVIDO de Production; a busca vai direto ao actor até o dono criar o
+   app no DevCenter.
+
+Conferir no dashboard da Vercel (1 min, dono): **Fluid Compute ativo** no projeto — sem
+ele, `maxDuration=300` vira 60s no plano Hobby e o teto mata turno de ML frio.
+
 ## Atualização 19/08/2026 (2ª) — teste real da mochila: 5 defeitos de conversa fechados
 
 Teste real do dono ("Oi quero uma mochila de academia sacola", screenshots) expôs cinco
@@ -1598,9 +1626,10 @@ status **Approved**. O histórico registra `Name verification requested` em 17/0
 registra aprovação nem rejeição. Portanto, a troca para **Lia Delivery** ainda não se
 refletiu no perfil; não reenviar nem alterar outros campos sem orientação do dono. Uma
 versão nova da foto foi preparada em `public/brand/lia-whatsapp-profile-hd.svg` e PNG
-2048×2048, renderizada diretamente do vetor com o símbolo 30% maior e a ponta direita da
-estrela alinhada à ponta da perna do “L”; ainda não foi enviada ao WhatsApp Manager e
-depende da confirmação do dono.
+2048×2048, renderizada diretamente do vetor com o símbolo 30% maior. Após comparar as duas
+composições, o dono escolheu manter a estrela na posição original, um pouco além da ponta do
+“L”. Essa versão foi enviada e salva no WhatsApp Manager em 19/08; a Meta avisou que pode
+levar alguns minutos para aparecer no WhatsApp.
 
 ### Validação independente — 15/08/2026
 

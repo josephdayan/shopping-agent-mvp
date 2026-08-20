@@ -181,6 +181,9 @@ async function parseIntentWithOpenAI(text: string): Promise<ProductIntent | null
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
+      // OpenAI pendurada NUNCA pode pendurar o turno (silêncio de 19/08): estourou o
+      // teto, a chamada aborta e o fluxo cai no determinístico que já existe.
+      signal: AbortSignal.timeout(Number(process.env.LIA_AI_TIMEOUT_MS ?? 10000)),
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
         input: [
@@ -314,6 +317,9 @@ export async function matchCatalog(
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
+      // OpenAI pendurada NUNCA pode pendurar o turno (silêncio de 19/08): estourou o
+      // teto, a chamada aborta e o fluxo cai no determinístico que já existe.
+      signal: AbortSignal.timeout(Number(process.env.LIA_AI_TIMEOUT_MS ?? 10000)),
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
         input: [
@@ -400,6 +406,9 @@ export async function extractShoppingList(text: string): Promise<ShoppingExtract
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
+      // OpenAI pendurada NUNCA pode pendurar o turno (silêncio de 19/08): estourou o
+      // teto, a chamada aborta e o fluxo cai no determinístico que já existe.
+      signal: AbortSignal.timeout(Number(process.env.LIA_AI_TIMEOUT_MS ?? 10000)),
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
         input: [
@@ -572,6 +581,9 @@ async function classifyTurnWithOpenAI(text: string, context: TurnContext): Promi
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
+      // OpenAI pendurada NUNCA pode pendurar o turno (silêncio de 19/08): estourou o
+      // teto, a chamada aborta e o fluxo cai no determinístico que já existe.
+      signal: AbortSignal.timeout(Number(process.env.LIA_AI_TIMEOUT_MS ?? 10000)),
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
         input: [
@@ -813,6 +825,9 @@ async function curateProductsWithOpenAI(intent: ProductIntent, products: RankedP
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json"
       },
+      // OpenAI pendurada NUNCA pode pendurar o turno (silêncio de 19/08): estourou o
+      // teto, a chamada aborta e o fluxo cai no determinístico que já existe.
+      signal: AbortSignal.timeout(Number(process.env.LIA_AI_TIMEOUT_MS ?? 10000)),
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
         input: [

@@ -450,6 +450,9 @@ async function releaseTurnLock(convoId: string, token: string) {
 // busca de catálogo local (instantânea) nunca chega a mandar a mensagem.
 const lastSearchNoticeAt = new Map<string, number>();
 
+// Início do turno por telefone: o orçamento do resgate de última chance mede daqui.
+export const turnStartedAt = new Map<string, number>();
+
 function searchNoticeTimer(phone: string): { cancel: () => void } {
   const delay = Number(process.env.LIA_SEARCH_NOTICE_MS ?? 2500);
   const timer = setTimeout(() => {
@@ -1053,6 +1056,7 @@ function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
 
 export async function handleDeliveryMessage(input: { phone?: string; text: string; name?: string; messageId?: string }) {
   const phone = normalizePhone(input.phone);
+  turnStartedAt.set(phone, Date.now());
   const text = (input.text ?? "").trim();
   const { user, convo } = await getOrCreateConvo(phone, input.name);
 
@@ -3044,7 +3048,15 @@ async function handleConciergeRequest(
   // Patrulha Canina, o gate achava que estava resolvido, o rerank descartava o
   // brinquedo (certíssimo) e o cliente ficava sem violão. Custo do ML só é pago aqui,
   // no exato caso em que a alternativa era recusar.
-  if (notFoundLines.length && mercadoLivreEnabled()) {
+  const turnElapsedMs = Date.now() - (turnStartedAt.get(phone) ?? Date.now());
+  const rescueBudgetMs = Number(process.env.LIA_RESCUE_BUDGET_MS ?? 90000);
+  if (notFoundLines.length && mercadoLivreEnabled() && turnElapsedMs > rescueBudgetMs) {
+    // O resgate custa mais uma rodada inteira (extração + actor + rerank, ~40-70s). Com
+    // o turno já estourado, recusar honesto AGORA vence morrer no teto da função em
+    // silêncio (caso real 19/08).
+    console.warn(`[search:rescue-skipped] turno com ${Math.round(turnElapsedMs / 1000)}s; recusa honesta sem 2ª rodada`);
+  }
+  if (notFoundLines.length && mercadoLivreEnabled() && turnElapsedMs <= rescueBudgetMs) {
     // O retry vai re-extrair e re-rankear (~3-6s de IA); o run do ML começa já, com a
     // frase determinística, e a busca do retry se acopla a ele (dedupe em voo).
     for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);

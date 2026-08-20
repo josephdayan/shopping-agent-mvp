@@ -5,7 +5,7 @@ import { requireMetaSignature, requireTwilioSignature, requireWebhookSecret } fr
 import { prisma } from "@/lib/prisma";
 import { handleDeliveryMessage } from "@/lib/delivery-service";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
-import { genericError } from "@/lib/lia-copy";
+import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +17,29 @@ export const maxDuration = 300;
 
 async function processDeliveryMessage(inbound: ReturnType<typeof whatsappAdapter.parseInbound>) {
   try {
-    await handleDeliveryMessage(inbound);
+    // WATCHDOG anti-silêncio (caso real 19/08: o turno morreu no teto da função e o
+    // cliente ficou sem NENHUMA resposta). Se o processamento passar do prazo, avisa o
+    // cliente que a Lia continua nele — a resposta de verdade chega em seguida quando o
+    // turno terminar; se a função for morta, ao menos o silêncio absoluto não existe.
+    const deadlineMs = Number(process.env.LIA_TURN_DEADLINE_MS ?? 45000);
+    let deadlineTimer: ReturnType<typeof setTimeout> | undefined;
+    const work = handleDeliveryMessage(inbound);
+    const raced = await Promise.race([
+      work.then(() => "done" as const),
+      new Promise<"deadline">((resolve) => {
+        deadlineTimer = setTimeout(() => resolve("deadline"), deadlineMs);
+      })
+    ]);
+    if (raced === "deadline") {
+      console.error(`[turn:deadline] ${inbound.phone} passou de ${deadlineMs}ms sem resposta`);
+      try {
+        await whatsappAdapter.sendMessage(inbound.phone, turnStillWorking());
+      } catch (notifyError) {
+        console.error(`[turn:deadline:notify-failed]`, notifyError);
+      }
+    }
+    clearTimeout(deadlineTimer);
+    await work;
   } catch (error) {
     console.error(`[whatsapp:${inbound.provider}:delivery-error]`, error);
     try {
