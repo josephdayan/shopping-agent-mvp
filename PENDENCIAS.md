@@ -260,6 +260,14 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 > anúncio com prazo publicado vence — na prática os cards saem "chega hoje/amanhã".
 > Cache do ML versionado (v2) pro conserto valer imediatamente. Conector 11/11.
 
+> **20/08 — ticket do suporte ML redigido e pronto.** O texto completo (erro `OPT02` +
+> pergunta objetiva sobre a habilitação do `/sites/MLB/search`, que hoje devolve 403 até
+> para apps registrados) está em
+> [docs/ticket-suporte-mercadolivre.md](docs/ticket-suporte-mercadolivre.md), com o
+> passo a passo de onde abrir e as respostas prontas para perguntas técnicas. **Ação do
+> dono:** preencher CNPJ/login e enviar; sem isso a busca de cauda longa segue no actor
+> (20–75s por busca fria).
+
 > **17/08 — app Mercado Livre: bloqueio externo antes da criação.** O DevCenter foi acessado
 > na conta operacional, mas a tela oficial de primeira aplicação retornou
 > `OPT02-EN1XAJYDKPNW` e voltou ao início após retry. Não houve app, segredo, token ou
