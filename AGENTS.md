@@ -51,6 +51,31 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 23/08/2026 — frete grátis-lento × expresso pago: a escolha não escapava mais (caso QTNL2T)
+
+Compra real do pedido pago #QTNL2T (mochila MLB4125746307, "frete grátis"): na hora de
+comprar, o operador viu grátis chegando ~1 semana × ~R$17 chegando amanhã — e o CLIENTE
+nunca recebeu essa escolha. Diagnóstico com a resposta real do endpoint: a consulta
+ANÔNIMA achata as datas (grátis-slow e expresso-standard "chegam" ambos 26/08), e a
+regra do `fasterThan` exigia data ESTRITAMENTE anterior → sem gap, sem botões. Os
+R$15,99 que apareciam eram `shipping_option_type: agency` (ponto de retirada — filtrado
+certo; o expresso de ENDEREÇO é o de R$17,99, os "dezessete" do relato).
+
+Conserto em duas camadas, sem quebrar a regra dura de prazo:
+1. `fasterThan` ganhou a REGRA 2 (por classe): base grátis/lenta (`slow` ou custo 0) com
+   opção de classe expressa (`standard`/`next_day`/`same_day`/`express`) mais cara e
+   data NÃO-posterior vira escolha — com a data do lado rápido REMOVIDA (sem gap
+   comprovado, não se promete data; botão sai "Mais rápido" e a copy "sem data
+   publicada"). Expresso × expresso sem gap continua NÃO sendo escolha.
+2. `mlBasketFreight` não recai mais na data do barato quando o rápido vem sem data
+   (`?? outcome.isoDate` era o vazamento): qualquer item de data desconhecida deixa a
+   cesta rápida inteira sem data.
+
+Verificado contra os DOIS anúncios reais: mochila → grátis 26/08 × R$17,99 sem data;
+sacola (MLB5574835066) → grátis 25/08 × R$9,99 24/08 (regra 1 intacta). Gate: tsc,
+ml-freight 14/14 (2 casos novos), instant-quote/copy/adapter 39/39, E2E choosing_freight
+4/4.
+
 ## Atualização 20/08/2026 (5ª) — decisão do dono: agente GPT executa as compras manuais
 
 O dono validou que um agente de IA (GPT) consegue fazer as compras manuais nos sites —

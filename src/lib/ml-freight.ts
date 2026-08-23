@@ -127,23 +127,53 @@ function cheapest(options: MlShippingOption[]): MlShippingOption | null {
   });
 }
 
-// A alternativa "chega antes pagando mais" — só conta se realmente chegar ANTES e custar
-// MAIS que a barata (senão não é escolha, é a mesma coisa com outro nome). Entre as que
-// chegam antes, a que chega mais cedo; empate na data, a mais barata delas.
+// Classes de envio do ML: "slow" é o econômico (o grátis costuma ser slow); as demais
+// são as expressas. É o sinal que sobrevive quando a consulta ANÔNIMA achata as datas.
+const EXPRESS_CLASSES = new Set(["standard", "next_day", "same_day", "express"]);
+
+// A alternativa "chega antes pagando mais". Regra 1 (dados completos): chega ANTES e
+// custa MAIS. Regra 2 (caso QTNL2T, 23/08): a consulta anônima às vezes devolve a MESMA
+// data pro grátis-lento e pro expresso pago — mas na compra real o expresso chega dias
+// antes. Quando a base é grátis/lenta e existe classe expressa mais cara com data igual
+// (nunca posterior), a escolha é oferecida SEM data no lado rápido (prometer data que a
+// consulta não deu é proibido; a classe é do anúncio, o preço é real).
 function fasterThan(options: MlShippingOption[], base: MlShippingOption): MlShippingOption | null {
   const baseDay = isoDay(base);
-  if (!baseDay) return null;
-  const earlier = options.filter((option) => {
+  if (baseDay) {
+    const earlier = options.filter((option) => {
+      const day = isoDay(option);
+      return Boolean(day) && day! < baseDay && option.cost! > base.cost!;
+    });
+    if (earlier.length) {
+      return earlier.reduce((best, option) => {
+        const a = isoDay(option)!;
+        const b = isoDay(best)!;
+        if (a !== b) return a < b ? option : best;
+        return option.cost! < best.cost! ? option : best;
+      });
+    }
+  }
+  // Regra 2: só a partir de base grátis ou lenta — expresso × expresso sem gap de data
+  // não é escolha, é o mesmo serviço mais caro.
+  const baseIsSlow = base.cost === 0 || (base.shipping_method_type ?? "") === "slow";
+  if (!baseIsSlow) return null;
+  const expressPaid = options.filter((option) => {
+    if (!(option.cost! > base.cost!)) return false;
+    if (!EXPRESS_CLASSES.has(option.shipping_method_type ?? "")) return false;
     const day = isoDay(option);
-    return Boolean(day) && day! < baseDay && option.cost! > base.cost!;
+    // Data posterior à da base nunca é "mais rápido"; sem data ou empate, a classe decide.
+    return !baseDay || !day || day <= baseDay;
   });
-  if (!earlier.length) return null;
-  return earlier.reduce((best, option) => {
-    const a = isoDay(option)!;
-    const b = isoDay(best)!;
+  if (!expressPaid.length) return null;
+  const picked = expressPaid.reduce((best, option) => {
+    const a = isoDay(option) ?? "9999";
+    const b = isoDay(best) ?? "9999";
     if (a !== b) return a < b ? option : best;
     return option.cost! < best.cost! ? option : best;
   });
+  // Sem gap de data comprovado, o lado rápido sai SEM promessa de data — o botão e a
+  // copy já lidam com estimate ausente ("sem data publicada").
+  return { ...picked, estimated_delivery_time: undefined };
 }
 
 function normalizeCep(cep: string): string | null {
@@ -236,6 +266,7 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
   let fastFee = 0;
   const fastDays: (string | undefined)[] = [];
   let hasChoice = false;
+  let fastHasUnknownDate = false;
 
   for (const { item, itemId, outcome } of outcomes) {
     if (outcome.kind === "ok") {
@@ -252,8 +283,16 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
       // Versão rápida: paga a opção que chega antes NESTE anúncio, se houver. Aqui o
       // "grátis declarado" não isenta — o cliente está escolhendo pagar pra chegar antes.
       fastFee += outcome.faster ? outcome.faster.fee : item.freeShipping === true ? 0 : outcome.fee;
-      fastDays.push(outcome.faster?.isoDate ?? outcome.isoDate);
-      if (outcome.faster) hasChoice = true;
+      if (outcome.faster) {
+        // Rápida por CLASSE (sem gap de data comprovado) vem sem isoDate — e a cesta
+        // rápida inteira fica SEM data: recair na data da barata prometeria o que a
+        // consulta não deu (o furo do QTNL2T, 23/08).
+        fastDays.push(outcome.faster.isoDate);
+        if (!outcome.faster.isoDate) fastHasUnknownDate = true;
+        hasChoice = true;
+      } else {
+        fastDays.push(outcome.isoDate);
+      }
       continue;
     }
     if (outcome.kind === "no-delivery") {
@@ -271,7 +310,13 @@ export async function mlBasketFreight(items: MlFreightItem[], cep: string): Prom
     // A cesta chega quando o ÚLTIMO item chega.
     estimate: latestLabel(days),
     ...(hasChoice
-      ? { faster: { fee: roundMoney(fastFee), estimate: latestLabel(fastDays), isoDate: latestIso(fastDays) } }
+      ? {
+          faster: {
+            fee: roundMoney(fastFee),
+            estimate: fastHasUnknownDate ? undefined : latestLabel(fastDays),
+            isoDate: fastHasUnknownDate ? undefined : latestIso(fastDays)
+          }
+        }
       : {})
   };
 }

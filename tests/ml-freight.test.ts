@@ -99,6 +99,42 @@ test("duas opções = escolha real: barata/lenta como padrão e a rápida/cara c
   assert.deepEqual(outcome.faster, { fee: 25.99, estimate: "20/08", isoDate: "2026-08-20" });
 });
 
+test("caso QTNL2T (23/08): grátis-LENTO com expresso pago de MESMA data vira escolha — sem prometer data", async () => {
+  // Payload real do MLB4125746307: a consulta anônima achata as datas (tudo 26/08), mas
+  // na compra o expresso chega dias antes. A CLASSE (slow × standard) é o sinal.
+  mockFetch(200, {
+    options: [
+      { cost: 0, shipping_option_type: "address", shipping_method_type: "slow", estimated_delivery_time: { date: "2026-08-26T00:00:00-03:00" } },
+      { cost: 17.99, shipping_option_type: "address", shipping_method_type: "standard", estimated_delivery_time: { date: "2026-08-26T00:00:00-03:00" } },
+      { cost: 15.99, shipping_option_type: "address", shipping_method_type: "standard", estimated_delivery_time: { date: "2026-08-26T00:00:00-03:00" } },
+      // Data POSTERIOR nunca é "mais rápido" — excluída mesmo sendo classe expressa.
+      { cost: 15.99, shipping_option_type: "address", shipping_method_type: "standard", estimated_delivery_time: { date: "2026-08-31T00:00:00-03:00" } }
+    ]
+  });
+  const outcome = await mlItemFreight("MLB4125746307", "01310100");
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.fee, 0);
+  assert.equal(outcome.estimate, "26/08");
+  // A mais barata das expressas de data não-posterior; SEM estimate (sem gap comprovado,
+  // prometer data é proibido — o botão sai "Mais rápido" e a copy "sem data publicada").
+  assert.equal(outcome.faster?.fee, 15.99);
+  assert.equal(outcome.faster?.estimate, undefined);
+});
+
+test("expresso × expresso sem gap de data NÃO vira escolha (só base grátis/lenta reabre)", async () => {
+  mockFetch(200, {
+    options: [
+      { cost: 14.99, shipping_option_type: "address", shipping_method_type: "standard", estimated_delivery_time: { date: "2026-08-25T00:00:00-03:00" } },
+      { cost: 22.9, shipping_option_type: "address", shipping_method_type: "next_day", estimated_delivery_time: { date: "2026-08-25T00:00:00-03:00" } }
+    ]
+  });
+  const outcome = await mlItemFreight("MLB111111111", "01310100");
+  assert.equal(outcome.kind, "ok");
+  if (outcome.kind !== "ok") return;
+  assert.equal(outcome.faster, undefined);
+});
+
 test("opção mais cara que NÃO chega antes não vira escolha", async () => {
   mockFetch(200, {
     options: [
