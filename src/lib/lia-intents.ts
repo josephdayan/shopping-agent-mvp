@@ -864,6 +864,18 @@ const REFINE_FILLER = new Set(
 // options for the SAME item (not pick, not skip). The tail after "mais/outras" must be
 // empty or pure filler: "manda mais 2 cocas" is ADDING an item, "tem mais barato?" is
 // picking the cheapest — neither is paging.
+// Lista encaminhada com NUMERAÇÃO ("1. coca ¶ 2) vodka ¶ 3- suco"): os números são
+// índice, não quantidade — só com separador explícito (./)/-) depois do dígito; número
+// nu ("2 vodka") continua sendo quantidade. Exige 3+ linhas todas numeradas.
+export function stripListNumbering(text: string): string {
+  const lines = text.split(/\n/);
+  const nonEmpty = lines.filter((l) => l.trim());
+  if (nonEmpty.length < 3) return text;
+  const marker = /^\s*\d{1,2}\s*[.)\-–]\s+/;
+  if (!nonEmpty.every((l) => marker.test(l))) return text;
+  return lines.map((l) => l.replace(marker, "")).join("\n");
+}
+
 export function wantsMoreOptions(text: string): boolean {
   const n = normalizeMsg(text).replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim();
   // Toque no botão "Outras opções" do card (id de máquina, não linguagem).

@@ -62,6 +62,7 @@ import {
   splitPriceCap,
   mergeShoppingLines,
   parseChoiceReply,
+  stripListNumbering,
   parseRefinement,
   wantsMoreOptions,
   type Intent,
@@ -2989,6 +2990,12 @@ async function handleConciergeRequest(
   ctx: DeliveryContext,
   text: string
 ) {
+  // LISTA ENCAMINHADA (pedido do dono, 20/08): mensagem com 3+ linhas de itens não
+  // vira interrogatório de cards — a Lia escolhe o melhor match de cada linha (mesmo
+  // ranking da escolha) e monta a cesta inteira de uma vez; "troca X por Y"/"tira X"
+  // ajustam depois. Numeração de lista ("1. coca") é índice, não quantidade.
+  text = stripListNumbering(text);
+  const bulkList = text.split(/\n+/).map((l) => l.trim()).filter(Boolean).length >= 3;
   // "Pode colocar mais um leite": adição RELATIVA a um item que já está na cesta herda
   // o item exato (sku) — a busca genérica perdia o atributo ("sem lactose" virava leite
   // integral; 3º ciclo de testes 15/08, rodadas 3 e 8).
@@ -3102,6 +3109,29 @@ async function handleConciergeRequest(
   ctx.storeKey = CONCIERGE_STORE_KEY;
   ctx.cep = ctx.cep ?? userCep ?? undefined;
   ctx.notFound = undefined;
+
+  // Modo lista: 2+ itens resolvidos de uma mensagem de 3+ linhas → cesta direta com o
+  // topo do ranking de cada linha (rerank/determinístico — o mesmo que "escolhe você").
+  // Sem cards por item (10 cards é spam); o resumo sai com os botões de sempre e
+  // "troca"/"tira"/"opções de X" continuam valendo item a item.
+  if (pending.length >= 2 && bulkList) {
+    const added: BasketItem[] = [];
+    for (const choice of pending) {
+      const top = choice.options[0];
+      const store = top.storeKey ? getStore(top.storeKey) : orderStore(ctx);
+      added.push(choiceToBasketItem(top, Math.max(1, choice.qty), store));
+    }
+    ctx.basket = mergeBaskets(ctx.basket ?? [], added);
+    ctx.pending = undefined;
+    ctx.step = "collecting";
+    const notes: string[] = [
+      copy.bulkBasketAdded(added.map((i) => ({ qty: i.qty, name: i.name, total: display(i.unitPrice) * i.qty })))
+    ];
+    if (containsMedicine) notes.push(copy.medicineSkippedNote());
+    if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+    await advancePending(phone, convoId, ctx, userCep, notes.join("\n"));
+    return;
+  }
 
   if (pending.length) {
     ctx.step = "choosing";
@@ -4037,7 +4067,12 @@ export async function markDeliveryOrderPaid(orderId: string) {
   // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
   await reply(order.phone, copy.paymentConfirmed());
   // Pedido pago é o alerta mais urgente de todos: dinheiro na mão e ninguém comprando.
-  await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total));
+  // Alerta de PAGO desligado por padrão (pedido do dono, 20/08 — ele é o operador e o
+  // /ops já mostra). Religar com LIA_OPERATOR_PAID_ALERT=true quando entrar gente de
+  // fora: foi este alerta que matou o pedido-zumbi de 2 dias em 11/08.
+  if (process.env.LIA_OPERATOR_PAID_ALERT === "true") {
+    await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total));
+  }
   return order;
 }
 

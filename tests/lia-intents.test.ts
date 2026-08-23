@@ -10,6 +10,7 @@ import {
   parseBasketLines,
   mergeShoppingLines,
   parseChoiceReply,
+  stripListNumbering,
   parseRefinement,
   stripMedicineNegation,
   wantsMoreOptions
@@ -18,6 +19,23 @@ import {
 function kind(text: string) {
   return detectIntent(text).kind;
 }
+
+test("lista numerada: '1.' é índice, número nu é quantidade (20/08)", () => {
+  assert.equal(
+    stripListNumbering("1. coca\n2. vodka\n3. suco"),
+    "coca\nvodka\nsuco"
+  );
+  assert.equal(
+    stripListNumbering("1) coca\n2) vodka\n3- suco"),
+    "coca\nvodka\nsuco"
+  );
+  // número NU é quantidade — não mexe
+  assert.equal(stripListNumbering("1 coca\n2 vodka\n2 sucos"), "1 coca\n2 vodka\n2 sucos");
+  // menos de 3 linhas: não é lista — não mexe ("1. coca" solto segue como veio)
+  assert.equal(stripListNumbering("1. coca\n2. vodka"), "1. coca\n2. vodka");
+  // linha sem numeração no meio quebra o padrão — não mexe
+  assert.equal(stripListNumbering("1. coca\nvodka\n3. suco"), "1. coca\nvodka\n3. suco");
+});
 
 test("outras opções / mais barato fora da escolha reabrem a última (19/08)", () => {
   assert.equal(kind("opt:outras"), "more_options");

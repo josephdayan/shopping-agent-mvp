@@ -51,6 +51,31 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 20/08/2026 (3ª) — lista encaminhada vira cesta direta + alerta de PAGO opcional
+
+Pedido do dono: encaminhar uma lista do WhatsApp ("1 coca ¶ 2 vodka ¶ 2 sucos") tem que
+montar a cesta inteira de uma vez, sem interrogatório de cards por item.
+
+- **Modo lista** (`handleConciergeRequest`): mensagem com **3+ linhas** que resolvem
+  **2+ itens** → a Lia escolhe o topo do ranking de cada linha (o MESMO ranking de
+  "escolhe você": rerank por IA ou determinístico) e monta a cesta com as quantidades da
+  lista; resposta = resumo "Montei a cesta da sua lista" (item a item com preço) + os
+  botões de sempre (Ver total/Adicionar mais/Cancelar). Sem cards/foto por item de
+  propósito (10 cards é spam); ajuste fino continua por "troca X por Y" e "tira X".
+  Linha sem preço é recusada na mesma resposta; a cesta monta com o resto. Lista por
+  VÍRGULA continua no fluxo de cards (o gatilho é ter 3+ LINHAS — formato de lista
+  encaminhada). Quantidade some da pergunta: a da linha vale, sem qty explícita = 1.
+- **Numeração ≠ quantidade** (`stripListNumbering`, lia-intents): "1. coca ¶ 2. vodka ¶
+  3. suco" com separador (./)/-) é índice → tudo qty 1; número NU ("2 vodka") segue
+  sendo quantidade. Exige 3+ linhas todas numeradas.
+- **Alerta de pedido PAGO ao operador desligado por padrão** (pedido do dono — ele é o
+  operador e o /ops mostra). Religar com `LIA_OPERATOR_PAID_ALERT=true` quando entrar
+  gente de fora: foi esse alerta que matou o pedido-zumbi de 11/08. Os alertas de
+  cotação manual/item adicionado continuam.
+
+Gate: tsc, intents 43/43 (5 casos novos de numeração), E2E 3/3 novos (lista direta,
+numerada, com item impossível) + 6/6 de regressão dos fluxos de card/instantânea.
+
 ## Atualização 20/08/2026 (2ª) — recusa da "mochila saco pequena": o actor chegava 5s atrasado
 
 Reteste pós-watchdog: a Lia avisou aos 45s (camada 1 funcionou) mas terminou em recusa

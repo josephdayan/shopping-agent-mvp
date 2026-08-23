@@ -747,6 +747,16 @@ export function itemsNotAvailableWithOptions(items: string[]): string {
   return [`Esses eu não achei: ${items.join(", ")}.`, "O resto achei e tá logo abaixo."].join("\n");
 }
 
+// Lista encaminhada resolvida de uma vez: resumo da cesta montada, item a item com o
+// preço da linha. O rodapé de troca fica no follow-up padrão (Ver total/Adicionar mais).
+export function bulkBasketAdded(items: { qty: number; name: string; total: number }[]): string {
+  return [
+    "Montei a cesta da sua lista:",
+    ...items.map((i) => `• ${i.qty}x ${i.name} — ${brl(i.total)}`),
+    "Pra ajustar: *troca X por Y* ou *tira X*."
+  ].join("\n");
+}
+
 export function itemsNotAvailable(items: string[]): string {
   if (items.length === 1) {
     return `*${items[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;

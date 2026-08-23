@@ -540,6 +540,47 @@ test("'Outras opções' com escolha já fechada REABRE — e o novo pick substit
   assert.notEqual(ctx2.basket[0].sku, firstSku, "o item antigo saiu da cesta");
 });
 
+test("lista encaminhada (3+ linhas) monta a cesta DIRETO — sem interrogatório de cards (20/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("2 coca cola\n1 shampoo\n2 sabonete");
+  assert.match(out, /Montei a cesta/i, `esperava cesta direta: ${out.slice(0, 250)}`);
+  assert.doesNotMatch(out, /Responde \*1\*/, "não pode abrir escolha de cards");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  assert.equal(ctx.step, "collecting");
+  assert.ok(!(ctx.pending?.length), "sem escolha pendente");
+  const basket = ctx.basket as Array<{ name: string; qty: number }>;
+  assert.equal(basket.length, 3, `cesta: ${JSON.stringify(basket?.map((b) => `${b.qty}x ${b.name}`))}`);
+  const byName = (frag: string) => basket.find((b) => new RegExp(frag, "i").test(b.name));
+  assert.equal(byName("coca")?.qty, 2);
+  assert.equal(byName("shampoo|sham")?.qty, 1);
+  assert.equal(byName("sabonete")?.qty, 2);
+});
+
+test("lista NUMERADA: '1.' é índice — tudo entra com quantidade 1 (20/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("1. coca cola\n2. shampoo\n3. sabonete");
+  assert.match(out, /Montei a cesta/i);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ name: string; qty: number }>;
+  assert.equal(basket.length, 3);
+  for (const b of basket) assert.equal(b.qty, 1, `${b.name} deveria ter qty 1 (numeração ≠ quantidade)`);
+});
+
+test("lista com item inexistente: cesta monta e a linha sem preço é recusada junto (20/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("2 coca cola\n1 sabonete\n1 vedante de torneira industrial");
+  assert.match(out, /Montei a cesta/i);
+  assert.match(out, /não consigo trazer/i, `a linha impossível precisa da recusa: ${out.slice(0, 300)}`);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ name: string }>;
+  assert.equal(basket.length, 2);
+  assert.ok(!basket.some((b) => /vedante/i.test(b.name)));
+});
+
 // ---------- achados da revisão de código (11/08) ----------
 
 test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {
