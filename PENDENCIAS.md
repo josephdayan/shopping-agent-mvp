@@ -534,10 +534,15 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
 - [x] Definir quem opera o piloto: decisão do dono em 02/08 — **ele mesmo opera** os
   primeiros pedidos (cotação, compra e despacho no `/ops`). Contratação de operador fica
   para depois do piloto, se houver volume.
-- [ ] **19/08 — achar um operador (decisão do dono).** O dono sinalizou que precisa
-  contratar um operador para a operação (cotar/comprar/despachar no `/ops` seguindo o
-  [runbook](docs/operador-runbook.md)). Perfil e formato a definir; o dono ainda opera os
-  primeiros pedidos de amigos-e-família enquanto procura.
+- [~] **19/08 — achar um operador → SUPERADO em 20/08.** Decisão do dono: as compras
+  manuais serão executadas por um **agente de IA (GPT)** sob supervisão dele — sem
+  contratar operador humano por ora. O `/ops` continua sendo o painel da operação
+  (cotação manual quando houver, marcar comprado/despachado/entregue, estornos); o que
+  muda é QUEM executa a compra no site. Riscos registrados em AGENTS.md (entrada 20/08
+  5ª): anti-bot dos varejistas (a mesma classe que baniu o Browserbase no Carrefour),
+  conta do ML sob risco se o agente comprar lá em volume, e a necessidade de religar o
+  alerta de pedido PAGO (`LIA_OPERATOR_PAID_ALERT=true`) se ninguém ficar de olho no
+  /ops. Reabrir a contratação humana se o piloto provar que o agente não dá conta.
 - [x] Separar/concluir a migration Oba inacabada e publicar o concierge em deploy limpo. Não
   misturar a publicação com o trabalho paralelo do Oba.
 - [x] Limpar os preflights internos sem pagamento de Production após autorização explícita:

@@ -51,6 +51,27 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 20/08/2026 (5ª) — decisão do dono: agente GPT executa as compras manuais
+
+O dono validou que um agente de IA (GPT) consegue fazer as compras manuais nos sites —
+a pendência "achar um operador" (19/08) fica SUPERADA: sem contratação humana por ora;
+o dono supervisiona. O fluxo não muda: a Lia cota/cobra, o `/ops` continua sendo o
+painel (comprado/despachado/entregue, estornos), muda só quem digita no checkout.
+
+Riscos aceitos/vigiados, registrados na decisão:
+1. **Anti-bot dos varejistas.** Agente de IA num checkout é automação aos olhos da loja
+   — a MESMA classe que fez o Carrefour banir a sessão remota em 19/07. Em volume de
+   piloto tende a passar; se uma loja bloquear, a compra volta pra mão humana NAQUELA
+   loja. Não insistir contra bloqueio (regra antiga do projeto, continua valendo).
+2. **Conta do Mercado Livre.** "Robô = banimento" foi o motivo de nunca automatizar
+   compra no ML. Um agente comprando pela conta do dono reabre esse risco exatamente
+   onde a cauda longa mora. Mitigação: volume baixo, sessão logada do próprio dono,
+   e o passo de PAGAMENTO confirmado por humano enquanto o piloto durar.
+3. **Quem olha o /ops?** O alerta de pedido PAGO foi desligado hoje a pedido do dono
+   (ele era o operador). Com a compra delegada ao agente, pedido pago sem ninguém
+   olhando volta a ser o cenário do zumbi de 11/08 — religar com
+   `LIA_OPERATOR_PAID_ALERT=true` na Vercel quando entrar gente de fora.
+
 ## Atualização 20/08/2026 (4ª) — correção fina em cima da lista: "coca zero em vez da normal"
 
 Sequência do modo lista (pedido do dono): a cesta montada precisa aceitar ajuste
