@@ -581,6 +581,43 @@ test("lista com item inexistente: cesta monta e a linha sem preço é recusada j
   assert.ok(!basket.some((b) => /vedante/i.test(b.name)));
 });
 
+test("correção fina pós-lista: 'não quero de uva, quero de laranja' troca o SUCO (20/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("2 suco de uva\n1 coca cola\n2 sabonete");
+  assert.match(out, /Montei a cesta/i, out.slice(0, 200));
+  const swapped = await c.send("não quero de uva, quero de laranja");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  const names = [
+    ...((ctx.basket ?? []) as Array<{ name: string }>).map((b) => b.name),
+    ...((ctx.pending ?? []) as Array<{ options: Array<{ name: string }> }>).flatMap((p) => p.options.map((o) => o.name))
+  ];
+  assert.ok(!names.some((n) => /uva/i.test(n)), `uva deveria sair: ${JSON.stringify(names)}`);
+  // A troca por atributo compõe "suco laranja" — cesta ou opções precisam ser SUCO de
+  // laranja, nunca a fruta.
+  assert.ok(
+    names.some((n) => /suco.*laranja|laranja.*suco/i.test(n)),
+    `esperava suco de laranja em cesta/opções: ${JSON.stringify(names)} | resposta: ${swapped.slice(0, 200)}`
+  );
+});
+
+test("'X em vez do Y' troca direto na cesta (20/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("2 suco de uva\n1 coca cola\n2 sabonete");
+  assert.match(out, /Montei a cesta/i);
+  await c.send("suco de laranja em vez do de uva");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}");
+  const names = [
+    ...((ctx.basket ?? []) as Array<{ name: string }>).map((b) => b.name),
+    ...((ctx.pending ?? []) as Array<{ options: Array<{ name: string }> }>).flatMap((p) => p.options.map((o) => o.name))
+  ];
+  assert.ok(!names.some((n) => /uva/i.test(n)), `uva deveria sair: ${JSON.stringify(names)}`);
+  assert.ok(names.some((n) => /laranja/i.test(n)), `laranja deveria entrar: ${JSON.stringify(names)}`);
+});
+
 // ---------- achados da revisão de código (11/08) ----------
 
 test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {

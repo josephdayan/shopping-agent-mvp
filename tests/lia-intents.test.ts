@@ -20,6 +20,17 @@ function kind(text: string) {
   return detectIntent(text).kind;
 }
 
+test("troca por atributo e 'em vez de' (pedido do dono, 20/08)", () => {
+  assert.deepEqual(detectIntent("coca zero em vez da normal"), { kind: "swap_item", from: "normal", to: "coca zero" });
+  assert.deepEqual(detectIntent("bota coca zero no lugar da normal"), { kind: "swap_item", from: "normal", to: "coca zero" });
+  assert.deepEqual(detectIntent("não quero de uva, quero de laranja"), { kind: "swap_item", from: "uva", to: "laranja", attr: true });
+  // sem o "de" dos dois lados não é atributo — troca comum
+  assert.deepEqual(detectIntent("não quero uva, quero laranja"), { kind: "swap_item", from: "uva", to: "laranja" });
+  // comando nunca vira lado de troca
+  assert.notEqual(kind("não quero mais nada, quero pagar"), "swap_item");
+  assert.notEqual(kind("não quero mais, quero fechar"), "swap_item");
+});
+
 test("lista numerada: '1.' é índice, número nu é quantidade (20/08)", () => {
   assert.equal(
     stripListNumbering("1. coca\n2. vodka\n3. suco"),

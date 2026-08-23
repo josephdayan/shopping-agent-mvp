@@ -51,6 +51,26 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 20/08/2026 (4ª) — correção fina em cima da lista: "coca zero em vez da normal"
+
+Sequência do modo lista (pedido do dono): a cesta montada precisa aceitar ajuste
+NATURAL, sem sintaxe de comando. Três peças novas, todas com guarda:
+
+1. **"X em vez de/da/do Y" e "X no lugar de Y"** (`SWAP_INSTEAD_RE`, ordem invertida —
+   o novo vem primeiro) viram `swap_item`. "bota coca zero em vez da normal" funciona.
+2. **"não quero de X, quero de Y"** (`SWAP_NEG_RE`) vira troca; com "de" nos DOIS lados
+   é troca de ATRIBUTO (`attr: true`) e o cérebro compõe a busca com o substantivo do
+   item trocado — "de laranja" busca "suco laranja", nunca a fruta. Guarda: comando
+   nunca é lado de troca ("não quero mais nada, quero PAGAR" segue sendo fechamento).
+3. **Referência à cesta ≠ busca** (handleSwap): "de uva" apontando pro "Suco de Uva" da
+   cesta agora resolve por presença de token quando aponta pra UM item só — a regra de
+   aposição da busca (1 palavra não casa qualificador) zerava a remoção. E quando o
+   `from` não nomeia nada ("da normal"), o alvo cai pro item que compartilha token com
+   o TO ("coca zero" → a coca da cesta), também exigindo unicidade.
+
+Gate: tsc, intents 44/44, copy 12/12, E2E 12/12 (2 novos de correção fina + lista 3 +
+trocas/endereço 7 de regressão).
+
 ## Atualização 20/08/2026 (3ª) — lista encaminhada vira cesta direta + alerta de PAGO opcional
 
 Pedido do dono: encaminhar uma lista do WhatsApp ("1 coca ¶ 2 vodka ¶ 2 sucos") tem que

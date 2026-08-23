@@ -18,7 +18,7 @@ export type Intent =
   // rest = o que sobrou da mensagem além do CEP ("meu cep é 01310-100, quero arroz e leite")
   | { kind: "cep"; cep: string; bare: boolean; rest?: string }
   | { kind: "repeat_last" }
-  | { kind: "swap_item"; from: string; to: string }
+  | { kind: "swap_item"; from: string; to: string; attr?: boolean }
   // andAdd = item a ADICIONAR numa multi-intenção ("tira o arroz e coloca feijão")
   | { kind: "remove_item"; target: string; andAdd?: string }
   | { kind: "pay"; method?: "pix" | "card" }
@@ -596,6 +596,14 @@ const REMOVE_START_RE = /^(tira|tirar|remove|remover|retira|retirar|exclui|exclu
 
 const SWAP_RE =
   /\b(?:troca|trocar|substitui|substituir|muda|mudar)\s+(?:o |a |os |as )?(.+?)\s+(?:por|pelo|pela)\s+(.+)$/;
+// "coca zero em vez da normal" / "bota X no lugar do Y" — ordem INVERTIDA (to vem antes).
+const SWAP_INSTEAD_RE =
+  /^(?:(?:bota|poe|coloca|manda|me ve|quero|queria|prefiro|melhor|ah)\s+)?(?:o |a |um |uma )?(.+?)\s+(?:em vez|no lugar|ao inves)\s+(?:de|da|do|das|dos)\s+(.+)$/;
+// "não quero de uva, quero de laranja" — correção de ATRIBUTO do item da cesta. O
+// "de/da/do" antes dos dois lados é o sinal de atributo (attr: o cérebro compõe a
+// busca com o substantivo do item: "suco laranja", não "laranja" solta = fruta).
+const SWAP_NEG_RE =
+  /^nao quero\s+(de |da |do )?(.+?)[,;.]?\s+(?:quero|prefiro|me ve|manda|pode ser|melhor)\s+(de |da |do )?(.+)$/;
 
 // Emoji-only message ("🙏", "👍👍", "😊") — never product search.
 const EMOJI_ONLY_RE = /^[\p{Extended_Pictographic}️‍\s]+$/u;
@@ -670,6 +678,30 @@ export function detectIntent(text: string): Intent {
     let to = cleanItemPhrase(swap[2]);
     if (/^(favor|gentileza)$/.test(to)) to = ""; // "troca o arroz por favor"
     if (from) return { kind: "swap_item", from, to };
+  }
+  // Comando nunca é lado de troca: "não quero mais nada, quero PAGAR" é fechamento,
+  // não swap. Vale para os dois regexes novos abaixo.
+  const swapSideIsCommand = (s: string) =>
+    !s || /\b(nada|mais|pagar|pagamento|fechar|cancelar|finalizar|encerrar|parar|desistir|isso|so isso)\b/.test(s);
+  // "coca zero em vez da normal": o TO vem primeiro. Exige cesta em contexto? Não —
+  // o cérebro resolve o alvo; sem cesta cai no "não achei pra tirar" de sempre.
+  const instead = n.match(SWAP_INSTEAD_RE);
+  if (instead) {
+    const to = cleanItemPhrase(instead[1]);
+    const from = cleanItemPhrase(instead[2]);
+    if (to && from && !swapSideIsCommand(to) && !swapSideIsCommand(from)) {
+      return { kind: "swap_item", from, to };
+    }
+  }
+  // "não quero de uva, quero de laranja" — attr quando os dois lados vêm com "de".
+  const negSwap = n.match(SWAP_NEG_RE);
+  if (negSwap) {
+    const from = cleanItemPhrase(negSwap[2]);
+    const to = cleanItemPhrase(negSwap[4]);
+    const attr = Boolean(negSwap[1] && negSwap[3]);
+    if (from && to && !swapSideIsCommand(to) && !swapSideIsCommand(from)) {
+      return { kind: "swap_item", from, to, ...(attr ? { attr: true } : {}) };
+    }
   }
 
   // "tira a esponja" / "cancela o guaraná" — remove of a SPECIFIC item beats order-cancel.

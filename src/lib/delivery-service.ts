@@ -1941,7 +1941,7 @@ async function handleDeliveryTurn(
 
   // ---- edit the basket: swap / remove ----
   if (intent.kind === "swap_item") {
-    await handleSwap(phone, convo.id, user.cep, ctx, intent.from, intent.to, text);
+    await handleSwap(phone, convo.id, user.cep, ctx, intent.from, intent.to, text, intent.attr);
     return;
   }
   if (intent.kind === "remove_item") {
@@ -2895,7 +2895,8 @@ async function handleSwap(
   ctx: DeliveryContext,
   from: string,
   to: string,
-  rawText?: string
+  rawText?: string,
+  attrSwap?: boolean
 ) {
   const basket = ctx.basket ?? [];
   // "quero A e B; pensando bem, troca B por C" numa LISTA NOVA (cesta vazia): não há o
@@ -2921,8 +2922,36 @@ async function handleSwap(
     await reply(phone, copy.removeNotFound());
     return;
   }
-  const keep = basket.filter((item) => !itemMatchesPhrase(from, item));
-  const removed = basket.filter((item) => !keep.includes(item));
+  let keep = basket.filter((item) => !itemMatchesPhrase(from, item));
+  let removed = basket.filter((item) => !keep.includes(item));
+  // Referência à cesta ≠ busca: "não quero DE UVA" aponta pro suco de uva da cesta,
+  // mas a regra de aposição da BUSCA zera "uva" contra "Suco de Uva" (qualificador
+  // não responde pedido de 1 palavra). Pra remoção, presença do token basta — desde
+  // que aponte pra UM item só (ambíguo mantém o comportamento antigo).
+  if (!removed.length && from) {
+    const fromTokens = queryTokens(from);
+    const byFrom = basket.filter((item) => {
+      const nameTokens = new Set(queryTokens(item.name));
+      return fromTokens.length > 0 && fromTokens.every((t) => nameTokens.has(t));
+    });
+    if (byFrom.length === 1) {
+      removed = byFrom;
+      keep = basket.filter((item) => item !== byFrom[0]);
+    }
+  }
+  // "coca zero em vez da NORMAL": o from ("normal") não nomeia produto nenhum — mas o
+  // TO compartilha token com exatamente UM item da cesta (a coca). Esse item é o alvo.
+  if (!removed.length && to) {
+    const toTokens = queryTokens(to);
+    const byTo = basket.filter((item) => {
+      const nameTokens = new Set(queryTokens(item.name));
+      return toTokens.some((t) => nameTokens.has(t));
+    });
+    if (byTo.length === 1) {
+      removed = byTo;
+      keep = basket.filter((item) => item !== byTo[0]);
+    }
+  }
   // The swapped-out item may still be an unresolved pending choice, not a basket line.
   const pending = ctx.pending ?? [];
   const pendingKeep = pending.filter((p) => !itemMatchesPhrase(from, { sku: p.query, name: p.query, unitPrice: 0 }));
@@ -2944,11 +2973,19 @@ async function handleSwap(
   // `ctx.storeKey` é "concierge", `orderStore` caía na loja default e o Y só era
   // procurado no Carrefour — as outras 17 vitrines ficavam invisíveis nesse comando.
   const crossStore = !ctx.storeKey || ctx.storeKey === CONCIERGE_STORE_KEY;
+  // Troca de ATRIBUTO ("não quero de uva, quero de laranja"): buscar "laranja" solta
+  // acharia a fruta — compõe com o substantivo do item trocado ("suco laranja"). Só na
+  // frase de atributo (attr) e quando o to ainda não carrega o substantivo.
+  let searchPhrase = to;
+  const removedHead = removed[0] ? queryTokens(removed[0].name)[0] : undefined;
+  if (attrSwap && removedHead && !queryTokens(to).includes(removedHead)) {
+    searchPhrase = `${removedHead} ${to}`;
+  }
   const candidates: StoreCandidate[] = crossStore
-    ? await gatherCrossStoreCandidates(to, 12)
-    : (await store.searchItems(to, 3)).map((item) => ({ store, item }));
-  const options = diversifyOptions(to, candidates.map((c) => c.item), 3)
-    .filter((item) => conciergeMatchIsStrong(to, item))
+    ? await gatherCrossStoreCandidates(searchPhrase, 12)
+    : (await store.searchItems(searchPhrase, 3)).map((item) => ({ store, item }));
+  const options = diversifyOptions(searchPhrase, candidates.map((c) => c.item), 3)
+    .filter((item) => conciergeMatchIsStrong(searchPhrase, item))
     .map((item) => candidates.find((c) => c.item.sku === item.sku)!);
 
   if (!options.length) {
