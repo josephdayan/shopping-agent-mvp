@@ -5,7 +5,7 @@ import { pagarmeAdapter } from "@/lib/payments/pagarme";
 import * as copy from "@/lib/lia-copy";
 
 const ATTEMPT_TTL_MS = 60 * 60 * 1000;
-const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);
+import { displayPrice } from "@/lib/pricing";
 
 type CardOrder = {
   id: string;
@@ -82,7 +82,7 @@ function orderDetailsInput(order: CardOrder, credential: { id: string; last4: st
         retailerId: String(item.sku ?? `${order.id}-${index + 1}`),
         name: String(item.name),
         quantity,
-        unitAmount: money(rawUnit * MARKUP)
+        unitAmount: money(displayPrice(rawUnit))
       };
     })
     .filter((item) => item.unitAmount > 0);

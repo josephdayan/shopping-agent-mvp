@@ -1,3 +1,4 @@
+import { displayPrice, serviceFeeForItems, serviceFeeForSubtotal } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import {
@@ -4110,6 +4111,15 @@ export async function markDeliveryOrderPaid(orderId: string) {
   if (process.env.LIA_OPERATOR_PAID_ALERT === "true") {
     await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total));
   }
+  // Create the durable local-worker task after the money state is committed. This is
+  // best-effort: a queue outage must not undo a real payment; claim() backfills paid
+  // orders that missed this hook.
+  try {
+    const { ensurePurchaseJobForPaidOrder } = await import("@/lib/purchase-worker");
+    await ensurePurchaseJobForPaidOrder(order.id);
+  } catch (error) {
+    console.error("[purchase-worker:enqueue-failed]", error instanceof Error ? error.message : error);
+  }
   return order;
 }
 
@@ -4287,6 +4297,22 @@ export async function opsMarkBought(orderId: string, storeOrderNumber: string, t
       // usada por opsMarkRetailerOutForDelivery). Só sobrescreve quando veio link novo.
       ...(safeTrackingUrl ? { courierTrackingUrl: safeTrackingUrl } : {}),
       notes: appendOrderNote(current.notes, `🧾 Compra marcada pelo operador em ${new Date().toISOString()}.`)
+    }
+  });
+  // Keep the durable purchase queue aligned when the operator finishes a claimed
+  // job through /ops. This also makes recovery safe if the worker loses its HTTP
+  // response after the retailer accepted the order.
+  await prisma.purchaseJob.updateMany({
+    where: {
+      deliveryOrderId: orderId,
+      status: { in: ["queued", "retrying", "claimed", "awaiting_approval", "approved"] }
+    },
+    data: {
+      status: "completed",
+      storeOrderNumber: storeOrderNumber.trim() || null,
+      lockedAt: null,
+      nextAttemptAt: null,
+      completedAt: new Date()
     }
   });
   // O cliente era o único que não sabia da compra (17/08): entre "pagamento confirmado" e

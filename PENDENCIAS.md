@@ -1041,3 +1041,11 @@ o critério descrito estiver comprovado. Quando uma decisão mudar, atualize tam
   cenários adicionais de refinamento, troca, quantidade, medicamento e cobertura geográfica.
   A recotação de Campinas preservou a cesta e eliminou “CEP.”, mas a UI não exibiu os dígitos
   de `13010-050`; confirmar o campo estruturado antes de considerar o caso totalmente fechado.
+# Operador automático local
+
+- [x] Criar fila durável e idempotente para pedidos pagos elegíveis do Mercado Livre.
+- [x] Proteger endpoints do worker e limitar o piloto a links exatos.
+- [x] Manter compra final bloqueada em `cart_only` e documentar a operação com Luna.
+- [ ] Validar um pedido real até o carrinho e conferir endereço, prazo e total no ML.
+- [ ] Implementar aprovação curta com hash/teto e testar recuperação sem compra duplicada.
+- [ ] Só depois decidir se libera `PURCHASE_AUTOMATION_MODE=purchase`.

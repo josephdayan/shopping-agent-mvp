@@ -2,6 +2,18 @@
 
 _Última atualização: 2026-08-19._
 
+## Atualização 23/08/2026 — piloto do operador automático local
+
+Por decisão do dono, a automação de compra volta como piloto local e gradual. Isso não
+reativa o Browserbase legado nem muda o concierge manual como caminho geral. A primeira
+fila aceita somente pedidos pagos do Mercado Livre com URL exata para todos os itens;
+linhas livres, cestas mistas e divergências continuam no `/ops`. A fila tem claim com
+lease, retry, auditoria e reconciliação com `opsMarkBought`. O modo inicial obrigatório é
+`PURCHASE_AUTOMATION_MODE=cart_only`: o Luna consulta a fila a cada hora, prepara e
+confere o carrinho, mas a confirmação financeira final continua humana. Ativar `purchase`
+exige antes aprovação expirada por tempo, hash imutável do carrinho, teto de valor e teste
+real de não duplicação. Manual: `docs/operador-automatico-local.md`.
+
 Leia este arquivo antes de planejar, responder sobre o estado do produto ou alterar o
 projeto. Ele é a memória canônica curta da Lia. Para detalhes, leia também:
 
@@ -50,6 +62,34 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 (seletor temporário, removido após a escolha): **Berinjela & lima** — roxo `#3A225E` + papel lilás
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
+
+## Atualização 23/08/2026 (2ª) — markup progressivo por faixa + fim do "cotar" na fala com o cliente
+
+Duas decisões do dono no mesmo turno:
+
+1. **Markup progressivo** (10% flat era demais em compra cara): faixas MARGINAIS por
+   preço unitário — 10% até R$200, 6% de 200–500, 4% de 500–1000, 3% acima. Marginal =
+   contínuo (R$201 nunca custa menos de margem que R$199). Exemplos: item de R$80,93 →
+   R$8,09 (10%); violão de R$1.389 → R$69,67 (5% efetivo). Módulo novo
+   `src/lib/pricing.ts` (displayPrice/serviceFeeForItems/serviceFeeForSubtotal) é o ponto
+   ÚNICO — `display()` delega, e todos os caminhos que multiplicavam `MARKUP` direto
+   (linha exibida, mínimo de loja, botões de frete, publicação instantânea,
+   `order_details` do One-Click, fulfillments legados) agora passam por ele. A cotação
+   instantânea propaga o serviceFee EXATO por item (bate com os cards); cotação manual do
+   /ops (só subtotal) aplica as faixas sobre o subtotal. Calibrável sem deploy:
+   `LIA_PRICE_MARKUP` segue mandando na 1ª faixa; `LIA_MARKUP_TIERS`
+   ("200:0.06,500:0.04,1000:0.03") nas de cima. A margem fina em item caro reduz o
+   colchão de preço defasado — risco registrado; item caro é quase sempre ML com preço
+   ao vivo na cotação.
+2. **"Cotar/cotação" saiu da fala com o CLIENTE** (dono: "ele tem que comprar, não
+   cotar"): "Cotação válida por X min" → "Preço garantido por X min"; "Essa cotação
+   venceu" → "Esse preço venceu"; "em cotação" → "com o total sendo fechado"; "Ainda
+   estou cotando" → "Fechando seu total"; "Incluí na cotação" → "Incluí no pedido";
+   trocas de endereço idem. O `/ops` e os alertas de operador MANTÊM "cotação" (jargão
+   interno de quem opera; nomes de status/funções idem — churn sem valor).
+
+Gate: tsc, pricing 5/5 (novo), copy/intents/frete/pay 87 units, E2E dinheiro+lista+frete
+15/15.
 
 ## Atualização 23/08/2026 — frete grátis-lento × expresso pago: a escolha não escapava mais (caso QTNL2T)
 

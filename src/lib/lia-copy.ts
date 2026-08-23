@@ -536,11 +536,11 @@ export function supplierValidationPending(): string {
 }
 
 export function quoteExpired(): string {
-  return "Essa cotação venceu. Monto uma nova antes de cobrar qualquer coisa.";
+  return "Esse preço venceu. Fecho um novo antes de cobrar qualquer coisa.";
 }
 
 export function quoteValidFor(minutes: number): string {
-  return `Cotação válida por ${minutes} min. Escolhe Pix ou cartão pra eu gerar o pagamento.`;
+  return `Preço garantido por ${minutes} min. Escolhe Pix ou cartão pra eu gerar o pagamento.`;
 }
 
 export function pixNotSeenYet(): string {
@@ -595,7 +595,7 @@ export function orderStatusLine(input: {
   const id = `*#${input.shortId}*`;
   switch (input.status) {
     case "awaiting_operator_quote":
-      return `${id} em cotação. Mando o total com a entrega pra você aprovar — nada é cobrado antes.`;
+      return `${id} com o total sendo fechado. Mando com a entrega pra você aprovar — nada é cobrado antes.`;
     case "awaiting_supplier_validation":
     case "payment_issuing":
       return `${id} em confirmação na loja. Te aviso quando o carrinho estiver pronto.`;
@@ -791,7 +791,7 @@ export function operatorQuoteRequested(items: string[]): string {
 
 // Cliente escreve enquanto o operador ainda está cotando.
 export function operatorQuoteStillWorking(): string {
-  return "Ainda estou cotando. Mando o total com entrega e prazo em instantes.";
+  return "Fechando seu total. Mando com entrega e prazo em instantes.";
 }
 
 // Corpo da confirmação pós-escolha quando os BOTÕES (Pagar / Adicionar mais itens /
@@ -805,7 +805,7 @@ export function conciergeChooseNext(): string {
 // (a cotação ainda não saiu), nunca é engolido nem exige cancelar pra pedir de novo.
 export function addedToPendingQuote(items: string[]): string {
   const list = items.map((i) => `• ${i}`).join("\n");
-  return [`Incluí na cotação:\n${list}`, "", "Mando o total com tudo junto em instantes."].join("\n");
+  return [`Incluí no pedido:\n${list}`, "", "Mando o total com tudo junto em instantes."].join("\n");
 }
 
 // Resumo da cotação manual: itens por nome (o operador informa o custo total dos
@@ -938,7 +938,7 @@ export function staleQuoteRestart(shortId: string): string {
 // Trocar endereço com cotação na mesa: o frete foi calculado pro endereço antigo, então
 // a cotação cai e a Lia recota depois do endereço novo. Nada foi cobrado.
 export function quoteDroppedForNewAddress(): string {
-  return "Cancelei a cotação anterior — nada foi cobrado. Já refaço com o endereço novo 📍";
+  return "Cancelei o total do endereço antigo — nada foi cobrado. Já refaço com o endereço novo 📍";
 }
 
 // Trocar endereço com Pix/cartão já emitidos: a cobrança vale um total calculado com
@@ -949,7 +949,7 @@ export function addressChangeNeedsCancel(): string {
 
 // Endereço trocado com o pedido ainda na fila de cotação: o pedido sobrevive.
 export function addressUpdatedQuoteContinues(address: string): string {
-  return `📍 Endereço atualizado: ${address}\nSua cotação continua valendo — o total já sai pro endereço novo.`;
+  return `📍 Endereço atualizado: ${address}\nSeu pedido continua valendo — o total já sai pro endereço novo.`;
 }
 
 export function operatorAddressChangedAlert(shortId: string, address: string): string {

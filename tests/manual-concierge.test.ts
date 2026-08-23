@@ -356,7 +356,7 @@ test("pedir item DURANTE a cotação do operador inclui no pedido — nunca engo
   // Em produção isso respondia "segura aí" e DESCARTAVA o cotonete; o cliente teve
   // que cancelar o pedido pra conseguir pedir de novo.
   const out = await c.send("quero um cotonete");
-  assert.match(out, /inclu(í|i) na cotação/i);
+  assert.match(out, /inclu(í|i) no pedido/i);
   assert.match(out.toLowerCase(), /cotonete/);
   assert.doesNotMatch(out, /segura aí/i);
 
@@ -370,7 +370,7 @@ test("pedir item DURANTE a cotação do operador inclui no pedido — nunca engo
   // Pergunta sobre o andamento tem resposta própria e NÃO vira item na cotação.
   const asking = await c.send("já saiu o total?");
   assert.ok(asking.length > 0, "pergunta ficou sem resposta");
-  assert.doesNotMatch(asking, /inclu(í|i) na cotação/i);
+  assert.doesNotMatch(asking, /inclu(í|i) no pedido/i);
   const afterAsk = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal((afterAsk!.items as unknown as unknown[]).length, 2);
 });
@@ -399,7 +399,7 @@ test("cotação concierge vencida não libera pagamento", async (t) => {
     data: { quoteExpiresAt: new Date(Date.now() - 1_000) }
   });
   const expired = await c.send("pix");
-  assert.match(expired, /cotação venceu/i);
+  assert.match(expired, /preço venceu/i);
   const canceled = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
   assert.equal(canceled!.status, "canceled");
 });

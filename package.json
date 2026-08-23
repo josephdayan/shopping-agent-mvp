@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "purchase-worker:claim": "tsx scripts/purchase-worker-client.mts claim",
     "dev": "next dev",
     "dev:demo": "bash scripts/dev-demo.sh",
     "build": "prisma generate && next build && node scripts/check-bundle-emoji.mjs",
