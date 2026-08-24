@@ -20,6 +20,24 @@ function kind(text: string) {
   return detectIntent(text).kind;
 }
 
+test("feedback do 1º testador (24/08): identidade, endereço salvo e colírio", () => {
+  // "Quem é vc" é apresentação, nunca busca (virou o blush "Quem Disse, Berenice?").
+  assert.equal(kind("Quem é vc"), "help");
+  assert.equal(kind("quem é você?"), "help");
+  assert.equal(kind("vc é um robô?"), "help");
+  assert.equal(kind("com quem eu to falando"), "help");
+  // Pergunta sobre o endereço em arquivo responde o endereço — não vira busca.
+  assert.equal(kind("Vc salvou o endereço já"), "address_question");
+  assert.equal(kind("pegou meu cep?"), "address_question");
+  assert.equal(kind("meu endereço tá certo?"), "address_question");
+  // Mensagem COM cep/número é endereço chegando, não pergunta.
+  assert.notEqual(kind("Rua X 221 São Paulo 01233020"), "address_question");
+  // "trocar endereço" continua troca.
+  assert.equal(kind("trocar endereço"), "change_address");
+  // Colírio é item de farmácia: recusa explicada, nunca "não achei" genérico.
+  assert.equal(looksLikeMedicine("colírio systane complete"), true);
+});
+
 test("troca por atributo e 'em vez de' (pedido do dono, 20/08)", () => {
   assert.deepEqual(detectIntent("coca zero em vez da normal"), { kind: "swap_item", from: "normal", to: "coca zero" });
   assert.deepEqual(detectIntent("bota coca zero no lugar da normal"), { kind: "swap_item", from: "normal", to: "coca zero" });

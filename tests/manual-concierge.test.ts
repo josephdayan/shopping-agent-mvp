@@ -618,6 +618,59 @@ test("'X em vez do Y' troca direto na cesta (20/08)", async (t) => {
   assert.ok(names.some((n) => /laranja/i.test(n)), `laranja deveria entrar: ${JSON.stringify(names)}`);
 });
 
+test("1º testador (24/08): onboarding sobrevive a 'Quem é vc', pergunta de endereço e colírio", async (t) => {
+  if (!dbOk) return t.skip();
+  const phone = newPhone();
+  await prisma.user.create({ data: { phone } });
+  const c = { userId: "", ...driver(phone) };
+  // 1ª mensagem "Quem é vc": apresentação, nunca pedido estocado.
+  const who = await c.send("Quem é vc");
+  assert.match(who, /Funciona assim/i, who.slice(0, 200));
+  // Endereço + CEP em duas linhas salva e destrava.
+  const saved = await c.send("Rua Edgar Egídio de Souza 221 São Paulo\n01233020");
+  assert.match(saved, /Endereço salvo/i, saved.slice(0, 200));
+  assert.doesNotMatch(saved, /Quem é vc/i, "a pergunta de identidade não pode virar busca");
+  // Colírio: recusa EXPLICADA (farmácia), nunca "não consigo trazer" genérico.
+  const eye = await c.send("Me.compra um colírio chamado systane complete");
+  assert.match(eye, /não posso vender|farmácia/i, eye.slice(0, 200));
+  assert.doesNotMatch(eye, /não consigo trazer/i);
+  // Pergunta sobre o endereço confirma — não re-pede nem vira busca.
+  const q = await c.send("Vc salvou o endereço já");
+  assert.match(q, /Edgar Egídio/i, q.slice(0, 200));
+  assert.doesNotMatch(q, /manda seu \*endereço/i, "não pode re-pedir endereço");
+  // Produto depois de tudo: opções normais.
+  const soap = await c.send("quero um sabonete");
+  assert.match(soap, /op(ç|c)(õ|o)es de/i, soap.slice(0, 200));
+});
+
+test("step need_address órfão com endereço salvo se DESTRAVA no próximo pedido (24/08)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  // Força o estado travado que o testador viveu: endereço verificado + step preso.
+  const convo0 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const base = convo0 ? JSON.parse(convo0.context ?? "{}") : {};
+  await c.send("oi");
+  const convo1 = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx1 = JSON.parse(convo1!.context ?? "{}");
+  await prisma.conversation.update({
+    where: { id: convo1!.id },
+    data: {
+      context: JSON.stringify({
+        ...ctx1,
+        flow: "delivery",
+        step: "need_address",
+        cep: "01310-100",
+        deliveryAddress: "Av Paulista 1000 apto 5, São Paulo",
+        deliveryAddressVerified: true
+      })
+    }
+  });
+  const out = await c.send("quero um sabonete");
+  assert.match(out, /op(ç|c)(õ|o)es de|sabonete/i, `deveria buscar, não pedir endereço: ${out.slice(0, 200)}`);
+  assert.doesNotMatch(out, /manda seu \*endereço/i);
+  void base;
+});
+
 // ---------- achados da revisão de código (11/08) ----------
 
 test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {
@@ -742,7 +795,7 @@ test("trocar endereço com pedido na fila do operador ATUALIZA o pedido (não ó
     await c.send("trocar endereço");
     await c.send("01310-200");
     const done = await c.send("Av Paulista, 1578, Bela Vista, São Paulo - SP");
-    assert.match(done, /cotação continua/i, `resposta: ${done.slice(0, 200)}`);
+    assert.match(done, /pedido continua/i, `resposta: ${done.slice(0, 200)}`);
     const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
     // O pedido segue vivo, com o endereço NOVO e nota pro operador.
     assert.equal(after!.status, "awaiting_operator_quote");

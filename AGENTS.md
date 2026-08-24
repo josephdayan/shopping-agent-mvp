@@ -63,6 +63,36 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 24/08/2026 — feedback do 1º testador externo: 4 defeitos do onboarding fechados
+
+Primeiro teste de gente de fora (conversa real no banco, +5511992475750). Relato dele:
+"pede endereço sem parar", "pedi colírio e disse que não consegue hoje", "falei nada a
+ver e ele achou que era produto", "perguntei quem é você e pediu endereço". Reprodução
+determinística confirmou tudo e ainda achou o pior: "Quem é vc" virou pendingRequest e
+depois BUSCA — casando com o blush "Quem Disse, Berenice?". Consertos:
+
+1. **Pergunta de identidade vira apresentação** (`detectIntent`): "quem é vc/você",
+   "com quem eu falo", "vc é um robô?" → `help` (a apresentação da Lia), em qualquer
+   estado — nunca busca, nunca pendingRequest.
+2. **Pergunta sobre o endereço responde o endereço** (intent nova `address_question`):
+   "vc salvou o endereço já?", "pegou meu cep?" → confirma o endereço em arquivo (ou
+   pede, se não houver). Antes virava busca e o cliente lia "*Vc salvou o endereço já*
+   eu não consigo trazer hoje".
+3. **Quebra do loop de endereço** (`handleDeliveryAddress`): com endereço JÁ verificado
+   no contexto, o passo `need_address` órfão não retém mais ninguém — pergunta sobre
+   endereço confirma; produto destrava pra coleta e busca; resto confirma e pede itens.
+   E o ESTOQUE de pedido (pendingRequest) só aceita `free_text` que não é pergunta —
+   "pode ser amanhã" (affirm) e afins ficam de fora. A conversa travada do testador se
+   destrava sozinha na próxima mensagem dele.
+4. **Colírio entrou na lista de farmácia** (`MEDICINE_WORDS`): a recusa agora explica
+   ("remédio eu não posso vender — por lei, só farmácia") em vez do "não consigo trazer
+   hoje" que soou como falha de estoque. Se o dono quiser liberar lubrificante ocular
+   (Systane é OTC), é decisão de produto a registrar — a régua atual é conservadora.
+
+Gate: tsc, intents 45/45, E2E novos 2/2 (fluxo completo do testador + destravamento do
+step órfão) + onboarding/endereço 10/10 (1 assert atualizado pro vocabulário novo:
+"Seu pedido continua valendo").
+
 ## Atualização 23/08/2026 (2ª) — markup progressivo por faixa + fim do "cotar" na fala com o cliente
 
 Duas decisões do dono no mesmo turno:

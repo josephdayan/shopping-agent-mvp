@@ -15,6 +15,10 @@ export type Intent =
   | { kind: "paid_claim" }
   | { kind: "clear_cart" }
   | { kind: "change_address" }
+  // "Vc salvou o endereço?"/"pegou meu cep?" — pergunta sobre o endereço em arquivo:
+  // responde com o endereço salvo, nunca vira busca (teste real 24/08: virou busca e a
+  // recusa "não consigo trazer *Vc salvou o endereço já*" saiu pro cliente).
+  | { kind: "address_question" }
   // rest = o que sobrou da mensagem além do CEP ("meu cep é 01310-100, quero arroz e leite")
   | { kind: "cep"; cep: string; bare: boolean; rest?: string }
   | { kind: "repeat_last" }
@@ -442,6 +446,11 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
 // ---------- medicine guard (deterministic — works even with OpenAI off) ----------
 
 const MEDICINE_WORDS = [
+  // Colírio é item de farmácia regulado (muitos são medicamento): a régua do produto é
+  // conservadora — recusa COM explicação, nunca "não consigo trazer" genérico (feedback
+  // real de testador, 24/08: pediu Systane e a recusa pareceu falha de estoque).
+  "colirio",
+  "colirios",
   "remedio",
   "remedios",
   "medicamento",
@@ -641,6 +650,15 @@ export function detectIntent(text: string): Intent {
   // underscore do id de máquina).
   if (n === "trocar_endereco") return { kind: "change_address" };
 
+  // "Quem é vc?", "com quem eu falo", "vc é um robô?" — pergunta de IDENTIDADE vira
+  // apresentação (help), NUNCA busca de produto (teste real 24/08: "Quem é vc" virou
+  // pendingRequest e depois casou com o blush "Quem Disse, Berenice?").
+  if (
+    /^(?:oi[,!\s]+)?(?:quem (?:e|eh) (?:vc|voce|tu)|com quem (?:eu )?(?:to|estou|tou) falando|(?:vc|voce) (?:e|eh) (?:um |uma )?(?:robo|bot|ia|maquina|pessoa|humano|atendente)|o que (?:e|eh) (?:isso|esse numero|a lia|aqui))[\s?!.]*$/.test(n)
+  ) {
+    return { kind: "help" };
+  }
+
   // Emoji sozinho: 👍/✅ = sim; 🙏/❤️/💚/😊/🙌 = obrigado; resto = um "oi" acenando.
   if (EMOJI_ONLY_RE.test(n)) {
     if (/[👍✅🆗]/u.test(n)) return { kind: "affirm" };
@@ -670,6 +688,13 @@ export function detectIntent(text: string): Intent {
   // "caiu?" / "já caiu?" é PERGUNTA sobre o pagamento (status), não afirmação de pago.
   if (PAID_RE.test(n)) return isQuestion(n) ? { kind: "status" } : { kind: "paid_claim" };
   if (CHANGE_ADDRESS_RE.test(n)) return { kind: "change_address" };
+  if (
+    /\b(salvou|salvo|anotou|anotado|guardou|registrou|pegou|recebeu|chegou|ta certo|esta certo)\b/.test(n) &&
+    /\b(endereco|cep)\b/.test(n) &&
+    !/\d{5}/.test(n)
+  ) {
+    return { kind: "address_question" };
+  }
 
   // "troca o arroz por leite" — swap BEFORE remove/cancel so "troca" wins.
   const swap = n.match(SWAP_RE);

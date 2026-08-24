@@ -1393,6 +1393,17 @@ async function handleDeliveryTurn(
   // respondem e retornam (o cliente pedia a troca e recebia de volta o menu de
   // pagamento, podendo pagar uma cotação amarrada ao endereço velho). Como o frete foi
   // calculado pro endereço antigo, uma cotação em aberto cai antes de pedir o CEP novo.
+  // "Vc salvou o endereço?": confirma o que está em arquivo — nunca vira busca.
+  if (intent.kind === "address_question") {
+    const saved = ctx.deliveryAddress ?? user.defaultAddress;
+    if (saved) {
+      await reply(phone, copy.addressUpdated(saved, ctx.cep ?? user.cep ?? undefined));
+    } else {
+      await reply(phone, copy.askFullDeliveryAddress());
+    }
+    return;
+  }
+
   if (intent.kind === "change_address") {
     // Cobrança já emitida (Pix/cartão vivos): trocar o endereço agora deixaria uma
     // cobrança válida amarrada a um total de outro frete — e a conversa órfã do pedido.
@@ -2324,10 +2335,45 @@ async function handleDeliveryAddress(
 ) {
   const address = rawAddress.trim();
   if (!looksLikeDeliveryAddress(address)) {
+    const kind = detectIntent(address).kind;
+    const hasSavedAddress = Boolean(ctx.deliveryAddress && ctx.deliveryAddressVerified);
+    // "Vc salvou o endereço já?" — pergunta SOBRE o endereço com endereço na mão:
+    // confirma e destrava, nunca re-pede (teste real 24/08: loop infinito de endereço).
+    if (hasSavedAddress && /\b(endereco|cep)\b/.test(normalizeMsg(address))) {
+      ctx.step = "collecting";
+      const queued = ctx.pendingRequest;
+      ctx.pendingRequest = undefined;
+      await writeCtx(convoId, ctx);
+      await reply(phone, copy.addressUpdated(ctx.deliveryAddress!, ctx.cep));
+      if (queued) await handleSearch(phone, convoId, null, ctx, queued);
+      return;
+    }
+    // Endereço já existe e a mensagem é OUTRA coisa: o passo travado não pode reter o
+    // cliente — destrava pra coleta e roteia a mensagem como pedido normal.
+    if (hasSavedAddress) {
+      ctx.step = "collecting";
+      await writeCtx(convoId, ctx);
+      if (kind === "free_text" && !isQuestion(address)) {
+        await handleSearch(phone, convoId, null, ctx, address);
+        return;
+      }
+      await reply(phone, copy.addressSavedAskItems(ctx.deliveryAddress!));
+      return;
+    }
+    // Pergunta no meio do onboarding: responde e pede o endereço de novo — pergunta não
+    // é pedido e nunca entra no estoque.
+    if (isQuestion(address) || kind === "help" || kind === "service_question") {
+      await reply(phone, copy.serviceAnswer("generic", customerCoverageLabel()));
+      ctx.step = "need_address";
+      await writeCtx(convoId, ctx);
+      await reply(phone, copy.askFullDeliveryAddress());
+      return;
+    }
     // Não é endereço — mas TAMBÉM não é lixo: quem responde "preciso de um carregador"
     // aqui está fazendo o pedido, não errando o endereço. Guardar em vez de descartar,
-    // pra rodar a busca assim que o endereço chegar (senão o pedido some em silêncio).
-    if (queryTokens(address).length && !looksLikeMedicine(address)) {
+    // pra rodar a busca assim que o endereço chegar. Só PEDIDO entra no estoque:
+    // "pode ser amanhã" (affirm), "obrigado" e afins ficam de fora (24/08).
+    if (kind === "free_text" && queryTokens(address).length && !looksLikeMedicine(address)) {
       ctx.pendingRequest = ctx.pendingRequest ? `${ctx.pendingRequest}, ${address}` : address;
     }
     ctx.step = "need_address";
