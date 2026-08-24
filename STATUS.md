@@ -967,9 +967,11 @@ confirmação, então a persistência estruturada ainda precisa ser confirmada. 
 foi feito; evidências em [docs/testes-whatsapp-2026-08-14.md](docs/testes-whatsapp-2026-08-14.md).
 # Operador automático local (23/08/2026)
 
-- Fundação implementada: fila durável para pedidos pagos do Mercado Livre, autenticação
-  própria do worker, claim com lease, retry/revisão, auditoria e reconciliação com `/ops`.
+- Fundação implantada em produção: fila durável para pedidos pagos do Mercado Livre,
+  autenticação própria do worker, claim com lease, retry/revisão, auditoria e
+  reconciliação com `/ops`.
 - Piloto permanece em `cart_only`; confirmação final automática está bloqueada no backend.
-- Cliente local: `npm run purchase-worker:claim`.
+- Cliente local: `npm run purchase-worker:claim`; segredo protegido no Chaves do Mac.
+- Automação de hora em hora está ativa. Primeiro check de produção: nenhuma compra pendente.
 - Falta para compra sem confirmação: tela/rota de aprovação curta por carrinho, validação
   real no ML e só então liberação controlada de `PURCHASE_AUTOMATION_MODE=purchase`.

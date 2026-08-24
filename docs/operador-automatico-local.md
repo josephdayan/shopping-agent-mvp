@@ -17,8 +17,8 @@ cestas mistas e qualquer ambiguidade continuam no `/ops`.
 
 ## Configuração local
 
-Use o mesmo segredo longo em `LIA_PURCHASE_WORKER_TOKEN` no app e no processo local.
-Defina `LIA_APP_URL` para a URL do app. Depois execute:
+O segredo do worker fica no Chaves do macOS e também no ambiente publicado, configurados
+na ativação. O cliente usa `https://liadelivery.com.br` por padrão. Depois execute:
 
 ```sh
 npm run purchase-worker:claim
