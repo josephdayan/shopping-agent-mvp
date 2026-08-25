@@ -369,6 +369,16 @@ export const whatsappAdapter = {
     ]);
   },
 
+  // Oferta de troca de loja pro pedido mínimo (24/08): o toque volta como
+  // `minswap:yes` e o roteador aplica a troca; fora do Meta, texto puro com a dica.
+  async sendStoreSwapOffer(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [
+      { id: "minswap:yes", title: "Trocar de loja" },
+      { id: "minswap:no", title: "Deixar como está" }
+    ]);
+  },
+
   // Aviso de espera de cotação com a saída SEMPRE visível (pedido do dono, 11/08): botão
   // "Cancelar pedido" cujo toque volta como o texto "cancelar" e cai no cancel contextual
   // que já existe. Fora do Meta retorna null e o chamador manda o texto puro.

@@ -63,6 +63,36 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 24/08/2026 (2ª) — 2º testador: pedido mínimo ganhou saída (troca de loja) + reversão de árvore reparada
+
+Segundo teste externo (+5511973741800): a pasta Colgate de R$6 ficou presa no pedido
+mínimo de R$30 do Carrefour a sessão INTEIRA — dois "pagar" bateram na parede, "quanto
+falta?" e "o que posso pedir pra completar o valor" viraram busca/beco, "outro"
+(singular) não paginava, e os desodorantes que ele somou eram de OUTRA loja (nunca
+ajudaram no mínimo). Nenhum pedido saiu. Consertos:
+
+1. **Oferta de troca de loja** (`offerMinimumSwap`): quando só o mínimo de uma loja
+   trava o fechamento e TODOS os itens dela têm equivalente forte em loja sem mínimo,
+   a Lia oferece com botões — *Trocar de loja* / *Deixar como está* (`minswap:yes/no`;
+   "trocar de loja" por texto vale). Aceite substitui os itens e fecha com total NA
+   HORA; recusa mantém a cesta. Entre as lojas candidatas, frete CONHECIDO ganha de
+   tarifa padrão e o fee menor desempata (senão a pasta de R$6 fechava com R$18 de
+   frete da Droga Raia em vez de R$4,90 da Pague Menos). A oferta sai nos dois pontos
+   que reclamam do mínimo (fechamento e "pagar") e no "quanto falta?".
+2. **Intent `missing_question`**: "quanto falta?", "o que posso pedir pra completar o
+   valor/pedido/mínimo" respondem o que falta (ou o total parcial) — nunca viram busca.
+3. **"outro"/"outra" no singular** paginam igual a "outras" (`wantsMoreOptions`).
+4. **Reversão de árvore reparada**: uma sessão paralela reverteu `delivery-service.ts`
+   pra antes do markup progressivo e o commit `a1c7f0f` selou a reversão — produção
+   voltou ao flat 10% sem ninguém notar. A fiação inteira foi reaplicada (displayPrice/
+   serviceFee em todos os caminhos). Regra antiga da memória confirmada: **commitar
+   batch verde na hora e conferir `git status` antes de `add -A`**.
+
+Testes: `tests/minimum-swap.test.ts` novo (2 E2E; arquivo próprio porque o roster de
+teste desliga as farmácias e o registry nasce no import — bootstrap dinâmico religa a
+Pague Menos antes de importar o cérebro), intents 46/46, pricing/copy/instant-quote
+69/69, mínimo legado + 1º testador verdes.
+
 ## Atualização 24/08/2026 — feedback do 1º testador externo: 4 defeitos do onboarding fechados
 
 Primeiro teste de gente de fora (conversa real no banco, +5511992475750). Relato dele:

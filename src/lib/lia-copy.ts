@@ -757,6 +757,21 @@ export function bulkBasketAdded(items: { qty: number; name: string; total: numbe
   ].join("\n");
 }
 
+// Só o pedido mínimo de UMA loja trava o fechamento e os MESMOS itens existem em loja
+// sem mínimo: oferecer a troca é a saída (teste real 24/08: a pasta de R$6 ficou presa
+// no mínimo de R$30 o dia inteiro e o cliente desistiu).
+export function minimumSwapOffer(input: { newTotal: number; delta: number; storeLabel: string }): string {
+  const diff = input.delta > 0.009 ? ` (${brl(input.delta)} a mais)` : input.delta < -0.009 ? ` (${brl(Math.abs(input.delta))} a menos)` : " (mesmo valor)";
+  return [
+    `Consigo esses itens em outra loja SEM pedido mínimo, por ${brl(input.newTotal)}${diff}.`,
+    `Toca em *Trocar de loja* — ou manda mais um item de ${input.storeLabel} que eu fecho como está.`
+  ].join("\n");
+}
+
+export function minimumSwapDone(): string {
+  return "Troquei de loja — sem pedido mínimo. Fechando seu total:";
+}
+
 export function itemsNotAvailable(items: string[]): string {
   if (items.length === 1) {
     return `*${items[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;

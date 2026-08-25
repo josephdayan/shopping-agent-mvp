@@ -20,6 +20,18 @@ function kind(text: string) {
   return detectIntent(text).kind;
 }
 
+test("2º testador (24/08): quanto falta, completar o valor e 'outro' singular", () => {
+  assert.equal(kind("quanto falta?"), "missing_question");
+  assert.equal(kind("falta quanto"), "missing_question");
+  assert.equal(kind("o que posso pedir pra completar o valor"), "missing_question");
+  assert.equal(kind("o que posso pedir pra completar o vamor".replace("vamor", "valor")), "missing_question");
+  // "outro" singular pagina igual a "outras" (o amigo digitou no singular e virou busca)
+  assert.equal(wantsMoreOptions("outro"), true);
+  assert.equal(wantsMoreOptions("outra"), true);
+  // "quanto custa o arroz" NÃO é missing_question — segue como pergunta/busca normal
+  assert.notEqual(kind("quanto custa o arroz"), "missing_question");
+});
+
 test("feedback do 1º testador (24/08): identidade, endereço salvo e colírio", () => {
   // "Quem é vc" é apresentação, nunca busca (virou o blush "Quem Disse, Berenice?").
   assert.equal(kind("Quem é vc"), "help");

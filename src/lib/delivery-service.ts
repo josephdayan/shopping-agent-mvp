@@ -41,6 +41,7 @@ import {
   freightBreakdownLabel,
   instantQuoteEligible,
   PER_AD_FREIGHT_STORES,
+  storeFreight,
   type InstantQuoteItem
 } from "@/lib/instant-quote";
 import { liveFreightEnabled, liveStoreFreight } from "@/lib/live-freight";
@@ -147,9 +148,9 @@ function customerCoverageLabel(): string {
   return manualConciergeEnabled() ? "o estado de São Paulo" : coverageLabel();
 }
 
-// Your margin is baked into the product price (no separate fee line). Customer sees
-// each item already +10%; you pay the retailer's real price, the markup is yours.
-const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);
+// Your margin is baked into the product price (no separate fee line). O markup é
+// PROGRESSIVO por faixa (23/08): vive em src/lib/pricing.ts — displayPrice é o ponto
+// único; serviceFeeForItems/Subtotal mantêm o total consistente com os cards.
 
 // Card MDR (~4.99% à vista) passed through to the customer when they choose card, so the
 // 10% margin survives. Gross-up: charged = net / (1 - mdr). Tunable via env as volume
@@ -160,7 +161,7 @@ function cardTotal(base: number): number {
 }
 
 function display(price: number): number {
-  return Math.round(price * MARKUP * 100) / 100;
+  return displayPrice(price);
 }
 
 type BasketItem = {
@@ -249,6 +250,9 @@ type DeliveryContext = {
   freightChoice?: {
     orderId: string;
     itemsSubtotal: number;
+    // Margem exata por item (faixas progressivas) — botões e publicação usam o MESMO
+    // número, consistente com os preços dos cards.
+    serviceFee?: number;
     // Quando o frete/data foram consultados no anúncio (epoch ms). É o que permite
     // recusar um toque de botão feito dias depois, com promessa de entrega já vencida.
     quotedAt?: number;
@@ -258,6 +262,12 @@ type DeliveryContext = {
   };
   storeKey?: string;
   notFound?: string[];
+  // Proposta viva de troca de loja pro pedido mínimo (24/08): itens da loja travada +
+  // substitutos de loja sem mínimo. Validada contra a cesta na hora do aceite.
+  minSwap?: {
+    fromStoreKey: string;
+    replacements: { fromSku: string; qty: number; option: ChoiceOption }[];
+  };
   // Última escolha CONCLUÍDA (com o sku escolhido): "Outras opções"/"mais barato" fora
   // da escolha reabrem ela — o toque num card antigo não pode cair no "me diz de outro
   // jeito" (teste real 19/08).
@@ -916,7 +926,7 @@ async function quoteBasket(ctx: DeliveryContext, store: StoreConnector) {
       deliveryFee: cheapest.fee,
       etaMinutes: cheapest.etaMinutes,
       itemsSubtotal,
-      serviceFee: Math.round(itemsSubtotal * (MARKUP - 1) * 100) / 100
+      serviceFee: serviceFeeForSubtotal(itemsSubtotal)
     });
   }
 
@@ -948,7 +958,7 @@ function basketForCopy(ctx: DeliveryContext): copy.CopyBasketItem[] {
   return (ctx.basket ?? []).map((item) => ({
     qty: item.qty,
     name: item.name,
-    displayLineTotal: Math.round(item.unitPrice * MARKUP * item.qty * 100) / 100
+    displayLineTotal: Math.round(display(item.unitPrice) * item.qty * 100) / 100
   }));
 }
 
@@ -1038,7 +1048,9 @@ function belowMinimum(ctx: DeliveryContext, store: StoreConnector): boolean {
 function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
   const displayMin = display(storeMinReal(store));
   const real = (ctx.basket ?? []).filter((item) => item.storeKey === store.key).reduce((sum, item) => sum + item.lineTotal, 0);
-  const produtos = Math.round(real * MARKUP * 100) / 100;
+  const produtos = (ctx.basket ?? [])
+    .filter((item) => item.storeKey === store.key)
+    .reduce((sum, item) => sum + Math.round(display(item.unitPrice) * item.qty * 100) / 100, 0);
   const falta = Math.max(0, Math.round((displayMin - produtos) * 100) / 100);
   const scoped = { ...ctx, basket: (ctx.basket ?? []).filter((item) => item.storeKey === store.key) };
   // O resto da cesta aparece junto: a mensagem parecia resumo COMPLETO e o cliente
@@ -1052,6 +1064,65 @@ function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
     storeLabel: store.label,
     otherItems: basketForCopy(others)
   });
+}
+
+// Só o mínimo de UMA loja trava e os itens têm equivalente FORTE em loja sem mínimo →
+// oferece a troca com botão. Melhor caminho pro cliente pequeno (teste real 24/08:
+// pasta de R$6 presa no mínimo de R$30 do mercado; o cliente desistiu).
+async function offerMinimumSwap(
+  phone: string,
+  convoId: string,
+  ctx: DeliveryContext,
+  store: StoreConnector
+): Promise<boolean> {
+  const stuck = (ctx.basket ?? []).filter((item) => item.storeKey === store.key);
+  if (!stuck.length) return false;
+  const replacements: { fromSku: string; qty: number; option: ChoiceOption }[] = [];
+  for (const item of stuck) {
+    const tokens = queryTokens(item.name);
+    let found: ChoiceOption | undefined;
+    for (const take of [4, 3]) {
+      const query = tokens.slice(0, take).join(" ");
+      if (!query) break;
+      const candidates = await gatherCrossStoreCandidates(query, 12);
+      const alts = candidates.filter(
+        (c) =>
+          c.store.key !== store.key &&
+          storeMinReal(c.store) === 0 &&
+          conciergeMatchIsStrong(query, c.item)
+      );
+      // Entre as lojas que servem, frete CONHECIDO ganha de tarifa padrão (R$18 numa
+      // pasta de R$6 mataria a vantagem da troca), e o fee menor desempata.
+      const ranked = alts
+        .map((c) => ({ c, freight: storeFreight(c.store.key, c.store.label, 0) }))
+        .sort((a, b) => {
+          const aPad = a.freight.source === "padrao" ? 1 : 0;
+          const bPad = b.freight.source === "padrao" ? 1 : 0;
+          if (aPad !== bPad) return aPad - bPad;
+          return a.freight.fee - b.freight.fee;
+        });
+      if (ranked.length) {
+        const alt = ranked[0].c;
+        found = toChoiceOption(alt.item, { storeKey: alt.store.key, storeLabel: alt.store.label });
+        break;
+      }
+    }
+    if (!found) return false;
+    replacements.push({ fromSku: item.sku, qty: item.qty, option: found });
+  }
+  const oldDisplay = stuck.reduce((sum, i) => sum + Math.round(display(i.unitPrice) * i.qty * 100) / 100, 0);
+  const newDisplay = replacements.reduce((sum, r) => sum + Math.round(display(r.option.unitPrice) * r.qty * 100) / 100, 0);
+  ctx.minSwap = { fromStoreKey: store.key, replacements };
+  await writeCtx(convoId, ctx);
+  const body = copy.minimumSwapOffer({ newTotal: newDisplay, delta: Math.round((newDisplay - oldDisplay) * 100) / 100, storeLabel: store.label });
+  try {
+    const interactive = await whatsappAdapter.sendStoreSwapOffer(phone, body);
+    if (interactive) return true;
+  } catch (error) {
+    console.warn("[whatsapp:minswap:fallback-text]", error instanceof Error ? error.message : error);
+  }
+  await reply(phone, `${body}\n(responde *trocar de loja* que eu troco)`);
+  return true;
 }
 
 // ---------- the WhatsApp conversation state machine ----------
@@ -1393,6 +1464,54 @@ async function handleDeliveryTurn(
   // respondem e retornam (o cliente pedia a troca e recebia de volta o menu de
   // pagamento, podendo pagar uma cotação amarrada ao endereço velho). Como o frete foi
   // calculado pro endereço antigo, uma cotação em aberto cai antes de pedir o CEP novo.
+  // Recusa da troca de loja: mantém a cesta e lembra o caminho de completar.
+  if (ctx.minSwap && normalizeMsg(text) === "minswap:no") {
+    const fromStore = getStore(ctx.minSwap.fromStoreKey);
+    ctx.minSwap = undefined;
+    await writeCtx(convo.id, ctx);
+    await reply(phone, minimumOrderText(ctx, fromStore));
+    return;
+  }
+
+  // Aceite da troca de loja do pedido mínimo (botão minswap:yes, "trocar de loja" ou
+  // um sim com a proposta na mesa). Valida contra a cesta atual: proposta velha morre.
+  if (ctx.minSwap && (normalizeMsg(text) === "minswap:yes" || /^troca(r)? de loja$/.test(normalizeMsg(text)) || intent.kind === "affirm")) {
+    const swap = ctx.minSwap;
+    const basket = ctx.basket ?? [];
+    const valid = swap.replacements.every((r) => basket.some((b) => b.sku === r.fromSku));
+    ctx.minSwap = undefined;
+    if (!valid) {
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.didNotUnderstand());
+      return;
+    }
+    const keep = basket.filter((b) => !swap.replacements.some((r) => r.fromSku === b.sku));
+    const added = swap.replacements.map((r) =>
+      choiceToBasketItem(r.option, r.qty, r.option.storeKey ? getStore(r.option.storeKey) : orderStore(ctx))
+    );
+    ctx.basket = mergeBaskets(keep, added);
+    await writeCtx(convo.id, ctx);
+    await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.minimumSwapDone());
+    return;
+  }
+
+  // "Quanto falta?"/"o que peço pra completar?" — responde o mínimo que falta, nunca busca.
+  if (intent.kind === "missing_question") {
+    const below = conciergeStoresBelowMinimum(ctx)[0];
+    if (below) {
+      await reply(phone, minimumOrderText(ctx, below));
+      if (!ctx.minSwap) await offerMinimumSwap(phone, convo.id, ctx, below);
+      return;
+    }
+    if (ctx.basket?.length) {
+      const produtos = Math.round(basketForCopy(ctx).reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
+      await reply(phone, copy.partialTotal(basketForCopy(ctx), produtos, ctx.pending?.length ?? 0));
+      return;
+    }
+    await reply(phone, copy.didNotUnderstand());
+    return;
+  }
+
   // "Vc salvou o endereço?": confirma o que está em arquivo — nunca vira busca.
   if (intent.kind === "address_question") {
     const saved = ctx.deliveryAddress ?? user.defaultAddress;
@@ -1638,6 +1757,7 @@ async function handleDeliveryTurn(
     });
     await publishInstantQuote(choice.orderId, {
       itemsSubtotal: choice.itemsSubtotal,
+      serviceFee: choice.serviceFee,
       fee: picked.fee,
       estimate: picked.estimate,
       stores: choice.stores
@@ -1904,12 +2024,14 @@ async function handleDeliveryTurn(
       // repetir o nudge genérico vira loop; a saída honesta (minimumDeadEnd) explica e
       // dá opção. "pagar" seco continua no nudge (mostra a cesta + quanto falta).
       if (intent.kind === "done" || intent.kind === "choose_payment" || (intent.kind === "pay" && intent.method)) {
-        const min = Math.round((payStore.minOrder ?? 0) * MARKUP * 100) / 100;
-        const produtos = (ctx.basket ?? []).reduce((sum, i) => sum + Math.round(i.unitPrice * MARKUP * i.qty * 100) / 100, 0);
+        const min = display(payStore.minOrder ?? 0);
+        const produtos = (ctx.basket ?? []).reduce((sum, i) => sum + Math.round(display(i.unitPrice) * i.qty * 100) / 100, 0);
         await reply(phone, copy.minimumDeadEnd(min, Math.max(0, Math.round((min - produtos) * 100) / 100)));
       } else {
         await reply(phone, minimumOrderText(ctx, payStore));
       }
+      // A saída de verdade: mesmos itens em loja sem mínimo (teste real 24/08).
+      await offerMinimumSwap(phone, convo.id, ctx, payStore);
       return;
     }
     // "só isso"/"mais nada" ANTES da cotação = fechar a LISTA: mostra o total primeiro
@@ -3632,6 +3754,8 @@ async function continueAfterBasket(
       await writeCtx(convoId, ctx);
       if (prefix) await reply(phone, prefix);
       await reply(phone, minimumOrderText(ctx, belowStore));
+      // A saída de verdade: mesmos itens em loja sem mínimo (teste real 24/08).
+      await offerMinimumSwap(phone, convoId, ctx, belowStore);
       return;
     }
     await createOperatorQuoteRequest(phone, convoId, ctx, prefix);
@@ -3814,6 +3938,7 @@ async function tryPublishInstantQuote(
       const choice = {
         orderId,
         itemsSubtotal,
+        serviceFee: serviceFeeForItems(items as { unitPrice: number; qty: number }[]),
         stores: freights.length,
         quotedAt: Date.now(),
         barato: { fee: totalFee, estimate: mlEstimate },
@@ -3824,7 +3949,13 @@ async function tryPublishInstantQuote(
       return true;
     }
 
-    await publishInstantQuote(orderId, { itemsSubtotal, fee: totalFee, estimate: mlEstimate, stores: freights.length });
+    await publishInstantQuote(orderId, {
+      itemsSubtotal,
+      serviceFee: serviceFeeForItems(items as { unitPrice: number; qty: number }[]),
+      fee: totalFee,
+      estimate: mlEstimate,
+      stores: freights.length
+    });
     return true;
   } catch (error) {
     console.warn("[instant-quote:fallback-manual]", error instanceof Error ? error.message : error);
@@ -3837,11 +3968,12 @@ async function tryPublishInstantQuote(
 // prazo (inventar prazo segue proibido).
 async function publishInstantQuote(
   orderId: string,
-  input: { itemsSubtotal: number; fee: number; estimate?: string; stores: number }
+  input: { itemsSubtotal: number; serviceFee?: number; fee: number; estimate?: string; stores: number }
 ) {
   const base = input.stores > 1 ? `pela própria loja (${input.stores} entregas)` : "pela própria loja";
   await opsPublishManualQuote(orderId, {
     itemsSubtotal: input.itemsSubtotal,
+    serviceFee: input.serviceFee,
     deliveryFee: input.fee,
     deliveryMode: "retailer_delivery",
     deliveryPromise: input.estimate ? `${base} · chega até ${input.estimate}` : base
@@ -3853,7 +3985,8 @@ async function publishInstantQuote(
 type FreightChoiceState = NonNullable<DeliveryContext["freightChoice"]>;
 
 async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
-  const totalFor = (fee: number) => roundMoney(choice.itemsSubtotal * MARKUP + fee);
+  const totalFor = (fee: number) =>
+    roundMoney(choice.itemsSubtotal + (choice.serviceFee ?? serviceFeeForSubtotal(choice.itemsSubtotal)) + fee);
   const barato = { total: totalFor(choice.barato.fee), estimate: choice.barato.estimate };
   const rapido = { total: totalFor(choice.rapido.fee), estimate: choice.rapido.estimate };
   const body = copy.shippingSpeedChoice(barato, rapido);
@@ -4180,6 +4313,9 @@ export async function opsPublishManualQuote(
     deliveryMode?: "operator_courier" | "retailer_delivery";
     deliveryPromise?: string;
     etaMinutes?: number;
+    // Margem exata por item (cotação instantânea). Ausente = cotação manual do /ops,
+    // onde só existe o subtotal — as faixas progressivas valem sobre ele inteiro.
+    serviceFee?: number;
     items?: { qty: number; name: string; unitPrice?: number }[];
   }
 ) {
@@ -4191,7 +4327,7 @@ export async function opsPublishManualQuote(
   const itemsSubtotal = roundMoney(Math.max(0, Number(input.itemsSubtotal) || 0));
   const deliveryFee = roundMoney(Math.max(0, Number(input.deliveryFee) || 0));
   if (itemsSubtotal <= 0) throw new Error("Informe o custo dos produtos (maior que zero).");
-  const serviceFee = roundMoney(itemsSubtotal * (MARKUP - 1));
+  const serviceFee = input.serviceFee != null ? roundMoney(input.serviceFee) : serviceFeeForSubtotal(itemsSubtotal);
   // "produtos" shown to the customer already includes the markup.
   const produtos = roundMoney(itemsSubtotal + serviceFee);
   const total = roundMoney(produtos + deliveryFee);

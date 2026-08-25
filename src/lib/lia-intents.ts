@@ -19,6 +19,9 @@ export type Intent =
   // responde com o endereço salvo, nunca vira busca (teste real 24/08: virou busca e a
   // recusa "não consigo trazer *Vc salvou o endereço já*" saiu pro cliente).
   | { kind: "address_question" }
+  // "quanto falta?"/"o que posso pedir pra completar?" — pergunta sobre o que falta pro
+  // fechamento (pedido mínimo), nunca busca (teste real 24/08: virou busca e beco).
+  | { kind: "missing_question" }
   // rest = o que sobrou da mensagem além do CEP ("meu cep é 01310-100, quero arroz e leite")
   | { kind: "cep"; cep: string; bare: boolean; rest?: string }
   | { kind: "repeat_last" }
@@ -689,6 +692,13 @@ export function detectIntent(text: string): Intent {
   if (PAID_RE.test(n)) return isQuestion(n) ? { kind: "status" } : { kind: "paid_claim" };
   if (CHANGE_ADDRESS_RE.test(n)) return { kind: "change_address" };
   if (
+    /^(quanto (ainda )?falta|falta quanto|falta muito)[\s?!.]*$/.test(n) ||
+    /\b(que|quanto) (eu )?(posso|da pra|preciso|devo) (pedir|comprar|adicionar|por|colocar)( mais)? pra (completar|fechar|chegar)/.test(n) ||
+    /\bcompletar o (valor|pedido|minimo|m[ií]nimo)\b/.test(n)
+  ) {
+    return { kind: "missing_question" };
+  }
+  if (
     /\b(salvou|salvo|anotou|anotado|guardou|registrou|pegou|recebeu|chegou|ta certo|esta certo)\b/.test(n) &&
     /\b(endereco|cep)\b/.test(n) &&
     !/\d{5}/.test(n)
@@ -940,7 +950,7 @@ export function wantsMoreOptions(text: string): boolean {
   if (/\b(mais|outras) opcoes\b/.test(n)) return true;
   // "outras"/"outros" seco: é o atalho que a própria Lia anuncia no choicesAsk
   // ("*outras* que eu mostro mais") — tem que funcionar sozinho.
-  if (/^outr[ao]s$/.test(n)) return true;
+  if (/^outr[ao]s?$/.test(n)) return true;
   if (/^e (as|os) outr[ao]s( opcoes)?$/.test(n)) return true;
   const m = n.match(/\b(?:tem|acha|ache|mostrar?|procura|busca|manda|me ve|quero ver|ver)\s+(?:mais|outr[ao]s?)\b(.*)$/);
   if (!m) return false;
