@@ -63,6 +63,23 @@ com as mensagens reais de `lia-copy.ts`. Paleta escolhida pelo dono no seletor a
 `#F7F4FB` + lima `#D9FF5B`, CTAs em lima. O logo/avatar/favicon e a arte da foto de perfil do
 WhatsApp foram refeitos na mesma paleta (lima `#D9FF5B` + roxo `#3A225E`).
 
+## Atualização 25/08/2026 — troca de mínimo agora cai no Mercado Livre quando a vitrine local não cobre
+
+Pergunta do dono ("se o item de R$15 tá preso no mínimo de R$30 do Carrefour, ele pode ir
+pro Meli comprar direto, não?") — sim, e agora o fluxo faz: `offerMinimumSwap` ganhou o
+FALLBACK do ML. Ordem da busca por substituto, por item preso: (1) vitrine local sem
+mínimo com frete CONHECIDO (fecha rápido, frete barato); (2) vitrine local sem mínimo em
+tarifa padrão; (3) **Mercado Livre** — sem mínimo por definição (cada anúncio é um
+checkout próprio). Só entra anúncio que fecha sozinho: com id de anúncio (frete ao vivo)
+ou frete grátis declarado — senão a troca viraria espera de operador. Piso de match e
+guarda ANVISA valem igual (searchMercadoLivre já filtra). Busca fria do ML pode atrasar a
+OFERTA em ~20-40s (a mensagem do mínimo já saiu; cache de 6h torna a segunda instantânea).
+
+Teste novo `tests/minimum-swap-ml.test.ts` (farmácias OFF pra forçar o fallback; ML
+responde do CACHE semeado no banco — zero rede; anúncio de frete grátis fecha com fee 0).
+Detalhe de harness: `mercadoLivreEnabled()` exige `APIFY_API_TOKEN` mesmo com cache — o
+teste seta um token fake que nunca é usado. Gate: swap local 2/2 + ML store 13/13 verdes.
+
 ## Atualização 24/08/2026 (2ª) — 2º testador: pedido mínimo ganhou saída (troca de loja) + reversão de árvore reparada
 
 Segundo teste externo (+5511973741800): a pasta Colgate de R$6 ficou presa no pedido

@@ -12,7 +12,8 @@ import {
   type StoreConnector
 } from "@/lib/stores";
 import { pickNearestUnit } from "@/lib/stores/nearest";
-import { mercadoLivreEnabled, prefetchMercadoLivre } from "@/lib/stores/mercadolivre";
+import { mercadoLivreEnabled, prefetchMercadoLivre, searchMercadoLivre } from "@/lib/stores/mercadolivre";
+import { mlItemIdFrom } from "@/lib/ml-freight";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
 import {
   attrMatchesItem,
@@ -1105,6 +1106,28 @@ async function offerMinimumSwap(
         const alt = ranked[0].c;
         found = toChoiceOption(alt.item, { storeKey: alt.store.key, storeLabel: alt.store.label });
         break;
+      }
+      // Nenhuma vitrine local sem mínimo tem o item → MERCADO LIVRE (dono, 25/08:
+      // "ele pode ir pra outra loja, o Meli, e comprar direto"). Sem mínimo por
+      // definição (cada anúncio é um checkout). Só anúncio que fecha sozinho serve:
+      // com id (frete ao vivo por anúncio) ou frete grátis declarado — senão o
+      // fechamento abortaria pro operador e a troca viraria espera.
+      if (mercadoLivreEnabled()) {
+        try {
+          const mlItems = await searchMercadoLivre(query, 4);
+          const mlAlt = mlItems.find(
+            (item) =>
+              conciergeMatchIsStrong(query, item) &&
+              (item.freeShipping === true || mlItemIdFrom(item) !== null)
+          );
+          if (mlAlt) {
+            const mlStore = getStore("mercadolivre");
+            found = toChoiceOption(mlAlt, { storeKey: mlStore.key, storeLabel: mlStore.label });
+            break;
+          }
+        } catch (error) {
+          console.warn("[minswap:ml-failed]", error instanceof Error ? error.message : error);
+        }
       }
     }
     if (!found) return false;
