@@ -2,6 +2,12 @@
 
 _Última atualização: 2026-08-26._
 
+> **26/08 — protocolo v2 pronto pra rodada de validação.** Roteiro fixo de 20 sessões
+> (8 sondas de regressão + 12 de chão novo, auditoria item a item obrigatória) em
+> [docs/protocolo-teste-persona-v2.md](docs/protocolo-teste-persona-v2.md); gates: zero
+> cesta contaminada, zero estorno falso, média ≥8, <20 "não entendi". Rodar e mandar o
+> relatório pro agente triar (frequência × gravidade → caso de teste → conserto).
+
 > **26/08 — pós-teste em massa: o que ficou ADIADO com registro.** Blocos 1-3 do
 > relatório implementados (ver AGENTS.md). Ficam como próximos ciclos, por decisão de
 > escopo (produto/qualidade, não bug de estado):
