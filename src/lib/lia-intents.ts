@@ -34,6 +34,9 @@ export type Intent =
   | { kind: "choose_payment"; method: "pix" | "card" }
   | { kind: "affirm" }
   | { kind: "reject" }
+  // Toque num botão "Escolher esse" FORA de uma escolha ativa: é um botão de mensagem
+  // antiga — resposta específica, nunca "não entendi" (rodada 27/08 S1).
+  | { kind: "stale_option_tap"; sku: string }
   // "Outras opções" (botão ou texto) fora da escolha ativa; cheaper=true quando o
   // cliente pediu "mais barato" seco — reabre a última escolha ordenada por preço.
   | { kind: "more_options"; cheaper?: boolean }
@@ -138,10 +141,34 @@ const MODIFIER_SEGMENT_RE = new RegExp(
       "p(a)?ra (hoje|amanha)( se der| se possivel)?",
       "o quanto antes",
       "urgente(mente)?",
-      "(entrega|entregam|entregue|entregando) (hoje|amanha|rapida|rapido)( .*)?"
+      "(entrega|entregam|entregue|entregando) (hoje|amanha|rapida|rapido)( .*)?",
+      // aposto classificador ("coisa simples de farmácia", "coisinhas básicas de
+      // mercado") — descreve a LISTA, nunca é item (rodada 27/08 S20)
+      "(umas? |so |apenas )?(coisa|coisinha)s? (simples|basica|rapida)s?( (de|do|da) [a-zà-ú]+)?",
+      "(fazer )?(a |as |uma )?compras? (da semana|do mes|de casa)( .*)?"
     ].join("|") +
     ")$"
 );
+
+// Oração NARRATIVA ("meu neto vem sábado", "vou receber a família", "que não seja
+// muito caro"): contexto sobre pessoas/planos/preferências, nunca item de compra.
+// Sem este filtro, o resgate do merge com a IA re-promovia a narrativa a produto e a
+// Lia ecoava a frase inteira como não-achado (rodada 27/08 S3/S13/S20).
+const NARRATIVE_SEGMENT_RE = new RegExp(
+  "^(" +
+    [
+      "(eu |a gente |nos )?(meu|minha|meus|minhas) [a-zà-ú]+( [a-zà-ú]+)? (que )?(vem|veio|vai|vao|chega|volta|pediu|pedia|falou|disse|gosta|adora|mora|visita|completa|faz)\\b.*",
+      "(eu )?(vou|vamos) (receber|fazer|dar|ter|visitar|viajar|arrumar|deixar)\\b.*",
+      "(eu )?(quero |queria |gostaria de )?(deixar|arrumar) (meu|minha|o|a)\\b.*",
+      "que (nao )?(seja|fique|custe|passe|pese|demore)\\b.*",
+      "(porque|pois|ja que) .*"
+    ].join("|") +
+    ")$"
+);
+
+export function isNarrativeSegment(phrase: string): boolean {
+  return NARRATIVE_SEGMENT_RE.test(normalizeMsg(phrase));
+}
 
 // Desabafo sobre o próprio estado ("to com dor de cabeça", "estou gripada", "to com
 // fome") — conversa, nunca item de compra. "to sem X" NÃO entra aqui: é pedido de X.
@@ -229,6 +256,7 @@ export function parseBasketLines(text: string): ParsedLine[] {
         raw.length > 1 &&
         !NOISE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !STATE_SEGMENT_RE.test(normalizeMsg(raw)) &&
+        !NARRATIVE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !/^(ah+|hm+|hmm+|aa+|eh+|dai|tipo|ne)$/i.test(normalizeMsg(raw))
     )
     .map((raw) => {
@@ -442,6 +470,10 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
   const merged = [...flagged];
   for (const line of deterministic) {
     if (giftMetaOnly(line.phrase)) continue;
+    // O resgate só re-promove segmento com cara de PRODUTO: narrativa/modificador que a
+    // IA descartou de propósito não volta (rodada 27/08 S3/S20 — o resgate desfazia o
+    // descarte certo da IA e a narrativa virava "item não achado").
+    if (isNarrativeSegment(line.phrase) || isRequestModifier(line.phrase)) continue;
     if (!merged.some((candidate) => sameProduct(line.phrase, candidate.phrase))) merged.push(line);
   }
   return merged;
@@ -648,8 +680,10 @@ export function detectIntent(text: string): Intent {
     return { kind: "more_options", cheaper: true };
   }
   // Botão "Escolher esse" (id por sku). Na escolha, o handleChoosing resolve o sku
-  // ANTES de qualquer parser; fora dela, reject educado — nunca busca de produto.
-  if (/^optsku:/.test(n)) return { kind: "reject" };
+  // ANTES de qualquer parser; fora dela, é botão de conversa ANTIGA — intent próprio
+  // com o sku preservado, nunca busca de produto nem "não entendi" (27/08 S1).
+  const staleTap = n.match(/^optsku:(.+)$/);
+  if (staleTap) return { kind: "stale_option_tap", sku: staleTap[1].trim() };
   // Botão "Trocar endereço" do resumo da cotação (o regex de texto não casa o
   // underscore do id de máquina).
   if (n === "trocar_endereco") return { kind: "change_address" };
@@ -764,10 +798,14 @@ export function detectIntent(text: string): Intent {
   // "não achei pra tirar" e o shampoo do resto da frase se perdia) — segue como pedido.
   if (REMOVE_START_RE.test(n) && !/^sem\s+(remedios?|medicamentos?)\b/.test(n)) {
     const rawTarget = n.replace(REMOVE_START_RE, "");
-    // Multi-intenção: "tira o arroz E COLOCA feijão" — corta no verbo de adicionar;
-    // a 1ª parte é o remove, a 2ª volta pro fluxo como item novo. Sem isto o target
-    // sujo casa com os DOIS itens na cesta e apaga o que o cliente quer comprar.
-    const addSplit = rawTarget.split(/\s+e\s+(?:coloca|poe|bota|traz|adiciona|adicione|inclui|acrescenta|manda|me ve|quero|compra)\s+/);
+    // Multi-intenção: "tira o arroz E COLOCA feijão" / "tira o café, QUERO chá" —
+    // corta no verbo de adicionar (com " e ", vírgula ou ponto-e-vírgula antes); a 1ª
+    // parte é o remove, a 2ª volta pro fluxo como item novo. Sem isto o target sujo
+    // casa com os DOIS itens na cesta e apaga o que o cliente quer comprar (o caso da
+    // vírgula: rodada 27/08 S8 — "tira o café, quero café de centeio" só removia).
+    const addSplit = rawTarget.split(
+      /(?:\s+e\s+|\s*[,;]\s*(?:e\s+)?)(?:coloca|poe|bota|traz|adiciona|adicione|inclui|acrescenta|manda|me ve|quero|compra)\s+/
+    );
     const target = cleanItemPhrase(addSplit[0]);
     const andAdd = addSplit[1] ? cleanItemPhrase(addSplit[1]) : undefined;
     const clearAll = !target || /\b(tudo|todos|todas)\b/.test(target);

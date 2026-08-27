@@ -1,5 +1,64 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 27/08/2026 — rodada 2 (20 sessões): forense + conserto dos achados
+
+Rodada 2 do protocolo v2 deu **4,15/10** (relatório em
+[docs/testes-rodada-2-2026-08-27.md](docs/testes-rodada-2-2026-08-27.md)): perda de
+estado caiu de 12/20 pra 3/20, mas surgiram "P0s" novos. A forense no banco mudou o
+diagnóstico dos dois piores:
+
+- **#YAQHF8 "cancelado que virou pago" NÃO é corrupção**: é um pedido REAL pago no
+  cartão em 25/08 (Pagar.me charge `ch_VAolM1vcKiwjnK8m`, R$20,62, escova de dente),
+  parado em `paid` desde então — nunca comprado nem estornado. Idem **#QTNL2T** (mochila
+  R$80,93, pago 23/08, `retailer_preparing`). O telefone de teste acumula pedidos vivos
+  e as 20 sessões compartilham a MESMA conversa — "cadê meu pedido?" achava esses
+  legitimamente. **Decisão pendente do dono: comprar/entregar ou estornar os dois.**
+- **A cesta "PlayStation fantasma" (S19)** foi pedida pelo próprio telefone às 9h38 e
+  largada em `awaiting_payment`; a retomada mostrou o pedido pendente correto. Sem
+  fronteira de sessão, persona nova herda pedido da anterior — artefato de teste, mas a
+  APRESENTAÇÃO era o bug real.
+
+Consertos implementados (todos com teste):
+
+1. **Status/cancelamento ancorados**: `orderStatusLine` agora imprime data ("de ontem",
+   "de sábado", "de 23/08") + prévia de itens em todo pedido citado; `handleCancel` grava
+   `lastCanceledOrderId` e "cadê meu pedido?" pós-cancelamento fala PRIMEIRO do
+   cancelado (pago antigo vira segunda linha rotulada); "pedido de ONTEM/anterior" pula a
+   cesta e busca o passado; `nothingToCancel` nomeia o pago com data+itens.
+2. **Anti-turno-velho**: `rememberCtxSnapshot` após a releitura pós-lock (mensagem que
+   esperava o lock morria em falso conflito de CAS, sem resposta NENHUMA);
+   `TurnSupersededError` propaga em `tryPublishInstantQuote` (turno superado não cai
+   mais no caminho manual falando); `opsPublishManualQuote` checa `movedOn` antes de
+   sobrescrever o contexto e rotula a cotação com `#pedido (data)` quando a conversa já
+   está em outro assunto.
+3. **Troca de loja NUNCA silenciosa**: oferta e aceite do minswap listam
+   "antigo (R$a) → novo (R$b)" item a item; resumo pagável (`manualQuoteSummary`) imprime
+   preço por linha quando a margem exata existe — soma das linhas = "Produtos" sempre.
+4. **Pós-total com controle**: em `awaiting_quote_confirmation`, "entrega mais rápida"
+   republica com a opção rápida guardada (`freightChoice` agora sobrevive à publicação)
+   ou responde honesto ("só tem uma modalidade"); "mais barato" cancela a cotação e
+   reabre a última escolha ordenada por preço (`lastChoice` também sobrevive) — cumprindo
+   a promessa do haggle; nada disso cai mais no menu "Como prefere pagar?".
+5. **Narrativa não vira produto**: `NARRATIVE_SEGMENT_RE` filtra orações de contexto
+   ("meu neto vem sábado", "que não seja muito caro") no parser E no resgate do merge
+   (que re-promovia o que a IA descartara); "coisa simples de farmácia"/"compra da
+   semana" viraram modificadores; prompt da IA ganhou a regra 7a (não inferir produto de
+   desejo narrativo); eco de não-achados trunca frase longa (~6 palavras).
+6. **Escolha destravada**: resposta curta de 1 token ("Philco") tenta a busca COMBINADA
+   ("fone bluetooth philco") antes de virar item novo — refina se cobrir a query E o
+   token; narrativa no meio da escolha re-pergunta em vez de "anotar"; botão de conversa
+   antiga tem intent (`stale_option_tap`) e copy próprios; "outras" esgotado faz UMA
+   re-busca relaxada (forceLongTail) e depois pede reformulação em vez de repetir;
+   "tira X, quero Y" com vírgula agora separa remove+busca.
+7. **"O de sempre" confere antes de fechar** (resumo + "É isso? responde *sim*");
+   `LIA_BULK_AUTOPICK_MAX` caiu de 300 pra **100** (furadeira de R$142 entrou sozinha);
+   copy do caminho manual ficou honesta ("assim que conferir", não "em instantes") e
+   nomeia QUAL item travou a cotação (nota do /ops inclui os itens da loja abortada).
+
+Adiados com registro (PENDENCIAS): SLA/watchdog para `awaiting_operator_quote`, opção
+rápida para anúncios ML com frete grátis, item indisponível numa loja abortar SÓ a loja,
+name≠productUrl no sku dsp-548880 + mídia 500 (Meta 131053) na S20.
+
 ## Validação ao vivo — 20 clientes simulados (2026-08-26)
 
 Foram executadas 20 sessões sequenciais no WhatsApp, sem pagamento e sem confirmar Pix

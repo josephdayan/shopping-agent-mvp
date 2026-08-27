@@ -1,5 +1,23 @@
 # Lia — Status do Projeto
 
+## 27/08/2026 — rodada 2 (4,15/10): forense mudou o diagnóstico, consertos implementados
+
+A rodada 2 confirmou o avanço em estado (perda 12/20 → 3/20) e derrubou a média por
+UX/integridade (4,15). A forense no banco provou que os dois "P0s" não eram corrupção:
+**#YAQHF8 é uma cobrança REAL de cartão (R$20,62, 25/08, Pagar.me) parada em `paid`** e
+o "PlayStation fantasma" foi pedido pelo próprio telefone de teste e largado aguardando
+pagamento — o bug real era a APRESENTAÇÃO (pedido antigo sem data nem itens). Sete
+blocos de conserto implementados no mesmo dia (status ancorado em data+itens, memória de
+cancelamento, guardas anti-turno-velho, troca de loja anunciada item a item, resumo com
+preço por linha, pós-total com "mais barato"/"mais rápida" funcionando, narrativa fora
+da extração, escolha destravada, "de sempre" com conferência). Detalhe em AGENTS.md
+(27/08). Relatório do testador:
+[docs/testes-rodada-2-2026-08-27.md](docs/testes-rodada-2-2026-08-27.md).
+
+**Ação do dono (URGENTE): decidir o destino de 2 cobranças reais paradas** —
+`#YAQHF8` (R$20,62, pago 25/08, nunca comprado) e `#QTNL2T` (R$80,93, pago 23/08,
+`retailer_preparing` desde a compra): entregar ou estornar no /ops / Pagar.me.
+
 ## 26/08/2026 — 20 sessões ao vivo: piloto amplo bloqueado
 
 Vinte sessões adversariais no WhatsApp, sem pagamento, deram média auditada **4,30/10**

@@ -96,6 +96,8 @@ test("pedido mínimo oferece TROCA DE LOJA e o aceite fecha na hora (2º testado
   const wall = await c.send("pagar");
   assert.match(wall, /pedido mínimo/i, wall.slice(0, 300));
   assert.match(wall, /outra loja SEM pedido mínimo|Trocar de loja/i, `sem oferta de troca: ${wall.slice(0, 400)}`);
+  // 27/08 S1/S2/S5: a troca nunca é silenciosa — a oferta nomeia cada antigo → novo.
+  assert.match(wall, /→/, `oferta sem os pares antigo→novo: ${wall.slice(0, 400)}`);
   // "quanto falta?" responde o mínimo — nunca vira busca (o testador caiu no beco).
   const gap = await c.send("quanto falta?");
   assert.match(gap, /faltam/i, gap.slice(0, 300));
@@ -103,6 +105,7 @@ test("pedido mínimo oferece TROCA DE LOJA e o aceite fecha na hora (2º testado
   // Aceite: troca pra loja sem mínimo e fecha com total NA HORA.
   const done = await c.send("minswap:yes");
   assert.match(done, /Troquei de loja/i, done.slice(0, 300));
+  assert.match(done, /→/, `aceite sem os pares antigo→novo: ${done.slice(0, 400)}`);
   assert.match(done, /Preço garantido|Como prefere pagar/i, `não fechou: ${done.slice(0, 400)}`);
   // A cesta virou PEDIDO no fechamento: a prova da troca mora nos itens do pedido.
   const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId }, orderBy: { createdAt: "desc" } });

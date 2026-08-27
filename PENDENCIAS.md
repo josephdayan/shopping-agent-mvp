@@ -1,6 +1,27 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-26._
+_Última atualização: 2026-08-27._
+
+> **27/08 — pós-rodada 2: pendências novas.**
+> (a) **DECISÃO DO DONO, urgente:** estornar ou entregar `#YAQHF8` (R$20,62 no cartão,
+> pago 25/08, nunca comprado) e `#QTNL2T` (R$80,93, `retailer_preparing` desde 23/08).
+> (b) **SLA do caminho manual**: `awaiting_operator_quote` não tem watchdog — sem
+> operador agindo, o cliente fica no silêncio (S11); criar re-aviso automático +
+> re-alerta do operador após N min (a copy já ficou honesta: "assim que conferir").
+> (c) **Anúncio ML com frete grátis não oferece a opção rápida** (S12 — a mochila só
+> tinha uma modalidade porque `shipping_options` não roda para freeShipping).
+> (d) **Item indisponível numa loja aborta o pedido inteiro** pro manual (S11): abortar
+> só a loja falhada e oferecer substituto do item.
+> (e) **dsp-548880**: name ≠ productUrl na vitrine Drogaria SP + investigar mídia 500
+> (Meta 131053) da S20 no runtime log.
+> (f) **Fronteira de sessão no telefone de teste**: pedidos vivos de rodadas anteriores
+> contaminam a leitura dos testadores — considerar comando de reset/flag de teste antes
+> da rodada 3 (a v2 do protocolo já pede cancelamento no fim de cada sessão).
+> (g) Continuam de 26/08: P1.8 cesta-como-conjunto (S18 fragmentou R$53,70 de frete em
+> R$71 de produto — é o baseline do ciclo), P1.10 contrato do fallback manual, P2.1
+> latência fria (ticket ML), P2.5 pergunta antes de item vago/caro (o teto de autopick
+> caiu 300→100 como mitigação), golden semântico (S18 somou "óleo" → Óleo Corporal:
+> caso novo pro golden — óleo sozinho = óleo de cozinha).
 
 > **26/08 — protocolo v2 pronto pra rodada de validação.** Roteiro fixo de 20 sessões
 > (8 sondas de regressão + 12 de chão novo, auditoria item a item obrigatória) em

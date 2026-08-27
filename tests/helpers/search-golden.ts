@@ -176,5 +176,14 @@ export const GOLDEN_CASES: GoldenCase[] = [
     distinctOptions: true,
     deterministic: false,
     note: "empate semântico: IA deve preferir parede/cabo como 1ª opção"
+  },
+  {
+    name: "óleo sozinho é óleo de COZINHA, nunca corporal/capilar (27/08 S18)",
+    query: "oleo",
+    message: "arroz, feijão, café, leite, banana, óleo e sabão em pó",
+    top1Include: /soja|girassol|milho|canola|cozinha|algodao|oleo de/,
+    allExclude: /corporal|corpo|capilar|cabelo|massagem|paixao/,
+    deterministic: false,
+    note: "rodada 27/08 S18: 'óleo' na lista semanal virou Óleo Corporal Paixão R$14,84 — contexto de mercado define o sentido"
   }
 ];

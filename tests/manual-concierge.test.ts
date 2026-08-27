@@ -1229,3 +1229,107 @@ test("cliente que some na escolha de frete: 1h+ cancela o pedido e não vira lis
   const ctx = await ctxOf(c.userId);
   assert.equal(ctx.deliveryOrderId, undefined);
 });
+
+// ---------- rodada 2 de testes externos (27/08) — regressões ----------
+
+// Pedido pago ANTIGO no mesmo telefone (resíduo real do piloto: #YAQHF8/#QTNL2T).
+async function seedOldPaidOrder(c: { userId: string; phone: string }, daysAgo = 2) {
+  const when = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+  return prisma.deliveryOrder.create({
+    data: {
+      userId: c.userId,
+      phone: c.phone,
+      status: "paid",
+      paidAt: when,
+      createdAt: when,
+      total: 44.97,
+      deliveryFee: 6.9,
+      itemsSubtotal: 34.62,
+      // qty 3 pra CIMA do pedido mínimo do Carrefour pinado no registry de teste — o
+      // "sim" do S16 fecha em vez de esbarrar na parede do mínimo.
+      items: [{ sku: "seed-1", name: "Escova de Dente Colgate Classic", qty: 3, unitPrice: 11.54, lineTotal: 34.62, storeKey: "carrefour" }],
+      cep: "01310-100",
+      deliveryAddress: TEST_ADDRESS
+    }
+  });
+}
+
+test("27/08 S17: 'cadê meu pedido?' logo após cancelar fala do CANCELADO — pedido pago antigo vem rotulado", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await seedOldPaidOrder(c);
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  const canceled = await c.send("mudei de ideia, cancela");
+  assert.match(canceled, /Cancelado\. Nada foi cobrado/i, canceled.slice(0, 250));
+  const status = await c.send("cadê meu pedido?");
+  // Primeiro o cancelado de agora — nunca "confirmado, separando os itens" seco.
+  assert.match(status, /cancelado — nada foi cobrado/i, `não reconheceu o cancelamento: ${status.slice(0, 350)}`);
+  // O pago antigo aparece como SEGUNDO assunto, com data e conteúdo.
+  assert.match(status, /pago e em andamento/i, status.slice(0, 350));
+  assert.match(status, /Escova de Dente/i, `pedido antigo sem itens: ${status.slice(0, 350)}`);
+  const again = await c.send("cancelar");
+  assert.match(again, /em aberto pra cancelar/i, again.slice(0, 250));
+  assert.match(again, /Escova de Dente/i, `nothingToCancel sem itens do pago: ${again.slice(0, 350)}`);
+});
+
+test("27/08 S2: 'cadê meu pedido de ontem?' no meio da escolha responde o pedido PASSADO com data", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await seedOldPaidOrder(c, 1);
+  await c.send("quero coca cola");
+  const status = await c.send("cadê meu pedido de ontem?");
+  assert.doesNotMatch(status, /Nenhum item fechado|Falta você escolher/i, `ignorou o 'ontem': ${status.slice(0, 300)}`);
+  assert.match(status, /confirmado, separando/i, status.slice(0, 300));
+  assert.match(status, /de ontem/i, `sem âncora de data: ${status.slice(0, 300)}`);
+  assert.match(status, /Escova de Dente/i, status.slice(0, 300));
+});
+
+test("27/08 S16: 'o de sempre' confere antes de fechar — 'sim' fecha", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await seedOldPaidOrder(c, 3);
+  const confirm = await c.send("qero o mesmo de sempre");
+  assert.match(confirm, /Achei sua última compra/i, confirm.slice(0, 300));
+  assert.match(confirm, /Escova de Dente/i, confirm.slice(0, 300));
+  assert.match(confirm, /É isso\?/i, `foi direto pro fechamento sem conferir: ${confirm.slice(0, 300)}`);
+  assert.doesNotMatch(confirm, /Como prefere pagar/i, `pulou direto pro pagamento: ${confirm.slice(0, 300)}`);
+  process.env.LIA_INSTANT_QUOTE = "false";
+  try {
+    const closed = await c.send("sim");
+    assert.match(closed, /Recebi seu pedido|Total/i, `o "sim" não fechou: ${closed.slice(0, 300)}`);
+  } finally {
+    delete process.env.LIA_INSTANT_QUOTE;
+  }
+});
+
+test("27/08 S12/S14: ajustes depois do total nunca caem no menu de pagamento", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  // S12: entrega mais rápida sem alternativa guardada → resposta honesta.
+  const faster = await c.send("quero a entrega mais rápida");
+  assert.doesNotMatch(faster, /Como prefere pagar/i, `empurrou pagamento: ${faster.slice(0, 300)}`);
+  assert.match(faster, /uma modalidade|não consigo acelerar/i, faster.slice(0, 300));
+  // S14: "mais barato" reabre a última escolha ordenada por preço (promessa do haggle).
+  const haggle = await c.send("faz por 10?");
+  assert.match(haggle, /mais barato/i, haggle.slice(0, 300));
+  const cheaper = await c.send("mais barato");
+  assert.doesNotMatch(cheaper, /Como prefere pagar/i, `empurrou pagamento de novo: ${cheaper.slice(0, 300)}`);
+  assert.match(cheaper, /mais baratas de|qual item você quer mais barato/i, cheaper.slice(0, 300));
+});
+
+test("27/08 S1: botão 'Escolher esse' de conversa antiga é nomeado como botão velho", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  // Fora de escolha ativa.
+  const solto = await c.send("optsku:sku-de-outra-conversa");
+  assert.match(solto, /botão é de uma conversa antiga/i, solto.slice(0, 300));
+  // Dentro de uma escolha ativa, com sku que não pertence a ela.
+  await c.send("quero coca cola");
+  const dentro = await c.send("optsku:sku-que-nao-existe-aqui");
+  assert.match(dentro, /botão é de uma conversa antiga/i, dentro.slice(0, 300));
+  assert.doesNotMatch(dentro, /Não peguei qual você quer/i, dentro.slice(0, 300));
+});

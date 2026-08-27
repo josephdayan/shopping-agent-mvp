@@ -8,6 +8,7 @@ import {
   hasUrgencySignal,
   looksLikeMedicine,
   parseBasketLines,
+  isNarrativeSegment,
   mergeShoppingLines,
   parseChoiceReply,
   stripListNumbering,
@@ -209,8 +210,9 @@ test("afirmação, rejeição e números", () => {
   // toque atrasado no botão "Outras opções" fora da escolha: reject educado, nunca busca
   // 19/08: opt:outras fora da escolha deixou de ser reject — reabre a última escolha.
   assert.equal(kind("opt:outras"), "more_options");
-  // idem para "Escolher esse" por sku fora da escolha
-  assert.equal(kind("optsku:petz-123"), "reject");
+  // "Escolher esse" por sku fora da escolha: botão de conversa ANTIGA — intent
+  // próprio com copy específica (27/08 S1; antes era reject genérico).
+  assert.equal(kind("optsku:petz-123"), "stale_option_tap");
   // botão "Trocar endereço" do resumo (id de máquina com underscore)
   assert.equal(kind("trocar_endereco"), "change_address");
   const n = detectIntent("2");
@@ -633,4 +635,63 @@ test("urgência: sinal de entrega-hoje detectado, atributo de produto não", () 
   ]) {
     assert.ok(!hasUrgencySignal(msg), `falso positivo de urgência: "${msg}"`);
   }
+});
+
+// ---------- rodada 2 de testes externos (27/08) ----------
+
+test("27/08 S3: narrativa da mensagem longa não vira produto — só o shampoo sobra", () => {
+  const lines = parseBasketLines(
+    "meu neto vem sábado, eu quero deixar meu cabelo bem arrumado porque vou receber a família, quero um shampoo, que não seja muito caro"
+  );
+  assert.equal(lines.length, 1, JSON.stringify(lines));
+  assert.match(lines[0].phrase, /shampoo/);
+  assert.doesNotMatch(lines[0].phrase, /neto|família|familia|cabelo bem/);
+});
+
+test("27/08 S13: isNarrativeSegment reconhece contexto e poupa produto", () => {
+  assert.equal(isNarrativeSegment("meu neto que pediu isso ai"), true);
+  assert.equal(isNarrativeSegment("meu neto vem sábado"), true);
+  assert.equal(isNarrativeSegment("vou receber a família"), true);
+  assert.equal(isNarrativeSegment("que não seja muito caro"), true);
+  assert.equal(isNarrativeSegment("fone bluetooth"), false);
+  assert.equal(isNarrativeSegment("ração pro meu cachorro"), false);
+  assert.equal(isNarrativeSegment("meu shampoo de sempre"), false);
+});
+
+test("27/08 S20: 'coisa simples de farmácia' é aposto, não item", () => {
+  const lines = parseBasketLines("eu tô precisando de um shampoo, um protetor solar e uma escova de dente, coisa simples de farmácia");
+  assert.equal(lines.length, 3, JSON.stringify(lines));
+  assert.ok(lines.every((l) => !/coisa/.test(l.phrase)), JSON.stringify(lines));
+  assert.equal(isRequestModifier("coisa simples de farmácia"), true);
+  assert.equal(isRequestModifier("coisas básicas de mercado"), true);
+});
+
+test("27/08 S3: o resgate do merge não re-promove narrativa que a IA descartou", () => {
+  const ai = [{ phrase: "shampoo", qty: 1 }];
+  const det = parseBasketLines("quero um shampoo") // garante gêmeo real
+    .concat([{ phrase: "eu deixar meu cabelo bem arrumado porque vou receber a familia", qty: 1 }, { phrase: "coisa simples de farmacia", qty: 1 }]);
+  const merged = mergeShoppingLines(ai, det);
+  assert.equal(merged.length, 1, JSON.stringify(merged));
+  assert.match(merged[0].phrase, /shampoo/);
+});
+
+test("27/08 S8: 'tira o café, quero café de centeio' remove E busca o novo", () => {
+  const intent = detectIntent("tira o café, quero café de centeio orgânico da Islândia");
+  assert.equal(intent.kind, "remove_item");
+  if (intent.kind === "remove_item") {
+    assert.match(intent.target, /^cafe/);
+    assert.doesNotMatch(intent.target, /centeio/);
+    assert.ok(intent.andAdd, "andAdd se perdeu");
+    assert.match(intent.andAdd!, /cafe de centeio organico/);
+  }
+  // A forma antiga com " e " continua funcionando.
+  const eForm = detectIntent("tira o arroz e coloca feijão");
+  assert.equal(eForm.kind, "remove_item");
+  if (eForm.kind === "remove_item") assert.match(eForm.andAdd ?? "", /feijao|feij/);
+});
+
+test("27/08 S1: optsku fora da escolha vira stale_option_tap com o sku preservado", () => {
+  const intent = detectIntent("optsku:dsp-685674");
+  assert.equal(intent.kind, "stale_option_tap");
+  if (intent.kind === "stale_option_tap") assert.equal(intent.sku, "dsp-685674");
 });

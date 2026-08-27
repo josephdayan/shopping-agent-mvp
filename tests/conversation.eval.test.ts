@@ -443,10 +443,15 @@ test("status: responde o estado real do pedido", async (t) => {
   assert.match(status, /separando/);
 });
 
-test("pedido anterior: 'repete o de sempre' remonta a última cesta", async (t) => {
+test("pedido anterior: 'repete o de sempre' confere a cesta e o 'sim' fecha", async (t) => {
   if (!dbOk) return t.skip();
+  // 27/08 S16: retomada automática com dinheiro na mesa exige um "sim" — o resumo da
+  // última compra vem primeiro, e só a confirmação fecha o total.
   const again = await payer.send("repete o de sempre");
-  assert.match(again, /Seu pedido|mínimo/);
+  assert.match(again, /Achei sua última compra/i);
+  assert.match(again, /É isso\?/i);
+  const closed = await payer.send("sim");
+  assert.match(closed, /Seu pedido|mínimo|Total/i);
   await payer.send("limpar carrinho");
 });
 

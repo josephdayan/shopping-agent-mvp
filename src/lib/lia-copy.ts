@@ -299,6 +299,20 @@ export function noMoreOptions(query: string): string {
   return `Essas são todas as opções de *${query}* que eu tenho. Responde o número, ou *pula* pra seguir sem esse item.`;
 }
 
+// Segundo "outras" com o pool esgotado NÃO repete a mesma frase (rodada 27/08 S4):
+// convida a reformular, que é a única saída real.
+export function noMoreOptionsAskReword(query: string): string {
+  return `De *${query}* eu já mostrei tudo que tenho. Me diz uma marca, tipo ou faixa de preço que eu procuro diferente.`;
+}
+
+// Toque num botão "Escolher esse" de uma mensagem antiga: dizer ISSO, em vez do
+// genérico "não peguei qual você quer" (rodada 27/08 S1).
+export function staleButtonTap(hasCurrentOptions: boolean): string {
+  return hasCurrentOptions
+    ? "Esse botão é de uma conversa antiga 🙂 As opções de agora são essas:"
+    : "Esse botão é de uma conversa antiga 🙂 Me diz o que você precisa que eu busco de novo.";
+}
+
 export function refineNoResult(refined: string): string {
   return `Não achei *${refined}*. O que eu tenho é isso:`;
 }
@@ -324,7 +338,7 @@ export function autoAddedNote(items: string[]): string {
 }
 
 export function notFoundNote(items: string[]): string {
-  return `_Não achei: ${items.join(", ")}. Me fala de outro jeito que eu procuro._`;
+  return `_Não achei: ${items.map(shortNotFoundLabel).join(", ")}. Me fala de outro jeito que eu procuro._`;
 }
 
 // ---------- quote / summary ----------
@@ -592,8 +606,13 @@ export function orderStatusLine(input: {
   etaMinutes?: number;
   itemsPreview?: string;
   paid?: boolean;
+  // "de ontem" / "de sábado" / "de 23/08" — pedido antigo SEMPRE chega ancorado no
+  // tempo e no conteúdo (rodada 27/08: "#YAQHF8 confirmado" sem data nem itens fez o
+  // testador achar que o pedido cancelado dele tinha virado pago).
+  dateLabel?: string;
 }): string {
-  const id = `*#${input.shortId}*`;
+  const meta = [input.dateLabel, input.itemsPreview].filter(Boolean).join(" — ");
+  const id = meta ? `*#${input.shortId}* (${meta})` : `*#${input.shortId}*`;
   switch (input.status) {
     case "awaiting_operator_quote":
       return `${id} com o total sendo fechado. Mando com a entrega pra você aprovar — nada é cobrado antes.`;
@@ -660,15 +679,45 @@ export function cancelTooLate(): string {
   return NO_CANCEL_AFTER_PAYMENT;
 }
 
-export function nothingToCancel(paidActiveShortId?: string): string {
-  if (paidActiveShortId) {
-    return `Não tem compra em aberto pra cancelar. Seu pedido *#${paidActiveShortId}* está pago e em andamento — esse segue normal; qualquer coisa nele, me fala o número.`;
+export function nothingToCancel(paidActive?: { shortId: string; dateLabel?: string; itemsPreview?: string }): string {
+  if (paidActive) {
+    const meta = [paidActive.dateLabel, paidActive.itemsPreview].filter(Boolean).join(" — ");
+    return `Não tem compra em aberto pra cancelar. Seu pedido *#${paidActive.shortId}*${meta ? ` (${meta})` : ""} está pago e em andamento — esse segue normal; qualquer coisa nele, me fala o número.`;
   }
   return "Não tem nada em aberto pra cancelar. Me diz o que você precisa que eu monto a lista.";
 }
 
+// "cadê meu pedido?" logo depois de um cancelamento fala PRIMEIRO do cancelado; se
+// existir um pedido pago antigo, ele entra como segunda linha, com data e conteúdo.
+export function alsoActiveOrder(input: { shortId: string; dateLabel?: string; itemsPreview?: string }): string {
+  const meta = [input.dateLabel, input.itemsPreview].filter(Boolean).join(" — ");
+  return `Além desse, seu pedido *#${input.shortId}*${meta ? ` (${meta})` : ""} está pago e em andamento — esse segue normal.`;
+}
+
 export function noPreviousOrder(): string {
   return "Você ainda não tem um pedido pra repetir. Me diz o que quer que eu monto.";
+}
+
+// "o de sempre": a cesta antiga volta pra CONFERÊNCIA, nunca direto pro pagamento —
+// retomada automática com dinheiro na mesa precisa de um "sim" (rodada 27/08 S16).
+export function repeatOrderConfirm(items: { qty: number; name: string; total: number }[]): string {
+  return [
+    "Achei sua última compra:",
+    ...items.map((i) => `• ${i.qty}x ${i.name} — ${brl(i.total)}`),
+    "É isso? Responde *sim* que eu fecho o total — ou me diz o que mudar."
+  ].join("\n");
+}
+
+// "quero a entrega mais rápida" quando o pedido só tem UMA modalidade: resposta
+// honesta, nunca o menu de pagamento (rodada 27/08 S12).
+export function onlyOneShippingMode(): string {
+  return "Essa entrega só tem uma modalidade — não consigo acelerar esse pedido. Quer fechar assim, ou prefere que eu procure o item em outra loja?";
+}
+
+// "mais barato" depois do total, sem escolha reabrível: pede o alvo em vez de repetir
+// o menu de pagamento (27/08 S14 — a própria Lia tinha prometido esse comando).
+export function cheaperAfterQuoteNeedsItem(): string {
+  return "Me diz qual item você quer mais barato que eu procuro outra opção — ou fecha assim respondendo *pix* ou *cartão*.";
 }
 
 export function dispatched(trackingUrl?: string | null): string {
@@ -730,7 +779,9 @@ export function totalAwaitingPayment(total: number): string {
 // "quanto deu tudo?" no meio das escolhas/coleta → parcial honesto, sem inventar frete.
 export function partialTotal(items: CopyBasketItem[], produtos: number, pendingCount: number): string {
   if (!items.length) {
-    return "Nenhum item fechado ainda. Responde as opções que eu mando o total.";
+    // Responde também o "quando chega": total, entrega E prazo saem juntos após a escolha
+    // (rodada 27/08 S2: "quanto ficou? e quando chega?" ouvia só "nenhum item fechado").
+    return "Falta você escolher as opções que eu mandei — aí eu fecho total, entrega e prazo de uma vez.";
   }
   const lines = items.map((item) => `• ${item.qty}x ${item.name} — ${brl(item.displayLineTotal)}`);
   const tail =
@@ -748,11 +799,20 @@ export function partialTotal(items: CopyBasketItem[], produtos: number, pendingC
 // Recusa quando OUTRAS linhas da mesma mensagem acharam opções (elas vêm logo abaixo):
 // escopo explícito pra não ler como recusa do pedido inteiro (teste real 19/08: "sacola
 // eu não consigo trazer" seguido de cards de mochila pareceu contradição).
+// Frase longa demais pra ecoar como "item": corta em ~6 palavras. Ecoar a narrativa
+// inteira do cliente como não-achado ("meu neto vem sábado, eu deixar meu cabelo...")
+// soa quebrado e constrangedor (rodada 27/08 S3).
+function shortNotFoundLabel(phrase: string): string {
+  const words = phrase.trim().split(/\s+/);
+  return words.length > 6 ? `${words.slice(0, 5).join(" ")}…` : phrase;
+}
+
 export function itemsNotAvailableWithOptions(items: string[]): string {
-  if (items.length === 1) {
-    return `*${items[0]}* eu não achei — o resto achei e tá logo abaixo.`;
+  const labels = items.map(shortNotFoundLabel);
+  if (labels.length === 1) {
+    return `*${labels[0]}* eu não achei — o resto achei e tá logo abaixo.`;
   }
-  return [`Esses eu não achei: ${items.join(", ")}.`, "O resto achei e tá logo abaixo."].join("\n");
+  return [`Esses eu não achei: ${labels.join(", ")}.`, "O resto achei e tá logo abaixo."].join("\n");
 }
 
 // Lista encaminhada resolvida de uma vez: resumo da cesta montada, item a item com o
@@ -785,25 +845,36 @@ export function swapKeptOriginal(kept: string, wanted: string): string {
   return `*${wanted}* eu não achei em nenhuma loja. Mantive *${kept}* na cesta — me diz outra marca ou versão que eu troco.`;
 }
 
-export function minimumSwapOffer(input: { newTotal: number; delta: number; storeLabel: string }): string {
-  const diff = input.delta > 0.009 ? ` (${brl(input.delta)} a mais)` : input.delta < -0.009 ? ` (${brl(Math.abs(input.delta))} a menos)` : " (mesmo valor)";
-  return [
-    `Consigo esses itens em outra loja SEM pedido mínimo, por ${brl(input.newTotal)}${diff}.`,
-    `Toca em *Trocar de loja* — ou manda mais um item de ${input.storeLabel} que eu fecho como está.`
-  ].join("\n");
+// Cada troca é nomeada ANTES e DEPOIS do aceite: na rodada 27/08, 4 sessões viram o
+// café/leite mudar de marca e gramatura em silêncio e só descobriram auditando linha
+// a linha — troca de produto sem anúncio é quebra de confiança.
+export type SwapPair = { fromName: string; fromPrice: number; toName: string; toPrice: number };
+
+function swapPairLines(pairs: SwapPair[]): string[] {
+  return pairs.map((p) => `• ${p.fromName} (${brl(p.fromPrice)}) → *${p.toName}* (${brl(p.toPrice)})`);
 }
 
-export function minimumSwapDone(): string {
-  return "Troquei de loja — sem pedido mínimo. Fechando seu total:";
+export function minimumSwapOffer(input: { newTotal: number; delta: number; storeLabel: string; pairs?: SwapPair[] }): string {
+  const diff = input.delta > 0.009 ? ` (${brl(input.delta)} a mais)` : input.delta < -0.009 ? ` (${brl(Math.abs(input.delta))} a menos)` : " (mesmo valor)";
+  const out = [`Consigo em outra loja SEM pedido mínimo, por ${brl(input.newTotal)}${diff}. Fica assim:`];
+  if (input.pairs?.length) out.push(...swapPairLines(input.pairs));
+  out.push(`Toca em *Trocar de loja* — ou manda mais um item de ${input.storeLabel} que eu fecho como está.`);
+  return out.join("\n");
+}
+
+export function minimumSwapDone(pairs?: SwapPair[]): string {
+  if (!pairs?.length) return "Troquei de loja — sem pedido mínimo. Fechando seu total:";
+  return ["Troquei de loja — sem pedido mínimo:", ...swapPairLines(pairs), "Fechando seu total:"].join("\n");
 }
 
 export function itemsNotAvailable(items: string[]): string {
-  if (items.length === 1) {
-    return `*${items[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;
+  const labels = items.map(shortNotFoundLabel);
+  if (labels.length === 1) {
+    return `*${labels[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;
   }
   return [
     "Esses eu não consigo trazer hoje:",
-    ...items.map((i) => `• ${i}`),
+    ...labels.map((i) => `• ${i}`),
     "",
     "Me diz outras marcas ou versões que eu tento de novo."
   ].join("\n");
@@ -820,18 +891,30 @@ export function conciergeAskWhatYouWant(): string {
 }
 
 // "só isso" no concierge: o pedido foi para a fila de cotação do operador. A Lia NÃO
-// mostra um total inventado — ela volta com o valor real depois de cotar.
-export function operatorQuoteRequested(items: string[]): string {
+// mostra um total inventado — ela volta com o valor real depois de cotar. A promessa
+// é honesta ("assim que conferir", não "em instantes"): a conferência é humana e já
+// demorou horas em teste real (rodada 27/08 S11). Quando dá pra saber QUAL item
+// travou, ele é nomeado.
+export function operatorQuoteRequested(items: string[], holdupItem?: string): string {
   const list = items.length ? `\n${items.map((i) => `• ${i}`).join("\n")}\n` : " ";
+  const reason = holdupItem
+    ? `O item *${holdupItem}* precisa de conferência na loja, então o total não sai automático.`
+    : "Um dos itens precisa de conferência na loja, então o total não sai automático.";
   return [
     `Recebi seu pedido:${list}`,
-    "Um dos itens precisa de conferência na loja, então o total não sai automático. Mando preço, entrega e prazo em instantes pra você aprovar — nada é cobrado antes disso."
+    `${reason} Mando preço, entrega e prazo assim que conferir — nada é cobrado antes disso.`
   ].join("\n");
 }
 
 // Cliente escreve enquanto o operador ainda está cotando.
 export function operatorQuoteStillWorking(): string {
-  return "Fechando seu total. Mando com entrega e prazo em instantes.";
+  return "Ainda estou fechando seu total — te aviso assim que sair, com entrega e prazo.";
+}
+
+// Cotação que sai enquanto a conversa já está em OUTRO assunto: rotulada com o pedido
+// dela, pra não parecer a cesta atual (27/08 S19).
+export function quoteForOrderLabel(shortId: string, dateLabel?: string): string {
+  return `Saiu o total do seu pedido *#${shortId}*${dateLabel ? ` (${dateLabel})` : ""} — esse é separado do que a gente está vendo agora:`;
 }
 
 // Corpo da confirmação pós-escolha quando os BOTÕES (Pagar / Adicionar mais itens /
@@ -852,7 +935,10 @@ export function addedToPendingQuote(items: string[]): string {
 // produtos e o frete), com prazo/entrega e endereço. É o gêmeo de `summary` para o
 // fluxo concierge, onde não há preço por linha.
 export function manualQuoteSummary(input: {
-  items: { qty: number; name: string }[];
+  // lineTotal (preço de exibição da linha) presente = a linha sai COM preço. Sem ele o
+  // cliente somava preços velhos de mensagens anteriores e achava o subtotal "errado"
+  // (rodada 27/08 S1: linhas antigas R$10,31 vs Produtos R$12,53 após troca de loja).
+  items: { qty: number; name: string; lineTotal?: number }[];
   produtos: number;
   frete: number;
   deliveryPromise?: string;
@@ -864,7 +950,9 @@ export function manualQuoteSummary(input: {
   // não instrução de digitar) — a dica de texto some porque o botão fala por ela.
   addressButton?: boolean;
 }): string {
-  const lines = input.items.map((item) => `• ${item.qty}x ${item.name}`);
+  const lines = input.items.map((item) =>
+    item.lineTotal != null ? `• ${item.qty}x ${item.name} — ${brl(item.lineTotal)}` : `• ${item.qty}x ${item.name}`
+  );
   const out = [
     "🛒 *Seu pedido:*",
     ...lines,

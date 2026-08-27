@@ -55,6 +55,7 @@ import {
   asksRunningTotal,
   looksLikeMedicine,
   hasUrgencySignal,
+  isNarrativeSegment,
   isRequestModifier,
   sharesProductNoun,
   stripMedicineNegation,
@@ -230,6 +231,9 @@ type PendingChoice = {
   // Escolha REABERTA ("Outras opções" depois de já ter escolhido): o novo pick
   // SUBSTITUI esta linha da cesta em vez de somar uma segunda mochila.
   replaceSku?: string;
+  // O pool + a re-busca relaxada já esgotaram: o próximo "outras" pede reformulação
+  // em vez de repetir "essas são todas" (27/08 S4).
+  exhausted?: boolean;
 };
 
 // A frete option the customer can pick between (cheapest vs fastest courier).
@@ -311,6 +315,13 @@ type DeliveryContext = {
   // Cliente sinalizou que quer receber HOJE/agora ("urgente", "pra hoje"). Vira a tag
   // "⚡ URGENTE" no pedido do /ops — o operador escolhe o canal por isso na cotação.
   urgent?: boolean;
+  // Último pedido cancelado NESTA conversa: "cadê meu pedido?" logo depois de um
+  // cancelamento fala primeiro dele — sem isso, o fallback achava um pedido pago de
+  // dias atrás e o cliente entendia que o cancelado tinha "virado pago" (27/08 S17).
+  lastCanceledOrderId?: string;
+  // "o de sempre" restaurou a cesta antiga e está esperando o "sim" de conferência
+  // antes de fechar o total (27/08 S16).
+  repeatConfirm?: boolean;
 };
 
 const ACTIVE_ORDER_STATUSES = ACTIVE_DELIVERY_ORDER_STATUSES;
@@ -1149,6 +1160,26 @@ function minimumOrderText(ctx: DeliveryContext, store: StoreConnector): string {
 // Só o mínimo de UMA loja trava e os itens têm equivalente FORTE em loja sem mínimo →
 // oferece a troca com botão. Melhor caminho pro cliente pequeno (teste real 24/08:
 // pasta de R$6 presa no mínimo de R$30 do mercado; o cliente desistiu).
+// Pares antigo→novo (com preço de exibição da LINHA) da troca de loja, para a copy
+// anunciar cada substituição — a troca nunca é silenciosa (27/08 S1/S2/S5/S18).
+function swapPairsForCopy(
+  originals: BasketItem[],
+  replacements: { fromSku: string; qty: number; option: ChoiceOption }[]
+): copy.SwapPair[] {
+  const pairs: copy.SwapPair[] = [];
+  for (const r of replacements) {
+    const from = originals.find((i) => i.sku === r.fromSku);
+    if (!from) continue;
+    pairs.push({
+      fromName: from.name,
+      fromPrice: Math.round(display(from.unitPrice) * from.qty * 100) / 100,
+      toName: r.option.name,
+      toPrice: Math.round(display(r.option.unitPrice) * r.qty * 100) / 100
+    });
+  }
+  return pairs;
+}
+
 async function offerMinimumSwap(
   phone: string,
   convoId: string,
@@ -1216,7 +1247,12 @@ async function offerMinimumSwap(
   const newDisplay = replacements.reduce((sum, r) => sum + Math.round(display(r.option.unitPrice) * r.qty * 100) / 100, 0);
   ctx.minSwap = { fromStoreKey: store.key, replacements };
   await writeCtx(convoId, ctx);
-  const body = copy.minimumSwapOffer({ newTotal: newDisplay, delta: Math.round((newDisplay - oldDisplay) * 100) / 100, storeLabel: store.label });
+  const body = copy.minimumSwapOffer({
+    newTotal: newDisplay,
+    delta: Math.round((newDisplay - oldDisplay) * 100) / 100,
+    storeLabel: store.label,
+    pairs: swapPairsForCopy(stuck, replacements)
+  });
   try {
     const interactive = await whatsappAdapter.sendStoreSwapOffer(phone, body);
     if (interactive) return true;
@@ -1257,6 +1293,10 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     // Recarrega a conversa DEPOIS do lock: o turno anterior pode ter gravado contexto
     // enquanto esperávamos — processar sobre o snapshot velho recriaria a corrida.
     const freshConvo = (await prisma.conversation.findUnique({ where: { id: convo.id } })) ?? convo;
+    // O snapshot do CAS também precisa avançar para o contexto recarregado; senão a
+    // primeira escrita deste turno colide com a do turno que terminou enquanto
+    // esperávamos o lock e morre em falso TurnSupersededError — cliente sem resposta.
+    rememberCtxSnapshot(convo.id, freshConvo.context ?? null);
     await handleDeliveryTurn(phone, text, user, freshConvo, inboundMessageId);
   } finally {
     await releaseTurnLock(convo.id, lockToken);
@@ -1639,12 +1679,16 @@ async function handleDeliveryTurn(
       return;
     }
     const keep = basket.filter((b) => !swap.replacements.some((r) => r.fromSku === b.sku));
+    // O que saiu e o que entrou, com preço: a troca nunca é silenciosa (27/08 S1/S2/S5
+    // — café e leite mudaram de marca/gramatura sem anúncio e o cliente só descobriu
+    // auditando linha a linha).
+    const swappedOut = basket.filter((b) => swap.replacements.some((r) => r.fromSku === b.sku));
     const added = swap.replacements.map((r) =>
       choiceToBasketItem(r.option, r.qty, r.option.storeKey ? getStore(r.option.storeKey) : orderStore(ctx))
     );
     ctx.basket = mergeBaskets(keep, added);
     await writeCtx(convo.id, ctx);
-    await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.minimumSwapDone());
+    await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.minimumSwapDone(swapPairsForCopy(swappedOut, swap.replacements)));
     return;
   }
 
@@ -1813,6 +1857,62 @@ async function handleDeliveryTurn(
         ctx.deliveryAddressVerified = false;
         // segue para a seção de CEP abaixo, que salva e pede o endereço completo
       } else {
+        // Ajuste DEPOIS do total nunca cai no menu de pagamento (27/08 S12/S14): o
+        // cliente ainda está decidindo, e empurrar "pix ou cartão" quebra a confiança
+        // no exato momento do dinheiro.
+        const nq = normalizeMsg(text);
+        const wantsFasterDelivery =
+          /\b(mais rapid\w*|rapidinho|chega\w* antes|acelera\w*)\b/.test(nq) ||
+          (/\brapid|urgent/.test(nq) && /\b(entrega|frete|chega|receber|envio)\b/.test(nq));
+        if (wantsFasterDelivery) {
+          const alt = ctx.freightChoice?.orderId === order.id ? ctx.freightChoice : undefined;
+          const altFresh = alt?.quotedAt ? Date.now() - alt.quotedAt <= quoteAbandonTtlMs() : false;
+          if (alt && altFresh) {
+            // O anúncio tinha a opção rápida e ela ficou guardada: republica a cotação
+            // com o frete/data rápidos — mesmo caminho da escolha original.
+            const reclaimed = await prisma.deliveryOrder.updateMany({
+              where: { id: order.id, status: "awaiting_quote_confirmation" },
+              data: {
+                status: AWAITING_OPERATOR_QUOTE_STATUS,
+                notes: appendOrderNote(
+                  order.notes,
+                  `🚚 Cliente trocou para a entrega mais rápida (frete ${copy.brl(alt.rapido.fee)}${alt.rapido.estimate ? `, chega até ${alt.rapido.estimate}` : ""}) — comprar ESSA opção de envio no anúncio.`
+                )
+              }
+            });
+            if (reclaimed.count) {
+              await publishInstantQuote(order.id, {
+                itemsSubtotal: alt.itemsSubtotal,
+                serviceFee: alt.serviceFee,
+                fee: alt.rapido.fee,
+                estimate: alt.rapido.estimate,
+                stores: alt.stores
+              });
+              return;
+            }
+          }
+          await reply(phone, copy.onlyOneShippingMode());
+          return;
+        }
+        // "mais barato" com o total na mesa: é a promessa do haggleAnswer — reabre a
+        // última escolha ordenada por preço em vez de repetir o menu de pagamento.
+        if (intent.kind === "more_options" && ctx.lastChoice) {
+          await cancelPendingRetailerQuote(order.id);
+          const restored: DeliveryContext = {
+            ...addressOnlyCtx(ctx, user.cep),
+            basket: ((order.items as unknown as BasketItem[]) ?? []).filter((item) => item.unitPrice > 0),
+            lastChoice: ctx.lastChoice,
+            step: "collecting"
+          };
+          if (await reopenLastChoice(phone, convo.id, restored, intent.cheaper === false ? "more" : "cheaper")) return;
+          await writeCtx(convo.id, restored);
+          await reply(phone, copy.cheaperAfterQuoteNeedsItem());
+          return;
+        }
+        if (intent.kind === "more_options") {
+          await reply(phone, copy.cheaperAfterQuoteNeedsItem());
+          return;
+        }
         await reply(phone, copy.paymentMethod(order.total, cardTotal(order.total)));
         return;
       }
@@ -2222,15 +2322,25 @@ async function handleDeliveryTurn(
       await reply(phone, copy.noPreviousOrder());
       return;
     }
+    // A cesta antiga volta pra CONFERÊNCIA — retomada automática com dinheiro na mesa
+    // precisa de um "sim" antes do total/pagamento (27/08 S16).
     const next: DeliveryContext = {
       flow: "delivery",
       basket: items,
       notFound: [],
+      step: "collecting",
+      repeatConfirm: true,
       cep: user.cep ?? ctx.cep,
       deliveryAddress: ctx.deliveryAddress,
       deliveryAddressVerified: ctx.deliveryAddressVerified
     };
-    await continueAfterBasket(phone, convo.id, next, user.cep);
+    await writeCtx(convo.id, next);
+    await reply(
+      phone,
+      copy.repeatOrderConfirm(
+        items.map((i) => ({ qty: i.qty, name: i.name, total: Math.round(display(i.unitPrice) * i.qty * 100) / 100 }))
+      )
+    );
     return;
   }
 
@@ -2255,6 +2365,12 @@ async function handleDeliveryTurn(
     return;
   }
 
+  // ---- botão "Escolher esse" de uma mensagem antiga, fora de escolha ativa ----
+  if (intent.kind === "stale_option_tap") {
+    await reply(phone, copy.staleButtonTap(false));
+    return;
+  }
+
   // ---- "não era isso" outside the choice step ----
   if (intent.kind === "reject") {
     await reply(phone, copy.rejectedAskAgain());
@@ -2263,6 +2379,12 @@ async function handleDeliveryTurn(
 
   // ---- a lone "show!"/"perfeito" with nothing to confirm — friendly ack, not a search ----
   if (intent.kind === "affirm") {
+    // "sim" confirmando a recompra do "o de sempre": fecha o total (27/08 S16).
+    if (ctx.repeatConfirm && ctx.basket?.length) {
+      ctx.repeatConfirm = undefined;
+      await continueAfterBasket(phone, convo.id, ctx, user.cep);
+      return;
+    }
     await reply(phone, copy.thanks());
     return;
   }
@@ -2328,7 +2450,77 @@ async function handleDeliveryTurn(
 
 // ---------- intent handlers ----------
 
+// "de ontem" / "de sábado" / "de 23/08" — âncora temporal pra qualquer pedido que não
+// seja de hoje. Sem ela, um pedido pago antigo aparecia como se fosse o atual (27/08).
+function orderDateLabel(createdAt: Date): string | undefined {
+  const tz = "America/Sao_Paulo";
+  const dayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" });
+  const today = dayFmt.format(new Date());
+  const that = dayFmt.format(createdAt);
+  if (that === today) return undefined;
+  const diffDays = Math.round((Date.parse(today) - Date.parse(that)) / 86_400_000);
+  if (diffDays === 1) return "de ontem";
+  if (diffDays > 1 && diffDays < 7) {
+    const weekday = new Intl.DateTimeFormat("pt-BR", { timeZone: tz, weekday: "long" }).format(createdAt);
+    return `de ${weekday.replace("-feira", "")}`;
+  }
+  const dm = new Intl.DateTimeFormat("pt-BR", { timeZone: tz, day: "2-digit", month: "2-digit" }).format(createdAt);
+  return `de ${dm}`;
+}
+
+// "1x Escova de Dente Colgate…, +2" — o conteúdo do pedido citado, curto.
+function orderItemsPreview(itemsJson: unknown): string | undefined {
+  if (!Array.isArray(itemsJson) || !itemsJson.length) return undefined;
+  const items = itemsJson as { qty?: number; name?: string }[];
+  const parts = items.slice(0, 2).map((i) => {
+    const name = (i.name ?? "item").trim();
+    return `${i.qty ?? 1}x ${name.length > 40 ? `${name.slice(0, 38)}…` : name}`;
+  });
+  const extra = items.length - 2;
+  return parts.join(", ") + (extra > 0 ? ` +${extra}` : "");
+}
+
+// "pedido de ONTEM/anterior": o cliente está perguntando do passado — a cesta em
+// montagem e o pedido da conversa atual não são o assunto (27/08 S2).
+function asksPastOrder(text?: string): boolean {
+  if (!text) return false;
+  return /\b(ontem|anteontem|semana passada|outro dia|(da |a )?ultima vez|anterior|(meu |o )?outro pedido|de antes)\b/.test(
+    normalizeMsg(text)
+  );
+}
+
 async function handleStatus(phone: string, userId: string, ctx: DeliveryContext, text?: string) {
+  if (asksPastOrder(text)) {
+    const past =
+      (await prisma.deliveryOrder.findFirst({
+        where: {
+          userId,
+          status: { in: ACTIVE_ORDER_STATUSES },
+          ...(ctx.deliveryOrderId ? { id: { not: ctx.deliveryOrderId } } : {})
+        },
+        orderBy: { createdAt: "desc" }
+      })) ??
+      (await prisma.deliveryOrder.findFirst({
+        where: { userId, ...(ctx.deliveryOrderId ? { id: { not: ctx.deliveryOrderId } } : {}) },
+        orderBy: { createdAt: "desc" }
+      }));
+    if (past) {
+      await reply(
+        phone,
+        copy.orderStatusLine({
+          shortId: past.id.slice(-6).toUpperCase(),
+          status: past.status,
+          trackingUrl: past.courierTrackingUrl,
+          paid: Boolean(past.paidAt),
+          dateLabel: orderDateLabel(past.createdAt),
+          itemsPreview: orderItemsPreview(past.items)
+        })
+      );
+      return;
+    }
+    await reply(phone, copy.noOrdersYet());
+    return;
+  }
   // A COMPRA EM ANDAMENTO na conversa vence qualquer pedido velho: "quanto ficou? e
   // quando chega?" com a cesta na mesa é pergunta sobre a compra ATUAL — no teste de
   // 26/08 (sessão 5), a resposta foi um pedido cancelado de outro dia + "estorno a
@@ -2341,6 +2533,35 @@ async function handleStatus(phone: string, userId: string, ctx: DeliveryContext,
     const produtos = Math.round(items.reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
     await reply(phone, copy.partialTotal(items, produtos, ctx.pending?.length ?? 0));
     return;
+  }
+  // Cancelou agora há pouco e perguntou "cadê meu pedido?": o assunto é o CANCELADO.
+  // Sem essa memória, o fallback achava um pedido pago antigo e respondia como se o
+  // cancelamento nunca tivesse acontecido (27/08 S17: "#YAQHF8 confirmado..." depois
+  // de "Cancelado. Nada foi cobrado." leu como pedido ressuscitado).
+  if (!ctxOrder && ctx.lastCanceledOrderId) {
+    const canceled = await prisma.deliveryOrder.findUnique({ where: { id: ctx.lastCanceledOrderId } });
+    if (canceled && canceled.status === "canceled") {
+      let msg = copy.orderStatusLine({
+        shortId: canceled.id.slice(-6).toUpperCase(),
+        status: canceled.status,
+        paid: Boolean(canceled.paidAt),
+        dateLabel: orderDateLabel(canceled.createdAt),
+        itemsPreview: orderItemsPreview(canceled.items)
+      });
+      const paidActive = await prisma.deliveryOrder.findFirst({
+        where: { userId, status: { in: ACTIVE_ORDER_STATUSES }, paidAt: { not: null } },
+        orderBy: { createdAt: "desc" }
+      });
+      if (paidActive) {
+        msg += `\n\n${copy.alsoActiveOrder({
+          shortId: paidActive.id.slice(-6).toUpperCase(),
+          dateLabel: orderDateLabel(paidActive.createdAt),
+          itemsPreview: orderItemsPreview(paidActive.items)
+        })}`;
+      }
+      await reply(phone, msg);
+      return;
+    }
   }
   // Pedido ATIVO vence pedido morto: status nunca responde um cancelado antigo quando
   // existe um vivo — e um cancelado só entra quando é tudo que o cliente tem.
@@ -2366,7 +2587,9 @@ async function handleStatus(phone: string, userId: string, ctx: DeliveryContext,
       shortId: order.id.slice(-6).toUpperCase(),
       status: order.status,
       trackingUrl: order.courierTrackingUrl,
-      paid: Boolean(order.paidAt)
+      paid: Boolean(order.paidAt),
+      dateLabel: orderDateLabel(order.createdAt),
+      itemsPreview: orderItemsPreview(order.items)
     })
   );
 }
@@ -2389,7 +2612,14 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
     } else {
       await reply(
         phone,
-        copy.orderStatusLine({ shortId: order.id.slice(-6).toUpperCase(), status: order.status, trackingUrl: order.courierTrackingUrl })
+        copy.orderStatusLine({
+          shortId: order.id.slice(-6).toUpperCase(),
+          status: order.status,
+          trackingUrl: order.courierTrackingUrl,
+          paid: Boolean(order.paidAt),
+          dateLabel: orderDateLabel(order.createdAt),
+          itemsPreview: orderItemsPreview(order.items)
+        })
       );
     }
     return;
@@ -2467,24 +2697,38 @@ async function handleCancel(
       where: { userId, status: { in: ACTIVE_ORDER_STATUSES }, paidAt: { not: null } },
       orderBy: { createdAt: "desc" }
     });
-    await reply(phone, copy.nothingToCancel(paidActive ? paidActive.id.slice(-6).toUpperCase() : undefined));
+    await reply(
+      phone,
+      copy.nothingToCancel(
+        paidActive
+          ? {
+              shortId: paidActive.id.slice(-6).toUpperCase(),
+              dateLabel: orderDateLabel(paidActive.createdAt),
+              itemsPreview: orderItemsPreview(paidActive.items)
+            }
+          : undefined
+      )
+    );
     return;
   }
+  // O contexto limpo LEMBRA qual pedido acabou de ser cancelado: "cadê meu pedido?"
+  // em seguida fala dele primeiro (27/08 S17).
+  const canceledCtx = { ...addressOnlyCtx(ctx, userCep), lastCanceledOrderId: order.id };
   if (order.status === AWAITING_OPERATOR_QUOTE_STATUS) {
     await prisma.deliveryOrder.update({ where: { id: order.id }, data: { status: "canceled" } });
-    await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
+    await writeCtx(convoId, canceledCtx);
     await reply(phone, copy.canceledUnpaid());
     return;
   }
   if (order.status === "awaiting_supplier_validation" || order.status === "awaiting_quote_confirmation") {
     await cancelPendingRetailerQuote(order.id);
-    await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
+    await writeCtx(convoId, canceledCtx);
     await reply(phone, copy.canceledUnpaid());
     return;
   }
   if (order.status === "awaiting_payment") {
     await prisma.deliveryOrder.update({ where: { id: order.id }, data: { status: "canceled" } });
-    await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
+    await writeCtx(convoId, canceledCtx);
     await reply(phone, copy.canceledUnpaid());
     return;
   }
@@ -2806,8 +3050,9 @@ async function handleChoosing(
       current.options.find((o) => o.sku.toLowerCase() === wanted) ??
       current.shownOptions?.find((o) => o.sku.toLowerCase() === wanted);
     if (!tapped) {
-      // Card de outro item/conversa antiga: não chuta produto — reapresenta a escolha atual.
-      await reply(phone, copy.choiceNotUnderstood());
+      // Card de outro item/conversa antiga: não chuta produto — DIZ que o botão é
+      // velho (27/08 S1: "não peguei qual você quer" confundia) e reapresenta a atual.
+      await reply(phone, copy.staleButtonTap(true));
       await sendChoices(phone, current);
       return;
     }
@@ -2909,6 +3154,40 @@ async function handleChoosing(
   if (catalogAttrs) {
     await refineOptions(phone, convoId, ctx, store, catalogAttrs);
     return;
+  }
+
+  // Narrativa no meio da escolha ("meu neto que pediu isso aí"): nunca vira item
+  // "anotado" nem busca — re-pergunta a escolha (27/08 S13).
+  if (intent.kind === "free_text" && isNarrativeSegment(text)) {
+    await reply(phone, copy.choiceNotUnderstood());
+    await sendChoices(phone, current);
+    return;
+  }
+
+  // Marca/atributo que NÃO existe no pool atual ("Philco" escolhendo fone bluetooth):
+  // antes de tratar como item novo, tenta a BUSCA COMBINADA "fone bluetooth philco".
+  // Só refina se o resultado cobre a query combinada E o token novo — "leite" no meio
+  // da escolha de coca continua caindo no fluxo de item novo (27/08 S6: "Philco"
+  // virava linha nova "anotada" e a escolha não avançava).
+  const addedTokens = queryTokens(normalizeMsg(text));
+  if (intent.kind === "free_text" && !isQuestion(text) && addedTokens.length === 1) {
+    const combinedQuery = `${current.baseQuery ?? current.query} ${normalizeMsg(text)}`.replace(/\s+/g, " ").trim();
+    const combined = await gatherCrossStoreCandidates(combinedQuery, 12);
+    const strong = combined
+      .map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }))
+      .filter((o) => conciergeMatchIsStrong(combinedQuery, o) && conciergeMatchIsStrong(normalizeMsg(text), o));
+    if (strong.length) {
+      current.baseQuery = current.baseQuery ?? current.query;
+      current.query = combinedQuery;
+      const opts = diversifyOptions(combinedQuery, strong, 3);
+      const remembered = new Set((current.shownOptions ?? current.options).map((o) => o.sku));
+      current.shownOptions = [...(current.shownOptions ?? current.options), ...opts.filter((o) => !remembered.has(o.sku))];
+      current.options = opts;
+      current.shownSkus = [...new Set([...(current.shownSkus ?? []), ...opts.map((o) => o.sku)])];
+      await writeCtx(convoId, ctx);
+      await sendChoices(phone, current, copy.narrowedChoices(current.query));
+      return;
+    }
   }
 
   // Not a selection — maybe they're adding MORE items mid-choice ("ah, e 2 leites").
@@ -3096,7 +3375,36 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
     if (!next.some((n) => n.sku === option.sku)) next.push(option);
   }
   if (!next.length) {
-    await reply(phone, copy.noMoreOptions(p.query));
+    // Pool esgotado: UMA re-busca relaxada antes de desistir — sem o token menos
+    // importante da query, forçando a cauda longa (ML). Repetir a mesma frase a cada
+    // "outras" era beco sem saída (27/08 S4: duas vezes a frase idêntica).
+    if (!p.exhausted) {
+      p.exhausted = true;
+      const tokens = queryTokens(p.baseQuery ?? p.query);
+      const relaxedQuery = tokens.length > 2 ? tokens.slice(0, -1).join(" ") : (p.baseQuery ?? p.query);
+      try {
+        const rescue = (await gatherCrossStoreCandidates(relaxedQuery, 12, 4, { forceLongTail: true }))
+          .map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }))
+          .filter((o) => conciergeMatchIsStrong(relaxedQuery, o) && !shown.includes(o.sku))
+          .filter((o) => p.cap == null || display(o.unitPrice) <= p.cap);
+        const rescueNext = diversifyOptions(relaxedQuery, rescue, 3);
+        if (rescueNext.length) {
+          const rememberedRescue = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
+          p.shownOptions = [...(p.shownOptions ?? p.options), ...rescueNext.filter((o) => !rememberedRescue.has(o.sku))];
+          p.options = rescueNext;
+          p.shownSkus = [...shown, ...rescueNext.map((o) => o.sku)];
+          await writeCtx(convoId, ctx);
+          await sendChoices(phone, p, copy.moreChoicesHeader(relaxedQuery));
+          return;
+        }
+      } catch (error) {
+        console.warn("[choice:more-options:rescue-failed]", error instanceof Error ? error.message : error);
+      }
+      await writeCtx(convoId, ctx);
+      await reply(phone, copy.noMoreOptions(p.query));
+      return;
+    }
+    await reply(phone, copy.noMoreOptionsAskReword(p.query));
     return;
   }
   // Memória de TUDO que já foi mostrado: o toque num card antigo resolve por sku.
@@ -3515,9 +3823,9 @@ async function handleConciergeRequest(
   // "troca"/"tira"/"opções de X" continuam valendo item a item.
   if (pending.length >= 2 && bulkList) {
     // Item CARO não entra sozinho na cesta (26/08: peça de trator de R$2.556 foi
-    // auto-escolhida de uma descrição vaga). Acima do teto, a linha vira escolha com
-    // cards — o resto da lista continua automático.
-    const autopickMax = Number(process.env.LIA_BULK_AUTOPICK_MAX ?? 300);
+    // auto-escolhida de uma descrição vaga; 27/08 S5: furadeira de R$142 idem). Acima
+    // do teto, a linha vira escolha com cards — o resto da lista continua automático.
+    const autopickMax = Number(process.env.LIA_BULK_AUTOPICK_MAX ?? 100);
     const auto = pending.filter((choice) => display(choice.options[0].unitPrice) <= autopickMax);
     const confirm = pending.filter((choice) => display(choice.options[0].unitPrice) > autopickMax);
     const added: BasketItem[] = [];
@@ -4040,16 +4348,28 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
       }
     });
   }
-  await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: AWAITING_OPERATOR_QUOTE_STATUS });
+  // `lastChoice` sobrevive à publicação: é ela que permite "mais barato" DEPOIS do
+  // total reabrir a escolha (27/08 S14).
+  await writeCtx(convoId, {
+    ...addressOnlyCtx(ctx),
+    deliveryOrderId: order.id,
+    step: AWAITING_OPERATOR_QUOTE_STATUS,
+    ...(ctx.lastChoice ? { lastChoice: ctx.lastChoice } : {})
+  });
 
+  let holdupItem: string | undefined;
   if (instantQuoteEligible((ctx.basket ?? []) as InstantQuoteItem[], CONCIERGE_STORE_KEY) && ctx.cep) {
-    // `true` = a Lia resolveu o turno (publicou a cotação OU parou na escolha de entrega).
-    const handled = await tryPublishInstantQuote(order.id, phone, ctx, prefix, convoId);
-    if (handled) return;
+    // `handled` = a Lia resolveu o turno (publicou a cotação OU parou na escolha de entrega).
+    const outcome = await tryPublishInstantQuote(order.id, phone, ctx, prefix, convoId);
+    if (outcome.handled) return;
+    holdupItem = outcome.holdup;
   }
 
   if (prefix) await reply(phone, prefix);
-  await replyQuoteNotice(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
+  await replyQuoteNotice(
+    phone,
+    existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames, holdupItem)
+  );
   const alert = copy.operatorQuoteAlert(order.id.slice(-6).toUpperCase(), itemNames);
   await notifyOperator(ctx.urgent ? `⚡ URGENTE — ${alert}` : alert, phone);
 }
@@ -4064,14 +4384,21 @@ async function tryPublishInstantQuote(
   ctx: DeliveryContext,
   prefix?: string,
   convoId?: string
-): Promise<boolean> {
+): Promise<{ handled: boolean; holdup?: string }> {
   try {
     const items = ctx.basket ?? [];
+    // Quais itens travaram a cotação automática — vai pra nota do /ops E pra copy do
+    // cliente (27/08 S11: "um dos itens precisa de conferência" sem dizer qual).
+    const namesOf = (storeKey: string) =>
+      items
+        .filter((i) => i.storeKey === storeKey)
+        .map((i) => i.name)
+        .join(", ");
     // A entrega é pelo SITE de cada loja (o operador compra lá e a loja entrega), então
     // o frete é a política de cada site — por loja, com frete grátis por limiar.
     const seeded = computeStoreFreights(items as InstantQuoteItem[]);
     let freights = seeded.freights;
-    if (!freights.length) return false;
+    if (!freights.length) return { handled: false };
     // Mercado Livre: o frete é do ANÚNCIO + CEP, não da loja — a consulta pública do
     // próprio ML (`shipping_options`, ~0,35s) devolve custo e data reais. É o que
     // substitui a tarifa padrão de R$18 (reprovada pelo dono, 17/08). Sem número real, o
@@ -4087,12 +4414,18 @@ async function tryPublishInstantQuote(
       const outcome = await mlBasketFreight(mlItems, ctx.cep!);
       console.log("[instant-quote:ml-freight]", outcome.kind, outcome.kind === "ok" ? outcome.fee : outcome.reason);
       if (outcome.kind === "manual") {
+        const holdup = namesOf(freights[i].storeKey);
         const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
         await prisma.deliveryOrder.update({
           where: { id: orderId },
-          data: { notes: appendOrderNote(current?.notes ?? null, `⚠️ Cotação instantânea abortada: Mercado Livre — ${outcome.reason}.`) }
+          data: {
+            notes: appendOrderNote(
+              current?.notes ?? null,
+              `⚠️ Cotação instantânea abortada: Mercado Livre — ${outcome.reason}. Itens: ${holdup}.`
+            )
+          }
         });
-        return false;
+        return { handled: false, holdup };
       }
       freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       mlEstimate = outcome.estimate;
@@ -4122,19 +4455,22 @@ async function tryPublishInstantQuote(
         // ninguém sabia o motivo sem o runtime log de 1h).
         if (outcome.kind === "no-delivery" || outcome.kind === "item-unavailable") {
           const why = outcome.kind === "no-delivery" ? "site não entrega no CEP" : "item indisponível no site";
+          const holdup = namesOf(freights[i].storeKey);
           const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
           await prisma.deliveryOrder.update({
             where: { id: orderId },
-            data: { notes: appendOrderNote(current?.notes ?? null, `⚠️ Cotação instantânea abortada: ${freights[i].storeKey} — ${why}.`) }
+            data: {
+              notes: appendOrderNote(current?.notes ?? null, `⚠️ Cotação instantânea abortada: ${freights[i].storeKey} — ${why}. Itens: ${holdup}.`)
+            }
           });
-          return false;
+          return { handled: false, holdup };
         }
         if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       }
     }
     const totalFee = Math.round(freights.reduce((sum, f) => sum + f.fee, 0) * 100) / 100;
     const itemsSubtotal = roundMoney(items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0));
-    if (itemsSubtotal <= 0) return false;
+    if (itemsSubtotal <= 0) return { handled: false };
     const breakdown = freightBreakdownLabel(freights);
     await prisma.deliveryOrder.update({
       where: { id: orderId },
@@ -4157,9 +4493,15 @@ async function tryPublishInstantQuote(
         barato: { fee: totalFee, estimate: mlEstimate },
         rapido: { fee: rapidoFee, estimate: mlFaster.estimate }
       };
-      await writeCtx(convoId, { ...addressOnlyCtx(ctx), deliveryOrderId: orderId, step: "choosing_freight", freightChoice: choice });
+      await writeCtx(convoId, {
+        ...addressOnlyCtx(ctx),
+        deliveryOrderId: orderId,
+        step: "choosing_freight",
+        freightChoice: choice,
+        ...(ctx.lastChoice ? { lastChoice: ctx.lastChoice } : {})
+      });
       await sendFreightChoice(phone, choice);
-      return true;
+      return { handled: true };
     }
 
     await publishInstantQuote(orderId, {
@@ -4169,10 +4511,14 @@ async function tryPublishInstantQuote(
       estimate: mlEstimate,
       stores: freights.length
     });
-    return true;
+    return { handled: true };
   } catch (error) {
+    // Turno superado (outro turno/cancelar escreveu por baixo) NÃO cai no caminho
+    // manual: ele pararia de escrever mas continuaria FALANDO — resumo velho no meio
+    // da conversa nova (27/08 S19). Propaga e morre em silêncio no webhook.
+    if (error instanceof TurnSupersededError) throw error;
     console.warn("[instant-quote:fallback-manual]", error instanceof Error ? error.message : error);
-    return false;
+    return { handled: false };
   }
 }
 
@@ -4600,16 +4946,59 @@ export async function opsPublishManualQuote(
     throw new Error("O pedido mudou de estado antes da cotação sair (cancelado ou já cotado). Recarregue o /ops.");
   }
 
+  // Se a conversa JÁ seguiu em frente (outro pedido/outra cesta), o contexto novo vale
+  // mais: a cotação sai rotulada com o pedido a que pertence e NADA é sobrescrito —
+  // sem isso, uma cotação atrasada apagava a compra em andamento e despejava o resumo
+  // de outra sessão no meio do papo (27/08 S19, resumo do PS5 na sessão do arroz).
+  let conversationMovedOn = false;
   if (order.conversationId) {
     const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
     if (convo) {
       const ctx = readCtx(convo.context);
-      await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_quote_confirmation" });
+      conversationMovedOn =
+        (Boolean(ctx.deliveryOrderId) && ctx.deliveryOrderId !== order.id) ||
+        ((ctx.basket?.length ?? 0) > 0 && ctx.deliveryOrderId !== order.id) ||
+        ((ctx.pending?.length ?? 0) > 0 && ctx.deliveryOrderId !== order.id);
+      if (!conversationMovedOn) {
+        try {
+          await writeCtx(convo.id, {
+            ...addressOnlyCtx(ctx),
+            deliveryOrderId: order.id,
+            step: "awaiting_quote_confirmation",
+            // "mais barato"/"entrega mais rápida" DEPOIS do total dependem dos dois
+            // (27/08 S12/S14).
+            ...(ctx.lastChoice ? { lastChoice: ctx.lastChoice } : {}),
+            ...(ctx.freightChoice?.orderId === order.id ? { freightChoice: ctx.freightChoice } : {})
+          });
+        } catch (error) {
+          // Turno superado no meio da publicação: o pedido volta pra fila e o turno
+          // morre SEM falar — quem escreveu por baixo é o dono da conversa agora.
+          if (error instanceof TurnSupersededError) {
+            await prisma.deliveryOrder.updateMany({
+              where: { id: order.id, status: "awaiting_quote_confirmation" },
+              data: {
+                status: AWAITING_OPERATOR_QUOTE_STATUS,
+                quoteExpiresAt: null,
+                notes: appendOrderNote(order.notes, "⚠️ Cotação revertida: a conversa avançou durante a publicação. Cote de novo pelo /ops.")
+              }
+            });
+          }
+          throw error;
+        }
+      }
     }
   }
 
   const summaryInput = {
-    items: items.map((item) => ({ qty: item.qty, name: item.name })),
+    // Preço por linha SEMPRE que a margem exata por item existe: sem ele, o cliente
+    // somava os preços de mensagens antigas e achava o subtotal "errado" (27/08 S1).
+    items: items.map((item) => ({
+      qty: item.qty,
+      name: item.name,
+      ...(input.serviceFee != null && item.unitPrice > 0
+        ? { lineTotal: roundMoney(display(item.unitPrice) * item.qty) }
+        : {})
+    })),
     produtos,
     frete: deliveryFee,
     deliveryPromise: input.deliveryPromise,
@@ -4624,6 +5013,14 @@ export async function opsPublishManualQuote(
   // acessórios ("pix"/"cartão" por texto funcionam), e reverter aqui desalinharia
   // pedido e conversa — o cliente pode já ter tocado num botão e o pedido avançado.
   try {
+    // Conversa em outro assunto: o resumo chega ROTULADO com o pedido a que pertence,
+    // pra nunca parecer a cesta da compra atual (27/08 S19).
+    if (conversationMovedOn) {
+      await reply(
+        order.phone,
+        copy.quoteForOrderLabel(order.id.slice(-6).toUpperCase(), orderDateLabel(order.createdAt))
+      );
+    }
     // Resumo com botão "Trocar endereço" (dono, 11/08). Corpo interativo tem teto de 1024
     // chars na Meta — resumo comprido (ou canal sem botão) cai no texto com a dica escrita.
     let summarySent = false;
