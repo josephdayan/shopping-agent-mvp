@@ -591,6 +591,7 @@ export function orderStatusLine(input: {
   trackingUrl?: string | null;
   etaMinutes?: number;
   itemsPreview?: string;
+  paid?: boolean;
 }): string {
   const id = `*#${input.shortId}*`;
   switch (input.status) {
@@ -628,7 +629,11 @@ export function orderStatusLine(input: {
     case "refunded":
       return `${id} cancelado e estornado ✅`;
     case "canceled":
-      return `${id} cancelado. Se pagou, o estorno está a caminho. Quer pedir de novo?`;
+      // Estado financeiro REAL, nunca "se pagou" (teste 26/08: 6 sessões ouviram
+      // "estorno a caminho" de pedidos que nunca foram pagos).
+      return input.paid
+        ? `${id} cancelado. O estorno do que você pagou está sendo tratado — te aviso quando concluir.`
+        : `${id} cancelado — nada foi cobrado. Quer pedir de novo?`;
     default:
       return `${id} em andamento. Qualquer novidade eu aviso.`;
   }
@@ -655,8 +660,11 @@ export function cancelTooLate(): string {
   return NO_CANCEL_AFTER_PAYMENT;
 }
 
-export function nothingToCancel(): string {
-  return "Não tem pedido em andamento pra cancelar. Quer começar um novo?";
+export function nothingToCancel(paidActiveShortId?: string): string {
+  if (paidActiveShortId) {
+    return `Não tem compra em aberto pra cancelar. Seu pedido *#${paidActiveShortId}* está pago e em andamento — esse segue normal; qualquer coisa nele, me fala o número.`;
+  }
+  return "Não tem nada em aberto pra cancelar. Me diz o que você precisa que eu monto a lista.";
 }
 
 export function noPreviousOrder(): string {
@@ -760,6 +768,23 @@ export function bulkBasketAdded(items: { qty: number; name: string; total: numbe
 // Só o pedido mínimo de UMA loja trava o fechamento e os MESMOS itens existem em loja
 // sem mínimo: oferecer a troca é a saída (teste real 24/08: a pasta de R$6 ficou presa
 // no mínimo de R$30 o dia inteiro e o cliente desistiu).
+// Regateio (26/08): resposta única e honesta — sem negociar, sem virar busca.
+// Vários cartões salvos: os outros vêm numerados; responder o número troca o cartão
+// da cobrança (26/08 — antes só o mais recente era oferecido).
+export function savedCardMoreOptions(cards: { index: number; last4: string; brand?: string }[]): string {
+  const lines = cards.map((c) => `*${c.index})* ${c.brand ? `${c.brand} ` : ""}•••• ${c.last4}`);
+  return [`Também tenho salvo:`, ...lines, `Responde o número pra pagar com outro cartão.`].join("\n");
+}
+
+export function haggleAnswer(): string {
+  return "O preço é o que está aí — não tenho desconto pra dar. Quer que eu mostre opções mais baratas? Responde *mais barato*.";
+}
+
+// Troca sem substituto à altura: NADA muda (26/08 P1.7 — a cesta ficava mutilada).
+export function swapKeptOriginal(kept: string, wanted: string): string {
+  return `*${wanted}* eu não achei em nenhuma loja. Mantive *${kept}* na cesta — me diz outra marca ou versão que eu troco.`;
+}
+
 export function minimumSwapOffer(input: { newTotal: number; delta: number; storeLabel: string }): string {
   const diff = input.delta > 0.009 ? ` (${brl(input.delta)} a mais)` : input.delta < -0.009 ? ` (${brl(Math.abs(input.delta))} a menos)` : " (mesmo valor)";
   return [

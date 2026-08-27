@@ -32,6 +32,7 @@ import {
   createCardAttempt,
   expireOpenPaymentAttempts,
   findPendingSavedCardAttempt,
+  listOneClickCredentials,
   getConfirmedPaymentAttempt,
   getOneClickCredential
 } from "@/lib/payments/whatsapp-pay";
@@ -115,9 +116,16 @@ function manualConciergeEnabled(): boolean {
 // Caso real (11/08): um pedido ficou 2 DIAS em awaiting_operator_quote porque nada avisava
 // o operador de que havia trabalho no /ops — pro cliente, o "te mando em instantes" virou
 // nunca. Best-effort: falha de envio jamais afeta o fluxo do cliente.
-async function notifyOperator(text: string) {
+async function notifyOperator(text: string, customerPhone?: string) {
   const to = process.env.LIA_OPERATOR_PHONE?.trim();
   if (!to) return;
+  // Operador comprando/testando como cliente: o alerta interno iria pro MESMO chat da
+  // conversa (26/08 P1.9 — "[operador] Pedido #..." apareceu no meio do teste). Loga e
+  // suprime; o /ops continua sendo a fonte.
+  if (customerPhone && normalizePhone(to) === normalizePhone(customerPhone)) {
+    console.warn("[operator-alert:suppressed-self]", text.slice(0, 80));
+    return;
+  }
   try {
     await whatsappAdapter.sendMessage(to, text);
   } catch (error) {
@@ -216,6 +224,9 @@ type PendingChoice = {
   // antes do "outras"/refino — continuar escolhendo exatamente o produto daquele card.
   // Caso real 11/08: ids posicionais fizeram "Escolher esse" confirmar outro produto.
   shownOptions?: ChoiceOption[];
+  // Teto de preço pedido na linha ("até R$50") — TODO caminho que repõe opções
+  // (paginação, refino, mais-baratas, resgate) re-filtra por ele.
+  cap?: number;
   // Escolha REABERTA ("Outras opções" depois de já ter escolhido): o novo pick
   // SUBSTITUI esta linha da cesta em vez de somar uma segunda mochila.
   replaceSku?: string;
@@ -243,7 +254,7 @@ type DeliveryContext = {
     | "awaiting_payment";
   basket?: BasketItem[];
   pending?: PendingChoice[];
-  quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string };
+  quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string; misses?: number };
   courierOptions?: CourierOption[];
   // Cotação instantânea PARADA esperando o cliente escolher a entrega (barata/lenta ×
   // rápida/cara do anúncio). Nada é cobrado antes do toque; os dois totais já estão
@@ -303,6 +314,17 @@ type DeliveryContext = {
 };
 
 const ACTIVE_ORDER_STATUSES = ACTIVE_DELIVERY_ORDER_STATUSES;
+// Pedidos que "cancelar" pode mirar por FALLBACK (sem referência explícita nem vínculo
+// com a conversa): só os que ainda não têm dinheiro do cliente. Pedido PAGO nunca é
+// alvo implícito — teste de 26/08: o "cancelar" de encerramento acertava o pedido pago
+// real do operador e respondia "depois do pagamento não dá", confundindo tudo.
+const CANCELABLE_FALLBACK_STATUSES = [
+  "awaiting_operator_quote",
+  "awaiting_supplier_validation",
+  "awaiting_quote_confirmation",
+  "payment_issuing",
+  "awaiting_payment"
+];
 
 // ---------- helpers: conversation + money + text ----------
 
@@ -336,6 +358,7 @@ async function getOrCreateConvo(phone: string, name?: string) {
       create: { id: `conv_${user.id}`, userId: user.id, status: "active", currentStep: "delivery" }
     });
   }
+  rememberCtxSnapshot(convo.id, convo.context ?? null);
   return { user, convo };
 }
 
@@ -347,12 +370,60 @@ function readCtx(context: string | null): DeliveryContext {
   }
 }
 
+// ---------- escrita CONDICIONAL de contexto (teste 26/08, P0.1) ----------
+// O pior achado do teste em massa: um turno LENTO (busca fria de 45-120s) terminava
+// depois de um "cancelar" e regravava a cesta antiga por cima do contexto limpo — a
+// sessão 19 chegou ao Pix com 6 itens da sessão 18 cancelada. A cura estrutural:
+// cada turno guarda o SNAPSHOT do contexto que leu (AsyncLocalStorage, sem mudar a
+// assinatura dos 88 call sites) e toda escrita é compare-and-swap contra ele. Outra
+// escrita no meio (cancelar, outro turno) → o CAS falha → TurnSupersededError → o
+// turno velho PARA, sem gravar e sem falar mais nada.
+import { AsyncLocalStorage } from "node:async_hooks";
+
+export class TurnSupersededError extends Error {
+  constructor(convoId: string) {
+    super(`turno superado: contexto de ${convoId} mudou por baixo`);
+    this.name = "TurnSupersededError";
+  }
+}
+
+const turnStore = new AsyncLocalStorage<Map<string, string | null>>();
+
+export function runTurnScoped<T>(fn: () => Promise<T>): Promise<T> {
+  return turnStore.run(new Map(), fn);
+}
+
+function rememberCtxSnapshot(convoId: string, context: string | null) {
+  turnStore.getStore()?.set(convoId, context);
+}
+
 async function writeCtx(convoId: string, ctx: DeliveryContext) {
+  const next = JSON.stringify(ctx);
+  const snapshots = turnStore.getStore();
+  const snapshot = snapshots?.get(convoId);
+  if (snapshots && snapshot !== undefined) {
+    const updated = await prisma.conversation.updateMany({
+      where: { id: convoId, context: snapshot },
+      data: { context: next, currentStep: ctx.step ?? "delivery" }
+    });
+    if (!updated.count) {
+      console.warn("[ctx:cas-conflict]", convoId, "— turno antigo descartado sem gravar");
+      throw new TurnSupersededError(convoId);
+    }
+    snapshots.set(convoId, next);
+    return;
+  }
+  // Fora de um turno (scripts, /ops, testes diretos): escrita simples de sempre.
   await prisma.conversation.update({
     where: { id: convoId },
-    data: { context: JSON.stringify(ctx), currentStep: ctx.step ?? "delivery" }
+    data: { context: next, currentStep: ctx.step ?? "delivery" }
   });
+  snapshots?.set(convoId, next);
 }
+
+// Costura de TESTE do CAS: os E2E provam que uma escrita de turno velho morre depois
+// de outra escrita (cancelar) — sem exportar nada disso pro fluxo normal.
+export const __casTestSeams = { writeCtx, rememberCtxSnapshot };
 
 // A fresh context that keeps only the saved address (used after clear/cancel/paid).
 function addressOnlyCtx(ctx: DeliveryContext, userCep?: string | null): DeliveryContext {
@@ -423,7 +494,10 @@ async function lastActivityAt(convoId: string, exceptMessageId?: string): Promis
 // travado; quem espera demais entra assim mesmo (o webhook não pode pendurar — melhor
 // a corrida rara de antes do que mensagem sem resposta).
 const TURN_LOCK_TTL_MS = 60_000;
-const TURN_LOCK_MAX_WAIT_MS = 15_000;
+// 26/08: 15s de espera + barge era a PORTA do P0.1 — busca fria dura 45-120s e a
+// mensagem seguinte furava a trava no meio. Agora espera até 120s (o watchdog avisa o
+// cliente) e o barge residual é inofensivo: o CAS do contexto mata a escrita perdedora.
+const TURN_LOCK_MAX_WAIT_MS = Number(process.env.LIA_TURN_LOCK_MAX_WAIT_MS ?? 120_000);
 
 async function acquireTurnLock(convoId: string): Promise<string> {
   const token = `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
@@ -636,7 +710,9 @@ async function buildChoices(
       // Recompra: o que o cliente já escolheu antes sobe (sort estável preserva o
       // ranking de relevância entre itens sem histórico).
       candidates.sort((a, b) => (preferredSkus?.get(b.item.sku) ?? 0) - (preferredSkus?.get(a.item.sku) ?? 0));
-      return { line: { ...line, phrase: searchPhrase }, candidates };
+      // O teto viaja NA LINHA: paginação, refino e o resgate do ML re-filtram por ele
+      // (26/08: "até R$50/100/200" vazou nas opções — o cap morria aqui).
+      return { line: { ...line, phrase: searchPhrase, ...(cap != null ? { cap } : {}) }, candidates };
     })
   );
 
@@ -685,6 +761,7 @@ async function buildChoices(
       query: line.phrase,
       qty: line.qty,
       ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
+      ...(line.cap != null ? { cap: line.cap } : {}),
       options: options.slice(0, 3).map(({ store, item }) =>
         toChoiceOption(item, { storeKey: store.key, storeLabel: store.label })
       )
@@ -778,8 +855,10 @@ function toChoiceOption(
   o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string; freeShipping?: boolean },
   storeRef?: { storeKey?: string; storeLabel?: string }
 ): ChoiceOption {
-  // Vitrine ao vivo do ML manda o prazo do anúncio em `category` ("chega hoje").
-  const delivery = storeRef?.storeKey === "mercadolivre" ? o.category : undefined;
+  // Prazo NÃO entra em card de busca (regra dura de 17/08, reafirmada em 26/08 —
+  // P1.4: "Entrega: chega hoje" nos cards cria promessa antes do endereço/frete; o
+  // prazo aparece UMA vez, no resumo, com o dado real da consulta de frete).
+  const delivery = undefined;
   return {
     sku: o.sku,
     name: o.name,
@@ -1304,6 +1383,18 @@ async function handleDeliveryTurn(
     return;
   }
 
+  // GUARDA DE REMÉDIO GLOBAL (26/08 P1.6: 2/4 — a recusa dependia da etapa; na
+  // pergunta de quantidade "também queria dipirona" virava "responde o número").
+  // "sem remédio, quero X" segue como pedido (negação já tratada na extração).
+  if (looksLikeMedicine(text) && !/^sem\s/.test(normalizeMsg(text))) {
+    await reply(phone, copy.noMedicine());
+    if (ctx.step === "choosing" && ctx.pending?.length) await sendChoices(phone, ctx.pending[0]);
+    else if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
+      await reply(phone, copy.quantityAsk(ctx.quantityChoice.option.name));
+    }
+    return;
+  }
+
   if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
     // Botão "Outra quantidade": abre a pergunta livre — o cliente digita o número.
     if (normalizeMsg(text) === "qty:other") {
@@ -1320,9 +1411,22 @@ async function handleDeliveryTurn(
       await finishQuantityChoice(phone, user.cep, convo.id, ctx, 1);
       return;
     }
-    // Só o que realmente não faz sentido re-pergunta; "cancelar"/"status"/"pagar"
-    // etc. seguem pro roteador normal — a pergunta de quantidade não é uma prisão.
+    // Só o que realmente não faz sentido re-pergunta — UMA vez. Na segunda resposta
+    // sem número ("Philco", "ring light"), fecha 1 unidade e roteia a mensagem como
+    // pedido normal: a pergunta de quantidade não é prisão (26/08 P2.4 — o cliente
+    // ficou preso no "Só consigo de 1 a 50" com marca, troca e risada).
     if (intent.kind === "free_text" || intent.kind === "number") {
+      const misses = (ctx.quantityChoice.misses ?? 0) + 1;
+      if (misses >= 2) {
+        await finishQuantityChoice(phone, user.cep, convo.id, ctx, 1);
+        const freshCtx = readCtx(
+          (await prisma.conversation.findUnique({ where: { id: convo.id }, select: { context: true } }))?.context ?? null
+        );
+        await handleSearch(phone, convo.id, user.cep, freshCtx, text, user.id);
+        return;
+      }
+      ctx.quantityChoice.misses = misses;
+      await writeCtx(convo.id, ctx);
       await reply(phone, "Só consigo de 1 a 50 unidades. Quantas?");
       return;
     }
@@ -1447,8 +1551,34 @@ async function handleDeliveryTurn(
     await handleSavedCardOther(phone, user.id);
     return;
   }
+  // "2" com cobrança de cartão salvo na mesa = trocar PRO cartão nº 2 da lista
+  // numerada (26/08: vários cartões salvos, só o mais recente era oferecido).
+  if (intent.kind === "number" && ctx.step === "awaiting_payment" && cardOnFileEnabled()) {
+    const order = await prisma.deliveryOrder.findFirst({
+      where: { userId: user.id, status: "awaiting_payment" },
+      orderBy: { createdAt: "desc" }
+    });
+    const pending = order ? await findPendingSavedCardAttempt(order.id) : null;
+    if (order && pending) {
+      const creds = await listOneClickCredentials(user.id);
+      const chosen = creds[intent.value - 1];
+      if (chosen && chosen.id !== pending.credentialId) {
+        await expireOpenPaymentAttempts(order.id);
+        await createCardAttempt(order as Parameters<typeof createCardAttempt>[0], {
+          id: chosen.id,
+          last4: chosen.last4
+        });
+        return;
+      }
+      if (chosen) {
+        // Escolheu o que já está oferecido: só confirma o caminho.
+        await reply(phone, copy.savedCardOffer(order.total, chosen.last4));
+        return;
+      }
+    }
+  }
   if (intent.kind === "status") {
-    await handleStatus(phone, user.id, text);
+    await handleStatus(phone, user.id, ctx, text);
     return;
   }
   if (intent.kind === "paid_claim") {
@@ -1515,6 +1645,14 @@ async function handleDeliveryTurn(
     ctx.basket = mergeBaskets(keep, added);
     await writeCtx(convo.id, ctx);
     await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.minimumSwapDone());
+    return;
+  }
+
+  // Regateio ("faz por 10?", "tem desconto?"): o preço é o mostrado; o caminho barato
+  // já existe ("mais barato" reordena). Nunca vira escolha de número nem busca (26/08).
+  if (intent.kind === "haggle") {
+    await reply(phone, copy.haggleAnswer());
+    if (ctx.step === "choosing" && ctx.pending?.length) await sendChoices(phone, ctx.pending[0]);
     return;
   }
 
@@ -1616,7 +1754,7 @@ async function handleDeliveryTurn(
           if (containsMedicine) notes.push(copy.medicineSkippedNote());
           notes.push(copy.addedToPendingQuote(addedLabels));
           await replyQuoteNotice(phone, notes.join("\n"));
-          await notifyOperator(copy.operatorItemAddedAlert(order.id.slice(-6).toUpperCase(), addedLabels));
+          await notifyOperator(copy.operatorItemAddedAlert(order.id.slice(-6).toUpperCase(), addedLabels), phone);
           return;
         }
       }
@@ -2190,8 +2328,29 @@ async function handleDeliveryTurn(
 
 // ---------- intent handlers ----------
 
-async function handleStatus(phone: string, userId: string, text?: string) {
-  const order = await prisma.deliveryOrder.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } });
+async function handleStatus(phone: string, userId: string, ctx: DeliveryContext, text?: string) {
+  // A COMPRA EM ANDAMENTO na conversa vence qualquer pedido velho: "quanto ficou? e
+  // quando chega?" com a cesta na mesa é pergunta sobre a compra ATUAL — no teste de
+  // 26/08 (sessão 5), a resposta foi um pedido cancelado de outro dia + "estorno a
+  // caminho", e o cliente abandonou.
+  const ctxOrder = ctx.deliveryOrderId
+    ? await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } })
+    : null;
+  if (!ctxOrder && ((ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0)) {
+    const items = basketForCopy(ctx);
+    const produtos = Math.round(items.reduce((sum, i) => sum + i.displayLineTotal, 0) * 100) / 100;
+    await reply(phone, copy.partialTotal(items, produtos, ctx.pending?.length ?? 0));
+    return;
+  }
+  // Pedido ATIVO vence pedido morto: status nunca responde um cancelado antigo quando
+  // existe um vivo — e um cancelado só entra quando é tudo que o cliente tem.
+  const order =
+    ctxOrder ??
+    (await prisma.deliveryOrder.findFirst({
+      where: { userId, status: { in: ACTIVE_ORDER_STATUSES } },
+      orderBy: { createdAt: "desc" }
+    })) ??
+    (await prisma.deliveryOrder.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } }));
   if (!order) {
     // "que horas chega?" sem pedido = pergunta de PRAZO, não de status.
     if (text && /\b(chega|demora|horas|prazo|falta)\b/.test(normalizeMsg(text))) {
@@ -2206,7 +2365,8 @@ async function handleStatus(phone: string, userId: string, text?: string) {
     copy.orderStatusLine({
       shortId: order.id.slice(-6).toUpperCase(),
       status: order.status,
-      trackingUrl: order.courierTrackingUrl
+      trackingUrl: order.courierTrackingUrl,
+      paid: Boolean(order.paidAt)
     })
   );
 }
@@ -2282,7 +2442,7 @@ async function handleCancel(
       ? await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } })
       : null) ??
     (await prisma.deliveryOrder.findFirst({
-      where: { userId, status: { in: ACTIVE_ORDER_STATUSES } },
+      where: { userId, status: { in: explicitOrder ? ACTIVE_ORDER_STATUSES : CANCELABLE_FALLBACK_STATUSES } },
       orderBy: { createdAt: "desc" }
     }));
   if (!order || !ACTIVE_ORDER_STATUSES.includes(order.status)) {
@@ -2301,7 +2461,13 @@ async function handleCancel(
       }
       await writeCtx(convoId, fresh);
     }
-    await reply(phone, copy.nothingToCancel());
+    // Existe um pedido PAGO em andamento? A recusa nomeia ELE — sem isso o cliente do
+    // teste de 26/08 ouviu "depois do pagamento não dá" sem saber de qual pedido.
+    const paidActive = await prisma.deliveryOrder.findFirst({
+      where: { userId, status: { in: ACTIVE_ORDER_STATUSES }, paidAt: { not: null } },
+      orderBy: { createdAt: "desc" }
+    });
+    await reply(phone, copy.nothingToCancel(paidActive ? paidActive.id.slice(-6).toUpperCase() : undefined));
     return;
   }
   if (order.status === AWAITING_OPERATOR_QUOTE_STATUS) {
@@ -2580,7 +2746,7 @@ async function syncAwaitingQuoteOrderAddress(phone: string, convoId: string, ctx
   ctx.step = AWAITING_OPERATOR_QUOTE_STATUS;
   await writeCtx(convoId, ctx);
   await reply(phone, copy.addressUpdatedQuoteContinues(ctx.deliveryAddress));
-  await notifyOperator(copy.operatorAddressChangedAlert(order.id.slice(-6).toUpperCase(), ctx.deliveryAddress));
+  await notifyOperator(copy.operatorAddressChangedAlert(order.id.slice(-6).toUpperCase(), ctx.deliveryAddress), phone);
   return true;
 }
 
@@ -2845,6 +3011,7 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
   // score>0 sem piso). O rerank de IA não roda aqui (resposta na hora), então o piso
   // léxico é a única guarda; pool que esvazia vira o honesto "essas são todas".
   pool = pool.filter((o) => conciergeMatchIsStrong(query, o));
+  if (p.cap != null) pool = pool.filter((o) => display(o.unitPrice) <= p.cap!);
   return active.length ? pool.filter((o) => active.every((a) => attrMatchesItem(a, o))) : pool;
 }
 
@@ -3181,13 +3348,12 @@ async function handleSwap(
     .map((item) => candidates.find((c) => c.item.sku === item.sku)!);
 
   if (!options.length) {
-    const prefix = `${copy.swapRemovedPrefix(removedNames)} ${copy.itemsNotFound([to])}`;
-    if (!keep.length) {
-      await writeCtx(convoId, addressOnlyCtx(ctx, userCep));
-      await reply(phone, prefix);
-      return;
-    }
-    await continueAfterBasket(phone, convoId, ctx, userCep, prefix);
+    // TROCA É ATÔMICA (26/08 P1.7): sem substituto forte, o item original FICA — tirar
+    // o frango sem incluir o peixe deixava a cesta mutilada em silêncio.
+    ctx.basket = basket;
+    ctx.pending = pending.length ? pending : undefined;
+    await writeCtx(convoId, ctx);
+    await reply(phone, copy.swapKeptOriginal(removedNames, to));
     return;
   }
   if (options.length === 1 && !(ctx.pending?.length)) {
@@ -3296,7 +3462,11 @@ async function handleConciergeRequest(
     // O retry vai re-extrair e re-rankear (~3-6s de IA); o run do ML começa já, com a
     // frase determinística, e a busca do retry se acopla a ele (dedupe em voo).
     for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
-    const retryText = notFoundLines.map((line) => line.phrase).join(", ");
+    // O teto volta pra frase do retry: o resgate re-extrai e o cap re-filtra no build
+    // (26/08: presente "até R$50" resgatado no ML saía sem teto nenhum).
+    const retryText = notFoundLines
+      .map((line) => (line.cap != null ? `${line.phrase} até ${line.cap} reais` : line.phrase))
+      .join(", ");
     const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
     const rescued: PendingChoice[] = [];
     for (const choice of retry.pending) {
@@ -3344,15 +3514,35 @@ async function handleConciergeRequest(
   // Sem cards por item (10 cards é spam); o resumo sai com os botões de sempre e
   // "troca"/"tira"/"opções de X" continuam valendo item a item.
   if (pending.length >= 2 && bulkList) {
+    // Item CARO não entra sozinho na cesta (26/08: peça de trator de R$2.556 foi
+    // auto-escolhida de uma descrição vaga). Acima do teto, a linha vira escolha com
+    // cards — o resto da lista continua automático.
+    const autopickMax = Number(process.env.LIA_BULK_AUTOPICK_MAX ?? 300);
+    const auto = pending.filter((choice) => display(choice.options[0].unitPrice) <= autopickMax);
+    const confirm = pending.filter((choice) => display(choice.options[0].unitPrice) > autopickMax);
     const added: BasketItem[] = [];
-    for (const choice of pending) {
+    for (const choice of auto) {
       const top = choice.options[0];
       const store = top.storeKey ? getStore(top.storeKey) : orderStore(ctx);
       added.push(choiceToBasketItem(top, Math.max(1, choice.qty), store));
     }
     ctx.basket = mergeBaskets(ctx.basket ?? [], added);
-    ctx.pending = undefined;
-    ctx.step = "collecting";
+    ctx.pending = confirm.length ? confirm : undefined;
+    ctx.step = confirm.length ? "choosing" : "collecting";
+    if (confirm.length) {
+      const notes: string[] = [];
+      if (added.length) {
+        notes.push(
+          copy.bulkBasketAdded(added.map((i) => ({ qty: i.qty, name: i.name, total: display(i.unitPrice) * i.qty })))
+        );
+      }
+      if (containsMedicine) notes.push(copy.medicineSkippedNote());
+      if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+      await writeCtx(convoId, ctx);
+      if (notes.length) await reply(phone, notes.join("\n"));
+      await sendChoices(phone, confirm[0]);
+      return;
+    }
     const notes: string[] = [
       copy.bulkBasketAdded(added.map((i) => ({ qty: i.qty, name: i.name, total: display(i.unitPrice) * i.qty })))
     ];
@@ -3594,7 +3784,7 @@ async function reportChargeIssueFailure(
     console.error("[payment:issue:failed:note]", err);
   }
   await reply(phone, copy.paymentIssueFailed());
-  await notifyOperator(copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), detail));
+  await notifyOperator(copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), detail), phone);
 }
 
 // Emite a cobrança de um pedido JÁ criado e aguardando pagamento (Pix copia-e-cola ou
@@ -3861,7 +4051,7 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   if (prefix) await reply(phone, prefix);
   await replyQuoteNotice(phone, existing ? copy.operatorQuoteStillWorking() : copy.operatorQuoteRequested(itemNames));
   const alert = copy.operatorQuoteAlert(order.id.slice(-6).toUpperCase(), itemNames);
-  await notifyOperator(ctx.urgent ? `⚡ URGENTE — ${alert}` : alert);
+  await notifyOperator(ctx.urgent ? `⚡ URGENTE — ${alert}` : alert, phone);
 }
 
 // Publica a cotação instantânea reutilizando opsPublishManualQuote — status, mensagem ao
@@ -4129,7 +4319,8 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
     if (error instanceof PaymentProviderError) {
       await reply(order.phone, copy.paymentIssueFailed());
       await notifyOperator(
-        copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), error.message.slice(0, 180))
+        copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), error.message.slice(0, 180)),
+        order.phone
       );
       return { expired: false };
     }
@@ -4311,7 +4502,7 @@ export async function markDeliveryOrderPaid(orderId: string) {
   // /ops já mostra). Religar com LIA_OPERATOR_PAID_ALERT=true quando entrar gente de
   // fora: foi este alerta que matou o pedido-zumbi de 2 dias em 11/08.
   if (process.env.LIA_OPERATOR_PAID_ALERT === "true") {
-    await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total));
+    await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total), order.phone);
   }
   // Create the durable local-worker task after the money state is committed. This is
   // best-effort: a queue outage must not undo a real payment; claim() backfills paid

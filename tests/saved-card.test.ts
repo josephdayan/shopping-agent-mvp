@@ -178,3 +178,56 @@ test("cartão salvo DB: toque sem nada pendente responde honesto", async (t) => 
     await cleanup(data);
   }
 });
+
+test("cartão salvo DB: com DOIS cartões, a Lia lista os outros e '2' troca a cobrança", async (t) => {
+  if (!(await paymentTablesReady(t))) return;
+  const data = await makeCardOrder();
+  try {
+    // segundo cartão, mais antigo que o principal
+    const older = await prisma.paymentCredential.create({
+      data: {
+        userId: data.user.id,
+        providerCustomerId: `customer_multi_${suffix}`,
+        providerCardId: `card_multi_${suffix}`,
+        last4: "5678",
+        brand: "Visa",
+        createdAt: new Date(Date.now() - 60_000)
+      }
+    });
+    // a conversa precisa estar em awaiting_payment pro "2" significar troca de cartão
+    await prisma.conversation.upsert({
+      where: { id: `conv_${data.user.id}` },
+      update: { context: JSON.stringify({ flow: "delivery", step: "awaiting_payment", deliveryOrderId: data.order.id }) },
+      create: {
+        id: `conv_${data.user.id}`,
+        userId: data.user.id,
+        status: "active",
+        currentStep: "delivery",
+        context: JSON.stringify({ flow: "delivery", step: "awaiting_payment", deliveryOrderId: data.order.id })
+      }
+    });
+    const start = outbox.length;
+    await createCardAttempt(
+      { id: data.order.id, userId: data.user.id, phone: data.phone, total: data.order.total, status: "awaiting_payment", deliveryFee: 2, items: [] },
+      { id: data.credential.id, last4: data.credential.last4 }
+    );
+    const offered = outbox.slice(start).map((m) => m.text).join("\n");
+    assert.match(offered, /Também tenho salvo/i, offered.slice(0, 300));
+    assert.match(offered, /5678/);
+    // "2" troca a cobrança pro Visa 5678: tentativa antiga expira, nova nasce no outro cartão
+    const beforeSwap = outbox.length;
+    await send(data.phone, "2");
+    const swapped = outbox.slice(beforeSwap).map((m) => m.text).join("\n");
+    assert.match(swapped, /5678/, swapped.slice(0, 300));
+    const attempts = await prisma.paymentAttempt.findMany({
+      where: { deliveryOrderId: data.order.id },
+      orderBy: { createdAt: "asc" }
+    });
+    assert.equal(attempts.length, 2);
+    assert.equal(attempts[0].status, "expired");
+    assert.equal(attempts[1].status, "pending");
+    assert.equal(attempts[1].credentialId, older.id);
+  } finally {
+    await cleanup(data);
+  }
+});

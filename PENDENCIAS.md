@@ -1,6 +1,36 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-19._
+_Última atualização: 2026-08-26._
+
+> **26/08 — pós-teste em massa: o que ficou ADIADO com registro.** Blocos 1-3 do
+> relatório implementados (ver AGENTS.md). Ficam como próximos ciclos, por decisão de
+> escopo (produto/qualidade, não bug de estado):
+> (a) **P1.8 — otimizar a cesta como CONJUNTO**: hoje cada item acha sua loja e a compra
+> semanal fragmenta em 3-4 entregas (R$60 de frete em R$80 de produto); ranquear a
+> composição por total+nº de entregas+fidelidade. (b) **P1.10 — fallback manual depois
+> de mostrar preço**: quando o card já mostrou valor, cair pra "alguém confere" quebra a
+> expectativa; decidir o contrato. (c) **P2.1 — latência da busca fria** (teto é o actor;
+> API oficial 403 — ticket pronto em docs/ticket-suporte-mercadolivre.md). (d) **P2.5 —
+> pergunta curta antes de escolher item vago/caro** (trator, TikTok). (e) **golden novos
+> de semântica**: toalha≠lenço umedecido, frutas≠congeladas, garrafa≠água mineral — pelo
+> método (caso no golden ANTES do conserto de scorer). (f) **re-rodar as 20 sessões** do
+> protocolo (docs/protocolo-teste-persona.md) como gate de reabertura: meta ≥8/10, zero
+> P0 — os gates numéricos estão no fim do relatório.
+
+> **20 sessões adversariais ao vivo — 26/08.** Nenhum pagamento foi feito. A média
+> atribuída durante a rodada foi **4,55/10**; a auditoria rebaixou a sessão 19 depois de
+> encontrar seis itens da sessão 18 cancelada no Pix seguinte, levando a média auditada a
+> **4,30/10**. Não tratar o concierge como pronto para uso amplo: 12/20 sessões
+> perderam estado com mensagens rápidas/fora da etapa, 6/20 não responderam preço de
+> entrega, 7/20 tiveram mínimo/fragmentação de frete e seis geraram cancelamento/estorno
+> condicional para um pedido não reconhecido. Também apareceram limites de preço
+> ignorados, trocas silenciosas e `chega hoje`/`chega amanhã` nos cards. **Bloqueador
+> principal:** cancelamento não é uma barreira segura contra turnos antigos; não reabrir
+> piloto sem zerar vazamento de estado, falso estado financeiro e mutação silenciosa.
+> Diagnóstico em
+> [docs/relatorio-completo-problemas-lia-2026-08-26.md](docs/relatorio-completo-problemas-lia-2026-08-26.md);
+> scorecards em
+> [docs/testes-20-clientes-2026-08-26.md](docs/testes-20-clientes-2026-08-26.md).
 
 > **Rodada adversarial ao vivo — 19/08.** Oito cenários difíceis foram executados sem
 > cobrança: 5 passaram, 1 foi parcial e 2 falharam. Reabrir a validação de “mais barata”

@@ -34,7 +34,12 @@ export function CardEnrollmentForm({ sessionId, sessionToken, total, initialName
   const [message, setMessage] = useState("");
 
   const submitTokenizedCard = useCallback(async (data: Record<string, unknown>) => {
-    const cardToken = stringValue(data, "pagarmetoken") || stringValue(data, "token") || stringValue(data, "id") || stringValue(data, "card_token");
+    // tokenizecard.js writes the token to this protected field. Its callback
+    // payload is not consistent across versions, so prefer either source.
+    const tokenInput = document.querySelector<HTMLInputElement>(
+      'form[data-pagarmecheckout-form] input[name^="pagarmetoken"]'
+    );
+    const cardToken = stringValue(data, "pagarmetoken") || stringValue(data, "pagarmetoken-0") || stringValue(data, "token") || stringValue(data, "id") || stringValue(data, "card_token") || tokenInput?.value.trim() || "";
     if (!cardToken) {
       setMessage("Não consegui tokenizar o cartão. Confira os dados e tente de novo.");
       return;
@@ -107,60 +112,63 @@ export function CardEnrollmentForm({ sessionId, sessionToken, total, initialName
   }
 
   return (
-    <form className="mt-6 space-y-4" data-pagarmecheckout-form onSubmit={blockUntilReady}>
-      <div className="rounded-xl bg-slate-800 px-4 py-3 text-sm">Total: <strong>{brl(total)}</strong></div>
-      <label className="block text-sm">Nome completo
-        <input name="name" defaultValue={initialName} required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+    <form className="mt-5 space-y-4 text-tinta" data-pagarmecheckout-form onSubmit={blockUntilReady}>
+      <div className="flex items-center justify-between rounded-2xl bg-poster px-4 py-3 text-sm text-white">Total da compra <strong className="text-lg text-acento">{brl(total)}</strong></div>
+      <label className="block text-sm font-medium text-tinta/80">Nome completo
+        <input name="name" defaultValue={initialName} required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
-      <label className="block text-sm">E-mail
-        <input name="email" type="email" defaultValue={initialEmail} required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <label className="block text-sm font-medium text-tinta/80">E-mail
+        <input name="email" type="email" defaultValue={initialEmail} required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
-      <label className="block text-sm">CPF
-        <input name="cpf" inputMode="numeric" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <label className="block text-sm font-medium text-tinta/80">CPF
+        <input name="cpf" inputMode="numeric" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
       <div className="grid grid-cols-2 gap-3">
-        <label className="block text-sm">Nome no cartão
-          <input name="holder-name" data-pagarmecheckout-element="holder_name" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="block text-sm font-medium text-tinta/80">Nome no cartão
+          <input name="holder-name" data-pagarmecheckout-element="holder_name" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
         </label>
-        <label className="block text-sm">Número do cartão
-          <input name="card-number" inputMode="numeric" data-pagarmecheckout-element="number" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="block text-sm font-medium text-tinta/80">Número do cartão
+          <div className="relative mt-1">
+            <input name="card-number" inputMode="numeric" data-pagarmecheckout-element="number" required className="w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
+            <span data-pagarmecheckout-element="brand" className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-poster/60" />
+          </div>
         </label>
-        <label className="block text-sm">Mês
-          <input name="card-exp-month" inputMode="numeric" data-pagarmecheckout-element="exp_month" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="block text-sm font-medium text-tinta/80">Mês
+          <input name="card-exp-month" inputMode="numeric" data-pagarmecheckout-element="exp_month" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
         </label>
-        <label className="block text-sm">Ano
-          <input name="card-exp-year" inputMode="numeric" data-pagarmecheckout-element="exp_year" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="block text-sm font-medium text-tinta/80">Ano
+          <input name="card-exp-year" inputMode="numeric" data-pagarmecheckout-element="exp_year" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
         </label>
       </div>
-      <label className="block text-sm">CVV
-        <input name="cvv" inputMode="numeric" data-pagarmecheckout-element="cvv" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <label className="block text-sm font-medium text-tinta/80">CVV
+        <input name="cvv" inputMode="numeric" data-pagarmecheckout-element="cvv" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
-      <p className="pt-2 text-xs text-slate-400">Endereço de cobrança</p>
-      <label className="block text-sm">Número, rua e bairro
-        <input name="line1" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-poster/60">Endereço de cobrança</p>
+      <label className="block text-sm font-medium text-tinta/80">Número, rua e bairro
+        <input name="line1" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
-      <label className="block text-sm">Complemento (opcional)
-        <input name="line2" className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <label className="block text-sm font-medium text-tinta/80">Complemento (opcional)
+        <input name="line2" className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
       <div className="grid grid-cols-3 gap-3">
-        <label className="block text-sm">CEP
-          <input name="zipCode" inputMode="numeric" defaultValue={initialZipCode} required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="block text-sm font-medium text-tinta/80">CEP
+          <input name="zipCode" inputMode="numeric" defaultValue={initialZipCode} required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
         </label>
-        <label className="col-span-2 block text-sm">Cidade
-          <input name="city" required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+        <label className="col-span-2 block text-sm font-medium text-tinta/80">Cidade
+          <input name="city" required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
         </label>
       </div>
-      <label className="block text-sm">UF
-        <input name="state" maxLength={2} required className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" />
+      <label className="block text-sm font-medium text-tinta/80">UF
+        <input name="state" maxLength={2} required className="mt-1 w-full rounded-xl border border-poster/20 bg-papel px-3 py-2.5 text-tinta outline-none transition focus:border-poster focus:ring-2 focus:ring-acento" />
       </label>
-      <label className="flex gap-2 text-xs leading-5 text-slate-300">
-        <input name="consent" value="true" type="checkbox" required />
+      <label className="flex items-start gap-2 rounded-xl bg-papel px-3 py-2.5 text-xs leading-5 text-tinta/75">
+        <input name="consent" value="true" type="checkbox" required className="mt-0.5 h-4 w-4 accent-[#3A225E]" />
         Autorizo guardar este cartão no Pagar.me para futuras compras que eu confirmar no WhatsApp.
       </label>
-      <button type="submit" disabled={!ready || submitting} className="w-full rounded-lg bg-emerald-500 px-4 py-3 font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-50">
+      <button type="submit" disabled={!ready || submitting} className="w-full rounded-2xl bg-acento px-4 py-3.5 text-base font-bold text-poster shadow-[0_10px_30px_rgba(217,255,91,0.4)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50">
         {submitting ? "Processando..." : `Salvar e pagar ${brl(total)}`}
       </button>
-      {message ? <p role="status" className="text-sm text-slate-300">{message}</p> : null}
+      {message ? <p role="status" className="rounded-xl bg-poster/5 px-3 py-2 text-sm text-tinta/80">{message}</p> : null}
     </form>
   );
 }

@@ -14,6 +14,9 @@ import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import {
   handleDeliveryMessage,
+  runTurnScoped,
+  TurnSupersededError,
+  __casTestSeams,
   markDeliveryOrderPaid,
   opsPublishManualQuote,
   opsMarkBought,
@@ -671,6 +674,117 @@ test("step need_address órfão com endereço salvo se DESTRAVA no próximo pedi
   void base;
 });
 
+test("26/08 P0.1: escrita de turno VELHO morre depois de um cancelar (CAS de contexto)", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const staleCtx = JSON.parse(convo!.context ?? "{}");
+  await assert.rejects(
+    runTurnScoped(async () => {
+      // Turno A lê o contexto (snapshot armazenado no escopo)...
+      __casTestSeams.rememberCtxSnapshot(convo!.id, convo!.context ?? null);
+      // ...o cliente cancela POR FORA (outro turno grava por baixo)...
+      await prisma.conversation.update({
+        where: { id: convo!.id },
+        data: { context: JSON.stringify({ flow: "delivery", step: "collecting" }) }
+      });
+      // ...e a escrita atrasada do turno A tem que MORRER, nunca ressuscitar a cesta.
+      await __casTestSeams.writeCtx(convo!.id, staleCtx);
+    }),
+    TurnSupersededError
+  );
+  const after = await prisma.conversation.findFirst({ where: { id: convo!.id } });
+  const ctx = JSON.parse(after!.context ?? "{}");
+  assert.ok(!(ctx.pending?.length) && !(ctx.basket?.length), "a cesta velha não pode voltar");
+});
+
+test("26/08 P0.2: status com cesta na mesa responde a COMPRA ATUAL, nunca pedido velho", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  // pedido VELHO cancelado sem pagamento
+  await prisma.deliveryOrder.create({
+    data: {
+      userId: c.userId,
+      phone: c.phone,
+      status: "canceled",
+      total: 50,
+      deliveryFee: 5,
+      items: [{ qty: 1, name: "Velharia", unitPrice: 45 }],
+      cep: "01310-100",
+      deliveryAddress: TEST_ADDRESS
+    }
+  });
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) await c.send("2");
+  const status = await c.send("quanto ficou? e quando chega?");
+  assert.doesNotMatch(status, /cancelado/i, `não pode citar pedido morto: ${status.slice(0, 250)}`);
+  assert.doesNotMatch(status, /estorno/i);
+  assert.match(status, /Coca|parcial|R\$/i, status.slice(0, 250));
+});
+
+test("26/08 P0.2: status de cancelado sem pagamento diz 'nada foi cobrado' — nunca estorno", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await prisma.deliveryOrder.create({
+    data: {
+      userId: c.userId,
+      phone: c.phone,
+      status: "canceled",
+      total: 50,
+      deliveryFee: 5,
+      items: [{ qty: 1, name: "Velharia", unitPrice: 45 }],
+      cep: "01310-100",
+      deliveryAddress: TEST_ADDRESS
+    }
+  });
+  const status = await c.send("cadê meu pedido de ontem?");
+  assert.match(status, /nada foi cobrado/i, status.slice(0, 250));
+  assert.doesNotMatch(status, /estorno está a caminho/i);
+});
+
+test("26/08 P1.6: dipirona é recusada ATÉ na pergunta de quantidade", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  assert.match(afterChoice, /quantas unidades/i);
+  const med = await c.send("também queria dipirona");
+  assert.match(med, /não posso vender/i, med.slice(0, 250));
+  assert.doesNotMatch(med, /1 a 50/);
+  // e a pergunta de quantidade volta — o fluxo não se perde
+  assert.match(med, /quantas unidades/i);
+});
+
+test("26/08 P2.4: 2ª resposta sem número fecha 1 unidade e roteia a mensagem", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  assert.match(afterChoice, /quantas unidades/i);
+  const first = await c.send("Philco");
+  assert.match(first, /1 a 50/);
+  const second = await c.send("Philco");
+  assert.doesNotMatch(second, /1 a 50/, `preso na quantidade: ${second.slice(0, 200)}`);
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ qty: number; name: string }>;
+  assert.equal(basket?.[0]?.qty, 1, "a coca fechou com 1 unidade");
+});
+
+test("26/08 P1.3: teto de preço sobrevive à paginação ('outras')", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("sabonete até 5 reais");
+  assert.match(out, /op(ç|c)(õ|o)es/i, out.slice(0, 200));
+  await c.send("outras");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const pending = JSON.parse(convo!.context ?? "{}").pending as Array<{ options: Array<{ unitPrice: number }> }>;
+  for (const o of pending?.[0]?.options ?? []) {
+    assert.ok(Math.round(o.unitPrice * 1.1 * 100) / 100 <= 5, `opção acima do teto na paginação: R$${o.unitPrice}`);
+  }
+});
+
 // ---------- achados da revisão de código (11/08) ----------
 
 test("dedupe do webhook é ATÔMICO: mesma mensagem em paralelo não dobra a cesta", async (t) => {
@@ -1053,7 +1167,7 @@ test("'cancelar' com pedido já morto limpa o contexto (não repete 'não tem pe
   // Pedido cancelado por fora (qualquer caminho que não passe pela conversa).
   await prisma.deliveryOrder.update({ where: { id: order!.id }, data: { status: "canceled" } });
   const out = await c.send("cancelar");
-  assert.match(out, /não tem pedido em andamento/i, `resposta inesperada: ${out.slice(0, 200)}`);
+  assert.match(out, /nada em aberto pra cancelar/i, `resposta inesperada: ${out.slice(0, 200)}`);
   const after = await ctxOf(c.userId);
   assert.equal(after.deliveryOrderId, undefined, `ponteiro morto sobreviveu: ${JSON.stringify(after)}`);
   assert.notEqual(after.step, "awaiting_operator_quote");

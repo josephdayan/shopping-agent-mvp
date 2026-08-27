@@ -5,7 +5,7 @@
 
 // qtyExplicit: o cliente DISSE a quantidade ("uma coca", "2 leites") — o fluxo não
 // deve re-perguntar "quantas unidades?" depois da escolha. Ausente = qty implícito.
-export type ParsedLine = { phrase: string; qty: number; qtyExplicit?: boolean };
+export type ParsedLine = { phrase: string; qty: number; qtyExplicit?: boolean; cap?: number };
 
 export type Intent =
   | { kind: "thanks" }
@@ -22,6 +22,7 @@ export type Intent =
   // "quanto falta?"/"o que posso pedir pra completar?" — pergunta sobre o que falta pro
   // fechamento (pedido mínimo), nunca busca (teste real 24/08: virou busca e beco).
   | { kind: "missing_question" }
+  | { kind: "haggle" }
   // rest = o que sobrou da mensagem além do CEP ("meu cep é 01310-100, quero arroz e leite")
   | { kind: "cep"; cep: string; bare: boolean; rest?: string }
   | { kind: "repeat_last" }
@@ -662,6 +663,20 @@ export function detectIntent(text: string): Intent {
     return { kind: "help" };
   }
 
+  // Identidade/segurança DENTRO de mensagem composta curta: "oi... quem é vc? isso é
+  // golpe?" é apresentação, nunca extração de produto (teste 26/08, P1.5).
+  if (
+    n.length <= 90 &&
+    (/(quem (e|eh) (vc|voce|tu)\b)|(\b(e|eh|isso e|isso eh) golpe\b)|(\bgolpe\b.*\?)|(\bconfiavel\b)/.test(n))
+  ) {
+    return { kind: "help" };
+  }
+
+  // Regateio: "faz por 10?", "tem desconto?" — resposta clara, nunca escolha nem busca.
+  if (/^(faz|fazes|consegue|sai) por (r\$\s*)?\d+|^tem desconto|^(da|dá) (um )?desconto|^faz mais barato/.test(n)) {
+    return { kind: "haggle" };
+  }
+
   // Emoji sozinho: 👍/✅ = sim; 🙏/❤️/💚/😊/🙌 = obrigado; resto = um "oi" acenando.
   if (EMOJI_ONLY_RE.test(n)) {
     if (/[👍✅🆗]/u.test(n)) return { kind: "affirm" };
@@ -690,6 +705,11 @@ export function detectIntent(text: string): Intent {
   if (NOT_PAID_RE.test(n)) return { kind: "pay" };
   // "caiu?" / "já caiu?" é PERGUNTA sobre o pagamento (status), não afirmação de pago.
   if (PAID_RE.test(n)) return isQuestion(n) ? { kind: "status" } : { kind: "paid_claim" };
+  // "pensando bem melhor não"/"deixa pra lá" = arrependimento seco → reject (26/08:
+  // virava "item indisponível" e o item anterior ficava na cesta).
+  if (/^pensando (bem|melhor)[,.\s]*(melhor\s+)?(nao|não)( quero| vou querer)?[\s!.]*$/.test(n)) return { kind: "reject" };
+  // Risada/ack sem conteúdo ("kkkk", "kkkk beleza", "haha blz") → obrigado, nunca busca.
+  if (/^(k{2,}|ha(ha)+|rs+)[\s!.]*(beleza|blz|valeu|ok|okay|show|top)?[\s!.]*$/.test(n)) return { kind: "thanks" };
   if (CHANGE_ADDRESS_RE.test(n)) return { kind: "change_address" };
   if (
     /^(quanto (ainda )?falta|falta quanto|falta muito)[\s?!.]*$/.test(n) ||
@@ -839,7 +859,7 @@ export function detectIntent(text: string): Intent {
   // Pergunta operacional (frete/prazo/área/pagamento) SEM cara de produto — responder
   // com copy de serviço; cair em busca aqui gera "sabonete pra quem pergunta de frete".
   if (SERVICE_WORDS_RE.test(n) && (isQuestion(n) || /\b(vcs?|voces?)\b/.test(n)) && n.split(" ").length <= 10) {
-    const topic = /\bfrete|taxa\b/.test(n)
+    const topic = /\bfrete|taxa\b/.test(n) || /\b(quanto|qual( o)? valor|preco)\b.*\bentrega\b|\bentrega\b.*\b(quanto|custa|sai por)\b/.test(n)
       ? ("fee" as const)
       : /\bprazo|demora\w*|horario|que horas|tempo\b/.test(n)
         ? ("eta" as const)

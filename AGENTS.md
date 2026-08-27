@@ -1,6 +1,98 @@
 # Lia — contexto obrigatório para agentes
 
-_Última atualização: 2026-08-19._
+## Validação ao vivo — 20 clientes simulados (2026-08-26)
+
+Foram executadas 20 sessões sequenciais no WhatsApp, sem pagamento e sem confirmar Pix
+ou cartão. A média atribuída durante a rodada foi **4,55/10**; a auditoria posterior
+reclassificou a sessão 19 de 7 para 2 porque ela chegou ao Pix com seis itens da sessão
+18 já cancelada, levando a média auditada a **4,30/10**. A lista direta e a
+troca de loja funcionaram em vários casos, e a guarda de dipirona funcionou quando a
+mensagem chegou em uma etapa estável. Permanecem graves a perda de estado com mensagens
+rápidas, perguntas de entrega sem resposta, códigos de cancelamento/estorno para pedidos
+que o cliente não reconhece, limites de preço ignorados e promessas de prazo nos cards.
+O diagnóstico completo está em
+[docs/relatorio-completo-problemas-lia-2026-08-26.md](docs/relatorio-completo-problemas-lia-2026-08-26.md);
+scorecards e transcrições em
+[docs/testes-20-clientes-2026-08-26.md](docs/testes-20-clientes-2026-08-26.md).
+
+_Última atualização: 2026-08-26._
+
+## Atualização 26/08/2026 (2ª) — página /cartao com o branding + seleção de múltiplos cartões
+
+Dois pedidos do dono no mesmo dia, com o Pagar.me em ativação:
+
+1. **/cartao rebrandeada** (Berinjela & lima): fundo papel, cartão branco, logo LiaBrand
+   + selo "🔒 pagamento seguro" em roxo, total em faixa roxa com valor em lima, campos
+   com foco lima e CTA "Salvar e pagar R$X" em lima/roxo; rodapé "os dados vão direto
+   pro Pagar.me — a Lia não vê o número". Só classes/copy — NENHUM atributo
+   `data-pagarmecheckout-*` foi tocado (contrato do tokenizecard.js). Verificada ao
+   vivo em dev com sessão real de cadastro.
+2. **Vários cartões salvos**: `listOneClickCredentials` (até 5, ativos, desc); a oferta
+   de cobrança lista os demais numerados ("Também tenho salvo: 2) Visa •••• 5678") e
+   responder o número expira a tentativa pendente e cria outra no cartão escolhido
+   (idempotência preservada). "Usar outro cartão" segue cadastrando mais um — o enroll
+   acumula credenciais (dedupe só do MESMO cartão físico). Teste novo: 2 cartões →
+   listagem → "2" → tentativa antiga `expired`, nova `pending` no cartão certo
+   (saved-card 7/7).
+
+Colaterais: `.env.local` do `vercel env pull` (todos os valores VAZIOS — Sensitive não
+baixa) sobrescrevia o `.env` e quebrava QUALQUER dev local com banco; movido para
+`.env.local.bak` — não regenerar sem saber disso. `.claude/launch.json` criado
+(lia-dev, PAGARME_MOCK=true) pro preview.
+
+## Atualização 26/08/2026 — teste em massa (20 personas): Blocos 1-3 do relatório implementados
+
+O protocolo de persona rodou 20 sessões reais e o relatório
+([docs/relatorio-completo-problemas-lia-2026-08-26.md](docs/relatorio-completo-problemas-lia-2026-08-26.md))
+derrubou a média pra 4,30/10 com 2 P0 de estado. Implementado no mesmo dia, na ordem que
+o próprio relatório recomendou:
+
+**Bloco 1 — segurança de estado (P0.1/P0.2, a raiz de tudo):**
+- **Escrita CONDICIONAL de contexto (CAS)**: cada turno guarda o snapshot do contexto
+  que leu (AsyncLocalStorage — `runTurnScoped` no webhook, zero mudança nos 88 call
+  sites) e toda `writeCtx` vira compare-and-swap contra ele. Outra escrita no meio
+  (cancelar, turno mais novo) → `TurnSupersededError` → o turno velho PARA sem gravar e
+  sem responder (o webhook o engole com log `[turn-superseded]`). É a cura estrutural da
+  cesta da sessão 18 ressuscitando no Pix da 19.
+- **Barge vira último recurso**: `TURN_LOCK_MAX_WAIT_MS` 15s → 120s (env). Quem fura
+  depois disso é inofensivo — o CAS mata a escrita perdedora.
+- **Status mira a compra ATUAL**: cesta/escolha na mesa → responde o total parcial;
+  senão pedido da conversa → ativo mais novo → só então o último de qualquer estado.
+  Cancelado sem pagamento agora diz "*nada foi cobrado*"; "estorno" só com `paidAt`.
+- **Cancelar por fallback nunca mira pedido com dinheiro** (`CANCELABLE_FALLBACK_
+  STATUSES`); havendo pago ativo, a recusa o NOMEIA (`nothingToCancel(shortId)`).
+
+**Bloco 2 — integridade da compra (P0.3/P1.3/P1.4):**
+- **Teto de preço viaja** (`ParsedLine.cap` → `PendingChoice.cap`): paginação, refino,
+  mais-baratas e o RESGATE do ML (que reconstrói a frase com "até R$X") re-filtram.
+- **Lista direta não auto-escolhe item caro**: acima de `LIA_BULK_AUTOPICK_MAX` (300),
+  a linha vira cards (a peça de trator de R$2.556 nunca mais entra sozinha).
+- **Prazo NUNCA em card de busca**: o slot de entrega do card do ML foi removido de vez
+  (regra dura de 17/08; o prazo aparece no resumo, com o dado da consulta de frete).
+
+**Bloco 3 — conversa e operação (P1.2/P1.5/P1.6/P1.7/P1.9/P2.3/P2.4):**
+- "quanto custa a entrega?" → tópico `fee` (era "área"); identidade/golpe em frase
+  composta ("oi... quem é vc? isso é golpe?") → apresentação; "pensando bem melhor não"
+  → reject; "kkkk beleza" → obrigado; regateio ("faz por 10?") → intent `haggle` com
+  resposta própria (+ "mais barato" como saída).
+- **Remédio é guarda GLOBAL** (antes de qualquer etapa — na pergunta de quantidade a
+  dipirona virava "responde o número"); a etapa em curso é reapresentada após a recusa.
+- **A pergunta de quantidade deixou de ser prisão**: 2ª resposta sem número fecha 1
+  unidade e roteia a mensagem como pedido normal (`quantityChoice.misses`).
+- **Troca é atômica**: sem substituto forte, o item original FICA na cesta
+  (`swapKeptOriginal`) — "tira o frango, quero peixe" não mutila mais a lista.
+- **Alerta de operador nunca vai pro chat do próprio cliente**
+  (`[operator-alert:suppressed-self]` quando `LIA_OPERATOR_PHONE` == cliente).
+
+**Adiado com registro (produto, não bug):** otimização da cesta como conjunto (P1.8 —
+menos entregas/frete), expectativa do fallback manual pós-preço (P1.10), latência da
+busca fria (P2.1 — teto é o actor; API oficial segue bloqueada), pergunta de
+esclarecimento pra item vago/caro (P2.5) e golden cases de semântica (toalha≠lenço,
+frutas≠congelada) — próximos ciclos em PENDENCIAS.
+
+Gate: tsc; intents 47/47; copy 12/12; bateria nova 26/08 6/6 (CAS, status×2, dipirona
+na quantidade, fuga da quantidade, teto na paginação); regressão completa das 3 suítes
+E2E rodada antes do deploy.
 
 ## Atualização 23/08/2026 — piloto do operador automático local
 

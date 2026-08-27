@@ -3,7 +3,7 @@ import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
 import { requireMetaSignature, requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { handleDeliveryMessage } from "@/lib/delivery-service";
+import { handleDeliveryMessage, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
@@ -23,7 +23,10 @@ async function processDeliveryMessage(inbound: ReturnType<typeof whatsappAdapter
     // turno terminar; se a função for morta, ao menos o silêncio absoluto não existe.
     const deadlineMs = Number(process.env.LIA_TURN_DEADLINE_MS ?? 45000);
     let deadlineTimer: ReturnType<typeof setTimeout> | undefined;
-    const work = handleDeliveryMessage(inbound);
+    // runTurnScoped arma o CAS de contexto: se outro turno (ex.: um "cancelar") gravar
+    // no meio deste, a próxima escrita DESTE falha e ele para — cesta velha nunca
+    // ressuscita por cima da nova (P0.1 do teste de 26/08).
+    const work = runTurnScoped(() => handleDeliveryMessage(inbound));
     const raced = await Promise.race([
       work.then(() => "done" as const),
       new Promise<"deadline">((resolve) => {
@@ -41,6 +44,12 @@ async function processDeliveryMessage(inbound: ReturnType<typeof whatsappAdapter
     clearTimeout(deadlineTimer);
     await work;
   } catch (error) {
+    // Turno superado NÃO é erro pro cliente: outro turno mais novo já respondeu por
+    // ele. Falar "tive um problema" aqui seria ruído depois de uma resposta certa.
+    if (error instanceof TurnSupersededError) {
+      console.warn(`[whatsapp:${inbound.provider}:turn-superseded]`, inbound.phone);
+      return;
+    }
     console.error(`[whatsapp:${inbound.provider}:delivery-error]`, error);
     try {
       await whatsappAdapter.sendMessage(inbound.phone, genericError());

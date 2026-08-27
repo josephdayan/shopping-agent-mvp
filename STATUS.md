@@ -1,5 +1,23 @@
 # Lia — Status do Projeto
 
+## 26/08/2026 — 20 sessões ao vivo: piloto amplo bloqueado
+
+Vinte sessões adversariais no WhatsApp, sem pagamento, deram média auditada **4,30/10**
+(4,55 na atribuição inicial; sessão 19 rebaixada após auditoria). O achado P0 foi uma
+cesta da sessão 18, já cancelada, reaparecer na sessão 19 e chegar ao Pix junto do item
+novo. Outros bloqueadores: seis respostas de status/cancelamento para o pedido errado,
+trocas silenciosas de produto, processamento fora de ordem, três tetos de preço violados
+e prazo prematuro nos cards. A causa provável do vazamento de estado é a combinação de
+trabalhos assíncronos por mensagem com a trava que permite `barge` após 15 segundos,
+enquanto buscas podem durar muito mais.
+
+Não tratar “12 chegaram ao total/Pix” como 12 compras válidas. O piloto amplo fica
+bloqueado até zerar vazamento de sessão, falso estado financeiro e mutação silenciosa.
+Relatório completo em
+[docs/relatorio-completo-problemas-lia-2026-08-26.md](docs/relatorio-completo-problemas-lia-2026-08-26.md);
+scorecards em
+[docs/testes-20-clientes-2026-08-26.md](docs/testes-20-clientes-2026-08-26.md).
+
 ## 20/08 — silêncio absoluto não existe mais (watchdog + timeouts em camadas)
 
 O reteste da mochila morreu em silêncio (teto da função dentro do waitUntil; OpenAI sem
@@ -912,8 +930,6 @@ Em 18/07, a conta Carrefour foi aberta somente para confirmar a sessão; o opera
 adiar a troca da senha exposta. Nenhuma credencial foi digitada, alterada ou registrada. A senha
 continua tratada como exposta e bloqueia qualquer uso do Context Carrefour ou piloto até a rotação
 feita pelo titular.
-
----
 
 ## 8. Arquitetura (onde está cada coisa)
 

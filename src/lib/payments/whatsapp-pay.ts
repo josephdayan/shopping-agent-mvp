@@ -121,6 +121,16 @@ export async function getOneClickCredential(userId: string) {
   });
 }
 
+// Todos os cartões salvos ativos (pedido do dono, 26/08: dava pra guardar vários mas a
+// Lia só oferecia o mais recente — agora o cliente escolhe pelo número).
+export async function listOneClickCredentials(userId: string) {
+  return prisma.paymentCredential.findMany({
+    where: { userId, provider: "pagarme", status: "active" },
+    orderBy: { createdAt: "desc" },
+    take: 5
+  });
+}
+
 export async function isOneClickAvailable(userId: string) {
   return Boolean(await getOneClickCredential(userId));
 }
@@ -168,6 +178,15 @@ export async function createCardAttempt(order: CardOrder, credential: { id: stri
     });
     if (!interactive) {
       await whatsappAdapter.sendMessage(order.phone, copy.savedCardOffer(order.total, credential.last4));
+    }
+    // Mais de um cartão salvo: lista os outros com número — responder "2" troca o
+    // cartão da cobrança (26/08; o botão continua cobrando o oferecido).
+    const others = (await listOneClickCredentials(order.userId)).filter((c) => c.id !== credential.id);
+    if (others.length) {
+      await whatsappAdapter.sendMessage(
+        order.phone,
+        copy.savedCardMoreOptions(others.map((c, i) => ({ index: i + 2, last4: c.last4, brand: c.brand ?? undefined })))
+      );
     }
     return attempt;
   } catch (error) {

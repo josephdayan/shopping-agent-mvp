@@ -20,6 +20,24 @@ function kind(text: string) {
   return detectIntent(text).kind;
 }
 
+test("teste em massa 26/08: identidade composta, regateio, arrependimento, risada, frete", () => {
+  // P1.5: identidade/golpe em frase composta vence a extração
+  assert.equal(kind("oi... quem é vc? isso é golpe?"), "help");
+  assert.equal(kind("isso é golpe?"), "help");
+  // P2.3: regateio tem resposta própria
+  assert.equal(kind("faz por 10?"), "haggle");
+  assert.equal(kind("tem desconto?"), "haggle");
+  // P1.7/P2.2: arrependimento seco é reject; risada é ack
+  assert.equal(kind("pensando bem melhor não"), "reject");
+  assert.equal(kind("kkkk beleza"), "thanks");
+  assert.equal(kind("kkkkk"), "thanks");
+  // P1.2: "quanto custa a entrega?" é PREÇO (fee), não área
+  const fee = detectIntent("quanto custa a entrega?");
+  assert.deepEqual(fee, { kind: "service_question", topic: "fee" });
+  // pedido real com "entrega" no meio NÃO vira service_question
+  assert.notEqual(kind("quero entrega de pizza"), "service_question");
+});
+
 test("2º testador (24/08): quanto falta, completar o valor e 'outro' singular", () => {
   assert.equal(kind("quanto falta?"), "missing_question");
   assert.equal(kind("falta quanto"), "missing_question");
