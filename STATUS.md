@@ -1,5 +1,22 @@
 # Lia — Status do Projeto
 
+## 28/08/2026 — rodada 4 (protocolo hostil): 2,85/10 → ciclo grande de conserto
+
+A rodada 4 foi desenhada pra mapear o teto (cliente difícil de verdade) e mapeou: média
+**2,85**, com 19/20 sessões contendo resposta-robô ou silêncio — mas o dinheiro seguiu
+intacto (12/12 totais certos, zero cobrança). O ciclo de conserto atacou as 8 famílias:
+rede anti-silêncio estrutural (turno com zero respostas → fallback; mensagem sem texto
+→ "só leio texto"; o webhook tinha um **400 mudo**), intents de confiança
+(segurança/NF/CNPJ/quem entrega/preço vs site/pagar por terceiro/insulto), pausa e
+retomada ("pera", "voltei", "na vdd quero sim" recupera cancelado), comando composto
+executado em sequência, edição pós-total reabrindo o pedido, semântica de cesta
+(quantidades, embalagem de ovos, teto global, correções embutidas, óleo de cozinha,
+categoria de limpeza) e escolha com emoji/monossílabos. Detalhe em AGENTS.md (28/08).
+Relatório do testador: [docs/testes-rodada-4-2026-08-28.md](docs/testes-rodada-4-2026-08-28.md).
+
+**Nota de env**: `LIA_BUSINESS_INFO` (ex.: "Lia Delivery — CNPJ XX.XXX.XXX/0001-XX")
+alimenta a resposta de CNPJ; sem ela a resposta é honesta sem número.
+
 ## 27/08/2026 (2ª) — rodada 3: média 6,80, dinheiro 12/12, achados novos consertados no dia
 
 A rodada 3 (protocolo v3) validou o ciclo da rodada 2: média **4,15 → 6,80**, zero

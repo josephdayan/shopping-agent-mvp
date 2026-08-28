@@ -1379,3 +1379,159 @@ test("27/08 r3 S18: cotação vencida não engole a mensagem — o CEP novo segu
   assert.doesNotMatch(out, /Como prefere pagar/i, `voltou pro menu de pagamento: ${out.slice(0, 300)}`);
   assert.match(out, /endereço/i, `o CEP novo foi engolido: ${out.slice(0, 400)}`);
 });
+
+// ---------- rodada 4 de testes externos (28/08) — regressões ----------
+
+test("28/08 rede anti-silêncio: mensagem sem texto (figurinha/áudio) recebe resposta", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("");
+  assert.match(out, /só consigo ler texto/i, `silêncio para mensagem vazia: "${out}"`);
+});
+
+test("28/08 S8/S7/S5: NF, CNPJ, segurança, quem entrega e disputa de preço têm resposta", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  assert.match(await c.send("vocês emitem nota fiscal?"), /nota fiscal/i);
+  assert.match(await c.send("qual o CNPJ de vocês?"), /registrad|empresa/i);
+  assert.match(await c.send("é seguro? como sei q n é golpe?"), /só paga DEPOIS|nada é cobrado antes/i);
+  assert.match(await c.send("quem faz a entrega?"), /própria loja/i);
+  assert.match(await c.send("no site da loja tá mais barato, vc ta me cobrando a mais?"), /inclui o meu serviço/i);
+  assert.match(await c.send("meu filho que vai pagar, pode mandar a cobrança pro zap dele?"), /copia-e-cola|encaminhar/i);
+});
+
+test("28/08 S20/S10: 'espera' segura sem busca; 'voltei' resume o estado", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const hold = await c.send("espera, meu neto ta chorando");
+  assert.match(hold, /te espero/i, hold.slice(0, 200));
+  assert.doesNotMatch(hold, /Procurando|não achei/i, `virou busca: ${hold.slice(0, 200)}`);
+  const resume = await c.send("pronto voltei, onde a gente tava?");
+  assert.match(resume, /estava|estavamos|aqui/i, resume.slice(0, 200));
+  assert.match(resume, /Coca|opç|Escolh/i, `não reapresentou a escolha: ${resume.slice(0, 300)}`);
+});
+
+test("28/08 S18: 'adiciona um oleo' com total na mesa reabre o pedido — nunca menu de pagamento", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  const out = await c.send("adiciona um oleo de soja");
+  assert.doesNotMatch(out, /Como prefere pagar/i, `preso no pagamento: ${out.slice(0, 300)}`);
+  assert.match(out, /Atualizei seu pedido|total anterior não vale/i, out.slice(0, 300));
+  const after = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(after!.status, "canceled");
+});
+
+test("28/08 S11: 'na vdd quero sim, ainda da?' recupera a compra cancelada", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  const canceled = await c.send("mudei de ideia, cancela");
+  assert.match(canceled, /Cancelado/i);
+  const resumed = await c.send("na vdd quero sim, ainda da?");
+  assert.match(resumed, /Recuperei sua compra/i, `não recuperou: ${resumed.slice(0, 300)}`);
+  assert.doesNotMatch(resumed, /não achei|Opções de/i, `virou busca: ${resumed.slice(0, 300)}`);
+});
+
+test("28/08 S15: 'tira tudo que for de limpeza' remove SÓ limpeza; categoria desconhecida é honesta", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("1 arroz\n1 feijao\n1 sabao em po\n1 detergente");
+  const out = await c.send("tira tudo que for de limpeza");
+  assert.doesNotMatch(out, /Carrinho limpo/i, `apagou a cesta inteira: ${out.slice(0, 250)}`);
+  assert.match(out, /Tirei|Sabão|sabao|Detergente/i, out.slice(0, 300));
+  const latest = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId }, orderBy: { createdAt: "desc" } });
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}") as { basket?: { name: string }[] };
+  const pool = (ctx.basket?.length ? ctx.basket : ((latest?.items as { name: string }[] | null) ?? [])) as { name: string }[];
+  const names = pool.map((i) => i.name.toLowerCase()).join(" | ");
+  assert.ok(!/sab[aã]o|detergente/.test(names), `limpeza sobrou: ${names}`);
+  assert.ok(/arroz/.test(names) && /feij/.test(names), `mercado sumiu: ${names}`);
+  const unknown = await c.send("tira tudo que for de frescura");
+  assert.match(unknown, /Não consegui separar/i, unknown.slice(0, 250));
+});
+
+test("28/08 S17: 'quando chega o de hoje?' sem pedido de hoje é honesto", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await seedOldPaidOrder(c, 2);
+  const out = await c.send("e quando chega o pedido de hoje?");
+  assert.match(out, /Hoje você ainda não fez pedido/i, out.slice(0, 300));
+  assert.match(out, /Escova de Dente/i, `não citou o antigo rotulado: ${out.slice(0, 300)}`);
+});
+
+test("28/08 S16: monossílabos na quantidade — 'ta' vira 1; 'n' vira 1 com dica", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice)) {
+    const done = await c.send("ta");
+    assert.match(done, /✅ 1x|✅.*Coca/i, `'ta' não fechou 1 unidade: ${done.slice(0, 250)}`);
+  }
+  await c.send("limpar carrinho");
+  await c.send("quero guarana");
+  const afterChoice2 = await c.send("1");
+  if (/quantas unidades/i.test(afterChoice2)) {
+    const naoQty = await c.send("n");
+    assert.match(naoQty, /✅ 1x|é só dizer \*tira/i, `'n' travou: ${naoQty.slice(0, 250)}`);
+  }
+});
+
+test("28/08 S2: '👍' na escolha re-pergunta; '1️⃣ mano' escolhe a opção 1", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const thumbs = await c.send("👍");
+  assert.doesNotMatch(thumbs, /De nada|Disponha/i, `agradeceu no meio da escolha: ${thumbs.slice(0, 200)}`);
+  assert.match(thumbs, /qual você quer|Responde o número|Coca/i, thumbs.slice(0, 250));
+  const pick = await c.send("1️⃣ mano");
+  assert.match(pick, /✅|quantas unidades/i, `keycap não escolheu: ${pick.slice(0, 250)}`);
+});
+
+test("28/08 S12: esperando CEP, referência de padaria não vira busca", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("trocar endereço");
+  const landmark = await c.send("é pertinho da padaria São José");
+  assert.doesNotMatch(landmark, /não achei em nenhuma loja|Opções de/i, `virou busca: ${landmark.slice(0, 250)}`);
+  assert.match(landmark, /CEP/i, landmark.slice(0, 250));
+});
+
+test("28/08 S4: comando triplo executa as três ordens", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("1 arroz\n1 cafe\n1 leite");
+  const out = await c.send("troca o arroz por integral, tira cafe e bota 2 leites");
+  assert.doesNotMatch(out, /integral, tira cafe e bota 2 leites eu não achei/i, `virou busca única: ${out.slice(0, 300)}`);
+  const latest4 = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId }, orderBy: { createdAt: "desc" } });
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
+  const ctx = JSON.parse(convo!.context ?? "{}") as { basket?: { name: string; qty: number }[]; pending?: unknown[] };
+  const pool4 = (ctx.basket?.length ? ctx.basket : ((latest4?.items as { name: string; qty: number }[] | null) ?? [])) as { name: string; qty: number }[];
+  const names = pool4.map((i) => `${i.qty}x ${i.name.toLowerCase()}`).join(" | ");
+  assert.ok(!/caf[eé]/.test(names), `café ficou na cesta: ${names}`);
+  const leiteQty = pool4.filter((i) => /leite/.test(i.name.toLowerCase())).reduce((sum, i) => sum + i.qty, 0);
+  assert.ok(leiteQty >= 2, `leite não virou 2 (${leiteQty}): ${names}`);
+});
+
+test("28/08 S6: 'um shampoo qualquer, escolhe vc' auto-escolhe e confirma", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("um shampoo qualquer, escolhe vc");
+  assert.doesNotMatch(out, /escolhe vc eu não achei/i, `'escolhe vc' virou item: ${out.slice(0, 300)}`);
+  assert.match(out, /✅ Anotei|Anotei: 1x/i, `não auto-escolheu: ${out.slice(0, 300)}`);
+  assert.match(out, /shampoo/i, out.slice(0, 300));
+});
+
+test("28/08 S19: cigarro recusado com explicação; a 51 segue normal", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const out = await c.send("manda um marlboro e uma cachaça 51 ai");
+  assert.match(out, /tabaco eu não vendo|🚭/i, `Marlboro sumiu sem explicação: ${out.slice(0, 300)}`);
+  assert.match(out, /cacha|51|Opções/i, `a 51 não veio: ${out.slice(0, 300)}`);
+});

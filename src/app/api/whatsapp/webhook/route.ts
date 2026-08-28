@@ -167,7 +167,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, provider: "meta", ignored: inbound.eventType });
   }
 
-  if (!inbound.phone || !inbound.text) {
+  if (!inbound.phone) {
+    return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
+  }
+
+  // Reação (👍 num balão) não é mensagem — responder viraria spam. ACK e pronto.
+  if (inbound.provider === "meta" && inbound.messageType === "reaction") {
+    return NextResponse.json({ ok: true, provider: "meta", ignored: "reaction" });
+  }
+
+  // Mensagem SEM texto legível (áudio, imagem, figurinha, contato…): segue pro fluxo,
+  // que responde "só leio texto" — antes era um 400 mudo e o cliente ficava no vácuo
+  // (28/08 S2: "👍" e figurinhas morriam sem nenhuma resposta).
+  if (!inbound.text && inbound.provider !== "meta" && inbound.provider !== "twilio") {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
   }
 

@@ -1,5 +1,53 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 28/08/2026 — rodada 4 (cliente difícil, 2,85/10): ciclo de conserto
+
+A rodada 4 (protocolo v4, propositalmente hostil: comandos compostos, interrupções,
+emoji, perguntas de confiança) derrubou a média de 6,80 pra **2,85** — mas os totais
+seguiram 12/12 certos e zero cobrança indevida. Relatório:
+[docs/testes-rodada-4-2026-08-28.md](docs/testes-rodada-4-2026-08-28.md). Consertos:
+
+1. **Rede anti-silêncio estrutural**: turno que termina com ZERO respostas manda
+   fallback ("Me perdi aqui 😅") — `reply()` e todos os envios interativos contam num
+   `AsyncLocalStorage` por turno; mensagem SEM texto (áudio/figurinha/imagem) responde
+   "só leio texto" (antes era um **400 mudo no webhook**); reação de emoji é ACK sem
+   resposta (spam se respondesse). 4 sessões tiveram silêncio absoluto na rodada.
+2. **Perguntas de confiança viraram intents com resposta própria** (respondem em
+   QUALQUER estado): segurança/golpe (`trust_question`), nota fiscal e CNPJ
+   (`fiscal_question`, dados via env `LIA_BUSINESS_INFO`), quem entrega, "no site tá
+   mais barato" (`price_dispute` — explica o serviço com honestidade), "meu filho que
+   paga" (`third_party_pay` — Pix copia-e-cola pode ser encaminhado), xingamento leve
+   (`insult` — resposta digna + oferta de atendente).
+3. **Pausa e retomada**: "pera/espera/já volto" = `hold` (nada de busca — "nao pera"
+   virava busca de PERA fruta); "voltei, onde a gente tava?" = `resume_where` (resume o
+   estado e reapresenta a etapa); "na vdd quero sim, ainda dá?" = `resume_canceled`
+   (recupera a compra recém-cancelada pelo `lastCanceledOrderId`).
+4. **Comando composto**: "troca o arroz por integral, tira o café e bota 2 leites"
+   divide em cláusulas (`splitCommandClauses`) e executa em sequência; lado de troca
+   com 1 token compõe com o item ("arroz integral").
+5. **Editar DEPOIS do total reabre o pedido** (`reopenOrderForEdit`): add/troca/tira em
+   `awaiting_quote_confirmation`/`awaiting_payment`/`choosing_freight` cancela a
+   cotação/cobrança não paga, restaura a cesta e aplica a edição — o catch-all do menu
+   de pagamento só responde a quem não pediu mudança.
+6. **Semântica de cesta**: "1 arroz" depois de "2kg de arroz" é linha própria (dobra na
+   anterior só com "mais/outro" — flag `additive`); linhas repetidas do mesmo produto
+   somam ("meia dúzia de ovo" + "6 ovos" = 12); **conversão de embalagem** anunciada
+   (12 ovos ÷ caixa de 10 = 1 caixa — antes: 12 caixas, R$118); teto GLOBAL "nada acima
+   de 20 reais cada" vale pra lista inteira; correção embutida ("aliás esquece o café",
+   "deixa só chá") remove/deduplica; "óleo" com 2+ itens de despensa vira "óleo de
+   soja"; urgência sai da frase de busca + resposta honesta de prazo; "tira tudo que
+   for de limpeza" remove SÓ a categoria (mapa `CATEGORY_KEYWORDS`; desconhecida =
+   resposta honesta sem apagar nada).
+7. **Escolha**: "👍" com cards na mesa re-pergunta (não "de nada"); "1️⃣ mano" escolhe
+   (keycap normalizado + gíria de preenchimento removida); "o de melhor custo
+   benefício" pega a mais barata; "um shampoo qualquer, escolhe vc" auto-escolhe o topo
+   (flag `autoPick`); monossílabos na quantidade ("ta"→1; "n"→1 + dica de tirar).
+8. **Miudezas de honestidade**: sintoma sem remédio ("algo pra dor de cabeça") explica
+   o limite ANTES das opções de conforto; cigarro/tabaco recusado com explicação
+   (`looksLikeTobacco` — nunca sumir em silêncio); troca pix↔cartão avisa que o código
+   anterior não vale; "quando chega o DE HOJE?" sem pedido de hoje diz isso antes de
+   citar o antigo; esperando CEP, referência vaga re-pede o CEP (nunca busca).
+
 ## Atualização 27/08/2026 (2ª) — rodada 3 (média 6,80): dinheiro fechou 12/12, ciclo de conserto do mesmo dia
 
 Rodada 3 do protocolo (v3, [docs/protocolo-teste-persona-v3.md](docs/protocolo-teste-persona-v3.md))

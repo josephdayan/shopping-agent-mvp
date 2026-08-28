@@ -5,7 +5,18 @@
 
 // qtyExplicit: o cliente DISSE a quantidade ("uma coca", "2 leites") — o fluxo não
 // deve re-perguntar "quantas unidades?" depois da escolha. Ausente = qty implícito.
-export type ParsedLine = { phrase: string; qty: number; qtyExplicit?: boolean; cap?: number };
+export type ParsedLine = {
+  phrase: string;
+  qty: number;
+  qtyExplicit?: boolean;
+  cap?: number;
+  // Segmento veio com "mais/outro" ("mais dois leites"): só ele pode se DOBRAR na
+  // linha anterior — "1 arroz" depois de "arroz 2kg" é linha própria, nunca soma
+  // (28/08 S9: virou 2x de cada arroz).
+  additive?: boolean;
+  // "qualquer um, escolhe vc": a Lia escolhe o topo do ranking sozinha (28/08 S6).
+  autoPick?: boolean;
+};
 
 export type Intent =
   | { kind: "thanks" }
@@ -52,6 +63,24 @@ export type Intent =
   | { kind: "switch_payment" }
   // "quero falar com um atendente/humano".
   | { kind: "human" }
+  // "pera"/"espera aí"/"já volto" — o cliente pediu PAUSA; nada de busca (28/08 S10/S20).
+  | { kind: "hold" }
+  // "voltei, onde a gente tava?" — retomar com um resumo do estado (28/08 S20).
+  | { kind: "resume_where" }
+  // "na vdd quero sim, ainda dá?" — arrependimento do cancelamento (28/08 S11).
+  | { kind: "resume_canceled" }
+  // "no site tá mais barato, tá me cobrando a mais?" — disputa de preço (28/08 S5).
+  | { kind: "price_dispute" }
+  // "é seguro? como sei que não é golpe?" — confiança/segurança (28/08 S7).
+  | { kind: "trust_question" }
+  // "meu filho que vai pagar, manda pra ele?" — cobrança para terceiro (28/08 S7).
+  | { kind: "third_party_pay" }
+  // "emitem nota fiscal?" / "qual o CNPJ?" (28/08 S8).
+  | { kind: "fiscal_question"; topic: "nf" | "cnpj" }
+  // "quem faz a entrega?" (28/08 S8).
+  | { kind: "who_delivers" }
+  // "vc é burrinha né" — xingamento leve; resposta digna, nunca busca (28/08 S13).
+  | { kind: "insult" }
   // "veio errado", "faltou item", "produto estragado" — reclamação pós-pedido.
   | { kind: "complaint" }
   // "quero" / "queria comprar" / "quero fazer um pedido" SEM dizer o quê — perguntar
@@ -73,6 +102,10 @@ export function normalizeMsg(input: string): string {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
+    // Emoji de tecla ("1️⃣" = dígito + VS16 + combining keycap) vira o dígito puro —
+    // "1️⃣ mano" tem que escolher a opção 1 (28/08 S2).
+    .replace(/([0-9])️?⃣/g, "$1")
+    .replace(/️/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -114,7 +147,7 @@ function expandShoppingShorthand(text: string): string {
 
 // Segmentos que são conversa, não produto ("bom dia", "por favor", "lista:").
 const NOISE_SEGMENT_RE =
-  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|pensando bem|mudei de ideia|na verdade|alias|deixa (pra la|quieto)|quer saber|(nao|n) sei( .*)?|o que .*)[\s:!.?]*$/;
+  /^(oi+( lia)?|ola+( lia)?|bom dia+|boa tarde+|boa noite+|tudo (bem|bom)|td bem|e ?ai|opa+|obrigad\w*|valeu|por favor|pfv*|pls|lista|segue( a lista)?|ai vai|entao|so isso|é so|e so|mais nada|nada mais|ta+|ta bom|bom|ok+|okay|blz|beleza+|show|top|firmeza|certo|entendi|pensando bem|mudei de ideia|na verdade|alias|deixa (pra la|quieto)|quer saber|(nao|n) sei( .*)?|o que .*|(minha |meu )(filha?|filho|querid[ao]|amor|bem|anjo)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|(seu|dona) [a-zà-ú]+ aqui|aqui (e|eh) [a-zà-ú]+)[\s:!.?]*$/;
 
 // Restrição/complemento que NUNCA é produto (15 rodadas reais, 14/08): orçamento
 // ("até uns 100 reais"), preferência vazia ("qualquer marca", "de preferência o mais
@@ -145,10 +178,23 @@ const MODIFIER_SEGMENT_RE = new RegExp(
       // aposto classificador ("coisa simples de farmácia", "coisinhas básicas de
       // mercado") — descreve a LISTA, nunca é item (rodada 27/08 S20)
       "(umas? |so |apenas )?(coisa|coisinha)s? (simples|basica|rapida)s?( (de|do|da) [a-zà-ú]+)?",
-      "(fazer )?(a |as |uma )?compras? (da semana|do mes|de casa)( .*)?"
+      "(fazer )?(a |as |uma )?compras? (da semana|do mes|de casa)( .*)?",
+      // "escolhe você"/"tanto faz" — delega a escolha (28/08 S6)
+      "(pode |ai )?escolhe(r)? ((por )?(vc|voce|mim)|ai)",
+      "(vc|voce) (que )?(sabe|escolhe|decide)",
+      "tanto faz( qual)?",
+      // teto GLOBAL ("nada acima de 20 reais cada") — vale pra lista inteira (28/08 S1)
+      "(nada|nenhum( item)?) (acima|alem|passando) de (uns |umas )?(r\\$ ?)?\\d+([.,]\\d{1,2})? ?(reais|real|conto|contos)?( cada( uma?)?| por item)?"
     ].join("|") +
     ")$"
 );
+
+// Segmento que delega a escolha ("escolhe vc", "tanto faz"): marca a linha anterior
+// como autoPick — a Lia escolhe o topo do ranking sozinha (28/08 S6).
+const CHOOSE_FOR_ME_RE = /(escolhe(r)? ((por )?(vc|voce|mim)|ai)|(vc|voce) (que )?(sabe|escolhe|decide)|tanto faz)/;
+
+// Teto global da mensagem ("nada acima de 20 reais cada"): extrai o número.
+const GLOBAL_CAP_RE = /^(?:nada|nenhum(?: item)?) (?:acima|alem|passando) de (?:uns |umas )?(?:r\$ ?)?(\d+(?:[.,]\d{1,2})?)/;
 
 // Oração NARRATIVA ("meu neto vem sábado", "vou receber a família", "que não seja
 // muito caro"): contexto sobre pessoas/planos/preferências, nunca item de compra.
@@ -258,9 +304,19 @@ export function parseBasketLines(text: string): ParsedLine[] {
         )
         // vocativo ("minha filha, quero…", "amiga, me vê…", "lia,…") não é produto
         .replace(/^((minha|meu)\s+(filha?|filho|querid[ao]|amor|anjo|bem)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|lia)[\s,!.]+/i, "")
-        // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri",
+        // "mais um refri"/"outro leite" é ADIÇÃO relativa: marca com sentinela antes de
+        // limpar — só segmento aditivo pode se dobrar na linha anterior (28/08 S9).
+        .replace(/^(e\s+)?(mais|outr[oa]s?)\s+/i, "\u0001")
+        // conjunção sobrando no começo do segmento ("e areia pro gato",
         // "mas entrega hoje se der" — a adversativa escondia o modificador de urgência)
-        .replace(/^(e|mais|mas|porem|porém|so que|só que|com)\s+/i, "")
+        .replace(/^(e|mas|porem|porém|so que|só que|com)\s+/i, "")
+        // urgência DENTRO da linha ("fralda pra HOJE urgente") sai da frase de busca —
+        // a query mostrada era "fralda pra HOJE" (28/08 S14); a flag de urgência é da
+        // mensagem, não do nome do produto
+        .replace(/\s*\b(pra|para)\s+(hoje|amanha)\b/gi, "")
+        .replace(/\s*\burgente(mente)?\b/gi, "")
+        // "um shampoo QUALQUER" = tanto faz → a Lia pode escolher (28/08 S6)
+        .replace(/\s+qualquer(\s+uma?)?\s*$/i, "\u0002")
         // "to sem café" é jeito real de PEDIR café — o item é o que falta
         .replace(/^(?:eu\s+)?(?:t[oô]|tou|estou)\s+sem\s+/i, "")
         .replace(/\s+/g, " ")
@@ -272,16 +328,23 @@ export function parseBasketLines(text: string): ParsedLine[] {
         !NOISE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !STATE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !NARRATIVE_SEGMENT_RE.test(normalizeMsg(raw)) &&
-        !/^(ah+|hm+|hmm+|aa+|eh+|dai|tipo|ne|iss[oa]( ai)?|aquilo( ali)?|esses? ai|essas? ai)$/i.test(normalizeMsg(raw))
+        !/^(ah+|hm+|hmm+|aa+|e|é|eh+|dai|tipo|ne|iss[oa]( ai)?|aquilo( ali)?|esses? ai|essas? ai)[\s!.?]*$/i.test(normalizeMsg(raw))
     )
-    .map((raw) => {
+    .map((rawWithFlags): ParsedLine => {
+      // Sentinelas dos passos anteriores: \u0001 = segmento aditivo ("mais/outro"),
+      // \u0002 = "qualquer" (a Lia pode escolher sozinha).
+      const flags = {
+        ...(rawWithFlags.includes("\u0001") ? { additive: true as const } : {}),
+        ...(rawWithFlags.includes("\u0002") ? { autoPick: true as const } : {})
+      };
+      const raw = rawWithFlags.replace(/[\u0001\u0002]/g, "").trim();
       // Peso/volume NÃO é quantidade: "2kg de arroz" = 1× "arroz 2kg" (o tamanho vai pro
       // nome e o matcher casa por atributo); "1,5l de leite" idem.
       const weight = raw.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|lt|litros?)\s+(?:de\s+)?(.+)$/i);
-      if (weight) return { phrase: `${weight[3].trim()} ${weight[1]}${weight[2].toLowerCase()}`, qty: 1 };
+      if (weight) return { phrase: `${weight[3].trim()} ${weight[1]}${weight[2].toLowerCase()}`, qty: 1, ...flags };
 
       const m = raw.match(/^(\d+)\s*(?:x|un|unidades?)?\s+(.*)$/i);
-      if (m) return { phrase: m[2].trim(), qty: Math.min(MAX_QTY, Math.max(1, Number(m[1]))), qtyExplicit: true };
+      if (m) return { phrase: m[2].trim(), qty: Math.min(MAX_QTY, Math.max(1, Number(m[1]))), qtyExplicit: true, ...flags };
 
       // "dois pães", "meia dúzia de ovo", "uma dúzia de banana"
       // ([\wà-ú]+) e não (\w+): "três" tem acento e \w é ASCII — sem isso "três
@@ -289,17 +352,32 @@ export function parseBasketLines(text: string): ParsedLine[] {
       const word = raw.match(/^(?:(meia)\s+d[uú]zia|(uma\s+)?d[uú]zia|([\wà-ú]+))\s+(?:de\s+)?(.+)$/i);
       if (word) {
         const n = normalizeMsg(word[3] ?? "");
-        if (word[1]) return { phrase: word[4].trim(), qty: 6, qtyExplicit: true };
-        if (/d[uú]zia/i.test(raw) && !word[3]) return { phrase: word[4].trim(), qty: 12, qtyExplicit: true };
-        if (n && WORD_QTY[n]) return { phrase: word[4].trim(), qty: WORD_QTY[n], qtyExplicit: true };
+        if (word[1]) return { phrase: word[4].trim(), qty: 6, qtyExplicit: true, ...flags };
+        if (/d[uú]zia/i.test(raw) && !word[3]) return { phrase: word[4].trim(), qty: 12, qtyExplicit: true, ...flags };
+        if (n && WORD_QTY[n]) return { phrase: word[4].trim(), qty: WORD_QTY[n], qtyExplicit: true, ...flags };
       }
-      return { phrase: raw, qty: 1 };
+      return { phrase: raw, qty: 1, ...flags };
     });
 
   // "ração pro meu dog, ele é filhote": cláusula com pronome DESCREVE o item anterior
   // (vira atributo do nome), nunca um item novo. Sem item anterior, descrição solta
   // não é produto.
   const merged: ParsedLine[] = [];
+  let globalCap: number | null = null;
+  // Menção por token (tolerante a singular/plural e tokens curtos como "chá"):
+  // base das correções embutidas e do dedupe de linhas repetidas.
+  const lineMentions = (target: string, phrase: string) => {
+    const tTokens = normalizeMsg(target).split(" ").filter((t) => t.length >= 3);
+    if (!tTokens.length) return false;
+    const pTokens = new Set(normalizeMsg(phrase).split(" "));
+    return tTokens.some((t) => pTokens.has(t) || pTokens.has(`${t}s`) || (t.endsWith("s") && pTokens.has(t.slice(0, -1))));
+  };
+  const sameSpec = (a: string, b: string) => {
+    const at = normalizeMsg(a).split(" ").filter((t) => t.length >= 3).sort();
+    const bt = normalizeMsg(b).split(" ").filter((t) => t.length >= 3).sort();
+    if (!at.length || at.length !== bt.length) return false;
+    return at.every((t, i) => t === bt[i] || `${t}s` === bt[i] || t === `${bt[i]}s`);
+  };
   for (const line of parsedLines) {
     const pron = line.phrase.match(/^(?:ele|ela)s?\s+(?:é|e|eh|sao|são|esta|está|ta|tá)\s+(?:um\s+|uma\s+)?(.+)$/i);
     if (pron) {
@@ -314,13 +392,58 @@ export function parseBasketLines(text: string): ParsedLine[] {
     if (merged.length) {
       const prev = merged[merged.length - 1];
       const bareRef = /^(?:um |uma )?(?:desses?|dessas?|d[oa] mesm[oa]s?|iguais?)$/.test(normalizeMsg(line.phrase));
+      // Substantivo nu só se dobra na linha anterior quando o segmento era ADITIVO
+      // ("mais dois leites"). "1 arroz" depois de "arroz 2kg" é linha PRÓPRIA — sem a
+      // trava, os dois arrozes viravam 2x cada (28/08 S9).
       const bareNoun =
-        line.qtyExplicit && meaningfulProductTokens(line.phrase).length === 1 && sharesProductNoun(line.phrase, prev.phrase);
+        line.additive &&
+        line.qtyExplicit &&
+        meaningfulProductTokens(line.phrase).length === 1 &&
+        sharesProductNoun(line.phrase, prev.phrase);
       if (bareRef || bareNoun) {
         prev.qty = Math.min(MAX_QTY, prev.qty + Math.max(1, line.qty));
         prev.qtyExplicit = true;
         continue;
       }
+    }
+    // Correção EMBUTIDA na própria mensagem ("…café, aliás esquece o café, …"):
+    // remove a linha anterior correspondente, nunca vira item (28/08 S1 — o açúcar
+    // "esquecido" reapareceu na cesta e a correção virou linha).
+    const correction = line.phrase.match(
+      /^(?:a?li[aá]s\s+|na verdade\s+|pensando (?:bem|melhor)\s+|ah\s+)?(?:esquece|esqueci|corta|cancela|tira)(?:\s+(?:o|a|os|as))?\s+(.{2,40})$/i
+    );
+    if (correction && merged.length) {
+      const target = cleanItemPhrase(correction[1]);
+      const before = merged.length;
+      for (let i = merged.length - 1; i >= 0; i--) {
+        if (lineMentions(target, merged[i].phrase)) merged.splice(i, 1);
+      }
+      if (before !== merged.length) continue;
+      // sem alvo na lista: segue como linha normal (pode ser um produto "tira-gosto")
+    }
+    // "…e deixa só chá": mantém UMA linha desse produto e remove duplicatas (28/08 S1
+    // — o chá entrou duas vezes).
+    const keepOnly = line.phrase.match(/^deixa\s+(?:so|só)\s+(?:o\s+|a\s+)?(.{2,40})$/i);
+    if (keepOnly) {
+      const target = cleanItemPhrase(keepOnly[1]);
+      let kept = false;
+      for (let i = merged.length - 1; i >= 0; i--) {
+        if (lineMentions(target, merged[i].phrase)) {
+          if (kept) merged.splice(i, 1);
+          else kept = true;
+        }
+      }
+      if (!kept) merged.push({ phrase: target, qty: 1 });
+      continue;
+    }
+    // Linha REPETIDA do mesmo produto ("meia dúzia de ovo … 6 ovos"): soma na
+    // existente em vez de abrir duas escolhas iguais (28/08 S9).
+    const twinIdx = merged.findIndex((m) => sameSpec(m.phrase, line.phrase));
+    if (twinIdx >= 0) {
+      const twin = merged[twinIdx];
+      twin.qty = Math.min(MAX_QTY, twin.qty + line.qty);
+      twin.qtyExplicit = twin.qtyExplicit || line.qtyExplicit;
+      continue;
     }
     // Preferência NEGATIVA como segmento ("sem pimenta", "não veicular", "não quero
     // brinquedo barulhento", "não quero os muito amargos"): vira atributo "sem <alvo>"
@@ -355,6 +478,20 @@ export function parseBasketLines(text: string): ParsedLine[] {
     // Restrição solta nunca vira item; orçamento gruda como teto no item anterior
     // ("presente de aniversário, até uns 100 reais" → 1 item com cap de R$100).
     if (MODIFIER_SEGMENT_RE.test(normalizeMsg(line.phrase))) {
+      const nm = normalizeMsg(line.phrase);
+      // "nada acima de 20 reais cada" é teto da LISTA INTEIRA (28/08 S1: foi ecoado
+      // como item não-achado e ignorado).
+      const globalCapMatch = nm.match(GLOBAL_CAP_RE);
+      if (globalCapMatch) {
+        globalCap = Number(globalCapMatch[1].replace(",", "."));
+        continue;
+      }
+      // "escolhe vc"/"tanto faz": a linha anterior vira escolha automática (28/08 S6).
+      if (CHOOSE_FOR_ME_RE.test(nm)) {
+        const prev = merged[merged.length - 1];
+        if (prev) prev.autoPick = true;
+        continue;
+      }
       const cap = parsePriceCap(line.phrase) ?? parsePriceCap(`até ${line.phrase}`);
       const prev = merged[merged.length - 1];
       if (cap != null && prev && parsePriceCap(prev.phrase) == null) {
@@ -363,6 +500,11 @@ export function parseBasketLines(text: string): ParsedLine[] {
       continue;
     }
     merged.push(line);
+  }
+  if (globalCap != null) {
+    for (const line of merged) {
+      if (parsePriceCap(line.phrase) == null) line.phrase = `${line.phrase} até ${globalCap} reais`;
+    }
   }
   return merged;
 }
@@ -476,10 +618,12 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
     const twin = deterministic.find((d) => sameProduct(d.phrase, line.phrase));
     const twinCap = twin ? parsePriceCap(twin.phrase) : null;
     const phrase = twinCap != null && parsePriceCap(line.phrase) == null ? `${line.phrase} até ${twinCap} reais` : line.phrase;
-    if (line.qtyExplicit) return { ...line, phrase };
-    if (line.qty > 1) return { ...line, phrase, qtyExplicit: true };
-    if (twin?.qtyExplicit) return { ...line, phrase, qty: Math.max(line.qty, twin.qty), qtyExplicit: true };
-    return { ...line, phrase };
+    // "escolhe vc" também vive no gêmeo determinístico (28/08 S6).
+    const auto = twin?.autoPick ? { autoPick: true as const } : {};
+    if (line.qtyExplicit) return { ...line, phrase, ...auto };
+    if (line.qty > 1) return { ...line, phrase, qtyExplicit: true, ...auto };
+    if (twin?.qtyExplicit) return { ...line, phrase, qty: Math.max(line.qty, twin.qty), qtyExplicit: true, ...auto };
+    return { ...line, phrase, ...auto };
   });
   if (deterministic.length <= flagged.length) return flagged;
   const merged = [...flagged];
@@ -549,6 +693,41 @@ export function looksLikeMedicine(text: string): boolean {
   return MEDICINE_WORDS.some((word) =>
     word.includes(" ") ? n.includes(word) : new RegExp(`\\b${word}\\b`).test(n)
   );
+}
+
+// Cigarro/tabaco: não vendemos (venda online é restrita e o produto é indesejado no
+// catálogo). A recusa é EXPLICADA — sumir com o item em silêncio confundiu o teste
+// (28/08 S19: o Marlboro foi ignorado sem uma palavra).
+const TOBACCO_RE =
+  /\b(cigarros?|marlboro|dunhill|lucky strike|camel|derby|chesterfield|rothmans|hollywood|tabaco|fumo de corda|palheiros?|vape|pods? descartave\w*|cigarro eletronico|seda de enrolar)\b/;
+
+export function looksLikeTobacco(text: string): boolean {
+  return TOBACCO_RE.test(normalizeMsg(text));
+}
+
+// "alguma coisa pra dor de cabeça": pedido por SINTOMA sem nomear remédio — a Lia
+// explica que remédio é só farmácia ANTES de mostrar itens de conforto (28/08 S3:
+// mostrou touca térmica sem nenhuma explicação e pareceu perdida).
+export function looksLikeSymptomAsk(text: string): boolean {
+  const n = normalizeMsg(text);
+  return (
+    /\b(algo|alguma coisa|alguma coisinha|um negocio|um remedinho|um troco)\b.{0,30}\b(pra|para)\b.{0,30}\b(dor|febre|gripe|resfriado|enjoo|azia|tosse|alergia|enxaqueca|ressaca|garganta|colica)\b/.test(n) ||
+    /\b(pra|para) (minha |a |essa )?(dor de cabeca|dor de garganta|dor nas costas|garganta inflamada|colica)\b/.test(n)
+  );
+}
+
+// "troca o arroz por integral, tira o café e bota 2 leites" — UMA mensagem com vários
+// comandos de cesta. Divide nas fronteiras "(,|;| e ) + verbo de comando" para o
+// roteador executar em sequência (28/08 S4: virou UMA busca e nada foi feito).
+const COMMAND_VERB = "troca|trocar|tira|tirar|remove|remover|bota|botar|poe|por|coloca|colocar|adiciona|adicionar|inclui|incluir|acrescenta|acrescentar|manda|me ve|quero|cancela|esquece";
+
+export function splitCommandClauses(text: string): string[] {
+  const n = normalizeMsg(text);
+  const parts = n
+    .split(new RegExp(`\\s*[,;]\\s*(?=(?:e\\s+)?(?:${COMMAND_VERB})\\b)|\\s+e\\s+(?=(?:${COMMAND_VERB})\\b)`))
+    .map((p) => p.replace(/^e\s+/, "").trim())
+    .filter(Boolean);
+  return parts.length > 1 ? parts : [n];
 }
 
 // "quero receber em casa" não é troca de endereço — é o normal. Só "em/para <lugar
@@ -715,6 +894,14 @@ export function detectIntent(text: string): Intent {
     return { kind: "help" };
   }
 
+  // "é seguro? como sei q n é golpe?" — pergunta de CONFIANÇA na hora do dinheiro:
+  // resposta específica de segurança, não a apresentação genérica (28/08 S7).
+  if (
+    /\b(e|eh|é|isso e|isso eh) seguro\b|\bcomo (eu )?sei\b.*\bgolpe\b|\bnao (vou|to) (ser|sendo) (roubad|enganad)|\bposso confiar\b|\bvao me roubar\b/.test(n)
+  ) {
+    return { kind: "trust_question" };
+  }
+
   // Identidade/segurança DENTRO de mensagem composta curta: "oi... quem é vc? isso é
   // golpe?" é apresentação, nunca extração de produto (teste 26/08, P1.5).
   if (
@@ -722,6 +909,76 @@ export function detectIntent(text: string): Intent {
     (/(quem (e|eh) (vc|voce|tu)\b)|(\b(e|eh|isso e|isso eh) golpe\b)|(\bgolpe\b.*\?)|(\bconfiavel\b)/.test(n))
   ) {
     return { kind: "help" };
+  }
+
+  // "pera"/"espera aí, meu neto tá chorando"/"já volto": pedido de PAUSA — jamais
+  // busca (28/08 S10: "nao pera" virou busca de PERA fruta; S20: "espera, meu neto ta
+  // chorando" virou busca). "quero pera" tem verbo de pedido e não cai aqui.
+  if (
+    /^(nao |não )?(pera(i)?|espera( ai| um pouco| so)?|calma( ai)?|aguenta( ai)?|segura( ai)?|(so |só )?um (minuto|minutinho|momento|segundo|instante)|ja volto|volto ja(zinho)?)\b/.test(n) &&
+    !/\b(quero|me ve|manda|traz|compra|adiciona|coloca|bota)\b/.test(n)
+  ) {
+    return { kind: "hold" };
+  }
+
+  // "pronto voltei, onde a gente tava?" — retomar com resumo do estado (28/08 S20).
+  if (
+    /\b(pronto )?voltei\b|\bonde (a gente |nos |que )?(tava(mos)?|estava(mos)?|parou|paramos)\b|\bvamos continuar\b|\bcontinua(r)? (de onde|dali|o pedido)\b/.test(n) &&
+    !/\b(quero|me ve|manda|traz|compra)\b/.test(n)
+  ) {
+    return { kind: "resume_where" };
+  }
+
+  // "na vdd quero sim, ainda dá?" — arrependimento do cancelamento: recuperar a
+  // compra, nunca buscar "na vdd sim" (28/08 S11, que virou produto pra cachorro).
+  if (
+    /^(na (vdd|verdade)|pensando (bem|melhor))[,!.\s]*(eu )?quero( sim| ainda)?\b/.test(n) ||
+    /^quero sim[,!.\s]*(ainda (da|dá)\??)?\s*$/.test(n) ||
+    /^ainda (da|dá)\??\s*$/.test(n) ||
+    /\bmudei de ideia[,!.\s]+quero (sim|de volta|aquele)\b/.test(n)
+  ) {
+    return { kind: "resume_canceled" };
+  }
+
+  // "no site da loja tá mais barato, tá me cobrando a mais?" — disputa de preço:
+  // resposta honesta sobre o serviço, nunca o menu de pagamento (28/08 S5).
+  if (
+    /\b(no site|na loja|no mercado(?! livre))\b.*\bmais barato\b|\bcobrando (a mais|caro|errado)\b|\bpor ?que (ta|tá|esta|está) mais caro\b|\bmais caro que (o site|a loja|la)\b|\bpreco (ta|tá|esta|está) diferente\b/.test(n)
+  ) {
+    return { kind: "price_dispute" };
+  }
+
+  // "meu filho que vai pagar, manda a cobrança pro zap dele?" (28/08 S7).
+  if (
+    /\b(meu|minha) [a-zà-ú]+ (que |e quem )?(vai |pode |quem )?paga(r)?\b/.test(n) ||
+    /\bmanda(r)? (a |o )?(cobranca|conta|pix|codigo|link) (pro|pra|para o|para a|pro zap|pro whats)\b/.test(n) ||
+    /\bpode mandar pro (zap|whats(app)?|numero|celular) d/.test(n)
+  ) {
+    return { kind: "third_party_pay" };
+  }
+
+  // Nota fiscal / CNPJ (28/08 S8 — ficaram sem resposta nenhuma).
+  if (/\bnota fiscal\b|\bemitem? nota\b|\bvem com nota\b|\bquero (a )?nota\b|\bnfe?\b/.test(n) && n.length <= 80) {
+    return { kind: "fiscal_question", topic: "nf" };
+  }
+  if (/\bcnpj\b|\brazao social\b|\bempresa (registrada|de voces|e registrada)\b/.test(n) && n.length <= 80) {
+    return { kind: "fiscal_question", topic: "cnpj" };
+  }
+
+  // "quem faz a entrega?" (28/08 S8 — respondida com cobertura, fora do assunto).
+  if (/\bquem (faz|vai fazer|realiza) (a |as )?entrega/.test(n) || /^quem entrega\??\s*$/.test(n) || /\bquem (vem|traz|vai trazer)\b.*\bentrega/.test(n)) {
+    return { kind: "who_delivers" };
+  }
+
+  // Xingamento leve ("vc é meio burrinha né 😂"): resposta digna + seguir o fluxo,
+  // nunca silêncio nem busca (28/08 S13). Guarda: "saco de lixo"/"lixeira" é produto.
+  if (
+    n.length <= 70 &&
+    (/\b(vc|voce|tu|sua|seu) (e|eh|é|ta|tá)? ?(meio |muito |mt )?(burr\w*|idiota|inutil|lerd\w*|tonta?|tapad\w*)\b/.test(n) ||
+      /^(sua? )?(burr[ao]|burrinh[ao]|idiota|inutil)\b[\s!.😂🤣]*$/.test(n) ||
+      (/\b(lixo|uma bosta|pessima|péssima|horrivel)\b/.test(n) && /\b(vc|voce|tu|esse (bot|robo)|isso (e|eh|é))\b/.test(n) && !/\b(saco|sacos|lixeira|cesto)\b/.test(n)))
+  ) {
+    return { kind: "insult" };
   }
 
   // Regateio: "faz por 10?", "tem desconto?" — resposta clara, nunca escolha nem busca.
@@ -826,7 +1083,10 @@ export function detectIntent(text: string): Intent {
     );
     const target = cleanItemPhrase(addSplit[0]);
     const andAdd = addSplit[1] ? cleanItemPhrase(addSplit[1]) : undefined;
-    const clearAll = !target || /\b(tudo|todos|todas)\b/.test(target);
+    // "tira tudo que for de limpeza" é remoção por CATEGORIA — nunca limpa a cesta
+    // inteira (28/08 S15: apagou os 12 itens, inclusive 10 que não eram de limpeza).
+    const categoryQualified = /^(tudo|todos|todas)\s+(o\s+|os\s+|as\s+)?(que|de|da|do|d[ao]s)\b/.test(target);
+    const clearAll = !target || (/\b(tudo|todos|todas)\b/.test(target) && !categoryQualified);
     if (clearAll) return { kind: "clear_cart" };
     // "cancela o pedido" is an order cancel, not an item removal.
     if (/^(o\s+|a\s+|meu\s+)?(pedido|compra|entrega)$/.test(target)) return { kind: "cancel", explicitOrder: true };
@@ -1107,8 +1367,20 @@ const CHOICE_PICK_VERB_RE =
 const CHOICE_STOP = new Set(["pode", "ser", "quero", "essa", "esse", "dessa", "desse", "por", "favor", "mais", "com", "sem", "pra", "para", "das", "dos", "vou", "manda", "prefiro", "melhor", "acho", "que", "entao", "aquele", "aquela", "tem", "cor", "versao", "tamanho", "tipo", "ver", "acha", "ache", "mostra", "procura", "busca", "outra", "outro", "outras", "outros", "alguma", "algum", "opcoes", "opcao"]);
 
 export function parseChoiceReply(text: string, options: { name: string; unitPrice: number }[]): ChoiceReply {
-  const n = normalizeMsg(text);
+  // Gíria de preenchimento gruda no número ("1 mano", "2 ai pfv") — sai antes do
+  // parse (28/08 S2: "1️⃣ mano" não escolhia nada).
+  const n = normalizeMsg(text)
+    .replace(/\b(mano|meu|cara|vei|mermao|parca|ai|dai|pfv+|blz|beleza|mesmo|entao|então)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   if (!n || !options.length) return null;
+
+  // "o de melhor custo benefício" = escolha delegada por VALOR → a mais barata
+  // (28/08 S6: virou busca e trouxe "Projetos Corte A Laser").
+  if (/^(o|a)?\s*(de\s+)?(melhor\s+)?custo[\s-]?beneficio$/.test(n)) {
+    const idx = options.reduce((best, o, i) => (o.unitPrice < options[best].unitPrice ? i : best), 0);
+    return { type: "pick", index: idx };
+  }
 
   const bare = n.match(/^(?:opcao\s*|op\s*|numero\s*|n[o°º]?\s*|a\s+|o\s+)?([1-9])[\s).!]*$/);
   if (bare) {

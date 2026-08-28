@@ -8,6 +8,9 @@ import {
   hasUrgencySignal,
   looksLikeMedicine,
   parseBasketLines,
+  splitCommandClauses,
+  looksLikeTobacco,
+  looksLikeSymptomAsk,
   isNarrativeSegment,
   mergeShoppingLines,
   parseChoiceReply,
@@ -734,4 +737,95 @@ test("27/08 r3 S14: 'esquece' é remoção, mesmo com interjeição na frente", 
 test("27/08 r3 S17: 'outra opção' no singular pede mais opções", () => {
   assert.equal(wantsMoreOptions("me mostra outra opção"), true);
   assert.equal(wantsMoreOptions("tem outra opcao"), true);
+});
+
+// ---------- rodada 4 de testes externos (28/08) ----------
+
+test("28/08 S9: quantidades-pegadinha — peso não é qty, '1 arroz' é linha própria, ovos somam", () => {
+  const lines = parseBasketLines("2kg de arroz, 1 arroz, meia duzia de ovo, 6 ovos, 1,5l de coca e uma coca lata");
+  const short = lines.map((l) => `${l.phrase}:${l.qty}`);
+  assert.deepEqual(short, ["arroz 2kg:1", "arroz:1", "ovo:12", "coca 1,5l:1", "coca lata:1"], JSON.stringify(short));
+});
+
+test("28/08 S1: teto global 'nada acima de 20 reais cada' vale pra lista inteira", () => {
+  const lines = parseBasketLines("arroz, cafe, sabao em po, nada acima de 20 reais cada");
+  assert.equal(lines.length, 3);
+  assert.ok(lines.every((l) => /até 20 reais/.test(l.phrase)), JSON.stringify(lines));
+});
+
+test("28/08 S1: correção embutida remove o item; 'deixa só X' deduplica", () => {
+  const lines = parseBasketLines("arroz, acucar, cafe, alias esquece o acucar, cha, cha matte, e deixa so cha");
+  const phrases = lines.map((l) => l.phrase);
+  assert.ok(!phrases.some((p) => /acucar/.test(p)), JSON.stringify(phrases));
+  assert.equal(phrases.filter((p) => /cha/.test(p)).length, 1, JSON.stringify(phrases));
+});
+
+test("28/08 S6: 'qualquer'/'escolhe vc' marcam autoPick e não viram item", () => {
+  const lines = parseBasketLines("um shampoo qualquer, escolhe vc");
+  assert.equal(lines.length, 1);
+  assert.equal(lines[0].phrase, "shampoo");
+  assert.equal(lines[0].autoPick, true);
+});
+
+test("28/08 S4: splitCommandClauses divide comando triplo; lista normal não divide", () => {
+  assert.deepEqual(splitCommandClauses("troca o arroz por integral, tira cafe e bota 2 leites"), [
+    "troca o arroz por integral",
+    "tira cafe",
+    "bota 2 leites"
+  ]);
+  assert.equal(splitCommandClauses("quero arroz, feijao e cafe").length, 1);
+});
+
+test("28/08 S15: 'tira tudo que for de limpeza' é remoção por categoria, não limpar tudo", () => {
+  const intent = detectIntent("tira tudo que for de limpeza");
+  assert.equal(intent.kind, "remove_item");
+  if (intent.kind === "remove_item") assert.match(intent.target, /limpeza/);
+  assert.equal(detectIntent("tira tudo").kind, "clear_cart");
+});
+
+test("28/08: pausas e retomadas nunca viram busca", () => {
+  assert.equal(detectIntent("espera, meu neto ta chorando").kind, "hold");
+  assert.equal(detectIntent("nao pera").kind, "hold");
+  assert.equal(detectIntent("ja volto").kind, "hold");
+  assert.equal(detectIntent("quero pera").kind, "free_text");
+  assert.equal(detectIntent("pronto voltei, onde a gente tava?").kind, "resume_where");
+  assert.equal(detectIntent("na vdd quero sim, ainda da?").kind, "resume_canceled");
+});
+
+test("28/08 S5/S7/S8: perguntas de confiança têm intent próprio", () => {
+  assert.equal(detectIntent("é seguro? como sei q n é golpe?").kind, "trust_question");
+  assert.equal(detectIntent("isso é golpe?").kind, "help");
+  assert.equal(detectIntent("meu filho que vai pagar, pode mandar a cobrança pro zap dele?").kind, "third_party_pay");
+  assert.deepEqual(detectIntent("vocês emitem nota fiscal?"), { kind: "fiscal_question", topic: "nf" });
+  assert.deepEqual(detectIntent("qual o CNPJ de vocês?"), { kind: "fiscal_question", topic: "cnpj" });
+  assert.equal(detectIntent("quem faz a entrega?").kind, "who_delivers");
+  assert.equal(detectIntent("no site da loja tá mais barato, vc ta me cobrando a mais?").kind, "price_dispute");
+});
+
+test("28/08 S13: xingamento leve tem resposta própria; produto com 'lixo' não", () => {
+  assert.equal(detectIntent("vc é meio burrinha né 😂").kind, "insult");
+  assert.equal(detectIntent("quero saco de lixo").kind, "free_text");
+});
+
+test("28/08 S19: cigarro é reconhecido; S3: sintoma sem remédio é reconhecido", () => {
+  assert.equal(looksLikeTobacco("manda um marlboro e uma 51 ai"), true);
+  assert.equal(looksLikeTobacco("uma 51 e um limão"), false);
+  assert.equal(looksLikeSymptomAsk("quero alguma coisa pra minha dor de cabeça"), true);
+  assert.equal(looksLikeSymptomAsk("quero shampoo pra caspa"), false);
+});
+
+test("28/08 S2: keycap e gíria escolhem opção; 'custo benefício' pega a mais barata", () => {
+  const options = [
+    { name: "caro", unitPrice: 10 },
+    { name: "barato", unitPrice: 3 }
+  ];
+  assert.deepEqual(parseChoiceReply("1️⃣ mano", options), { type: "pick", index: 0 });
+  assert.deepEqual(parseChoiceReply("o de melhor custo beneficio", options), { type: "pick", index: 1 });
+});
+
+test("28/08 S14: urgência sai da frase de busca; vocativo solto não vira item", () => {
+  const fralda = parseBasketLines("preciso de fralda pra HOJE, é urgente!!");
+  assert.deepEqual(fralda.map((l) => l.phrase), ["fralda"]);
+  const voc = parseBasketLines("quero alguma coisa pra dor de barriga, minha filha");
+  assert.ok(!voc.some((l) => /^minha filha$/.test(l.phrase)), JSON.stringify(voc));
 });

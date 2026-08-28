@@ -277,6 +277,9 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id ?? stringFromPayload(payload.MessageSid),
+      // Tipo do conteúdo Meta ("text", "reaction", "audio", "image", "sticker"…) — o
+      // webhook decide o que ignorar (reação) e o que avisar ("só leio texto").
+      messageType: (metaMessage as { type?: string } | undefined)?.type,
       eventType: paymentConfirmation ? "payment_confirmation" : metaMessage ? "message" : metaChange?.statuses?.length ? "status" : metaChange ? "meta_event" : "message",
       paymentConfirmation,
       provider: metaChange ? "meta" : payload.From || payload.Body ? "twilio" : "mock"

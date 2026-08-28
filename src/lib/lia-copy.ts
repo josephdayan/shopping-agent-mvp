@@ -149,6 +149,11 @@ export function askCepForQuote(items: string[]): string {
   return `Anotei:\n${items.map((i) => `• ${i}`).join("\n")}\n\nQual seu *CEP*? 📍`;
 }
 
+// Esperando CEP e veio referência ("é pertinho da padaria"): re-pede com formato.
+export function cepNeededNotLandmark(): string {
+  return "Entendi 🙂 mas pra achar certinho eu preciso do *CEP* (8 números, tipo 01310-100). Se não souber, o nome da rua com número também ajuda.";
+}
+
 export function cepNotFound(cep: string): string {
   return `Não achei o CEP ${cep}. Confere e manda de novo.`;
 }
@@ -251,10 +256,13 @@ export function choicesHeader(query: string): string {
 }
 
 export function choiceSequence(queries: string[]): string {
-  return `Achei os ${queries.length} itens. Vamos um de cada vez: *${queries[0]}*, depois ${queries
-    .slice(1)
-    .map((q) => `*${q}*`)
-    .join(" e ")}.`;
+  // Lista longa não vira parágrafo com 11 "e" (28/08 S1): cita os 3 primeiros e conta
+  // o resto.
+  const rest = queries.slice(1);
+  const shown = rest.slice(0, 2).map((q) => `*${q}*`);
+  const extra = rest.length - shown.length;
+  const tail = extra > 0 ? `${shown.join(", ")} e mais ${extra}` : shown.join(" e ");
+  return `Achei os ${queries.length} itens. Vamos um de cada vez: *${queries[0]}*${rest.length ? `, depois ${tail}` : ""}.`;
 }
 
 export function nextChoiceHeader(query: string, remaining: number): string {
@@ -718,6 +726,132 @@ export function onlyOneShippingMode(): string {
 // o menu de pagamento (27/08 S14 — a própria Lia tinha prometido esse comando).
 export function cheaperAfterQuoteNeedsItem(): string {
   return "Me diz qual item você quer mais barato que eu procuro outra opção — ou fecha assim respondendo *pix* ou *cartão*.";
+}
+
+// ---------- perguntas de confiança/logística (rodada 28/08 — ficavam sem resposta) ----------
+
+// "é seguro? como sei que não é golpe?" — na hora do dinheiro, resposta ESPECÍFICA.
+export function trustAnswer(): string {
+  return [
+    "Pergunta justa 🙂 Funciona assim, na ordem que te protege:",
+    "• Você só paga DEPOIS de ver e aprovar o total — nada é cobrado antes.",
+    "• O pagamento é por Pix ou cartão com recibo; se algo não vier, o valor do item é estornado.",
+    "• Eu compro nas lojas oficiais (Carrefour, Mercado Livre e afins) e a entrega é rastreada.",
+    "Qualquer dúvida antes de pagar, é só perguntar — sem pressa."
+  ].join("\n");
+}
+
+// "meu filho que vai pagar, manda pra ele?" — honesto: a cobrança sai aqui, mas o
+// código Pix pode ser encaminhado pra quem for pagar.
+export function thirdPartyPayAnswer(): string {
+  return "A cobrança sai aqui na nossa conversa, mas o código Pix é copia-e-cola: você pode encaminhar a mensagem pra quem for pagar, e a pessoa paga direto no banco dela 🙂 Quer que eu gere o Pix?";
+}
+
+// Nota fiscal / CNPJ. Os dados da empresa vêm da env LIA_BUSINESS_INFO (ex.:
+// "Lia Delivery — CNPJ 12.345.678/0001-90"); sem env, resposta honesta sem número.
+export function fiscalAnswer(topic: "nf" | "cnpj", businessInfo?: string): string {
+  if (topic === "nf") {
+    return "Sim — a compra é feita na loja oficial e a nota fiscal sai da própria loja, no valor dos produtos. Te encaminho junto com a confirmação da compra se você quiser.";
+  }
+  return businessInfo
+    ? `Claro: ${businessInfo}. E a nota fiscal dos produtos sai da própria loja onde eu compro.`
+    : "Somos um serviço registrado e a nota fiscal dos produtos sai da própria loja onde eu compro. Se quiser os dados completos da empresa, me fala que eu te envio certinho.";
+}
+
+// "quem faz a entrega?"
+export function whoDeliversAnswer(): string {
+  return "A entrega é da própria loja onde eu faço a sua compra (ou do parceiro oficial dela, tipo os correios/transportadora do Mercado Livre). Eu acompanho o pedido até chegar e te aviso de cada etapa 📦";
+}
+
+// "no site tá mais barato, tá me cobrando a mais?" — honestidade sobre o serviço.
+export function priceDisputeAnswer(): string {
+  return [
+    "Olho clínico 🙂 É isso mesmo: o preço aqui inclui o meu serviço — eu busco, comparo, compro e acompanho a entrega pra você. Por isso pode ficar um pouco acima do site da loja.",
+    "O frete é o da própria loja, sem margem em cima.",
+    "Se preferir, respondo *mais barato* que eu procuro uma opção mais em conta — ou você fecha assim."
+  ].join("\n");
+}
+
+// Xingamento leve: resposta digna, sem briga, e devolve o fluxo.
+export function insultAnswer(): string {
+  return "Ainda estou aprendendo, é verdade 🙂 Me diz do seu jeito o que você precisa que eu resolvo — e se preferir falar com uma pessoa, é só dizer *atendente*.";
+}
+
+// Pedido por SINTOMA ("algo pra dor de cabeça"): explica o limite ANTES das opções.
+export function symptomExplainer(): string {
+  return "Remédio eu não posso vender — por lei, só farmácia. O que eu consigo trazer são itens de conforto (chá, isotônico, bolsa térmica…) — vou te mostrar o que achei; qualquer coisa, o farmacêutico é o caminho certo pra medicação 💊";
+}
+
+// Cigarro/tabaco: recusa explicada, nunca sumir com o item em silêncio (28/08 S19).
+export function tobaccoRefusal(): string {
+  return "Cigarro e produtos de tabaco eu não vendo — venda a distância é restrita 🚭 O resto da lista eu trago normal.";
+}
+
+// "espera aí/já volto": pausa reconhecida, nada muda.
+export function holdAck(): string {
+  return "Tranquilo, te espero 🙂 Volta quando puder que a gente continua de onde parou.";
+}
+
+// "voltei, onde a gente tava?" — cabeçalho do resumo de retomada.
+export function resumeHeader(): string {
+  return "Bem-vinda de volta! 🙂 A gente estava aqui:";
+}
+
+export function resumeNothingOpen(): string {
+  return "A gente não tinha nada aberto — me diz o que você precisa que eu começo agora 🙂";
+}
+
+// "na vdd quero sim, ainda dá?" — compra recém-cancelada recuperada.
+export function canceledOrderResumed(): string {
+  return "Dá sim! Recuperei sua compra de agora há pouco 🙂 Fechando de novo:";
+}
+
+export function canceledOrderResumeMissing(): string {
+  return "Que bom! 🙂 Não achei uma compra recente pra retomar — me diz o que você quer que eu monto rapidinho.";
+}
+
+// Urgência ("pra HOJE"): honestidade sobre prazo — nunca prometer o que a loja não confirmou.
+export function urgencyHonest(): string {
+  return "Sobre chegar hoje: o prazo certinho é o da loja e aparece junto com o total, antes de você pagar — eu não prometo o que não posso garantir 🙂";
+}
+
+// "quando chega o de hoje?" sem pedido criado hoje.
+export function noOrderToday(): string {
+  return "Hoje você ainda não fez pedido comigo 🙂";
+}
+
+// Embalagem × unidades ("12 ovos" quando a caixa tem 10): a conversão é ANUNCIADA.
+export function packConversionNote(requested: number, packSize: number, packs: number): string {
+  return `_Cada embalagem tem ${packSize} unidades — coloquei ${packs} ${packs === 1 ? "embalagem" : "embalagens"} (${packs * packSize} un) pro seu pedido de ${requested}. Pra mudar, é só dizer o número de embalagens._`;
+}
+
+// "tira tudo que for de <categoria>" que a Lia não sabe separar: honesto, sem apagar
+// nada (28/08 S15 — apagar a cesta inteira é o pior desfecho).
+export function categoryRemoveUnknown(category: string): string {
+  return `Não consegui separar o que é de *${category}* com certeza — me diz os itens que você quer tirar (ex.: "tira o sabão e o desinfetante") que eu removo na hora. A cesta continua como estava.`;
+}
+
+// "n" na pergunta de quantidade: 1 unidade + a saída honesta (28/08 S16).
+export function quantityDefaultedOne(name: string): string {
+  return `_Se não quiser o item, é só dizer *tira ${name.split(" ")[0].toLowerCase()}*._`;
+}
+
+// Cliente mandou áudio/imagem/figurinha: por enquanto a Lia só lê texto.
+export function nonTextMessage(): string {
+  return "Por enquanto eu só consigo ler texto 🙂 Me escreve o que você precisa?";
+}
+
+// Rede de segurança: o turno terminou sem NENHUMA resposta — melhor um pedido de
+// reformulação do que silêncio absoluto (28/08: 4 sessões tiveram silêncio).
+export function fallbackNoAnswer(): string {
+  return "Me perdi aqui 😅 Me diz de novo o que você precisa?";
+}
+
+// Troca de método com cobrança já emitida: o código antigo deixa de valer.
+export function previousChargeSuperseded(method: "pix" | "card"): string {
+  return method === "card"
+    ? "Fechado — vale o *cartão* agora. Se um código Pix chegou antes, pode ignorar que ele não vale mais."
+    : "Fechado — vale o *Pix* agora. Pode ignorar a cobrança de cartão de antes.";
 }
 
 export function dispatched(trackingUrl?: string | null): string {

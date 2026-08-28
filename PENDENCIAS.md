@@ -1,6 +1,20 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-27 (2ª)._
+_Última atualização: 2026-08-28._
+
+> **28/08 — pós-rodada 4 (2,85, protocolo hostil).** Consertos do dia em AGENTS.md.
+> Adiado com registro:
+> (a) **"escolhe você" com julgamento** (S6): o autoPick pega o topo do ranking; um
+> "melhor custo-benefício" de verdade (qualidade × preço via IA) é ciclo futuro.
+> (b) **Rajada dentro do pagamento** (S10): a troca pix↔cartão agora avisa que o código
+> antigo não vale, mas a cobrança Pix no MP não é cancelada de fato — avaliar
+> cancelamento real da cobrança anterior no provedor.
+> (c) **Retomada com resumo após pausa longa** cobre os casos comuns; pausa que cruza o
+> TTL de 30min ainda perde a cesta por design — decidir se o TTL sobe.
+> (d) **"51" sozinho** vira cachaça por sorte do matcher; apelidos de marca (51, Pitú,
+> Corote) mereceriam dicionário próprio.
+> (e) Continuam: P1.8 cesta-como-conjunto (frete fragmentado), P2.1 latência fria
+> (ticket ML), SLA do caminho manual, golden semântico.
 
 > **27/08 (2ª) — pós-rodada 3 (média 6,80).** Consertos do dia em AGENTS.md. Fica
 > aberto, por prioridade:
