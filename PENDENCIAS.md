@@ -1,6 +1,18 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-27._
+_Última atualização: 2026-08-27 (2ª)._
+
+> **27/08 (2ª) — pós-rodada 3 (média 6,80).** Consertos do dia em AGENTS.md. Fica
+> aberto, por prioridade:
+> (a) **P1.8 cesta-como-conjunto** subiu de prioridade: frete fragmentado foi o
+> problema nº 2 por frequência da rodada 3 (6/20 — ex.: R$48,80 de frete em R$68,52
+> de produto, 3 entregas). Ranquear a composição da cesta por total+nº de entregas.
+> (b) **Forense do "e arroz" (S18 r3)**: com a oferta de troca de loja na mesa, "e
+> arroz" não adicionou o arroz e disparou a troca do café — reconstruir no banco.
+> (c) **S10: variar a copy** quando o esgotamento de opções repete pela 3ª vez.
+> (d) **"óleo" não achou nada** (era pra ser óleo de cozinha) — caso golden já
+> registrado; ciclo de scorer/rerank.
+> (e) Continua: decisão do dono sobre #YAQHF8/#QTNL2T (test×live no Pagar.me).
 
 > **27/08 — pós-rodada 2: pendências novas.**
 > (a) **DECISÃO DO DONO, urgente:** estornar ou entregar `#YAQHF8` (R$20,62 no cartão,

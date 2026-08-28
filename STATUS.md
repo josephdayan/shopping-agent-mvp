@@ -1,5 +1,24 @@
 # Lia — Status do Projeto
 
+## 27/08/2026 (2ª) — rodada 3: média 6,80, dinheiro 12/12, achados novos consertados no dia
+
+A rodada 3 (protocolo v3) validou o ciclo da rodada 2: média **4,15 → 6,80**, zero
+cesta contaminada, zero divergência de total em 12 resumos auditados, e as guardas
+novas (botão velho, furadeira, "de sempre", troca anunciada) funcionaram às cegas. Os
+achados novos — auto-apresentação virando produto ("seu Jorge aqui" → imagem de São
+Jorge), "meu neto quer um violão" como query inteira, narrativa ESCOLHENDO produto na
+pausa, CEP engolido por cotação vencida (S18), "esquece o carregador" ignorado na
+rajada e "não gostei" descartando o item — foram todos consertados e testados no
+mesmo dia (AGENTS.md 27/08 2ª). Veredito do testador continua "ainda não deixaria
+minha mãe usar sem ajuda"; os dois temas estruturais que sobraram são **frete
+fragmentado (6/20 sessões)** e a recuperação pós-esgotamento de opções. Relatório:
+[docs/testes-rodada-3-2026-08-27.md](docs/testes-rodada-3-2026-08-27.md).
+
+**Ação do dono (continua): #YAQHF8 e #QTNL2T** — os dois pedidos pagos residuais
+apareceram (rotulados com data e itens, como projetado) nos 20 encerramentos da
+rodada. Conferir no painel Pagar.me se a chave é test ou live (`ch_VAolM1vcKiwjnK8m`)
+e então estornar/entregar ou só cancelar no /ops.
+
 ## 27/08/2026 — rodada 2 (4,15/10): forense mudou o diagnóstico, consertos implementados
 
 A rodada 2 confirmou o avanço em estado (perda 12/20 → 3/20) e derrubou a média por

@@ -161,7 +161,14 @@ const NARRATIVE_SEGMENT_RE = new RegExp(
       "(eu )?(vou|vamos) (receber|fazer|dar|ter|visitar|viajar|arrumar|deixar)\\b.*",
       "(eu )?(quero |queria |gostaria de )?(deixar|arrumar) (meu|minha|o|a)\\b.*",
       "que (nao )?(seja|fique|custe|passe|pese|demore)\\b.*",
-      "(porque|pois|ja que) .*"
+      "(porque|pois|ja que) .*",
+      // AUTO-APRESENTAÇÃO ("seu Jorge aqui", "aqui é a Marlene", "sou o Pedro"):
+      // o nome do cliente NUNCA é item — na rodada 3 virou busca de imagem de São
+      // Jorge três vezes (S6/S13/S19).
+      "(o |a )?(seu|dona|sr|sra|dr|dra|doutora?)\\.? [a-zà-ú]+ (aqui|falando|na linha)( .*)?",
+      "aqui (e|eh|quem fala e|quem ta e) (o |a |seu |dona )?[a-zà-ú]+",
+      "(sou|me chamo) (o |a |seu |dona )?[a-zà-ú]+",
+      "meu nome (e|eh) [a-zà-ú]+( [a-zà-ú]+)?"
     ].join("|") +
     ")$"
 );
@@ -241,6 +248,14 @@ export function parseBasketLines(text: string): ParsedLine[] {
         .replace(/^((oi+|ola+|opa+|bom dia|boa tarde|boa noite|e ?ai)( lia)?[\s,!.?]*)+/i, "")
         .replace(/^(tudo (bem|bom)|td bem|como vai)[\s,!.?]*/i, "")
         .replace(/^(ah+|hm+|hmm+|dai|tipo|ne|entao|ok+|okay|blz|beleza|ta|certo)\s+/i, "")
+        // sujeito-parente ("meu neto quer um violão", "minha filha pediu suco"): o
+        // pedido é o OBJETO — o parente sai, o produto fica (27/08 r3 S15: a query
+        // virou "meu neto quer um violão" inteira). ANTES do vocativo, que comeria só
+        // o "minha filha" e deixaria o verbo órfão na frase.
+        .replace(
+          /^(?:meu|minha)\s+(?:net[oa]|netinh[oa]|filh[oa]|filhinh[oa]|esposa?|marido|m[aã]e|pai|irm[aã]o?|sogr[oa]|av[oó]|v[oó]|sobrinh[oa]|cunhad[oa]|nora|genro|mulher|namorad[oa]|nen[eê]m?|beb[eê])\s+(?:que\s+)?(?:quer|queria|pediu|precisa(?:va)?(?:\s+de)?|ta\s+precisando\s+de|esta\s+precisando\s+de|anda\s+pedindo|adora|ama)\s+(?:de\s+)?/i,
+          ""
+        )
         // vocativo ("minha filha, quero…", "amiga, me vê…", "lia,…") não é produto
         .replace(/^((minha|meu)\s+(filha?|filho|querid[ao]|amor|anjo|bem)|querid[ao]|amig[ao]|amigona|mo[cç][ao]|lia)[\s,!.]+/i, "")
         // conjunção sobrando no começo do segmento ("e areia pro gato", "mais um refri",
@@ -257,7 +272,7 @@ export function parseBasketLines(text: string): ParsedLine[] {
         !NOISE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !STATE_SEGMENT_RE.test(normalizeMsg(raw)) &&
         !NARRATIVE_SEGMENT_RE.test(normalizeMsg(raw)) &&
-        !/^(ah+|hm+|hmm+|aa+|eh+|dai|tipo|ne)$/i.test(normalizeMsg(raw))
+        !/^(ah+|hm+|hmm+|aa+|eh+|dai|tipo|ne|iss[oa]( ai)?|aquilo( ali)?|esses? ai|essas? ai)$/i.test(normalizeMsg(raw))
     )
     .map((raw) => {
       // Peso/volume NÃO é quantidade: "2kg de arroz" = 1× "arroz 2kg" (o tamanho vai pro
@@ -637,7 +652,10 @@ function isAffirm(n: string): boolean {
 const REJECT_RE =
   /\b(nao era isso|nao e isso|nada a ver|errado|errou|nao gostei|nenhum(a)?( dess[ea]s| del[ea]s)?|outras opcoes|tem outr[ao]s?|acha outr[ao]s?|mostra outr[ao]s?)\b/;
 
-const REMOVE_START_RE = /^(tira|tirar|remove|remover|retira|retirar|exclui|excluir|apaga|apagar|sem|cancel\w*)\s+/;
+// "esquece o carregador" é remoção — e a interjeição na frente ("aa esquece...")
+// não pode esconder o verbo (27/08 r3 S14: virou "pula" do item ERRADO).
+const REMOVE_START_RE =
+  /^(?:(?:aa+|ah+|hm+|opa|ei|nossa|pera(?:i)?)[\s,]+)?(?:pode\s+)?(tira|tirar|remove|remover|retira|retirar|exclui|excluir|apaga|apagar|esquece|esquecer|sem|cancel\w*)\s+/;
 
 const SWAP_RE =
   /\b(?:troca|trocar|substitui|substituir|muda|mudar)\s+(?:o |a |os |as )?(.+?)\s+(?:por|pelo|pela)\s+(.+)$/;
@@ -1006,6 +1024,7 @@ export function wantsMoreOptions(text: string): boolean {
   // Toque no botão "Outras opções" do card (id de máquina, não linguagem).
   if (n === "opt:outras") return true;
   if (/\b(mais|outras) opcoes\b/.test(n)) return true;
+  if (/\boutra opcao\b/.test(n)) return true;
   // "outras"/"outros" seco: é o atalho que a própria Lia anuncia no choicesAsk
   // ("*outras* que eu mostro mais") — tem que funcionar sozinho.
   if (/^outr[ao]s?$/.test(n)) return true;

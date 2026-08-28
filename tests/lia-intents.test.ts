@@ -695,3 +695,43 @@ test("27/08 S1: optsku fora da escolha vira stale_option_tap com o sku preservad
   assert.equal(intent.kind, "stale_option_tap");
   if (intent.kind === "stale_option_tap") assert.equal(intent.sku, "dsp-685674");
 });
+
+// ---------- rodada 3 de testes externos (27/08) ----------
+
+test("27/08 r3 S6/S13/S19: auto-apresentação nunca vira produto", () => {
+  assert.equal(isNarrativeSegment("seu jorge aqui"), true);
+  assert.equal(isNarrativeSegment("aqui e a marlene"), true);
+  assert.equal(isNarrativeSegment("sou o pedro"), true);
+  assert.equal(isNarrativeSegment("me chamo julia"), true);
+  const lines = parseBasketLines("seu Jorge aqui, queria um café moído pra passar em casa");
+  assert.equal(lines.length, 1, JSON.stringify(lines));
+  assert.match(lines[0].phrase, /café moído/);
+  const farmacia = parseBasketLines("seu Jorge aqui, to precisando de um shampoo, um protetor solar e uma escova de dente, coisa simples de farmacia");
+  assert.equal(farmacia.length, 3, JSON.stringify(farmacia));
+});
+
+test("27/08 r3 S15: sujeito-parente sai, produto fica", () => {
+  const violao = parseBasketLines("Oi, meu neto quer um violão.");
+  assert.equal(violao.length, 1, JSON.stringify(violao));
+  assert.equal(violao[0].phrase, "violão");
+  const suco = parseBasketLines("minha filha pediu suco de uva");
+  assert.equal(suco.length, 1, JSON.stringify(suco));
+  assert.match(suco[0].phrase, /^suco de uva/);
+  // narrativa SEM produto continua morrendo inteira
+  assert.equal(parseBasketLines("meu neto que pediu isso ai").length, 0);
+});
+
+test("27/08 r3 S14: 'esquece' é remoção, mesmo com interjeição na frente", () => {
+  const a = detectIntent("aa esquece o carregador");
+  assert.equal(a.kind, "remove_item");
+  if (a.kind === "remove_item") assert.match(a.target, /carregador/);
+  const b = detectIntent("esquece o carregador");
+  assert.equal(b.kind, "remove_item");
+  // "esquece tudo" continua limpando o carrinho
+  assert.equal(detectIntent("esquece tudo").kind, "clear_cart");
+});
+
+test("27/08 r3 S17: 'outra opção' no singular pede mais opções", () => {
+  assert.equal(wantsMoreOptions("me mostra outra opção"), true);
+  assert.equal(wantsMoreOptions("tem outra opcao"), true);
+});

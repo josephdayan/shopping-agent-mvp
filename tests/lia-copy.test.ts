@@ -10,10 +10,10 @@ const items = [
 test("concierge: recusa honesta, cotação pedida e resumo manual", () => {
   // Regra 11/08: item sem preço = "não tenho" na hora, nunca "anotei, vou cotar".
   const one = copy.itemsNotAvailable(["vedante de torneira"]);
-  assert.match(one, /não consigo trazer/);
+  assert.match(one, /não achei em nenhuma loja/);
   assert.match(one, /vedante de torneira/);
   const many = copy.itemsNotAvailable(["vedante de torneira", "2x cadernos"]);
-  assert.match(many, /não consigo trazer/);
+  assert.match(many, /não achei em nenhuma loja/);
   assert.match(many, /cadernos/);
   assert.doesNotMatch(many, /vou cotar|garimpar|Anotei/i);
   const noted = many;

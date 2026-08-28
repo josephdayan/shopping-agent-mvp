@@ -1451,6 +1451,31 @@ async function handleDeliveryTurn(
       await finishQuantityChoice(phone, user.cep, convo.id, ctx, 1);
       return;
     }
+    // "esquece o carregador"/"só a pilha, sem carregador" NA pergunta de quantidade
+    // do próprio item: cancela o item em vez de re-perguntar unidades (27/08 r3 S14 —
+    // o cliente removeu e a Lia insistiu na quantidade do removido).
+    const qtyItem = ctx.quantityChoice.option;
+    const qtyRemoval =
+      intent.kind === "remove_item" && itemMatchesPhrase(intent.target, { sku: qtyItem.sku, name: qtyItem.name, unitPrice: qtyItem.unitPrice })
+        ? { rest: intent.andAdd }
+        : (() => {
+            const m = normalizeMsg(text).match(/^(.*?)[,;]?\s*\bsem\s+([a-zà-ú0-9 ]{3,40})$/);
+            return m && itemMatchesPhrase(m[2].trim(), { sku: qtyItem.sku, name: qtyItem.name, unitPrice: qtyItem.unitPrice })
+              ? { rest: m[1].trim() || undefined }
+              : null;
+          })();
+    if (qtyRemoval) {
+      ctx.quantityChoice = undefined;
+      ctx.step = ctx.pending?.length ? "choosing" : "collecting";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.choiceSkipped(qtyItem.name));
+      if (qtyRemoval.rest) {
+        await handleSearch(phone, convo.id, user.cep, ctx, qtyRemoval.rest, user.id);
+      } else if (ctx.pending?.length) {
+        await sendChoices(phone, ctx.pending[0]);
+      }
+      return;
+    }
     // Só o que realmente não faz sentido re-pergunta — UMA vez. Na segunda resposta
     // sem número ("Philco", "ring light"), fecha 1 unidade e roteia a mensagem como
     // pedido normal: a pergunta de quantidade não é prisão (26/08 P2.4 — o cliente
@@ -1836,15 +1861,26 @@ async function handleDeliveryTurn(
       }
       if (order.quoteExpiresAt && order.quoteExpiresAt.getTime() <= Date.now()) {
         await cancelPendingRetailerQuote(order.id);
-        await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
+        // A MENSAGEM não morre com a cotação (27/08 r3 S18: o CEP de Campinas chegou
+        // depois do TTL e sumiu atrás de "Esse preço venceu"). A cesta volta pro
+        // contexto e o texto segue o roteamento normal — troca de endereço, item
+        // novo, o que for.
+        const revived = {
+          ...addressOnlyCtx(ctx, user.cep),
+          basket: ((order.items as unknown as BasketItem[]) ?? []).filter((item) => item.unitPrice > 0)
+        };
+        for (const key of Object.keys(ctx)) delete (ctx as Record<string, unknown>)[key];
+        Object.assign(ctx, revived);
+        await writeCtx(convo.id, ctx);
         await reply(phone, copy.quoteExpired());
-        return;
+        // sem return: o resto do turno processa a mensagem sobre a cesta restaurada
+        // (o else-if abaixo NÃO roda — a cotação já morreu)
       }
       // CEP no meio do menu de pagamento ("Antes de pagar, vou entregar em Campinas,
       // CEP 13010-100") é troca de DESTINO — a cotação do endereço velho cai e o CEP
       // segue pro fluxo normal de endereço. Antes, qualquer texto que não fosse
       // pix/cartão devolvia o menu do endereço antigo (3º ciclo, rodada 6).
-      if (intent.kind === "cep") {
+      else if (intent.kind === "cep") {
         if (await cancelPendingRetailerQuote(order.id)) {
           await reply(phone, copy.quoteDroppedForNewAddress());
         }
@@ -3059,6 +3095,20 @@ async function handleChoosing(
     await confirmChosenOption(phone, convoId, ctx, userCep, store, current, tapped);
     return;
   }
+  // Narrativa no meio da escolha ("meu neto que pediu isso aí"): ANTES de qualquer
+  // parser de escolha — na rodada 3 (S15) a frase caiu no parser e ESCOLHEU o "Violão
+  // Meu Primeiro Violão" pelo token "meu/isso". Nunca vira pick nem item "anotado".
+  if (intent.kind === "free_text" && isNarrativeSegment(text)) {
+    await reply(phone, copy.choiceNotUnderstood());
+    await sendChoices(phone, current);
+    return;
+  }
+  // "não gostei"/"não curti" seco: o cliente quer OUTRAS opções, não abrir mão do
+  // item (27/08 r3 S17: virava "deixei de fora" + "não entendi", beco).
+  if (/^(nao|não) (gostei|curti|quero ess[ea]s?)( d[eo]ss?[ea]s?( ai)?)?[\s!.]*$/.test(normalizeMsg(text))) {
+    await pageMoreOptions(phone, convoId, ctx, store);
+    return;
+  }
   // "acha outras" pages; "tem essa em azul?"/"tem de 2kg?"/"quero uma maior" refine.
   // Both are checked AFTER an explicit pick ("2", "a colgate", "mais barato") but
   // BEFORE reject→skip — "não gostei, tem outras?" should show more, not drop the item.
@@ -3156,23 +3206,16 @@ async function handleChoosing(
     return;
   }
 
-  // Narrativa no meio da escolha ("meu neto que pediu isso aí"): nunca vira item
-  // "anotado" nem busca — re-pergunta a escolha (27/08 S13).
-  if (intent.kind === "free_text" && isNarrativeSegment(text)) {
-    await reply(phone, copy.choiceNotUnderstood());
-    await sendChoices(phone, current);
-    return;
-  }
-
   // Marca/atributo que NÃO existe no pool atual ("Philco" escolhendo fone bluetooth):
-  // antes de tratar como item novo, tenta a BUSCA COMBINADA "fone bluetooth philco".
-  // Só refina se o resultado cobre a query combinada E o token novo — "leite" no meio
-  // da escolha de coca continua caindo no fluxo de item novo (27/08 S6: "Philco"
-  // virava linha nova "anotada" e a escolha não avançava).
+  // antes de tratar como item novo, tenta a BUSCA COMBINADA "fone bluetooth philco" —
+  // com a cauda longa (ML) FORÇADA, porque a marca pedida raramente está na vitrine
+  // local (27/08 r3 S5: sem o ML, a re-busca falhava e "Philco" virava linha nova que
+  // depois mostrava air fryer). Só refina se o resultado cobre a query combinada E o
+  // token novo — "leite" no meio da escolha de coca continua caindo em item novo.
   const addedTokens = queryTokens(normalizeMsg(text));
   if (intent.kind === "free_text" && !isQuestion(text) && addedTokens.length === 1) {
     const combinedQuery = `${current.baseQuery ?? current.query} ${normalizeMsg(text)}`.replace(/\s+/g, " ").trim();
-    const combined = await gatherCrossStoreCandidates(combinedQuery, 12);
+    const combined = await gatherCrossStoreCandidates(combinedQuery, 12, 4, { forceLongTail: true });
     const strong = combined
       .map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }))
       .filter((o) => conciergeMatchIsStrong(combinedQuery, o) && conciergeMatchIsStrong(normalizeMsg(text), o));
@@ -3187,6 +3230,24 @@ async function handleChoosing(
       await writeCtx(convoId, ctx);
       await sendChoices(phone, current, copy.narrowedChoices(current.query));
       return;
+    }
+    // A re-busca combinada falhou. Se o token sozinho é uma MARCA (todos os matches
+    // dele são da marca, não produtos com esse nome), a resposta honesta é "não achei
+    // <query> <marca>" + re-mostrar o que existe — enfileirar "philco" seco como item
+    // novo era o que trazia air fryer depois (27/08 r3 S5).
+    try {
+      const token = normalizeMsg(text);
+      const solo = (await gatherCrossStoreCandidates(token, 8))
+        .map((c) => c.item)
+        .filter((item) => conciergeMatchIsStrong(token, item));
+      const brandOnly = solo.length > 0 && solo.every((item) => normalizeMsg(item.brand ?? "").includes(token));
+      if (brandOnly) {
+        await reply(phone, copy.refineNoResult(combinedQuery));
+        await sendChoices(phone, current);
+        return;
+      }
+    } catch (error) {
+      console.warn("[choice:brand-probe-failed]", error instanceof Error ? error.message : error);
     }
   }
 

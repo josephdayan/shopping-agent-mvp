@@ -1,5 +1,45 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 27/08/2026 (2ª) — rodada 3 (média 6,80): dinheiro fechou 12/12, ciclo de conserto do mesmo dia
+
+Rodada 3 do protocolo (v3, [docs/protocolo-teste-persona-v3.md](docs/protocolo-teste-persona-v3.md))
+validou os consertos da rodada 2: **média 4,15 → 6,80**, cesta contaminada 0/20,
+**12/12 totais batendo linha a linha**, minswap anunciado, botão velho nomeado,
+furadeira segurada, "de sempre" com conferência, S3 narrativa longa = 9/10. Relatório:
+[docs/testes-rodada-3-2026-08-27.md](docs/testes-rodada-3-2026-08-27.md).
+
+Achados novos, TODOS consertados no mesmo dia (com teste):
+
+1. **Auto-apresentação virava produto** ("seu Jorge aqui" → imagem de São Jorge, 3
+   sessões): padrões de auto-apresentação no `NARRATIVE_SEGMENT_RE` (honorífico+nome+
+   "aqui", "aqui é a X", "sou o X", "me chamo X").
+2. **Sujeito-parente engolia a query** ("meu neto quer um violão" era a busca inteira):
+   strip do sujeito ANTES do vocativo — o parente sai, o produto fica ("violão").
+3. **Narrativa na escolha ESCOLHIA produto** (S15: "meu neto que pediu isso ai" casou
+   "Meu Primeiro Violão" e foi pra quantidade): a guarda de narrativa subiu pra ANTES
+   de qualquer parser de escolha.
+4. **Cotação vencida engolia a mensagem** (S18: o CEP de Campinas morreu atrás de
+   "Esse preço venceu"): o ramo de expiração agora restaura a cesta e deixa a mensagem
+   seguir o roteamento normal (else-if — não cai mais no menu de pagamento).
+5. **"aa esquece o carregador" virava "pula" do item errado** (S14): "esquece" entrou
+   no REMOVE_START_RE com tolerância a interjeição; e remoção na pergunta de
+   quantidade cancela o próprio item ("só a pilha, sem carregador" idem).
+6. **"não gostei" seco descartava o item** (S17): agora pagina outras opções;
+   "outra opção" no singular também.
+7. **"Philco" (marca sem match local)**: a re-busca combinada agora FORÇA a cauda
+   longa (ML); se ainda falhar e o token for só-marca (campo brand), responde "não
+   achei fone bluetooth philco" e re-mostra — nunca mais enfileira a marca seca (que
+   virava air fryer).
+8. Copy: recusa de item vira "eu não achei em nenhuma loja agora" (era "não consigo
+   trazer hoje", que soava como recusa de serviço).
+
+Pendências que a rodada 3 reforçou (ver PENDENCIAS): frete fragmentado é o problema
+nº 2 por frequência (6/20) — P1.8 cesta-como-conjunto é o próximo ciclo grande;
+"óleo" sozinho não achou nada (golden registrado); resíduo #YAQHF8 apareceu nos 20
+encerramentos (rotulado certo, mas o dono precisa resolver o pedido); S10 repete a
+mesma copy de esgotamento na 3ª tentativa; forense pendente do "e arroz" da S18
+(cotação na mesa + item novo → troca disparou sem adicionar o arroz).
+
 ## Atualização 27/08/2026 — rodada 2 (20 sessões): forense + conserto dos achados
 
 Rodada 2 do protocolo v2 deu **4,15/10** (relatório em

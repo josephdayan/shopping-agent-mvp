@@ -870,10 +870,10 @@ export function minimumSwapDone(pairs?: SwapPair[]): string {
 export function itemsNotAvailable(items: string[]): string {
   const labels = items.map(shortNotFoundLabel);
   if (labels.length === 1) {
-    return `*${labels[0]}* eu não consigo trazer hoje. Me diz outra marca ou versão que eu tento de novo.`;
+    return `*${labels[0]}* eu não achei em nenhuma loja agora. Me diz outra marca ou versão que eu tento de novo.`;
   }
   return [
-    "Esses eu não consigo trazer hoje:",
+    "Esses eu não achei em nenhuma loja agora:",
     ...labels.map((i) => `• ${i}`),
     "",
     "Me diz outras marcas ou versões que eu tento de novo."

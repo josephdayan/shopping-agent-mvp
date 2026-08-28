@@ -119,7 +119,7 @@ test("regra 11/08: item sem preço é recusado NA HORA — nunca 'anotei, vou co
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const out = await c.send("quero um vedante pra torneira");
-  assert.match(out, /não consigo trazer/i);
+  assert.match(out, /não achei em nenhuma loja/i);
   assert.match(out.toLowerCase(), /vedante/);
   assert.doesNotMatch(out, /anotei|vou cotar|garimpar/i);
   const order = await prisma.deliveryOrder.findFirst({ where: { userId: c.userId } });
@@ -577,7 +577,7 @@ test("lista com item inexistente: cesta monta e a linha sem preço é recusada j
   const c = await returningCustomer();
   const out = await c.send("2 coca cola\n1 sabonete\n1 vedante de torneira industrial");
   assert.match(out, /Montei a cesta/i);
-  assert.match(out, /não consigo trazer/i, `a linha impossível precisa da recusa: ${out.slice(0, 300)}`);
+  assert.match(out, /não achei em nenhuma loja/i, `a linha impossível precisa da recusa: ${out.slice(0, 300)}`);
   const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
   const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ name: string }>;
   assert.equal(basket.length, 2);
@@ -636,7 +636,7 @@ test("1º testador (24/08): onboarding sobrevive a 'Quem é vc', pergunta de end
   // Colírio: recusa EXPLICADA (farmácia), nunca "não consigo trazer" genérico.
   const eye = await c.send("Me.compra um colírio chamado systane complete");
   assert.match(eye, /não posso vender|farmácia/i, eye.slice(0, 200));
-  assert.doesNotMatch(eye, /não consigo trazer/i);
+  assert.doesNotMatch(eye, /não achei em nenhuma loja/i);
   // Pergunta sobre o endereço confirma — não re-pede nem vira busca.
   const q = await c.send("Vc salvou o endereço já");
   assert.match(q, /Edgar Egídio/i, q.slice(0, 200));
@@ -1332,4 +1332,50 @@ test("27/08 S1: botão 'Escolher esse' de conversa antiga é nomeado como botão
   const dentro = await c.send("optsku:sku-que-nao-existe-aqui");
   assert.match(dentro, /botão é de uma conversa antiga/i, dentro.slice(0, 300));
   assert.doesNotMatch(dentro, /Não peguei qual você quer/i, dentro.slice(0, 300));
+});
+
+// ---------- rodada 3 de testes externos (27/08) — regressões ----------
+
+test("27/08 r3 S15: narrativa no meio da escolha não vira pick nem quantidade", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const out = await c.send("meu neto que pediu isso ai");
+  assert.doesNotMatch(out, /Quantas unidades/i, `a narrativa escolheu um produto: ${out.slice(0, 300)}`);
+  assert.doesNotMatch(out, /Anotei/i, `a narrativa virou item anotado: ${out.slice(0, 300)}`);
+  assert.match(out, /Não peguei qual você quer/i, out.slice(0, 300));
+});
+
+test("27/08 r3 S17: 'nao gostei' seco mostra OUTRAS opções, não abre mão do item", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero creme dental");
+  const out = await c.send("nao gostei");
+  assert.doesNotMatch(out, /Deixei .* de fora/i, `descartou o item: ${out.slice(0, 300)}`);
+  assert.doesNotMatch(out, /Não entendi/i, out.slice(0, 300));
+  assert.match(out, /Mais opções|já mostrei tudo|marca, tipo/i, `não paginou: ${out.slice(0, 300)}`);
+});
+
+test("27/08 r3 S14: 'esquece o item' na pergunta de quantidade cancela o item", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const afterChoice = await c.send("1");
+  assert.match(afterChoice, /Quantas unidades/i, afterChoice.slice(0, 200));
+  const out = await c.send("aa esquece a coca");
+  assert.doesNotMatch(out, /Quantas unidades|1 a 50/i, `insistiu na quantidade do removido: ${out.slice(0, 300)}`);
+  assert.match(out, /Deixei .* de fora/i, out.slice(0, 300));
+});
+
+test("27/08 r3 S18: cotação vencida não engole a mensagem — o CEP novo segue o fluxo", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  await prisma.deliveryOrder.update({ where: { id: order!.id }, data: { quoteExpiresAt: new Date(Date.now() - 60_000) } });
+  const out = await c.send("vou mandar pra casa da minha irmã em Campinas, CEP 13010-100");
+  assert.match(out, /preço venceu/i, out.slice(0, 300));
+  assert.doesNotMatch(out, /Como prefere pagar/i, `voltou pro menu de pagamento: ${out.slice(0, 300)}`);
+  assert.match(out, /endereço/i, `o CEP novo foi engolido: ${out.slice(0, 400)}`);
 });
