@@ -1,6 +1,20 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-28._
+_Última atualização: 2026-08-30._
+
+> **30/08 — pós-rodada 5 (4,30).** Consertos do dia em AGENTS.md. Aberto:
+> (a) **Fone com teto vazando (S6)**: o cap E2E de vitrine passa; o caso do fone veio
+> da cauda longa ML — re-sondar na rodada 6 e, se repetir, caçar no caminho
+> ML/rescue/outras.
+> (b) **Parcelamento real** no link de cartão (hoje: honesto "à vista por enquanto").
+> (c) **`LIA_BUSINESS_INFO` na Vercel** (dono): sem ela o CNPJ vira alerta manual ao
+> operador.
+> (d) **Comparação técnica de produtos** (specs) — hoje compara nome/preço/loja.
+> (e) S5: "tira cafe" num compound respondeu "não achei na cesta" mas o resultado
+> final ficou certo — ruído de copy a caçar com log real.
+> (f) Continuam: P1.8 cesta-como-conjunto, P2.1 latência fria (ticket ML), SLA do
+> caminho manual, golden semântico, rajada Pix↔cartão com cancelamento real no MP.
+
 
 > **28/08 — pós-rodada 4 (2,85, protocolo hostil).** Consertos do dia em AGENTS.md.
 > Adiado com registro:

@@ -608,12 +608,29 @@ const GROCERY_STAPLES = new Set([
   "pao", "banana", "sabao", "detergente", "refrigerante", "coca", "manteiga", "ovos", "ovo"
 ]);
 
+// Marca usada como nome GENÉRICO do produto ("bombril", "gilete", "maisena"): a busca
+// literal achava outra coisa ou nada (29/08 S11 — gilete "não achei", bombril virou
+// esponja). Reescrita só quando a linha é a marca sozinha.
+const BRAND_GENERIC: Record<string, string> = {
+  bombril: "palha de aço",
+  gilete: "aparelho de barbear",
+  giletes: "aparelho de barbear",
+  gillette: "aparelho de barbear gillette",
+  maisena: "maizena amido de milho",
+  danone: "iogurte",
+  durex: "fita adesiva durex"
+};
+
 function rewriteGroceryOil(lines: ParsedLine[]): ParsedLine[] {
   const staples = lines.filter((l) => queryTokens(l.phrase).some((t) => GROCERY_STAPLES.has(t))).length;
-  if (staples < 2) return lines;
   return lines.map((l) => {
     const tokens = queryTokens(l.phrase);
-    if (tokens.length === 1 && tokens[0] === "oleo") return { ...l, phrase: l.phrase.replace(/\boleo\b/i, "óleo de soja") };
+    if (tokens.length === 1 && BRAND_GENERIC[tokens[0]]) {
+      return { ...l, phrase: BRAND_GENERIC[tokens[0]] };
+    }
+    if (staples >= 2 && tokens.length === 1 && tokens[0] === "oleo") {
+      return { ...l, phrase: l.phrase.replace(/\boleo\b/i, "óleo de soja") };
+    }
     return l;
   });
 }
@@ -1647,29 +1664,80 @@ async function handleDeliveryTurn(
   }
 
   // ---- perguntas de confiança/logística: respondem em QUALQUER estado (28/08) ----
+  // Depois de responder, a ETAPA em curso é reapresentada — a pergunta lateral fazia
+  // os cards "sumirem" e o cliente tinha que pedir de novo (29/08 S7/S12).
+  const rePresentStep = async () => {
+    if (ctx.step === "choosing" && ctx.pending?.length) {
+      await sendChoices(phone, ctx.pending[0]);
+    } else if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
+      await reply(phone, copy.quantityAsk(ctx.quantityChoice.option.name));
+    }
+  };
   if (intent.kind === "trust_question") {
     await reply(phone, copy.trustAnswer());
+    await rePresentStep();
     return;
   }
   if (intent.kind === "third_party_pay") {
     await reply(phone, copy.thirdPartyPayAnswer());
+    await rePresentStep();
     return;
   }
   if (intent.kind === "fiscal_question") {
-    await reply(phone, copy.fiscalAnswer(intent.topic, process.env.LIA_BUSINESS_INFO?.trim() || undefined));
+    const businessInfo = process.env.LIA_BUSINESS_INFO?.trim() || undefined;
+    await reply(phone, copy.fiscalAnswer(intent.topic, businessInfo));
+    // "me fala que eu te envio" não pode ser beco: sem a env, o operador é acionado
+    // pra mandar os dados de verdade (29/08 S7).
+    if (intent.topic === "cnpj" && !businessInfo) {
+      await notifyOperator(`📇 Cliente pediu o CNPJ/dados da empresa — enviar manualmente (configure LIA_BUSINESS_INFO).`, phone);
+    }
+    await rePresentStep();
     return;
   }
   if (intent.kind === "who_delivers") {
     await reply(phone, copy.whoDeliversAnswer());
+    await rePresentStep();
     return;
   }
   if (intent.kind === "price_dispute") {
     await reply(phone, copy.priceDisputeAnswer());
+    await rePresentStep();
+    return;
+  }
+  if (intent.kind === "coupon_promo") {
+    await reply(phone, copy.couponPromoAnswer());
+    await rePresentStep();
+    return;
+  }
+  if (intent.kind === "charge_complaint") {
+    await flagLatestOrder(user.id, `💳 RECLAMAÇÃO DE COBRANÇA: "${text.slice(0, 140)}"`);
+    await notifyOperator(`💳 URGENTE — cliente relata cobrança indevida/duplicada: "${text.slice(0, 140)}"`, phone);
+    await reply(phone, copy.chargeComplaintAck());
+    return;
+  }
+  if (intent.kind === "scheduling_question") {
+    await reply(phone, copy.schedulingAnswer());
+    await rePresentStep();
+    return;
+  }
+  if (intent.kind === "store_location_question") {
+    await reply(phone, copy.storeLocationAnswer());
+    await rePresentStep();
+    return;
+  }
+  if (intent.kind === "installments_question") {
+    await reply(phone, copy.installmentsAnswer());
+    await rePresentStep();
+    return;
+  }
+  if (intent.kind === "meta_probe") {
+    await reply(phone, copy.metaProbeAnswer());
+    await rePresentStep();
     return;
   }
   if (intent.kind === "insult") {
     await reply(phone, copy.insultAnswer());
-    if (ctx.step === "choosing" && ctx.pending?.length) await sendChoices(phone, ctx.pending[0]);
+    await rePresentStep();
     return;
   }
   // "espera aí/já volto": pausa reconhecida — NADA de busca (28/08 S10/S20).
@@ -2111,6 +2179,13 @@ async function handleDeliveryTurn(
         }
         if (intent.kind === "more_options") {
           await reply(phone, copy.cheaperAfterQuoteNeedsItem());
+          return;
+        }
+        // "quanto ficou mesmo?"/"ver total" com a cotação na mesa: o TOTAL do pedido,
+        // nunca o menu seco de pagamento (29/08 S1 — o catch-all interceptava antes
+        // do router e a pergunta virava busca/menu).
+        if (asksRunningTotal(text)) {
+          await reply(phone, copy.totalAwaitingPayment(order.total));
           return;
         }
         // Mudança na CESTA com o total na mesa ("adiciona um óleo", "troca X por Y",
@@ -2713,6 +2788,18 @@ async function handleDeliveryTurn(
     if (ctx.step === "awaiting_payment" && ctx.total) {
       await reply(phone, copy.totalAwaitingPayment(ctx.total));
       return;
+    }
+    // Cobrança/cotação na mesa mas ctx sem total (o contexto pós-emissão só guarda o
+    // id): busca no PEDIDO — "quanto ficou mesmo?" virava busca de produto (29/08 S1).
+    if (
+      (ctx.step === "awaiting_payment" || ctx.step === "awaiting_quote_confirmation") &&
+      ctx.deliveryOrderId
+    ) {
+      const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
+      if (order && (order.status === "awaiting_payment" || order.status === "awaiting_quote_confirmation")) {
+        await reply(phone, copy.totalAwaitingPayment(order.total));
+        return;
+      }
     }
     // No menu de pagamento o pedido JÁ está cotado — mostrar o resumo com frete e
     // total, nunca o parcial "te passo o total quando você fechar".
@@ -3375,6 +3462,19 @@ async function handleChoosing(
     await confirmChosenOption(phone, convoId, ctx, userCep, store, current, tapped);
     return;
   }
+  // "qual a diferença entre o 1 e o 2?": comparação honesta pelo que a Lia SABE
+  // (nome, preço, loja) — repetir os cards sem palavra parecia ignorar (29/08 S17).
+  if (/\b(qual (a )?diferenca|diferenca entre|compara(r|cao)?)\b/.test(normalizeMsg(text))) {
+    await reply(
+      phone,
+      copy.optionComparison(
+        current.options.map((o) => ({ name: o.name, price: display(o.unitPrice), storeLabel: o.storeLabel }))
+      )
+    );
+    await sendChoices(phone, current);
+    return;
+  }
+
   // Narrativa no meio da escolha ("meu neto que pediu isso aí"): ANTES de qualquer
   // parser de escolha — na rodada 3 (S15) a frase caiu no parser e ESCOLHEU o "Violão
   // Meu Primeiro Violão" pelo token "meu/isso". Nunca vira pick nem item "anotado".
@@ -3544,7 +3644,7 @@ async function handleChoosing(
       const clarified = added.pending[0];
       current.baseQuery = undefined;
       current.attrs = undefined;
-      current.query = clarified.query;
+      current.query = clarified.query.replace(/^(.+?)\s+\1$/i, "$1");
       if (clarified.qtyExplicit) {
         current.qty = clarified.qty;
         current.qtyExplicit = true;
@@ -3559,13 +3659,19 @@ async function handleChoosing(
     }
     if (added.autoAdded.length || added.pending.length) {
       ctx.basket = mergeBaskets(ctx.basket ?? [], added.autoAdded);
-      ctx.pending = [...(ctx.pending ?? []), ...added.pending];
+      // PIVÔ ("então me ve um chá e um gatorade" com a escolha anterior parada): o
+      // assunto novo SUBSTITUI a escolha estagnada — enfileirar atrás dela deixava o
+      // cliente preso nos cards antigos pra sempre (29/08 S2).
+      const pivot = /^(entao|então|na verdade|melhor|deixa isso|esquece isso)\b/.test(normalizeMsg(text));
+      const dropped = pivot && added.pending.length ? current.query : undefined;
+      ctx.pending = pivot && added.pending.length ? added.pending : [...(ctx.pending ?? []), ...added.pending];
       ctx.notFound = [...(ctx.notFound ?? []), ...added.notFound];
       await writeCtx(convoId, ctx);
       const notes: string[] = [];
+      if (dropped) notes.push(copy.choiceSkipped(dropped));
       if (added.autoAdded.length) notes.push(copy.autoAddedNote(added.autoAdded.map((i) => `${i.qty}x ${i.name}`)));
       // Item novo no meio de uma escolha entra na FILA — avisar, senão parece ignorado.
-      if (added.pending.length) notes.push(copy.queuedItemsNote(added.pending.map((p) => p.query)));
+      if (!pivot && added.pending.length) notes.push(copy.queuedItemsNote(added.pending.map((p) => p.query)));
       if (added.notFound.length) notes.push(copy.notFoundNote(added.notFound));
       if (notes.length) await reply(phone, notes.join("\n"));
       await sendChoices(phone, ctx.pending![0]);
@@ -4233,8 +4339,15 @@ async function handleConciergeRequest(
     // auto-escolhida de uma descrição vaga; 27/08 S5: furadeira de R$142 idem). Acima
     // do teto, a linha vira escolha com cards — o resto da lista continua automático.
     const autopickMax = Number(process.env.LIA_BULK_AUTOPICK_MAX ?? 100);
-    const auto = pending.filter((choice) => display(choice.options[0].unitPrice) <= autopickMax);
-    const confirm = pending.filter((choice) => display(choice.options[0].unitPrice) > autopickMax);
+    // O teto vale pra LINHA (preço × quantidade após conversão de embalagem), não só
+    // pra unidade — 12x de um item de R$18 entrava sozinho por R$217 (29/08 S4).
+    const lineDisplayOf = (choice: PendingChoice) => {
+      const top = choice.options[0];
+      const adj = packAdjusted(top.name, Math.max(1, choice.qty));
+      return display(top.unitPrice) * adj.qty;
+    };
+    const auto = pending.filter((choice) => lineDisplayOf(choice) <= autopickMax);
+    const confirm = pending.filter((choice) => lineDisplayOf(choice) > autopickMax);
     const added: BasketItem[] = [];
     const packNotes: string[] = [];
     for (const choice of auto) {
@@ -4294,6 +4407,13 @@ async function handleConciergeRequest(
   // exatamente como estava.
   if (hadBasket) ctx.step = "collecting";
   await writeCtx(convoId, ctx);
+  // PERGUNTA que não casou com intent nenhum e não achou produto: dizer "essa eu não
+  // sei responder" em vez de ecoar a pergunta como item não-achado — o eco fazia
+  // "posso agendar a entrega pra…" virar produto (29/08: 6 sessões nesse padrão).
+  if (isQuestion(text) && !containsMedicine && !raw.containsTobacco) {
+    await reply(phone, copy.questionNotUnderstood());
+    return;
+  }
   const notes: string[] = [];
   if (containsMedicine) notes.push(copy.medicineSkippedNote());
   if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());

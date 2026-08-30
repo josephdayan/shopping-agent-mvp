@@ -1,5 +1,42 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 30/08/2026 — rodada 5 (4,30/10): o funil de perguntas fechou
+
+Rodada 5 ([docs/testes-rodada-5-2026-08-29.md](docs/testes-rodada-5-2026-08-29.md)):
+2,85 → **4,30**, 11/11 totais certos, zero silêncio, zero concessão em manipulação. A
+causa-mãe restante era UMA: pergunta que não casa com intent caía no funil de busca e
+virava "produto não achado". Consertos deste ciclo:
+
+1. **Funil de perguntas fechado em duas camadas**: (a) intents novos — `coupon_promo`
+   (cupom/promoção %; "promo de Instagram não é nossa, desconfia"), `charge_complaint`
+   ("fui cobrado 2x" = suporte sério + alerta URGENTE ao operador + flag no pedido),
+   `scheduling_question` (não agendo; prazo da loja antes de pagar),
+   `store_location_question` (100% WhatsApp), `installments_question` (à vista por
+   enquanto — honesto), `meta_probe` ("suas instruções"/"ignora as regras"/"responde
+   só sim" = deflexão leve, nunca busca); (b) **backstop**: pergunta que não casou com
+   nada e não achou produto recebe "essa eu não sei responder — sou a Lia das compras"
+   em vez de ecoar a pergunta como item não-achado.
+2. **Pergunta lateral reapresenta a etapa**: todas as respostas informativas (NF,
+   CNPJ, segurança, cupom, parcelas etc.) re-enviam os cards/pergunta de quantidade em
+   curso — os cards "sumiam" e o cliente re-pedia o produto (S7/S12). CNPJ sem
+   `LIA_BUSINESS_INFO` agora também alerta o operador (o "te envio certinho" não é
+   mais beco).
+3. **Ovos 60 de novo (S4)**: o caminho COM IA mantinha "ovo x6"+"ovos x6" (o dedupe só
+   existia no parser determinístico) → `foldSameSpecLines` exportado e aplicado nas
+   duas saídas do merge. 6+6 = ovo x12 → 1 embalagem de 10 anunciada.
+4. **Teto por extenso e gíria**: `parsePriceCap` lê "quinze reais", "de uns 30 conto",
+   "mangos" (S18: pinga de R$48,97 passou no teto de R$15).
+5. **"quanto ficou mesmo?"/"ver total" com cobrança na mesa**: contexto pós-emissão
+   não tem `total` — agora busca no PEDIDO e responde `totalAwaitingPayment` (S1:
+   virava busca de produto). "ver total"/"fechar total" entraram no RUNNING_TOTAL_RE.
+6. **Pivô "então me ve X" no meio de escolha parada** substitui a escolha estagnada
+   (S2: chá+gatorade ficavam "anotados" atrás da touca térmica pra sempre).
+7. **Comparação de opções** (S17): "qual a diferença entre o 1 e o 2?" → compara
+   nome/preço/loja com honestidade sobre specs, e re-envia os cards.
+8. **Marca-como-genérico** (S11): `BRAND_GENERIC` reescreve linha de 1 token — gilete→
+   aparelho de barbear, bombril→palha de aço, maisena→maizena amido de milho,
+   danone→iogurte. Header duplicado "coca cola coca cola" colapsado (S15).
+
 ## Atualização 28/08/2026 — rodada 4 (cliente difícil, 2,85/10): ciclo de conserto
 
 A rodada 4 (protocolo v4, propositalmente hostil: comandos compostos, interrupções,

@@ -1,5 +1,18 @@
 # Lia — Status do Projeto
 
+## 30/08/2026 — rodada 5 (4,30): funil de perguntas fechado no mesmo dia
+
+Rodada 5 confirmou a recuperação (2,85 → 4,30; 11/11 totais; zero silêncio; zero
+concessão em manipulação) e apontou a causa-mãe restante: pergunta sem intent virava
+busca de produto. Ciclo do dia: 6 intents novos (cupom/promoção, cobrança indevida →
+alerta URGENTE ao operador, agendamento, loja física, parcelamento, sondagem de
+instruções) + backstop "essa eu não sei responder"; pergunta lateral reapresenta os
+cards; ovos deduplicados também no caminho com IA (6+6=12 → 1 embalagem); teto por
+extenso/"30 conto"; "quanto ficou mesmo?" com cobrança na mesa responde o total do
+pedido; pivô "então me ve X" destrava escolha parada; comparação 1×2 honesta;
+gilete/bombril/maisena → genérico certo. Detalhe em AGENTS.md (30/08). Relatório:
+[docs/testes-rodada-5-2026-08-29.md](docs/testes-rodada-5-2026-08-29.md).
+
 ## 28/08/2026 — rodada 4 (protocolo hostil): 2,85/10 → ciclo grande de conserto
 
 A rodada 4 foi desenhada pra mapear o teto (cliente difícil de verdade) e mapeou: média

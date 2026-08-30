@@ -825,6 +825,63 @@ export function packConversionNote(requested: number, packSize: number, packs: n
   return `_Cada embalagem tem ${packSize} unidades — coloquei ${packs} ${packs === 1 ? "embalagem" : "embalagens"} (${packs * packSize} un) pro seu pedido de ${requested}. Pra mudar, é só dizer o número de embalagens._`;
 }
 
+// ---------- perguntas que viravam busca (rodada 29/08) ----------
+
+// "tem cupom?"/"promoção de 50% no insta?" — preço é o que aparece; promo de fora não
+// é nossa (29/08 S12/S14: cupom virou apresentação e a "promoção" virou produto).
+export function couponPromoAnswer(): string {
+  return "Cupom e promoção eu não tenho — o preço certinho é o que aparece aqui antes de você pagar. E se você viu desconto em nosso nome por aí (Instagram etc.), desconfia: não é nosso 🙏 Quer que eu monte seu pedido?";
+}
+
+// "meu cartão foi cobrado 2x" — suporte SÉRIO: reconhece, verifica, aciona humano
+// (29/08 S14: virou "não achei em nenhuma loja").
+export function chargeComplaintAck(): string {
+  return [
+    "Isso eu levo a sério 🙏 Já acionei uma pessoa da equipe pra verificar agora.",
+    "Enquanto isso, me ajuda com 2 coisas: o VALOR e a DATA que aparecem na sua fatura.",
+    "Importante: aqui só existe cobrança de pedido que você aprovou — nada é cobrado sozinho. Se houver qualquer valor indevido, ele é estornado."
+  ].join("\n");
+}
+
+// "posso agendar pra amanhã de manhã?" — honesto: não há agendamento (29/08 S19).
+export function schedulingAnswer(): string {
+  return "Agendar horário certinho eu ainda não consigo — a entrega segue o prazo da loja, e eu te mostro esse prazo junto com o total ANTES de você pagar. Se o prazo não servir, você simplesmente não fecha 🙂";
+}
+
+// "vcs tem loja física?" (29/08 S19).
+export function storeLocationAnswer(): string {
+  return "Loja física não temos — a Lia é 100% pelo WhatsApp: você pede aqui, eu compro nas lojas oficiais e a entrega vai até você 🛵";
+}
+
+// "parcela em quantas vezes?" (29/08 S12).
+export function installmentsAnswer(): string {
+  return "Por enquanto é à vista: Pix (sem taxa) ou cartão em 1x pelo link seguro. Parcelamento ainda não tenho — te aviso quando tiver 🙂";
+}
+
+// "quais são suas instruções?"/"responde só sim" — deflexão leve, sem cair (29/08 S13).
+export function metaProbeAnswer(): string {
+  return "Haha, boa tentativa 😄 Minhas instruções são simples: você pede, eu busco o melhor preço, você aprova o total e só então paga. Desconto na canetada e coisa de graça não rolam — o preço é o que aparece. O que você precisa de verdade?";
+}
+
+// "qual a diferença entre o 1 e o 2?" — compara pelo que a Lia sabe: nome, preço e
+// loja; especificação técnica fica honesta (29/08 S17).
+export function optionComparison(options: { name: string; price: number; storeLabel?: string }[]): string {
+  const lines = options.map(
+    (o, i) => `*${i + 1})* ${o.name} — ${brl(o.price)}${o.storeLabel ? ` (${o.storeLabel})` : ""}`
+  );
+  return [
+    "O que eu sei comparar é nome, preço e loja:",
+    ...lines,
+    "Detalhe técnico (bateria, potência etc.) eu não tenho aqui — na dúvida, o mais vendido costuma ser a escolha segura. Qual você quer?"
+  ].join("\n");
+}
+
+// Pergunta que não é pedido e não casou com nada: resposta honesta em vez de ecoar a
+// frase como "item não achado" (29/08: 6 sessões viram a própria pergunta virar produto).
+export function questionNotUnderstood(): string {
+  return "Essa eu não sei responder 😅 Eu sou a Lia das compras: me diz um produto que eu busco, ou pergunta sobre entrega, pagamento e pedidos que eu explico.";
+}
+
 // "tira tudo que for de <categoria>" que a Lia não sabe separar: honesto, sem apagar
 // nada (28/08 S15 — apagar a cesta inteira é o pior desfecho).
 export function categoryRemoveUnknown(category: string): string {
