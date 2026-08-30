@@ -1633,3 +1633,69 @@ test("29/08 S11: gilete/bombril/maisena viram o produto genérico certo", async 
   assert.doesNotMatch(out, /gilete eu não achei|maisena.*não achei/i, out.slice(0, 400));
   assert.match(out, /palha de aço|aparelho de barbear|maizena|amido/i, out.slice(0, 400));
 });
+
+// ---------- ciclo 30/08: roteador LLM de fallback (via costura de teste) ----------
+
+test("30/08 roteador: pergunta desconhecida ganha resposta da IA e reapresenta a etapa", async (t) => {
+  if (!dbOk) return t.skip();
+  const { __setRouterInterpreterForTests } = await import("../src/lib/adapters/ai");
+  __setRouterInterpreterForTests(async () => ({
+    action: "question",
+    reply: "Pode sim! Qualquer pessoa no endereço pode receber por você 🙂"
+  }));
+  try {
+    const c = await returningCustomer();
+    const out = await c.send("minha sogra pode receber a encomenda por mim?");
+    assert.match(out, /Qualquer pessoa no endereço/i, `IA não respondeu: ${out.slice(0, 300)}`);
+    assert.doesNotMatch(out, /não achei em nenhuma loja/i);
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
+});
+
+test("30/08 roteador: 'uma 51' vira busca reescrita de cachaça", async (t) => {
+  if (!dbOk) return t.skip();
+  const { __setRouterInterpreterForTests } = await import("../src/lib/adapters/ai");
+  __setRouterInterpreterForTests(async (input) =>
+    /51/.test(input.text) ? { action: "product_request", productRequest: "cachaça" } : null
+  );
+  try {
+    const c = await returningCustomer();
+    const out = await c.send("me ve uma 51 bem gelada ai");
+    assert.match(out, /cacha|Opções/i, `não reescreveu a busca: ${out.slice(0, 300)}`);
+    assert.doesNotMatch(out, /não sei responder|Me perdi/i);
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
+});
+
+test("30/08 roteador: edição normalizada pela IA mexe na cesta de verdade", async (t) => {
+  if (!dbOk) return t.skip();
+  const { __setRouterInterpreterForTests } = await import("../src/lib/adapters/ai");
+  __setRouterInterpreterForTests(async (input) =>
+    /desfazer|aquela bebida/.test(input.text) ? { action: "basket_edit", editCommand: "tira a coca" } : null
+  );
+  try {
+    const c = await returningCustomer();
+    await c.send("quero coca cola");
+    const afterChoice = await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("1");
+    const out = await c.send("da pra desfazer aquela bebida la");
+    assert.match(out, /Tirei|cesta ficou vazia/i, `edição não aplicou: ${out.slice(0, 300)}`);
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
+});
+
+test("30/08 roteador: IA off (null) mantém o comportamento determinístico", async (t) => {
+  if (!dbOk) return t.skip();
+  const { __setRouterInterpreterForTests } = await import("../src/lib/adapters/ai");
+  __setRouterInterpreterForTests(async () => null);
+  try {
+    const c = await returningCustomer();
+    const out = await c.send("xablau zorbo trilili?");
+    assert.match(out, /não sei responder|não achei|Me diz/i, out.slice(0, 300));
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
+});

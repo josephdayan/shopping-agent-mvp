@@ -1,5 +1,16 @@
 # Lia — Status do Projeto
 
+## 30/08/2026 (2ª) — mudança de patamar: roteador LLM + cesta-como-conjunto no ar
+
+Os dois ciclos estruturais aprovados pelo dono foram implementados e publicados: o
+roteador LLM de fallback (a cauda infinita de frases deixa de precisar de regex nova —
+"uma 51", "negocio de passar roupa" e "tira aquele negocio de lavar louça" resolvem
+sozinhos, com filtro anti-promessa e dinheiro 100% determinístico) e a cesta-como-
+conjunto V1 (lista grande escolhe a combinação de lojas que minimiza produtos+frete,
+com cada troca anunciada — o frete fragmentado era o problema nº 2 há 3 rodadas).
+Detalhe em AGENTS.md (30/08 2ª). Kill-switches: `LIA_LLM_ROUTER=false`,
+`LIA_BASKET_COMPOSER_OFF=true`.
+
 ## 30/08/2026 — rodada 5 (4,30): funil de perguntas fechado no mesmo dia
 
 Rodada 5 confirmou a recuperação (2,85 → 4,30; 11/11 totais; zero silêncio; zero

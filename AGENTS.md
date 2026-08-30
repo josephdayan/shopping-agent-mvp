@@ -1,5 +1,40 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 30/08/2026 (2ª) — os dois ciclos estruturais: roteador LLM + cesta-como-conjunto
+
+Decisão do dono ("então faz tudo isso"): sair do loop de conserto-por-regex e atacar
+as duas causas estruturais da média estagnada.
+
+**1. Roteador LLM de fallback** (`interpretCustomerMessage` em src/lib/adapters/ai.ts
++ `tryLlmInterpret` em delivery-service):
+- Entra SÓ nos becos onde a Lia responderia mal: busca que não achou nada, mensagem
+  sem produto/intent, e o "não peguei qual você quer" final da escolha. Uma tentativa
+  por turno (flag no `turnMeta`); OpenAI off/timeout/`LIA_LLM_ROUTER=false` → o
+  comportamento determinístico de sempre (todos os testes existentes valem intactos).
+- Ações: `product_request` reescreve a busca ("uma 51" → "cachaça 51", "negocio de
+  passar roupa" → "ferro de passar roupa" — provado ao vivo); `basket_edit` normaliza
+  pra comando canônico ("tira aquele negocio de lavar louça" → "tira o detergente") e
+  despacha pelos handlers de sempre; `question/support/smalltalk/manipulation`
+  respondem na voz da Lia — support também flag no pedido + alerta ao operador.
+- **A IA nunca decide dinheiro**: prompt proíbe desconto/gratuidade/confirmação de
+  pagamento/promessa de prazo/recursos inexistentes, e `sanitizeRouterReply` derruba
+  qualquer resposta com promessa proibida (cai na copy segura canned). Testado em
+  unidade (filtro) e E2E (costura `__setRouterInterpreterForTests`).
+
+**2. Cesta-como-conjunto V1** (P1.8; `src/lib/basket-composer.ts` puro + fiação no
+modo lista):
+- `composeBasket` escolhe, entre as opções JÁ aprovadas (piso+rerank) de cada linha,
+  a combinação que minimiza produtos+frete (guloso, uma troca por vez, limiares de
+  frete grátis contam). Só aplica com economia ≥ R$3 e **anuncia cada troca**
+  (`bundledDeliveriesNote`: "Juntei entregas pra te economizar R$X — item A (Loja) →
+  item B (Loja)"). Kill-switch `LIA_BASKET_COMPOSER_OFF`.
+- Cesta montada card a card NÃO é recomposta em silêncio (escolha explícita): quando a
+  cotação sai com 3+ entregas e frete ≥ 40% dos produtos, vai a dica honesta
+  (`freightFragmentationTip`) de reenviar a lista numa mensagem só.
+- Unidade: 4 casos (migração compensa, alternativa cara não mexe, limiar de frete
+  grátis, quantidade multiplica).
+
+
 ## Atualização 30/08/2026 — rodada 5 (4,30/10): o funil de perguntas fechou
 
 Rodada 5 ([docs/testes-rodada-5-2026-08-29.md](docs/testes-rodada-5-2026-08-29.md)):

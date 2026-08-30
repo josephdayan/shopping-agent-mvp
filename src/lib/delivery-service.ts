@@ -15,6 +15,7 @@ import { pickNearestUnit } from "@/lib/stores/nearest";
 import { mercadoLivreEnabled, prefetchMercadoLivre, searchMercadoLivre } from "@/lib/stores/mercadolivre";
 import { mlItemIdFrom } from "@/lib/ml-freight";
 import { checkFreightGuard, type FreightBlock } from "@/lib/freight-guard";
+import { composeBasket } from "@/lib/basket-composer";
 import {
   attrMatchesItem,
   conciergeMatchIsStrong,
@@ -37,7 +38,7 @@ import {
   getOneClickCredential
 } from "@/lib/payments/whatsapp-pay";
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
-import { extractShoppingList, rerankShoppingOptions } from "@/lib/adapters/ai";
+import { extractShoppingList, rerankShoppingOptions, interpretCustomerMessage } from "@/lib/adapters/ai";
 import {
   computeStoreFreights,
   freightBreakdownLabel,
@@ -409,10 +410,10 @@ const turnStore = new AsyncLocalStorage<Map<string, string | null>>();
 // Contador de RESPOSTAS do turno — a rede anti-silêncio absoluto (28/08: quatro
 // sessões terminaram um turno sem NENHUMA mensagem de volta). Se o turno fechar com
 // zero envios, handleDeliveryMessage manda um fallback pedindo reformulação.
-const turnMeta = new AsyncLocalStorage<{ replies: number }>();
+const turnMeta = new AsyncLocalStorage<{ replies: number; llmUsed?: boolean }>();
 
 export function runTurnScoped<T>(fn: () => Promise<T>): Promise<T> {
-  return turnStore.run(new Map(), () => turnMeta.run({ replies: 0 }, fn));
+  return turnStore.run(new Map(), () => turnMeta.run({ replies: 0, llmUsed: false }, fn));
 }
 
 function rememberCtxSnapshot(convoId: string, context: string | null) {
@@ -3678,6 +3679,9 @@ async function handleChoosing(
       return;
     }
   }
+  // Último recurso da escolha: o roteador LLM tenta entender (pergunta? edição?
+  // frase de produto torta?) antes do "não peguei qual você quer".
+  if (await tryLlmInterpret(phone, convoId, userCep, ctx, text)) return;
   await reply(phone, copy.choiceNotUnderstood());
   await sendChoices(phone, current);
 }
@@ -3956,6 +3960,96 @@ function itemMatchesPhrase(phrase: string, item: { sku: string; name: string; un
   return scoreCatalogMatch(phrase, item) > 0;
 }
 
+// ---------- roteador LLM de fallback (ciclo 30/08) ----------
+// Entra SÓ nos becos onde a Lia responderia mal (busca vazia, escolha não entendida):
+// classifica a mensagem com contexto e (a) reescreve a busca ("uma 51" → "cachaça 51"),
+// (b) normaliza edição de cesta, ou (c) responde pergunta/suporte/papo na voz da Lia —
+// com o filtro anti-promessa do lado da IA (sanitizeRouterReply). Uma tentativa por
+// turno; OpenAI off/falhou → comportamento determinístico de sempre.
+
+function llmStateSummary(ctx: DeliveryContext): string {
+  const parts: string[] = [];
+  if (ctx.step === "choosing" && ctx.pending?.length) {
+    parts.push(`escolhendo "${ctx.pending[0].query}" com ${ctx.pending[0].options.length} opções na tela`);
+  }
+  if (ctx.step === "choosing_quantity" && ctx.quantityChoice) {
+    parts.push(`perguntando a quantidade de ${ctx.quantityChoice.option.name}`);
+  }
+  if (ctx.basket?.length) {
+    parts.push(`cesta atual: ${ctx.basket.slice(0, 5).map((i) => `${i.qty}x ${i.name}`).join(", ")}`);
+  }
+  if (ctx.step === "awaiting_payment") parts.push("cobrança aberta aguardando pagamento");
+  if (ctx.step === "awaiting_quote_confirmation") parts.push("total apresentado, aguardando escolha de pagamento");
+  return parts.join(" · ") || "conversa sem compra em andamento";
+}
+
+async function tryLlmInterpret(
+  phone: string,
+  convoId: string,
+  userCep: string | null | undefined,
+  ctx: DeliveryContext,
+  text: string,
+  userId?: string
+): Promise<boolean> {
+  const meta = turnMeta.getStore();
+  if (meta?.llmUsed) return false;
+  if (meta) meta.llmUsed = true;
+  const verdict = await interpretCustomerMessage({ text, state: llmStateSummary(ctx) });
+  if (!verdict || verdict.action === "unknown") return false;
+  console.log("[llm-router]", verdict.action, JSON.stringify(text.slice(0, 60)));
+  const rePresent = async () => {
+    if (ctx.step === "choosing" && ctx.pending?.length) await sendChoices(phone, ctx.pending[0]);
+    else if (ctx.step === "choosing_quantity" && ctx.quantityChoice) await reply(phone, copy.quantityAsk(ctx.quantityChoice.option.name));
+  };
+  if (verdict.action === "product_request" && verdict.productRequest) {
+    // Só re-busca se a IA de fato REESCREVEU (senão vira loop do mesmo não-achado).
+    if (normalizeMsg(verdict.productRequest) === normalizeMsg(text)) return false;
+    await handleSearch(phone, convoId, userCep, ctx, verdict.productRequest, userId);
+    return true;
+  }
+  if (verdict.action === "basket_edit" && verdict.editCommand) {
+    const edited = detectIntent(verdict.editCommand);
+    if (edited.kind === "swap_item") {
+      await reopenOrderForEdit(phone, convoId, ctx, userCep);
+      await handleSwap(phone, convoId, userCep, ctx, edited.from, edited.to, verdict.editCommand, edited.attr);
+      return true;
+    }
+    if (edited.kind === "remove_item") {
+      await reopenOrderForEdit(phone, convoId, ctx, userCep);
+      await handleRemove(phone, convoId, userCep, ctx, edited.target, { silentIfFound: Boolean(edited.andAdd) });
+      if (edited.andAdd) await handleSearch(phone, convoId, userCep, ctx, edited.andAdd, userId);
+      return true;
+    }
+    if (edited.kind === "free_text") {
+      await handleSearch(phone, convoId, userCep, ctx, verdict.editCommand, userId);
+      return true;
+    }
+    return false;
+  }
+  if (
+    verdict.action === "question" ||
+    verdict.action === "support" ||
+    verdict.action === "smalltalk" ||
+    verdict.action === "manipulation"
+  ) {
+    // Resposta livre já passou pelo filtro anti-promessa; sem ela, copy segura da ação.
+    const fallbackByAction: Record<string, string> = {
+      question: copy.questionNotUnderstood(),
+      support: copy.supportGenericAck(),
+      smalltalk: copy.thanks(),
+      manipulation: copy.metaProbeAnswer()
+    };
+    await reply(phone, verdict.reply ?? fallbackByAction[verdict.action]);
+    if (verdict.action === "support" && userId) {
+      await flagLatestOrder(userId, `🆘 SUPORTE (via IA): "${text.slice(0, 140)}"`);
+      await notifyOperator(`🆘 Cliente com problema (classificado pela IA): "${text.slice(0, 140)}"`, phone);
+    }
+    await rePresent();
+    return true;
+  }
+  return false;
+}
+
 // Categorias que a remoção "tira tudo que for de X" sabe separar (28/08 S15).
 const CATEGORY_KEYWORDS: Record<string, RegExp> = {
   limpeza:
@@ -4167,7 +4261,8 @@ async function handleConciergeRequest(
   convoId: string,
   userCep: string | null | undefined,
   ctx: DeliveryContext,
-  text: string
+  text: string,
+  userId?: string
 ) {
   // LISTA ENCAMINHADA (pedido do dono, 20/08): mensagem com 3+ linhas de itens não
   // vira interrogatório de cards — a Lia escolhe o melhor match de cada linha (mesmo
@@ -4282,6 +4377,9 @@ async function handleConciergeRequest(
     } else if (raw.containsTobacco) {
       await reply(phone, copy.tobaccoRefusal());
     } else {
+      // Beco clássico: mensagem sem produto e sem intent. O roteador LLM tenta
+      // entender (pergunta? edição? frase de produto mal escrita?) antes do genérico.
+      if (await tryLlmInterpret(phone, convoId, userCep, ctx, text, userId)) return;
       await reply(phone, copy.didNotUnderstand());
     }
     return;
@@ -4338,6 +4436,52 @@ async function handleConciergeRequest(
     // Item CARO não entra sozinho na cesta (26/08: peça de trator de R$2.556 foi
     // auto-escolhida de uma descrição vaga; 27/08 S5: furadeira de R$142 idem). Acima
     // do teto, a linha vira escolha com cards — o resto da lista continua automático.
+    // Cesta como CONJUNTO (P1.8): entre as opções aprovadas de cada linha, escolhe a
+    // combinação que minimiza produtos+frete — e ANUNCIA cada troca (lição da rodada
+    // 2: mudança silenciosa de produto é quebra de confiança). Só aplica quando a
+    // economia é real (≥ R$3) e nunca é kill: LIA_BASKET_COMPOSER_OFF desliga.
+    const composedNotes: string[] = [];
+    if (process.env.LIA_BASKET_COMPOSER_OFF !== "true" && pending.length >= 2) {
+      const composition = composeBasket(
+        pending.map((p) => ({
+          qty: Math.max(1, p.qty),
+          options: p.options.map((o) => ({
+            sku: o.sku,
+            name: o.name,
+            unitPrice: o.unitPrice,
+            storeKey: o.storeKey,
+            storeLabel: o.storeLabel
+          }))
+        })),
+        display,
+        (storeKey, storeLabel, subtotal) => storeFreight(storeKey, storeLabel ?? storeKey, subtotal).fee
+      );
+      const saved = Math.round((composition.before.total - composition.after.total) * 100) / 100;
+      if (composition.moves.length && saved >= 3) {
+        for (let i = 0; i < pending.length; i++) {
+          const pick = composition.picks[i];
+          if (pick > 0) {
+            const line = pending[i];
+            const chosen = line.options[pick];
+            line.options = [chosen, ...line.options.filter((_, j) => j !== pick)];
+          }
+        }
+        composedNotes.push(
+          copy.bundledDeliveriesNote({
+            moves: composition.moves.map((m) => ({
+              fromName: m.fromName,
+              fromStore: m.fromStore,
+              toName: m.toName,
+              toStore: m.toStore
+            })),
+            storesBefore: composition.before.stores,
+            storesAfter: composition.after.stores,
+            saved
+          })
+        );
+        console.log("[basket-composer]", `${composition.before.stores}→${composition.after.stores} lojas, -R$${saved}`);
+      }
+    }
     const autopickMax = Number(process.env.LIA_BULK_AUTOPICK_MAX ?? 100);
     // O teto vale pra LINHA (preço × quantidade após conversão de embalagem), não só
     // pra unidade — 12x de um item de R$18 entrava sozinho por R$217 (29/08 S4).
@@ -4367,6 +4511,7 @@ async function handleConciergeRequest(
           copy.bulkBasketAdded(added.map((i) => ({ qty: i.qty, name: i.name, total: display(i.unitPrice) * i.qty })))
         );
       }
+      notes.push(...composedNotes);
       notes.push(...packNotes);
       if (containsMedicine) notes.push(copy.medicineSkippedNote());
       if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
@@ -4379,6 +4524,7 @@ async function handleConciergeRequest(
     const notes: string[] = [
       copy.bulkBasketAdded(added.map((i) => ({ qty: i.qty, name: i.name, total: display(i.unitPrice) * i.qty })))
     ];
+    notes.push(...composedNotes);
     notes.push(...packNotes);
     if (containsMedicine) notes.push(copy.medicineSkippedNote());
     if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
@@ -4407,12 +4553,15 @@ async function handleConciergeRequest(
   // exatamente como estava.
   if (hadBasket) ctx.step = "collecting";
   await writeCtx(convoId, ctx);
-  // PERGUNTA que não casou com intent nenhum e não achou produto: dizer "essa eu não
-  // sei responder" em vez de ecoar a pergunta como item não-achado — o eco fazia
-  // "posso agendar a entrega pra…" virar produto (29/08: 6 sessões nesse padrão).
-  if (isQuestion(text) && !containsMedicine && !raw.containsTobacco) {
-    await reply(phone, copy.questionNotUnderstood());
-    return;
+  // NADA achou preço: o roteador LLM tenta entender a mensagem (pergunta? "uma 51"?
+  // edição?) antes do eco de não-achado — o eco fazia "posso agendar a entrega pra…"
+  // virar produto (29/08: 6 sessões nesse padrão).
+  if (!containsMedicine && !raw.containsTobacco) {
+    if (await tryLlmInterpret(phone, convoId, userCep, ctx, text, userId)) return;
+    if (isQuestion(text)) {
+      await reply(phone, copy.questionNotUnderstood());
+      return;
+    }
   }
   const notes: string[] = [];
   if (containsMedicine) notes.push(copy.medicineSkippedNote());
@@ -4456,7 +4605,7 @@ async function handleSearch(
     await reply(phone, copy.urgencyHonest());
   }
   if (manualConciergeEnabled()) {
-    await handleConciergeRequest(phone, convoId, userCep, ctx, text);
+    await handleConciergeRequest(phone, convoId, userCep, ctx, text, userId);
     return;
   }
   // The search can take a couple seconds — acknowledge first so there's no silence.
@@ -5065,13 +5214,21 @@ async function tryPublishInstantQuote(
       return { handled: true };
     }
 
+    const serviceFeeExact = serviceFeeForItems(items as { unitPrice: number; qty: number }[]);
     await publishInstantQuote(orderId, {
       itemsSubtotal,
-      serviceFee: serviceFeeForItems(items as { unitPrice: number; qty: number }[]),
+      serviceFee: serviceFeeExact,
       fee: totalFee,
       estimate: mlEstimate,
       stores: freights.length
     });
+    // Frete comendo a compra (3+ entregas e frete ≥ 40% dos produtos): dica honesta de
+    // como baratear — a recomposição automática vale pra LISTA; cesta montada card a
+    // card foi escolha explícita do cliente e não é trocada em silêncio.
+    const produtosDisplay = itemsSubtotal + serviceFeeExact;
+    if (freights.length >= 3 && totalFee >= 0.4 * produtosDisplay) {
+      await reply(phone, copy.freightFragmentationTip(freights.length));
+    }
     return { handled: true };
   } catch (error) {
     // Turno superado (outro turno/cancelar escreveu por baixo) NÃO cai no caminho

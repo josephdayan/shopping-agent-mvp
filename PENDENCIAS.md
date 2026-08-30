@@ -1,6 +1,12 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-30._
+_Última atualização: 2026-08-30 (2ª)._
+
+> **30/08 (2ª) — pós-ciclos estruturais.** Roteador LLM e cesta-como-conjunto V1 no
+> ar. Próximos degraus registrados: (a) recomposição sob comando ("juntar entregas")
+> para cesta montada card a card — hoje sai a dica honesta; (b) roteador LLM também no
+> onboarding (hoje só nos becos pós-busca/escolha); (c) telemetria do roteador (log
+> [llm-router] — medir acerto na rodada 6).
 
 > **30/08 — pós-rodada 5 (4,30).** Consertos do dia em AGENTS.md. Aberto:
 > (a) **Fone com teto vazando (S6)**: o cap E2E de vitrine passa; o caso do fone veio

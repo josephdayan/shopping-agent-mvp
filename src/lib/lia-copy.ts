@@ -876,6 +876,38 @@ export function optionComparison(options: { name: string; price: number; storeLa
   ].join("\n");
 }
 
+// ---------- cesta como conjunto (P1.8, ciclo 30/08) ----------
+
+// A recomposição de lojas NUNCA é silenciosa: cada troca sai nomeada, com a economia
+// e o novo número de entregas (lição da rodada 2).
+export function bundledDeliveriesNote(input: {
+  moves: { fromName: string; fromStore?: string; toName: string; toStore?: string }[];
+  storesBefore: number;
+  storesAfter: number;
+  saved: number;
+}): string {
+  const lines = input.moves.map(
+    (m) => `• ${m.fromName}${m.fromStore ? ` (${m.fromStore})` : ""} → *${m.toName}*${m.toStore ? ` (${m.toStore})` : ""}`
+  );
+  const entregas = `${input.storesAfter} ${input.storesAfter === 1 ? "entrega" : "entregas"} em vez de ${input.storesBefore}`;
+  return [
+    `🚚 Juntei entregas pra te economizar ${brl(input.saved)} no total (${entregas}):`,
+    ...lines,
+    "_Se preferir a versão anterior de algum item, é só dizer *troca X por Y*._"
+  ].join("\n");
+}
+
+// Cesta montada card a card que fragmentou (3+ entregas, frete pesado): dica honesta —
+// escolha explícita do cliente não é trocada em silêncio.
+export function freightFragmentationTip(stores: number): string {
+  return `💡 Essa cesta saiu em ${stores} entregas e o frete pesou. Se quiser, me manda a lista inteira numa mensagem só que eu monto de novo juntando as entregas pra baratear.`;
+}
+
+// Suporte classificado pela IA sem resposta utilizável: acolhimento seguro genérico.
+export function supportGenericAck(): string {
+  return "Entendi — isso eu levo a sério 🙏 Já acionei uma pessoa da equipe pra verificar e te responder aqui. Se puder, me manda os detalhes (o que aconteceu, valor, data) que agiliza.";
+}
+
 // Pergunta que não é pedido e não casou com nada: resposta honesta em vez de ecoar a
 // frase como "item não achado" (29/08: 6 sessões viram a própria pergunta virar produto).
 export function questionNotUnderstood(): string {
