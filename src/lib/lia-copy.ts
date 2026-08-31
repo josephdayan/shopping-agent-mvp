@@ -481,6 +481,17 @@ export function pixInstructions(total: number, mock: boolean): string {
   ].join("\n");
 }
 
+// Corpo da bolha nativa de Pix (order_details). Enviada DEPOIS do copia-e-cola em texto:
+// se a Meta descartar a bolha, o cliente já tem o código; se entregar, o botão
+// "Pagar com Pix" abre o banco direto.
+export function nativePixBody(orderRef: string): string {
+  return `Pedido ${orderRef} — toca em *Pagar com Pix* pra abrir seu banco, ou usa o código que mandei acima. Assim que cair, te aviso por aqui ⚡`;
+}
+
+export function nativePixItemName(orderRef: string): string {
+  return `Pedido Lia ${orderRef}`;
+}
+
 export function cardInstructions(total: number, link: string, mock: boolean): string {
   return [
     `Total *${brl(total)}* no cartão _(taxa da maquininha incluída)_.`,
@@ -889,9 +900,14 @@ export function bundledDeliveriesNote(input: {
   const lines = input.moves.map(
     (m) => `• ${m.fromName}${m.fromStore ? ` (${m.fromStore})` : ""} → *${m.toName}*${m.toStore ? ` (${m.toStore})` : ""}`
   );
-  const entregas = `${input.storesAfter} ${input.storesAfter === 1 ? "entrega" : "entregas"} em vez de ${input.storesBefore}`;
+  const reducedDeliveries = input.storesAfter < input.storesBefore;
+  const deliveryContext = reducedDeliveries
+    ? `${input.storesAfter} ${input.storesAfter === 1 ? "entrega" : "entregas"} em vez de ${input.storesBefore}`
+    : `continuam ${input.storesAfter} ${input.storesAfter === 1 ? "entrega" : "entregas"}`;
   return [
-    `🚚 Juntei entregas pra te economizar ${brl(input.saved)} no total (${entregas}):`,
+    reducedDeliveries
+      ? `🚚 Juntei entregas pra te economizar ${brl(input.saved)} no total (${deliveryContext}):`
+      : `🚚 Reorganizei os itens entre as lojas pra te economizar ${brl(input.saved)} no total (${deliveryContext}):`,
     ...lines,
     "_Se preferir a versão anterior de algum item, é só dizer *troca X por Y*._"
   ].join("\n");

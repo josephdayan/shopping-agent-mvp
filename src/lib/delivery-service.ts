@@ -2457,7 +2457,7 @@ async function handleDeliveryTurn(
     intent.kind !== "choose_payment" &&
     intent.kind !== "done"
   ) {
-    await handleChoosing(phone, user.cep, convo.id, ctx, text, intent);
+    await handleChoosing(phone, user.id, user.cep, convo.id, ctx, text, intent);
     return;
   }
 
@@ -3436,6 +3436,7 @@ async function confirmChosenOption(
 
 async function handleChoosing(
   phone: string,
+  userId: string,
   userCep: string | null | undefined,
   convoId: string,
   ctx: DeliveryContext,
@@ -3599,7 +3600,11 @@ async function handleChoosing(
     const combined = await gatherCrossStoreCandidates(combinedQuery, 12, 4, { forceLongTail: true });
     const strong = combined
       .map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }))
-      .filter((o) => conciergeMatchIsStrong(combinedQuery, o) && conciergeMatchIsStrong(normalizeMsg(text), o));
+      .filter((o) => conciergeMatchIsStrong(combinedQuery, o) && conciergeMatchIsStrong(normalizeMsg(text), o))
+      // O teto da busca original continua valendo no refinamento por marca. Esse é o
+      // caminho de cauda longa de "fone até 150" → "Philco" que ainda deixava um
+      // anúncio caro do ML furar o orçamento depois de os primeiros cards respeitarem.
+      .filter((o) => current.cap == null || display(o.unitPrice) <= current.cap);
     if (strong.length) {
       current.baseQuery = current.baseQuery ?? current.query;
       current.query = combinedQuery;
@@ -3681,7 +3686,7 @@ async function handleChoosing(
   }
   // Último recurso da escolha: o roteador LLM tenta entender (pergunta? edição?
   // frase de produto torta?) antes do "não peguei qual você quer".
-  if (await tryLlmInterpret(phone, convoId, userCep, ctx, text)) return;
+  if (await tryLlmInterpret(phone, convoId, userCep, ctx, text, userId)) return;
   await reply(phone, copy.choiceNotUnderstood());
   await sendChoices(phone, current);
 }
@@ -4318,7 +4323,14 @@ async function handleConciergeRequest(
       ? choice.options
       : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
     if (strong.length) pending.push({ ...choice, options: strong });
-    else weakLines.push({ phrase: choice.query, qty: choice.qty, ...(choice.qtyExplicit ? { qtyExplicit: true } : {}) });
+    else {
+      weakLines.push({
+        phrase: choice.query,
+        qty: choice.qty,
+        ...(choice.qtyExplicit ? { qtyExplicit: true } : {}),
+        ...(choice.cap != null ? { cap: choice.cap } : {})
+      });
+    }
   }
   let notFoundLines = [...raw.notFoundLines, ...weakLines];
   const { greetingOnly, containsMedicine } = raw;
@@ -4872,7 +4884,51 @@ async function issueChargeForOrder(
   // com prosa junto, o copia-e-cola não cola no banco.
   await reply(phone, copy.pixInstructions(total, charge.mock));
   await reply(phone, charge.copiaECola);
+  await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
   return true;
+}
+
+// Bolha nativa de pagamento (order_details + pix_dynamic_code): total e botão
+// "Pagar com Pix" dentro do chat, como nos bots grandes. Experimento atrás de
+// LIA_NATIVE_PIX=1 porque a doc da Meta não exige allowlist para Pix (o cartão
+// One-Click exigia e foi negado em 08/2026) — só o teste real confirma. ADITIVA por
+// desenho: sai DEPOIS dos textos de sempre, então se a Graph rejeitar (ou aceitar e
+// descartar assíncrono, lição dos cards) o cliente já tem o copia-e-cola. Falha aqui
+// NUNCA bloqueia a cobrança.
+async function maybeSendNativePixBubble(
+  phone: string,
+  orderId: string,
+  pixId: string,
+  total: number,
+  pixCode: string,
+  mock: boolean
+) {
+  if (process.env.LIA_NATIVE_PIX !== "1" || mock || !pixCode) return;
+  const merchantName = process.env.LIA_PIX_MERCHANT_NAME;
+  const key = process.env.LIA_PIX_KEY;
+  const keyType = process.env.LIA_PIX_KEY_TYPE;
+  const validKeyType = keyType === "CPF" || keyType === "CNPJ" || keyType === "EMAIL" || keyType === "PHONE";
+  if (!merchantName || !key || !validKeyType) {
+    console.warn("[whatsapp:native-pix] flag ligada sem LIA_PIX_MERCHANT_NAME/LIA_PIX_KEY/LIA_PIX_KEY_TYPE — pulando bolha");
+    return;
+  }
+  const orderRef = `#${orderId.slice(-6).toUpperCase()}`;
+  try {
+    await whatsappAdapter.sendPixOrderDetails(phone, {
+      // reference_id precisa ser único por bolha; o pixId do Mercado Pago é único por
+      // cobrança (o mesmo pedido pode reemitir Pix ao trocar de forma de pagamento).
+      referenceId: `pix-${pixId}`,
+      body: copy.nativePixBody(orderRef),
+      itemName: copy.nativePixItemName(orderRef),
+      total,
+      pixCode,
+      merchantName,
+      key,
+      keyType
+    });
+  } catch (error) {
+    console.warn("[whatsapp:native-pix] bolha rejeitada, cliente segue com o texto:", error instanceof Error ? error.message : error);
+  }
 }
 
 // Re-send the open charge (card link or Pix code) for an awaiting_payment order.
@@ -5415,6 +5471,7 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
       await setQuoteConversationAwaitingPayment(order);
       await reply(order.phone, copy.pixInstructions(total, charge.mock));
       await reply(order.phone, charge.copiaECola);
+      await maybeSendNativePixBubble(order.phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
     }
     return { expired: false };
   } catch (error) {
@@ -5586,6 +5643,7 @@ async function switchPaymentMethod(
     phone,
     [copy.paymentSwitched(method, total), charge.payload, charge.mock ? `\n${copy.sandboxHint()}` : ""].filter(Boolean).join("\n")
   );
+  await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.payload, charge.mock);
 }
 
 // ---------- order lifecycle (called by webhook + operator dashboard) ----------

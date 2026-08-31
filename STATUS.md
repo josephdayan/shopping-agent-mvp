@@ -1,5 +1,29 @@
 # Lia — Status do Projeto
 
+## 31/08/2026 — bolha nativa de Pix no chat (experimento atrás de flag)
+
+Pagamento com cara de app dentro do WhatsApp: a cobrança Pix agora pode sair também
+como `order_details` nativo (total + botão "Pagar com Pix" que abre o banco + copy
+code), igual aos bots grandes. A doc da Meta não exige allowlist pra Pix dinâmico
+(o cartão One-Click exigia e foi negado) — mas só o teste real confirma. Aditivo e
+inofensivo: os textos de hoje continuam saindo antes da bolha, e falha na bolha nunca
+bloqueia a cobrança. **Pra ligar (dono, na Vercel):** `LIA_NATIVE_PIX=1` +
+`LIA_PIX_MERCHANT_NAME` + `LIA_PIX_KEY` + `LIA_PIX_KEY_TYPE` (chave da conta Mercado
+Pago que recebe), depois um pedido de teste no próprio número olhando o log
+`[whatsapp:native-pix]`. Detalhe em AGENTS.md (31/08).
+
+## 30/08/2026 (3ª) — auditoria pós-rodadas 1–5: 479/479, sete lacunas fechadas
+
+O pente-fino do código e a bateria integral contra o banco terminaram verdes: **479
+testes, 479 aprovados, zero pulado**, mais TypeScript, lint e build de produção. A
+auditoria encontrou e fechou sete lacunas residuais nos pontos novos: ambiguidade de
+`quero sim`; dois vazamentos do teto no caminho Mercado Livre; alerta de suporte via IA
+ausente durante escolha; confirmação financeira falsa ainda possível na resposta livre
+da IA; cálculo prematuro de frete grátis no compositor; e redistribuição 2→2 com copy
+contraditória/possibilidade de criar entrega adicional. Evidências e riscos externos que
+continuam abertos em
+[docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md](docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md).
+
 ## 30/08/2026 (2ª) — mudança de patamar: roteador LLM + cesta-como-conjunto no ar
 
 Os dois ciclos estruturais aprovados pelo dono foram implementados e publicados: o

@@ -1,7 +1,7 @@
 import "./helpers/load-env";
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildOrderDetailsPayload, parsePaymentConfirmation, whatsappAdapter } from "../src/lib/adapters/whatsapp";
+import { buildOrderDetailsPayload, buildPixOrderDetailsPayload, parsePaymentConfirmation, whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { pagarmeAdapter } from "../src/lib/payments/pagarme";
 
 test("One-Click: payload usa centavos, bens físicos e o credential_id interno", () => {
@@ -24,6 +24,36 @@ test("One-Click: payload usa centavos, bens físicos e o credential_id interno",
   assert.equal(parameters.payment_settings[0].offsite_card_pay.credential_id, "credential_internal_456");
   assert.equal(parameters.payment_settings[0].offsite_card_pay.last_four_digits, "5235");
   assert.equal(parameters.order.items[0].amount.value * parameters.order.items[0].quantity + parameters.order.shipping.value + parameters.order.tax.value, parameters.total_amount.value);
+});
+
+test("Pix nativo: bolha usa pix_dynamic_code em centavos e fecha item = total", () => {
+  const payload = buildPixOrderDetailsPayload("+5511999999999", {
+    referenceId: "pix-12345",
+    body: "Pedido #ABC123 — toca em Pagar com Pix",
+    itemName: "Pedido Lia #ABC123",
+    total: 98.4,
+    pixCode: "00020126PIXEXEMPLO5204000053039865802BR",
+    merchantName: "Lia Delivery",
+    key: "12345678000199",
+    keyType: "CNPJ"
+  });
+  const parameters = payload.interactive.action.parameters;
+  assert.equal(payload.interactive.type, "order_details");
+  assert.equal(parameters.reference_id, "pix-12345");
+  assert.equal(parameters.payment_type, "br");
+  assert.equal(parameters.currency, "BRL");
+  assert.equal(parameters.total_amount.value, 9840);
+  assert.equal(parameters.total_amount.offset, 100);
+  const pix = parameters.payment_settings[0];
+  assert.equal(pix.type, "pix_dynamic_code");
+  assert.equal(pix.pix_dynamic_code.code, "00020126PIXEXEMPLO5204000053039865802BR");
+  assert.equal(pix.pix_dynamic_code.merchant_name, "Lia Delivery");
+  assert.equal(pix.pix_dynamic_code.key, "12345678000199");
+  assert.equal(pix.pix_dynamic_code.key_type, "CNPJ");
+  // A bolha é apresentação de linha única: item = subtotal = total, sem frete/taxa avulsos.
+  assert.equal(parameters.order.items.length, 1);
+  assert.equal(parameters.order.items[0].amount.value, parameters.total_amount.value);
+  assert.equal(parameters.order.subtotal.value, parameters.total_amount.value);
 });
 
 test("One-Click: parser reconhece o payment_method interativo oficial", () => {

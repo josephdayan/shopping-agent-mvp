@@ -1,5 +1,45 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 31/08/2026 — bolha nativa de Pix (order_details) atrás de flag
+
+O dono viu um bot concorrente cobrando com a bolha nativa de pagamento do WhatsApp
+(total + "Pagar com Pix" + "Copy Pix code" dentro do chat) e pediu o mesmo. Descoberta:
+a doc pública da Meta (payments-br, atualizada 05/2026) **não lista allowlist para
+`pix_dynamic_code`** — diferente do One-Click de cartão (`offsite_card_pay`), que exigia
+habilitação e a Meta negou em 08/2026. Implementado como experimento:
+
+- `buildPixOrderDetailsPayload` + `whatsappAdapter.sendPixOrderDetails` (mesmo
+  `order_details`/`review_and_pay` do One-Click, com `payment_settings: pix_dynamic_code`
+  = código copia-e-cola do Mercado Pago + chave/nome do recebedor). Item de linha único
+  = total (frete/taxa já embutidos; a bolha é apresentação, a cobrança é o código).
+- `maybeSendNativePixBubble` no cérebro, chamada nos 3 pontos de emissão de Pix
+  (cobrança nova, cotação manual aprovada, troca cartão→pix). **ADITIVA**: sai DEPOIS
+  dos textos de sempre — se a Graph rejeitar (ou aceitar e descartar assíncrono, lição
+  dos cards Meta) o cliente já tem o copia-e-cola. Falha nunca bloqueia a cobrança;
+  `reference_id` = `pix-<pixId MP>` (único por cobrança, não por pedido).
+- **Envs (todas necessárias, senão a bolha é pulada com warn):** `LIA_NATIVE_PIX=1`,
+  `LIA_PIX_MERCHANT_NAME` (nome do recebedor como aparece no banco),
+  `LIA_PIX_KEY` + `LIA_PIX_KEY_TYPE` (CPF|CNPJ|EMAIL|PHONE — a chave da conta Mercado
+  Pago que recebe). Mock nunca envia bolha.
+- Copies novas: `nativePixBody` / `nativePixItemName`. Teste: payload em unidade
+  (whatsapp-pay.test.ts). O que SÓ o teste real prova: se a Graph aceita
+  `pix_dynamic_code` no nosso número sem habilitação — ligar a flag, mandar um pedido
+  de teste e olhar o log `[whatsapp:native-pix]` + `[whatsapp:meta:status-failed]`.
+
+## Atualização 30/08/2026 (3ª) — auditoria pós-rodadas 1–5: 479/479 e sete lacunas fechadas
+
+Pente-fino independente depois dos dois ciclos estruturais. A suíte COMPLETA rodou
+contra o banco (sem skips): **479/479**, além de `tsc`, lint e build de produção. Sete
+lacunas encontradas e corrigidas: `quero sim` volta a ser confirmação comum; o teto de
+preço sobrevive tanto ao descarte local→resgate ML quanto ao refino por marca
+(`fone até 150`→`Philco`); suporte classificado pela IA durante escolha agora recebe
+`userId`, grava flag e alerta o operador; o filtro da IA também barra confirmação falsa
+de Pix/cartão/pagamento; o compositor calcula frete grátis pelo subtotal real da loja
+(não pelo preço com margem), nunca aumenta o número de entregas e usa copy própria
+quando apenas redistribui itens entre as mesmas lojas. Regressões novas cobrem todos os
+casos, inclusive ML via cache real no banco. Relatório:
+[docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md](docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md).
+
 ## Atualização 30/08/2026 (2ª) — os dois ciclos estruturais: roteador LLM + cesta-como-conjunto
 
 Decisão do dono ("então faz tudo isso"): sair do loop de conserto-por-regex e atacar

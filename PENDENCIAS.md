@@ -1,6 +1,24 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-30 (2ª)._
+_Última atualização: 2026-08-31._
+
+> **31/08 — bolha nativa de Pix.** Implementada atrás de `LIA_NATIVE_PIX` (AGENTS.md
+> 31/08). Aberto, na mão do dono: setar as 4 envs na Vercel e fazer 1 pedido de teste
+> real pra confirmar se a Graph aceita `pix_dynamic_code` sem habilitação (log
+> `[whatsapp:native-pix]`). Se aceitar, v2 = enxugar os textos redundantes (hoje bolha
+> é aditiva por segurança) e mandar `order_status` "pago ✅" quando o webhook MP
+> confirmar. Se a Graph rejeitar por permissão, cai no mesmo saco do One-Click
+> (Solution Partner / GA da Meta) e nada muda pro cliente.
+
+> **30/08 (3ª) — auditoria pós-rodadas 1–5.** Fechado e provado: teto do fone/ML
+> (inclusive refino por marca e resgate), P1.8 cesta-como-conjunto, alerta de suporte do
+> roteador durante escolha, filtro anti-confirmação financeira e `quero sim`. Gate:
+> **479/479 sem skips + tsc + lint + build**. Continuam abertos por dependerem de
+> operação/produto, não deste conserto: `LIA_BUSINESS_INFO` na Vercel; destino dos
+> pedidos pagos #YAQHF8/#QTNL2T; latência fria; watchdog/reaviso do caminho manual;
+> cancelamento real da cobrança anterior na rajada Pix↔cartão; comparação técnica rica;
+> e nova rodada ao vivo no WhatsApp. Relatório:
+> [docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md](docs/auditoria-pos-rodadas-1-a-5-2026-08-30.md).
 
 > **30/08 (2ª) — pós-ciclos estruturais.** Roteador LLM e cesta-como-conjunto V1 no
 > ar. Próximos degraus registrados: (a) recomposição sob comando ("juntar entregas")

@@ -156,6 +156,66 @@ export function buildOrderDetailsPayload(to: string, input: WhatsAppOrderDetails
   };
 }
 
+// Bolha nativa de Pix (order_details + pix_dynamic_code): o mesmo formato do One-Click,
+// trocando o cartão por um código Pix dinâmico — total, "Pagar com Pix" e "Copy Pix code"
+// dentro do chat. Diferente do offsite_card_pay, a doc pública da Meta não lista allowlist
+// para Pix; a flag LIA_NATIVE_PIX liga o experimento e o copia-e-cola em texto continua
+// saindo como rede de segurança (a entrega Meta é assíncrona e pode descartar sem erro).
+export type WhatsAppPixOrderDetailsInput = {
+  referenceId: string;
+  body: string;
+  itemName: string;
+  total: number;
+  pixCode: string;
+  merchantName: string;
+  key: string;
+  keyType: "CPF" | "CNPJ" | "EMAIL" | "PHONE";
+};
+
+export function buildPixOrderDetailsPayload(to: string, input: WhatsAppPixOrderDetailsInput) {
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "order_details",
+      body: { text: input.body.slice(0, 1024) },
+      action: {
+        name: "review_and_pay",
+        parameters: {
+          reference_id: input.referenceId,
+          type: "physical-goods",
+          payment_type: "br",
+          payment_settings: [{
+            type: "pix_dynamic_code",
+            pix_dynamic_code: {
+              code: input.pixCode,
+              merchant_name: input.merchantName.slice(0, 100),
+              key: input.key,
+              key_type: input.keyType
+            }
+          }],
+          currency: "BRL",
+          total_amount: money(input.total),
+          order: {
+            status: "pending",
+            // Linha única = total: frete e taxa já estão embutidos no total cotado, e a
+            // cobrança real é o código Pix — a bolha é apresentação, não contabilidade.
+            items: [{
+              retailer_id: input.referenceId,
+              name: input.itemName.slice(0, 100),
+              amount: money(input.total),
+              quantity: 1
+            }],
+            subtotal: money(input.total)
+          }
+        }
+      }
+    }
+  };
+}
+
 export function buildOrderStatusPayload(to: string, input: WhatsAppOrderStatusInput) {
   return {
     messaging_product: "whatsapp",
@@ -420,6 +480,14 @@ export const whatsappAdapter = {
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
     return sendMetaPayload(phoneNumberId, token, buildOrderDetailsPayload(to, input));
+  },
+
+  async sendPixOrderDetails(to: string, input: WhatsAppPixOrderDetailsInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") throw new Error("Native Pix bubble requires WHATSAPP_PROVIDER=meta");
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildPixOrderDetailsPayload(to, input));
   },
 
   async sendOrderStatus(to: string, input: WhatsAppOrderStatusInput) {
