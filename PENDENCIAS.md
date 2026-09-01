@@ -2,13 +2,14 @@
 
 _Última atualização: 2026-08-31._
 
-> **31/08 — bolha nativa de Pix.** Implementada atrás de `LIA_NATIVE_PIX` (AGENTS.md
-> 31/08). Passo 1 (dono, 1 clique): abrir
-> `https://liadelivery.com.br/api/ops/native-pix-probe?key=<OPS_TOKEN>` — manda uma
-> bolha de teste não-pagável pro WhatsApp do operador e devolve o veredito da Graph
-> interpretado. Passo 2, se aceitou: setar as 4 envs na Vercel (`LIA_NATIVE_PIX=1`,
-> `LIA_PIX_MERCHANT_NAME`, `LIA_PIX_KEY` real da conta MP, `LIA_PIX_KEY_TYPE`),
-> redeploy e 1 pedido de teste real (log `[whatsapp:native-pix]`). Se aceitar, v2 = enxugar os textos redundantes (hoje bolha
+> **01/09 — bolha nativa de Pix: ATIVADA.** Sonda aceita (200; 1ª caiu na janela de
+> 24h/131047, 2ª chegou), envs setadas, redeploy READY — toda cobrança Pix real sai
+> com copia-e-cola + bolha "Lia Delivery" (AGENTS.md 01/09). Aberto: (a) observar o
+> **1º pedido real** com Pix — bolha com código MP de verdade abrindo o banco (logs
+> `[whatsapp:native-pix]` / `[whatsapp:meta:status-failed]`); (b) **v2**: enxugar os
+> textos redundantes quando a bolha estiver provada no real e mandar `order_status`
+> "pago ✅" nativo quando o webhook MP confirmar; (c) banco mostra razão social do
+> MEI (nome civil) — limitação aceita, reavaliar só se cliente estranhar. Se aceitar, v2 = enxugar os textos redundantes (hoje bolha
 > é aditiva por segurança) e mandar `order_status` "pago ✅" quando o webhook MP
 > confirmar. Se a Graph rejeitar por permissão, cai no mesmo saco do One-Click
 > (Solution Partner / GA da Meta) e nada muda pro cliente.

@@ -1,5 +1,16 @@
 # Lia — Status do Projeto
 
+## 01/09/2026 — bolha nativa de Pix NO AR: a Lia cobra com cara de app
+
+A sonda ao vivo provou que a Graph aceita `pix_dynamic_code` no nosso número **sem
+habilitação** (o 1º envio caiu na janela de 24h — erro 131047 —, o 2º chegou no
+WhatsApp do dono). Envs ativadas na Vercel (`LIA_NATIVE_PIX=1` + recebedor "Lia
+Delivery" com chave CNPJ Sensitive) e redeploy READY. Toda cobrança Pix real agora
+sai com o copia-e-cola de sempre **e** a bolha nativa com botão "Pagar com Pix".
+Ressalva aceita: o banco mostra o recebedor oficial (MEI = razão social com nome
+civil). Falta: observar o 1º pedido real (log `[whatsapp:native-pix]`) e a v2
+(enxugar textos + "pago ✅" nativo via webhook MP). Detalhe em AGENTS.md (01/09).
+
 ## 31/08/2026 — bolha nativa de Pix no chat (experimento atrás de flag)
 
 Pagamento com cara de app dentro do WhatsApp: a cobrança Pix agora pode sair também

@@ -1,5 +1,32 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 01/09/2026 — bolha nativa de Pix ATIVADA em produção (sonda provou: sem habilitação)
+
+A hipótese de 31/08 se confirmou ao vivo: a Graph **aceita `pix_dynamic_code` no nosso
+número sem a habilitação** que barrou o One-Click de cartão. Sequência do teste real:
+1ª sonda voltou 200 mas não chegou (erro Meta **131047** — janela de atendimento de 24h
+fechada; a sonda livre depende dela, a cobrança real não, porque o cliente acabou de
+escrever); dono mandou "oi" pra Lia, repetiu a sonda, 200 de novo e **a bolha chegou**.
+
+Ativação feita pelo dono na Vercel (Production + Preview): `LIA_NATIVE_PIX=1`,
+`LIA_PIX_MERCHANT_NAME=Lia Delivery`, `LIA_PIX_KEY=<chave CNPJ, Sensitive>`,
+`LIA_PIX_KEY_TYPE=CNPJ`; redeploy `dpl_FNqQtvJzTPHmYCDgFcDBRFNsG7ym` (READY,
+alias liadelivery.com.br). **Estado vigente: toda cobrança Pix real envia o fluxo
+textual/copia-e-cola de sempre e, em seguida, a bolha nativa "Lia Delivery".** Mock
+nunca envia bolha.
+
+Decisões registradas nessa ativação:
+- **Identidade do recebedor:** a bolha mostra "Lia Delivery", mas o app do banco é
+  obrigado a mostrar o recebedor oficial do Pix — e o CNPJ é MEI, cujo nome
+  empresarial contém o nome civil do dono. Limitação **aceita pelo dono**; não é bug.
+- **OPS_TOKEN foi trocada** (a antiga era Sensitive e irrecuperável na Vercel). O
+  valor NUNCA vai em doc/commit/log. `/ops?key=<token>` troca a chave por cookie
+  httpOnly de 90 dias.
+- Falta provar no primeiro **pedido real** com Pix: bolha com código MP de verdade
+  abrindo o banco (a sonda usou EMV não-pagável). Olhar `[whatsapp:native-pix]` e
+  `[whatsapp:meta:status-failed]` no primeiro pedido. V2 na fila: enxugar textos
+  redundantes e `order_status` "pago ✅" quando o webhook MP confirmar.
+
 ## Atualização 31/08/2026 — bolha nativa de Pix (order_details) atrás de flag
 
 O dono viu um bot concorrente cobrando com a bolha nativa de pagamento do WhatsApp
