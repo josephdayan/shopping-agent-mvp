@@ -185,5 +185,19 @@ export const GOLDEN_CASES: GoldenCase[] = [
     allExclude: /corporal|corpo|capilar|cabelo|massagem|paixao/,
     deterministic: false,
     note: "rodada 27/08 S18: 'óleo' na lista semanal virou Óleo Corporal Paixão R$14,84 — contexto de mercado define o sentido"
+  },
+  {
+    name: "apoio pra guitarra de chão → suporte de chão, nunca apoio de PÉ (caso real 01/09)",
+    query: "apoio pra guitarra de chao",
+    top1Include: /suporte|estante|ch[aã]o/,
+    top1Exclude: /apoio de p[eé]|descanso|pedal/,
+    deterministic: false,
+    note: "pedido real do dono: top1 veio 'Apoio De Pé Descanso Violonista' (descanso de pé) e a 2ª opção um expositor de quadros/livros — 'de chão' define o tipo do acessório"
+  },
+  {
+    name: "apoio de pé para violão continua achável (o inverso não pode quebrar)",
+    query: "apoio de pe para violao",
+    top1Include: /p[eé]/,
+    deterministic: false
   }
 ];

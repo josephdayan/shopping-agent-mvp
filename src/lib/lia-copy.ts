@@ -507,6 +507,28 @@ export function pixInstructions(total: number, mock: boolean): string {
   ].join("\n");
 }
 
+// Botão "Editar itens" do resumo: manual curto dos comandos de edição que já existem.
+export function editItemsHelp(): string {
+  return [
+    "Pra mexer no pedido é só me falar:",
+    '· *tira <item>* — remove',
+    '· *troca <item> por <outro>* — substitui',
+    '· *2x <item>* — muda a quantidade',
+    "· ou manda o nome de um item novo pra adicionar 😉"
+  ].join("\n");
+}
+
+// Pedido novo × juntar (01/09): pedido não-pago parado + cliente pedindo item novo do
+// nada. Antes a Lia fundia os dois sozinha ("O total anterior não vale mais") — agora
+// ela PERGUNTA. Juntar/adicionar explícito ou cobrança recém-emitida seguem fundindo.
+export function mergeOrNewOrderPrompt(shortId: string, total: number): string {
+  return `Você tem o pedido *#${shortId}* (${brl(total)}) esperando pagamento. Esse item novo é pra *juntar* nele, ou começamos um *pedido novo*?`;
+}
+
+export function newOrderStarted(shortId: string): string {
+  return `Fechado! Cancelei o *#${shortId}* — nada foi cobrado. Bora pro pedido novo 👇`;
+}
+
 // Corpo da bolha nativa de Pix (order_details). V2 (01/09): a bolha vai PRIMEIRO e,
 // quando a Graph aceita, substitui o texto de instruções — só o copia-e-cola sai
 // depois dela (fallback universal pra WhatsApp Web/cliente antigo).

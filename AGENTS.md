@@ -1,5 +1,27 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 01/09/2026 (4ª) — conversa real do dono expôs 4 defeitos; todos fechados
+
+Caso real (livro #GAS8P9 esperando Pix há 2h + "preciso de um apoio pra guitarra de chão"):
+
+1. **Fusão silenciosa morreu.** Pedido não-pago PARADO (cobrança > 10 min) + item novo
+   do nada → a Lia PERGUNTA "juntar no pedido ou pedido novo?" (botões `juntar_pedido`/
+   `pedido_novo`, estado `awaiting_merge_decision`, ctx.mergeDecision guarda pedido+texto).
+   "Pedido novo" cancela o antigo (nada cobrado, note própria) e busca o item; "Juntar"
+   segue o reopen de sempre. Adicionar explícito ("adiciona/bota/põe/mais um") ou cobrança
+   recém-emitida (< 10 min) continuam fundindo direto — é edição, não missão nova.
+   Futuro (PENDENCIAS): manter os DOIS pedidos abertos em paralelo.
+2. **"Me perdi aqui 😅" espúrio**: os botões do cartão salvo saem direto pelo adapter
+   (whatsapp-pay) sem passar pelo reply() — a rede anti-silêncio achava o turno mudo e
+   mandava o fallback logo depois dos botões. `createCardAttempt` agora é wrapper local
+   que marca o turno respondido.
+3. **Botão "Editar itens"** no resumo da cotação (junto de Trocar endereço): responde o
+   manual curto (`editItemsHelp`: tira/troca/2x/adicionar) — os comandos já funcionavam,
+   faltava o caminho visível.
+4. **Busca "apoio pra guitarra de chão"** devolveu apoio de PÉ como top1 → 2 casos novos
+   no golden (`search-golden.ts`, deterministic:false) SEM conserto de scorer ainda —
+   regra do projeto: caso primeiro, conserto medido pelo `scripts/eval-search.mts` depois.
+
 ## Atualização 01/09/2026 (3ª) — nome público reenviado sem CNPJ/nome pessoal
 
 O print real do iPhone confirmou que o cabeçalho público ainda mostrava

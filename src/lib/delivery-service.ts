@@ -30,7 +30,7 @@ import { PaymentProviderError, checkoutAdapter, paymentsAreMocked, pixAdapter } 
 import {
   cardOnFileEnabled,
   confirmSavedCardTap,
-  createCardAttempt,
+  createCardAttempt as createCardAttemptRaw,
   expireOpenPaymentAttempts,
   findPendingSavedCardAttempt,
   listOneClickCredentials,
@@ -262,8 +262,12 @@ type DeliveryContext = {
     | "awaiting_supplier_validation"
     | "awaiting_quote_confirmation"
     | "payment_issuing"
-    | "awaiting_payment";
+    | "awaiting_payment"
+    | "awaiting_merge_decision";
   basket?: BasketItem[];
+  // Pedido não-pago parado + item novo pedido do nada (01/09): a Lia pergunta "juntar
+  // ou pedido novo?" e guarda aqui o pedido antigo e o texto do item até a resposta.
+  mergeDecision?: { orderId: string; request: string; total: number };
   pending?: PendingChoice[];
   quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string; misses?: number };
   courierOptions?: CourierOption[];
@@ -503,6 +507,18 @@ async function reply(phone: string, text: string) {
 function markTurnReplied() {
   const meta = turnMeta.getStore();
   if (meta) meta.replies += 1;
+}
+
+// createCardAttempt envia os botões do cartão salvo DIRETO pelo adapter (fora do
+// reply()) — sem esta marca a rede anti-silêncio achava o turno mudo e mandava
+// "Me perdi aqui 😅" logo depois dos botões (caso real, 01/09 #GAS8P9).
+async function createCardAttempt(
+  order: Parameters<typeof createCardAttemptRaw>[0],
+  credential: Parameters<typeof createCardAttemptRaw>[1]
+) {
+  const attempt = await createCardAttemptRaw(order, credential);
+  markTurnReplied();
+  return attempt;
 }
 
 // Quando o cliente falou/agiu pela última vez ANTES desta mensagem. Base dos dois TTLs
@@ -1522,6 +1538,14 @@ async function handleDeliveryTurn(
     return;
   }
 
+  // Botão "Editar itens" do resumo da cotação (dono, 01/09: o total aparecia sem
+  // caminho visível pra tirar/trocar item). A resposta é o manual curto — os comandos
+  // em si já funcionam em qualquer etapa (reopenOrderForEdit + handlers de edição).
+  if (normalizeMsg(text) === "editar_itens") {
+    await reply(phone, copy.editItemsHelp());
+    return;
+  }
+
   // Botão "Mudar quantidade" do follow-up (dono, 01/09: mudar quantidade tem que ser
   // botão). Reabre os botões 1/2/Outra da pergunta clássica para o ÚLTIMO item; o
   // toque volta como qty:N e cai nos handlers logo abaixo. Nunca dispara no estado
@@ -2536,6 +2560,41 @@ async function handleDeliveryTurn(
     // free_text with no method → fall through (customer is adding more items).
   }
 
+  // ---- step: juntar × pedido novo (pedido não-pago parado + item novo, 01/09) ----
+  if (ctx.step === "awaiting_merge_decision" && ctx.mergeDecision) {
+    const pendingMerge = ctx.mergeDecision;
+    const n = normalizeMsg(text);
+    const wantsMerge = n === "juntar_pedido" || n === "1" || /\bjunt/.test(n) || /mesmo pedido/.test(n);
+    const wantsNew = !wantsMerge && (n === "pedido_novo" || n === "2" || /\b(novo|separado|outro)\b/.test(n));
+    if (wantsMerge || wantsNew) {
+      ctx.mergeDecision = undefined;
+      const order = await prisma.deliveryOrder.findUnique({ where: { id: pendingMerge.orderId } });
+      if (order && order.status === "awaiting_payment") {
+        await prisma.deliveryOrder.update({
+          where: { id: order.id },
+          data: {
+            status: "canceled",
+            notes: [order.notes, wantsMerge ? "reaberto pelo cliente (juntar item novo)" : "cliente preferiu pedido novo (nada cobrado)"]
+              .filter(Boolean)
+              .join("\n")
+          }
+        });
+        if (wantsMerge && !ctx.basket?.length) ctx.basket = ((order.items as unknown) as BasketItem[]) ?? [];
+      }
+      if (wantsNew) ctx.basket = [];
+      ctx.deliveryOrderId = undefined;
+      ctx.step = "collecting";
+      await writeCtx(convo.id, ctx);
+      await reply(phone, wantsMerge ? copy.orderReopened() : copy.newOrderStarted(pendingMerge.orderId.slice(-6).toUpperCase()));
+      await handleSearch(phone, convo.id, user.cep, ctx, pendingMerge.request, user.id);
+      return;
+    }
+    // "cancelar" nunca chega aqui (o cancelamento contextual roda antes e mira o
+    // pedido aguardando). Qualquer outra coisa re-pergunta — a decisão é binária.
+    await reply(phone, `${copy.mergeOrNewOrderPrompt(pendingMerge.orderId.slice(-6).toUpperCase(), pendingMerge.total)}\n1. Juntar no pedido\n2. Pedido novo`);
+    return;
+  }
+
   // ---- step: awaiting payment — resend / switch method instead of dead-ending ----
   if (ctx.step === "awaiting_payment" && ctx.deliveryOrderId && (intent.kind === "pay" || intent.kind === "choose_payment")) {
     const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
@@ -2895,12 +2954,32 @@ async function handleDeliveryTurn(
     }
   }
 
-  // ---- awaiting_payment + item novo: REABRE o pedido em vez de criar cesta fantasma ----
-  // "ah, e adiciona um leite" com cobrança aberta: cancela a cobrança antiga (não paga),
-  // avisa o cliente e segue o fluxo normal de busca com a cesta restaurada.
+  // ---- awaiting_payment + item novo ----
+  // "ah, e adiciona um leite" logo depois da cobrança: reabre e funde (fluxo de sempre).
+  // MAS pedido parado há tempo + item novo do nada é outra MISSÃO de compra (caso real
+  // 01/09: livro esperando Pix há 2h + "preciso de um apoio pra guitarra" → a Lia fundiu
+  // sozinha e declarou "o total anterior não vale mais"). Agora ela PERGUNTA: juntar ou
+  // pedido novo? Adicionar explícito ("adiciona/bota/põe/mais um") sempre funde.
   if (ctx.step === "awaiting_payment" && ctx.deliveryOrderId && intent.kind === "free_text" && !isQuestion(text)) {
     const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
     if (order && order.status === "awaiting_payment") {
+      const explicitAdd = /\b(adiciona|acrescenta|inclui|bota|coloca|poe|põe|mais um|mais uma)\b/.test(normalizeMsg(text));
+      const chargeFresh = Date.now() - order.updatedAt.getTime() < 10 * 60_000;
+      if (!explicitAdd && !chargeFresh) {
+        ctx.step = "awaiting_merge_decision";
+        ctx.mergeDecision = { orderId: order.id, request: text, total: order.total };
+        await writeCtx(convo.id, ctx);
+        const body = copy.mergeOrNewOrderPrompt(order.id.slice(-6).toUpperCase(), order.total);
+        try {
+          markTurnReplied();
+          const interactive = await whatsappAdapter.sendMergeDecisionButtons(phone, body);
+          if (interactive) return;
+        } catch (error) {
+          console.warn("[merge-decision:buttons:fallback-text]", error instanceof Error ? error.message : error);
+        }
+        await reply(phone, `${body}\n1. Juntar no pedido\n2. Pedido novo`);
+        return;
+      }
       await prisma.deliveryOrder.update({
         where: { id: order.id },
         data: { status: "canceled", notes: [order.notes, "reaberto pelo cliente (item novo)"].filter(Boolean).join("\n") }

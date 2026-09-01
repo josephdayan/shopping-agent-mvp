@@ -1,5 +1,15 @@
 # Lia — Status do Projeto
 
+## 01/09/2026 (4ª) — conversa real: fusão silenciosa vira pergunta, fallback espúrio morto, Editar itens
+
+O pedido real do dono expôs 4 defeitos, todos fechados no dia: pedido não-pago parado
++ item novo do nada agora PERGUNTA "juntar ou pedido novo?" (antes fundia sozinho com
+"o total anterior não vale mais"); o "Me perdi aqui 😅" depois dos botões do cartão
+salvo era a rede anti-silêncio disparando por engano (envio direto não marcava o
+turno); o resumo da cotação ganhou o botão "Editar itens"; e a busca ruim ("apoio pra
+guitarra de chão" → apoio de PÉ) virou 2 casos no golden pra consertar medido.
+Detalhe em AGENTS.md (01/09 4ª).
+
 ## 01/09/2026 (3ª) — display name “Lia Delivery” novamente em análise
 
 O WhatsApp Manager ainda mostrava como aprovado o nome público

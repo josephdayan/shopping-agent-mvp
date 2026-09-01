@@ -455,12 +455,16 @@ export const whatsappAdapter = {
     return sendMetaSimpleButtons(to, body, [{ id: "cancelar", title: "Cancelar pedido" }]);
   },
 
-  // Resumo da cotação com o botão "Trocar endereço" (dono, 11/08: ação em botão, não
-  // instrução de digitar). O toque volta como `trocar_endereco` e cai no fluxo de troca
-  // que já existia por texto. Fora do Meta retorna null → texto puro com a dica escrita.
+  // Resumo da cotação com botões "Trocar endereço" e "Editar itens" (dono, 01/09:
+  // tinha total sem caminho visível pra tirar item). Os toques voltam como
+  // `trocar_endereco` / `editar_itens` e caem nos fluxos que já existiam por texto.
+  // Fora do Meta retorna null → texto puro com a dica escrita.
   async sendQuoteSummary(to: string, body: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
-    return sendMetaSimpleButtons(to, body, [{ id: "trocar_endereco", title: "Trocar endereço" }]);
+    return sendMetaSimpleButtons(to, body, [
+      { id: "trocar_endereco", title: "Trocar endereço" },
+      { id: "editar_itens", title: "Editar itens" }
+    ]);
   },
 
   // Confirmação de recompra com cartão salvo SEM a Payments API da Meta: botões comuns
@@ -521,6 +525,15 @@ export const whatsappAdapter = {
       opts?.qtyButton
         ? { id: "qtd_alterar", title: "Mudar quantidade" }
         : { id: "cancelar", title: "Cancelar" }
+    ]);
+  },
+
+  // Pergunta "juntar no pedido parado ou pedido novo?" (01/09). Ids voltam como texto.
+  async sendMergeDecisionButtons(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [
+      { id: "juntar_pedido", title: "Juntar no pedido" },
+      { id: "pedido_novo", title: "Pedido novo" }
     ]);
   },
 

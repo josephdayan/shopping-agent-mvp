@@ -1,6 +1,14 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-08-31._
+_Última atualização: 2026-09-01 (4ª)._
+
+> **01/09 (4ª) — pós-conversa real.** Aberto: (a) **scorer/rerank do golden novo**
+> ("apoio pra guitarra de chão" não pode devolver apoio de PÉ) — rodar
+> `npx tsx scripts/eval-search.mts` e consertar com regra principial; (b) **dois
+> pedidos abertos em paralelo** — hoje "Pedido novo" cancela o não-pago antigo (fluxo
+> aprovado como V1); (c) suíte concierge completa ficou pendente de novo (regra do
+> dono: nunca segurar entrega por ela) — rodar na próxima janela morta.
+
 
 > **01/09 — bolha nativa de Pix: ATIVADA.** Sonda aceita (200; 1ª caiu na janela de
 > 24h/131047, 2ª chegou), envs setadas, redeploy READY — toda cobrança Pix real sai

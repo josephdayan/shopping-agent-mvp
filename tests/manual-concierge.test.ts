@@ -1752,3 +1752,34 @@ test("01/09: Ver detalhes — 'detalhes 2' devolve a página do produto sem fech
   const confirmed = await c.send("1");
   assert.match(confirmed, /✅/, confirmed.slice(0, 200));
 });
+
+test("01/09: pedido parado + item novo do nada PERGUNTA juntar × novo, nunca funde sozinho", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  const pix = await c.send("pix");
+  assert.match(pix, /MOCKPIX|copia e cola/i, pix.slice(0, 200));
+  // Envelhece a cobrança (20 min): item novo do nada é outra missão de compra.
+  await prisma.$executeRaw`UPDATE "DeliveryOrder" SET "updatedAt" = NOW() - INTERVAL '20 minutes' WHERE "id" = ${order!.id}`;
+  const ask = await c.send("preciso de um shampoo");
+  assert.doesNotMatch(ask, /total anterior não vale/i, `fundiu sozinho: ${ask.slice(0, 300)}`);
+  assert.match(ask, /juntar|pedido novo/i, `não perguntou: ${ask.slice(0, 300)}`);
+  const novo = await c.send("2");
+  assert.match(novo, /Cancelei o \*#/i, novo.slice(0, 300));
+  assert.match(novo, /opç|shampoo/i, `não buscou o item novo: ${novo.slice(0, 400)}`);
+  const old = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
+  assert.equal(old!.status, "canceled");
+  assert.match(old!.notes ?? "", /pedido novo/);
+});
+
+test("01/09: botão Editar itens responde o manual curto de edição", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  const help = await c.send("editar_itens");
+  assert.match(help, /tira <item>|troca <item>/i, help.slice(0, 300));
+});
