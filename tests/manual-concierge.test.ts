@@ -163,7 +163,9 @@ test("vitrine híbrida: escolher NÃO fecha a lista — o cliente ainda soma ite
 test("fechar a lista com escolha pendente pede pra ESCOLHER — e aí o total sai na hora", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
-  await c.send("quero coca cola");
+  // Quantidade explícita no pedido: sem a pergunta de quantidade (01/09), 1x coca
+  // ficaria abaixo do mínimo da loja e o fechamento viraria oferta de troca.
+  await c.send("quero 10 coca cola");
   // Fecha a lista no meio das opções, sem escolher: a Lia pede pra confirmar o item
   // (regra 11/08: nada de linha livre — só item com preço entra no pedido).
   const closed = await c.send("só isso");
@@ -171,9 +173,7 @@ test("fechar a lista com escolha pendente pede pra ESCOLHER — e aí o total sa
   assert.match(closed.toLowerCase(), /coca/, "as opções voltam pra facilitar a escolha");
   const order = await prisma.deliveryOrder.findFirst({ where: { phone: c.phone } });
   assert.equal(order, null, "sem escolha não há pedido");
-  // Escolhe (com quantidade que passa do mínimo da loja) e fecha: total na mesma resposta.
-  const afterChoice = await c.send("1");
-  if (/quantas unidades/i.test(afterChoice)) await c.send("10");
+  await c.send("1");
   const done = await c.send("só isso");
   assert.match(done, /Total/i, `fechamento: ${done.slice(0, 200)}`);
 });
@@ -744,32 +744,28 @@ test("26/08 P0.2: status de cancelado sem pagamento diz 'nada foi cobrado' — n
   assert.doesNotMatch(status, /estorno está a caminho/i);
 });
 
-test("26/08 P1.6: dipirona é recusada ATÉ na pergunta de quantidade", async (t) => {
+test("26/08 P1.6 (adaptado 01/09): dipirona é recusada logo após a escolha, sem perder o fluxo", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   await c.send("quero coca cola");
   const afterChoice = await c.send("1");
-  assert.match(afterChoice, /quantas unidades/i);
+  assert.match(afterChoice, /1 un/, afterChoice.slice(0, 200));
   const med = await c.send("também queria dipirona");
   assert.match(med, /não posso vender/i, med.slice(0, 250));
-  assert.doesNotMatch(med, /1 a 50/);
-  // e a pergunta de quantidade volta — o fluxo não se perde
-  assert.match(med, /quantas unidades/i);
+  assert.doesNotMatch(med, /1 a 50|quantas unidades/i);
 });
 
-test("26/08 P2.4: 2ª resposta sem número fecha 1 unidade e roteia a mensagem", async (t) => {
+test("26/08 P2.4 (adaptado 01/09): sem pergunta de quantidade, a mensagem seguinte roteia normal", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   await c.send("quero coca cola");
   const afterChoice = await c.send("1");
-  assert.match(afterChoice, /quantas unidades/i);
-  const first = await c.send("Philco");
-  assert.match(first, /1 a 50/);
+  assert.match(afterChoice, /1 un/, afterChoice.slice(0, 200));
   const second = await c.send("Philco");
-  assert.doesNotMatch(second, /1 a 50/, `preso na quantidade: ${second.slice(0, 200)}`);
+  assert.doesNotMatch(second, /1 a 50|quantas unidades/i, `preso na quantidade: ${second.slice(0, 200)}`);
   const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
   const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ qty: number; name: string }>;
-  assert.equal(basket?.[0]?.qty, 1, "a coca fechou com 1 unidade");
+  assert.equal(basket?.[0]?.qty, 1, "a coca ficou com 1 unidade");
 });
 
 test("26/08 P1.3: teto de preço sobrevive à paginação ('outras')", async (t) => {
@@ -1073,14 +1069,14 @@ test("3º ciclo: 'troca X por Y' numa lista NOVA corrige a própria mensagem", a
   assert.match(out.toLowerCase(), /saco|lixo/, `sem saco de lixo: ${out.slice(0, 250)}`);
 });
 
-test("botão 'Outra quantidade' abre a pergunta livre e o número digitado vale", async (t) => {
+test("botão 'Outra quantidade' (adaptado 01/09): pergunta livre pós-escolha e o número vale", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   await c.send("quero coca cola");
   const afterChoice = await c.send("1");
-  assert.match(afterChoice, /quantas unidades/i, `esperava pergunta de quantidade: ${afterChoice.slice(0, 150)}`);
+  assert.match(afterChoice, /1 un/, afterChoice.slice(0, 150));
   const other = await c.send("qty:other");
-  assert.match(other, /quantas unidades|1 a 50/i, `esperava pergunta livre: ${other.slice(0, 150)}`);
+  assert.match(other, /1 a 50/i, `esperava pergunta livre: ${other.slice(0, 150)}`);
   await c.send("7");
   const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
   const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ qty: number }>;
