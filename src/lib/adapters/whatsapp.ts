@@ -88,6 +88,11 @@ export type WhatsAppDeliveryChoice = {
   displayPrice: number;
   imageUrl?: string;
   delivery?: string;
+  // Página real do produto (anúncio ML, página da loja): liga o botão "Ver detalhes"
+  // do card — reviews, fotos e specs ficam a um toque (pedido do dono, 01/09).
+  productUrl?: string;
+  // Sku para o id de máquina do "Ver detalhes" (optinfo:<sku>), estável em card antigo.
+  sku?: string;
 };
 
 function minorAmount(value: number) {
@@ -502,14 +507,20 @@ export const whatsappAdapter = {
   // naturais viram botão (pedido do dono, 09/08). Os ids voltam como texto e caem nos
   // ramos que JÁ existem: "pagar" fecha a lista e cota, "adicionar_mais" pede o próximo
   // item, "cancelar" limpa a lista em montagem.
-  async sendChoiceFollowUp(to: string, body: string) {
+  async sendChoiceFollowUp(to: string, body: string, opts?: { qtyButton?: boolean }) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     return sendMetaSimpleButtons(to, body, [
-      // "Pagar" prometia cobrança imediata, mas o toque FECHA a lista e mostra o total
-      // com as formas — o rótulo agora diz o que realmente acontece (rodada 1, 14/08).
-      { id: "pagar", title: "Ver total" },
+      // Foi "Pagar"→"Ver total" (rodada 1) e voltou a "Pagar" por decisão do dono
+      // (01/09): com a bolha nativa de Pix, o toque leva direto ao fluxo de pagamento
+      // — total + formas na mesma resposta, cobrança em seguida.
+      { id: "pagar", title: "Pagar" },
       { id: "adicionar_mais", title: "Adicionar mais" },
-      { id: "cancelar", title: "Cancelar" }
+      // Teto Meta = 3 botões. Quando a quantidade acabou de ser assumida (1 un), o
+      // terceiro vira "Mudar quantidade" (dono, 01/09) — "cancelar" digitado segue
+      // funcionando em qualquer estado.
+      opts?.qtyButton
+        ? { id: "qtd_alterar", title: "Mudar quantidade" }
+        : { id: "cancelar", title: "Cancelar" }
     ]);
   },
 
@@ -622,9 +633,16 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
     const buttons: Array<{ type: "reply"; reply: { id: string; title: string } }> = [
       { type: "reply", reply: { id: option.id.slice(0, 256), title: "Escolher esse" } }
     ];
+    // "Ver detalhes" quando o produto tem página real: o toque volta como
+    // `optinfo:<sku>` e a Lia manda o link do anúncio (reviews, fotos, specs — tudo
+    // que o cliente veria no ML/loja). Pedido do dono, 01/09.
+    if (option.productUrl && option.sku) {
+      buttons.push({ type: "reply", reply: { id: `optinfo:${option.sku}`.slice(0, 256), title: "Ver detalhes" } });
+    }
     // O último card leva a saída "nenhuma dessas": o toque volta como o texto de
     // máquina `opt:outras` e cai no MESMO ramo do "mostra outras" digitado (paginação
-    // sem repetir sku). Pedido do dono, 10/08.
+    // sem repetir sku). Pedido do dono, 10/08. Teto Meta = 3 botões por card — com
+    // "Ver detalhes" o último card fica exatamente no limite.
     if (index === options.length - 1) {
       buttons.push({ type: "reply", reply: { id: "opt:outras", title: "Outras opções" } });
     }

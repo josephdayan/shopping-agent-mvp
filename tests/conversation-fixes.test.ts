@@ -346,6 +346,8 @@ test("'quero' sozinho é want_items — convite, não 'não entendi' (ciclo 2)",
   assert.equal(kind("quero falar com um atendente"), "human");
   assert.equal(kind("quero mudar a forma de pagamento"), "switch_payment");
   assert.equal(kind("quero sim"), "affirm");
+  assert.equal(kind("na verdade quero sim, ainda dá?"), "resume_canceled");
+  assert.equal(kind("mudei de ideia, quero de volta"), "resume_canceled");
 });
 
 test("desabafo 'to com dor de cabeça' não vira item de busca (ciclo 2: virou 'Caneca Dosadora p/ Cães')", () => {

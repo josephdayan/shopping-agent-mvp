@@ -221,3 +221,24 @@ test("escolha de entrega: mostra TOTAL de cada opção com a data, e cobre anún
   assert.match(semData, /sem data publicada/);
   assert.doesNotMatch(semData, /chega até undefined/);
 });
+
+test("cesta otimizada não diz '2 entregas em vez de 2' quando só redistribui lojas", () => {
+  const sameCount = copy.bundledDeliveriesNote({
+    moves: [{ fromName: "Leite A", fromStore: "Loja A", toName: "Leite B", toStore: "Loja B" }],
+    storesBefore: 2,
+    storesAfter: 2,
+    saved: 6.82
+  });
+  assert.match(sameCount, /Reorganizei os itens entre as lojas/);
+  assert.match(sameCount, /continuam 2 entregas/);
+  assert.doesNotMatch(sameCount, /em vez de 2/);
+
+  const reduced = copy.bundledDeliveriesNote({
+    moves: [{ fromName: "Leite A", fromStore: "Loja A", toName: "Leite B", toStore: "Loja B" }],
+    storesBefore: 2,
+    storesAfter: 1,
+    saved: 11.38
+  });
+  assert.match(reduced, /Juntei entregas/);
+  assert.match(reduced, /1 entrega em vez de 2/);
+});

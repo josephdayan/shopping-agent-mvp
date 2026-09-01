@@ -15,6 +15,9 @@ test("respostas normais passam; promessas proibidas caem", () => {
   assert.equal(sanitizeRouterReply("Chega hoje sem falta!"), undefined);
   assert.equal(sanitizeRouterReply("Cancelei seu pedido agora"), undefined);
   assert.equal(sanitizeRouterReply("Tenho um cupom especial pra você"), undefined);
+  assert.equal(sanitizeRouterReply("Seu pagamento foi confirmado e está tudo certo"), undefined);
+  assert.equal(sanitizeRouterReply("O Pix foi recebido com sucesso"), undefined);
+  assert.equal(sanitizeRouterReply("Já recebemos o pagamento"), undefined);
   assert.equal(sanitizeRouterReply(""), undefined);
   assert.equal(sanitizeRouterReply(undefined), undefined);
 });

@@ -260,15 +260,14 @@ test("produto ambíguo: mostra opções numeradas; 'mais barato' escolhe a mais 
   assert.ok(picked.includes(cheapest.name), `esperava ${cheapest.name} em: ${picked.slice(0, 200)}`);
 });
 
-test("quantidade: depois de escolher o produto aceita 3 unidades e recalcula", async (t) => {
+test("quantidade: escolher sem dizer quantas assume 1 un e avisa como mudar (regra 01/09)", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const offer = await c.send("quero coca");
   assert.match(offer, /opções/i);
-  const quantity = await c.send("1");
-  assert.match(quantity, /Quantas unidades/i);
-  const after = await c.send("3");
-  assert.match(after, /3x /i);
+  const confirmed = await c.send("1");
+  assert.doesNotMatch(confirmed, /Quantas unidades/i, `voltou a perguntar quantidade: ${confirmed.slice(0, 200)}`);
+  assert.match(confirmed, /1 un/, confirmed.slice(0, 200));
 });
 
 test("fluxo preguiçoso completo: oi → endereço → CEP → produto → duas → pix msm", async (t) => {
@@ -277,10 +276,10 @@ test("fluxo preguiçoso completo: oi → endereço → CEP → produto → duas 
   assert.match(await d.send("oi"), /endereço completo/i);
   assert.match(await d.send(TEST_ADDRESS), /CEP/i);
   assert.match(await d.send("01310-100"), /Endereço salvo/i);
-  const offer = await d.send("qro creatina pf");
+  // Quantidade dita JUNTO do pedido ("2 creatina") — sem rodada extra de pergunta.
+  const offer = await d.send("qro 2 creatina pf");
   assert.match(offer, /opções[\s\S]*creatina/i);
-  assert.match(await d.send("1"), /Quantas unidades/i);
-  let quoted = await d.send("duas");
+  let quoted = await d.send("1");
   assert.match(quoted, /2x /i);
   if (/mais barata|mais rápida/i.test(quoted)) quoted += `\n---\n${await d.send("mais barata")}`;
   assert.match(quoted, /Pix/i);
@@ -378,27 +377,18 @@ test("pedido mínimo: 'pix' abaixo do mínimo recebe a saída honesta, não o nu
   assert.match(pix, /cancelar/);
 });
 
-test("pergunta de quantidade não prende 'só isso' nem 'cancelar' (ciclo 2)", async (t) => {
+// A pergunta de quantidade morreu em 01/09 (assume 1 un e segue); este teste guarda a
+// regra nova: nenhuma escolha pode reabrir a pergunta, e a dica de ajuste aparece.
+test("escolha nunca pergunta quantidade: assume 1 un com dica de ajuste (regra 01/09)", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const opts = await c.send("arroz");
   assert.match(opts, /Responde \*1\*/);
-  const qtyAsk = await c.send("1");
-  assert.match(qtyAsk, /Quantas unidades/);
-  // "só isso" na pergunta de quantidade = 1 unidade e segue o fluxo
-  const done = await c.send("so isso");
-  assert.doesNotMatch(done, /de 1 a 50 unidades/);
-  assert.match(done, /1x/);
+  const confirmed = await c.send("1");
+  assert.doesNotMatch(confirmed, /Quantas unidades|de 1 a 50/i, `perguntou quantidade: ${confirmed.slice(0, 200)}`);
+  assert.match(confirmed, /1 un/, confirmed.slice(0, 200));
+  assert.match(confirmed, /2x arroz/i, `sem dica de ajuste: ${confirmed.slice(0, 200)}`);
   await c.send("limpar carrinho");
-
-  const d = await returningCustomer();
-  await d.send("arroz");
-  const qa = await d.send("1");
-  assert.match(qa, /Quantas unidades/);
-  // "cancelar" na pergunta de quantidade não pode ficar em loop de re-pergunta
-  const cancel = await d.send("cancelar");
-  assert.doesNotMatch(cancel, /de 1 a 50 unidades/);
-  assert.match(cancel, /limp(ei|o)|cancel/i);
 });
 
 test("'quero' sozinho recebe convite caloroso, não 'não entendi'", async (t) => {

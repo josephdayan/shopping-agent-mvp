@@ -1,5 +1,24 @@
 # Lia — Status do Projeto
 
+## 01/09/2026 (3ª) — display name “Lia Delivery” novamente em análise
+
+O WhatsApp Manager ainda mostrava como aprovado o nome público
+`Lia Delivery by 67.742.955 Joseph Carlos Dayan`. A pedido do dono, a mudança para
+**Lia Delivery** foi reenviada e agora consta como **In Review**. O texto antigo
+permanece no WhatsApp até a decisão da Meta. Nenhuma alteração em código, número,
+WABA, webhook ou pagamentos.
+
+## 01/09/2026 (2ª) — polimento pós-bolha: Pagar, Pix sem eco, Ver detalhes, fim do "quantas unidades?"
+
+Quatro pedidos do dono depois da primeira bolha real (#GAS8P9): botão pós-escolha
+voltou a ser **"Pagar"**; a bolha Pix agora vai primeiro e **substitui** o texto de
+instruções (só o copia-e-cola sai depois, como fallback universal); cards ganharam o
+botão **"Ver detalhes"** em TODAS as lojas (link real do anúncio — reviews, fotos,
+specs; Carrefour/Petz sem url por item usam link de busca da loja, validado ao vivo;
+digitado "detalhes 2" também funciona); e a pergunta **"Quantas unidades?" morreu** —
+escolha sem quantidade assume 1 un e o follow-up ganha o botão **"Mudar quantidade"**
+(reabre 1/2/Outra pro último item). Detalhe em AGENTS.md (01/09 2ª).
+
 ## 01/09/2026 — bolha nativa de Pix NO AR: a Lia cobra com cara de app
 
 A sonda ao vivo provou que a Graph aceita `pix_dynamic_code` no nosso número **sem

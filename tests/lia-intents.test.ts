@@ -878,3 +878,15 @@ test("29/08 S1: 'ver total' e 'quanto ficou mesmo?' são pergunta de total", () 
   assert.equal(asksRunningTotal("quanto ficou mesmo?"), true);
   assert.equal(asksRunningTotal("fechar total"), true);
 });
+
+test("01/09: botão Ver detalhes (optinfo:) e 'detalhes 2' digitado viram intent de página do produto", () => {
+  assert.deepEqual(detectIntent("optinfo:MLB123XYZ"), { kind: "product_details_tap", sku: "mlb123xyz" });
+  assert.deepEqual(detectIntent("detalhes"), { kind: "product_details", ordinal: undefined });
+  assert.deepEqual(detectIntent("detalhes 2"), { kind: "product_details", ordinal: 2 });
+  assert.deepEqual(detectIntent("me mostra o anuncio"), { kind: "product_details", ordinal: undefined });
+  assert.deepEqual(detectIntent("ver detalhes do produto 1"), { kind: "product_details", ordinal: 1 });
+  // "detalhes do pedido" é status, não página de produto; "link" seco é ambíguo
+  // (link de pagamento) e fica de fora.
+  assert.notEqual(detectIntent("detalhes do pedido").kind, "product_details");
+  assert.notEqual(detectIntent("manda o link").kind, "product_details");
+});

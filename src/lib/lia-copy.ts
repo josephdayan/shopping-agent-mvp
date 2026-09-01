@@ -332,6 +332,32 @@ export function choiceConfirmed(name: string, qty = 1): string {
   return qty > 1 ? `✅ ${qty}x ${name}` : `✅ ${name}`;
 }
 
+// Quantidade não dita = 1 e segue (dono, 01/09): a rodada "quantas unidades?" era uma
+// mensagem a mais no caso comum. A dica de ajuste usa o TERMO PEDIDO (curto), não o
+// nome completo do produto.
+export function choiceConfirmedAssumedOne(name: string, query: string): string {
+  return `✅ ${name}\n_1 un — quer mais? é só falar "2x ${query}"._`;
+}
+
+// Botão "Ver detalhes" / "detalhes 2" digitado: link real do anúncio/página, onde o
+// cliente vê reviews, fotos e specs. Mensagem de TEXTO puro (link clicável garantido).
+export function productDetailsLink(name: string, url: string): string {
+  return `🔎 *${name}*\n${url}\nQuando decidir, é só tocar em *Escolher esse* no card.`;
+}
+
+export function productDetailsList(items: Array<{ name: string; url: string }>): string {
+  const lines = items.map((item, index) => `${index + 1}) ${item.name}\n${item.url}`);
+  return [`🔎 As páginas dos produtos:`, ...lines, `Quando decidir, é só tocar em *Escolher esse* no card.`].join("\n");
+}
+
+export function productDetailsUnavailable(): string {
+  return "Esse aí é do nosso catálogo interno e não tem página pública — mas me pergunta o que quiser saber dele que eu te respondo.";
+}
+
+export function productDetailsWhich(): string {
+  return "De qual produto? Me diz o nome (ou o número do card) que eu mando a página.";
+}
+
 export function choiceSkipped(query: string): string {
   return `Deixei *${query}* de fora. Se quiser, me diz de outro jeito que eu procuro.`;
 }
@@ -481,11 +507,11 @@ export function pixInstructions(total: number, mock: boolean): string {
   ].join("\n");
 }
 
-// Corpo da bolha nativa de Pix (order_details). Enviada DEPOIS do copia-e-cola em texto:
-// se a Meta descartar a bolha, o cliente já tem o código; se entregar, o botão
-// "Pagar com Pix" abre o banco direto.
+// Corpo da bolha nativa de Pix (order_details). V2 (01/09): a bolha vai PRIMEIRO e,
+// quando a Graph aceita, substitui o texto de instruções — só o copia-e-cola sai
+// depois dela (fallback universal pra WhatsApp Web/cliente antigo).
 export function nativePixBody(orderRef: string): string {
-  return `Pedido ${orderRef} — toca em *Pagar com Pix* pra abrir seu banco, ou usa o código que mandei acima. Assim que cair, te aviso por aqui ⚡`;
+  return `Pedido ${orderRef} — toca em *Pagar com Pix* pra abrir seu banco, ou copia o código da próxima mensagem 👇 Assim que cair, te aviso por aqui ⚡`;
 }
 
 export function nativePixItemName(orderRef: string): string {
@@ -1055,7 +1081,7 @@ export function itemsNotAvailableWithOptions(items: string[]): string {
 }
 
 // Lista encaminhada resolvida de uma vez: resumo da cesta montada, item a item com o
-// preço da linha. O rodapé de troca fica no follow-up padrão (Ver total/Adicionar mais).
+// preço da linha. O rodapé de troca fica no follow-up padrão (Pagar/Adicionar mais).
 export function bulkBasketAdded(items: { qty: number; name: string; total: number }[]): string {
   return [
     "Montei a cesta da sua lista:",

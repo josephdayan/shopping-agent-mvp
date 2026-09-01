@@ -1356,15 +1356,17 @@ test("27/08 r3 S17: 'nao gostei' seco mostra OUTRAS opções, não abre mão do 
   assert.match(out, /Mais opções|já mostrei tudo|marca, tipo/i, `não paginou: ${out.slice(0, 300)}`);
 });
 
-test("27/08 r3 S14: 'esquece o item' na pergunta de quantidade cancela o item", async (t) => {
+test("27/08 r3 S14 (adaptado 01/09): escolha assume 1 un e 'esquece' tira da cesta", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   await c.send("quero coca cola");
   const afterChoice = await c.send("1");
-  assert.match(afterChoice, /Quantas unidades/i, afterChoice.slice(0, 200));
+  // Regra 01/09: nada de "Quantas unidades?" — assume 1 un e avisa como mudar.
+  assert.doesNotMatch(afterChoice, /Quantas unidades/i, afterChoice.slice(0, 200));
+  assert.match(afterChoice, /1 un/, afterChoice.slice(0, 200));
   const out = await c.send("aa esquece a coca");
   assert.doesNotMatch(out, /Quantas unidades|1 a 50/i, `insistiu na quantidade do removido: ${out.slice(0, 300)}`);
-  assert.match(out, /Deixei .* de fora/i, out.slice(0, 300));
+  assert.match(out, /Tirei/i, out.slice(0, 300));
 });
 
 test("27/08 r3 S18: cotação vencida não engole a mensagem — o CEP novo segue o fluxo", async (t) => {
@@ -1698,4 +1700,59 @@ test("30/08 roteador: IA off (null) mantém o comportamento determinístico", as
   } finally {
     __setRouterInterpreterForTests(null);
   }
+});
+
+test("30/08 roteador: suporte no meio da escolha alerta o operador", async (t) => {
+  if (!dbOk) return t.skip();
+  const { __setRouterInterpreterForTests } = await import("../src/lib/adapters/ai");
+  const operator = "+5500999000333";
+  process.env.LIA_OPERATOR_PHONE = operator;
+  __setRouterInterpreterForTests(async (input) =>
+    /pacote que evaporou/i.test(input.text)
+      ? { action: "support", reply: "Uma pessoa da equipe vai verificar isso com você." }
+      : null
+  );
+  try {
+    const c = await returningCustomer();
+    await c.send("quero coca cola");
+    const out = await c.send("como eu resolvo o pacote que evaporou?");
+    assert.match(out, /equipe vai verificar/i, out.slice(0, 300));
+    const alert = outbox
+      .filter((message) => message.to === operator)
+      .map((message) => message.text)
+      .join("\n");
+    assert.match(alert, /Cliente com problema.*pacote que evaporou/i, alert);
+  } finally {
+    __setRouterInterpreterForTests(null);
+    delete process.env.LIA_OPERATOR_PHONE;
+  }
+});
+
+test("01/09: botão Mudar quantidade reabre 1/2/Outra e o toque ajusta o último item", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  await c.send("quero coca cola");
+  const confirmed = await c.send("1");
+  assert.match(confirmed, /1 un/, confirmed.slice(0, 200));
+  const ask = await c.send("qtd_alterar");
+  assert.match(ask, /Quantas unidades/i, ask.slice(0, 200));
+  const adjusted = await c.send("qty:2");
+  assert.match(adjusted, /Ajustei: 2x/i, adjusted.slice(0, 200));
+  const askFree = await c.send("qty:other");
+  assert.match(askFree, /1 a 50/i, askFree.slice(0, 200));
+  const adjusted4 = await c.send("4");
+  assert.match(adjusted4, /4x/i, adjusted4.slice(0, 200));
+});
+
+test("01/09: Ver detalhes — 'detalhes 2' devolve a página do produto sem fechar a escolha", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const offer = await c.send("quero ração");
+  assert.match(offer, /opções/i);
+  const details = await c.send("detalhes 2");
+  assert.match(details, /🔎/, details.slice(0, 300));
+  assert.match(details, /https:\/\//, `sem link: ${details.slice(0, 300)}`);
+  // A escolha continua aberta: escolher a 1 ainda funciona.
+  const confirmed = await c.send("1");
+  assert.match(confirmed, /✅/, confirmed.slice(0, 200));
 });

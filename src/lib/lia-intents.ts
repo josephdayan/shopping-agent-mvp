@@ -48,6 +48,8 @@ export type Intent =
   // Toque num botão "Escolher esse" FORA de uma escolha ativa: é um botão de mensagem
   // antiga — resposta específica, nunca "não entendi" (rodada 27/08 S1).
   | { kind: "stale_option_tap"; sku: string }
+  | { kind: "product_details_tap"; sku: string }
+  | { kind: "product_details"; ordinal?: number }
   // "Outras opções" (botão ou texto) fora da escolha ativa; cheaper=true quando o
   // cliente pediu "mais barato" seco — reabre a última escolha ordenada por preço.
   | { kind: "more_options"; cheaper?: boolean }
@@ -919,6 +921,18 @@ export function detectIntent(text: string): Intent {
   // com o sku preservado, nunca busca de produto nem "não entendi" (27/08 S1).
   const staleTap = n.match(/^optsku:(.+)$/);
   if (staleTap) return { kind: "stale_option_tap", sku: staleTap[1].trim() };
+  // Botão "Ver detalhes" do card (id por sku): a Lia responde com o link real do
+  // anúncio/página do produto — reviews, fotos, specs (pedido do dono, 01/09).
+  const infoTap = n.match(/^optinfo:(.+)$/);
+  if (infoTap) return { kind: "product_details_tap", sku: infoTap[1].trim() };
+  // Versão digitada: "detalhes", "detalhes 2", "ver anúncio", "manda o link do produto".
+  // Sem número = todos os cards na mesa. "link" seco fica de fora de propósito (colide
+  // com o link de pagamento); "detalhes do pedido" não casa (o "do pedido" sobra e o
+  // $ derruba) — status continua com o intent de sempre.
+  const typedDetails = n.match(
+    /^(?:me )?(?:ve[rh]?|mostra|manda|quero ver)? ?(?:o[s]? |a )?(?:detalhes?|anuncios?|pagina|link d[oe] produto)(?: d[oae]s?(?: produtos?| anuncios?| opcao)?)?(?: (\d))?[\s?!.]*$/
+  );
+  if (typedDetails) return { kind: "product_details", ordinal: typedDetails[1] ? Number(typedDetails[1]) : undefined };
   // Botão "Trocar endereço" do resumo da cotação (o regex de texto não casa o
   // underscore do id de máquina).
   if (n === "trocar_endereco") return { kind: "change_address" };
@@ -971,7 +985,6 @@ export function detectIntent(text: string): Intent {
   // compra, nunca buscar "na vdd sim" (28/08 S11, que virou produto pra cachorro).
   if (
     /^(na (vdd|verdade)|pensando (bem|melhor))[,!.\s]*(eu )?quero( sim| ainda)?\b/.test(n) ||
-    /^quero sim[,!.\s]*(ainda (da|dá)\??)?\s*$/.test(n) ||
     /^ainda (da|dá)\??\s*$/.test(n) ||
     /\bmudei de ideia[,!.\s]+quero (sim|de volta|aquele)\b/.test(n)
   ) {

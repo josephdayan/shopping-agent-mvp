@@ -42,22 +42,27 @@ export function composeBasket(
   const storeOf = (o: ComposeOption) => o.storeKey ?? "concierge";
   const lineDisplay = (i: number, pick: number) =>
     round2(display(lines[i].options[pick].unitPrice) * Math.max(1, lines[i].qty));
+  const lineRaw = (i: number, pick: number) =>
+    round2(lines[i].options[pick].unitPrice * Math.max(1, lines[i].qty));
 
   const evaluate = (picks: number[]) => {
-    const perStore = new Map<string, { label?: string; subtotal: number }>();
+    const perStore = new Map<string, { label?: string; rawSubtotal: number }>();
     let products = 0;
     picks.forEach((pick, i) => {
       const opt = lines[i].options[pick];
       const value = lineDisplay(i, pick);
       products = round2(products + value);
       const key = storeOf(opt);
-      const entry = perStore.get(key) ?? { label: opt.storeLabel, subtotal: 0 };
-      entry.subtotal = round2(entry.subtotal + value);
+      const entry = perStore.get(key) ?? { label: opt.storeLabel, rawSubtotal: 0 };
+      // O limiar de frete grátis pertence ao checkout da loja e usa o preço de
+      // prateleira, não o preço exibido pela Lia com margem. Misturar os dois fazia a
+      // composição anunciar frete grátis que desaparecia na cotação final.
+      entry.rawSubtotal = round2(entry.rawSubtotal + lineRaw(i, pick));
       perStore.set(key, entry);
     });
     let freight = 0;
     for (const [key, entry] of perStore) {
-      freight = round2(freight + Math.max(0, freightFor(key, entry.label, entry.subtotal)));
+      freight = round2(freight + Math.max(0, freightFor(key, entry.label, entry.rawSubtotal)));
     }
     return { products, freight, total: round2(products + freight), stores: perStore.size };
   };
@@ -77,6 +82,10 @@ export function composeBasket(
         const trial = picks.slice();
         trial[i] = alt;
         const outcome = evaluate(trial);
+        // O compositor existe para combater fragmentação. Uma alternativa muito
+        // barata em uma terceira loja pode reduzir centavos do total, mas piorar a
+        // experiência com mais uma entrega; esse movimento nunca é aceito.
+        if (outcome.stores > current.stores) continue;
         const gain = round2(current.total - outcome.total);
         if (gain > bestGain) {
           bestGain = gain;

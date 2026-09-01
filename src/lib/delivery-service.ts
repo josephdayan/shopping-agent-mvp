@@ -930,6 +930,15 @@ function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
   return option.name;
 }
 
+// "Ver detalhes" para TODAS as lojas (dono, 01/09): quem tem página própria usa ela;
+// item de catálogo raspado SEM url por item (Carrefour, Petz) ganha o link de BUSCA
+// da loja com o nome do produto — não é a página exata, mas abre o produto na loja
+// real com foto/reviews a um clique.
+const STORE_SEARCH_URL: Record<string, (name: string) => string> = {
+  carrefour: (name) => `https://mercado.carrefour.com.br/s?q=${encodeURIComponent(name)}`,
+  petz: (name) => `https://www.petz.com.br/busca?q=${encodeURIComponent(name)}`
+};
+
 function toChoiceOption(
   o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string; freeShipping?: boolean },
   storeRef?: { storeKey?: string; storeLabel?: string }
@@ -944,7 +953,7 @@ function toChoiceOption(
     brand: o.brand,
     unitPrice: o.unitPrice,
     imageUrl: o.imageUrl,
-    productUrl: o.productUrl,
+    productUrl: o.productUrl ?? STORE_SEARCH_URL[storeRef?.storeKey ?? ""]?.(o.name),
     ...storeRef,
     ...(delivery ? { delivery } : {}),
     ...(o.freeShipping ? { freeShipping: true } : {})
@@ -983,7 +992,10 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
           name: customerChoiceName(p, o),
           displayPrice: display(o.unitPrice),
           imageUrl: o.imageUrl,
-          delivery: o.delivery
+          delivery: o.delivery,
+          // Liga o botão "Ver detalhes" do card quando o produto tem página real.
+          productUrl: o.productUrl,
+          sku: o.sku
         }))
       );
       if (interactive) return;
@@ -1507,6 +1519,36 @@ async function handleDeliveryTurn(
     ctx.step = "collecting";
     await writeCtx(convo.id, ctx);
     await reply(phone, copy.askMoreItems());
+    return;
+  }
+
+  // Botão "Mudar quantidade" do follow-up (dono, 01/09: mudar quantidade tem que ser
+  // botão). Reabre os botões 1/2/Outra da pergunta clássica para o ÚLTIMO item; o
+  // toque volta como qty:N e cai nos handlers logo abaixo. Nunca dispara no estado
+  // legado choosing_quantity — lá os mesmos ids fecham a escolha pendente.
+  if (normalizeMsg(text) === "qtd_alterar" && ctx.step !== "choosing_quantity") {
+    const last = ctx.basket?.[ctx.basket.length - 1];
+    if (!last) {
+      await reply(phone, copy.askMoreItems());
+      return;
+    }
+    markTurnReplied();
+    const interactive = await whatsappAdapter.sendQuantityChoices(phone, last.name);
+    if (!interactive) await reply(phone, copy.quantityAsk(last.name));
+    return;
+  }
+  const qtyTap = normalizeMsg(text).match(/^qty:([12])$/);
+  if (qtyTap && ctx.step !== "choosing_quantity" && ctx.basket?.length) {
+    const last = ctx.basket[ctx.basket.length - 1];
+    last.qty = Number(qtyTap[1]);
+    last.lineTotal = Math.round(last.unitPrice * last.qty * 100) / 100;
+    await writeCtx(convo.id, ctx);
+    await reply(phone, copy.qtyAdjusted(last.qty, last.name));
+    return;
+  }
+  if (normalizeMsg(text) === "qty:other" && ctx.step !== "choosing_quantity" && ctx.basket?.length) {
+    // O número digitado em seguida cai no ajuste de número seco do último item.
+    await reply(phone, copy.quantityAskFree(ctx.basket[ctx.basket.length - 1].name));
     return;
   }
 
@@ -2455,7 +2497,11 @@ async function handleDeliveryTurn(
     intent.kind !== "swap_item" &&
     intent.kind !== "pay" &&
     intent.kind !== "choose_payment" &&
-    intent.kind !== "done"
+    intent.kind !== "done" &&
+    // "Ver detalhes"/"detalhes 2" respondem no handler global (que já olha os cards
+    // na mesa) sem mexer na escolha — os cards continuam valendo depois do link.
+    intent.kind !== "product_details" &&
+    intent.kind !== "product_details_tap"
   ) {
     await handleChoosing(phone, user.id, user.cep, convo.id, ctx, text, intent);
     return;
@@ -2739,6 +2785,39 @@ async function handleDeliveryTurn(
   // ---- botão "Escolher esse" de uma mensagem antiga, fora de escolha ativa ----
   if (intent.kind === "stale_option_tap") {
     await reply(phone, copy.staleButtonTap(false));
+    return;
+  }
+
+  // ---- "Ver detalhes" (botão optinfo:<sku>) e "detalhes 2" digitado (dono, 01/09):
+  // responde com a PÁGINA REAL do produto — reviews, fotos, specs, tudo que o cliente
+  // veria no ML/na loja. Não mexe em estado nenhum: os cards continuam valendo.
+  if (intent.kind === "product_details_tap" || intent.kind === "product_details") {
+    const activeOptions = ctx.pending?.[0]?.options ?? ctx.lastChoice?.options ?? [];
+    if (intent.kind === "product_details_tap") {
+      // O intent vem do texto normalizado (minúsculas); os skus reais têm caixa mista.
+      const wanted = intent.sku.toLowerCase();
+      const hit =
+        activeOptions.find((o) => o.sku.toLowerCase() === wanted) ??
+        (ctx.basket ?? []).find((b) => b.sku.toLowerCase() === wanted);
+      if (hit?.productUrl) await reply(phone, copy.productDetailsLink(hit.name, hit.productUrl));
+      else if (hit) await reply(phone, copy.productDetailsUnavailable());
+      else await reply(phone, copy.productDetailsWhich());
+      return;
+    }
+    if (intent.ordinal) {
+      const picked = activeOptions[intent.ordinal - 1];
+      if (picked?.productUrl) await reply(phone, copy.productDetailsLink(picked.name, picked.productUrl));
+      else if (picked) await reply(phone, copy.productDetailsUnavailable());
+      else await reply(phone, copy.productDetailsWhich());
+      return;
+    }
+    const linked = activeOptions
+      .filter((o) => Boolean(o.productUrl))
+      .map((o) => ({ name: o.name, url: o.productUrl! }));
+    if (linked.length > 1) await reply(phone, copy.productDetailsList(linked));
+    else if (linked.length === 1) await reply(phone, copy.productDetailsLink(linked[0].name, linked[0].url));
+    else if (activeOptions.length) await reply(phone, copy.productDetailsUnavailable());
+    else await reply(phone, copy.productDetailsWhich());
     return;
   }
 
@@ -3420,18 +3499,23 @@ async function confirmChosenOption(
   if (replaceSku && replaceSku !== chosen.sku) {
     ctx.basket = (ctx.basket ?? []).filter((item) => item.sku !== replaceSku);
   }
-  if (current.qty === 1 && !current.qtyExplicit) {
-    await beginQuantityChoice(phone, convoId, ctx, chosenStore, chosen);
-    return;
-  }
+  // Quantidade não dita = 1 e segue em frente (dono, 01/09): a rodada "quantas
+  // unidades?" era uma mensagem a mais no caso comum — quem quer 3 fala "3x" na hora
+  // ou depois ("bota 3"). O handler de choosing_quantity fica vivo só para conversas
+  // que estavam no meio da pergunta durante o deploy.
+  const assumedOne = current.qty === 1 && !current.qtyExplicit;
+  const confirmed = assumedOne
+    ? copy.choiceConfirmedAssumedOne(chosen.name, current.query)
+    : copy.choiceConfirmed(chosen.name, current.qty);
   ctx.basket = mergeBaskets(ctx.basket ?? [], [choiceToBasketItem(chosen, current.qty, chosenStore)]);
   if (ctx.pending.length) {
     await writeCtx(convoId, ctx);
-    await reply(phone, copy.choiceConfirmed(chosen.name, current.qty));
+    await reply(phone, confirmed);
     await sendChoices(phone, ctx.pending[0], copy.nextChoiceHeader(ctx.pending[0].query, ctx.pending.length));
     return;
   }
-  await advancePending(phone, convoId, ctx, userCep, copy.choiceConfirmed(chosen.name, current.qty));
+  // Quantidade assumida → o follow-up troca "Cancelar" por "Mudar quantidade".
+  await advancePending(phone, convoId, ctx, userCep, confirmed, { qtyButton: assumedOne });
 }
 
 async function handleChoosing(
@@ -3696,21 +3780,9 @@ async function contextualCatalogAttrs(store: StoreConnector, ctx: DeliveryContex
   return inferCatalogRefinement(text, candidates);
 }
 
-async function beginQuantityChoice(
-  phone: string,
-  convoId: string,
-  ctx: DeliveryContext,
-  store: StoreConnector,
-  chosen: ChoiceOption
-) {
-  ctx.step = "choosing_quantity";
-  ctx.quantityChoice = { option: chosen, storeKey: store.key, storeLabel: store.label };
-  await writeCtx(convoId, ctx);
-  markTurnReplied();
-  const interactive = await whatsappAdapter.sendQuantityChoices(phone, chosen.name);
-  if (!interactive) await reply(phone, copy.quantityAsk(chosen.name));
-}
-
+// beginQuantityChoice foi removida (01/09): a escolha assume 1 unidade e segue. O
+// estado choosing_quantity e o finishQuantityChoice abaixo continuam existindo para
+// terminar conversas que estavam no meio da pergunta quando o deploy trocou a regra.
 async function finishQuantityChoice(
   phone: string,
   userCep: string | null | undefined,
@@ -3911,7 +3983,8 @@ async function advancePending(
   convoId: string,
   ctx: DeliveryContext,
   userCep?: string | null,
-  prefix?: string
+  prefix?: string,
+  followUpOpts?: { qtyButton?: boolean }
 ) {
   if (ctx.pending?.length) {
     await writeCtx(convoId, ctx);
@@ -3938,7 +4011,7 @@ async function advancePending(
     const body = [prefix, copy.conciergeChooseNext()].filter(Boolean).join("\n");
     try {
       markTurnReplied();
-      const interactive = await whatsappAdapter.sendChoiceFollowUp(phone, body);
+      const interactive = await whatsappAdapter.sendChoiceFollowUp(phone, body, followUpOpts);
       if (interactive) return;
     } catch (error) {
       console.warn("[whatsapp:choice-followup:fallback-text]", error instanceof Error ? error.message : error);
@@ -4880,11 +4953,13 @@ async function issueChargeForOrder(
     where: { id: order.id },
     data: { pixId: charge.pixId, pixCopiaECola: charge.copiaECola }
   });
-  // Intro + código em mensagens SEPARADAS: no WhatsApp copia-se a mensagem inteira —
-  // com prosa junto, o copia-e-cola não cola no banco.
-  await reply(phone, copy.pixInstructions(total, charge.mock));
+  // V2 (01/09, "veio os dois"): a bolha nativa vai PRIMEIRO; quando a Graph aceita,
+  // ela substitui o texto de instruções e só o código sai depois (fallback universal
+  // pra WhatsApp Web/cliente antigo — e o copia-e-cola precisa ser mensagem SOZINHA:
+  // com prosa junto, não cola no banco). Bolha recusada → as duas mensagens de sempre.
+  const bubbleSent = await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
+  if (!bubbleSent) await reply(phone, copy.pixInstructions(total, charge.mock));
   await reply(phone, charge.copiaECola);
-  await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
   return true;
 }
 
@@ -4902,15 +4977,15 @@ async function maybeSendNativePixBubble(
   total: number,
   pixCode: string,
   mock: boolean
-) {
-  if (process.env.LIA_NATIVE_PIX !== "1" || mock || !pixCode) return;
+): Promise<boolean> {
+  if (process.env.LIA_NATIVE_PIX !== "1" || mock || !pixCode) return false;
   const merchantName = process.env.LIA_PIX_MERCHANT_NAME;
   const key = process.env.LIA_PIX_KEY;
   const keyType = process.env.LIA_PIX_KEY_TYPE;
   const validKeyType = keyType === "CPF" || keyType === "CNPJ" || keyType === "EMAIL" || keyType === "PHONE";
   if (!merchantName || !key || !validKeyType) {
     console.warn("[whatsapp:native-pix] flag ligada sem LIA_PIX_MERCHANT_NAME/LIA_PIX_KEY/LIA_PIX_KEY_TYPE — pulando bolha");
-    return;
+    return false;
   }
   const orderRef = `#${orderId.slice(-6).toUpperCase()}`;
   try {
@@ -4926,8 +5001,10 @@ async function maybeSendNativePixBubble(
       key,
       keyType
     });
+    return true;
   } catch (error) {
     console.warn("[whatsapp:native-pix] bolha rejeitada, cliente segue com o texto:", error instanceof Error ? error.message : error);
+    return false;
   }
 }
 
@@ -5469,9 +5546,9 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
         data: { status: "awaiting_payment", pixId: charge.pixId, pixCopiaECola: charge.copiaECola, quoteExpiresAt: null }
       });
       await setQuoteConversationAwaitingPayment(order);
-      await reply(order.phone, copy.pixInstructions(total, charge.mock));
+      const bubbleSent = await maybeSendNativePixBubble(order.phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
+      if (!bubbleSent) await reply(order.phone, copy.pixInstructions(total, charge.mock));
       await reply(order.phone, charge.copiaECola);
-      await maybeSendNativePixBubble(order.phone, order.id, charge.pixId, total, charge.copiaECola, charge.mock);
     }
     return { expired: false };
   } catch (error) {
@@ -5639,11 +5716,14 @@ async function switchPaymentMethod(
     where: { id: order.id },
     data: { total, notes, pixId: charge.pixId, pixCopiaECola: charge.payload }
   });
+  // Bolha antes do texto (a troca de forma continua numa mensagem só: contexto do
+  // novo total + código juntos — aqui o código não precisa ser mensagem solitária
+  // porque a bolha, quando entregue, já tem o Copy Pix code).
+  await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.payload, charge.mock);
   await reply(
     phone,
     [copy.paymentSwitched(method, total), charge.payload, charge.mock ? `\n${copy.sandboxHint()}` : ""].filter(Boolean).join("\n")
   );
-  await maybeSendNativePixBubble(phone, order.id, charge.pixId, total, charge.payload, charge.mock);
 }
 
 // ---------- order lifecycle (called by webhook + operator dashboard) ----------

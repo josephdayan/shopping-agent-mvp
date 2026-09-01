@@ -1028,7 +1028,7 @@ export type RouterVerdict = {
 // Promessas que a IA está PROIBIDA de fazer. Se a resposta livre contiver qualquer
 // uma, ela é descartada e o chamador usa a copy segura de sempre.
 const FORBIDDEN_REPLY_RE =
-  /(desconto|gr[aá]tis|de gra[cç]a|cortesia|estorn(ei|ado|amos)|reembols(ei|ado)|cancelei (o|seu) pedido|chega (hoje|amanh[ãa])|entrego (hoje|amanh[ãa])|prometo|pode pagar depois|fiado|100%|cupom)/i;
+  /(desconto|gr[aá]tis|de gra[cç]a|cortesia|estorn(ei|ado|amos)|reembols(ei|ado)|cancelei (o|seu) pedido|chega (hoje|amanh[ãa])|entrego (hoje|amanh[ãa])|prometo|pode pagar depois|fiado|100%|cupom|\b(pagamento|pix|cart[aã]o|cobran[cç]a).{0,30}\b(confirmad[oa]|aprova[doa]|recebid[oa]|processad[oa]|conclu[ií]d[oa])\b|\b(j[aá] )?(recebi|recebemos|confirmo|confirmamos) (o )?(pagamento|pix)\b)/i;
 
 export function sanitizeRouterReply(reply: string | undefined): string | undefined {
   if (!reply) return undefined;

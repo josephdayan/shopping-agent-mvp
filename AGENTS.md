@@ -1,5 +1,51 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 01/09/2026 (3ª) — nome público reenviado sem CNPJ/nome pessoal
+
+O print real do iPhone confirmou que o cabeçalho público ainda mostrava
+`Lia Delivery by 67.742.955 Joseph Carlos Dayan`. No WhatsApp Manager do número
+`+55 11 97844-4813`, o nome antigo estava **Approved**. Por ordem do dono, foi
+reenviada a alteração para **Lia Delivery**; a Meta aceitou a solicitação e o status
+atual é **In Review**. Até a aprovação, o nome antigo continua visível. Isso é
+configuração do display name na Meta: não altera código, número, WABA, webhook, Pix
+nem cartão.
+
+## Atualização 01/09/2026 (2ª) — quatro pedidos do dono após a 1ª bolha real
+
+O dono viu a bolha real no ar (pedido #GAS8P9, R$51,77) e pediu quatro mudanças, todas
+implementadas no mesmo dia:
+
+1. **Botão "Ver total" → "Pagar"** (follow-up pós-escolha). O rótulo tinha virado
+   "Ver total" na rodada 1 porque "Pagar" prometia cobrança imediata; com a bolha
+   nativa o caminho até o pagamento ficou curto e o dono mandou voltar. Decisão do
+   dono, 01/09 — não re-renomear sem ele.
+2. **Pix v2 — "veio os dois":** a bolha nativa agora vai PRIMEIRO e, quando a Graph
+   aceita, o texto `pixInstructions` NÃO sai — só o copia-e-cola solitário depois dela
+   (fallback universal: WhatsApp Web/cliente antigo não renderiza `order_details`, e o
+   código precisa ser mensagem sozinha pra colar no banco). Bolha recusada/flag off/
+   mock → as duas mensagens de sempre. `maybeSendNativePixBubble` devolve boolean.
+3. **"Ver detalhes" no card, para TODAS as lojas** (reviews/fotos/specs a um toque):
+   cada card com `productUrl` ganha o botão `optinfo:<sku>` (último card fica com 3
+   botões — teto Meta). O toque responde com a PÁGINA REAL do anúncio em texto puro
+   (link clicável), sem mexer na escolha. Digitado também: "detalhes", "detalhes 2",
+   "ver anúncio" (intent `product_details`; "link" seco fica de fora — colide com
+   link de pagamento; "detalhes do pedido" continua status). Cobertura: os wrappers
+   de vitrine já propagam `productUrl` do catálogo (Boticário, Cobasi, Divvino…); os
+   catálogos SEM url por item (Carrefour, Petz) usam fallback de link de BUSCA da
+   loja (`STORE_SEARCH_URL` no cérebro — `mercado.carrefour.com.br/s?q=` e
+   `petz.com.br/busca?q=`, ambos validados ao vivo em 01/09). Item sem nada →
+   resposta honesta.
+4. **A pergunta "Quantas unidades?" morreu — e ajustar virou botão**: escolher sem
+   dizer quantidade assume **1 un** e segue, com dica na confirmação
+   (`choiceConfirmedAssumedOne`). Nesse caso o follow-up troca "Cancelar" por
+   **"Mudar quantidade"** (teto de 3 botões; "cancelar" digitado segue valendo):
+   o toque (`qtd_alterar`) reabre os botões 1/2/Outra da pergunta clássica para o
+   último item, e `qty:1`/`qty:2`/`qty:other` fora do estado legado ajustam o último
+   item da cesta em vez de fechar escolha. Ajuste por texto continua ("bota 3",
+   número seco pós-item). `choosing_quantity` + `finishQuantityChoice` ficam vivos SÓ
+   para conversas em voo no deploy — `beginQuantityChoice` foi removida; não
+   reintroduzir a pergunta sem o dono.
+
 ## Atualização 01/09/2026 — bolha nativa de Pix ATIVADA em produção (sonda provou: sem habilitação)
 
 A hipótese de 31/08 se confirmou ao vivo: a Graph **aceita `pix_dynamic_code` no nosso

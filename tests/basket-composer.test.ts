@@ -79,3 +79,29 @@ test("quantidade multiplica o preço da linha na conta", () => {
   assert.equal(out.picks[1], 1, JSON.stringify(out));
   assert.equal(out.after.total, 36);
 });
+
+test("frete grátis usa subtotal real da loja, não preço exibido com margem", () => {
+  const withMarkup = (value: number) => Math.round(value * 1.1 * 100) / 100;
+  const thresholdFreight = (_storeKey: string, _label: string | undefined, rawSubtotal: number) =>
+    rawSubtotal >= 100 ? 0 : 20;
+  const lines: ComposeLine[] = [
+    // Preço exibido = R$104,50, mas o checkout da loja ainda vê R$95 e cobra frete.
+    { qty: 1, options: [opt("a1", "Produto A", 95, "a")] }
+  ];
+  const out = composeBasket(lines, withMarkup, thresholdFreight);
+  assert.equal(out.before.products, 104.5);
+  assert.equal(out.before.freight, 20);
+  assert.equal(out.before.total, 124.5);
+});
+
+test("uma economia de produto nunca cria uma entrega adicional", () => {
+  const zeroFreight = () => 0;
+  const lines: ComposeLine[] = [
+    { qty: 1, options: [opt("a1", "Arroz A", 10, "a")] },
+    { qty: 1, options: [opt("a2", "Café A", 100, "a"), opt("b2", "Café B", 10, "b")] }
+  ];
+  const out = composeBasket(lines, display, zeroFreight);
+  assert.deepEqual(out.picks, [0, 0]);
+  assert.equal(out.before.stores, 1);
+  assert.equal(out.after.stores, 1);
+});
