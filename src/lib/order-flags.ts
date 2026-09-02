@@ -58,6 +58,9 @@ export const OPS_QUEUE_STATUSES = [
   "awaiting_supplier_validation",
   "awaiting_quote_confirmation",
   "payment_issuing",
+  // Revisão 01/09: pedido esperando Pix/cartão sumia do painel (#GAS8P9 ficou 2h
+  // invisível) — o operador precisa vê-lo pra avisar o cliente ou cancelar.
+  "awaiting_payment",
   "paid",
   RETAILER_PREPARING_STATUS,
   RETAILER_OUT_FOR_DELIVERY_STATUS,

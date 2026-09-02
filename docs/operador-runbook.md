@@ -2,6 +2,13 @@
 
 _Guia de 1 página pra quem opera os pedidos. Criado em 2026-07-20._
 
+> **Nota de 02/09/2026.** Este runbook descreve o fluxo de julho (motoboy saindo da base).
+> Hoje o padrão é: a Lia cota na hora com preço da vitrine, o cliente paga, **você compra
+> no site da loja/ML como cliente comum e a loja entrega**; "motoboy na hora" é exceção.
+> O botão **"Cancelar e solicitar estorno"** voltou ao card de pedido pago (revisão de
+> 01/09); pedido esperando Pix/cartão agora aparece na fila. Frete e custo aceitam vírgula
+> ("12,90").
+
 Você é a pessoa que **compra os pedidos e manda entregar**. O cliente pede pela Lia no
 WhatsApp; a Lia mostra o pedido pra você no painel; **você cota, compra e despacha**. A Lia
 cuida da conversa e da cobrança — você não fala com o cliente nem cobra à mão.

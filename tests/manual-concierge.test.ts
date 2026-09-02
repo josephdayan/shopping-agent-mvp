@@ -1036,13 +1036,17 @@ test("3º ciclo: 'mais um leite' herda o item da cesta (sku), nunca busca genér
   const c = await returningCustomer();
   await c.send("quero leite sem lactose");
   const afterChoice = await c.send("1");
-  if (/quantas unidades/i.test(afterChoice)) await c.send("2");
+  // Regra 01/09: escolher sem dizer quantidade assume 1 un (a pergunta "quantas
+  // unidades?" morreu). O teste segue valendo nos dois mundos: com pergunta, 2+1; sem, 1+1.
+  const asked = /quantas unidades/i.test(afterChoice);
+  if (asked) await c.send("2");
+  const expectedQty = asked ? 3 : 2;
   const more = await c.send("Pode colocar mais um leite.");
-  assert.match(more, /agora são 3x/i, `não herdou o item: ${more.slice(0, 200)}`);
+  assert.match(more, new RegExp(`agora são ${expectedQty}x`, "i"), `não herdou o item: ${more.slice(0, 200)}`);
   const convo = await prisma.conversation.findFirst({ where: { userId: c.userId } });
   const basket = JSON.parse(convo!.context ?? "{}").basket as Array<{ name: string; qty: number }>;
   assert.equal(basket.length, 1, `cesta: ${JSON.stringify(basket.map((b) => b.name))}`);
-  assert.equal(basket[0].qty, 3);
+  assert.equal(basket[0].qty, expectedQty);
 });
 
 test("3º ciclo: CEP no meio do menu de pagamento troca o destino (nunca re-mostra pagamento)", async (t) => {

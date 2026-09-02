@@ -3,6 +3,13 @@
 > Memória canônica vigente: [AGENTS.md](AGENTS.md). Este arquivo também contém histórico;
 > em caso de conflito, prevalecem `AGENTS.md` e a decisão mais recente datada.
 
+> **Revisão completa de 01/09/2026** (código, achados abertos, legado, métricas reais e
+> caminhos de produto): [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md).
+> Correções do que está escrito abaixo: o markup é **progressivo** (10% até R$200, 6/4/3%
+> acima — `src/lib/pricing.ts`), não flat; Browserbase e busca ao vivo Petz foram
+> **removidos** em 03/08; a entrega é do varejista (sem motoboy); as 107 unidades
+> geocodadas e as guardas de cobertura/km são legado do modelo de julho.
+
 Lia é uma **concierge de compras do dia a dia no WhatsApp**: o cliente pede itens em
 linguagem natural, recebe uma cotação do checkout real, paga por Pix/cartão, e a Lia compra
 para o varejista entregar diretamente. Este doc registra **por que** o produto é assim

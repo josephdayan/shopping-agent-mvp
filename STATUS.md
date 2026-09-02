@@ -1,5 +1,18 @@
 # Lia — Status do Projeto
 
+## 02/09/2026 — revisão completa: 19 correções (5 P0 de dinheiro), auth do /ops fechada, relatório de negócio
+
+Revisão pedida pelo dono com o modelo novo. Fechados com regressão: webhook do Mercado
+Pago aprovava sem conferir valor/id (agora vira alerta), cancelar/reabrir ignorava cartão
+em cobrança e deixava o Pix antigo pagável (agora saída única com cancelamento no MP),
+taxa do cartão contaminava o Pix após falha, frete "12,90" virava R$ 0 no /ops, /ops
+falhava aberto sem token em Preview. Abertos (P1): retries do workflow de cartão mudos,
+Pagar.me 4xx = "recusado", mock aprova sem env em prod, estorno sem API, rate limit.
+Relatório com métricas reais e três caminhos de produto:
+[docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md). **Ações do
+dono:** aplicar a migration nova, deploy + abrir `/ops?key=` uma vez, decidir #YAQHF8/
+#QTNL2T, apagar `.env.local.bak`, escolher o caminho da seção 4.5.
+
 ## 01/09/2026 (5ª) — revisão da 4ª fecha três brechas (toque do cartão, relógio da fusão, Pix pago com pergunta aberta)
 
 Revisão de código da leva da manhã: o toque em "Pagar ••••" ainda deixava o turno mudo em

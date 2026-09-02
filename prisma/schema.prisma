@@ -78,6 +78,8 @@ model DeliveryOrder {
   @@index([status])
   @@index([quoteExpiresAt])
   @@index([phone])
+  // Revisão 01/09: o cérebro faz findFirst por userId(+status) em quase todo turno.
+  @@index([userId, status, createdAt])
 }
 
 // A purchase job is deliberately separate from DeliveryOrder.status. The order status
@@ -273,6 +275,8 @@ model Conversation {
   messages    Message[]
   options     ProductOption[]
   orders      Order[]
+
+  @@index([userId, status, updatedAt])
 }
 
 model Message {
@@ -293,6 +297,7 @@ model Message {
   // PARCIAL de propósito: no fluxo legado de busca, `metadata` de mensagens do
   // ASSISTENTE guarda um JSON de opções que legitimamente se repete — um índice global
   // quebraria aquele fluxo. Não troque por @@unique.
+  @@index([conversationId, createdAt])
 }
 
 model Product {

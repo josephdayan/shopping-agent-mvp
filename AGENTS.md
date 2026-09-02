@@ -1,5 +1,64 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 02/09/2026 — revisão completa (código + negócio) com o modelo novo
+
+Pedido do dono: revisão completa do código, sugestões e leitura do modelo de negócio.
+Relatório canônico: [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md)
+(19 correções, achados abertos por severidade, inventário de legado, métricas reais do
+banco e três caminhos de produto com recomendação). O que mudou no código, tudo com
+regressão (`tests/payment-reconcile.test.ts` 6 E2E, `auth` +2, `pricing` +2):
+
+1. **Dinheiro que chega tem que bater com a cobrança na mesa.** `markDeliveryOrderPaid`
+   aceita evidência (provedor, id, valor); o webhook do MP a repassa. Valor diferente,
+   Pix que não é o vigente, ou pedido fora de `awaiting_payment` → nota
+   `⚠️ PAGAMENTO FORA DO ESPERADO` + alerta ao operador + aviso ao cliente
+   (`copy.unexpectedPaymentReceived`), NUNCA aprovação. Replay idempotente. Webhook
+   devolve 503 em falha nossa (o MP reenvia) e valida o id antes de ir na URL.
+2. **Saída única de `awaiting_payment` sem dinheiro** (`closeUnpaidOrder`): guarda de
+   status no UPDATE, bloqueio se há cartão salvo CONFIRMADO (`hasInFlightCardAttempt`,
+   sem filtro de TTL) e cancelamento best-effort do Pix antigo no MP
+   (`cancelMercadoPagoPayment`, nunca lança). Usada por cancelar, reabrir pra editar,
+   juntar/pedido novo; a troca Pix↔cartão cancela o Pix anterior depois de gravar o novo.
+3. `chargeConfirmedPaymentAttempt` reconfere status e valor do pedido ANTES do PSP;
+   captura em pedido que saiu de `awaiting_payment` vira alerta via evidência.
+4. `issueValidatedRetailerQuotePayment`: base recomposta de subtotal+margem+frete (o
+   gross-up de um cartão que falhou não contamina o Pix seguinte) e o `catch` restaura
+   `total` E `quoteExpiresAt` (sem isso o "pix" seguinte cancelava como "preço vencido").
+5. `/ops`: `parseMoneyInput` ("12,90" era NaN → frete R$ 0) no cliente e no servidor;
+   `awaiting_payment` entrou na fila; botão **"Cancelar e solicitar estorno"** voltou
+   para pedido pago (ação excepcional do operador; o cliente segue sem cancelar pós-pago
+   pelo chat); erros de domínio chegam com a mensagem real (409/400).
+6. **Auth do /ops unificada** em `requireOpsKey` (auth.ts): fail-closed em deploy, tempo
+   constante, cookie = HMAC do token, sem fallback pra `API_TOKEN`. **Depois do deploy,
+   abrir `/ops?key=<OPS_TOKEN>` uma vez** (cookie antigo não vale). Callback Apify
+   fail-closed + telefone tem que ser o dono da conversa; petz-image só raster + nosniff;
+   OAuth do ML exige sessão admin.
+7. Conversa: lock de turno 180s (`LIA_TURN_LOCK_TTL_MS`; 60s era menor que a busca
+   fria); relógio de abandono considera `order.updatedAt` (cotação manual publicada tarde
+   não é cancelada no "pix"); "trocar endereço" com o mesmo CEP não restaura a rua velha;
+   "pix"/"cartão" sem cesta acha cotação publicada com a conversa em outro assunto.
+8. Infra: migration `20260901120000_waitlist_petz_image_indexes` (IF NOT EXISTS + 3
+   índices por cliente — **ainda não aplicada em produção**, decisão do dono),
+   `migration_lock.toml`, `.env.example` com as 14 envs operacionais, `.gitignore` não
+   engole mais `.env.example`; removidos `/api/mercadolivre/{notifications,callback}`,
+   `scripts/preflight-oba-internal.mts`, `serverComponentsExternalPackages` morto.
+
+**Regras que saem desta revisão:** (a) nenhuma aprovação de pagamento sem evidência
+(id + valor) — não reintroduzir `markDeliveryOrderPaid(id)` seco em caminho de webhook;
+(b) nenhuma saída de `awaiting_payment` fora de `closeUnpaidOrder`; (c) rota nova do
+`/ops` usa `requireOpsKey`, nunca cópia local. Gate: `tsc`, lint, 109 unitários,
+`payment-reconcile` + `payment-issue-failure` + `saved-card` + `whatsapp-pay.db`
+23/23 com banco.
+
+**Leitura de negócio (resumo; detalhe no relatório):** 10 semanas, 295 commits, 5
+pedidos reais pagos (≈R$215, todos do dono/testadores), zero concluído de ponta a ponta
+pelo varejista. A família de falha presente em 100% das rodadas (frete fragmentado /
+mínimo por loja / troca forçada) é desenho, não bug. Markup de 10% em cesta de R$50–80
+não paga o turno manual. Recomendação: congelar features por 4 semanas e rodar piloto de
+30 pedidos com desconhecidos sob contrato simples (taxa fixa, uma loja por cesta, SLA
+humano visível), com a rota de parceria com um varejista testada em paralelo. Decisão do
+dono pendente.
+
 ## Atualização 01/09/2026 (5ª) — revisão da 4ª: três brechas fechadas
 
 Revisão de código da entrega da 4ª (mesmo dia) achou três furos reais; todos fechados

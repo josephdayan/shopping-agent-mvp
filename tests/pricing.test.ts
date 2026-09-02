@@ -55,3 +55,29 @@ test("env calibra sem deploy: base por LIA_PRICE_MARKUP, faixas por LIA_MARKUP_T
   // 200 → 100*0.15 + 100*0.05 = 20
   assert.equal(displayPrice(200), 220);
 });
+
+// ---- entrada de dinheiro digitada (revisão 01/09: "12,90" virava frete R$ 0) ----
+import { parseMoneyInput } from "../src/lib/pricing";
+
+test("parseMoneyInput: vírgula, R$, milhar à brasileira e ponto decimal", () => {
+  assert.equal(parseMoneyInput("12,90"), 12.9);
+  assert.equal(parseMoneyInput("R$ 1.290,00"), 1290);
+  assert.equal(parseMoneyInput("12.90"), 12.9);
+  assert.equal(parseMoneyInput("1.290"), 1290, "ponto + 3 dígitos sem vírgula = milhar");
+  assert.equal(parseMoneyInput("1.234.567"), 1234567);
+  assert.equal(parseMoneyInput("1.234,56"), 1234.56);
+  assert.equal(parseMoneyInput("1,234.56"), 1234.56);
+  assert.equal(parseMoneyInput("27"), 27);
+  assert.equal(parseMoneyInput(" 0,5 "), 0.5);
+  assert.equal(parseMoneyInput(27.5), 27.5);
+});
+
+test("parseMoneyInput: lixo vira null, nunca zero silencioso", () => {
+  assert.equal(parseMoneyInput(""), null);
+  assert.equal(parseMoneyInput("   "), null);
+  assert.equal(parseMoneyInput("abc"), null);
+  assert.equal(parseMoneyInput("1,2,3"), null);
+  assert.equal(parseMoneyInput(undefined), null);
+  assert.equal(parseMoneyInput(null), null);
+  assert.equal(parseMoneyInput(Number.NaN), null);
+});

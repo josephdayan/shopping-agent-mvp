@@ -1,6 +1,25 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-01 (5ª)._
+_Última atualização: 2026-09-02 (revisão completa)._
+
+> **02/09 — revisão completa.** Relatório:
+> [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md). Aberto,
+> por ordem: (a) **dono**: aplicar `prisma migrate deploy` (índices + tabelas sem
+> migration; no-op nos dados), deploy e abrir `/ops?key=` uma vez, entregar/estornar
+> #YAQHF8 e #QTNL2T, apagar `.env.local.bak`, projeto Supabase só da Lia; (b) **P1
+> dinheiro**: retries esgotados do workflow de cartão ficam mudos + `claimConfirmation`
+> reentrante não cobra; Pagar.me 4xx tratado como "recusado"; mock aprova em produção
+> sem env; estorno não é feito por API (só anotação); `awaiting_payment` não expira e
+> `getStatus` mapeia `cancelled` como `rejected`; (c) **P1 conversa** (a confirmar em
+> E2E): "2x arroz"/"bota 3" somam em vez de ajustar, `minSwap` pegajoso, `mergeDecision`
+> sobrevive a `change_address`, dois turnos mudos residuais; TTL de cotação manual de 5
+> min (decisão de produto); (d) **P2**: rate limit por telefone, headers de segurança,
+> assinatura Meta antes do parse, teste/prod no mesmo banco, CI, suíte de 53 min,
+> catálogo fora do bundle, guarda veterinária no caminho ML; (e) **produto**: decidir o
+> caminho (A piloto de 30 pedidos com taxa fixa + uma loja por cesta / B lista
+> recorrente / C parceria com varejista / D pausar) e autorizar o PR de remoção do
+> legado (seção 2.3 do relatório).
+
 
 > **01/09 (5ª) — revisão.** Aberto: (d) **provar no canal real** que o toque em
 > "Pagar ••••" responde "Cobrando…" sem "Me perdi aqui" (a suíte não roda o workflow de

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 
 import { mercadoLivreAuthorizeUrl, newMercadoLivreOAuthState } from "@/lib/mercadolivre-oauth";
+import { requireAdminSession } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+// Revisão 01/09: sem login, qualquer pessoa podia vincular a PRÓPRIA conta ML no lugar
+// da credencial do operador (upsert fixo em "lia-operator").
+export async function GET(request: Request) {
+  const denied = requireAdminSession(request);
+  if (denied) return denied;
   const state = newMercadoLivreOAuthState();
   const authorizationUrl = mercadoLivreAuthorizeUrl(state);
   if (!authorizationUrl) {

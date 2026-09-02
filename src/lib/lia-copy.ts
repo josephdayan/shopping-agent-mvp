@@ -1410,3 +1410,14 @@ export function turnStillWorking(): string {
 export function searchingWider(): string {
   return "🔎 Procurando as melhores opções…";
 }
+
+// ---- pagamento fora do esperado (revisão 01/09) ----
+// Dinheiro que chegou sem bater com a cobrança vigente (código antigo pago, valor
+// diferente, pedido já cancelado). Nada é aprovado sozinho: operador confere.
+export function unexpectedPaymentReceived(shortId: string, amount: number): string {
+  return `Recebi um pagamento de ${brl(amount)} ligado ao pedido #${shortId}, que não estava mais aguardando esse valor. Vou conferir e te retorno por aqui.`;
+}
+
+export function operatorUnexpectedPaymentAlert(shortId: string, detail: string): string {
+  return `🚨 [operador] Pedido #${shortId}: pagamento FORA DO ESPERADO (${detail}). Nada foi aprovado automaticamente — conferir no provedor e estornar se for duplicado.`;
+}

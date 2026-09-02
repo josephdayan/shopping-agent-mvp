@@ -26,7 +26,7 @@ import {
   scoreCatalogMatch
 } from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
-import { PaymentProviderError, checkoutAdapter, paymentsAreMocked, pixAdapter } from "@/lib/payments/mercadopago";
+import { PaymentProviderError, cancelMercadoPagoPayment, checkoutAdapter, paymentsAreMocked, pixAdapter } from "@/lib/payments/mercadopago";
 import {
   cardOnFileEnabled,
   confirmSavedCardTap,
@@ -35,6 +35,7 @@ import {
   findPendingSavedCardAttempt,
   listOneClickCredentials,
   getConfirmedPaymentAttempt,
+  hasInFlightCardAttempt,
   getOneClickCredential
 } from "@/lib/payments/whatsapp-pay";
 import { createCardEnrollmentSession, isCardEnrollmentAvailable } from "@/lib/payments/card-enrollment";
@@ -558,7 +559,10 @@ async function lastActivityAt(convoId: string, exceptMessageId?: string): Promis
 // serverless): claim atômico via updateMany; TTL de 60s liberta conversa de turno
 // travado; quem espera demais entra assim mesmo (o webhook não pode pendurar — melhor
 // a corrida rara de antes do que mensagem sem resposta).
-const TURN_LOCK_TTL_MS = 60_000;
+// Revisão 01/09: 60s era MENOR que um turno de busca fria (45–120s) — a mensagem
+// seguinte roubava o lock no meio e a mais nova morria no CAS sem resposta. 180s cobre o
+// maior turno observado; um turno travado de verdade prende a conversa por 3 min, não 1.
+const TURN_LOCK_TTL_MS = Number(process.env.LIA_TURN_LOCK_TTL_MS ?? 180_000);
 // 26/08: 15s de espera + barge era a PORTA do P0.1 — busca fria dura 45-120s e a
 // mensagem seguinte furava a trava no meio. Agora espera até 120s (o watchdog avisa o
 // cliente) e o barge residual é inofensivo: o CAS do contexto mata a escrita perdedora.
@@ -1445,7 +1449,10 @@ async function handleDeliveryTurn(
   const ctx = readCtx(convo.context);
   // Addresses saved through the legacy checkout are customer-entered and can be
   // reused safely by the delivery flow.
-  if (!ctx.deliveryAddress && user.defaultAddress) {
+  // Nunca durante "trocar endereço" (need_cep/need_address): o passo acabou de
+  // esvaziar o endereço de propósito, e restaurar aqui fazia o mesmo CEP manter a rua
+  // VELHA como verificada (revisão 01/09).
+  if (!ctx.deliveryAddress && user.defaultAddress && ctx.step !== "need_cep" && ctx.step !== "need_address") {
     ctx.deliveryAddress = user.defaultAddress;
     ctx.deliveryAddressVerified = true;
   }
@@ -1496,7 +1503,18 @@ async function handleDeliveryTurn(
     "awaiting_quote_confirmation",
     "choosing_freight"
   ];
-  if (quoteWaitSteps.includes(ctx.step) && idleSince && idleMs > QUOTE_ABANDON_TTL_MS) {
+  // Revisão 01/09: o relógio acima só conta mensagens do CLIENTE (a Lia não grava as
+  // suas em Message). Cotação manual publicada 70 min depois do "só isso" e aceita 2 min
+  // depois era cancelada "por inatividade" no instante do "pix". Só no passo em que a
+  // cotação JÁ SAIU (`awaiting_quote_confirmation`), a publicação (updatedAt do pedido)
+  // entra como segundo relógio: vale o mais recente dos dois. Nos passos de espera pelo
+  // operador o relógio continua sendo o do cliente (o zumbi de 11/08 tem que expirar).
+  let quoteIdleMs = idleMs;
+  if (ctx.step === "awaiting_quote_confirmation" && idleSince && idleMs > QUOTE_ABANDON_TTL_MS && ctx.deliveryOrderId) {
+    const waiting = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId }, select: { updatedAt: true } });
+    if (waiting) quoteIdleMs = Math.min(idleMs, Date.now() - waiting.updatedAt.getTime());
+  }
+  if (quoteWaitSteps.includes(ctx.step) && idleSince && quoteIdleMs > QUOTE_ABANDON_TTL_MS) {
     let canceledShortId: string | undefined;
     // O operador pode ter publicado a cotação no exato instante em que o cliente voltou.
     // Se a corrida for perdida, NÃO limpamos a conversa: o contexto correto acabou de ser
@@ -2589,15 +2607,20 @@ async function handleDeliveryTurn(
       ctx.mergeDecision = undefined;
       const order = await prisma.deliveryOrder.findUnique({ where: { id: pendingMerge.orderId } });
       if (order && order.status === "awaiting_payment") {
-        await prisma.deliveryOrder.update({
-          where: { id: order.id },
-          data: {
-            status: "canceled",
-            notes: [order.notes, wantsMerge ? "reaberto pelo cliente (juntar item novo)" : "cliente preferiu pedido novo (nada cobrado)"]
-              .filter(Boolean)
-              .join("\n")
-          }
-        });
+        const closed = await closeUnpaidOrder(
+          order,
+          wantsMerge ? "reaberto pelo cliente (juntar item novo)" : "cliente preferiu pedido novo (nada cobrado)"
+        );
+        if (closed === "card_processing") {
+          ctx.mergeDecision = pendingMerge;
+          await writeCtx(convo.id, ctx);
+          await reply(phone, copy.cardPaymentProcessing());
+          return;
+        }
+        if (closed === "paid") {
+          await reply(phone, copy.newItemAfterPayment(pendingMerge.request));
+          return;
+        }
         if (wantsMerge && !ctx.basket?.length) ctx.basket = ((order.items as unknown) as BasketItem[]) ?? [];
       }
       if (wantsNew) ctx.basket = [];
@@ -2637,6 +2660,22 @@ async function handleDeliveryTurn(
   if (ctx.step === "quoted" && (ctx.basket?.length ?? 0) > 0 && isQuestion(text) && detectPaymentMethod(text)) {
     await reply(phone, paymentMethodText(ctx));
     return;
+  }
+  // Cotação publicada enquanto a conversa estava em outro assunto (revisão 01/09): o
+  // resumo chega rotulado, mas o contexto não aponta pro pedido — "pix"/"cartão" sem
+  // cesta nem escolha aberta procura a cotação em aberto do cliente em vez de virar busca.
+  const spokenMethod =
+    intent.kind === "pay" ? intent.method : intent.kind === "choose_payment" ? intent.method : undefined;
+  if (spokenMethod && !(ctx.basket?.length ?? 0) && !(ctx.pending?.length ?? 0) && ctx.step !== "awaiting_quote_confirmation") {
+    const quoted = await prisma.deliveryOrder.findFirst({
+      where: { userId: user.id, status: "awaiting_quote_confirmation" },
+      orderBy: { createdAt: "desc" }
+    });
+    if (quoted) {
+      const result = await issueValidatedRetailerQuotePayment(quoted.id, spokenMethod);
+      if (result.expired) await reply(phone, copy.quoteExpired());
+      return;
+    }
   }
   const wantsToPay =
     intent.kind === "pay" ||
@@ -3000,10 +3039,15 @@ async function handleDeliveryTurn(
         await reply(phone, `${body}\n1. Juntar no pedido\n2. Pedido novo`);
         return;
       }
-      await prisma.deliveryOrder.update({
-        where: { id: order.id },
-        data: { status: "canceled", notes: [order.notes, "reaberto pelo cliente (item novo)"].filter(Boolean).join("\n") }
-      });
+      const closed = await closeUnpaidOrder(order, "reaberto pelo cliente (item novo)");
+      if (closed === "card_processing") {
+        await reply(phone, copy.cardPaymentProcessing());
+        return;
+      }
+      if (closed === "paid") {
+        await reply(phone, copy.newItemAfterPayment(text));
+        return;
+      }
       if (!ctx.basket?.length) ctx.basket = ((order.items as unknown) as BasketItem[]) ?? [];
       ctx.deliveryOrderId = undefined;
       ctx.step = "collecting";
@@ -3309,7 +3353,16 @@ async function handleCancel(
     return;
   }
   if (order.status === "awaiting_payment") {
-    await prisma.deliveryOrder.update({ where: { id: order.id }, data: { status: "canceled" } });
+    const closed = await closeUnpaidOrder(order, "cancelado pelo cliente (nada cobrado)");
+    if (closed === "card_processing") {
+      await reply(phone, copy.cardPaymentProcessing());
+      return;
+    }
+    if (closed === "paid") {
+      // O pagamento caiu no mesmo instante: o webhook já reiniciou a conversa e avisou.
+      await reply(phone, copy.cancelRequestedPaid());
+      return;
+    }
     await writeCtx(convoId, canceledCtx);
     await reply(phone, copy.canceledUnpaid());
     return;
@@ -5547,11 +5600,7 @@ async function reopenOrderForEdit(
   if (order.status === "awaiting_quote_confirmation" || order.status === "awaiting_supplier_validation") {
     reopened = await cancelPendingRetailerQuote(order.id);
   } else if (order.status === "awaiting_payment") {
-    const updated = await prisma.deliveryOrder.updateMany({
-      where: { id: order.id, status: "awaiting_payment" },
-      data: { status: "canceled", notes: appendOrderNote(order.notes, "reaberto pelo cliente (ajuste na cesta)") }
-    });
-    reopened = updated.count > 0;
+    reopened = (await closeUnpaidOrder(order, "reaberto pelo cliente (ajuste na cesta)")) === "closed";
   } else if (order.status === AWAITING_OPERATOR_QUOTE_STATUS) {
     const updated = await prisma.deliveryOrder.updateMany({
       where: { id: order.id, status: AWAITING_OPERATOR_QUOTE_STATUS },
@@ -5607,6 +5656,44 @@ async function setQuoteConversationAwaitingPayment(order: { id: string; conversa
   }
 }
 
+type CloseUnpaidResult = "closed" | "card_processing" | "paid" | "gone";
+
+// Saída ÚNICA de `awaiting_payment` sem dinheiro (cancelar, reabrir pra editar, juntar/
+// pedido novo). Revisão 01/09: (1) guarda de status no próprio UPDATE — um Pix pago no
+// mesmo instante não vira "cancelado" com paidAt preenchido; (2) cartão salvo já
+// confirmado (workflow cobrando) BLOQUEIA — antes o cliente ouvia "nada foi cobrado" e o
+// cartão era capturado em seguida num pedido cancelado; (3) a cobrança Pix antiga é
+// cancelada no Mercado Pago (best-effort) pra bolha/código velho no chat não continuar
+// pagável por 60 min.
+async function closeUnpaidOrder(
+  order: { id: string; notes: string | null; pixId: string | null },
+  note: string
+): Promise<CloseUnpaidResult> {
+  if (await hasInFlightCardAttempt(order.id)) return "card_processing";
+  const closed = await prisma.deliveryOrder.updateMany({
+    where: { id: order.id, status: "awaiting_payment" },
+    data: { status: "canceled", notes: appendOrderNote(order.notes, note) }
+  });
+  if (closed.count === 0) {
+    const now = await prisma.deliveryOrder.findUnique({ where: { id: order.id }, select: { status: true, paidAt: true } });
+    return now && (now.paidAt || PAID_OR_IN_FULFILLMENT_STATUSES.includes(now.status)) ? "paid" : "gone";
+  }
+  await expireOpenPaymentAttempts(order.id);
+  await supersedePixCharge(order.pixId);
+  return "closed";
+}
+
+// Cancela no provedor a cobrança Pix que deixou de valer. Nunca lança, nunca bloqueia.
+async function supersedePixCharge(pixId: string | null | undefined) {
+  if (!pixId || !/^\d{1,20}$/.test(pixId)) return;
+  try {
+    const ok = await cancelMercadoPagoPayment(pixId);
+    if (!ok) console.warn("[pix:supersede:not-cancelled]", pixId);
+  } catch (error) {
+    console.warn("[pix:supersede:failed]", pixId, error instanceof Error ? error.message : error);
+  }
+}
+
 export async function issueValidatedRetailerQuotePayment(orderId: string, method: "pix" | "card"): Promise<{ expired: boolean }> {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order || order.status !== "awaiting_quote_confirmation") return { expired: false };
@@ -5616,7 +5703,11 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
   }
 
   const isCard = method === "card";
-  const base = order.total;
+  // Base SEM taxa de cartão, recomposta das partes: `order.total` pode ter ficado com o
+  // gross-up de uma emissão de cartão que falhou (revisão 01/09 — o Pix seguinte saía
+  // ~5% mais caro e um novo "cartão" aplicava a taxa duas vezes).
+  const components = roundMoney(order.itemsSubtotal + order.serviceFee + order.deliveryFee);
+  const base = components > 0 ? components : order.total;
   const total = isCard ? cardTotal(base) : base;
   const cardFee = roundMoney(total - base);
   const notes = withPaymentNote(order.notes, paymentNote(method, isCard ? copy.brl(cardFee) : undefined));
@@ -5664,7 +5755,16 @@ export async function issueValidatedRetailerQuotePayment(orderId: string, method
   } catch (error) {
     await prisma.deliveryOrder.update({
       where: { id: order.id },
-      data: { status: "awaiting_quote_confirmation", notes: [notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n") }
+      // `total` volta à base (a taxa do cartão só existe com cobrança de cartão) e a
+      // validade da cotação volta junto: o caminho do cartão já tinha zerado
+      // `quoteExpiresAt` antes de falhar, e o "pix" seguinte cancelava o pedido como
+      // "preço vencido" (achado pelo E2E de 01/09).
+      data: {
+        status: "awaiting_quote_confirmation",
+        total: base,
+        quoteExpiresAt: order.quoteExpiresAt,
+        notes: [notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n")
+      }
     });
     await setQuoteConversationAwaitingConfirmation(order);
     // Mercado Pago fora do ar: a cotação continua de pé (o TTL ainda vale), então o
@@ -5754,6 +5854,7 @@ async function switchPaymentMethod(
     serviceFee: number;
     deliveryFee: number;
     notes?: string | null;
+    pixId?: string | null;
   },
   method: "pix" | "card"
 ) {
@@ -5777,6 +5878,7 @@ async function switchPaymentMethod(
         where: { id: order.id },
         data: { total, notes, pixId: null, pixCopiaECola: null }
       });
+      await supersedePixCharge(order.pixId);
       try {
         await createCardAttempt(updated, credential);
         return;
@@ -5788,6 +5890,7 @@ async function switchPaymentMethod(
       where: { id: order.id },
       data: { total, notes, pixId: null, pixCopiaECola: null }
     });
+    await supersedePixCharge(order.pixId);
     if (await sendFirstCardEnrollment(updated)) {
       await reply(phone, copy.paymentSwitched(method, total));
       return;
@@ -5827,6 +5930,7 @@ async function switchPaymentMethod(
     where: { id: order.id },
     data: { total, notes, pixId: charge.pixId, pixCopiaECola: charge.payload }
   });
+  if (order.pixId !== charge.pixId) await supersedePixCharge(order.pixId);
   // Bolha antes do texto (a troca de forma continua numa mensagem só: contexto do
   // novo total + código juntos — aqui o código não precisa ser mensagem solitária
   // porque a bolha, quando entregue, já tem o Copy Pix code).
@@ -5839,7 +5943,72 @@ async function switchPaymentMethod(
 
 // ---------- order lifecycle (called by webhook + operator dashboard) ----------
 
-export async function markDeliveryOrderPaid(orderId: string) {
+export type PaymentEvidence = {
+  provider: "mercadopago" | "pagarme";
+  paymentId?: string | null;
+  amount?: number | null;
+};
+
+// Pagamento aprovado que NÃO bate com a cobrança na mesa: valor diferente, ou um Pix
+// que não é o vigente (código antigo pago depois de reabrir/trocar pra cartão).
+function paymentEvidenceMismatch(order: { total: number; pixId: string | null }, evidence: PaymentEvidence): string | null {
+  if (evidence.amount != null && Math.abs(evidence.amount - order.total) > 0.01) {
+    return `valor pago ${copy.brl(evidence.amount)} ≠ total ${copy.brl(order.total)}`;
+  }
+  // Link de cartão (Checkout Pro) guarda o id da PREFERÊNCIA em pixId e o pagamento
+  // nasce com outro id — aí só o valor é conferível. Pix guarda o id do pagamento.
+  if (
+    evidence.provider === "mercadopago" &&
+    evidence.paymentId &&
+    order.pixId &&
+    /^\d{1,20}$/.test(order.pixId) &&
+    order.pixId !== evidence.paymentId
+  ) {
+    return `pagamento ${evidence.paymentId} não é a cobrança vigente (${order.pixId})`;
+  }
+  return null;
+}
+
+async function recordUnexpectedPayment(
+  order: { id: string; phone: string; notes: string | null; status: string },
+  evidence: PaymentEvidence,
+  reason: string
+) {
+  const marker = `⚠️ PAGAMENTO FORA DO ESPERADO (${evidence.provider} ${evidence.paymentId ?? "?"})`;
+  if ((order.notes ?? "").includes(marker)) return; // replay do webhook
+  const detail = `${reason}${evidence.amount != null ? ` — ${copy.brl(evidence.amount)}` : ""}`;
+  await prisma.deliveryOrder.update({
+    where: { id: order.id },
+    data: { notes: appendOrderNote(order.notes, `${marker}: ${detail}. Conferir no provedor e estornar se for duplicado.`) }
+  });
+  console.error("[payment:unexpected]", {
+    orderId: order.id,
+    provider: evidence.provider,
+    paymentId: evidence.paymentId,
+    amount: evidence.amount,
+    status: order.status,
+    reason
+  });
+  await notifyOperator(copy.operatorUnexpectedPaymentAlert(order.id.slice(-6).toUpperCase(), detail), order.phone);
+  if (evidence.amount != null) await reply(order.phone, copy.unexpectedPaymentReceived(order.id.slice(-6).toUpperCase(), evidence.amount));
+}
+
+export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence) {
+  // Revisão 01/09: o webhook marcava "pago" sem conferir VALOR nem QUAL cobrança foi
+  // paga. Com a bolha nativa no chat, o código antigo (pedido reaberto/trocado pra
+  // cartão) segue pagável por 60 min — pagamento que não bate com a cobrança vigente
+  // NÃO aprova: vira nota + alerta pro operador conferir/estornar.
+  if (evidence) {
+    const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+    if (!current) return null;
+    if (current.status === "awaiting_payment") {
+      const mismatch = paymentEvidenceMismatch(current, evidence);
+      if (mismatch) {
+        await recordUnexpectedPayment(current, evidence, mismatch);
+        return current;
+      }
+    }
+  }
   // Atomic status flip: MP retries webhooks and the customer may text "paguei" at the
   // same moment — only ONE caller wins, so the confirmation goes out exactly once.
   const flipped = await prisma.deliveryOrder.updateMany({
@@ -5847,7 +6016,15 @@ export async function markDeliveryOrderPaid(orderId: string) {
     data: { status: "paid", paidAt: new Date() }
   });
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!order || flipped.count === 0) return order;
+  if (!order) return order;
+  if (flipped.count === 0) {
+    // Replay legítimo (já pago) é silencioso; dinheiro chegando em pedido cancelado/
+    // recotado não pode sumir sem rastro.
+    if (evidence && !order.paidAt && !PAID_OR_IN_FULFILLMENT_STATUSES.includes(order.status) && order.status !== "delivered") {
+      await recordUnexpectedPayment(order, evidence, `pedido estava em "${order.status}"`);
+    }
+    return order;
+  }
   // Reset the conversation (keep the address) so the next message starts a fresh
   // basket instead of resurrecting the awaiting_payment step. If the customer has
   // ALREADY started a new basket in this conversation, leave it alone — the async

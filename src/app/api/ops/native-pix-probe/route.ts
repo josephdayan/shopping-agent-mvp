@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireOpsKey } from "@/lib/auth";
 import { buildPixOrderDetailsPayload } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -12,15 +13,10 @@ export const dynamic = "force-dynamic";
 // Disparo manual do operador (mesma guarda das outras rotas /ops); sem cron, sem
 // efeito no fluxo do cliente.
 
+// Guarda compartilhada (src/lib/auth.ts): fail-closed em deploy, tempo constante,
+// cookie HMAC. `?key=` continua aceito só por compatibilidade com scripts do operador.
 function authed(request: Request) {
-  const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
-  if (!expected) return true;
-  const url = new URL(request.url);
-  const key =
-    request.headers.get("x-ops-key") ??
-    url.searchParams.get("key") ??
-    (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
-  return key === expected;
+  return requireOpsKey(request, { allowQuery: true }) === null;
 }
 
 const PROBE_BODY =

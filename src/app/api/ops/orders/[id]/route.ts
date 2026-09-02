@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { requireOpsKey } from "@/lib/auth";
+import { parseMoneyInput } from "@/lib/pricing";
 import {
   opsCancelRefund,
   opsConfirmRefund,
@@ -12,15 +14,10 @@ import {
 
 export const dynamic = "force-dynamic";
 
+// Guarda compartilhada (src/lib/auth.ts): fail-closed em deploy, tempo constante,
+// cookie HMAC. `?key=` continua aceito só por compatibilidade com scripts do operador.
 function authed(request: Request) {
-  const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
-  if (!expected) return true;
-  const url = new URL(request.url);
-  const key =
-    request.headers.get("x-ops-key") ??
-    url.searchParams.get("key") ??
-    (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
-  return key === expected;
+  return requireOpsKey(request, { allowQuery: true }) === null;
 }
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
@@ -41,15 +38,26 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const id = params.id;
   try {
     switch (body.action) {
-      case "publish_quote":
+      case "publish_quote": {
+        // Dinheiro digitado ("27,90") é validado aqui também — o servidor nunca confia
+        // no Number() do cliente (revisão 01/09: vírgula virava frete zero).
+        const itemsSubtotal = parseMoneyInput(body.itemsSubtotal);
+        const deliveryFee = body.deliveryFee == null || body.deliveryFee === "" ? 0 : parseMoneyInput(body.deliveryFee);
+        if (itemsSubtotal == null || itemsSubtotal <= 0) {
+          return NextResponse.json({ error: "Custo dos produtos inválido (ex.: 27,90)." }, { status: 400 });
+        }
+        if (deliveryFee == null || deliveryFee < 0) {
+          return NextResponse.json({ error: "Frete inválido (ex.: 12,90)." }, { status: 400 });
+        }
         await opsPublishManualQuote(id, {
-          itemsSubtotal: Number(body.itemsSubtotal),
-          deliveryFee: Number(body.deliveryFee),
+          itemsSubtotal,
+          deliveryFee,
           deliveryMode: body.deliveryMode,
           deliveryPromise: body.deliveryPromise?.toString().trim() || undefined,
           etaMinutes: body.etaMinutes != null && body.etaMinutes !== "" ? Number(body.etaMinutes) : undefined
         });
         break;
+      }
       case "bought":
         await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl);
         break;
@@ -72,13 +80,12 @@ export async function POST(request: Request, { params }: { params: { id: string 
       case "cancel":
         await opsCancelRefund(id);
         break;
-      case "confirm_refund":
-        await opsConfirmRefund(
-          id,
-          String(body.refundReference ?? ""),
-          body.refundAmount == null || body.refundAmount === "" ? undefined : Number(body.refundAmount)
-        );
+      case "confirm_refund": {
+        const refundAmount = body.refundAmount == null || body.refundAmount === "" ? undefined : parseMoneyInput(body.refundAmount);
+        if (refundAmount === null) return NextResponse.json({ error: "Valor do estorno inválido (ex.: 12,90)." }, { status: 400 });
+        await opsConfirmRefund(id, String(body.refundReference ?? ""), refundAmount);
         break;
+      }
       case "notify": {
         const text = String(body.text ?? "").trim();
         // Client-input problem, not a server failure — answer 400, not 500.
@@ -91,7 +98,13 @@ export async function POST(request: Request, { params }: { params: { id: string 
     }
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("[ops:action:error]", error);
-    return NextResponse.json({ ok: false, error: "action failed" }, { status: 500 });
+    console.error("[ops:action:error]", id, body.action, error);
+    // Erros de domínio ("o pedido mudou de estado", "informe a referência") são a
+    // orientação que o operador precisa LER — não um 500 mudo (revisão 01/09).
+    const message =
+      error instanceof Error && error.message && !/prisma|ECONN|timed? ?out|ETIMEDOUT/i.test(error.message)
+        ? error.message.slice(0, 200)
+        : "action failed";
+    return NextResponse.json({ ok: false, error: message }, { status: message === "action failed" ? 500 : 409 });
   }
 }

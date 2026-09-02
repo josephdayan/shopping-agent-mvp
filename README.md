@@ -3,27 +3,19 @@
 > Contexto obrigatório para agentes: [AGENTS.md](AGENTS.md). Checklist de progresso:
 > [PENDENCIAS.md](PENDENCIAS.md).
 
-> **⚠️ Estado atual (2026-07-21):** o produto vigente é uma **concierge manual de compras no
-> WhatsApp**: o cliente pede qualquer coisa, o operador cota e compra, e o motoboy parte da
-> base do operador com o pacote em mãos. `Clique-e-retire + motoboy aleatório` continua fora do
-> modelo. O fluxo passou por demonstração local mockada sem cobrança, mas ainda aguarda deploy
-> limpo porque uma migration Oba paralela está inacabada; a operação decidiu contratar um
-> operador. O estado está em [STATUS.md](STATUS.md) e [CLAUDE.md](CLAUDE.md). O cérebro é `src/lib/delivery-service.ts`
-> (intenções em `src/lib/lia-intents.ts`, copy em `src/lib/lia-copy.ts`), painel do operador
-> em `/ops`, e os testes rodam com `npm test` (só unitários: `npm run test:unit`).
-> A reconstrução recente de conversa, matcher e testes está registrada em
-> [docs/evolucao-conversa-2026-07.md](docs/evolucao-conversa-2026-07.md).
-> A situação de Meta, domínio, canais, pagamentos e piloto está em
-> [docs/operacao-canais-2026-07.md](docs/operacao-canais-2026-07.md).
-> A automação segura de cotação em carrinho para Oba, Petz e Boticário é fluxo legado e está em
-> [docs/automacao-compra-varejistas.md](docs/automacao-compra-varejistas.md).
-> O procedimento do piloto para `needs_human`, cancelamento e estorno está em
-> [docs/operacao-piloto-needs-human-estorno.md](docs/operacao-piloto-needs-human-estorno.md).
-> As conclusões operacionais de hoje estão em
-> [docs/decisoes-operacionais-2026-07-14.md](docs/decisoes-operacionais-2026-07-14.md).
-> O caminho de cartão One-Click (Meta direta + Pagar.me), seu estado e a ativação segura
-> estão em [docs/whatsapp-one-click-pagarme.md](docs/whatsapp-one-click-pagarme.md).
-> O fluxo abaixo (busca no Mercado Livre com 3 opções) é o caminho **legado/dormente**.
+> **⚠️ Estado atual (2026-09-02):** o produto vigente é o concierge de compras no
+> WhatsApp (Meta Cloud API) com vitrine de 18 lojas + Mercado Livre como cauda longa,
+> cotação instantânea com markup progressivo, Pix (copia-e-cola + bolha nativa) ou cartão,
+> **compra manual pelo operador no site da loja e entrega pelo próprio varejista** (o
+> motoboy da base foi descartado em 09/08). A regra canônica curta está no topo de
+> [AGENTS.md](AGENTS.md); o estado em [STATUS.md](STATUS.md); a revisão completa de
+> 01/09 (código, dívidas, métricas reais e caminhos de produto) em
+> [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md). O cérebro é
+> `src/lib/delivery-service.ts`; painel do operador em `/ops`; `npm test` roda tudo
+> (precisa de banco), `npm run test:unit` só o puro.
+>
+> **Tudo abaixo desta linha descreve o fluxo LEGADO de junho** (busca ML com 3 opções,
+> Twilio, `/admin`, `/api/v1`) — mantido só como referência até o PR de remoção do legado.
 
 Lia funciona como um concierge de compras com IA via API e WhatsApp, com web chat apenas como console de teste. O fluxo permite pedir um produto em linguagem natural, receber 3 opcoes ranqueadas, escolher por texto ou clique, confirmar checkout, gerar pagamento mockado, aprovar pagamento, criar pedido, avancar fulfillment e salvar preferencias para compras futuras.
 

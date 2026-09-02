@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
 
 import { exchangeMercadoLivreAuthorizationCode } from "@/lib/mercadolivre-oauth";
+import { requireAdminSession } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const denied = requireAdminSession(request);
+  if (denied) return denied;
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const error = url.searchParams.get("error");
-  const expectedState = request.headers.get("cookie")?.match(/(?:^|;\\s*)lia_ml_oauth_state=([^;]+)/)?.[1];
+  const expectedState = request.headers.get("cookie")?.match(/(?:^|;\s*)lia_ml_oauth_state=([^;]+)/)?.[1];
 
   if (error) return page("Mercado Livre não autorizou", "A autorização foi cancelada ou recusada. Você pode tentar novamente.", 400);
   if (!code || !state || !expectedState || state !== expectedState) {

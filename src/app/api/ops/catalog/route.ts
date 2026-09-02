@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server";
+import { requireOpsKey } from "@/lib/auth";
 import { listStores } from "@/lib/stores";
 import { scoreCatalogMatch } from "@/lib/stores/types";
 
 export const dynamic = "force-dynamic";
 
 // Same auth as the rest of /ops: ?key=, x-ops-key header, or the ops_session cookie.
+// Guarda compartilhada (src/lib/auth.ts): fail-closed em deploy, tempo constante,
+// cookie HMAC. `?key=` continua aceito só por compatibilidade com scripts do operador.
 function authed(request: Request) {
-  const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
-  if (!expected) return true;
-  const url = new URL(request.url);
-  const key =
-    request.headers.get("x-ops-key") ??
-    url.searchParams.get("key") ??
-    (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
-  return key === expected;
+  return requireOpsKey(request, { allowQuery: true }) === null;
 }
 
 const MARKUP = Number(process.env.LIA_PRICE_MARKUP ?? 1.1);

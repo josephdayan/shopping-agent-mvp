@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireOpsKey } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -8,11 +9,9 @@ export const runtime = "nodejs";
 // bytes, and — when given ?ids=1,2,3 — which of those ids are still MISSING. Used to
 // drive/verify the browser re-host loop and retry gaps.
 export async function GET(request: Request) {
-  const expected = process.env.OPS_TOKEN ?? process.env.API_TOKEN;
+  const denied = requireOpsKey(request, { allowQuery: true });
+  if (denied) return denied;
   const url = new URL(request.url);
-  if (expected && url.searchParams.get("key") !== expected) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
   const count = await prisma.petzImage.count();
   const agg = await prisma.petzImage.aggregate({ _sum: { bytes: true } });
   const idsParam = url.searchParams.get("ids");

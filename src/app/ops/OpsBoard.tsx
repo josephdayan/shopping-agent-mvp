@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { hasCancelRequest, hasPendingRefund, isCardCharge, isOperatorCourierOrder, isRetailerDeliveryOrder } from "@/lib/order-flags";
+import { parseMoneyInput } from "@/lib/pricing";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
 type Fulfillment = {
@@ -59,6 +60,7 @@ const STATUS_LABEL: Record<string, string> = {
   awaiting_supplier_validation: "🔎 Confirmando carrinho na loja",
   awaiting_quote_confirmation: "⏱️ Cotação enviada — aguardando pagamento",
   payment_issuing: "💳 Gerando pagamento para cliente",
+  awaiting_payment: "⏳ Aguardando o cliente pagar (Pix/cartão emitido)",
   paid: "💳 Pago — comprar na loja",
   retailer_preparing: "📦 Loja preparando a entrega",
   retailer_out_for_delivery: "🚚 Saiu para entrega pela loja",
@@ -209,8 +211,20 @@ export default function OpsBoard() {
       });
       if (!res.ok) {
         // A silent failure here means the operator believes something happened that
-        // didn't (e.g. "the customer was warned") — always surface it.
-        alert(`A ação falhou (${res.status}). Confira a sessão (/ops?key=…) e tente de novo.`);
+        // didn't (e.g. "the customer was warned") — always surface it, WITH the reason
+        // the server gave (revisão 01/09: antes todo erro virava "confira a sessão").
+        const detail = await res
+          .json()
+          .then((b: { error?: string }) => b?.error)
+          .catch(() => undefined);
+        alert(
+          res.status === 401
+            ? "Sessão expirada. Abra /ops?key=… de novo."
+            : detail && detail !== "action failed"
+              ? `Não deu: ${detail}`
+              : `A ação falhou (${res.status}). Tente de novo.`
+        );
+        await load();
         return false;
       }
       await load();
@@ -379,11 +393,16 @@ export default function OpsBoard() {
                   />
                   <button
                     style={primary}
-                    disabled={busy === `${o.id}:publish_quote` || !(Number(quote.itemsSubtotal) > 0)}
+                    disabled={
+                      busy === `${o.id}:publish_quote` ||
+                      !((parseMoneyInput(quote.itemsSubtotal) ?? 0) > 0) ||
+                      (quote.deliveryFee.trim() !== "" && parseMoneyInput(quote.deliveryFee) == null)
+                    }
                     onClick={() =>
                       act(o.id, "publish_quote", {
-                        itemsSubtotal: Number(quote.itemsSubtotal),
-                        deliveryFee: Number(quote.deliveryFee) || 0,
+                        // "12,90" (teclado pt-BR) era NaN → frete R$ 0 cobrado do cliente.
+                        itemsSubtotal: parseMoneyInput(quote.itemsSubtotal) ?? 0,
+                        deliveryFee: parseMoneyInput(quote.deliveryFee) ?? 0,
                         deliveryMode: quote.deliveryMode,
                         deliveryPromise: quote.deliveryPromise.trim() || undefined,
                         etaMinutes: quote.etaMinutes ? Number(quote.etaMinutes) : undefined
@@ -394,7 +413,7 @@ export default function OpsBoard() {
                   </button>
                 </div>
                 <div style={{ fontSize: 12, color: "#667085" }}>
-                  Produtos recebem +10% de margem automático. O cliente aprova e paga por Pix/cartão; nada é cobrado antes.
+                  A margem entra sozinha por faixa (10% até R$ 200; 6%, 4% e 3% nas fatias acima). O cliente aprova e paga por Pix/cartão; nada é cobrado antes.
                 </div>
               </div>
             )}
@@ -536,7 +555,7 @@ export default function OpsBoard() {
                       ) {
                         void act(o.id, "confirm_refund", {
                           refundReference: refundReferences[o.id] ?? "",
-                          refundAmount: refundAmounts[o.id] ? Number(refundAmounts[o.id].replace(",", ".")) : undefined
+                          refundAmount: parseMoneyInput(refundAmounts[o.id]) ?? undefined
                         });
                       }
                     }}
@@ -555,9 +574,24 @@ export default function OpsBoard() {
                   Cancelar pedido
                 </button>
               ) : (
-                <span style={{ fontSize: 12, color: "#667085", alignSelf: "center" }}>
-                  Cancelamento pós-pagamento desativado; item faltante segue para estorno.
-                </span>
+                // Ação EXCEPCIONAL do operador (o cliente não cancela pós-pago pelo chat):
+                // abre refund_pending; o estorno real é feito no provedor e confirmado
+                // com a referência. O botão tinha sumido em 02/08 e o runbook seguia
+                // mandando clicar nele (revisão 01/09).
+                <button
+                  style={ghost}
+                  disabled={busy === `${o.id}:cancel`}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Cancelar este pedido PAGO e abrir o estorno? O cliente será avisado agora; o estorno em si é feito no Mercado Pago/Pagar.me e confirmado depois com a referência."
+                      )
+                    )
+                      void act(o.id, "cancel");
+                  }}
+                >
+                  ↩️ Cancelar e solicitar estorno
+                </button>
               )}
             </div>
 

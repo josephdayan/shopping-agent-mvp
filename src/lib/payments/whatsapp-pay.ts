@@ -149,6 +149,14 @@ export async function getConfirmedPaymentAttempt(deliveryOrderId: string) {
   });
 }
 
+// Guarda de cancelamento/reabertura: uma tentativa CONFIRMADA (cliente tocou "Pagar",
+// workflow cobrando) bloqueia qualquer saída de awaiting_payment — sem o filtro de
+// expiresAt, porque uma cobrança de desfecho desconhecido não deixa de existir aos
+// 60 min (revisão 01/09).
+export async function hasInFlightCardAttempt(deliveryOrderId: string) {
+  return Boolean(await prisma.paymentAttempt.findFirst({ where: { deliveryOrderId, status: "confirmed" }, select: { id: true } }));
+}
+
 export async function createCardAttempt(order: CardOrder, credential: { id: string; last4: string }) {
   if (order.status !== "awaiting_payment") throw new Error("Can only send a card attempt for an awaiting payment order");
   if (await getConfirmedPaymentAttempt(order.id)) {
@@ -316,7 +324,13 @@ async function markAttemptCaptured(attemptId: string, provider: { orderId?: stri
     });
   }
   const { markDeliveryOrderPaid } = await import("@/lib/delivery-service");
-  await markDeliveryOrderPaid(attempt.deliveryOrderId);
+  // Com evidência: um cartão capturado em pedido que já saiu de awaiting_payment (ops
+  // cancelou, cliente reabriu no exato instante) vira nota + alerta, não silêncio.
+  await markDeliveryOrderPaid(attempt.deliveryOrderId, {
+    provider: "pagarme",
+    paymentId: provider.chargeId ?? provider.orderId ?? null,
+    amount: fromCents(attempt.amountCents)
+  });
   return { handled: true, charged: true };
 }
 
@@ -347,6 +361,21 @@ export async function chargeConfirmedPaymentAttempt(attemptId: string) {
   });
   if (!attempt) return { handled: false, reason: "unknown_attempt" as const };
   if (attempt.status !== "confirmed") return { handled: true, duplicate: true as const };
+  // Última checagem ANTES do PSP (revisão 01/09): o claim conferiu o pedido, mas o
+  // step de cobrança roda depois (retries de até 5×30s) — se o pedido saiu de
+  // awaiting_payment ou o total mudou nesse meio-tempo, não se cobra o cartão.
+  const liveOrder = await prisma.deliveryOrder.findUnique({
+    where: { id: attempt.deliveryOrderId },
+    select: { status: true, total: true }
+  });
+  if (!liveOrder || liveOrder.status !== "awaiting_payment" || attempt.amountCents !== toCents(liveOrder.total)) {
+    await prisma.paymentAttempt.updateMany({
+      where: { id: attempt.id, status: "confirmed" },
+      data: { status: "expired", error: "Order left awaiting_payment (or its total changed) before the charge was captured" }
+    });
+    console.warn("[whatsapp-pay:charge-skipped:order-changed]", { attemptId: attempt.id, status: liveOrder?.status });
+    return { handled: true, expired: true as const };
+  }
 
   const charge = await pagarmeAdapter.chargeSavedCard({
     orderId: attempt.deliveryOrderId,

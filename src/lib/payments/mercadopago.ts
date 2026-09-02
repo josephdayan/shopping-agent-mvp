@@ -154,7 +154,10 @@ async function realCreatePix(input: { orderId: string; amount: number; descripti
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-      "X-Idempotency-Key": input.orderId
+      // Mesma chave por 30 min (retentativa após timeout devolve o MESMO pagamento, sem
+      // duplicar); chave nova depois disso, pra reemissão de Pix vencido não receber de
+      // volta o pagamento antigo já cancelado (revisão 01/09).
+      "X-Idempotency-Key": `${input.orderId}:${Number(input.amount.toFixed(2))}:${Math.floor(Date.now() / (30 * 60 * 1000))}`
     },
     body: JSON.stringify(body),
     cache: "no-store",
@@ -299,4 +302,32 @@ async function realGetStatus(pixId: string): Promise<PixStatus> {
   if (data.status === "approved") return "approved";
   if (data.status === "rejected" || data.status === "cancelled") return "rejected";
   return "pending";
+}
+
+// Cancela no Mercado Pago uma cobrança Pix que deixou de valer (pedido cancelado,
+// reaberto pra edição, trocado pra cartão). Best-effort e NUNCA lança: a bolha/código
+// antigo no chat ficava pagável por 60 min e o dinheiro entrava sem pedido (revisão
+// 01/09). Só ids numéricos de PAGAMENTO — id de preferência (Checkout Pro) não passa
+// por aqui; mock nunca chama a API.
+export async function cancelMercadoPagoPayment(paymentId: string): Promise<boolean> {
+  if (paymentsAreMocked() || !/^\d{1,20}$/.test(paymentId)) return false;
+  const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
+  try {
+    const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "cancelled" }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
+    });
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => "");
+      console.warn("[mercadopago:cancel:rejected]", paymentId, res.status, errBody.slice(0, 200));
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.warn("[mercadopago:cancel:failed]", paymentId, error instanceof Error ? error.message : error);
+    return false;
+  }
 }

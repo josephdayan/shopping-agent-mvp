@@ -28,14 +28,21 @@ function signatureValid(request: Request, dataId: string): boolean {
   }
 }
 
-// Mercado Pago payment notification. On an approved Pix payment, mark the matching
-// DeliveryOrder paid (external_reference = order id) which moves it into the
-// operator queue and notifies the customer. Inert until MP creds are set.
+// Mercado Pago payment notification. On an approved payment, hand the evidence
+// (payment id + amount) to the brain, which only flips the order when it matches the
+// charge currently on the table — a paid-but-superseded Pix becomes an operator alert,
+// never a silent approval (revisão 01/09). Inert until MP creds are set.
+//
+// Status codes matter here: 200 = processed or deliberately ignored; 5xx = transient
+// failure on OUR side (MP retries with backoff, and the flip is atomic so a replay is
+// safe). Before 01/09 every failure answered 200 and a DB hiccup lost the payment
+// until the customer typed "paguei".
 export async function POST(request: Request) {
+  let paymentId: string | null = null;
   try {
     const url = new URL(request.url);
-    let paymentId = url.searchParams.get("data.id") ?? url.searchParams.get("id");
-    let body: { data?: { id?: string }; id?: string; type?: string; topic?: string } = {};
+    paymentId = url.searchParams.get("data.id") ?? url.searchParams.get("id");
+    let body: { data?: { id?: string | number }; id?: string | number; type?: string; topic?: string } = {};
     try {
       body = (await request.json()) as typeof body;
     } catch {
@@ -48,11 +55,17 @@ export async function POST(request: Request) {
     if (topic && topic !== "payment") {
       return NextResponse.json({ ok: true, skipped: `topic:${topic}` });
     }
-    paymentId = paymentId ?? body?.data?.id ?? body?.id ?? null;
+    const rawId = paymentId ?? body?.data?.id ?? body?.id ?? null;
+    paymentId = rawId == null ? null : String(rawId);
 
     const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
     if (!paymentId || !token) {
       return NextResponse.json({ ok: true, skipped: !paymentId ? "no-payment-id" : "no-token" });
+    }
+    // The id is interpolated into a URL we call WITH our access token: anything that is
+    // not a plain payment id is dropped here, never forwarded to MP.
+    if (!/^\d{1,20}$/.test(paymentId)) {
+      return NextResponse.json({ ok: true, skipped: "invalid-payment-id" });
     }
 
     // Signature is advisory, NOT a gate: MP's HMAC can mismatch (secret mode/format)
@@ -62,18 +75,38 @@ export async function POST(request: Request) {
       console.warn("[mercadopago:webhook:signature-skip]", paymentId);
     }
 
-    const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store"
-    });
-    if (!res.ok) return NextResponse.json({ ok: false }, { status: 200 });
-    const data = (await res.json()) as { status?: string; external_reference?: string };
+    let res: Response;
+    try {
+      res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: "no-store",
+        signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
+      });
+    } catch (error) {
+      console.error("[mercadopago:webhook:fetch-failed]", paymentId, error instanceof Error ? error.message : error);
+      return NextResponse.json({ ok: false, retry: true }, { status: 503 });
+    }
+    if (res.status === 404) return NextResponse.json({ ok: true, skipped: "payment-not-found" });
+    if (!res.ok) {
+      console.error("[mercadopago:webhook:fetch-status]", paymentId, res.status);
+      return NextResponse.json({ ok: false, retry: res.status >= 500 }, { status: res.status >= 500 ? 503 : 200 });
+    }
+    const data = (await res.json()) as {
+      id?: number | string;
+      status?: string;
+      external_reference?: string;
+      transaction_amount?: number;
+    };
     if (data.status === "approved" && data.external_reference) {
-      await markDeliveryOrderPaid(data.external_reference);
+      await markDeliveryOrderPaid(data.external_reference, {
+        provider: "mercadopago",
+        paymentId: String(data.id ?? paymentId),
+        amount: typeof data.transaction_amount === "number" ? data.transaction_amount : null
+      });
     }
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("[mercadopago:webhook:error]", error);
-    return NextResponse.json({ ok: false }, { status: 200 });
+    console.error("[mercadopago:webhook:error]", paymentId, error);
+    return NextResponse.json({ ok: false, retry: true }, { status: 500 });
   }
 }
