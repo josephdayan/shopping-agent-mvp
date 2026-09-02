@@ -31,9 +31,10 @@ jobs:
       WHATSAPP_WEBHOOK_SECRET: ci-webhook-secret
     steps:
       - uses: actions/checkout@v4
+      # Node 24 = mesmo runtime da Vercel (project.json) e npm 11, que gerou o lock.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npx prisma generate
