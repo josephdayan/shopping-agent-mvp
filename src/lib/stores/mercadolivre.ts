@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import type { CatalogItem, StoreConnector, StoreUnit } from "./types";
 import { scoreCatalogMatch } from "./types";
-import { runApifyActor } from "@/lib/adapters/suppliers";
+import { runApifyActor } from "@/lib/adapters/apify";
 import { getMercadoLivreAccessToken } from "@/lib/mercadolivre-oauth";
 import { withoutMedicine } from "./anvisa";
 

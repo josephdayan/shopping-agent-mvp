@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
-import { requireMetaSignature, requireTwilioSignature, requireWebhookSecret } from "@/lib/auth";
+import { requireMetaSignature, requireWebhookSecret } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { handleDeliveryMessage, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
@@ -62,10 +62,8 @@ async function processDeliveryMessage(inbound: ReturnType<typeof whatsappAdapter
 const genericSchema = z
   .object({
     from: z.string().optional(),
-    From: z.string().optional(),
     phone: z.string().optional(),
     body: z.string().optional(),
-    Body: z.string().optional(),
     text: z.string().optional(),
     name: z.string().optional(),
     profileName: z.string().optional()
@@ -89,26 +87,29 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const contentType = request.headers.get("content-type") ?? "";
-  const rawBody = contentType.includes("application/x-www-form-urlencoded") ? null : await request.text();
-  const rawPayload = rawBody === null
-    ? Object.fromEntries(await request.formData())
-    : genericSchema.parse(JSON.parse(rawBody));
-  const inbound = whatsappAdapter.parseInbound(rawPayload);
-
-  if (inbound.provider !== "meta" && inbound.provider !== "twilio") {
+  const rawBody = await request.text();
+  // Assinatura ANTES de qualquer parse (revisão 02/09): corpo malformado anônimo não
+  // chega ao JSON.parse/zod. Meta assina tudo que manda; o formato mock (dev/testes e
+  // curl interno) exige o segredo compartilhado.
+  const looksLikeMeta = /"object"\s*:\s*"whatsapp_business_account"/.test(rawBody) || /"entry"\s*:/.test(rawBody);
+  if (looksLikeMeta) {
+    const unauthorized = requireMetaSignature(request, rawBody);
+    if (unauthorized) return unauthorized;
+  } else {
     const unauthorized = requireWebhookSecret(request);
     if (unauthorized) return unauthorized;
   }
-
-  if (inbound.provider === "twilio") {
-    const unauthorized = requireTwilioSignature(request, rawPayload);
-    if (unauthorized) return unauthorized;
+  let rawPayload: Record<string, unknown>;
+  try {
+    rawPayload = genericSchema.parse(JSON.parse(rawBody));
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
   }
-
-  if (inbound.provider === "meta" && rawBody !== null) {
-    const unauthorized = requireMetaSignature(request, rawBody);
-    if (unauthorized) return unauthorized;
+  const inbound = whatsappAdapter.parseInbound(rawPayload);
+  // Em deploy, só o provedor configurado entra: um payload mock assinado com o segredo
+  // não pode injetar mensagem "de" um telefone qualquer em produção.
+  if (process.env.VERCEL && process.env.WHATSAPP_PROVIDER === "meta" && inbound.provider !== "meta") {
+    return NextResponse.json({ error: "Unsupported WhatsApp provider" }, { status: 400 });
   }
 
   // One-Click confirmation has no user text. It must be handled before the generic
@@ -179,24 +180,18 @@ export async function POST(request: Request) {
   // Mensagem SEM texto legível (áudio, imagem, figurinha, contato…): segue pro fluxo,
   // que responde "só leio texto" — antes era um 400 mudo e o cliente ficava no vácuo
   // (28/08 S2: "👍" e figurinhas morriam sem nenhuma resposta).
-  if (!inbound.text && inbound.provider !== "meta" && inbound.provider !== "twilio") {
+  if (!inbound.text && inbound.provider !== "meta") {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
   }
 
-  if (inbound.provider === "twilio" || inbound.provider === "meta") {
-    // A product lookup can take tens of seconds. Acknowledge provider webhooks first
-    // so Meta/Twilio do not retry the same message while the conversation runs.
+  if (inbound.provider === "meta") {
+    // A product lookup can take tens of seconds. Acknowledge the webhook first so
+    // Meta does not retry the same message while the conversation runs.
     waitUntil(processDeliveryMessage(inbound));
-
-    if (inbound.provider === "meta") {
-      return NextResponse.json({ ok: true, provider: "meta" });
-    }
-
-    return new Response(`<?xml version="1.0" encoding="UTF-8"?><Response></Response>`, {
-      status: 200,
-      headers: { "Content-Type": "text/xml" }
-    });
+    return NextResponse.json({ ok: true, provider: "meta" });
   }
 
-  return NextResponse.json({ error: "Unsupported WhatsApp provider" }, { status: 400 });
+  // Provedor mock (dev/testes/curl interno): processa em linha e responde.
+  await processDeliveryMessage(inbound);
+  return NextResponse.json({ ok: true, provider: "mock" });
 }

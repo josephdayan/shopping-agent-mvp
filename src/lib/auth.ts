@@ -1,6 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import twilio from "twilio";
 
 // Em deploy (Vercel), segredo ausente é erro de configuração, nunca porta aberta: a
 // checagem FALHA FECHADO. Localmente (dev/demo/testes) a ausência continua liberando,
@@ -37,27 +36,6 @@ export function requireWebhookSecret(request: Request) {
   return null;
 }
 
-export function requireTwilioSignature(request: Request, params: Record<string, unknown>) {
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  if (!authToken) return missingSecret("TWILIO_AUTH_TOKEN");
-
-  const signature = request.headers.get("x-twilio-signature");
-  if (!signature) {
-    return NextResponse.json({ error: "Missing Twilio signature" }, { status: 401 });
-  }
-
-  const url = process.env.TWILIO_WEBHOOK_URL || publicRequestUrl(request);
-  const normalizedParams = Object.fromEntries(
-    Object.entries(params).map(([key, value]) => [key, typeof value === "string" ? value : String(value ?? "")])
-  );
-
-  if (!twilio.validateRequest(authToken, signature, url, normalizedParams)) {
-    return NextResponse.json({ error: "Invalid Twilio signature" }, { status: 401 });
-  }
-
-  return null;
-}
-
 export function requireMetaSignature(request: Request, rawBody: string) {
   const appSecret = process.env.WHATSAPP_APP_SECRET;
   if (!appSecret) return missingSecret("WHATSAPP_APP_SECRET");
@@ -77,17 +55,6 @@ export function requireMetaSignature(request: Request, rawBody: string) {
   }
 
   return null;
-}
-
-function publicRequestUrl(request: Request) {
-  const url = new URL(request.url);
-  const proto = request.headers.get("x-forwarded-proto");
-  const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
-
-  if (proto) url.protocol = `${proto}:`;
-  if (host) url.host = host;
-
-  return url.toString();
 }
 
 // ---------- painel /ops ----------

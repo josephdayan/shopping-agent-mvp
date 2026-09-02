@@ -5,7 +5,6 @@
   "scripts": {
     "purchase-worker:claim": "tsx scripts/purchase-worker-client.mts claim",
     "dev": "next dev",
-    "dev:demo": "bash scripts/dev-demo.sh",
     "build": "prisma generate && node scripts/migrate-on-build.mjs && next build && node scripts/check-bundle-emoji.mjs",
     "start": "next start",
     "lint": "next lint",
@@ -13,12 +12,9 @@
     "catalog:refresh": "tsx scripts/refresh-catalogs.mts",
     "test:unit": "node --import tsx --test tests/lia-intents.test.ts tests/lia-copy.test.ts",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "twilio:create-product-options-template": "tsx scripts/create-twilio-product-options-template.mjs",
     "db:check": "node scripts/check-migrations.mjs",
     "test:e2e": "LIA_RETAILER_TEST_SEED=true LIA_REQUIRE_DB=1 node --import tsx --test tests/*.test.ts",
     "test:local": "tsx scripts/test-local-db.mts"
@@ -30,7 +26,6 @@
     "next": "^14.2.23",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "twilio": "^6.0.2",
     "workflow": "^4.6.0",
     "zod": "^3.24.1"
   },
@@ -47,8 +42,5 @@
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   }
 }

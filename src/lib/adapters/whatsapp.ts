@@ -1,5 +1,3 @@
-import twilio from "twilio";
-import type { Product } from "@prisma/client";
 
 type RawInbound = {
   entry?: Array<{
@@ -23,15 +21,11 @@ type RawInbound = {
     }>;
   }>;
   from?: string;
-  From?: string;
   phone?: string;
   body?: string;
-  Body?: string;
   text?: string;
   name?: string;
   profileName?: string;
-  ButtonText?: string;
-  ButtonPayload?: string;
   [key: string]: unknown;
 };
 
@@ -70,10 +64,25 @@ export type WhatsAppOrderStatusInput = {
   timestamp?: number;
 };
 
+// Estrutural (revisão 02/09): o modelo Prisma `Product` era do motor ML de junho.
+export type WhatsAppProduct = {
+  id?: string;
+  title: string;
+  price: number;
+  shippingPrice: number;
+  imageUrl: string;
+  productUrl: string;
+  deliveryEstimate: string;
+  deliveryHours?: number | null;
+  source: string;
+  automationLevel: string;
+  [key: string]: unknown;
+};
+
 export type WhatsAppProductOption = {
   rank: number;
   reason: string;
-  product: Product;
+  product: WhatsAppProduct;
 };
 
 export type WhatsAppRichReply = {
@@ -315,14 +324,11 @@ export const whatsappAdapter = {
     return {
       phone:
         metaMessage?.from ??
-        normalizeTwilioFrom(payload.From) ??
         payload.from ??
         payload.phone ??
         extractNestedString(payload, ["message", "from"]) ??
         "",
       text:
-        payload.ButtonPayload ??
-        payload.ButtonText ??
         metaMessage?.interactive?.button_reply?.id ??
         metaMessage?.interactive?.button_reply?.title ??
         metaMessage?.interactive?.list_reply?.id ??
@@ -331,7 +337,6 @@ export const whatsappAdapter = {
         metaMessage?.button?.text ??
         metaMessage?.text?.body ??
         payload.body ??
-        payload.Body ??
         payload.text ??
         extractNestedString(payload, ["message", "text"]) ??
         "",
@@ -341,28 +346,20 @@ export const whatsappAdapter = {
         payload.profileName ??
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
-      messageId: metaMessage?.id ?? stringFromPayload(payload.MessageSid),
+      messageId: metaMessage?.id ?? stringFromPayload(payload.messageId),
       // Tipo do conteúdo Meta ("text", "reaction", "audio", "image", "sticker"…) — o
       // webhook decide o que ignorar (reação) e o que avisar ("só leio texto").
       messageType: (metaMessage as { type?: string } | undefined)?.type,
       eventType: paymentConfirmation ? "payment_confirmation" : metaMessage ? "message" : metaChange?.statuses?.length ? "status" : metaChange ? "meta_event" : "message",
       paymentConfirmation,
-      provider: metaChange ? "meta" : payload.From || payload.Body ? "twilio" : "mock"
+      // Só Meta (produção) e mock (dev/testes). Twilio saiu em 02/09.
+      provider: metaChange ? "meta" : "mock"
     };
   },
 
   async sendMessage(to: string, text: string, metadata?: unknown) {
     if (process.env.WHATSAPP_PROVIDER === "meta") {
       return sendMetaMessage(to, text);
-    }
-
-    if (process.env.WHATSAPP_PROVIDER === "twilio") {
-      return sendTwilioWhatsAppMessage(to, text, metadata);
-    }
-
-    if (process.env.WHATSAPP_PROVIDER === "zapi") {
-      // Plug Z-API here: POST /send-text with phone and message.
-      return { provider: "zapi", mocked: true, to, text, metadata };
     }
 
     console.log("[whatsapp:mock]", { to, text, metadata });
@@ -375,7 +372,6 @@ export const whatsappAdapter = {
   async sendMedia(to: string, text: string, mediaUrl: string) {
     if (!isPublicMediaUrl(mediaUrl)) return this.sendMessage(to, text);
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaImage(to, text, mediaUrl);
-    if (process.env.WHATSAPP_PROVIDER === "twilio") return sendTwilioMedia(to, text, mediaUrl);
     console.log("[whatsapp:mock:media]", { to, text, mediaUrl });
     return { provider: "mock", to, text, mediaUrl };
   },
@@ -553,16 +549,11 @@ export const whatsappAdapter = {
   async sendInteractiveProductOptions(to: string, reply: WhatsAppRichReply) {
     if (!reply.options?.length) return null;
     if (process.env.WHATSAPP_PROVIDER === "meta") return sendMetaInteractiveProductOptions(to, reply);
-    if (process.env.WHATSAPP_PROVIDER !== "twilio") return null;
-    return sendTwilioQuickReplyOptions(to, reply);
+    return null;
   },
 
   async sendRichReplyMessages(to: string, reply: WhatsAppRichReply) {
-    if (process.env.WHATSAPP_PROVIDER !== "twilio") {
-      return this.sendMessage(to, reply.text);
-    }
-
-    return sendTwilioRichReplyMessages(to, reply);
+    return this.sendMessage(to, reply.text);
   }
 };
 
@@ -823,64 +814,6 @@ async function sendMetaPayload(phoneNumberId: string, token: string, body: Recor
   return payload;
 }
 
-async function sendTwilioWhatsAppMessage(to: string, text: string, metadata?: unknown) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_WHATSAPP_FROM;
-
-  if (!accountSid || !authToken || !from) {
-    return {
-      provider: "twilio",
-      mocked: true,
-      to,
-      text,
-      metadata,
-      missingConfig: [
-        !accountSid ? "TWILIO_ACCOUNT_SID" : null,
-        !authToken ? "TWILIO_AUTH_TOKEN" : null,
-        !from ? "TWILIO_WHATSAPP_FROM" : null
-      ].filter(Boolean)
-    };
-  }
-
-  const client = twilio(accountSid, authToken);
-  const message = await client.messages.create({
-    from: normalizeTwilioWhatsAppAddress(from),
-    to: normalizeTwilioWhatsAppAddress(to),
-    body: text.slice(0, 1600)
-  });
-
-  return {
-    provider: "twilio",
-    to,
-    sid: message.sid,
-    status: message.status
-  };
-}
-
-async function sendTwilioMedia(to: string, text: string, mediaUrl: string) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_WHATSAPP_FROM;
-  if (!accountSid || !authToken || !from) {
-    return { provider: "twilio", mocked: true, to, text, mediaUrl };
-  }
-  const client = twilio(accountSid, authToken);
-  try {
-    const message = await client.messages.create({
-      from: normalizeTwilioWhatsAppAddress(from),
-      to: normalizeTwilioWhatsAppAddress(to),
-      body: text.slice(0, 1500),
-      mediaUrl: [mediaUrl]
-    });
-    return { provider: "twilio", to, sid: message.sid, status: message.status };
-  } catch (error) {
-    // If WhatsApp/Twilio rejects the image, still deliver the caption as text.
-    console.warn("[whatsapp:twilio:media:fallback-text]", error instanceof Error ? error.message : error);
-    return sendTwilioWhatsAppMessage(to, text);
-  }
-}
-
 async function sendMetaImage(to: string, text: string, mediaUrl: string) {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
@@ -899,215 +832,7 @@ async function sendMetaImage(to: string, text: string, mediaUrl: string) {
   }
 }
 
-async function sendTwilioQuickReplyOptions(to: string, reply: WhatsAppRichReply) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_WHATSAPP_FROM;
-  const contentSid = process.env.TWILIO_PRODUCT_OPTIONS_CONTENT_SID;
-
-  if (!accountSid || !authToken || !from || !contentSid) return null;
-
-  const variables = buildProductOptionVariables(reply);
-  const client = twilio(accountSid, authToken);
-  const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
-  const normalizedTo = normalizeTwilioWhatsAppAddress(to);
-  const mediaMessages = [];
-  const options = (reply.options ?? []).slice(0, 3);
-  for (const [index, option] of options.entries()) {
-    const body = buildTwilioProductCaption(option);
-    const mediaUrl = isPublicMediaUrl(option.product.imageUrl) ? [option.product.imageUrl] : undefined;
-
-    mediaMessages.push(
-      await client.messages.create({
-        from: normalizedFrom,
-        to: normalizedTo,
-        body,
-        ...(mediaUrl ? { mediaUrl } : {})
-      })
-    );
-    await delayBetweenProductMessages(index, options.length);
-  }
-
-  const message = await client.messages.create({
-    from: normalizedFrom,
-    to: normalizedTo,
-    contentSid,
-    contentVariables: JSON.stringify(variables)
-  });
-
-  return {
-    provider: "twilio",
-    mode: "quick_reply",
-    to,
-    mediaMessages: mediaMessages.map((mediaMessage) => ({
-      sid: mediaMessage.sid,
-      status: mediaMessage.status
-    })),
-    sid: message.sid,
-    status: message.status
-  };
-}
-
-async function sendTwilioRichReplyMessages(to: string, reply: WhatsAppRichReply) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_WHATSAPP_FROM;
-
-  if (!accountSid || !authToken || !from) {
-    return sendTwilioWhatsAppMessage(to, reply.text);
-  }
-
-  const client = twilio(accountSid, authToken);
-  const normalizedFrom = normalizeTwilioWhatsAppAddress(from);
-  const normalizedTo = normalizeTwilioWhatsAppAddress(to);
-  const messages = [];
-
-  if (reply.options?.length) {
-    const options = reply.options.slice(0, 3);
-    // Images on by default now that we serve a WhatsApp-deliverable .jpg. Set
-    // TWILIO_SEND_PRODUCT_IMAGES=false to fall back to a single text message.
-    const sendImages = process.env.TWILIO_SEND_PRODUCT_IMAGES !== "false";
-
-    if (sendImages) {
-      for (const [index, option] of options.entries()) {
-        const body = buildTwilioProductCaption(option);
-        const imageUrl = toWhatsAppImageUrl(option.product.imageUrl);
-        const mediaUrl = isPublicMediaUrl(imageUrl) ? [imageUrl] : undefined;
-
-        messages.push(
-          await client.messages.create({
-            from: normalizedFrom,
-            to: normalizedTo,
-            body,
-            ...(mediaUrl ? { mediaUrl } : {})
-          })
-        );
-        await delayBetweenProductMessages(index, options.length);
-      }
-    } else {
-      // The Twilio WhatsApp Sandbox does not deliver the Mercado Livre .webp
-      // product images, so by default send ONE reliable text message with all the
-      // options. Set TWILIO_SEND_PRODUCT_IMAGES=true on an approved sender to bring
-      // the image cards back.
-      messages.push(
-        await client.messages.create({
-          from: normalizedFrom,
-          to: normalizedTo,
-          body: buildTwilioProductListText(options)
-        })
-      );
-    }
-  } else if (reply.text) {
-    const actionMessage = reply.actions?.length
-      ? await sendTwilioActionMessage(client, normalizedFrom, normalizedTo, reply)
-      : null;
-    messages.push(
-      actionMessage ??
-        (await client.messages.create({
-          from: normalizedFrom,
-          to: normalizedTo,
-          body: reply.text
-        }))
-    );
-  }
-
-  return {
-    provider: "twilio",
-    mode: "rich_reply_messages",
-    to,
-    messages: messages.map((message) => ({
-      sid: message.sid,
-      status: message.status
-    }))
-  };
-}
-
-function toWhatsAppImageUrl(url: string) {
-  // WhatsApp/Twilio don't deliver .webp images; Mercado Livre serves the very same
-  // picture as JPEG when the extension is .jpg, which WhatsApp accepts.
-  if (!url) return url;
-  return url.replace(/\.webp(\?|$)/i, ".jpg$1");
-}
-
-function buildTwilioProductListText(options: WhatsAppProductOption[]) {
-  const lines: string[] = ["Achei estas opções:", ""];
-  for (const option of options) {
-    const total = option.product.price + option.product.shippingPrice;
-    lines.push(`*${option.rank}) ${option.product.title}*`);
-    lines.push(`R$ ${total.toFixed(2)}`);
-    if (option.product.source === "mercado_livre" && option.product.automationLevel.startsWith("real_")) {
-      lines.push(option.product.productUrl);
-    }
-    lines.push("");
-  }
-  lines.push("Responda *1*, *2* ou *3* para escolher.");
-  return lines.join("\n").slice(0, 1500);
-}
-
-function buildTwilioProductCaption(option: WhatsAppProductOption) {
-  const product = option.product;
-  return [
-    `*${option.rank})*`,
-    `🛒 *Produto:* ${product.title}`,
-    `💰 *Preço:* ${formatBRL(product.price)}`,
-    `🚚 *Entrega:* ${deliveryLabel(product)}`,
-    "",
-    `_Responda ${option.rank} para escolher este._`
-  ]
-    .join("\n")
-    .slice(0, 1000);
-}
-
-function formatBRL(value: number) {
-  return `R$ ${value.toFixed(2).replace(".", ",")}`;
-}
-
-function deliveryLabel(product: Product) {
-  const estimate = (product.deliveryEstimate ?? "").trim();
-  // Prefer a real delivery time from the listing when it has one.
-  if (estimate && /\b(chega|chegar|amanh|hoje|dias?|horas?|uteis|úteis)\b/i.test(estimate)) {
-    return estimate;
-  }
-  // The exact per-item prazo depends on the buyer's CEP, which we don't have yet —
-  // show an honest estimated range instead of a fake single number.
-  const days = Math.max(2, Math.round((product.deliveryHours || 72) / 24));
-  return `Estimado em ${days} a ${days + 3} dias úteis`;
-}
-
-function buildProductOptionVariables(reply: WhatsAppRichReply) {
-  return { "1": "Escolha uma opção:" };
-}
-
-async function sendTwilioActionMessage(
-  client: ReturnType<typeof twilio>,
-  from: string,
-  to: string,
-  reply: WhatsAppRichReply
-) {
-  const contentSid = process.env.TWILIO_CHECKOUT_ACTIONS_CONTENT_SID;
-  if (!contentSid) return null;
-
-  try {
-    return await client.messages.create({
-      from,
-      to,
-      contentSid,
-      contentVariables: JSON.stringify({ "1": reply.text })
-    });
-  } catch (error) {
-    console.warn("[whatsapp:twilio:checkout-actions:fallback]", error);
-    return null;
-  }
-}
-
-async function delayBetweenProductMessages(index: number, total: number) {
-  if (index >= total - 1) return;
-  const delayMs = Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 700);
-  if (!Number.isFinite(delayMs) || delayMs <= 0) return;
-  await new Promise((resolve) => setTimeout(resolve, Math.min(delayMs, 4000)));
-}
-
-// Hosts that block server-side fetches (Akamai/anti-bot) — WhatsApp/Twilio can't load
+// Hosts that block server-side fetches (Akamai/anti-bot) — WhatsApp can't load
 // them, so we skip media and fall back to text (never ship a broken image). Petz
 // self-hosts product photos behind Akamai: only a real browser that solved the JS sensor
 // can fetch them, so their URLs 403 for Twilio (a retailer VTEX CDN is permissive and
@@ -1129,6 +854,10 @@ export function safeMediaLink(url: string): string {
   return /[^\x00-\x7F]/.test(url) ? encodeURI(url) : url;
 }
 
+function formatBRL(value: number) {
+  return `R$ ${value.toFixed(2).replace(".", ",")}`;
+}
+
 function isPublicMediaUrl(url: string) {
   if (!/^https:\/\/.+/i.test(url)) return false;
   try {
@@ -1144,17 +873,6 @@ function isPublicMediaUrl(url: string) {
 
 function normalizeWhatsAppPhone(phone: string) {
   return phone.replace(/\D/g, "");
-}
-
-function normalizeTwilioWhatsAppAddress(phone: string) {
-  const cleaned = phone.trim();
-  if (cleaned.startsWith("whatsapp:")) return cleaned;
-  if (cleaned.startsWith("+")) return `whatsapp:${cleaned}`;
-  return `whatsapp:+${cleaned.replace(/\D/g, "")}`;
-}
-
-function normalizeTwilioFrom(phone?: string) {
-  return phone?.replace(/^whatsapp:/, "");
 }
 
 function stringFromPayload(value: unknown) {
