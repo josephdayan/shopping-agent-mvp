@@ -70,10 +70,6 @@ export function welcomeAskCep(notedItems?: string[]): string {
   return `${INTRO}${note}\n\nMe manda seu *CEP*? Só peço uma vez. 📍`;
 }
 
-export function welcomeAddressButton(): string {
-  return `${INTRO}\n\nCadastra seu endereço aí embaixo — só uma vez.`;
-}
-
 export function welcomeAskFullDeliveryAddress(notedItems?: string[]): string {
   const note = notedItems?.length ? `\n\nJá anotei:\n${notedItems.map((i) => `• ${i}`).join("\n")}` : "";
   return `${INTRO}${note}\n\nMe manda seu *endereço completo* com CEP — rua, número, bairro e cidade. Só peço uma vez. 📍`;
@@ -173,27 +169,10 @@ export function outsideCoverage(city: string | undefined, areaLabel: string): st
 
 // Cidade É atendida, mas o endereço ficou longe demais de qualquer loja parceira hoje.
 // Cuidado: NÃO dizer "não atendo sua cidade" (atendo!) — é questão de loja perto ainda.
-export function tooFarForDelivery(city: string | undefined, areaLabel: string): string {
-  const onde = city ? city : "seu endereço";
-  return [
-    `Atendo ${onde}, mas seu endereço ficou longe demais das lojas que tenho por perto — o frete não valeria a pena 😔`,
-    "",
-    "Anotei seu contato: quando abrir uma loja mais perto, te chamo."
-  ].join("\n");
-}
-
 // ---------- search / basket ----------
 
 export function searching(): string {
   return "🔎 Procurando…";
-}
-
-export function deliveryQuoteUnavailable(): string {
-  return "Não consegui confirmar o valor da entrega agora — e não quero te passar um valor chutado. Tenta de novo em instantes.";
-}
-
-export function itemsNotFound(items: string[]): string {
-  return `Não achei ${items.join(", ")}. Me diz uma marca ou tamanho que eu tento de novo.`;
 }
 
 export function noMedicine(): string {
@@ -229,14 +208,6 @@ export function swappedFor(from: string, to: string): string {
 }
 
 // "só isso" com a cesta ABAIXO do mínimo da loja: sem loop — explica e dá saída.
-export function minimumDeadEnd(displayMin: number, falta: number): string {
-  return [
-    `A loja não fecha abaixo de *${brl(displayMin)}* — faltam *${brl(falta)}*.`,
-    "",
-    "Manda mais um item barato que eu fecho, ou responde *cancelar*."
-  ].join("\n");
-}
-
 export function finishOrderFirst(): string {
   return "Esse pedido ainda não foi fechado. Responde *pagar* que eu mando o código.";
 }
@@ -475,14 +446,6 @@ export function shippingSpeedChoice(
   ].join("\n");
 }
 
-export function freteChoice(barato?: { fee: number; etaMinutes: number }, rapido?: { fee: number; etaMinutes: number }): string {
-  const lines = ["Como prefere a entrega?"];
-  if (barato) lines.push(`*1)* Mais barata — ${brl(barato.fee)} · ~${barato.etaMinutes} min`);
-  if (rapido) lines.push(`*2)* Mais rápida — ${brl(rapido.fee)} · ~${rapido.etaMinutes} min`);
-  lines.push("", "Responde *1* ou *2*.");
-  return lines.join("\n");
-}
-
 // ---------- payment ----------
 
 export function paymentMethod(totalPix: number, totalCard: number): string {
@@ -609,14 +572,6 @@ export function cardAttemptExpired(): string {
 
 export function paymentConfirmed(): string {
   return "✅ Pagamento confirmado. Já estou separando — te aviso quando sair pra entrega.";
-}
-
-export function paymentConfirmedSupplierCheck(): string {
-  return "✅ Pagamento confirmado. Confirmando os itens na loja agora — te aviso quando avançar.";
-}
-
-export function supplierValidationStarted(): string {
-  return "Confirmando itens, frete e prazo na loja. Te mostro o total final antes do pagamento.";
 }
 
 export function supplierValidationPending(): string {
@@ -992,10 +947,6 @@ export function categoryRemoveUnknown(category: string): string {
 }
 
 // "n" na pergunta de quantidade: 1 unidade + a saída honesta (28/08 S16).
-export function quantityDefaultedOne(name: string): string {
-  return `_Se não quiser o item, é só dizer *tira ${name.split(" ")[0].toLowerCase()}*._`;
-}
-
 // Cliente mandou áudio/imagem/figurinha: por enquanto a Lia só lê texto.
 export function nonTextMessage(): string {
   return "Por enquanto eu só consigo ler texto 🙂 Me escreve o que você precisa?";
@@ -1045,10 +996,6 @@ export function narrowedChoices(query: string): string {
 
 // "só isso"/"fechado" quando o pedido já está fechado e só falta a forma de pagamento —
 // nunca responder "não peguei qual você quer" (copy de escolha de produto).
-export function donePickPayment(): string {
-  return "Pedido completo. Escolhe abaixo como quer pagar.";
-}
-
 // "algum até X reais?" e nenhuma das opções na mesa cabe no teto.
 export function nonePriceCap(cap: number): string {
   return `Nenhuma dessas sai por até ${brl(cap)}. Responde *mais barato* ou *mais opções*.`;

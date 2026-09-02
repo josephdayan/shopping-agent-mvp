@@ -48,7 +48,7 @@ model DeliveryOrder {
   fulfillments        Json?
   itemsSubtotal       Float         @default(0)
   // "retailer_delivery" is the default; courier keys require an authorized partner.
-  courierKey          String        @default("uber_direct")
+  courierKey          String        @default("retailer_delivery")
   courierQuoteId      String?
   deliveryFee         Float         @default(0)
   serviceFee          Float         @default(0)
@@ -301,6 +301,9 @@ model Message {
   @@index([conversationId, createdAt])
 }
 
+// ---- LEGADO (motor de busca ML de junho: chat, /admin, /api/v1 — código removido em
+// 02/09/2026). Sem leitor no produto vigente. Manter até o dono autorizar o DROP das
+// tabelas Product, ProductOption, Order, OpsTask e Preference (migration destrutiva).
 model Product {
   id               String          @id @default(cuid())
   externalId       String          @unique

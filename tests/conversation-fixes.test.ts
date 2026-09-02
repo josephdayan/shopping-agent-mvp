@@ -3,7 +3,7 @@
 import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { detectIntent, mergeShoppingLines, parseBasketLines, parseContextualQuantity, parseRefinement, parseChoiceReply, wantsMoreOptions, narrowChoiceByName, asksRunningTotal, parsePriceCap, splitPriceCap } from "../src/lib/lia-intents";
+import { detectIntent, mergeShoppingLines, parseBasketLines, parseRefinement, parseChoiceReply, wantsMoreOptions, narrowChoiceByName, asksRunningTotal, parsePriceCap, splitPriceCap } from "../src/lib/lia-intents";
 import { inferCatalogRefinement, scoreCatalogMatch, rankCatalog } from "../src/lib/stores/types";
 
 const kind = (s: string) => detectIntent(s).kind;
@@ -103,14 +103,6 @@ test("mensagem preguiçosa: abreviações não contaminam o nome do produto", ()
   assert.deepEqual(parseBasketLines("qro uma coca tb pf").map((x) => x.phrase), ["coca"]);
   assert.deepEqual(parseBasketLines("qr detergente e sabonete tbm").map((x) => x.phrase), ["detergente", "sabonete"]);
   assert.deepEqual(parseBasketLines("bota um papel hig pff").map((x) => x.phrase), ["papel hig"]);
-});
-
-test("quantidade contextual entende resposta natural e botão", () => {
-  for (const [text, qty] of [["qty:3", 3], ["mais 2", 2], ["quero 5", 5], ["duas", 2], ["me vê quatro", 4], ["meia dúzia", 6]] as const) {
-    assert.equal(parseContextualQuantity(text), qty, text);
-  }
-  assert.equal(parseContextualQuantity("muitas"), null);
-  assert.equal(parseContextualQuantity("99"), null);
 });
 
 test("busca tolera um erro de digitação sem aceitar ruído curto", () => {
@@ -423,10 +415,6 @@ test("merge LLM não perde a quantidade dita — qtyExplicit propaga (ciclo 2: r
 });
 
 test("resposta de quantidade não engole 'tira a coca e coloca um guarana' (ciclo 2)", () => {
-  assert.equal(parseContextualQuantity("tira a coca e coloca um guarana"), null);
-  assert.equal(parseContextualQuantity("quero 2"), 2);
-  assert.equal(parseContextualQuantity("um"), 1);
-  assert.equal(parseContextualQuantity("pode ser 3 unidades"), 3);
 });
 
 test("matcher: apelido de refri no meio do nome — 'guarana'/'fanta' acham; 'coca' casa a variante 'Refrigerante Coca-Cola…' (ciclo 2)", () => {

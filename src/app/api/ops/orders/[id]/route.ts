@@ -4,7 +4,6 @@ import { parseMoneyInput } from "@/lib/pricing";
 import {
   opsCancelRefund,
   opsConfirmRefund,
-  opsDispatchCourier,
   opsMarkBought,
   opsMarkDelivered,
   opsMarkRetailerOutForDelivery,
@@ -61,16 +60,6 @@ export async function POST(request: Request, { params }: { params: { id: string 
       }
       case "bought":
         await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl);
-        break;
-      case "bought_and_dispatch":
-        // Concierge one-click: the operator has the goods in hand at the base, so mark
-        // bought AND dispatch the courier in a single step. If dispatch fails, the order
-        // stays in operator_buying and the standalone "despachar" button remains.
-        await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl);
-        await opsDispatchCourier(id);
-        break;
-      case "dispatch":
-        await opsDispatchCourier(id);
         break;
       case "retailer_out_for_delivery":
         await opsMarkRetailerOutForDelivery(id, body.trackingUrl);

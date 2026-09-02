@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { hasCancelRequest, hasPendingRefund, isCardCharge, isOperatorCourierOrder, isRetailerDeliveryOrder } from "@/lib/order-flags";
+import { hasCancelRequest, hasPendingRefund, isCardCharge, isRetailerDeliveryOrder } from "@/lib/order-flags";
 import { parseMoneyInput } from "@/lib/pricing";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
@@ -272,9 +272,8 @@ export default function OpsBoard() {
         const paymentReceived =
           Boolean(o.paidAt) ||
           ["paid", "retailer_preparing", "retailer_out_for_delivery", "operator_buying", "ready_for_pickup", "dispatched"].includes(o.status);
-        const operatorCourier = isOperatorCourierOrder(o);
         const quote =
-          quotes[o.id] ?? { itemsSubtotal: "", deliveryFee: "", deliveryMode: "operator_courier", deliveryPromise: "", etaMinutes: "" };
+          quotes[o.id] ?? { itemsSubtotal: "", deliveryFee: "", deliveryMode: "retailer_delivery", deliveryPromise: "", etaMinutes: "" };
         const setQuote = (patch: Partial<typeof quote>) => setQuotes((prev) => ({ ...prev, [o.id]: { ...quote, ...patch } }));
         return (
           <div key={o.id} style={{ ...card, ...(cancelRequested ? cancelCard : {}) }}>
@@ -348,11 +347,6 @@ export default function OpsBoard() {
                   </div>
                 ))}
               </div>
-            ) : !retailerDelivery ? (
-              <div style={{ fontSize: 13, color: "#667085", marginTop: 4 }}>
-                🏬 Retirada autorizada em: <strong>{o.storeUnit ?? o.storeLabel}</strong>
-                {o.storeAddress ? ` — ${o.storeAddress}` : ""}
-              </div>
             ) : null}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
@@ -375,7 +369,6 @@ export default function OpsBoard() {
                     style={{ ...input, minWidth: 110 }}
                   />
                   <select value={quote.deliveryMode} onChange={(e) => setQuote({ deliveryMode: e.target.value })} style={{ ...input, minWidth: 180 }}>
-                    <option value="operator_courier">🛵 motoboy na hora</option>
                     <option value="retailer_delivery">🚚 entrega do varejista</option>
                   </select>
                   <input
@@ -462,31 +455,15 @@ export default function OpsBoard() {
                     style={{ ...input, minWidth: 240 }}
                     title="Cole aqui a página do pedido na loja (ex.: Mercado Livre). A Lia manda esse link pro cliente ao avisar da compra."
                   />
-                  {operatorCourier ? (
-                    <button
-                      style={primary}
-                      disabled={busy === `${o.id}:bought_and_dispatch`}
-                      onClick={() =>
-                        act(o.id, "bought_and_dispatch", {
-                          storeOrderNumber: numbers[o.id] ?? "",
-                          trackingUrl: tracking[o.id] ?? ""
-                        })
-                      }
-                      title="Marca como comprado e já chama o motoboy na sua base, num passo só."
-                    >
-                      🛵 Comprei — despachar motoboy
-                    </button>
-                  ) : (
-                    <button
-                      style={primary}
-                      disabled={busy === `${o.id}:bought`}
-                      onClick={() =>
-                        act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "", trackingUrl: tracking[o.id] ?? "" })
-                      }
-                    >
-                      {retailerDelivery ? "Confirmar compra no varejista" : "Marquei como comprado"}
-                    </button>
-                  )}
+                  <button
+                    style={primary}
+                    disabled={busy === `${o.id}:bought`}
+                    onClick={() =>
+                      act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "", trackingUrl: tracking[o.id] ?? "" })
+                    }
+                  >
+                    Confirmar compra na loja
+                  </button>
                 </>
               )}
               {retailerDelivery && (o.status === "retailer_preparing" || o.status === "operator_buying") && (
@@ -507,11 +484,6 @@ export default function OpsBoard() {
                     🚚 Loja saiu para entrega
                   </button>
                 </>
-              )}
-              {!retailerDelivery && (o.status === "operator_buying" || o.status === "ready_for_pickup") && (
-                <button style={primary} disabled={busy === `${o.id}:dispatch`} onClick={() => act(o.id, "dispatch")}>
-                  {operatorCourier ? "🛵 Despachar motoboy (sai da sua base)" : "🛵 Despachar courier autorizado"}
-                </button>
               )}
               {(o.status === "retailer_out_for_delivery" || o.status === "dispatched") && (
                 <>

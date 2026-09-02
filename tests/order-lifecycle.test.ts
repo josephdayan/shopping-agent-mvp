@@ -36,7 +36,9 @@ test("retailer delivery is detected from the canonical key or fulfillment mode",
 
 test("a confirmed direct purchase enters retailer preparation, not pickup", () => {
   assert.equal(statusAfterStorePurchase({ courierKey: "retailer_delivery" }), RETAILER_PREPARING_STATUS);
-  assert.equal(statusAfterStorePurchase({ courierKey: "uber_direct" }), "operator_buying");
+  // Revisão 02/09: courier/motoboy saíram do produto — pedido legado com courierKey antigo
+  // também segue para a preparação do varejista.
+  assert.equal(statusAfterStorePurchase({ courierKey: "uber_direct" }), RETAILER_PREPARING_STATUS);
   assert.ok(ACTIVE_DELIVERY_ORDER_STATUSES.includes(RETAILER_PREPARING_STATUS));
   assert.ok(OPS_QUEUE_STATUSES.includes(RETAILER_OUT_FOR_DELIVERY_STATUS));
 });

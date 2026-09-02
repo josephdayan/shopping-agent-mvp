@@ -5,8 +5,6 @@
 import "./helpers/load-env";
 // This file exercises the concierge flow, so re-enable the flag the shared helper pins off.
 process.env.LIA_MANUAL_CONCIERGE = "true";
-process.env.LIA_OPERATOR_PICKUP_ADDRESS = "Rua da Base, 10, São Paulo - SP";
-process.env.LIA_OPERATOR_PICKUP_CEP = "01310-100";
 
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
@@ -20,12 +18,11 @@ import {
   markDeliveryOrderPaid,
   opsPublishManualQuote,
   opsMarkBought,
-  opsDispatchCourier,
   opsMarkDelivered,
+  opsMarkRetailerOutForDelivery,
   opsCancelRefund,
   opsConfirmRefund
 } from "../src/lib/delivery-service";
-import { isOperatorCourierOrder } from "../src/lib/order-flags";
 
 const RUN = `${Date.now().toString(36)}${process.pid}`;
 const PREFIX = `+5501${String(Date.now()).slice(-6)}${String(process.pid).slice(-2)}`;
@@ -272,7 +269,7 @@ test("cotação instantânea: kill-switch LIA_INSTANT_QUOTE=false volta ao fluxo
   }
 });
 
-test("concierge completo: pede → operador cota → paga → compra → motoboy do operador → entregue", async (t) => {
+test("concierge completo: pede → operador cota → paga → compra → loja entrega → entregue", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
 
@@ -282,12 +279,12 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   assert.equal(pending!.storeKey, "concierge");
   assert.equal((pending!.items as unknown as unknown[]).length, 1);
 
-  // 3. Operador cota à mão: R$ 50 de produtos + R$ 12 de motoboy, entrega na hora.
+  // 3. Operador cota à mão: R$ 50 de produtos + R$ 12 de frete da loja.
   const start = outbox.length;
   await opsPublishManualQuote(pending!.id, {
     itemsSubtotal: 50,
     deliveryFee: 12,
-    deliveryMode: "operator_courier",
+    deliveryMode: "retailer_delivery",
     deliveryPromise: "hoje até 19h",
     etaMinutes: 90
   });
@@ -309,7 +306,7 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   const paid = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal(paid!.status, "paid");
 
-  // 6. Operador compra à mão e marca. Concierge → operator_buying (não retirada de loja).
+  // 6. Operador compra à mão no site da loja e marca — a loja prepara e entrega.
   // Link de acompanhamento colado na COMPRA (17/08): é a hora em que o operador tem a
   // página do pedido aberta — e nos pedidos entregues pela loja ele não sabe quando o
   // pacote sai, então esse é o único momento garantido de dar rastreio ao cliente.
@@ -321,8 +318,7 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   const beforeBought = outbox.length;
   await opsMarkBought(pending!.id, "", TRACKING);
   const bought = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
-  assert.equal(bought!.status, "operator_buying");
-  assert.equal(isOperatorCourierOrder(bought!), true);
+  assert.equal(bought!.status, "retailer_preparing");
   // O cliente é avisado da compra (17/08): silêncio entre "pago" e "saiu pra entrega"
   // é onde nasce o "cadê meu pedido?".
   const boughtMsgs = outbox.slice(beforeBought);
@@ -332,18 +328,11 @@ test("concierge completo: pede → operador cota → paga → compra → motoboy
   assert.ok(boughtText.includes(TRACKING), `aviso de compra tem que levar o link: ${boughtText}`);
   assert.equal(bought!.courierTrackingUrl, TRACKING, "link fica guardado no pedido");
 
-  // 7. Despacha o motoboy — sai da BASE do operador, não de uma loja. Não pode lançar.
-  await opsDispatchCourier(pending!.id);
-  const dispatched = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
-  assert.equal(dispatched!.status, "dispatched");
-  assert.ok(dispatched!.courierTrackingUrl, "deveria ter rastreio do motoboy");
-  // Repetir o clique não pode criar um segundo despacho nem enviar nova mensagem.
-  const trackingBeforeRetry = dispatched!.courierTrackingUrl;
-  const messagesBeforeRetry = outbox.length;
-  const retry = await opsDispatchCourier(pending!.id);
-  assert.equal(retry.status, "dispatched");
-  assert.equal(retry.courierTrackingUrl, trackingBeforeRetry);
-  assert.equal(outbox.length, messagesBeforeRetry);
+  // 7. A loja despacha (revisão 02/09: courier/motoboy saíram do produto e do código).
+  await opsMarkRetailerOutForDelivery(pending!.id, TRACKING);
+  const shipped = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
+  assert.equal(shipped!.status, "retailer_out_for_delivery");
+  assert.equal(shipped!.courierTrackingUrl, TRACKING);
 
   // 8. Entregue.
   await opsMarkDelivered(pending!.id);
@@ -384,7 +373,7 @@ test("não é possível cotar um pedido que não está aguardando cotação", as
   const c = await returningCustomer();
   const order = await manualQuoteOrder(c);
   assert.ok(order);
-  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
   // Segunda cotação no mesmo pedido (agora awaiting_quote_confirmation) deve falhar.
   await assert.rejects(
     () => opsPublishManualQuote(order!.id, { itemsSubtotal: 40, deliveryFee: 10 }),
@@ -397,7 +386,7 @@ test("cotação concierge vencida não libera pagamento", async (t) => {
   const c = await returningCustomer();
   const order = await manualQuoteOrder(c);
   assert.ok(order);
-  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
   await prisma.deliveryOrder.update({
     where: { id: order!.id },
     data: { quoteExpiresAt: new Date(Date.now() - 1_000) }
@@ -413,7 +402,7 @@ test("estorno parcial registra valor e referência antes de avisar", async (t) =
   const c = await returningCustomer();
   const order = await manualQuoteOrder(c);
   assert.ok(order);
-  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "operator_courier" });
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10, deliveryMode: "retailer_delivery" });
   await c.send("pix");
   await markDeliveryOrderPaid(order!.id);
   await opsCancelRefund(order!.id);

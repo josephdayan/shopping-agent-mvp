@@ -528,35 +528,6 @@ export function parseBasketLines(text: string): ParsedLine[] {
 // Aceita o jeito que as pessoas realmente escrevem: "2", "quero 2", "mais duas",
 // "me vê 4". O contexto já diz que a mensagem é quantidade, então não precisamos
 // obrigar a pessoa a usar um comando rígido.
-export function parseContextualQuantity(text: string): number | null {
-  const n = normalizeMsg(text)
-    .replace(/[?!.,]/g, " ")
-    .replace(/\b(qro|qr|qero)\b/g, "quero")
-    .replace(/\s+/g, " ")
-    .trim();
-  const button = n.match(/^qty:(\d{1,2})$/)?.[1];
-  if (button) {
-    const qty = Number(button);
-    return qty >= 1 && qty <= MAX_QTY ? qty : null;
-  }
-  // "tira a coca e coloca um guarana" tem um "um" no meio, mas NÃO é resposta de
-  // quantidade — frase longa ou com verbo de edição segue pro roteador de intenção.
-  if (n.split(" ").length > 6 || REMOVE_START_RE.test(n) || SWAP_RE.test(n)) return null;
-
-  const digit = n.match(/(?:^|\b)(\d{1,2})(?:\s*(?:x|un|unidades?))?(?:\b|$)/)?.[1];
-  if (digit) {
-    const qty = Number(digit);
-    return qty >= 1 && qty <= MAX_QTY ? qty : null;
-  }
-
-  if (/\bmeia\s+duzia\b/.test(n)) return 6;
-  if (/\b(?:uma\s+)?duzia\b/.test(n)) return 12;
-  for (const [word, qty] of Object.entries(WORD_QTY)) {
-    if (new RegExp(`\\b${word}\\b`).test(n)) return qty;
-  }
-  return null;
-}
-
 // A extração por IA melhora sinônimos, mas uma lista nunca pode perder itens por uma
 // omissão do modelo. Confere o resultado com o parser determinístico e acrescenta só
 // as linhas realmente ausentes. Sinônimos comuns são canonizados para não duplicar

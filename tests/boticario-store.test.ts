@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getStore, listStores } from "../src/lib/stores";
-import { pickNearestUnit } from "../src/lib/stores/nearest";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 
 test("Boticário está registrada com catálogo real", () => {
@@ -26,12 +25,6 @@ test("roteamento: item de beleza vai pra Boticário, não pro Oba", async () => 
   const { pickStoreForQueries } = await import("../src/lib/stores");
   const store = await pickStoreForQueries(["perfume", "batom", "maquiagem"]);
   assert.equal(store.key, "boticario", `roteou pra ${store.key}`);
-});
-
-test("pickNearestUnit escolhe uma loja de SP por CEP", async () => {
-  const { unit } = await pickNearestUnit(getStore("boticario").listUnits(), "01310-100");
-  assert.ok(unit.label.includes("Boticário"));
-  assert.ok(unit.cep && unit.address.includes("São Paulo"));
 });
 
 test("catálogo tem fotos entregáveis no WhatsApp (Cloudinary, JPG)", () => {

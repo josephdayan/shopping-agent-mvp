@@ -60,7 +60,3 @@ for (const store of [
 ]) {
   process.env[`LIA_ENABLE_${store}`] = "false";
 }
-// The catalog-choice conversation evals exercise the legacy auto-quote flow. The manual
-// concierge flow (production default) is covered by tests/manual-concierge.test.ts, which
-// re-enables the flag after importing this helper.
-process.env.LIA_MANUAL_CONCIERGE = "false";

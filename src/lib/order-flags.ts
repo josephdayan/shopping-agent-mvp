@@ -83,31 +83,11 @@ export function isRetailerDeliveryOrder(order: { courierKey?: string | null; ful
   );
 }
 
-export function statusAfterStorePurchase(order: { courierKey?: string | null; fulfillments?: unknown }): string {
-  return isRetailerDeliveryOrder(order) ? RETAILER_PREPARING_STATUS : "operator_buying";
+// Revisão 02/09: só existe entrega do varejista (courier/motoboy saíram do código).
+export function statusAfterStorePurchase(_order: { courierKey?: string | null; fulfillments?: unknown }): string {
+  return RETAILER_PREPARING_STATUS;
 }
 
-// Same-hour concierge: the operator bought the goods and a courier (Uber Direct /
-// Lalamove) delivers from the OPERATOR's location to the customer — no store-counter
-// pickup, so none of the third-party-pickup document rules apply. This is the pilot's
-// courier path (distinct from the legacy authorized-partner store pickup).
-export function isOperatorCourierOrder(order: {
-  courierKey?: string | null;
-  storeKey?: string | null;
-  fulfillments?: unknown;
-}): boolean {
-  if (isRetailerDeliveryOrder(order)) return false;
-  if (order.storeKey === CONCIERGE_STORE_KEY) return true;
-  if (Array.isArray(order.fulfillments)) {
-    return order.fulfillments.some(
-      (fulfillment) =>
-        typeof fulfillment === "object" &&
-        fulfillment !== null &&
-        (fulfillment as FulfillmentLike).deliveryMode === "operator_courier"
-    );
-  }
-  return false;
-}
 
 export function isOrderOutForDelivery(status: string): boolean {
   return status === RETAILER_OUT_FOR_DELIVERY_STATUS || status === "dispatched";
