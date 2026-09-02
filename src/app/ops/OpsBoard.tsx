@@ -562,6 +562,21 @@ export default function OpsBoard() {
                   >
                     ✅ Confirmar estorno concluído
                   </button>
+                  <button
+                    style={primary}
+                    disabled={busy === `${o.id}:refund_provider`}
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Estornar AGORA pelo provedor (Mercado Pago/Pagar.me)? O valor volta ao cliente e a referência entra sozinha. Vazio = total."
+                        )
+                      ) {
+                        void act(o.id, "refund_provider", { refundAmount: parseMoneyInput(refundAmounts[o.id]) ?? undefined });
+                      }
+                    }}
+                  >
+                    ↩️ Estornar pelo provedor
+                  </button>
                 </>
               ) : !paymentReceived ? (
                 <button

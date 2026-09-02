@@ -27,6 +27,7 @@ import {
 } from "@/lib/stores/types";
 import { assertDispatchIsAllowed, getCourier, quoteAll } from "@/lib/couriers";
 import { PaymentProviderError, cancelMercadoPagoPayment, checkoutAdapter, paymentsAreMocked, pixAdapter } from "@/lib/payments/mercadopago";
+import { recordPayment, refundOrderViaProvider } from "@/lib/payments/ledger";
 import {
   cardOnFileEnabled,
   confirmSavedCardTap,
@@ -3254,7 +3255,7 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
   // é resíduo — nunca autorização de pagamento: cai na verificação normal abaixo.
   const isMock = paymentsAreMocked() && (order.pixId ?? "").startsWith("mock");
   if (isMock) {
-    await markDeliveryOrderPaid(order.id);
+    await markDeliveryOrderPaid(order.id, { provider: "mock", paymentId: order.pixId, amount: order.total });
     await writeCtx(convoId, addressOnlyCtx(ctx));
     return;
   }
@@ -3264,8 +3265,18 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
   }
   const status = await pixAdapter.getStatus(order.pixId ?? "");
   if (status === "approved") {
-    await markDeliveryOrderPaid(order.id);
+    // Evidência real (id + valor) vem do próprio MP; sem ela o flip continua valendo.
+    const { getMercadoPagoPayment } = await import("@/lib/payments/mercadopago");
+    const details = await getMercadoPagoPayment(order.pixId ?? "");
+    await markDeliveryOrderPaid(
+      order.id,
+      details ? { provider: "mercadopago", paymentId: details.id, amount: details.amount } : undefined
+    );
     await writeCtx(convoId, addressOnlyCtx(ctx));
+    return;
+  }
+  if (status === "expired") {
+    await markPixExpired(order.id, order.pixId ?? "");
     return;
   }
   await reply(phone, copy.pixNotSeenYet());
@@ -5944,10 +5955,27 @@ async function switchPaymentMethod(
 // ---------- order lifecycle (called by webhook + operator dashboard) ----------
 
 export type PaymentEvidence = {
-  provider: "mercadopago" | "pagarme";
+  provider: "mercadopago" | "pagarme" | "mock";
   paymentId?: string | null;
   amount?: number | null;
 };
+
+// Razão de pagamentos: nunca bloqueia o fluxo do dinheiro (falha vira log).
+async function ledgerRecord(order: { id: string; notes: string | null }, evidence: PaymentEvidence, status: "approved" | "unexpected") {
+  if (!evidence.paymentId || evidence.amount == null) return;
+  try {
+    await recordPayment({
+      deliveryOrderId: order.id,
+      provider: evidence.provider,
+      providerPaymentId: evidence.paymentId,
+      method: evidence.provider === "pagarme" || isCardCharge(order) ? "card" : "pix",
+      amountCents: Math.round(Number(evidence.amount.toFixed(2)) * 100),
+      status
+    });
+  } catch (error) {
+    console.error("[payment:ledger-failed]", order.id, error instanceof Error ? error.message : error);
+  }
+}
 
 // Pagamento aprovado que NÃO bate com a cobrança na mesa: valor diferente, ou um Pix
 // que não é o vigente (código antigo pago depois de reabrir/trocar pra cartão).
@@ -5976,6 +6004,7 @@ async function recordUnexpectedPayment(
 ) {
   const marker = `⚠️ PAGAMENTO FORA DO ESPERADO (${evidence.provider} ${evidence.paymentId ?? "?"})`;
   if ((order.notes ?? "").includes(marker)) return; // replay do webhook
+  await ledgerRecord(order, evidence, "unexpected");
   const detail = `${reason}${evidence.amount != null ? ` — ${copy.brl(evidence.amount)}` : ""}`;
   await prisma.deliveryOrder.update({
     where: { id: order.id },
@@ -5991,6 +6020,48 @@ async function recordUnexpectedPayment(
   });
   await notifyOperator(copy.operatorUnexpectedPaymentAlert(order.id.slice(-6).toUpperCase(), detail), order.phone);
   if (evidence.amount != null) await reply(order.phone, copy.unexpectedPaymentReceived(order.id.slice(-6).toUpperCase(), evidence.amount));
+}
+
+// Pix vencido no provedor (60 min): limpa o código pra "pix" gerar outro, anota UMA vez e
+// avisa o cliente. Idempotente pelo marcador na nota (o cron repete sem duplicar).
+export async function markPixExpired(orderId: string, pixId: string) {
+  const marker = `⏰ PIX EXPIROU (${pixId})`;
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order || order.status !== "awaiting_payment") return false;
+  if ((order.notes ?? "").includes(marker)) return false;
+  const cleared = await prisma.deliveryOrder.updateMany({
+    where: { id: orderId, status: "awaiting_payment", pixId },
+    data: { pixId: null, pixCopiaECola: null, notes: appendOrderNote(order.notes, `${marker}: cliente avisado; "pix" reemite.`) }
+  });
+  if (!cleared.count) return false;
+  await reply(order.phone, copy.pixExpiredReissue());
+  return true;
+}
+
+// Cartão salvo com desfecho desconhecido (retries esgotados / 1h sem id do provedor):
+// nota no pedido + alerta ao operador. Chamado pelo módulo de pagamentos.
+export async function flagCardOutcomeUnknown(orderId: string, attemptId: string, detail: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order) return;
+  const marker = `⚠️ CARTÃO: DESFECHO DESCONHECIDO (${attemptId})`;
+  if (!(order.notes ?? "").includes(marker)) {
+    await prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: { notes: appendOrderNote(order.notes, `${marker}: ${detail.slice(0, 160)}. Conferir no Pagar.me antes de cobrar/comprar.`) }
+    });
+  }
+  await notifyOperator(copy.operatorCardOutcomeUnknownAlert(order.id.slice(-6).toUpperCase(), detail.slice(0, 120)), order.phone);
+}
+
+// Estorno pelo provedor (revisão 02/09): o operador não precisa mais ir ao painel do MP/
+// Pagar.me e voltar com a referência — a API estorna e a referência entra sozinha.
+// Continua exigindo o pedido em `refund_pending` (o operador abriu o estorno de propósito).
+export async function opsRefundViaProvider(orderId: string, amount?: number) {
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (current.status !== "refund_pending") throw new Error("O pedido não está aguardando estorno.");
+  const result = await refundOrderViaProvider(orderId, amount);
+  return opsConfirmRefund(orderId, result.reference, result.amount);
 }
 
 export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence) {
@@ -6017,6 +6088,7 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   });
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order) return order;
+  if (flipped.count === 1 && evidence) await ledgerRecord(order, evidence, "approved");
   if (flipped.count === 0) {
     // Replay legítimo (já pago) é silencioso; dinheiro chegando em pedido cancelado/
     // recotado não pode sumir sem rastro.

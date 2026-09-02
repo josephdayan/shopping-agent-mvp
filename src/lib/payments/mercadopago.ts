@@ -14,7 +14,9 @@ export type PixCharge = {
   mock: boolean;
 };
 
-export type PixStatus = "pending" | "approved" | "rejected" | "unknown";
+// "expired": o MP devolve `cancelled` quando o Pix venceu (60 min) — o cliente precisa de
+// um código NOVO, não de "ainda não caiu" (revisão 02/09).
+export type PixStatus = "pending" | "approved" | "rejected" | "expired" | "unknown";
 
 export type SavedCardCharge = {
   status: "approved" | "declined" | "unavailable";
@@ -38,9 +40,15 @@ function hasCreds() {
   return Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN);
 }
 
+// Em deploy de produção, dinheiro de mentira não existe (revisão 02/09): um build sem
+// MERCADO_PAGO_ACCESS_TOKEN gerava Pix "MOCKPIX" e "paguei" aprovava sem dinheiro.
+export function productionRequiresRealMoney(): boolean {
+  return process.env.NODE_ENV === "production" && process.env.VERCEL === "1";
+}
+
 // True only in dev/tests (no access token): the mock charges below are safe ONLY here.
 export function paymentsAreMocked(): boolean {
-  return !hasCreds();
+  return !hasCreds() && !productionRequiresRealMoney();
 }
 
 // Raised when Mercado Pago is configured for real money but the call failed
@@ -71,6 +79,9 @@ export const pixAdapter = {
         console.error("[pix:create:failed]", input.orderId, detail);
         throw new PaymentProviderError(detail);
       }
+    }
+    if (productionRequiresRealMoney()) {
+      throw new PaymentProviderError("MERCADO_PAGO_ACCESS_TOKEN ausente em produção — cobrança recusada (nada de mock)");
     }
     const pixId = `mockpix_${randomUUID()}`;
     return {
@@ -207,6 +218,9 @@ export const checkoutAdapter = {
         throw new PaymentProviderError(detail);
       }
     }
+    if (productionRequiresRealMoney()) {
+      throw new PaymentProviderError("MERCADO_PAGO_ACCESS_TOKEN ausente em produção — link recusado (nada de mock)");
+    }
     return {
       preferenceId: `mockpref_${randomUUID()}`,
       initPoint: `https://mock.lia/pay/${input.orderId}`,
@@ -300,7 +314,8 @@ async function realGetStatus(pixId: string): Promise<PixStatus> {
   if (!res.ok) return "unknown";
   const data = (await res.json()) as { status?: string };
   if (data.status === "approved") return "approved";
-  if (data.status === "rejected" || data.status === "cancelled") return "rejected";
+  if (data.status === "cancelled" || data.status === "expired") return "expired";
+  if (data.status === "rejected") return "rejected";
   return "pending";
 }
 
@@ -330,4 +345,80 @@ export async function cancelMercadoPagoPayment(paymentId: string): Promise<boole
     console.warn("[mercadopago:cancel:failed]", paymentId, error instanceof Error ? error.message : error);
     return false;
   }
+}
+
+export type MercadoPagoPaymentDetails = {
+  id: string;
+  status: string;
+  amount: number | null;
+  externalReference: string | null;
+  refundedAmount: number;
+};
+
+// Leitura completa de um pagamento (status + valor) — base da reconciliação por cron e
+// da evidência que o cérebro exige pra marcar "pago". Nunca lança: null = não deu pra ler.
+export async function getMercadoPagoPayment(paymentId: string): Promise<MercadoPagoPaymentDetails | null> {
+  if (!hasCreds() || !/^\d{1,20}$/.test(paymentId)) return null;
+  const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
+  try {
+    const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      id?: number | string;
+      status?: string;
+      transaction_amount?: number;
+      external_reference?: string;
+      transaction_amount_refunded?: number;
+    };
+    return {
+      id: String(data.id ?? paymentId),
+      status: data.status ?? "unknown",
+      amount: typeof data.transaction_amount === "number" ? data.transaction_amount : null,
+      externalReference: data.external_reference ?? null,
+      refundedAmount: typeof data.transaction_amount_refunded === "number" ? data.transaction_amount_refunded : 0
+    };
+  } catch (error) {
+    console.warn("[mercadopago:get-payment:failed]", paymentId, error instanceof Error ? error.message : error);
+    return null;
+  }
+}
+
+// Estorno por API (revisão 02/09): total (sem `amount`) ou parcial. Lança
+// PaymentProviderError com o corpo do MP quando recusado — o operador precisa LER o
+// motivo (saldo, prazo, pagamento já estornado), nunca um "falhou" seco.
+export async function refundMercadoPagoPayment(
+  paymentId: string,
+  amount?: number
+): Promise<{ refundId: string; status: string; amount: number | null }> {
+  if (!/^\d{1,20}$/.test(paymentId)) throw new PaymentProviderError(`id de pagamento inválido: ${paymentId}`);
+  if (!hasCreds()) {
+    if (productionRequiresRealMoney()) throw new PaymentProviderError("MERCADO_PAGO_ACCESS_TOKEN ausente em produção");
+    return { refundId: `mockrefund_${randomUUID()}`, status: "approved", amount: amount ?? null };
+  }
+  const token = process.env.MERCADO_PAGO_ACCESS_TOKEN as string;
+  const body = amount != null ? JSON.stringify({ amount: Number(amount.toFixed(2)) }) : "{}";
+  const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}/refunds`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "X-Idempotency-Key": `refund:${paymentId}:${amount != null ? Number(amount.toFixed(2)) : "full"}`
+    },
+    body,
+    cache: "no-store",
+    signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
+  });
+  const text = await res.text().catch(() => "");
+  if (!res.ok) throw new PaymentProviderError(`Mercado Pago recusou o estorno (${res.status}): ${text.slice(0, 300)}`);
+  let data: { id?: number | string; status?: string; amount?: number } = {};
+  try {
+    data = JSON.parse(text) as typeof data;
+  } catch {
+    /* corpo vazio */
+  }
+  return { refundId: String(data.id ?? ""), status: data.status ?? "unknown", amount: typeof data.amount === "number" ? data.amount : amount ?? null };
 }

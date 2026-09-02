@@ -7,7 +7,13 @@ import { sleep } from "workflow";
 export async function chargeWhatsAppCardWorkflow(confirmation: PaymentConfirmation) {
   "use workflow";
   const claim = await claimConfirmation(confirmation);
-  if (!claim.claimed) return claim;
+  if (!claim.claimed) {
+    // Reentrada do step (revisão 02/09): o claim persistiu no banco mas o resultado não
+    // — a re-execução via "duplicate" e saía SEM cobrar, deixando a tentativa confirmada
+    // órfã. A cobrança é idempotente pelo attemptId (Pagar.me), então seguir é seguro.
+    if (claim.reason === "duplicate") return chargeAttemptWithRetry(confirmation.referenceId);
+    return claim;
+  }
   return chargeAttemptWithRetry(claim.attemptId);
 }
 
@@ -32,6 +38,13 @@ async function chargeAttempt(attemptId: string) {
   return chargeConfirmedPaymentAttempt(attemptId);
 }
 
+async function flagUnknownOutcome(attemptId: string, detail: string) {
+  "use step";
+  const { reportCardChargeOutcomeUnknown } = await import("@/lib/payments/whatsapp-pay");
+  console.error(`[whatsapp-card:unknown-outcome] attempt=${attemptId} ${detail}`);
+  return reportCardChargeOutcomeUnknown(attemptId, detail);
+}
+
 async function chargeAttemptWithRetry(attemptId: string) {
   // A lost HTTP response is exactly when a PSP idempotency key matters. Retry the
   // same durable step and the same Pagar.me key a few times before surfacing an
@@ -40,7 +53,12 @@ async function chargeAttemptWithRetry(attemptId: string) {
     try {
       return await chargeAttempt(attemptId);
     } catch (error) {
-      if (retry === 4) throw error;
+      if (retry === 4) {
+        // Esgotou (revisão 02/09): antes só relançava e a tentativa ficava confirmada
+        // em silêncio. Agora vira desfecho desconhecido com alerta humano.
+        await flagUnknownOutcome(attemptId, `5 tentativas falharam: ${error instanceof Error ? error.message.slice(0, 200) : "erro"}`);
+        throw error;
+      }
       await sleep("30s");
     }
   }

@@ -74,6 +74,7 @@ model DeliveryOrder {
   purchaseJobs        PurchaseJob[]
   paymentAttempts     PaymentAttempt[]
   cardEnrollmentSession CardEnrollmentSession?
+  payments            Payment[]
 
   @@index([status])
   @@index([quoteExpiresAt])
@@ -450,4 +451,31 @@ model PetzImage {
   contentType String   @default("image/jpeg")
   bytes       Int      @default(0)
   updatedAt   DateTime @updatedAt
+}
+
+// Livro-razão do dinheiro (revisão 02/09): uma linha por pagamento conhecido no provedor
+// (aprovado, ou recebido fora do esperado) e o que já foi estornado dele. "Pago" e
+// "estornado" deixam de ser anotações: o estorno por API grava a referência sozinho.
+model Payment {
+  id                String        @id @default(cuid())
+  deliveryOrderId   String
+  // mercadopago | pagarme | mock
+  provider          String
+  providerPaymentId String
+  // pix | card
+  method            String
+  amountCents       Int
+  // approved | unexpected | partially_refunded | refunded
+  status            String
+  refundedCents     Int           @default(0)
+  refundReference   String?
+  rawStatus         String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  // Cascade: pedido apagado (só limpeza de teste) leva o razão junto; em produção pedido não é apagado.
+  deliveryOrder     DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerPaymentId])
+  @@index([deliveryOrderId])
+  @@index([status, createdAt])
 }

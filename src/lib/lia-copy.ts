@@ -1421,3 +1421,12 @@ export function unexpectedPaymentReceived(shortId: string, amount: number): stri
 export function operatorUnexpectedPaymentAlert(shortId: string, detail: string): string {
   return `🚨 [operador] Pedido #${shortId}: pagamento FORA DO ESPERADO (${detail}). Nada foi aprovado automaticamente — conferir no provedor e estornar se for duplicado.`;
 }
+
+// ---- reconciliação (revisão 02/09) ----
+export function pixExpiredReissue(): string {
+  return "Esse Pix venceu (vale 60 min). Responde *pix* que eu gero outro na hora — nada foi cobrado.";
+}
+
+export function operatorCardOutcomeUnknownAlert(shortId: string, detail: string): string {
+  return `🚨 [operador] Pedido #${shortId}: cobrança no cartão salvo com DESFECHO DESCONHECIDO (${detail}). Conferir no painel Pagar.me antes de cobrar de novo ou comprar.`;
+}

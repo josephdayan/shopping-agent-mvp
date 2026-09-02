@@ -432,6 +432,24 @@ export async function reconcilePagarmeOrder(input: { providerOrderId?: string; a
   return { handled: true, pending: true as const };
 }
 
+// Desfecho desconhecido (revisão 02/09): retries esgotados, ou 1h sem id do provedor.
+// Antes a tentativa ficava `confirmed` para sempre e ninguém era avisado; o cliente ouvia
+// "Cobrando no cartão…" e depois silêncio. Não cobra de novo, não expira: marca, anota
+// no pedido e alerta o operador, que confere no painel Pagar.me.
+export async function reportCardChargeOutcomeUnknown(attemptId: string, detail: string) {
+  const changed = await prisma.paymentAttempt.updateMany({
+    where: { id: attemptId, status: "confirmed" },
+    data: { status: "unknown_outcome", error: detail.slice(0, 700) }
+  });
+  if (changed.count !== 1) return { flagged: false };
+  const attempt = await prisma.paymentAttempt.findUnique({ where: { id: attemptId }, select: { deliveryOrderId: true } });
+  if (attempt) {
+    const { flagCardOutcomeUnknown } = await import("@/lib/delivery-service");
+    await flagCardOutcomeUnknown(attempt.deliveryOrderId, attemptId, detail);
+  }
+  return { flagged: true };
+}
+
 export function attemptTotal(attempt: { amountCents: number }) {
   return fromCents(attempt.amountCents);
 }

@@ -50,6 +50,8 @@ export class PagarmeApiError extends Error {
 }
 
 function mockEnabled() {
+  // Em deploy de produção nunca existe cartão de mentira (revisão 02/09).
+  if (process.env.NODE_ENV === "production" && process.env.VERCEL === "1") return false;
   return process.env.PAGARME_MOCK === "true" || process.env.NODE_ENV === "test";
 }
 
@@ -216,13 +218,29 @@ export const pagarmeAdapter = {
         mock: false
       };
     } catch (error) {
-      // A 409 means the same Idempotency-Key is still executing. It may become a
-      // successful charge, so never tell the customer their card was declined.
-      if (error instanceof PagarmeApiError && error.status && error.status >= 400 && error.status < 500 && error.status !== 409) {
-        return { status: "declined", error: error.message, mock: false };
-      }
+      // Revisão 02/09: um 4xx da API (401 chave errada, 404 cartão/cliente inexistente,
+      // 422 payload) é erro de CONFIGURAÇÃO/pedido, não "seu cartão foi recusado" —
+      // dizer isso ao cliente e mandar link de fallback era mentira que queimava a
+      // credencial. Recusa de verdade vem com 200 e charge `failed`/`not_authorized`
+      // (statusFromOrder). Qualquer 4xx/5xx/rede aqui é "unavailable": o step durável
+      // tenta de novo com a mesma Idempotency-Key e, esgotado, vira desfecho
+      // desconhecido com alerta humano.
       return { status: "unavailable", error: error instanceof Error ? error.message : "Pagar.me unavailable", mock: false };
     }
+  },
+
+  // Estorno/cancelamento de uma charge (API v5: DELETE /charges/{id}; `amount` em
+  // centavos para parcial). Lança PagarmeApiError com o corpo quando recusado.
+  async refundCharge(chargeId: string, amountCents?: number): Promise<{ status: string; reference: string }> {
+    if (mockEnabled() && !config().secretKey) {
+      return { status: "refunded", reference: `refund_mock_${randomUUID()}` };
+    }
+    const result = await request<{ id?: string; status?: string; last_transaction?: { id?: string; status?: string } }>(
+      `/charges/${encodeURIComponent(chargeId)}`,
+      { method: "DELETE", body: amountCents != null ? JSON.stringify({ amount: amountCents }) : undefined },
+      `refund:${chargeId}:${amountCents ?? "full"}`
+    );
+    return { status: result.status ?? result.last_transaction?.status ?? "unknown", reference: result.last_transaction?.id ?? result.id ?? chargeId };
   },
 
   async getOrder(orderId: string): Promise<PagarmeSavedCardCharge> {
