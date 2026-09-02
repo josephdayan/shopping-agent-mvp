@@ -35,6 +35,7 @@ test("ML: desligado por padrão — não busca, não toca rede", async () => {
 test("ML: ligado sem token continua inerte (nunca meia-boca)", () => {
   const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN };
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false";
   delete process.env.APIFY_API_TOKEN;
   try {
     assert.equal(mercadoLivreEnabled(), false);
@@ -59,6 +60,7 @@ test("ML: prazo mostrado é o do anúncio (nunca estimado por nós)", () => {
 test("ML: anúncio com prazo publicado vence o sem prazo no empate (e internacional cai fora)", async () => {
   const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN, fetch: global.fetch, poll: process.env.APIFY_MERCADO_LIVRE_POLL_MS };
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false";
   process.env.APIFY_API_TOKEN = "token-de-teste";
   process.env.APIFY_MERCADO_LIVRE_POLL_MS = "1";
   global.fetch = (async (input: string | URL | Request) => {
@@ -153,6 +155,7 @@ test("ML: pipeline completo com o payload REAL do actor (rede mockada)", async (
   ];
   const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN, fetch: global.fetch, poll: process.env.APIFY_MERCADO_LIVRE_POLL_MS };
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false";
   process.env.APIFY_API_TOKEN = "token-de-teste";
   process.env.APIFY_MERCADO_LIVRE_POLL_MS = "1";
   global.fetch = (async (input: string | URL | Request) => {
@@ -190,6 +193,7 @@ test("ML: buscas frias idênticas em voo compartilham UM run (prefetch + busca r
   // segundos depois com a MESMA query. Sem dedupe em voo seriam dois runs pagos.
   const previous = { flag: process.env.LIA_ENABLE_MERCADOLIVRE, token: process.env.APIFY_API_TOKEN, fetch: global.fetch, poll: process.env.APIFY_MERCADO_LIVRE_POLL_MS };
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false";
   process.env.APIFY_API_TOKEN = "token-de-teste";
   process.env.APIFY_MERCADO_LIVRE_POLL_MS = "1";
   let runsStarted = 0;

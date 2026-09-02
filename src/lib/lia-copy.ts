@@ -1377,3 +1377,16 @@ export function pixExpiredReissue(): string {
 export function operatorCardOutcomeUnknownAlert(shortId: string, detail: string): string {
   return `🚨 [operador] Pedido #${shortId}: cobrança no cartão salvo com DESFECHO DESCONHECIDO (${detail}). Conferir no painel Pagar.me antes de cobrar de novo ou comprar.`;
 }
+
+// ---- cauda longa opt-in (revisão 02/09) ----
+export function longTailOffer(items: string[]): string {
+  const labels = items.map(shortNotFoundLabel);
+  if (labels.length === 1) {
+    return `*${labels[0]}* eu não achei nas lojas parceiras. Quer que eu procure no Mercado Livre? Responde *sim* ou *não*.`;
+  }
+  return ["Esses eu não achei nas lojas parceiras:", ...labels.map((i) => `• ${i}`), "Quer que eu procure no Mercado Livre? Responde *sim* ou *não*."].join("\n");
+}
+
+export function longTailDeclined(): string {
+  return "Deixo esses de fora. Manda o próximo item ou *só isso* pra fechar.";
+}

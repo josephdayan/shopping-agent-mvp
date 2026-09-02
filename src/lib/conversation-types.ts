@@ -126,6 +126,9 @@ export type DeliveryContext = {
   };
   storeKey?: string;
   notFound?: string[];
+  // Oferta pendente de busca na cauda longa (Mercado Livre) para as linhas que as
+  // vitrines locais não cobriram (revisão 02/09). "sim" dispara a busca; "não" limpa.
+  longTailOffer?: { lines: Array<{ phrase: string; qty: number; qtyExplicit?: boolean; cap?: number }> };
   // Proposta viva de troca de loja pro pedido mínimo (24/08): itens da loja travada +
   // substitutos de loja sem mínimo. Validada contra a cesta na hora do aceite.
   minSwap?: {

@@ -525,6 +525,14 @@ export const whatsappAdapter = {
   },
 
   // Pergunta "juntar no pedido parado ou pedido novo?" (01/09). Ids voltam como texto.
+  async sendLongTailOfferButtons(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [
+      { id: "longtail_sim", title: "Sim, procura" },
+      { id: "longtail_nao", title: "Não precisa" }
+    ]);
+  },
+
   async sendMergeDecisionButtons(to: string, body: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     return sendMetaSimpleButtons(to, body, [

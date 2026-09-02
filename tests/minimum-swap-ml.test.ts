@@ -41,6 +41,7 @@ before(async () => {
   await import("./helpers/load-env");
   process.env.LIA_MANUAL_CONCIERGE = "true";
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false"; // este teste cobre o resgate AUTOMÁTICO
   // mercadoLivreEnabled exige o token do actor mesmo quando o cache resolve tudo; um
   // valor fake basta — o teste nunca vai à rede (cache semeado + frete grátis).
   process.env.APIFY_API_TOKEN = process.env.APIFY_API_TOKEN || "apify_test_token";

@@ -27,6 +27,7 @@ before(async () => {
   await import("./helpers/load-env");
   process.env.LIA_MANUAL_CONCIERGE = "true";
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
+  process.env.LIA_LONGTAIL_OPTIN = "false"; // este teste cobre o resgate AUTOMÁTICO
   process.env.APIFY_API_TOKEN = process.env.APIFY_API_TOKEN || "apify_test_token";
   ({ prisma } = await import("../src/lib/prisma"));
   const adapters = await import("../src/lib/adapters/whatsapp");

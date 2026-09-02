@@ -185,6 +185,14 @@ export async function prefetchLongTailIfNeeded(query: string): Promise<void> {
 // veiculares) com o carregador de parede USB-C parado na Pague Menos. Quem decide o
 // que aparece é a camada de cima (rerank semântico; fallback = este ranking global).
 export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
+// Cauda longa OPT-IN (revisão 02/09): por padrão a primeira busca é só nas vitrines
+// locais; o Mercado Livre (actor pago, 20–75s frio) só roda quando o cliente responde
+// "sim" à oferta — ou quando a rota já falhou de propósito (forceLongTail).
+// LIA_LONGTAIL_OPTIN=false volta ao comportamento automático.
+export function longTailOptInEnabled(): boolean {
+  return process.env.LIA_LONGTAIL_OPTIN !== "false";
+}
+
 export async function gatherCrossStoreCandidates(
   query: string,
   limit = 12,
@@ -206,7 +214,7 @@ export async function gatherCrossStoreCandidates(
   // Canina" (Ri Happy), o gate achava que a busca local resolveu, o rerank descartava o
   // brinquedo com razão e o cliente ficava sem violão nenhum.
   let ranked = localRanked;
-  if (longTail && (options?.forceLongTail || needsLongTailSearch(query, localRanked))) {
+  if (longTail && (options?.forceLongTail || (!longTailOptInEnabled() && needsLongTailSearch(query, localRanked)))) {
     options?.onLongTailSearch?.();
     const longTailHits = await searchSelectedStores([longTail], query, perStore);
     ranked = rankStoreCandidates(query, [...localHits, ...longTailHits]);

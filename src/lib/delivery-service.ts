@@ -1,7 +1,7 @@
 import { displayPrice, serviceFeeForItems } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
-import { getStore, pickStoreForQueries, gatherCrossStoreCandidates, prefetchLongTailIfNeeded, type StoreCandidate, type StoreConnector } from "@/lib/stores";
+import { getStore, pickStoreForQueries, gatherCrossStoreCandidates, prefetchLongTailIfNeeded, longTailOptInEnabled, type StoreCandidate, type StoreConnector } from "@/lib/stores";
 import { mercadoLivreEnabled, prefetchMercadoLivre, searchMercadoLivre } from "@/lib/stores/mercadolivre";
 import { mlItemIdFrom } from "@/lib/ml-freight";
 import { composeBasket } from "@/lib/basket-composer";
@@ -144,7 +144,7 @@ async function buildChoices(
   // não têm match local forte — o run frio do ML (~21s) começa AGORA e roda em paralelo.
   // A busca de verdade lá embaixo se acopla ao mesmo run (dedupe em voo no conector).
   const crossStore = !lockedStoreKey;
-  if (crossStore && !forceLongTail && mercadoLivreEnabled()) {
+  if (crossStore && !forceLongTail && mercadoLivreEnabled() && !longTailOptInEnabled()) {
     const sanitized = stripMedicineNegation(text);
     for (const line of parseBasketLines(sanitized)) {
       if (!queryTokens(line.phrase).length || looksLikeMedicine(line.phrase)) continue;
@@ -751,6 +751,27 @@ async function handleDeliveryTurn(
   if (normalizeMsg(text) === "editar_itens") {
     await reply(phone, copy.editItemsHelp());
     return;
+  }
+
+  // Resposta à oferta da cauda longa ("procuro no Mercado Livre?", revisão 02/09). Só
+  // vale sem escolha aberta e fora de outras perguntas binárias (o de sempre, troca de
+  // loja) — nesses, "sim" continua sendo delas.
+  if (ctx.longTailOffer && !ctx.pending?.length && (ctx.step === "collecting" || !ctx.step) && !ctx.repeatConfirm && !ctx.minSwap) {
+    const n = normalizeMsg(text);
+    const yes = n === "longtail_sim" || (n.length <= 30 && /^(sim|pode|procura|procurar|manda|quero|bora|vai|ok|isso|claro|beleza|blz)\b/.test(n));
+    const no = n === "longtail_nao" || (n.length <= 30 && /^(n|nao|nao precisa|deixa|deixa pra la|esquece|nao quero|nem|dispensa)\b/.test(n));
+    if (yes) {
+      const offer = ctx.longTailOffer;
+      ctx.longTailOffer = undefined;
+      await rescueLongTail(phone, convo.id, user.cep, ctx, offer.lines, user.id);
+      return;
+    }
+    if (no) {
+      ctx.longTailOffer = undefined;
+      await writeCtx(convo.id, ctx);
+      await reply(phone, copy.longTailDeclined());
+      return;
+    }
   }
 
   // Botão "Mudar quantidade" do follow-up (dono, 01/09: mudar quantidade tem que ser
@@ -2021,6 +2042,13 @@ async function handleDeliveryTurn(
   }
 
   // ---- default: treat as a product request ----
+  // Classificar ANTES de buscar (revisão 02/09): a busca era o default de tudo que não
+  // casava com intent, e frase/pergunta virava produto ("seu Jorge aqui" → Imagem de São
+  // Jorge). Frase solta passa pelo roteador primeiro; lista de compras evidente vai
+  // direto pra busca (custo/latência). Sem OpenAI o roteador devolve null e nada muda.
+  if (classifyFirstEnabled() && intent.kind === "free_text" && !looksLikeProductList(text)) {
+    if (await tryLlmInterpret(phone, convo.id, user.cep, ctx, text, user.id)) return;
+  }
   // Item novo com cotação na mesa ("adiciona um óleo" em awaiting_quote_confirmation):
   // reabre o pedido pra cesta antiga não se perder (28/08 S18).
   if (
@@ -3073,7 +3101,11 @@ async function advancePending(
     // As três saídas naturais pós-escolha viram botão no canal Meta (Pagar /
     // Adicionar mais itens / Cancelar); os ids voltam como texto e caem nos ramos
     // já existentes. Sem Meta (ou falha do envio interativo), o texto de sempre.
-    const body = [prefix, copy.conciergeChooseNext()].filter(Boolean).join("\n");
+    const offerAgain =
+      ctx.longTailOffer
+        ? copy.longTailOffer(ctx.longTailOffer.lines.map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase)))
+        : undefined;
+    const body = [prefix, offerAgain, copy.conciergeChooseNext()].filter(Boolean).join("\n");
     try {
       markTurnReplied();
       const interactive = await whatsappAdapter.sendChoiceFollowUp(phone, body, followUpOpts);
@@ -3083,6 +3115,7 @@ async function advancePending(
     }
     const notes: string[] = [];
     if (prefix) notes.push(prefix);
+    if (offerAgain) notes.push(offerAgain);
     notes.push(copy.conciergeKeepAdding());
     await reply(phone, notes.join("\n"));
     return;
@@ -3113,6 +3146,18 @@ function llmStateSummary(ctx: DeliveryContext): string {
   return parts.join(" · ") || "conversa sem compra em andamento";
 }
 
+function classifyFirstEnabled(): boolean {
+  return process.env.LIA_CLASSIFY_FIRST !== "false";
+}
+
+// Lista de compras evidente (2+ linhas, ou quantidade numérica na frente) não precisa
+// do classificador: vai direto pra busca, sem pagar a chamada de IA.
+function looksLikeProductList(text: string): boolean {
+  if (parseBasketLines(text).length >= 2) return true;
+  const n = normalizeMsg(text);
+  return /^\d+\s*x?\s+\S/.test(n) || /^(quero|queria|me ve|manda|preciso de|traz|compra)\s+\d/.test(n);
+}
+
 async function tryLlmInterpret(
   phone: string,
   convoId: string,
@@ -3125,11 +3170,21 @@ async function tryLlmInterpret(
   if (meta?.llmUsed) return false;
   if (meta) meta.llmUsed = true;
   const verdict = await interpretCustomerMessage({ text, state: llmStateSummary(ctx) });
-  if (!verdict || verdict.action === "unknown") return false;
-  console.log("[llm-router]", verdict.action, JSON.stringify(text.slice(0, 60)));
+  if (!verdict) return false;
   const rePresent = async () => {
     if (ctx.step === "choosing" && ctx.pending?.length) await sendChoices(phone, ctx.pending[0]);
   };
+  console.log("[llm-router]", verdict.action, JSON.stringify(text.slice(0, 60)));
+  if (verdict.action === "unknown") {
+    // "Não sei" é resposta legítima (revisão 02/09): pergunta que nem a IA classifica não
+    // vira busca de produto. Frase sem interrogação segue pro caminho determinístico.
+    if (isQuestion(text)) {
+      await reply(phone, copy.questionNotUnderstood());
+      await rePresent();
+      return true;
+    }
+    return false;
+  }
   if (verdict.action === "product_request" && verdict.productRequest) {
     // Só re-busca se a IA de fato REESCREVEU (senão vira loop do mesmo não-achado).
     if (normalizeMsg(verdict.productRequest) === normalizeMsg(text)) return false;
@@ -3469,13 +3524,14 @@ async function handleConciergeRequest(
   // no exato caso em que a alternativa era recusar.
   const turnElapsedMs = Date.now() - (turnStartedAt.get(phone) ?? Date.now());
   const rescueBudgetMs = Number(process.env.LIA_RESCUE_BUDGET_MS ?? 120000);
-  if (notFoundLines.length && mercadoLivreEnabled() && turnElapsedMs > rescueBudgetMs) {
+  const optIn = longTailOptInEnabled();
+  if (notFoundLines.length && mercadoLivreEnabled() && !optIn && turnElapsedMs > rescueBudgetMs) {
     // O resgate custa mais uma rodada inteira (extração + actor + rerank, ~40-70s). Com
     // o turno já estourado, recusar honesto AGORA vence morrer no teto da função em
     // silêncio (caso real 19/08).
     console.warn(`[search:rescue-skipped] turno com ${Math.round(turnElapsedMs / 1000)}s; recusa honesta sem 2ª rodada`);
   }
-  if (notFoundLines.length && mercadoLivreEnabled() && turnElapsedMs <= rescueBudgetMs) {
+  if (notFoundLines.length && mercadoLivreEnabled() && !optIn && turnElapsedMs <= rescueBudgetMs) {
     // O retry vai re-extrair e re-rankear (~3-6s de IA); o run do ML começa já, com a
     // frase determinística, e a busca do retry se acopla a ele (dedupe em voo).
     for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
@@ -3505,6 +3561,20 @@ async function handleConciergeRequest(
       }
     }
   }
+  // Cauda longa OPT-IN (revisão 02/09): o que as vitrines locais não cobriram vira uma
+  // PERGUNTA ("procuro no Mercado Livre?"), não uma busca automática paga e lenta. A
+  // resposta "sim" cai em rescueLongTail; "não" limpa. Oferta nova substitui a antiga.
+  const offerLongTail = notFoundLines.length > 0 && mercadoLivreEnabled() && optIn;
+  ctx.longTailOffer = offerLongTail
+    ? {
+        lines: notFoundLines.map((line) => ({
+          phrase: line.phrase,
+          qty: line.qty,
+          ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
+          ...(line.cap != null ? { cap: line.cap } : {})
+        }))
+      }
+    : undefined;
   if (greetingOnly && !pending.length && !notFoundLines.length) {
     await reply(phone, copy.greeting());
     return;
@@ -3528,6 +3598,12 @@ async function handleConciergeRequest(
   // cotação — "se não tem, fala que não tem". A linha livre saiu do fluxo do cliente:
   // só item com preço entra na cesta, e por isso todo fechamento tem total NA HORA.
   const unavailable = notFoundLines.map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
+  const notFoundNote = (withOptions: boolean) =>
+    offerLongTail
+      ? copy.longTailOffer(unavailable)
+      : withOptions
+        ? copy.itemsNotAvailableWithOptions(unavailable)
+        : copy.itemsNotAvailable(unavailable);
   ctx.flow = "delivery";
   // A cesta continua pertencendo ao "concierge" mesmo quando o item veio de uma vitrine: o
   // pedido é cotado e comprado à mão, então não há uma loja dona do pedido.
@@ -3555,7 +3631,7 @@ async function handleConciergeRequest(
     const notes: string[] = [copy.autoAddedNote(added.map((i) => `${i.qty}x ${i.name}`)), ...packNotes];
     if (containsMedicine) notes.push(copy.medicineSkippedNote());
     if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
-    if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+    if (unavailable.length) notes.push(notFoundNote(false));
     if (rest.length) {
       await writeCtx(convoId, ctx);
       await reply(phone, notes.join("\n"));
@@ -3653,7 +3729,7 @@ async function handleConciergeRequest(
       notes.push(...packNotes);
       if (containsMedicine) notes.push(copy.medicineSkippedNote());
       if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
-      if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+      if (unavailable.length) notes.push(notFoundNote(false));
       await writeCtx(convoId, ctx);
       if (notes.length) await reply(phone, notes.join("\n"));
       await sendChoices(phone, confirm[0]);
@@ -3666,7 +3742,7 @@ async function handleConciergeRequest(
     notes.push(...packNotes);
     if (containsMedicine) notes.push(copy.medicineSkippedNote());
     if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
-    if (unavailable.length) notes.push(copy.itemsNotAvailable(unavailable));
+    if (unavailable.length) notes.push(notFoundNote(false));
     await advancePending(phone, convoId, ctx, userCep, notes.join("\n"));
     return;
   }
@@ -3680,7 +3756,7 @@ async function handleConciergeRequest(
     if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
     // Os itens sem preço são recusados ANTES das opções — mas com escopo explícito:
     // "não achei X — o resto tá abaixo" (a copy global parecia contradição, 19/08).
-    if (unavailable.length) notes.push(copy.itemsNotAvailableWithOptions(unavailable));
+    if (unavailable.length) notes.push(notFoundNote(true));
     if (notes.length) await reply(phone, notes.join("\n"));
     if (pending.length > 1) await reply(phone, copy.choiceSequence(pending.map((p) => p.query)));
     await sendChoices(phone, pending[0]);
@@ -3704,8 +3780,58 @@ async function handleConciergeRequest(
   const notes: string[] = [];
   if (containsMedicine) notes.push(copy.medicineSkippedNote());
   if (raw.containsTobacco) notes.push(copy.tobaccoRefusal());
-  notes.push(copy.itemsNotAvailable(unavailable));
+  notes.push(notFoundNote(false));
+  if (offerLongTail) {
+    try {
+      markTurnReplied();
+      const interactive = await whatsappAdapter.sendLongTailOfferButtons(phone, notes.join("\n"));
+      if (interactive) return;
+    } catch (error) {
+      console.warn("[longtail:offer-buttons:fallback-text]", error instanceof Error ? error.message : error);
+    }
+  }
   await reply(phone, notes.join("\n"));
+}
+
+// "sim" à oferta da cauda longa: a mesma rodada de resgate que antes era automática
+// (extração + actor + rerank), agora só quando o cliente pediu (revisão 02/09).
+async function rescueLongTail(
+  phone: string,
+  convoId: string,
+  userCep: string | null | undefined,
+  ctx: DeliveryContext,
+  lines: NonNullable<DeliveryContext["longTailOffer"]>["lines"],
+  userId?: string
+) {
+  void userId;
+  const unavailable = lines.map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
+  for (const line of lines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
+  const retryText = lines.map((line) => (line.cap != null ? `${line.phrase} até ${line.cap} reais` : line.phrase)).join(", ");
+  const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
+  const rescued: PendingChoice[] = [];
+  for (const choice of retry.pending) {
+    const strong = retry.reranked ? choice.options : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
+    if (!strong.length) continue;
+    const original = lines.find((line) => normalizeMsg(line.phrase) === normalizeMsg(choice.query));
+    rescued.push(original?.qtyExplicit ? { ...choice, options: strong, qty: original.qty, qtyExplicit: true } : { ...choice, options: strong });
+  }
+  const rescuedQueries = new Set(rescued.map((choice) => normalizeMsg(choice.query)));
+  const still = lines.filter((line) => !rescuedQueries.has(normalizeMsg(line.phrase))).map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
+  ctx.flow = "delivery";
+  ctx.storeKey = CONCIERGE_STORE_KEY;
+  ctx.cep = ctx.cep ?? userCep ?? undefined;
+  if (rescued.length) {
+    ctx.step = "choosing";
+    ctx.pending = rescued;
+    await writeCtx(convoId, ctx);
+    if (still.length) await reply(phone, copy.itemsNotAvailableWithOptions(still));
+    if (rescued.length > 1) await reply(phone, copy.choiceSequence(rescued.map((p) => p.query)));
+    await sendChoices(phone, rescued[0]);
+    return;
+  }
+  if (ctx.basket?.length) ctx.step = "collecting";
+  await writeCtx(convoId, ctx);
+  await reply(phone, copy.itemsNotAvailable(unavailable));
 }
 
 // "12 ovos" quando o produto é "Ovos ... 10 Unidades": a quantidade pedida é em
