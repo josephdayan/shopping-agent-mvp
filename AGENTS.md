@@ -1,5 +1,37 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 01/09/2026 (5ª) — revisão da 4ª: três brechas fechadas
+
+Revisão de código da entrega da 4ª (mesmo dia) achou três furos reais; todos fechados
+com teste de regressão:
+
+1. **Toque em "Pagar •••• 1234" ainda disparava "Me perdi aqui 😅" em produção.** O
+   botão traz só o `attemptId` (sem last4), `handleSavedCardPay` não respondia nada e, em
+   prod, `confirmSavedCardTap` só inicia o workflow durável e retorna — turno mudo → rede
+   anti-silêncio. Agora o toque busca a tentativa e responde "Cobrando no cartão final
+   *1234*" (replay de tentativa já cobrada só marca o turno). A suíte NÃO exercita o
+   caminho do workflow (NODE_ENV≠production); a prova final é um toque real no canal.
+2. **"Cobrança fresca" media o campo errado.** `chargeFresh` usava `DeliveryOrder.updatedAt`,
+   que qualquer nota renova (reclamação, "quero falar com atendente", troca de método) —
+   cliente reclamava e o item seguinte era fundido em silêncio de novo. Relógio novo:
+   `ctx.paymentIssuedAt` (epoch ms, gravado nas duas escritas de `step: "awaiting_payment"`);
+   fallback pro updatedAt só em contexto antigo sem o campo.
+3. **Pix pago com a pergunta "juntar ou pedido novo?" aberta engolia o item novo.** O
+   reset pós-pagamento apagava `mergeDecision` sem aviso. `markDeliveryOrderPaid` lê o
+   pedido pendurado ANTES do reset e, depois da confirmação, manda `copy.newItemAfterPayment`
+   ("como este pedido já está pago, vira pedido novo — me manda de novo"). Resposta
+   atrasada "1"/"2" cai fora do passo e não mexe no pedido pago.
+
+Menores: `wantsNew` não aceita mais "outro" sozinho ("quero outro modelo" durante a
+pergunta é refinamento e cancelaria um Pix emitido) — só "novo", "separado" ou "outro
+pedido"; o golden inverso ("apoio de pé para violão") passou de `/p[eé]/` (casava
+"pedal", "especial") para `/apoio de p[eé]|descanso/`.
+
+Gate: tsc, units 87/87, concierge "01/09" 10/10 (3 E2E novos: reclamação não renova a
+janela + "outro modelo" re-pergunta; Pix pago com pergunta aberta avisa do item; regressão
+do juntar×novo agora envelhece `paymentIssuedAt`, não o pedido), saved-card com asserção
+"Cobrando…" + nunca "Me perdi" no toque e no replay.
+
 ## Atualização 01/09/2026 (4ª) — conversa real do dono expôs 4 defeitos; todos fechados
 
 Caso real (livro #GAS8P9 esperando Pix há 2h + "preciso de um apoio pra guitarra de chão"):

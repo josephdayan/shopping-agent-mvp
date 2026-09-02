@@ -1,6 +1,11 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-01 (4ª)._
+_Última atualização: 2026-09-01 (5ª)._
+
+> **01/09 (5ª) — revisão.** Aberto: (d) **provar no canal real** que o toque em
+> "Pagar ••••" responde "Cobrando…" sem "Me perdi aqui" (a suíte não roda o workflow de
+> produção); (e) item novo pendurado quando o Pix é pago com a pergunta aberta hoje vira
+> aviso "me manda de novo" — V2 poderia abrir a busca sozinha (zero espera).
 
 > **01/09 (4ª) — pós-conversa real.** Aberto: (a) **scorer/rerank do golden novo**
 > ("apoio pra guitarra de chão" não pode devolver apoio de PÉ) — rodar

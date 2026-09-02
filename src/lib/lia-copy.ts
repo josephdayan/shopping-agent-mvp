@@ -525,6 +525,13 @@ export function mergeOrNewOrderPrompt(shortId: string, total: number): string {
   return `Você tem o pedido *#${shortId}* (${brl(total)}) esperando pagamento. Esse item novo é pra *juntar* nele, ou começamos um *pedido novo*?`;
 }
 
+// Pix pago enquanto a pergunta "juntar ou pedido novo?" estava aberta: o item novo
+// não pode sumir em silêncio — vira pedido novo assim que o cliente mandar de novo.
+export function newItemAfterPayment(request: string): string {
+  const item = request.trim().slice(0, 60);
+  return `E aquele item novo ("${item}") — como este pedido já está pago, ele vira um pedido novo. Me manda de novo que eu busco 🙂`;
+}
+
 export function newOrderStarted(shortId: string): string {
   return `Fechado! Cancelei o *#${shortId}* — nada foi cobrado. Bora pro pedido novo 👇`;
 }

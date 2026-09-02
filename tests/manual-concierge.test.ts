@@ -1762,7 +1762,7 @@ test("01/09: pedido parado + item novo do nada PERGUNTA juntar × novo, nunca fu
   const pix = await c.send("pix");
   assert.match(pix, /MOCKPIX|copia e cola/i, pix.slice(0, 200));
   // Envelhece a cobrança (20 min): item novo do nada é outra missão de compra.
-  await prisma.$executeRaw`UPDATE "DeliveryOrder" SET "updatedAt" = NOW() - INTERVAL '20 minutes' WHERE "id" = ${order!.id}`;
+  await agePaymentIssuedAt(c.userId, 20);
   const ask = await c.send("preciso de um shampoo");
   assert.doesNotMatch(ask, /total anterior não vale/i, `fundiu sozinho: ${ask.slice(0, 300)}`);
   assert.match(ask, /juntar|pedido novo/i, `não perguntou: ${ask.slice(0, 300)}`);
@@ -1772,6 +1772,58 @@ test("01/09: pedido parado + item novo do nada PERGUNTA juntar × novo, nunca fu
   const old = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
   assert.equal(old!.status, "canceled");
   assert.match(old!.notes ?? "", /pedido novo/);
+});
+
+// Envelhece a cobrança emitida (ctx.paymentIssuedAt) sem tocar no pedido — é este o
+// relógio da fusão, não o updatedAt do DeliveryOrder.
+async function agePaymentIssuedAt(userId: string, minutes: number) {
+  const convo = await prisma.conversation.findFirst({ where: { userId }, orderBy: { updatedAt: "desc" } });
+  assert.ok(convo, "conversa do cliente não encontrada");
+  const ctx = JSON.parse(convo!.context ?? "{}") as Record<string, unknown>;
+  assert.equal(ctx.step, "awaiting_payment");
+  ctx.paymentIssuedAt = Date.now() - minutes * 60_000;
+  await prisma.conversation.update({ where: { id: convo!.id }, data: { context: JSON.stringify(ctx) } });
+}
+
+test("01/09 rev: reclamação/atendimento não renova a janela da cobrança — item novo ainda PERGUNTA", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  await c.send("pix");
+  await agePaymentIssuedAt(c.userId, 20);
+  // Pedido de humano grava nota no pedido (updatedAt anda) — antes isso "refrescava" a
+  // cobrança e o item seguinte era fundido em silêncio.
+  const human = await c.send("quero falar com um atendente");
+  assert.doesNotMatch(human, /juntar|pedido novo/i, human.slice(0, 200));
+  const ask = await c.send("preciso de um shampoo");
+  assert.doesNotMatch(ask, /total anterior não vale/i, `fundiu sozinho: ${ask.slice(0, 300)}`);
+  assert.match(ask, /juntar|pedido novo/i, `não perguntou: ${ask.slice(0, 300)}`);
+  // "quero outro modelo" durante a pergunta NÃO cancela o Pix emitido: re-pergunta.
+  const refine = await c.send("quero outro modelo");
+  assert.match(refine, /juntar|pedido novo/i, refine.slice(0, 300));
+  assert.equal((await prisma.deliveryOrder.findUnique({ where: { id: order!.id } }))!.status, "awaiting_payment");
+});
+
+test("01/09 rev: Pix pago com a pergunta aberta não engole o item novo", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  const order = await manualQuoteOrder(c);
+  assert.ok(order);
+  await opsPublishManualQuote(order!.id, { itemsSubtotal: 30, deliveryFee: 10 });
+  await c.send("pix");
+  await agePaymentIssuedAt(c.userId, 20);
+  const ask = await c.send("preciso de um shampoo");
+  assert.match(ask, /juntar|pedido novo/i, ask.slice(0, 300));
+  const before = outbox.length;
+  await markDeliveryOrderPaid(order!.id);
+  const afterPay = outbox.slice(before).map((m) => m.text).join("\n");
+  assert.match(afterPay, /Pagamento confirmado/i, afterPay.slice(0, 300));
+  assert.match(afterPay, /shampoo/i, `item novo sumiu em silêncio: ${afterPay.slice(0, 300)}`);
+  // Resposta atrasada "1" à pergunta não reabre nem cancela o pedido pago.
+  await c.send("1");
+  assert.equal((await prisma.deliveryOrder.findUnique({ where: { id: order!.id } }))!.status, "paid");
 });
 
 test("01/09: botão Editar itens responde o manual curto de edição", async (t) => {

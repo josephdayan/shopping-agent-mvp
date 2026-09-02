@@ -197,7 +197,7 @@ export const GOLDEN_CASES: GoldenCase[] = [
   {
     name: "apoio de pé para violão continua achável (o inverso não pode quebrar)",
     query: "apoio de pe para violao",
-    top1Include: /p[eé]/,
+    top1Include: /apoio de p[eé]|descanso/,
     deterministic: false
   }
 ];

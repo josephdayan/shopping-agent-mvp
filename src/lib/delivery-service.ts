@@ -268,6 +268,10 @@ type DeliveryContext = {
   // Pedido não-pago parado + item novo pedido do nada (01/09): a Lia pergunta "juntar
   // ou pedido novo?" e guarda aqui o pedido antigo e o texto do item até a resposta.
   mergeDecision?: { orderId: string; request: string; total: number };
+  // Quando a cobrança do pedido atual foi emitida (epoch ms). É o relógio de "cobrança
+  // fresca" da fusão de item novo — não o updatedAt do pedido, que qualquer nota
+  // (reclamação, atendimento humano, troca de método) renova (revisão 01/09).
+  paymentIssuedAt?: number;
   pending?: PendingChoice[];
   quantityChoice?: { option: ChoiceOption; storeKey: string; storeLabel: string; misses?: number };
   courierOptions?: CourierOption[];
@@ -493,6 +497,19 @@ async function resetConversationForClosedOrder(
     await writeCtx(convo.id, addressOnlyCtx(ctx));
   } catch (error) {
     console.warn(`[delivery:${tag}:ctx-reset]`, error instanceof Error ? error.message : error);
+  }
+}
+
+// Item novo que ficou pendurado na pergunta "juntar ou pedido novo?" deste pedido.
+async function mergeDecisionRequestFor(order: { id: string; conversationId?: string | null }): Promise<string | undefined> {
+  if (!order.conversationId) return undefined;
+  try {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    const ctx = convo ? readCtx(convo.context) : undefined;
+    return ctx?.mergeDecision?.orderId === order.id ? ctx.mergeDecision.request : undefined;
+  } catch (error) {
+    console.warn("[delivery:paid:merge-decision]", error instanceof Error ? error.message : error);
+    return undefined;
   }
 }
 
@@ -2565,7 +2582,9 @@ async function handleDeliveryTurn(
     const pendingMerge = ctx.mergeDecision;
     const n = normalizeMsg(text);
     const wantsMerge = n === "juntar_pedido" || n === "1" || /\bjunt/.test(n) || /mesmo pedido/.test(n);
-    const wantsNew = !wantsMerge && (n === "pedido_novo" || n === "2" || /\b(novo|separado|outro)\b/.test(n));
+    // "outro" sozinho NÃO conta ("quero outro modelo" é refinamento, e o "novo"
+    // cancela um Pix emitido): só "novo", "separado" ou "outro pedido".
+    const wantsNew = !wantsMerge && (n === "pedido_novo" || n === "2" || /\b(novo|separado)\b|outro pedido/.test(n));
     if (wantsMerge || wantsNew) {
       ctx.mergeDecision = undefined;
       const order = await prisma.deliveryOrder.findUnique({ where: { id: pendingMerge.orderId } });
@@ -2964,7 +2983,8 @@ async function handleDeliveryTurn(
     const order = await prisma.deliveryOrder.findUnique({ where: { id: ctx.deliveryOrderId } });
     if (order && order.status === "awaiting_payment") {
       const explicitAdd = /\b(adiciona|acrescenta|inclui|bota|coloca|poe|põe|mais um|mais uma)\b/.test(normalizeMsg(text));
-      const chargeFresh = Date.now() - order.updatedAt.getTime() < 10 * 60_000;
+      const issuedAt = ctx.paymentIssuedAt ?? order.updatedAt.getTime();
+      const chargeFresh = Date.now() - issuedAt < 10 * 60_000;
       if (!explicitAdd && !chargeFresh) {
         ctx.step = "awaiting_merge_decision";
         ctx.mergeDecision = { orderId: order.id, request: text, total: order.total };
@@ -4894,7 +4914,16 @@ async function handleSavedCardPay(phone: string, userId: string, attemptId?: str
     resolved = pending.id;
     last4 = pending.credential.last4;
   }
+  if (!last4) {
+    // Toque no botão: só o attemptId vem. Responde "Cobrando…" aqui mesmo — em produção
+    // o workflow durável devolve o desfecho FORA deste turno, e um turno mudo fazia a
+    // rede anti-silêncio mandar "Me perdi aqui 😅" logo depois do toque (revisão 01/09).
+    // Replay de tentativa já cobrada: nada a dizer, mas o turno conta como respondido.
+    const attempt = await prisma.paymentAttempt.findUnique({ where: { id: resolved }, include: { credential: true } });
+    if (attempt?.status === "pending") last4 = attempt.credential?.last4;
+  }
   if (last4) await reply(phone, copy.savedCardCharging(last4));
+  else markTurnReplied();
   // Claim + cobrança idempotente acontecem no pipeline (workflow ou fallback síncrono);
   // o desfecho volta por mensagem própria (aprovado / recusado + fallback de link).
   await confirmSavedCardTap(resolved, phone);
@@ -5573,7 +5602,9 @@ async function setQuoteConversationAwaitingPayment(order: { id: string; conversa
   const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
   if (!convo) return;
   const ctx = readCtx(convo.context);
-  if (ctx.deliveryOrderId === order.id) await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment" });
+  if (ctx.deliveryOrderId === order.id) {
+    await writeCtx(convo.id, { ...addressOnlyCtx(ctx), deliveryOrderId: order.id, step: "awaiting_payment", paymentIssuedAt: Date.now() });
+  }
 }
 
 export async function issueValidatedRetailerQuotePayment(orderId: string, method: "pix" | "card"): Promise<{ expired: boolean }> {
@@ -5697,7 +5728,8 @@ async function createOrderAndCharge(phone: string, userId: string, convoId: stri
   await writeCtx(convoId, {
     ...addressOnlyCtx(ctx),
     deliveryOrderId: order.id,
-    step: "awaiting_payment"
+    step: "awaiting_payment",
+    paymentIssuedAt: Date.now()
   });
 
   // A cobrança em si (e a falha do Mercado Pago) vive em issueChargeForOrder: o pedido
@@ -5820,10 +5852,14 @@ export async function markDeliveryOrderPaid(orderId: string) {
   // basket instead of resurrecting the awaiting_payment step. If the customer has
   // ALREADY started a new basket in this conversation, leave it alone — the async
   // webhook must not wipe an in-flight order.
+  const pendingNewItem = await mergeDecisionRequestFor(order);
   await resetConversationForClosedOrder(order, "paid");
   // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
   // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
   await reply(order.phone, copy.paymentConfirmed());
+  // Pix pago com "juntar ou pedido novo?" aberta: o reset apaga o passo, mas o item
+  // novo que o cliente pediu não pode sumir em silêncio (revisão 01/09).
+  if (pendingNewItem) await reply(order.phone, copy.newItemAfterPayment(pendingNewItem));
   // Pedido pago é o alerta mais urgente de todos: dinheiro na mão e ninguém comprando.
   // Alerta de PAGO desligado por padrão (pedido do dono, 20/08 — ele é o operador e o
   // /ops já mostra). Religar com LIA_OPERATOR_PAID_ALERT=true quando entrar gente de

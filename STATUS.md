@@ -1,5 +1,13 @@
 # Lia — Status do Projeto
 
+## 01/09/2026 (5ª) — revisão da 4ª fecha três brechas (toque do cartão, relógio da fusão, Pix pago com pergunta aberta)
+
+Revisão de código da leva da manhã: o toque em "Pagar ••••" ainda deixava o turno mudo em
+produção (workflow assíncrono) → "Me perdi aqui" no toque; a janela de "cobrança fresca"
+lia o `updatedAt` do pedido, que uma reclamação renova; e o Pix pago com "juntar ou pedido
+novo?" aberta apagava o item novo sem aviso. Os três fechados com E2E; detalhe em AGENTS.md
+(01/09 5ª). Prova final do item 1 exige um toque real no canal Meta.
+
 ## 01/09/2026 (4ª) — conversa real: fusão silenciosa vira pergunta, fallback espúrio morto, Editar itens
 
 O pedido real do dono expôs 4 defeitos, todos fechados no dia: pedido não-pago parado
