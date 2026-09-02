@@ -6,7 +6,7 @@
     "purchase-worker:claim": "tsx scripts/purchase-worker-client.mts claim",
     "dev": "next dev",
     "dev:demo": "bash scripts/dev-demo.sh",
-    "build": "prisma generate && next build && node scripts/check-bundle-emoji.mjs",
+    "build": "prisma generate && node scripts/migrate-on-build.mjs && next build && node scripts/check-bundle-emoji.mjs",
     "start": "next start",
     "lint": "next lint",
     "test": "LIA_RETAILER_TEST_SEED=true node --import tsx --test tests/*.test.ts",
@@ -18,7 +18,10 @@
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "twilio:create-product-options-template": "tsx scripts/create-twilio-product-options-template.mjs"
+    "twilio:create-product-options-template": "tsx scripts/create-twilio-product-options-template.mjs",
+    "db:check": "node scripts/check-migrations.mjs",
+    "test:e2e": "LIA_RETAILER_TEST_SEED=true LIA_REQUIRE_DB=1 node --import tsx --test tests/*.test.ts",
+    "test:local": "tsx scripts/test-local-db.mts"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
@@ -36,6 +39,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "autoprefixer": "^10.4.20",
+    "embedded-postgres": "^18.4.0-beta.17",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.23",
     "postcss": "^8.4.49",

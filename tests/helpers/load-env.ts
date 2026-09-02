@@ -16,6 +16,15 @@ try {
   // no .env — tests that need the DB will fail loudly on connect
 }
 
+// Fronteira teste × produção (revisão 02/09): com TEST_DATABASE_URL definida, TODA a
+// suíte fala com esse banco (nunca com o DATABASE_URL de produção do .env). Sem ela, o
+// comportamento antigo continua (mesmo banco, telefones de teste auto-limpos) — mas
+// LIA_REQUIRE_DB=1 (CI) transforma "banco indisponível → skip" em falha.
+if (process.env.TEST_DATABASE_URL) {
+  process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
+  process.env.DIRECT_URL = process.env.TEST_DIRECT_URL ?? process.env.TEST_DATABASE_URL;
+}
+
 process.env.WHATSAPP_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";
 process.env.LIA_RETAILER_TEST_SEED = "true";

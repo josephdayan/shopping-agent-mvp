@@ -140,7 +140,8 @@ before(async () => {
     await prisma.$queryRaw`SELECT 1`;
     dbOk = true;
     await wipeTestData(); // leftovers from a crashed previous run
-  } catch {
+  } catch (error) {
+    if (process.env.LIA_REQUIRE_DB === "1") throw error;
     dbOk = false;
     console.warn("⚠️  Banco indisponível — evals de conversa serão pulados.");
   }
@@ -496,8 +497,15 @@ test("trocar endereço: pede o novo CEP e atualiza", async (t) => {
   const c = await returningCustomer();
   const ask = await c.send("quero trocar meu endereço");
   assert.match(ask, /CEP/);
-  const updated = await c.send("04538-132");
-  assert.match(updated, /atualizado|salvo/i);
+  // Revisão 02/09: CEP novo NÃO herda a rua antiga como "verificada" (o teste antigo
+  // travava exatamente esse bug: "Endereço atualizado: Rua das Flores…" num CEP de
+  // outro bairro). A Lia pede rua/número do endereço novo e só então confirma.
+  const askAddress = await c.send("04538-132");
+  assert.match(askAddress, /endereço/i, `não pediu o endereço novo: ${askAddress.slice(0, 160)}`);
+  assert.doesNotMatch(askAddress, /Rua das Flores/i, "a rua velha não pode voltar como verificada");
+  const updated = await c.send("Rua Funchal, 500, apto 12, Vila Olímpia");
+  assert.match(updated, /atualizado|salvo/i, `não confirmou: ${updated.slice(0, 160)}`);
+  assert.match(updated, /Funchal/);
   const user = await prisma.user.findUnique({ where: { phone: c.phone } });
   assert.equal(user?.cep, "04538-132");
 });

@@ -42,7 +42,8 @@ before(async () => {
   try {
     await prisma.$queryRaw`SELECT 1`;
     dbOk = true;
-  } catch {
+  } catch (error) {
+    if (process.env.LIA_REQUIRE_DB === "1") throw error;
     console.warn("⚠️  Banco indisponível — teste de teto no ML será pulado.");
     return;
   }

@@ -91,7 +91,8 @@ test("Meta: onboarding, quantidade e pagamento usam botões com ids estáveis", 
     assert.deepEqual(bodies[4].interactive.action.buttons.map((b: any) => b.reply.id), ["cancelar"]);
     assert.equal(bodies[4].interactive.action.buttons[0].reply.title, "Cancelar pedido");
     // Resumo da cotação leva o botão "Trocar endereço" (ação em botão, não instrução).
-    assert.deepEqual(bodies[5].interactive.action.buttons.map((b: any) => b.reply.id), ["trocar_endereco"]);
+    // "Editar itens" entrou no resumo em 01/09 (4ª) — o teste não tinha sido adaptado.
+    assert.deepEqual(bodies[5].interactive.action.buttons.map((b: any) => b.reply.id), ["trocar_endereco", "editar_itens"]);
     assert.equal(bodies[5].interactive.action.buttons[0].reply.title, "Trocar endereço");
   } finally {
     process.env.WHATSAPP_PROVIDER = previous.provider;

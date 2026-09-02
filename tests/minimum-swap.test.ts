@@ -75,7 +75,8 @@ before(async () => {
     await prisma.$queryRaw`SELECT 1`;
     dbOk = true;
     await wipeTestData();
-  } catch {
+  } catch (error) {
+    if (process.env.LIA_REQUIRE_DB === "1") throw error;
     dbOk = false;
     console.warn("⚠️  Banco indisponível — testes de troca de mínimo serão pulados.");
   }

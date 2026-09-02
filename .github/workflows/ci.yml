@@ -1,0 +1,48 @@
+# CI mínimo (revisão 02/09): tsc + lint + unitários em todo push; E2E com Postgres em
+# serviço e LIA_REQUIRE_DB=1 (sem banco = FALHA, não skip). Nenhum segredo real: os
+# helpers de teste pinam provider mock e OpenAI vazia.
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lia_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d lia_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lia_test?schema=public
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lia_test?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/lia_test?schema=public
+      LIA_REQUIRE_DB: "1"
+      LIA_RETAILER_TEST_SEED: "true"
+      WHATSAPP_PROVIDER: mock
+      API_TOKEN: ci-api-token
+      WHATSAPP_WEBHOOK_SECRET: ci-webhook-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - name: Migrations aplicam num banco limpo e batem com o schema
+        run: |
+          npx prisma migrate deploy
+          npm run db:check
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - run: npm run test:unit
+      - name: E2E (banco de serviço, sem skip)
+        run: npm test

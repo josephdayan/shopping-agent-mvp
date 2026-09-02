@@ -27,3 +27,6 @@ docs/obsidian/.obsidian/
 /.swc
 .env*
 !.env.example
+
+# Postgres local embutido dos testes (scripts/test-local-db.mts)
+.local-pg/
