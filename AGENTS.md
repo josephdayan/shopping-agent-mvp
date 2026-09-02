@@ -1,5 +1,22 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 02/09/2026 (3ª) — deploy das melhorias em produção ("faz isso")
+
+O dono mandou executar a lista de ações. Feito: **deploy de produção pela CLI**
+(`shopping-agent-8pcyha9nk`, READY em 2 min) — o build aplicou sozinho as 4 migrations
+(`waitlist_petz_image_indexes`, `payment_ledger`, `retailer_delivery_default`,
+`drop_legacy_models`; confirmadas em `_prisma_migrations`); **`CRON_SECRET` criada** na Vercel
+(Production + Preview; valor não registrado); **29 variáveis mortas removidas** da Vercel
+(Twilio, Uber, Lalamove, Browserbase/Contexts, `ADMIN_*`, `LIA_MANUAL_CONCIERGE`,
+`LIA_OPERATOR_PICKUP_*`, `LIA_REQUIRE_REAL_COURIER_DISPATCH`, `PURCHASE_AUTOMATION_ENABLED`,
+`APIFY_WEBHOOK_SECRET`, `APIFY_MERCADO_LIVRE_CALLBACK_URL`, `MERCADO_LIVRE_REFRESH_TOKEN`,
+`MERCADO_LIVRE_REDIRECT_URI`); **tabelas legadas do motor de junho DROPADAS** (Product,
+ProductOption, Order, OpsTask, Preference — autorização explícita do dono); `.env.local.bak`
+apagado. **Não feito por mim:** `git push origin main` (bloqueado pela política da sessão —
+`main` está 10 commits à frente de `origin/main`; o dono roda o push) e abrir `/ops?key=`
+(cookie do navegador do dono). Fica também o projeto Supabase exclusivo (plano gratuito no
+limite de 2 projetos).
+
 ## Atualização 02/09/2026 (2ª) — as quatro melhorias da revisão EXECUTADAS ("pode fazer tudo isso")
 
 Decisão do dono em 02/09: executar os quatro itens da seção 3 do relatório

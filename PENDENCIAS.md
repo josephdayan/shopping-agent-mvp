@@ -1,6 +1,13 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-02 (2ª — melhorias executadas)._
+_Última atualização: 2026-09-02 (3ª — deploy feito)._
+
+> **02/09 (3ª) — em produção.** Deploy READY, 4 migrations aplicadas (com o DROP das
+> tabelas legadas), `CRON_SECRET` criada, envs mortas removidas, `.env.local.bak` apagado.
+> **Aberto, do dono (1 min cada):** `git push origin main`; abrir `/ops?key=<OPS_TOKEN>`
+> uma vez; observar o 1º pedido real (`[payment:unexpected]`, `[cron:reconcile-payments]`,
+> copy da oferta do Mercado Livre); decidir #YAQHF8/#QTNL2T; escolher o caminho A/B/C/D.
+
 
 > **02/09 (2ª) — as quatro melhorias foram executadas** (AGENTS.md 02/09 2ª). Fechado:
 > banco de teste local + CI + migrate no build; razão de pagamentos + estorno por API +

@@ -1,5 +1,12 @@
 # Lia — Status do Projeto
 
+## 02/09/2026 (3ª) — melhorias em produção
+
+Deploy READY com as 4 migrations aplicadas (inclusive o DROP das tabelas do motor de
+junho, autorizado pelo dono), `CRON_SECRET` criada, 29 envs mortas removidas da Vercel,
+`.env.local.bak` apagado. Pendente do dono: `git push origin main` (10 commits locais) e
+abrir `/ops?key=<OPS_TOKEN>` uma vez. Depois disso, observar o primeiro pedido real.
+
 ## 02/09/2026 (2ª) — quatro melhorias executadas: banco de teste local, dinheiro fechado, legado apagado, cérebro em módulos, classificar antes de buscar
 
 Cinco commits, cada um com tsc, lint e suíte inteira verde (**476 testes em ~15 s** num
