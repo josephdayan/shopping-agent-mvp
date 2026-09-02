@@ -1,5 +1,64 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 02/09/2026 (2ª) — as quatro melhorias da revisão EXECUTADAS ("pode fazer tudo isso")
+
+Decisão do dono em 02/09: executar os quatro itens da seção 3 do relatório
+[docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md). Feito em
+cinco commits (fases 1, 2, 3a, 3c, 3b, 4), cada um com `tsc`, lint e suíte inteira verde.
+Regras novas que valem a partir daqui:
+
+1. **Teste ≠ produção.** `npm run test:local` sobe um Postgres embutido (`embedded-postgres`,
+   pasta `.local-pg/`), recria `lia_test`, aplica as migrations, roda o gate de drift
+   (`npm run db:check`) e a suíte inteira: **476 testes em ~15 s** (antes: 53 min no banco
+   remoto de produção). É o gate padrão; **nunca mais rodar a suíte contra o DATABASE_URL de
+   produção**. `TEST_DATABASE_URL` redireciona a suíte; `LIA_REQUIRE_DB=1` transforma "sem
+   banco → skip" em falha (CI em `.github/workflows/ci.yml`: tsc, lint, unit, E2E com Postgres
+   em serviço). O build de PRODUÇÃO na Vercel aplica as migrations pendentes
+   (`scripts/migrate-on-build.mjs`); Preview não toca no banco.
+2. **Dinheiro de ponta a ponta.** Tabela `Payment` (razão: provedor, id, valor, quanto voltou,
+   referência) alimentada por `markDeliveryOrderPaid` com evidência. Estorno pela API do
+   provedor (`refundOrderViaProvider` → MP `/refunds` ou Pagar.me `DELETE /charges`) via
+   `opsRefundViaProvider` e botão "Estornar pelo provedor" no /ops (manual continua). Em
+   deploy de produção **não existe mock de pagamento** (`paymentsAreMocked()` é false; Pix/
+   link sem credencial lançam). Pagar.me 4xx = `unavailable` (nunca "cartão recusado").
+   Workflow do cartão: reentrada `duplicate` cobra; retries esgotados → `unknown_outcome` +
+   nota + alerta. Pix vencido → `markPixExpired` (limpa código, avisa uma vez). Cron
+   `/api/cron/reconcile-payments` (a cada 10 min, `CRON_SECRET`) reconcilia tentativas e Pix.
+3. **Legado apagado.** Twilio, /admin, /chat, /api/v1, /api/conversations, /api/twilio,
+   callback Apify, motor de busca ML de junho (chat-service, suppliers, products, messaging,
+   fulfillment, payment, types.ts, aiAdapter), fluxo legado de catálogo dentro do cérebro
+   (`LIA_MANUAL_CONCIERGE` não existe mais — o concierge é o único caminho), couriers/motoboy
+   (Uber/Lalamove/Loggi, `LIA_OPERATOR_PICKUP_*`, "motoboy na hora" no /ops), guarda de
+   km/geo/nearest, pergunta de quantidade legada. **Não reintroduzir.** Os modelos Prisma
+   `Product/ProductOption/Order/OpsTask/Preference` continuam no schema, anotados como
+   legado, até o dono autorizar o DROP (migration destrutiva). `courierKey` default agora
+   é `retailer_delivery`; `statusAfterStorePurchase` é sempre `retailer_preparing`.
+4. **Cérebro em módulos.** `src/lib/conversation-types.ts` (tipos e contas puras),
+   `turn-runtime.ts` (ctx/CAS, lock, reply, alertas), `order-payments.ts` (Pix/cartão,
+   troca, saída de awaiting_payment, evidência, pago), `ops-lifecycle.ts` (cotação manual,
+   comprado, saiu, entregue, estorno, fila, lista de espera) e `delivery-service.ts` (só a
+   conversa, 4.085 linhas; re-exporta a API pública). Camadas sem ciclo: tipos ← turno ←
+   pagamentos ← operação ← conversa. Função nova vai no módulo da sua camada.
+5. **Classificar antes de buscar.** Frase solta passa pelo roteador LLM ANTES da busca
+   (`classifyFirstEnabled`, kill-switch `LIA_CLASSIFY_FIRST=false`); lista com quantidades
+   vai direto. `unknown` em pergunta responde `questionNotUnderstood` ("não sei") em vez de
+   virar produto. **Cauda longa opt-in**: a primeira busca é só nas vitrines locais (sem
+   prefetch pago); o que não tem preço vira "quer que eu procure no Mercado Livre?"
+   (botões `longtail_sim`/`longtail_nao`, texto sim/não); "sim" → `rescueLongTail`. Kill-
+   switch `LIA_LONGTAIL_OPTIN=false` (os testes de resgate automático o usam). Memória de
+   compra (`preferredSkuCounts`) passou a valer no concierge.
+
+**Ações do dono depois deste ciclo:** (a) deploy — o build de produção aplica 3 migrations
+(WaitlistLead/PetzImage+índices, Payment, default retailer_delivery); (b) `CRON_SECRET` na
+Vercel (sem ela o cron nega); (c) abrir `/ops?key=<OPS_TOKEN>` uma vez; (d) observar o
+primeiro pedido real com `[payment:unexpected]`, `[cron:reconcile-payments]` e a oferta do
+Mercado Livre (copy nova, ajustar se soar estranha); (e) autorizar ou não o DROP das 5
+tabelas legadas; (f) apagar `.env.local.bak`; (g) remover da Vercel as envs mortas
+(`TWILIO_*`, `UBER_*`, `LALAMOVE_*`, `BROWSERBASE_*`, `*_BROWSER_CONTEXT_ID`,
+`LIA_OPERATOR_PICKUP_*`, `LIA_REQUIRE_REAL_COURIER_DISPATCH`, `LIA_MANUAL_CONCIERGE`,
+`ADMIN_USER/PASSWORD`, `MERCADO_LIVRE_REFRESH_TOKEN`, `APIFY_WEBHOOK_SECRET`,
+`APIFY_MERCADO_LIVRE_CALLBACK_URL`).
+
 ## Atualização 02/09/2026 — revisão completa (código + negócio) com o modelo novo
 
 Pedido do dono: revisão completa do código, sugestões e leitura do modelo de negócio.

@@ -1,6 +1,20 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-02 (revisão completa)._
+_Última atualização: 2026-09-02 (2ª — melhorias executadas)._
+
+> **02/09 (2ª) — as quatro melhorias foram executadas** (AGENTS.md 02/09 2ª). Fechado:
+> banco de teste local + CI + migrate no build; razão de pagamentos + estorno por API +
+> mock proibido em prod + cron + desfecho desconhecido + Pix vencido; legado apagado
+> (Twilio, /admin, /chat, /api/v1, motor ML de junho, fluxo legado, couriers, geo);
+> cérebro em 5 módulos; classificar antes de buscar + cauda longa opt-in. **Aberto, do
+> dono:** deploy (3 migrations aplicam sozinhas no build de produção), `CRON_SECRET` na
+> Vercel, `/ops?key=` uma vez, observar o 1º pedido real (`[payment:unexpected]`,
+> `[cron:reconcile-payments]`, copy da oferta do ML), autorizar DROP das 5 tabelas
+> legadas, apagar `.env.local.bak`, limpar envs mortas da Vercel, mover a Lia para um
+> projeto Supabase só dela (o atual hospeda outro app). **Aberto, produto:** decidir o
+> caminho A/B/C/D da seção 4.5 do relatório; rate limit por telefone; headers de
+> segurança; comparação técnica; parcelamento.
+
 
 > **02/09 — revisão completa.** Relatório:
 > [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md). Aberto,

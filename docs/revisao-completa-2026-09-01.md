@@ -288,3 +288,28 @@ para C.
 - **Não coberto:** revisão profunda do matcher/rerank e dos wrappers de loja (o agente
   dessa frente caiu por limite de gasto); recomendo rodar `npx tsx scripts/eval-search.mts`
   e o golden como parte do próximo ciclo, se houver.
+
+---
+
+## 6. Execução das melhorias — 02/09/2026
+
+O dono autorizou os quatro itens da seção 3 ("pode fazer tudo isso"). Resultado, por fase,
+cada uma com `tsc`, lint e suíte inteira verde antes do commit:
+
+| Fase | O que mudou | Prova |
+|---|---|---|
+| 1 — teste ≠ produção | `npm run test:local` (Postgres embutido, sem Docker), `TEST_DATABASE_URL`, `LIA_REQUIRE_DB`, CI em GitHub Actions, `migrate deploy` só no build de produção, gate de drift schema×migrations | suíte inteira **499 → 476 testes em ~15 s** (antes 53 min contra o banco de produção); 2 testes antigos travavam bugs já corrigidos e foram adaptados |
+| 2 — dinheiro | tabela `Payment`, estorno pela API (MP e Pagar.me) com referência automática, mock proibido em deploy de produção, Pagar.me 4xx = indisponível, workflow do cartão com reentrada e desfecho desconhecido, Pix vencido, cron de reconciliação | `tests/payment-ledger.test.ts` (8) + 507/507 |
+| 3a — legado de superfície | Twilio, /admin, /chat, /api/v1, /api/conversations, /api/twilio, callback Apify, motor ML de junho, seed mock, dependência `twilio`; webhook assina antes de qualquer parse | 507/507, lint 0 |
+| 3c — legado no cérebro | fluxo de catálogo de junho, couriers/motoboy, guarda de km/geo, pergunta de quantidade; memória de compra ligada no concierge | 9 evals do fluxo morto apagados, 7 portados, 1 novo; 470/470 |
+| 3b — módulos | `conversation-types`, `turn-runtime`, `order-payments`, `ops-lifecycle`; cérebro 5.987 → 4.085 linhas, camadas sem ciclo | 470/470 |
+| 4 — roteamento | classificar antes de buscar (frase solta → roteador; lista → busca), "não sei" legítimo, Mercado Livre opt-in ("quer que eu procure?") | `tests/classify-first-longtail.test.ts` (6); 476/476 |
+
+**Não feito, por decisão ou bloqueio:** DROP das cinco tabelas Prisma do motor de junho
+(migration destrutiva — fica para o dono); projeto Supabase exclusivo (o plano gratuito já
+tem 2 projetos); rate limit por telefone e headers de segurança (P2 da seção 2.2).
+
+**O que o dono precisa fazer para isso chegar em produção:** deploy (as três migrations
+novas aplicam sozinhas no build de produção), `CRON_SECRET` na Vercel, abrir `/ops?key=`
+uma vez, e observar o primeiro pedido real — em especial a copy nova da oferta do Mercado
+Livre e os logs `[payment:unexpected]` / `[cron:reconcile-payments]`.

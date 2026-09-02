@@ -3,11 +3,12 @@
 _Guia de 1 página pra quem opera os pedidos. Criado em 2026-07-20._
 
 > **Nota de 02/09/2026.** Este runbook descreve o fluxo de julho (motoboy saindo da base).
-> Hoje o padrão é: a Lia cota na hora com preço da vitrine, o cliente paga, **você compra
-> no site da loja/ML como cliente comum e a loja entrega**; "motoboy na hora" é exceção.
-> O botão **"Cancelar e solicitar estorno"** voltou ao card de pedido pago (revisão de
-> 01/09); pedido esperando Pix/cartão agora aparece na fila. Frete e custo aceitam vírgula
-> ("12,90").
+> Hoje só existe **entrega pela própria loja**: a Lia cota na hora com preço da vitrine, o
+> cliente paga, você compra no site da loja/ML como cliente comum e marca "Confirmar
+> compra na loja", depois "Loja saiu para entrega" e "Marcar entregue". O motoboy da base
+> saiu do produto (09/08) e do código (02/09). Estorno de pedido pago: "Cancelar e
+> solicitar estorno" e depois "Estornar pelo provedor" (automático) ou "Confirmar estorno"
+> (manual, com referência). Frete e custo aceitam vírgula ("12,90").
 
 Você é a pessoa que **compra os pedidos e manda entregar**. O cliente pede pela Lia no
 WhatsApp; a Lia mostra o pedido pra você no painel; **você cota, compra e despacha**. A Lia

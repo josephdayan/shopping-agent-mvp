@@ -1,5 +1,19 @@
 # Lia — Status do Projeto
 
+## 02/09/2026 (2ª) — quatro melhorias executadas: banco de teste local, dinheiro fechado, legado apagado, cérebro em módulos, classificar antes de buscar
+
+Cinco commits, cada um com tsc, lint e suíte inteira verde (**476 testes em ~15 s** num
+Postgres embutido — o remoto de produção não é mais tocado pelos testes; CI criada).
+Dinheiro: razão `Payment`, estorno pela API do provedor no /ops, mock proibido em
+produção, cron de reconciliação, desfecho desconhecido do cartão com alerta, Pix vencido
+tratado. Legado: Twilio, /admin, /chat, /api/v1, motor ML de junho, fluxo legado de
+catálogo, couriers/motoboy e guarda de km removidos (−30% de arquivos; modelos Prisma
+legados ficam até o dono autorizar o DROP). Cérebro: 5.987 → 4.085 linhas + 4 módulos
+(tipos, turno, pagamentos, operação). Roteamento: frase solta passa pela IA antes da
+busca, "não sei" é resposta, Mercado Livre só depois de um "sim". Detalhe e ações do
+dono em AGENTS.md (02/09 2ª) e no relatório
+[docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md) (seção 6).
+
 ## 02/09/2026 — revisão completa: 19 correções (5 P0 de dinheiro), auth do /ops fechada, relatório de negócio
 
 Revisão pedida pelo dono com o modelo novo. Fechados com regressão: webhook do Mercado
