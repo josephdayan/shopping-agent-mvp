@@ -117,10 +117,6 @@ async function wipeTestData() {
   // Use the parent relation too: this remains correct if another test created a
   // conversation between the id snapshot above and the cleanup statements.
   await prisma.message.deleteMany({ where: { conversation: { userId: { in: ids } } } });
-  await prisma.productOption.deleteMany({ where: { conversation: { userId: { in: ids } } } });
-  const legacyOrders = await prisma.order.findMany({ where: { userId: { in: ids } }, select: { id: true } });
-  await prisma.opsTask.deleteMany({ where: { orderId: { in: legacyOrders.map((o) => o.id) } } });
-  await prisma.order.deleteMany({ where: { userId: { in: ids } } });
   await prisma.deliveryOrder.deleteMany({ where: { userId: { in: ids } } });
   await prisma.conversation.deleteMany({ where: { id: { in: convoIds } } });
   await prisma.user.deleteMany({ where: { id: { in: ids } } });
