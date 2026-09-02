@@ -1,0 +1,309 @@
+// Runtime do turno (revisão 02/09): contexto (ler/gravar com CAS), lock por conversa,
+// resposta ao cliente e alerta ao operador. Zero regra de negócio de compra.
+import { whatsappAdapter } from "@/lib/adapters/whatsapp";
+import { normalizeMsg } from "@/lib/lia-intents";
+import { displayPrice, serviceFeeForItems } from "@/lib/pricing";
+import { prisma } from "@/lib/prisma";
+import * as copy from "@/lib/lia-copy";
+import { DeliveryContext } from "./conversation-types";
+
+// The active product: a WhatsApp concierge with breadth — the customer asks
+// for anything from anywhere, the operator sources, prices and buys it by hand, and a
+// courier (Uber Direct/Lalamove) delivers same-hour from the operator to the customer.
+// No live retailer automation (Browserbase) sits on the critical path here; the operator
+// is the source of truth for the quote. Flip LIA_MANUAL_CONCIERGE=false to fall back to
+// the legacy catalog auto-quote flow (still exercised by the conversation evals).
+// Alerta operacional no WhatsApp do operador (LIA_OPERATOR_PHONE; sem env = silêncio).
+// Caso real (11/08): um pedido ficou 2 DIAS em awaiting_operator_quote porque nada avisava
+// o operador de que havia trabalho no /ops — pro cliente, o "te mando em instantes" virou
+// nunca. Best-effort: falha de envio jamais afeta o fluxo do cliente.
+export async function notifyOperator(text: string, customerPhone?: string) {
+  const to = process.env.LIA_OPERATOR_PHONE?.trim();
+  if (!to) return;
+  // Operador comprando/testando como cliente: o alerta interno iria pro MESMO chat da
+  // conversa (26/08 P1.9 — "[operador] Pedido #..." apareceu no meio do teste). Loga e
+  // suprime; o /ops continua sendo a fonte.
+  if (customerPhone && normalizePhone(to) === normalizePhone(customerPhone)) {
+    console.warn("[operator-alert:suppressed-self]", text.slice(0, 80));
+    return;
+  }
+  try {
+    await whatsappAdapter.sendMessage(to, text);
+  } catch (error) {
+    console.warn("[operator-alert:failed]", error instanceof Error ? error.message : error);
+  }
+}
+
+// Where the operator hands the goods to the courier (their own base). Same-hour courier
+// pickup is from HERE, never a store counter — so the retailer third-party-pickup document
+// rules never apply. Configured once via env for same-hour operation.
+// Your margin is baked into the product price (no separate fee line). O markup é
+// PROGRESSIVO por faixa (23/08): vive em src/lib/pricing.ts — displayPrice é o ponto
+// único; serviceFeeForItems/Subtotal mantêm o total consistente com os cards.
+
+export function normalizePhone(phone?: string) {
+  if (!phone) return "+550000000000";
+  const cleaned = phone.replace("whatsapp:", "").trim();
+  if (cleaned.startsWith("+")) return cleaned;
+  const digits = cleaned.replace(/\D/g, "");
+  return `+${digits}`;
+}
+
+export async function getOrCreateConvo(phone: string, name?: string) {
+  const user = await prisma.user.upsert({
+    where: { phone },
+    update: name ? { name } : {},
+    create: { phone, name }
+  });
+  let convo = await prisma.conversation.findFirst({
+    where: { userId: user.id, status: "active" },
+    orderBy: { updatedAt: "desc" }
+  });
+  if (!convo) {
+    // Id DETERMINÍSTICO por cliente: duas mensagens simultâneas do mesmo número
+    // convergem para a MESMA conversa, porque upsert por chave primária é atômico.
+    // Com `create`, o ler-depois-criar abria DUAS conversas ativas — cada mensagem
+    // caía numa, dividindo a cesta e furando o dedupe do webhook (que é por conversa).
+    // Conversa nunca é desativada no produto, então reaproveitar o id é seguro.
+    convo = await prisma.conversation.upsert({
+      where: { id: `conv_${user.id}` },
+      update: { status: "active" },
+      create: { id: `conv_${user.id}`, userId: user.id, status: "active", currentStep: "delivery" }
+    });
+  }
+  rememberCtxSnapshot(convo.id, convo.context ?? null);
+  return { user, convo };
+}
+
+export function readCtx(context: string | null): DeliveryContext {
+  try {
+    return context ? (JSON.parse(context) as DeliveryContext) : {};
+  } catch {
+    return {};
+  }
+}
+
+// ---------- escrita CONDICIONAL de contexto (teste 26/08, P0.1) ----------
+// O pior achado do teste em massa: um turno LENTO (busca fria de 45-120s) terminava
+// depois de um "cancelar" e regravava a cesta antiga por cima do contexto limpo — a
+// sessão 19 chegou ao Pix com 6 itens da sessão 18 cancelada. A cura estrutural:
+// cada turno guarda o SNAPSHOT do contexto que leu (AsyncLocalStorage, sem mudar a
+// assinatura dos 88 call sites) e toda escrita é compare-and-swap contra ele. Outra
+// escrita no meio (cancelar, outro turno) → o CAS falha → TurnSupersededError → o
+// turno velho PARA, sem gravar e sem falar mais nada.
+import { AsyncLocalStorage } from "node:async_hooks";
+
+export class TurnSupersededError extends Error {
+  constructor(convoId: string) {
+    super(`turno superado: contexto de ${convoId} mudou por baixo`);
+    this.name = "TurnSupersededError";
+  }
+}
+
+export const turnStore = new AsyncLocalStorage<Map<string, string | null>>();
+
+// Contador de RESPOSTAS do turno — a rede anti-silêncio absoluto (28/08: quatro
+// sessões terminaram um turno sem NENHUMA mensagem de volta). Se o turno fechar com
+// zero envios, handleDeliveryMessage manda um fallback pedindo reformulação.
+export const turnMeta = new AsyncLocalStorage<{ replies: number; llmUsed?: boolean }>();
+
+export function runTurnScoped<T>(fn: () => Promise<T>): Promise<T> {
+  return turnStore.run(new Map(), () => turnMeta.run({ replies: 0, llmUsed: false }, fn));
+}
+
+export function rememberCtxSnapshot(convoId: string, context: string | null) {
+  turnStore.getStore()?.set(convoId, context);
+}
+
+export async function writeCtx(convoId: string, ctx: DeliveryContext) {
+  const next = JSON.stringify(ctx);
+  const snapshots = turnStore.getStore();
+  const snapshot = snapshots?.get(convoId);
+  if (snapshots && snapshot !== undefined) {
+    const updated = await prisma.conversation.updateMany({
+      where: { id: convoId, context: snapshot },
+      data: { context: next, currentStep: ctx.step ?? "delivery" }
+    });
+    if (!updated.count) {
+      console.warn("[ctx:cas-conflict]", convoId, "— turno antigo descartado sem gravar");
+      throw new TurnSupersededError(convoId);
+    }
+    snapshots.set(convoId, next);
+    return;
+  }
+  // Fora de um turno (scripts, /ops, testes diretos): escrita simples de sempre.
+  await prisma.conversation.update({
+    where: { id: convoId },
+    data: { context: next, currentStep: ctx.step ?? "delivery" }
+  });
+  snapshots?.set(convoId, next);
+}
+
+// A fresh context that keeps only the saved address (used after clear/cancel/paid).
+export function addressOnlyCtx(ctx: DeliveryContext, userCep?: string | null): DeliveryContext {
+  return {
+    flow: "delivery",
+    cep: ctx.cep ?? userCep ?? undefined,
+    deliveryAddress: ctx.deliveryAddress,
+    deliveryAddressVerified: ctx.deliveryAddressVerified
+  };
+}
+
+// TTL de abandono: cotação parada + cliente sumido = ele não quer mais aquilo. Lido a
+// cada chamada (e não uma vez no módulo) porque os evals ajustam o env em tempo de teste.
+export function quoteAbandonTtlMs(): number {
+  const configured = Number(process.env.LIA_QUOTE_ABANDON_TTL_MS ?? 60 * 60 * 1000);
+  return Number.isFinite(configured) && configured > 0 ? configured : 60 * 60 * 1000;
+}
+
+// Toque nos botões da escolha de entrega (barata × rápida).
+export function isFreightChoicePayload(text: string): boolean {
+  return /^frete:(barato|rapido)$/.test(normalizeMsg(text));
+}
+
+// A conversa não pode continuar apontando para um pedido que FECHOU (pago, cancelado,
+// estornado): o cliente ouvia "ainda estou cotando" de um pedido morto e, em
+// `choosing_freight`, o botão de frete caía num erro sem saída. Se ele JÁ começou outra
+// cesta/outro pedido aqui, o contexto novo vale mais e nada é apagado.
+export async function resetConversationForClosedOrder(
+  order: { id: string; conversationId?: string | null },
+  tag: string
+) {
+  if (!order.conversationId) return;
+  try {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    if (!convo) return;
+    const ctx = readCtx(convo.context);
+    const movedOn = Boolean(ctx.deliveryOrderId) && ctx.deliveryOrderId !== order.id;
+    const hasNewBasket = (ctx.basket?.length ?? 0) > 0 && ctx.deliveryOrderId !== order.id;
+    if (movedOn || hasNewBasket) return;
+    await writeCtx(convo.id, addressOnlyCtx(ctx));
+  } catch (error) {
+    console.warn(`[delivery:${tag}:ctx-reset]`, error instanceof Error ? error.message : error);
+  }
+}
+
+// Item novo que ficou pendurado na pergunta "juntar ou pedido novo?" deste pedido.
+export async function mergeDecisionRequestFor(order: { id: string; conversationId?: string | null }): Promise<string | undefined> {
+  if (!order.conversationId) return undefined;
+  try {
+    const convo = await prisma.conversation.findUnique({ where: { id: order.conversationId } });
+    const ctx = convo ? readCtx(convo.context) : undefined;
+    return ctx?.mergeDecision?.orderId === order.id ? ctx.mergeDecision.request : undefined;
+  } catch (error) {
+    console.warn("[delivery:paid:merge-decision]", error instanceof Error ? error.message : error);
+    return undefined;
+  }
+}
+
+export async function reply(phone: string, text: string) {
+  const meta = turnMeta.getStore();
+  if (meta) meta.replies += 1;
+  await whatsappAdapter.sendMessage(phone, text);
+}
+
+// Envios que não passam pelo reply() (cards, botões, resumos interativos) também
+// contam como resposta do turno pra rede anti-silêncio.
+export function markTurnReplied() {
+  const meta = turnMeta.getStore();
+  if (meta) meta.replies += 1;
+}
+
+// Quando o cliente falou/agiu pela última vez ANTES desta mensagem. Base dos dois TTLs
+// (cesta parada, cotação abandonada). Usa a mensagem anterior da conversa — NÃO o
+// `Conversation.updatedAt`: ele se move quando contexto é gravado E quando o lock de
+// turno é reivindicado, então nunca serviria de relógio de inatividade; já a mensagem
+// anterior é a atividade real (toda mensagem, do cliente ou da Lia, conta).
+export async function lastActivityAt(convoId: string, exceptMessageId?: string): Promise<Date | undefined> {
+  const previous = await prisma.message.findFirst({
+    where: { conversationId: convoId, ...(exceptMessageId ? { id: { not: exceptMessageId } } : {}) },
+    orderBy: { createdAt: "desc" },
+    select: { createdAt: true }
+  });
+  return previous?.createdAt;
+}
+
+// Um turno POR VEZ por conversa (2ª revisão, 11/08). Duas mensagens simultâneas do
+// mesmo cliente liam a mesma cesta e cada uma gravava o contexto INTEIRO — a última
+// apagava o item da primeira. Lock cooperativo no banco (vale entre instâncias
+// serverless): claim atômico via updateMany; TTL de 60s liberta conversa de turno
+// travado; quem espera demais entra assim mesmo (o webhook não pode pendurar — melhor
+// a corrida rara de antes do que mensagem sem resposta).
+// Revisão 01/09: 60s era MENOR que um turno de busca fria (45–120s) — a mensagem
+// seguinte roubava o lock no meio e a mais nova morria no CAS sem resposta. 180s cobre o
+// maior turno observado; um turno travado de verdade prende a conversa por 3 min, não 1.
+export const TURN_LOCK_TTL_MS = Number(process.env.LIA_TURN_LOCK_TTL_MS ?? 180_000);
+
+// 26/08: 15s de espera + barge era a PORTA do P0.1 — busca fria dura 45-120s e a
+// mensagem seguinte furava a trava no meio. Agora espera até 120s (o watchdog avisa o
+// cliente) e o barge residual é inofensivo: o CAS do contexto mata a escrita perdedora.
+export const TURN_LOCK_MAX_WAIT_MS = Number(process.env.LIA_TURN_LOCK_MAX_WAIT_MS ?? 120_000);
+
+export async function acquireTurnLock(convoId: string): Promise<string> {
+  const token = `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+  const deadline = Date.now() + TURN_LOCK_MAX_WAIT_MS;
+  for (;;) {
+    const claimed = await prisma.conversation.updateMany({
+      where: {
+        id: convoId,
+        OR: [{ turnLock: null }, { turnLockAt: null }, { turnLockAt: { lt: new Date(Date.now() - TURN_LOCK_TTL_MS) } }]
+      },
+      data: { turnLock: token, turnLockAt: new Date() }
+    });
+    if (claimed.count) return token;
+    if (Date.now() >= deadline) {
+      console.warn("[turn-lock:barge]", convoId);
+      await prisma.conversation.updateMany({ where: { id: convoId }, data: { turnLock: token, turnLockAt: new Date() } });
+      return token;
+    }
+    await sleep(400);
+  }
+}
+
+export async function releaseTurnLock(convoId: string, token: string) {
+  try {
+    // Só solta se o lock ainda é NOSSO — quem entrou por barge/TTL não pode ser solto
+    // por um turno velho terminando atrasado.
+    await prisma.conversation.updateMany({ where: { id: convoId, turnLock: token }, data: { turnLock: null, turnLockAt: null } });
+  } catch (error) {
+    console.warn("[turn-lock:release-failed]", error instanceof Error ? error.message : error);
+  }
+}
+
+// Mensagens de ESPERA de cotação sempre saem com o botão "Cancelar pedido" no Meta
+// (pedido do dono, 11/08: a saída tem que estar visível, não escondida num comando).
+// Sem Meta (ou em falha), cai no texto puro — "cancelar" digitado funciona igual.
+// Dispara "estou procurando" só se a busca passar de LIA_SEARCH_NOTICE_MS (2,5s) —
+// busca de catálogo local (instantânea) nunca chega a mandar a mensagem.
+export const lastSearchNoticeAt = new Map<string, number>();
+
+export function searchNoticeTimer(phone: string): { cancel: () => void } {
+  const delay = Number(process.env.LIA_SEARCH_NOTICE_MS ?? 2500);
+  const timer = setTimeout(() => {
+    // Um aviso por rajada: a busca inicial e o resgate de última chance criam timers
+    // separados e o cliente via "Procurando…" DUAS vezes (teste real 19/08).
+    const last = lastSearchNoticeAt.get(phone) ?? 0;
+    if (Date.now() - last < 90_000) return;
+    lastSearchNoticeAt.set(phone, Date.now());
+    void reply(phone, copy.searchingWider()).catch(() => {});
+  }, delay);
+  return { cancel: () => clearTimeout(timer) };
+}
+
+export async function replyQuoteNotice(phone: string, text: string) {
+  try {
+    if (await whatsappAdapter.sendCancelableNotice(phone, text)) {
+      markTurnReplied();
+      return;
+    }
+  } catch (error) {
+    console.warn("[whatsapp:cancel-notice:fallback-text]", error instanceof Error ? error.message : error);
+  }
+  await reply(phone, text);
+}
+
+// ---------- basket parsing + catalog matching ----------
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
