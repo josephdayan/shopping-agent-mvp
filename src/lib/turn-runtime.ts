@@ -17,6 +17,47 @@ import { DeliveryContext } from "./conversation-types";
 // Caso real (11/08): um pedido ficou 2 DIAS em awaiting_operator_quote porque nada avisava
 // o operador de que havia trabalho no /ops — pro cliente, o "te mando em instantes" virou
 // nunca. Best-effort: falha de envio jamais afeta o fluxo do cliente.
+// Janela de atendimento da Meta: mensagem LIVRE só chega até 24h depois da última mensagem
+// do cliente; fora dela a Graph aceita (200) e o WhatsApp descarta com erro 131047. Aqui
+// medimos pela última mensagem inbound gravada na conversa daquele telefone.
+const SERVICE_WINDOW_MS = 23 * 60 * 60_000;
+
+export async function lastInboundAt(phone: string): Promise<Date | undefined> {
+  const user = await prisma.user.findUnique({ where: { phone: normalizePhone(phone) }, select: { id: true } });
+  if (!user) return undefined;
+  const last = await prisma.message.findFirst({
+    where: { sender: "user", conversation: { userId: user.id } },
+    orderBy: { createdAt: "desc" },
+    select: { createdAt: true }
+  });
+  return last?.createdAt;
+}
+
+export async function outsideServiceWindow(phone: string): Promise<boolean> {
+  const last = await lastInboundAt(phone);
+  return !last || Date.now() - last.getTime() > SERVICE_WINDOW_MS;
+}
+
+export type NoticeDelivery = "text" | "template" | "skipped";
+
+// Aviso PROATIVO (o cliente não acabou de escrever): dentro da janela vai como texto; fora
+// dela vai como template aprovado (LIA_TEMPLATE_ORDER_UPDATE, body "{{1}}" = pedido,
+// "{{2}}" = texto) ou, sem template configurado, NÃO é enviado (falharia) — quem chama
+// registra na nota do pedido (03/09: o aviso do chá morreu em silêncio por isso).
+export async function deliverNotice(to: string, text: string, opts: { shortId?: string } = {}): Promise<NoticeDelivery> {
+  if (!(await outsideServiceWindow(to))) {
+    await whatsappAdapter.sendMessage(to, text);
+    return "text";
+  }
+  const template = process.env.LIA_TEMPLATE_ORDER_UPDATE?.trim();
+  if (!template) {
+    console.warn("[notice:skipped-outside-window]", { to: to.slice(0, 7) + "***", reason: "sem LIA_TEMPLATE_ORDER_UPDATE" });
+    return "skipped";
+  }
+  await whatsappAdapter.sendTemplateMessage(to, { name: template, bodyParams: [opts.shortId ?? "—", text] });
+  return "template";
+}
+
 export async function notifyOperator(text: string, customerPhone?: string) {
   const to = process.env.LIA_OPERATOR_PHONE?.trim();
   if (!to) return;
@@ -28,6 +69,13 @@ export async function notifyOperator(text: string, customerPhone?: string) {
     return;
   }
   try {
+    // Operador que não escreve pra Lia há 24h está fora da janela: sem template o alerta
+    // morre (03/09). Com template vai por ele; sem, tenta texto e loga — o /ops é a fonte.
+    const template = process.env.LIA_TEMPLATE_ORDER_UPDATE?.trim();
+    if (template && (await outsideServiceWindow(to))) {
+      await whatsappAdapter.sendTemplateMessage(to, { name: template, bodyParams: ["operador", text] });
+      return;
+    }
     await whatsappAdapter.sendMessage(to, text);
   } catch (error) {
     console.warn("[operator-alert:failed]", error instanceof Error ? error.message : error);

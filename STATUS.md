@@ -1,5 +1,13 @@
 # Lia — Status do Projeto
 
+## 03/09/2026 (3ª) — avisos fora da janela de 24h da Meta
+
+O vigia alertou às 12h e 24h, mas a Meta descartou as mensagens (erro 131047): fora da janela
+de 24h só passa template aprovado, e o operador quase nunca escreve pra Lia. Agora aviso
+proativo dentro da janela vai como texto; fora vai por template (`LIA_TEMPLATE_ORDER_UPDATE`)
+ou não vai e fica registrado na nota do pedido. Falta o dono criar/aprovar o template na Meta
+e setar a env. Detalhe em AGENTS.md (03/09 3ª).
+
 ## 03/09/2026 (2ª) — vitrine só mostra o que a loja confirmou para o CEP
 
 Antes dos cards, cada candidato de loja consultável é simulado no site da loja para o CEP

@@ -53,9 +53,13 @@ async function send(phone: string, text: string): Promise<string> {
   return textsTo(phone, start);
 }
 
-async function paidOrder(paidAgoMs: number, notes = "Pagamento: cartão") {
+// Cliente real sempre escreveu pra Lia antes de pagar: o helper grava essa mensagem inbound
+// (default 5 min atrás = dentro da janela de 24h da Meta; passe 2 dias pra simular fora).
+async function paidOrder(paidAgoMs: number, notes = "Pagamento: cartão", lastInboundAgoMs = 5 * 60_000) {
   const phone = newPhone();
   const user = await prisma.user.create({ data: { phone, cep: "01229-000", defaultAddress: TEST_ADDRESS } });
+  const convo = await prisma.conversation.create({ data: { userId: user.id, status: "active", currentStep: "collecting", context: "{}" } });
+  await prisma.message.create({ data: { conversationId: convo.id, sender: "user", text: "quero um chá", createdAt: new Date(Date.now() - lastInboundAgoMs) } });
   const paidAt = new Date(Date.now() - paidAgoMs);
   const order = await prisma.deliveryOrder.create({
     data: {
@@ -192,4 +196,48 @@ test("'Não consegui comprar → estornar': estorna pelo provedor, fecha o pedid
   assert.match(msg, /R\$ 24,14/);
   // Já estornado não estorna de novo.
   await assert.rejects(() => opsPurchaseFailedRefund(orderId), /Só um pedido pago/);
+});
+
+// ---- janela de 24h (03/09: o aviso do chá morreu com erro 131047) ----
+import { whatsappAdapter as adapterForTemplates } from "../src/lib/adapters/whatsapp";
+
+test("cliente fora da janela de 24h: com template configurado o aviso vai por template; sem template, nota no pedido e nada é enviado", async (t) => {
+  if (!dbOk) return t.skip();
+  const templates: { to: string; name: string; params: string[] }[] = [];
+  (adapterForTemplates as { sendTemplateMessage: unknown }).sendTemplateMessage = async (to: string, input: { name: string; bodyParams: string[] }) => {
+    templates.push({ to, name: input.name, params: input.bodyParams });
+    return { provider: "test", to, template: input.name };
+  };
+  // Cliente cuja última mensagem foi há 2 dias (fora da janela).
+  // Sem bloqueio, o cliente é avisado a partir do balde de 6h.
+  const stale = await paidOrder(7 * 60 * 60_000, "Pagamento: cartão", 2 * 24 * 60 * 60_000);
+
+  process.env.LIA_TEMPLATE_ORDER_UPDATE = "pedido_atualizacao";
+  try {
+    const start = outbox.length;
+    assert.equal(await watchPaidOrder(stale.orderId), "operator+customer");
+    assert.equal(textsTo(stale.phone, start), "", "fora da janela não pode sair texto livre");
+    // Operador também está fora da janela (nunca escreveu pra Lia): alerta dele vai por template.
+    const toCustomer = templates.filter((m) => m.to === stale.phone);
+    const toOperator = templates.filter((m) => m.to !== stale.phone);
+    assert.equal(toCustomer.length, 1);
+    assert.equal(toCustomer[0].params[0], stale.orderId.slice(-6).toUpperCase());
+    assert.match(toCustomer[0].params[1], /pedido/i);
+    assert.equal(toOperator.length, 1);
+    assert.equal(toOperator[0].params[0], "operador");
+  } finally {
+    delete process.env.LIA_TEMPLATE_ORDER_UPDATE;
+  }
+
+  // Sem template: nada sai e o pedido registra o porquê (bucket seguinte para não colidir com o marcador de 6h).
+  const stale2 = await paidOrder(13 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque para o CEP.`, 2 * 24 * 60 * 60_000);
+  // Bloqueio só avisa em 2h e 24h+: força o bucket de 24h.
+  await prisma.deliveryOrder.update({ where: { id: stale2.orderId }, data: { paidAt: new Date(Date.now() - 25 * 60 * 60_000) } });
+  const before = templates.length;
+  const start2 = outbox.length;
+  assert.equal(await watchPaidOrder(stale2.orderId), "operator");
+  assert.equal(templates.length, before, "sem template configurado nada sai por template");
+  assert.equal(textsTo(stale2.phone, start2), "");
+  const after = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: stale2.orderId } });
+  assert.match(after.notes ?? "", /Aviso ao cliente NÃO enviado: fora da janela/);
 });

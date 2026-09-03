@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
 import * as copy from "@/lib/lia-copy";
 import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 import { BasketItem, FreightChoiceState, cardTotal, display, orderDateLabel, quoteTtlMinutes, roundMoney } from "./conversation-types";
-import { TurnSupersededError, addressOnlyCtx, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { TurnSupersededError, addressOnlyCtx, deliverNotice, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
 import { issueValidatedRetailerQuotePayment } from "./order-payments";
 
 export async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
@@ -519,7 +519,14 @@ export async function watchPaidOrder(orderId: string, now = new Date()): Promise
   // depois em 24h/48h/72h — nunca a cada 10 min.
   const tellCustomer = blockedReason ? bucket === 2 || bucket >= 24 : bucket >= 6;
   if (!tellCustomer) return "operator";
-  await reply(order.phone, copy.purchaseDelayedCustomer(shortId, Boolean(blockedReason)));
+  const delivered = await deliverNotice(order.phone, copy.purchaseDelayedCustomer(shortId, Boolean(blockedReason)), { shortId });
+  if (delivered === "skipped") {
+    await prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: { notes: appendOrderNote((await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } }))?.notes ?? null, "⚠️ Aviso ao cliente NÃO enviado: fora da janela de 24h e sem template (LIA_TEMPLATE_ORDER_UPDATE). Avisar por outro canal.") }
+    });
+    return "operator";
+  }
   return "operator+customer";
 }
 
@@ -550,6 +557,12 @@ export async function opsPurchaseFailedRefund(orderId: string, reason?: string) 
   });
   await resetConversationForClosedOrder(order, "refund");
   const items = ((order.items as unknown as { qty: number; name: string }[]) ?? []).map((i) => (i.qty > 1 ? `${i.qty}x ${i.name}` : i.name));
-  await reply(order.phone, copy.purchaseFailedRefunded(items, result.amount, safeReason || undefined));
+  const delivered = await deliverNotice(order.phone, copy.purchaseFailedRefunded(items, result.amount, safeReason || undefined), { shortId: order.id.slice(-6).toUpperCase() });
+  if (delivered === "skipped") {
+    return prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: { notes: appendOrderNote(order.notes, "⚠️ Aviso do estorno NÃO enviado: cliente fora da janela de 24h e sem template (LIA_TEMPLATE_ORDER_UPDATE). Avisar por outro canal.") }
+    });
+  }
   return order;
 }

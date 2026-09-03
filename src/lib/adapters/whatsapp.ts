@@ -230,6 +230,34 @@ export function buildPixOrderDetailsPayload(to: string, input: WhatsAppPixOrderD
   };
 }
 
+// Template aprovado na Meta (categoria Utility): o ÚNICO tipo de mensagem que passa fora
+// da janela de 24h desde a última mensagem do cliente (erro 131047 "Re-engagement" nas
+// mensagens livres — 03/09: aviso ao cliente e alerta ao operador falharam por isso).
+// Parâmetros de body não aceitam quebra de linha nem 4+ espaços seguidos.
+export type WhatsAppTemplateInput = { name: string; language?: string; bodyParams: string[] };
+
+export function buildTemplatePayload(to: string, input: WhatsAppTemplateInput) {
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "template",
+    template: {
+      name: input.name,
+      language: { code: input.language ?? process.env.LIA_TEMPLATE_LANG ?? "pt_BR" },
+      components: [
+        {
+          type: "body",
+          parameters: input.bodyParams.map((text) => ({
+            type: "text",
+            text: text.replace(/\s*\n+\s*/g, " · ").replace(/\s{4,}/g, "   ").trim().slice(0, 1024)
+          }))
+        }
+      ]
+    }
+  };
+}
+
 export function buildOrderStatusPayload(to: string, input: WhatsAppOrderStatusInput) {
   return {
     messaging_product: "whatsapp",
@@ -562,6 +590,17 @@ export const whatsappAdapter = {
 
   async sendRichReplyMessages(to: string, reply: WhatsAppRichReply) {
     return this.sendMessage(to, reply.text);
+  },
+
+  async sendTemplateMessage(to: string, input: WhatsAppTemplateInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") {
+      console.log("[whatsapp:mock:template]", { to, name: input.name, bodyParams: input.bodyParams });
+      return { provider: "mock", to, template: input.name };
+    }
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildTemplatePayload(to, input));
   }
 };
 

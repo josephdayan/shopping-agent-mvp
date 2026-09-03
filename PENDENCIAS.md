@@ -1,6 +1,13 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-03 (2ª — verificação ao vivo)._
+_Última atualização: 2026-09-03 (3ª — janela de 24h / template)._
+
+> **03/09 (3ª) — janela de 24h.** Aviso proativo fora da janela agora vai por template ou é
+> registrado como não enviado (AGENTS.md 03/09 3ª). **Dono:** criar template Utility no
+> WhatsApp Manager (`pedido_atualizacao`, body "Sobre o seu pedido {{1}}: {{2}}"), aprovar e
+> setar `LIA_TEMPLATE_ORDER_UPDATE` na Vercel. **Aberto:** alerta ao operador por canal que
+> não dependa da janela (e-mail/push); hoje ele só chega se o operador escreveu pra Lia em 24h
+> ou se houver template.
 
 > **03/09 (2ª).** Verificação ao vivo antes dos cards + cobrança só do confirmado (AGENTS.md
 > 03/09 2ª). **Aberto:** Carrefour, Petz e Boticário (maiores catálogos) não têm checkout

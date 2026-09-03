@@ -242,3 +242,17 @@ test("Meta: botões de entrega barata/rápida levam a DATA e respeitam o teto de
     global.fetch = previous.fetch;
   }
 });
+
+// ---- template fora da janela de 24h (03/09) ----
+import { buildTemplatePayload } from "../src/lib/adapters/whatsapp";
+
+test("template: payload Meta com idioma e parâmetros saneados (sem quebra de linha)", () => {
+  const payload = buildTemplatePayload("+55 11 99999-9999", { name: "pedido_atualizacao", bodyParams: ["ABC123", "Linha 1\nLinha 2    com espaços"] }) as {
+    to: string; type: string; template: { name: string; language: { code: string }; components: Array<{ parameters: Array<{ text: string }> }> };
+  };
+  assert.equal(payload.to, "5511999999999");
+  assert.equal(payload.type, "template");
+  assert.equal(payload.template.name, "pedido_atualizacao");
+  assert.equal(payload.template.language.code, "pt_BR");
+  assert.deepEqual(payload.template.components[0].parameters.map((p) => p.text), ["ABC123", "Linha 1 · Linha 2   com espaços"]);
+});

@@ -1,5 +1,28 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 03/09/2026 (3ª) — janela de 24h da Meta: aviso proativo vai por template ou não vai
+
+Descoberta ao auditar o vigia do chá: os alertas de 12h e 24h saíram do código, mas a Meta
+**descartou** o aviso ao cliente e o alerta ao operador com erro `131047 Re-engagement` —
+mensagem livre só chega até 24h depois da última mensagem daquele telefone; a Graph responde
+200 e a falha vem depois, pelo webhook de status. O operador quase nunca escreve pra Lia,
+então **todo alerta interno fora da janela vinha morrendo em silêncio**.
+
+Regra agora (`deliverNotice` em `turn-runtime.ts`):
+1. Aviso PROATIVO (vigia, estorno por compra falhada, alerta ao operador) mede a janela pela
+   última mensagem inbound gravada (`lastInboundAt`, limite 23h). Dentro → texto normal.
+2. Fora → **template aprovado** (`LIA_TEMPLATE_ORDER_UPDATE`, body `{{1}}` = pedido, `{{2}}` =
+   texto; `sendTemplateMessage` no adapter Meta, parâmetros saneados sem quebra de linha).
+3. Fora e sem template → **não envia** (falharia) e grava na nota do pedido
+   "⚠️ Aviso ao cliente NÃO enviado: fora da janela de 24h…" para o operador avisar por outro
+   canal. Resposta a mensagem do cliente (dentro do turno) não muda: está sempre na janela.
+
+**Dono:** criar o template no WhatsApp Manager (categoria Utility, ex. `pedido_atualizacao`,
+body sugerido "Sobre o seu pedido {{1}}: {{2}}"), esperar aprovação e setar
+`LIA_TEMPLATE_ORDER_UPDATE` na Vercel. Enquanto não existe, cliente fora da janela só é
+alcançável se ele escrever primeiro (ou pelo telefone pessoal do dono). Alternativa para o
+operador: alerta por outro canal (e-mail/push) — pendência.
+
 ## Atualização 03/09/2026 (2ª) — "só ofereço o que a loja confirmou": verificação ao vivo antes dos cards
 
 Regra do dono depois do chá: *"se ele quer um chá, tem que dar em um lugar que tenha chá,
