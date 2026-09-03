@@ -1,5 +1,12 @@
 # Lia — Status do Projeto
 
+## 03/09/2026 (2ª) — vitrine só mostra o que a loja confirmou para o CEP
+
+Antes dos cards, cada candidato de loja consultável é simulado no site da loja para o CEP
+do cliente: sem estoque ou sem entrega no endereço sai; confirmado ganha prazo real no card
+e vem primeiro, do mais rápido ao mais lento. Cobrança automática só do que foi confirmado
+ao vivo; o resto passa pelo operador. Detalhe e limites em AGENTS.md (03/09 2ª).
+
 ## 03/09/2026 — incidente do chá pago sem estoque: causa e consertos em produção
 
 Um cliente real pagou R$24,14 por um chá que a Natural da Terra não tinha para o CEP

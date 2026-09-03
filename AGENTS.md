@@ -1,5 +1,43 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 03/09/2026 (2ª) — "só ofereço o que a loja confirmou": verificação ao vivo antes dos cards
+
+Regra do dono depois do chá: *"se ele quer um chá, tem que dar em um lugar que tenha chá,
+que esteja disponível e que chegue rápido."* Implementado como regra de produto, não
+conserto pontual:
+
+1. **Verificação ao vivo ANTES dos cards** (`src/lib/live-availability.ts` +
+   `liveItemAvailability` em `live-freight.ts`): para cada linha buscada, os candidatos
+   de lojas com checkout consultável (VTEX_LIVE: Pague Menos, Drogaria SP, Cobasi, Oba,
+   Swift, Divvino, Kopenhagen, Ri Happy, Natural da Terra) são simulados no site da
+   PRÓPRIA loja para o CEP do cliente, uma chamada por loja (≤12 skus, em paralelo, timeout
+   4,5s). Sem estoque ou sem opção de entrega no endereço → **sai da vitrine**. Confirmado
+   → ganha `verified`, `etaMinutes` e o prazo real no card (`delivery`: "chega em 1 dia
+   útil"). Vale também na paginação/refino ("outras"). Loja que não responde = desconhecido
+   (mantém, nunca inventa indisponibilidade). Log `[live-check:dropped]`.
+2. **Ordem dos cards**: confirmado pela loja vem antes do não-verificável; entre
+   confirmados, o que chega antes vem primeiro; empate mantém a relevância do rerank.
+3. **Prazo no card volta — só com dado real.** A regra dura de 17/08 ("nenhum prazo em
+   card") era contra estimativa nossa/frase genérica do anúncio. O prazo que a simulação
+   devolve para o CEP do cliente é o dado real que a regra exigia; ML continua sem prazo no
+   card (a busca do actor não é por CEP).
+4. **Cobrança automática SÓ do que foi confirmado ao vivo** (`LIA_CHARGE_ONLY_VERIFIED`,
+   default true): na cotação instantânea, loja cuja fonte de frete não é `vivo` (tabela
+   semeada ou tarifa padrão) manda o pedido pro operador conferir estoque/entrega/mínimo
+   antes de cobrar, com o motivo na nota. Zero-espera continua para lojas VTEX (a maioria
+   das vitrines) e para o ML (frete por anúncio ao vivo); Carrefour, Petz e Boticário
+   (bloqueiam consulta externa) passam pelo operador até haver forma de confirmar.
+   Nos evals (`load-env`) o modo estrito fica desligado porque a simulação está off; o
+   estrito tem teste próprio em `tests/paid-order-watchdog.test.ts`.
+
+Testes: `tests/live-availability.test.ts` (puro, simulação injetada), `live-freight.test.ts`
+(+3: por item, erro→null, prazo humano), watchdog (+1 estrito). Suíte 491/491.
+
+**O que ainda NÃO é garantido:** lojas sem checkout consultável (Carrefour, Petz,
+Boticário, Imigrantes, Kalunga, Decathlon, Cacau Show, Giuliana, Droga Raia) — nelas o
+operador é a verificação. Próximo passo natural: mapear se alguma expõe simulação por
+outro caminho ou tirá-las da vitrine automática.
+
 ## Atualização 03/09/2026 — chá pago sem estoque: 4 consertos (caso real do amigo do dono)
 
 Pedido `cmtk5b3lr000jlsj15w41epw0` (02/09 10h45, cartão, R$24,14): Ice Tea de R$4,49 na

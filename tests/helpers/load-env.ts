@@ -32,6 +32,11 @@ process.env.LIA_SEND_PHOTOS = "false";
 // Frete ao vivo consulta a rede (checkout das lojas) — nos testes fica desligado para
 // os E2E de cotação instantânea serem determinísticos (tabela semeada).
 process.env.LIA_LIVE_FREIGHT_OFF = "true";
+// Produção (03/09) só cobra automático o que a loja confirmou AO VIVO; nos evals a
+// simulação está desligada, então a tabela semeada continua valendo para exercitar o
+// caminho da cotação instantânea. O modo estrito tem teste próprio
+// (tests/paid-order-watchdog.test.ts).
+process.env.LIA_CHARGE_ONLY_VERIFIED ??= "false";
 // Mercado Livre é vitrine AO VIVO (rede + custo por busca): fica desligado nos testes,
 // como em produção por padrão. Seus próprios testes vivem em mercadolivre-store.test.ts.
 process.env.LIA_ENABLE_MERCADOLIVRE = "false";

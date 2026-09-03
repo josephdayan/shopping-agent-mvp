@@ -12,7 +12,8 @@ import { cardOnFileEnabled, expireOpenPaymentAttempts, findPendingSavedCardAttem
 
 import { extractShoppingList, rerankShoppingOptions, interpretCustomerMessage } from "@/lib/adapters/ai";
 import { computeStoreFreights, freightBreakdownLabel, instantQuoteEligible, PER_AD_FREIGHT_STORES, storeFreight, type InstantQuoteItem } from "@/lib/instant-quote";
-import { liveFreightEnabled, liveStoreFreight } from "@/lib/live-freight";
+import { humanEstimate, liveFreightEnabled, liveStoreFreight, type LiveItemCheck } from "@/lib/live-freight";
+import { checkCandidatesLive, liveKey } from "@/lib/live-availability";
 import { mlBasketFreight } from "@/lib/ml-freight";
 import { detectIntent, extractCep, isQuestion, asksRunningTotal, looksLikeMedicine, hasUrgencySignal, isNarrativeSegment, isRequestModifier, sharesProductNoun, stripMedicineNegation, narrowChoiceByName, normalizeMsg, parseBasketLines, parsePriceCap, splitPriceCap, mergeShoppingLines, parseChoiceReply, splitCommandClauses, stripListNumbering, parseRefinement, wantsMoreOptions, looksLikeTobacco, looksLikeSymptomAsk, type Intent, type ParsedLine } from "@/lib/lia-intents";
 import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LABEL, PAID_OR_IN_FULFILLMENT_STATUSES, REPEATABLE_DELIVERY_ORDER_STATUSES, appendOrderNote, isCardCharge, isOrderOutForDelivery } from "@/lib/order-flags";
@@ -138,8 +139,11 @@ async function buildChoices(
   lockedStoreKey?: string,
   preferredSkus?: Map<string, number>,
   onLongTailSearch?: () => void,
-  forceLongTail?: boolean
+  forceLongTail?: boolean,
+  cep?: string | null
 ): Promise<ChoicesResult> {
+  // Mapa (loja:sku → verificação ao vivo) preenchido por linha e lido ao montar os cards.
+  const liveChecks = new Map<string, LiveItemCheck>();
   // Enquanto a IA extrai a lista (~2-5s), o parser determinístico já sabe quais linhas
   // não têm match local forte — o run frio do ML (~21s) começa AGORA e roda em paralelo.
   // A busca de verdade lá embaixo se acopla ao mesmo run (dedupe em voo no conector).
@@ -183,6 +187,18 @@ async function buildChoices(
       // Recompra: o que o cliente já escolheu antes sobe (sort estável preserva o
       // ranking de relevância entre itens sem histórico).
       candidates.sort((a, b) => (preferredSkus?.get(b.item.sku) ?? 0) - (preferredSkus?.get(a.item.sku) ?? 0));
+      // Verificação AO VIVO no site de cada loja para o CEP do cliente (03/09: chá cobrado
+      // sem estoque). Sem estoque/sem entrega no endereço sai daqui; confirmado ganha o
+      // prazo real e vem antes do não-verificável.
+      if (cep) {
+        const wrapped = candidates.map((c) => ({ storeKey: c.store.key, sku: c.item.sku, c }));
+        const live = await checkCandidatesLive(wrapped, cep);
+        for (const [key, check] of live.checks) liveChecks.set(key, check);
+        if (live.dropped.length) {
+          console.log("[live-check:dropped]", live.dropped.map((w) => `${w.storeKey}:${w.sku}`).join(","));
+        }
+        candidates = live.kept.map((w) => w.c);
+      }
       // O teto viaja NA LINHA: paginação, refino e o resgate do ML re-filtram por ele
       // (26/08: "até R$50/100/200" vazou nas opções — o cap morria aqui).
       return { line: { ...line, phrase: searchPhrase, ...(cap != null ? { cap } : {}) }, candidates };
@@ -236,9 +252,10 @@ async function buildChoices(
       ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
       ...(line.cap != null ? { cap: line.cap } : {}),
       ...(line.autoPick ? { autoPick: true } : {}),
-      options: options.slice(0, 3).map(({ store, item }) =>
-        toChoiceOption(item, { storeKey: store.key, storeLabel: store.label })
-      )
+      options: options
+        .map(({ store, item }) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }, liveChecks.get(liveKey(store.key, item.sku))))
+        .sort(byVerifiedThenEta)
+        .slice(0, 3)
     });
   }
   return {
@@ -259,7 +276,8 @@ async function buildChoicesWithSearchNotice(
   text: string,
   lockedStoreKey?: string,
   preferredSkus?: Map<string, number>,
-  forceLongTail?: boolean
+  forceLongTail?: boolean,
+  cep?: string | null
 ): Promise<ChoicesResult> {
   let notice: ReturnType<typeof searchNoticeTimer> | undefined;
   return buildChoices(
@@ -269,8 +287,18 @@ async function buildChoicesWithSearchNotice(
     () => {
       notice ??= searchNoticeTimer(phone);
     },
-    forceLongTail
+    forceLongTail,
+    cep
   ).finally(() => notice?.cancel());
+}
+
+// Confirmado pela loja antes do não-verificável; entre confirmados, o que chega antes.
+// Estável: quem empata mantém a ordem de relevância do rerank.
+function byVerifiedThenEta(a: ChoiceOption, b: ChoiceOption): number {
+  const va = a.verified ? 1 : 0;
+  const vb = b.verified ? 1 : 0;
+  if (va !== vb) return vb - va;
+  return (a.etaMinutes ?? Number.MAX_SAFE_INTEGER) - (b.etaMinutes ?? Number.MAX_SAFE_INTEGER);
 }
 
 // A free-form concierge line: whatever the customer asked for, verbatim. No catalog
@@ -323,12 +351,13 @@ function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
 
 function toChoiceOption(
   o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string; freeShipping?: boolean },
-  storeRef?: { storeKey?: string; storeLabel?: string }
+  storeRef?: { storeKey?: string; storeLabel?: string },
+  live?: LiveItemCheck
 ): ChoiceOption {
-  // Prazo NÃO entra em card de busca (regra dura de 17/08, reafirmada em 26/08 —
-  // P1.4: "Entrega: chega hoje" nos cards cria promessa antes do endereço/frete; o
-  // prazo aparece UMA vez, no resumo, com o dado real da consulta de frete).
-  const delivery = undefined;
+  // Prazo em card SÓ com dado real da loja para o CEP do cliente (regra de 17/08, agora
+  // atendida pela simulação ao vivo de 03/09). Sem simulação, nenhum prazo — nunca uma
+  // estimativa nossa ou a frase genérica do anúncio.
+  const delivery = live?.available ? humanEstimate(live.estimate) : undefined;
   return {
     sku: o.sku,
     name: o.name,
@@ -338,7 +367,8 @@ function toChoiceOption(
     productUrl: o.productUrl ?? STORE_SEARCH_URL[storeRef?.storeKey ?? ""]?.(o.name),
     ...storeRef,
     ...(delivery ? { delivery } : {}),
-    ...(o.freeShipping ? { freeShipping: true } : {})
+    ...(o.freeShipping ? { freeShipping: true } : {}),
+    ...(live?.available ? { verified: true, ...(live.etaMinutes != null ? { etaMinutes: live.etaMinutes } : {}) } : {})
   };
 }
 
@@ -2833,7 +2863,7 @@ async function handleChoosing(
   // Questions about the shown options ("qual é a desnatada?") must NOT be searched
   // as new products — re-show the options instead.
   if (intent.kind === "free_text" && !isQuestion(text)) {
-    const added = await buildChoicesWithSearchNotice(phone, text);
+    const added = await buildChoicesWithSearchNotice(phone, text, undefined, undefined, undefined, ctx.cep);
     // "Só shampoo normal, sem preferência de marca" ENQUANTO escolhe shampoo é
     // esclarecimento do MESMO item — substitui as opções na mesa, nunca vira uma
     // segunda linha (rodada 5 dos testes de 14/08: a linha duplicada fez o cliente
@@ -2906,6 +2936,16 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
     pool = candidates.map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }));
   } else {
     pool = (await store.searchItems(query, 40)).map((item) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }));
+  }
+  // Paginação/refino também só mostram o que a loja confirmou para o CEP (03/09).
+  if (ctx.cep) {
+    const live = await checkCandidatesLive(pool.map((o) => ({ storeKey: o.storeKey ?? "", sku: o.sku, o })), ctx.cep);
+    pool = live.kept.map((w) => {
+      const check = live.checks.get(liveKey(w.storeKey, w.sku));
+      if (!check?.available) return w.o;
+      const delivery = humanEstimate(check.estimate);
+      return { ...w.o, verified: true, ...(delivery ? { delivery } : {}), ...(check.etaMinutes != null ? { etaMinutes: check.etaMinutes } : {}) };
+    });
   }
   // Piso de relevância TAMBÉM na paginação/refino (vistoria 10/08: "outras" de
   // "carregador de celular" devolvia Sérum Nivea "Cellular" e chip de operadora —
@@ -3488,8 +3528,8 @@ async function handleConciergeRequest(
   // legado — no concierge nunca rodou (revisão 02/09).
   const preferred = userId ? await preferredSkuCounts(userId) : undefined;
   const raw = mercadoLivreEnabled()
-    ? await buildChoicesWithSearchNotice(phone, text, undefined, preferred)
-    : await buildChoices(text, undefined, preferred);
+    ? await buildChoicesWithSearchNotice(phone, text, undefined, preferred, undefined, ctx.cep ?? userCep)
+    : await buildChoices(text, undefined, preferred, undefined, undefined, ctx.cep ?? userCep);
   // Piso de relevância próprio do concierge: opção que não responde pelo que o cliente
   // escreveu é descartada e a linha volta a ser livre. Sugerir errado é pior que não
   // sugerir, porque a linha livre resolve o pedido de verdade.
@@ -4134,7 +4174,11 @@ async function tryPublishInstantQuote(
     // Loja sem política de frete calibrada e sem simulação ao vivo = "tarifa padrão", um
     // chute. Cobrar em cima de chute vendeu um chá sem estoque, sem entrega no CEP e abaixo
     // do mínimo da loja (02/09): agora o operador confere ANTES de qualquer cobrança.
-    const guessed = freights.filter((f) => f.source === "padrao");
+    // Cobrança automática SÓ do que a loja confirmou ao vivo para este CEP (estoque,
+    // entrega e frete): "tarifa padrão" é chute e a tabela pesquisada não sabe de estoque.
+    // LIA_CHARGE_ONLY_VERIFIED=false volta a aceitar a tabela (não recomendado).
+    const chargeOnlyVerified = process.env.LIA_CHARGE_ONLY_VERIFIED !== "false";
+    const guessed = freights.filter((f) => (chargeOnlyVerified ? f.source !== "vivo" : f.source === "padrao"));
     if (guessed.length) {
       const holdup = guessed.map((f) => namesOf(f.storeKey)).filter(Boolean).join(", ");
       const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
@@ -4143,7 +4187,7 @@ async function tryPublishInstantQuote(
         data: {
           notes: appendOrderNote(
             current?.notes ?? null,
-            `⚠️ Cotação instantânea abortada: ${guessed.map((f) => f.storeKey).join(", ")} — sem política de frete calibrada nem simulação ao vivo (tarifa padrão é chute). Conferir estoque, entrega no CEP e mínimo da loja. Itens: ${holdup}.`
+            `⚠️ Cotação instantânea abortada: ${guessed.map((f) => `${f.storeKey} (${f.source})`).join(", ")} — sem confirmação ao vivo de estoque/entrega/frete para o CEP${guessed.some((f) => f.source === "padrao") ? " (tarifa padrão é chute)" : ""}. Conferir estoque, entrega no CEP e mínimo da loja. Itens: ${holdup}.`
           )
         }
       });

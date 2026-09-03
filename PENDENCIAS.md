@@ -1,6 +1,13 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-03 (incidente do chá)._
+_Última atualização: 2026-09-03 (2ª — verificação ao vivo)._
+
+> **03/09 (2ª).** Verificação ao vivo antes dos cards + cobrança só do confirmado (AGENTS.md
+> 03/09 2ª). **Aberto:** Carrefour, Petz e Boticário (maiores catálogos) não têm checkout
+> consultável — decidir: manter via operador (hoje), buscar outra forma de confirmar
+> estoque/entrega, ou tirar da vitrine automática. Observar em produção a latência extra
+> da simulação (≤4,5s em paralelo) e o log `[live-check:dropped]`.
+
 
 > **03/09 — chá pago sem estoque.** Consertos em produção (AGENTS.md 03/09). **Dono:**
 > decidir o pedido `…epw0` do amigo — botão "Não consegui comprar → estornar" (motivo:

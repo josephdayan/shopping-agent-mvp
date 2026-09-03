@@ -8,6 +8,8 @@ import "./helpers/load-env";
 process.env.LIA_OPERATOR_PHONE = "+5511900000000";
 // Estorno Pagar.me em mock (sem chave) — mesmo arranjo do saved-card.test.
 process.env.PAGARME_MOCK = "true";
+// Modo ESTRITO de produção: só cobra automático o que a loja confirmou ao vivo.
+process.env.LIA_CHARGE_ONLY_VERIFIED = "true";
 
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
@@ -17,6 +19,7 @@ import { handleDeliveryMessage, opsPurchaseFailedRefund, watchPaidOrder } from "
 import { reconcilePayments } from "../src/lib/payments/reconcile";
 import { PURCHASE_BLOCKED_PREFIX } from "../src/lib/order-monitor";
 import { AWAITING_OPERATOR_QUOTE_STATUS } from "../src/lib/order-flags";
+import { getStore } from "../src/lib/stores";
 import * as copy from "../src/lib/lia-copy";
 
 const OPERATOR = "+5511900000000";
@@ -121,6 +124,26 @@ test("loja sem política de frete calibrada NÃO cobra automático: vai pro oper
   assert.ok(order, "esperava pedido na fila do operador");
   assert.equal(order!.status, AWAITING_OPERATOR_QUOTE_STATUS);
   assert.match(order!.notes ?? "", /tarifa padrão é chute/);
+});
+
+test("modo estrito: loja com tabela semeada mas SEM confirmação ao vivo também vai pro operador", async (t) => {
+  if (!dbOk) return t.skip();
+  // Petz tem frete semeado ("loja"), mas a simulação está desligada → nada confirmado
+  // para o CEP → o total não sai automático (é o que faltou no chá de 02/09).
+  const phone = newPhone();
+  await prisma.user.create({ data: { phone, cep: "01310-100", defaultAddress: TEST_ADDRESS } });
+  // Item da Petz acima de qualquer mínimo (a Petz não tem mínimo; evita o nudge de R$30).
+  const catalog = getStore("petz").listCatalog();
+  const item = catalog.find((i) => i.unitPrice >= 20 && i.unitPrice <= 80 && !/,|\se\s|^\d/i.test(i.name)) ?? catalog[0];
+  const qty = Math.max(1, Math.ceil(60 / item.unitPrice));
+  let out = await send(phone, `quero ${qty} ${item.name}`);
+  for (let i = 0; i < 4 && /Responde \*1\*/.test(out); i++) out = await send(phone, "1");
+  const closed = await send(phone, "so isso");
+  assert.doesNotMatch(closed, /Total: R\$/, `cobrou sem confirmação ao vivo: ${closed.slice(0, 300)}`);
+  const user = await prisma.user.findUniqueOrThrow({ where: { phone } });
+  const order = await prisma.deliveryOrder.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
+  assert.equal(order?.status, AWAITING_OPERATOR_QUOTE_STATUS, `sem pedido na fila. cards: ${out.slice(0, 300)} | fechamento: ${closed.slice(0, 300)}`);
+  assert.match(order?.notes ?? "", /sem confirmação ao vivo/);
 });
 
 test("pedido pago há 3h sem compra e com bloqueio: alerta o operador e avisa o cliente UMA vez", async (t) => {

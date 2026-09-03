@@ -154,3 +154,49 @@ test("ao vivo: eco com id trocado, quantidade errada ou item repetido cai na tab
   });
   assert.equal((await liveStoreFreight("paguemenos", TWO_ITEMS, "01310100")).kind, "unavailable");
 });
+
+// ---- disponibilidade por item para um CEP (03/09) ----
+import { humanEstimate, liveItemAvailability } from "../src/lib/live-freight";
+
+test("por item: withoutStock e sem SLA de entrega viram indisponível; disponível traz frete e prazo", async () => {
+  mockResponse({
+    items: [
+      { id: "165908", quantity: 1, availability: "withoutStock" },
+      { id: "155042", quantity: 1, availability: "available" },
+      { id: "999", quantity: 1, availability: "available" }
+    ],
+    logisticsInfo: [
+      { itemIndex: 0, slas: [] },
+      { itemIndex: 1, slas: [{ name: "Normal", price: 990, shippingEstimate: "1bd" }, { name: "Retire em Loja", price: 0, pickupStoreInfo: { isPickupStore: true } }] },
+      { itemIndex: 2, slas: [{ name: "Retire em Loja", price: 0, pickupStoreInfo: { isPickupStore: true } }] }
+    ]
+  });
+  const result = await liveItemAvailability("naturaldaterra", ["naturaldaterra-165908", "naturaldaterra-155042", "naturaldaterra-999"], "01229-000");
+  assert.ok(result);
+  assert.equal(result!.get("naturaldaterra-165908")?.available, false, "sem estoque");
+  const ok = result!.get("naturaldaterra-155042");
+  assert.equal(ok?.available, true);
+  assert.equal(ok?.fee, 9.9);
+  assert.equal(ok?.estimate, "1bd");
+  assert.equal(ok?.etaMinutes, 24 * 60);
+  assert.equal(result!.get("naturaldaterra-999")?.available, false, "só retirada = não entrega no CEP");
+});
+
+test("por item: loja fora da simulação, sku fora do padrão ou erro de rede → null (desconhecido, nunca 'indisponível')", async () => {
+  mockResponse({}, 500);
+  assert.equal(await liveItemAvailability("naturaldaterra", ["naturaldaterra-1"], "01229-000"), null);
+  assert.equal(await liveItemAvailability("petz", ["PETZ-1"], "01229-000"), null);
+  assert.equal(await liveItemAvailability("naturaldaterra", ["xyz"], "01229-000"), null);
+  process.env.LIA_LIVE_FREIGHT_OFF = "true";
+  assert.equal(await liveItemAvailability("naturaldaterra", ["naturaldaterra-1"], "01229-000"), null);
+});
+
+test("prazo humano só a partir do formato da loja", () => {
+  assert.equal(humanEstimate("1bd"), "chega em 1 dia útil");
+  assert.equal(humanEstimate("3bd"), "chega em 3 dias úteis");
+  assert.equal(humanEstimate("2h"), "chega em 2h");
+  assert.equal(humanEstimate("45m"), "chega em 45 min");
+  assert.equal(humanEstimate("2d"), "chega em 2 dias");
+  assert.equal(humanEstimate("amanhã"), undefined);
+  assert.equal(humanEstimate(undefined), undefined);
+});
