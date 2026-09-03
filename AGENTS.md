@@ -18,8 +18,10 @@ Regra agora (`deliverNotice` em `turn-runtime.ts`):
    canal. Resposta a mensagem do cliente (dentro do turno) não muda: está sempre na janela.
 
 **Dono:** criar o template no WhatsApp Manager (categoria Utility, ex. `pedido_atualizacao`,
-body sugerido "Sobre o seu pedido {{1}}: {{2}}"), esperar aprovação e setar
-`LIA_TEMPLATE_ORDER_UPDATE` na Vercel. Enquanto não existe, cliente fora da janela só é
+body sugerido "Olá! Aqui é a Lia, com uma atualização sobre o seu pedido {{1}}: {{2}} Se precisar de algo, é só responder esta mensagem."), esperar aprovação e setar
+`LIA_TEMPLATE_ORDER_UPDATE` na Vercel e **redeploy**. Passo a passo completo em
+[docs/whatsapp-template-avisos.md](docs/whatsapp-template-avisos.md) (a Meta rejeita corpo que
+começa ou termina com variável). Enquanto não existe, cliente fora da janela só é
 alcançável se ele escrever primeiro (ou pelo telefone pessoal do dono). Alternativa para o
 operador: alerta por outro canal (e-mail/push) — pendência.
 
