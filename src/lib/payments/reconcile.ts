@@ -12,6 +12,7 @@ export type ReconcileReport = {
   attemptsUnknown: number;
   pixApproved: number;
   pixExpired: number;
+  paidStuckAlerts: number;
   errors: string[];
 };
 
@@ -21,7 +22,7 @@ const PIX_LOOKBACK_MS = 48 * 60 * 60_000;
 export const PIX_EXPIRED_MARKER = "⏰ PIX EXPIROU";
 
 export async function reconcilePayments(now = new Date()): Promise<ReconcileReport> {
-  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, errors: [] };
+  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, paidStuckAlerts: 0, errors: [] };
   const brain = await import("@/lib/delivery-service");
 
   // 1) Cartão salvo: tentativa confirmada há mais de 5 min sem desfecho.
@@ -71,6 +72,23 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
       }
     } catch (error) {
       report.errors.push(`order ${order.id}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  // 3) Pedido PAGO sem compra há 2h+ (02/09: chá pago às 10h45, bloqueado por falta de
+  // estoque, cliente sem notícia o dia inteiro). Alerta o operador e, quando cabe, avisa o
+  // cliente com honestidade — idempotente por marcador na nota.
+  const stuck = await prisma.deliveryOrder.findMany({
+    where: { status: "paid", storeOrderNumber: null, paidAt: { lt: new Date(now.getTime() - 2 * 60 * 60_000) } },
+    orderBy: { paidAt: "asc" },
+    take: 50,
+    select: { id: true }
+  });
+  for (const order of stuck) {
+    try {
+      const { watchPaidOrder } = await import("@/lib/ops-lifecycle");
+      if ((await watchPaidOrder(order.id, now)) !== "none") report.paidStuckAlerts += 1;
+    } catch (error) {
+      report.errors.push(`stuck ${order.id}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
   return report;

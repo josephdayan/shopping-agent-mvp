@@ -8,8 +8,9 @@ import { refundOrderViaProvider } from "@/lib/payments/ledger";
 import { serviceFeeForSubtotal } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 import * as copy from "@/lib/lia-copy";
+import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 import { BasketItem, FreightChoiceState, cardTotal, display, orderDateLabel, quoteTtlMinutes, roundMoney } from "./conversation-types";
-import { TurnSupersededError, addressOnlyCtx, markTurnReplied, normalizePhone, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { TurnSupersededError, addressOnlyCtx, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
 import { issueValidatedRetailerQuotePayment } from "./order-payments";
 
 export async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
@@ -487,4 +488,68 @@ export async function getWaitlist() {
   }
   const regions = [...byRegion.values()].sort((a, b) => b.leads - a.leads || b.hits - a.hits);
   return { total: leads.length, regions, recent: leads.slice(0, 40) };
+}
+
+// ---- pedido PAGO sem compra (revisão 02/09) ----
+// O cliente pagou e ninguém comprou: ou o operador ainda não agiu, ou a compra foi
+// bloqueada (sem estoque / sem entrega no CEP / mínimo da loja) e a nota "🛑 COMPRA
+// BLOQUEADA" ficou só no /ops. Chamado pelo cron a cada 10 min; idempotente por marcador.
+const STUCK_BUCKETS_H = [2, 6, 12, 24, 48, 72];
+
+export async function watchPaidOrder(orderId: string, now = new Date()): Promise<"none" | "operator" | "operator+customer"> {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!order || order.status !== "paid" || order.storeOrderNumber || !order.paidAt) return "none";
+  const hours = Math.floor((now.getTime() - order.paidAt.getTime()) / 3_600_000);
+  const bucket = [...STUCK_BUCKETS_H].reverse().find((h) => hours >= h);
+  if (!bucket) return "none";
+  const marker = `⏰ COMPRA PENDENTE ${bucket}h`;
+  if ((order.notes ?? "").includes(marker)) return "none";
+  const blockedLine = (order.notes ?? "")
+    .split("\n")
+    .filter((line) => line.startsWith(PURCHASE_BLOCKED_PREFIX))
+    .pop();
+  const blockedReason = blockedLine?.slice(PURCHASE_BLOCKED_PREFIX.length).trim();
+  await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: { notes: appendOrderNote(order.notes, `${marker}: alerta enviado em ${now.toISOString()}.`) }
+  });
+  const shortId = order.id.slice(-6).toUpperCase();
+  await notifyOperator(copy.operatorPaidStuckAlert(shortId, hours, blockedReason), order.phone);
+  // Cliente: bloqueio conhecido avisa já no 1º alerta; sem bloqueio, só a partir de 6h e
+  // depois em 24h/48h/72h — nunca a cada 10 min.
+  const tellCustomer = blockedReason ? bucket === 2 || bucket >= 24 : bucket >= 6;
+  if (!tellCustomer) return "operator";
+  await reply(order.phone, copy.purchaseDelayedCustomer(shortId, Boolean(blockedReason)));
+  return "operator+customer";
+}
+
+// "Não consegui comprar → estornar": um clique no /ops que estorna pelo provedor,
+// fecha o pedido e explica ao cliente, com o motivo. Sem razão no pagamento
+// (pedido antigo), lança a mensagem legível e o caminho manual continua valendo.
+export async function opsPurchaseFailedRefund(orderId: string, reason?: string) {
+  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+  if (!current) throw new Error("Order not found");
+  if (!["paid", "refund_pending"].includes(current.status)) {
+    throw new Error("Só um pedido pago (ou com estorno pendente) pode ser estornado por compra não realizada.");
+  }
+  const result = await refundOrderViaProvider(orderId);
+  const safeReason = (reason ?? "").replace(/[\r\n]/g, " ").trim().slice(0, 160);
+  const notesWithoutPending = (current.notes ?? "")
+    .split("\n")
+    .filter((line) => line !== REFUND_PENDING_FLAG)
+    .join("\n");
+  const order = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: {
+      status: "refunded",
+      notes: appendOrderNote(
+        appendOrderNote(notesWithoutPending, `🧾 Compra não realizada${safeReason ? ` (${safeReason})` : ""} — estorno pelo provedor em ${new Date().toISOString()}.`),
+        `${REFUND_CONFIRMED_PREFIX} integral — ${result.reference}`
+      )
+    }
+  });
+  await resetConversationForClosedOrder(order, "refund");
+  const items = ((order.items as unknown as { qty: number; name: string }[]) ?? []).map((i) => (i.qty > 1 ? `${i.qty}x ${i.name}` : i.name));
+  await reply(order.phone, copy.purchaseFailedRefunded(items, result.amount, safeReason || undefined));
+  return order;
 }

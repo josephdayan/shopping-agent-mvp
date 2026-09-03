@@ -1,5 +1,57 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 03/09/2026 — chá pago sem estoque: 4 consertos (caso real do amigo do dono)
+
+Pedido `cmtk5b3lr000jlsj15w41epw0` (02/09 10h45, cartão, R$24,14): Ice Tea de R$4,49 na
+Natural da Terra cobrado com **"tarifa padrão R$18"**; na hora de comprar, o item não tinha
+estoque para o CEP, o site exige mínimo de R$50 e a Pague Menos não entregava no CEP. O
+cliente ficou o dia inteiro sem notícia. Causa raiz: a Natural da Terra **não estava em
+`VTEX_LIVE`** (live-freight.ts) — a simulação do próprio site responde `withoutStock` para
+esse item/CEP, ou seja, o bloqueio antes de cobrar era possível — e a cotação instantânea
+cobrava em cima de "tarifa padrão", que é chute. Consertos, todos com E2E em
+`tests/paid-order-watchdog.test.ts`:
+
+1. **Natural da Terra na simulação ao vivo** (`VTEX_LIVE`, sku `naturaldaterra-<id>`) e
+   **mínimo default R$50** (`LIA_NATURALDATERRA_MIN_ORDER`). Giuliana Flores testada: não é
+   VTEX (404) — segue sem simulação.
+2. **"Tarifa padrão" não cobra automático**: loja sem política calibrada nem simulação
+   (`source === "padrao"`) manda a cotação pro operador conferir estoque, entrega e mínimo,
+   com o motivo na nota. Zero-espera continua valendo para lojas calibradas; calibrar uma
+   loja (SEED_STORE_FREIGHT / LIA_STORE_FREIGHT_<LOJA> / VTEX_LIVE) devolve o automático.
+3. **Vigia de pedido pago sem compra** (`watchPaidOrder`, no cron de 10 min): pago há 2h+
+   sem `storeOrderNumber` → alerta ao operador (buckets 2/6/12/24/48/72h, idempotente por
+   marcador `⏰ COMPRA PENDENTE Nh`); com nota `🛑 COMPRA BLOQUEADA` avisa o cliente já no
+   1º alerta (e em 24h+); sem bloqueio, avisa o cliente a partir de 6h. Copy honesta, sem
+   prazo (`purchaseDelayedCustomer`).
+4. **Botão "Não consegui comprar → estornar"** no card de pedido pago do /ops
+   (`opsPurchaseFailedRefund`): estorna pelo provedor (razão `Payment`), fecha como
+   `refunded`, solta a conversa e explica ao cliente com o motivo e o valor
+   (`purchaseFailedRefunded`). Sem razão de pagamento (pedido antigo) lança mensagem
+   legível e o caminho manual continua.
+
+**Decisão do dono pendente para o pedido do amigo:** estornar (um clique no botão novo,
+motivo "sem estoque para o seu endereço") ou comprar em outra loja e "Confirmar compra".
+
+## Atualização 02/09/2026 (4ª) — monitor de todas as lojas, não apenas jobs do ML
+
+Pedido do dono: checar todos os pedidos sempre e atender o chá pago que estava invisível
+ao worker. `npm run purchase-worker:monitor` agora consulta TODOS os pedidos ativos de
+`DeliveryOrder`, encerrados/alterados nas últimas 24h e pendências financeiras, sem filtro
+por loja, por existência de job ou limite N. `purchase-worker:inspect -- ID` traz o detalhe
+de um pedido. Ambos são SOMENTE LEITURA; resumo compacto sem dados pessoais, evidência
+de pagamento real antes de sugerir compra, bloqueios e jobs reservados exigem revisão.
+**`purchase-worker:claim` com `job:null` NÃO significa que não há pedido.** O executor
+continua restrito ao Mercado Livre; não ampliar checkout recorrente implicitamente.
+
+A automação horária local `operador-de-compras-da-lia` foi atualizada para monitorar todas
+as lojas e inspecionar impedimentos; preparação do carrinho ML continua parando antes
+da confirmação final. Nenhum deploy/migration necessário para o monitor local.
+Pedido #41EPW0: pagamento real confirmado, mas chá indisponível na Natural da Terra e
+mínimo da loja de R$50 incompatível com a cotação; alternativa consultada sem entrega
+ao CEP. Bloqueio anotado no pedido, **nenhuma compra/entrega realizada**. Não substituir
+produto/loja nem aumentar gasto sem autorização. Gate: tsc, lint, 481/481 em `test:local`.
+Detalhes: [docs/operador-automatico-local.md](docs/operador-automatico-local.md).
+
 ## Atualização 02/09/2026 (3ª) — deploy das melhorias em produção ("faz isso")
 
 O dono mandou executar a lista de ações. Feito: **deploy de produção pela CLI**

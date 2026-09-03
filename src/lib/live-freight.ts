@@ -30,7 +30,10 @@ const VTEX_LIVE: Record<string, { domain: string; sku: RegExp }> = {
   swift: { domain: "loja.swift.com.br", sku: /^swift-(\d+)$/ },
   divvino: { domain: "www.divvino.com.br", sku: /^divvino-(\d+)$/ },
   kopenhagen: { domain: "www.kopenhagen.com.br", sku: /^kopenhagen-(\d+)$/ },
-  rihappy: { domain: "www.rihappy.com.br", sku: /^rihappy-(\d+)$/ }
+  rihappy: { domain: "www.rihappy.com.br", sku: /^rihappy-(\d+)$/ },
+  // 02/09: o chá de R$4,49 foi cobrado com "tarifa padrão" e não tinha estoque no CEP —
+  // a simulação do site responde isso (withoutStock) e agora barra antes de cobrar.
+  naturaldaterra: { domain: "www.naturaldaterra.com.br", sku: /^naturaldaterra-(\d+)$/ }
 };
 
 export function liveFreightEnabled(): boolean {

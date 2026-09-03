@@ -464,6 +464,23 @@ export default function OpsBoard() {
                   >
                     Confirmar compra na loja
                   </button>
+                  <button
+                    style={ghost}
+                    disabled={busy === `${o.id}:purchase_failed_refund`}
+                    title="Sem estoque, loja não entrega no CEP, mínimo da loja… Estorna pelo provedor e explica ao cliente com o motivo."
+                    onClick={() => {
+                      const reason = window.prompt(
+                        "Não consegui comprar — motivo curto para o cliente (ex.: 'sem estoque para o seu endereço'):",
+                        ""
+                      );
+                      if (reason === null) return;
+                      if (window.confirm(`Estornar ${o.total.toFixed(2).replace(".", ",")} pelo provedor e avisar o cliente?`)) {
+                        void act(o.id, "purchase_failed_refund", { text: reason });
+                      }
+                    }}
+                  >
+                    ↩️ Não consegui comprar → estornar
+                  </button>
                 </>
               )}
               {retailerDelivery && (o.status === "retailer_preparing" || o.status === "operator_buying") && (

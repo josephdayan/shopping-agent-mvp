@@ -9,7 +9,8 @@ import {
   opsMarkRetailerOutForDelivery,
   opsNotifyCustomer,
   opsPublishManualQuote,
-  opsRefundViaProvider
+  opsRefundViaProvider,
+  opsPurchaseFailedRefund
 } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -70,6 +71,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
       case "cancel":
         await opsCancelRefund(id);
         break;
+      case "purchase_failed_refund": {
+        await opsPurchaseFailedRefund(id, String(body.text ?? "").trim() || undefined);
+        break;
+      }
       case "refund_provider": {
         const refundAmount = body.refundAmount == null || body.refundAmount === "" ? undefined : parseMoneyInput(body.refundAmount);
         if (refundAmount === null) return NextResponse.json({ error: "Valor do estorno inválido (ex.: 12,90)." }, { status: 400 });

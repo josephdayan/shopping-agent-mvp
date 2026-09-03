@@ -10,7 +10,8 @@ const ITEMS = catalogWithImages(CATALOG);
 export const naturalDaTerraStore: StoreConnector = {
   key: "naturaldaterra",
   label: "Natural da Terra",
-  minOrder: Number(process.env.LIA_NATURALDATERRA_MIN_ORDER ?? 0),
+  // Site exige mínimo de R$50 (verificado pelo operador em 02/09 num pedido de R$4,49).
+  minOrder: Number(process.env.LIA_NATURALDATERRA_MIN_ORDER ?? 50),
   async searchItems(query: string, limit = 4) {
     return rankCatalog(query, ITEMS, limit);
   },

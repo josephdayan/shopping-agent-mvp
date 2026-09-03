@@ -1390,3 +1390,22 @@ export function longTailOffer(items: string[]): string {
 export function longTailDeclined(): string {
   return "Deixo esses de fora. Manda o próximo item ou *só isso* pra fechar.";
 }
+
+// ---- pedido pago sem compra (02/09: chá pago às 10h45, bloqueado por falta de estoque,
+// cliente sem notícia o dia inteiro) ----
+export function operatorPaidStuckAlert(shortId: string, hours: number, blockedReason?: string): string {
+  const why = blockedReason ? ` Bloqueio registrado: ${blockedReason.slice(0, 160)}.` : "";
+  return `🚨 [operador] Pedido #${shortId} PAGO há ${hours}h sem compra.${why} Comprar, ou usar "Não consegui comprar → estornar" no /ops. O cliente ${blockedReason ? "já foi" : "será"} avisado.`;
+}
+
+export function purchaseDelayedCustomer(shortId: string, blocked: boolean): string {
+  return blocked
+    ? `Seu pedido *#${shortId}* travou na loja: o item está sem estoque para o seu endereço. Estou tentando outra loja agora; se não der, devolvo o valor integral e te aviso por aqui.`
+    : `Seu pedido *#${shortId}* está demorando mais que o normal para eu fechar a compra na loja. Continuo nele; se não conseguir, devolvo o valor integral e te aviso por aqui.`;
+}
+
+export function purchaseFailedRefunded(items: string[], total: number, reason?: string): string {
+  const what = items.length === 1 ? `*${items[0]}*` : items.map((i) => `• ${i}`).join("\n");
+  const why = reason ? ` (${reason.slice(0, 120)})` : "";
+  return `Não consegui comprar ${items.length === 1 ? what : `estes itens:\n${what}`}${why}. Estornei o valor integral de ${brl(total)} — ele volta no mesmo Pix ou cartão em até 7 dias úteis. Se quiser, me manda outra opção que eu procuro de novo.`;
+}

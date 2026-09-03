@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "purchase-worker:monitor": "node --import tsx scripts/order-monitor.mts monitor",
+    "purchase-worker:inspect": "node --import tsx scripts/order-monitor.mts inspect",
     "purchase-worker:claim": "tsx scripts/purchase-worker-client.mts claim",
     "dev": "next dev",
     "build": "prisma generate && node scripts/migrate-on-build.mjs && next build && node scripts/check-bundle-emoji.mjs",

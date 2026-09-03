@@ -1,5 +1,16 @@
 # Lia — Status do Projeto
 
+## 03/09/2026 — incidente do chá pago sem estoque: causa e consertos em produção
+
+Um cliente real pagou R$24,14 por um chá que a Natural da Terra não tinha para o CEP
+(mínimo R$50, sem entrega em outra loja) e ficou sem resposta o dia todo. Causa: loja fora
+da simulação ao vivo + cotação automática sobre "tarifa padrão". Consertos: Natural da
+Terra na simulação (barra `withoutStock` antes de cobrar) com mínimo R$50; tarifa padrão
+vai pro operador; vigia de pedido pago sem compra (alerta 2h+, cliente avisado com
+honestidade); botão "Não consegui comprar → estornar" no /ops. Detalhe em AGENTS.md
+(03/09). O pedido do amigo do dono aguarda a decisão dele: estornar (1 clique) ou comprar
+em outra loja.
+
 ## 02/09/2026 (3ª) — melhorias em produção
 
 Deploy READY com as 4 migrations aplicadas (inclusive o DROP das tabelas do motor de

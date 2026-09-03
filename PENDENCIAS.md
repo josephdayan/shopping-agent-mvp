@@ -1,6 +1,13 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-02 (3ª — deploy feito)._
+_Última atualização: 2026-09-03 (incidente do chá)._
+
+> **03/09 — chá pago sem estoque.** Consertos em produção (AGENTS.md 03/09). **Dono:**
+> decidir o pedido `…epw0` do amigo — botão "Não consegui comprar → estornar" (motivo:
+> "sem estoque para o seu endereço") ou comprar em outra loja e confirmar. **Próximo:**
+> calibrar frete/simulação das lojas ainda em "tarifa padrão" (Imigrantes, Kalunga,
+> Decathlon, Cacau Show, Giuliana Flores, Droga Raia) — até lá elas vão pro operador.
+
 
 > **02/09 (3ª) — em produção.** Deploy READY, 4 migrations aplicadas (com o DROP das
 > tabelas legadas), `CRON_SECRET` criada, envs mortas removidas, `.env.local.bak` apagado.

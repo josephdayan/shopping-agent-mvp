@@ -34,7 +34,7 @@ import { opsPublishManualQuote, recordWaitlistLead, sendFreightChoice } from "./
 export { runTurnScoped, TurnSupersededError, normalizePhone } from "./turn-runtime";
 export { markDeliveryOrderPaid, issueValidatedRetailerQuotePayment, markPixExpired, flagCardOutcomeUnknown } from "./order-payments";
 export type { PaymentEvidence } from "./order-payments";
-export { opsRefundViaProvider, opsPublishManualQuote, opsMarkBought, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
+export { opsRefundViaProvider, opsPurchaseFailedRefund, watchPaidOrder, opsPublishManualQuote, opsMarkBought, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
 
 // Costura de TESTE do CAS: os E2E provam que uma escrita de turno velho morre depois
 // de outra escrita (cancelar) — sem exportar nada disso pro fluxo normal.
@@ -4130,6 +4130,24 @@ async function tryPublishInstantQuote(
         }
         if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
       }
+    }
+    // Loja sem política de frete calibrada e sem simulação ao vivo = "tarifa padrão", um
+    // chute. Cobrar em cima de chute vendeu um chá sem estoque, sem entrega no CEP e abaixo
+    // do mínimo da loja (02/09): agora o operador confere ANTES de qualquer cobrança.
+    const guessed = freights.filter((f) => f.source === "padrao");
+    if (guessed.length) {
+      const holdup = guessed.map((f) => namesOf(f.storeKey)).filter(Boolean).join(", ");
+      const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, select: { notes: true } });
+      await prisma.deliveryOrder.update({
+        where: { id: orderId },
+        data: {
+          notes: appendOrderNote(
+            current?.notes ?? null,
+            `⚠️ Cotação instantânea abortada: ${guessed.map((f) => f.storeKey).join(", ")} — sem política de frete calibrada nem simulação ao vivo (tarifa padrão é chute). Conferir estoque, entrega no CEP e mínimo da loja. Itens: ${holdup}.`
+          )
+        }
+      });
+      return { handled: false, holdup };
     }
     const totalFee = Math.round(freights.reduce((sum, f) => sum + f.fee, 0) * 100) / 100;
     const itemsSubtotal = roundMoney(items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0));
