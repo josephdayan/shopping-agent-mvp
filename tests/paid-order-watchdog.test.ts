@@ -10,6 +10,8 @@ process.env.LIA_OPERATOR_PHONE = "+5511900000000";
 process.env.PAGARME_MOCK = "true";
 // Modo ESTRITO de produção: só cobra automático o que a loja confirmou ao vivo.
 process.env.LIA_CHARGE_ONLY_VERIFIED = "true";
+// Estorno automático vale para qualquer data nos testes (em prod: só pagos a partir de 04/09).
+process.env.LIA_AUTO_REFUND_SINCE = "2000-01-01T00:00:00Z";
 
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
@@ -295,6 +297,13 @@ test("kill-switch e pedido já em compra nunca estornam sozinhos", async (t) => 
   assert.equal(await watchPaidOrder(buying.orderId), "none");
   assert.equal(autoRefundDecision({ status: "operator_buying", paidAt: new Date(0), notes: `${PURCHASE_BLOCKED_PREFIX} x` }).refund, false);
   assert.equal(autoRefundDecision({ status: "paid", storeOrderNumber: "123", paidAt: new Date(0), notes: `${PURCHASE_BLOCKED_PREFIX} x` }).refund, false, "com número de compra na loja não é falha");
+  process.env.LIA_AUTO_REFUND_SINCE = "2026-09-04T12:00:00Z";
+  try {
+    assert.equal(autoRefundDecision({ status: "paid", paidAt: new Date("2026-08-30T15:26:53Z"), notes: `${PURCHASE_BLOCKED_PREFIX} x` }, new Date("2026-09-05T00:00:00Z")).refund, false, "pago antes da regra existir nunca é estornado em bloco");
+    assert.equal(autoRefundDecision({ status: "paid", paidAt: new Date("2026-09-04T13:00:00Z"), notes: `${PURCHASE_BLOCKED_PREFIX} x` }, new Date("2026-09-05T00:00:00Z")).refund, true);
+  } finally {
+    process.env.LIA_AUTO_REFUND_SINCE = "2000-01-01T00:00:00Z";
+  }
 });
 
 test("provedor falha: pedido continua pago, nota e alerta uma vez, tenta de novo sem repetir", async (t) => {

@@ -527,6 +527,10 @@ export type AutoRefundDecision =
 function autoRefundBlockedHours(): number {
   return Number(process.env.LIA_AUTO_REFUND_BLOCKED_HOURS ?? 6);
 }
+function autoRefundSince(): number {
+  const parsed = Date.parse(process.env.LIA_AUTO_REFUND_SINCE ?? "2026-09-04T12:00:00Z");
+  return Number.isFinite(parsed) ? parsed : Date.parse("2026-09-04T12:00:00Z");
+}
 function autoRefundStaleHours(): number {
   return Number(process.env.LIA_AUTO_REFUND_STALE_HOURS ?? 24);
 }
@@ -546,6 +550,9 @@ export function autoRefundDecision(
 ): AutoRefundDecision {
   if (process.env.LIA_AUTO_REFUND_OFF === "true") return { refund: false };
   if (input.status !== "paid" || input.storeOrderNumber || !input.paidAt) return { refund: false };
+  // Só pedidos pagos DEPOIS da regra existir: em 04/09 havia 15 pedidos `paid` de
+  // junho–agosto (testes/sandbox e pendências antigas) que o cron estornaria em bloco.
+  if (input.paidAt.getTime() < autoRefundSince()) return { refund: false };
   const hours = (now.getTime() - input.paidAt.getTime()) / 3_600_000;
   const blocked = (input.notes ?? "")
     .split("\n")
