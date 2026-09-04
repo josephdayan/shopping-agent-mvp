@@ -21,7 +21,7 @@ loja como cliente comum e **a própria loja entrega**.
 | Preço (markup progressivo, `parseMoneyInput`) | `src/lib/pricing.ts` |
 | Pagamentos: Mercado Pago, Pagar.me, razão, reconciliação | `src/lib/payments/` |
 | Webhooks: WhatsApp (Meta), Mercado Pago, Pagar.me; cron | `src/app/api/**` |
-| Painel do operador | `/ops` (`src/app/ops/`) — abrir `/ops?key=<OPS_TOKEN>` uma vez |
+| Painel do operador | `/ops` (`src/app/ops/`) — mandar "ops" pra Lia no WhatsApp e tocar no link (ou `/ops?key=<OPS_TOKEN>` uma vez) |
 | Guards de auth (fail-closed em deploy) | `src/lib/auth.ts` |
 | Schema e migrations | `prisma/` |
 | Testes (unitários + E2E de conversa) | `tests/` |

@@ -954,6 +954,15 @@ export function nonTextMessage(): string {
 
 // Rede de segurança: o turno terminou sem NENHUMA resposta — melhor um pedido de
 // reformulação do que silêncio absoluto (28/08: 4 sessões tiveram silêncio).
+// ---------- login do /ops pelo WhatsApp (04/09; só telefone de operador) ----------
+export function opsLoginLink(url: string): string {
+  return `Abra o painel por aqui: ${url}\n\nO link vale 10 minutos e deixa você logado por 1 ano neste aparelho.`;
+}
+
+export function opsLoginUnavailable(): string {
+  return "Não consegui gerar o link do painel: OPS_TOKEN não está configurado no servidor.";
+}
+
 export function fallbackNoAnswer(): string {
   return "Me perdi aqui 😅 Me diz de novo o que você precisa?";
 }

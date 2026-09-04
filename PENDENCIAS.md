@@ -1,6 +1,11 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-03 (3ª — janela de 24h / template)._
+_Última atualização: 2026-09-04 (login do /ops pelo WhatsApp)._
+
+> **04/09 — login do /ops pelo WhatsApp.** Em produção (AGENTS.md 04/09). **Aberto:** link não
+> é de uso único (só expira em 10 min) — se incomodar, guardar nonce usado no banco.
+> **Dono:** mandar "ops" pra Lia do número do operador e tocar no link; depois clicar
+> "Não consegui comprar → estornar" no pedido #41EPW0.
 
 > **03/09 (3ª) — janela de 24h.** Aviso proativo fora da janela agora vai por template ou é
 > registrado como não enviado (AGENTS.md 03/09 3ª). **Dono:** criar template Utility no

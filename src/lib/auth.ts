@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 
 // Em deploy (Vercel), segredo ausente é erro de configuração, nunca porta aberta: a
@@ -107,4 +107,39 @@ export function requireOpsKey(request: Request, options: { allowQuery?: boolean 
     (cookie != null && safeEqual(cookie, opsSessionCookieValue(expected)));
   if (!ok) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   return null;
+}
+
+// ---------- login do /ops pelo WhatsApp (04/09) ----------
+// O dono não conseguia abrir o painel: buscar OPS_TOKEN na Vercel a cada sessão era a
+// barreira. Agora o operador manda "ops" pra Lia e recebe um link de uso curto, assinado
+// com o PRÓPRIO OPS_TOKEN (nada novo pra guardar): /api/ops/login?login=<exp>.<nonce>.<hmac>.
+// Vale 10 min; ao abrir, vira o mesmo cookie ops_session de sempre. Quem pode pedir o link
+// é só telefone de operador (LIA_OPERATOR_PHONE / LIA_ADMIN_PHONES) — a Meta garante o
+// remetente. Sem OPS_TOKEN não há link (fail-closed como o resto).
+export const OPS_LOGIN_TTL_MS = 10 * 60_000;
+export const OPS_SESSION_MAX_AGE_S = 60 * 60 * 24 * 365;
+
+function loginSignature(secret: string, exp: string, nonce: string): string {
+  return createHmac("sha256", `lia-ops-login:${secret}`).update(`${exp}.${nonce}`).digest("hex");
+}
+
+export function createOpsLoginToken(now = Date.now()): string | null {
+  const secret = opsToken();
+  if (!secret) return null;
+  const exp = String(now + OPS_LOGIN_TTL_MS);
+  const nonce = randomBytes(8).toString("hex");
+  return `${exp}.${nonce}.${loginSignature(secret, exp, nonce)}`;
+}
+
+export function verifyOpsLoginToken(token: string | null | undefined, now = Date.now()): boolean {
+  const secret = opsToken();
+  if (!secret || !token) return false;
+  const [exp, nonce, sig] = token.split(".");
+  if (!exp || !nonce || !sig || !/^\d+$/.test(exp) || Number(exp) < now) return false;
+  return safeEqual(sig, loginSignature(secret, exp, nonce));
+}
+
+export function opsLoginUrl(token: string): string {
+  const base = (process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "");
+  return `${base}/api/ops/login?login=${encodeURIComponent(token)}`;
 }

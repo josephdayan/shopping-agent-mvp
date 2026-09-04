@@ -58,6 +58,16 @@ export async function deliverNotice(to: string, text: string, opts: { shortId?: 
   return "template";
 }
 
+// Telefones com poder de operador: LIA_OPERATOR_PHONE (alertas) + LIA_ADMIN_PHONES
+// (lista separada por vírgula). Só eles recebem o link de login do /ops.
+export function isAdminPhone(phone: string): boolean {
+  const list = [process.env.LIA_OPERATOR_PHONE ?? "", ...(process.env.LIA_ADMIN_PHONES ?? "").split(",")]
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => normalizePhone(p));
+  return list.includes(normalizePhone(phone));
+}
+
 export async function notifyOperator(text: string, customerPhone?: string) {
   const to = process.env.LIA_OPERATOR_PHONE?.trim();
   if (!to) return;

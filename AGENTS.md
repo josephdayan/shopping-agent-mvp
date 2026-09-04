@@ -1,5 +1,26 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 — login do /ops pelo WhatsApp (acabou o "pega o OPS_TOKEN na Vercel")
+
+Dono, 04/09: *"eu nunca consigo abrir essa droga de ops… odeio entrar na Vercel e pegar
+coisas."* A barreira era o `?key=OPS_TOKEN` na URL. Regra nova:
+
+1. O operador manda **"ops"** (ou "painel", "login", "entrar") pra Lia no WhatsApp.
+   Só telefone de operador recebe resposta especial: `LIA_OPERATOR_PHONE` e
+   `LIA_ADMIN_PHONES` (`isAdminPhone` em `turn-runtime.ts`); cliente comum cai no fluxo
+   normal. A Meta garante o remetente, por isso o telefone basta como identidade.
+2. A Lia responde com `https://liadelivery.com.br/api/ops/login?login=<token>`: token de
+   **10 min** assinado com o próprio `OPS_TOKEN` (`createOpsLoginToken`/`verifyOpsLoginToken`
+   em `auth.ts`; nada novo pra guardar). Abrir o link grava o mesmo cookie `ops_session`
+   (HMAC do token) por **1 ano** e redireciona pro `/ops`. Link vencido → `/ops?expired=1`.
+3. `?key=` continua funcionando como alternativa. Sem `OPS_TOKEN` em deploy não há link
+   (fail-closed, revisão 01/09).
+4. `LIA_PUBLIC_URL` só se o domínio não for `liadelivery.com.br`.
+
+Limite: o link não é de uso único (expira em 10 min). Se vazar dentro desse tempo, quem abrir
+entra; aceitável no piloto, registrado em PENDENCIAS. Testes: `ops-login-token` (unit) e
+`ops-whatsapp-login` (E2E).
+
 ## Atualização 03/09/2026 (3ª) — janela de 24h da Meta: aviso proativo vai por template ou não vai
 
 Descoberta ao auditar o vigia do chá: os alertas de 12h e 24h saíram do código, mas a Meta

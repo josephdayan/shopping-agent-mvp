@@ -1,5 +1,10 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 — /ops abre pelo WhatsApp
+
+Operador manda "ops" pra Lia e recebe um link de 10 minutos; ao abrir, fica logado por 1 ano
+no aparelho. Sem buscar OPS_TOKEN na Vercel. Detalhe em AGENTS.md (04/09).
+
 ## 03/09/2026 (3ª) — avisos fora da janela de 24h da Meta
 
 O vigia alertou às 12h e 24h, mas a Meta descartou as mensagens (erro 131047): fora da janela

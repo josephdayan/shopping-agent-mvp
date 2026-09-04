@@ -219,7 +219,7 @@ export default function OpsBoard() {
           .catch(() => undefined);
         alert(
           res.status === 401
-            ? "Sessão expirada. Abra /ops?key=… de novo."
+            ? "Sessão expirada. Mande \"ops\" pra Lia no WhatsApp e toque no link que ela responder."
             : detail && detail !== "action failed"
               ? `Não deu: ${detail}`
               : `A ação falhou (${res.status}). Tente de novo.`
@@ -249,8 +249,10 @@ export default function OpsBoard() {
   if (denied) {
     return (
       <p style={{ marginTop: 24, color: "#b42318" }}>
-        Acesso negado. Abra <strong>uma vez</strong> com <code>/ops?key=SEU_TOKEN</code> (valor de
-        OPS_TOKEN/API_TOKEN) — depois disso a chave fica salva e você abre só <code>/ops</code>.
+        Acesso negado. Mande <strong>ops</strong> pra Lia no WhatsApp (do número do operador) e toque no
+        link que ela responder: o painel abre logado por 1 ano neste aparelho.
+        {new URLSearchParams(window.location.search).get("expired") ? " Esse link já venceu (vale 10 minutos) — peça outro." : ""}
+        {" "}Alternativa: <code>/ops?key=SEU_TOKEN</code> uma vez.
       </p>
     );
   }
