@@ -1416,6 +1416,8 @@ export function parseRefinement(text: string): string[] | null {
 
 export type ChoiceReply =
   | { type: "pick"; index: number }
+  // Texto que nomeia UMA opção (marca/nome): estreita, não escolhe (04/09).
+  | { type: "name"; index: number }
   | { type: "any" }
   | { type: "cheapest" }
   // "mais barato"/"mais caro" SEM verbo de escolha: o cliente quer VER opções nessa
@@ -1505,7 +1507,9 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
     });
     const max = Math.max(...scores);
     if (max > 0 && scores.filter((s) => s === max).length === 1) {
-      return { type: "pick", index: scores.indexOf(max) };
+      // 04/09 (dono): nome/marca digitado NÃO escolhe — estreita para essa opção e o
+      // cliente confirma no botão/número. Só número/ordinal/"mais barato" escolhem.
+      return { type: "name", index: scores.indexOf(max) };
     }
   }
 

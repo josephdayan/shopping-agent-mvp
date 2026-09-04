@@ -2139,18 +2139,15 @@ async function handleDeliveryTurn(
       const issuedAt = ctx.paymentIssuedAt ?? order.updatedAt.getTime();
       const chargeFresh = Date.now() - issuedAt < 10 * 60_000;
       if (!explicitAdd && !chargeFresh) {
-        ctx.step = "awaiting_merge_decision";
-        ctx.mergeDecision = { orderId: order.id, request: text, total: order.total };
+        // 04/09 (dono): pedido parado + item novo do nada = pedido NOVO, sem perguntar
+        // ("se ele esquece do outro e pede outra coisa, só dá o que ele pede"). O antigo
+        // fica como está — o Pix dele continua válido até vencer — e a conversa segue com
+        // o que o cliente pediu agora.
+        const fresh = addressOnlyCtx(ctx, user.cep);
+        for (const key of Object.keys(ctx)) delete (ctx as unknown as Record<string, unknown>)[key];
+        Object.assign(ctx, fresh);
         await writeCtx(convo.id, ctx);
-        const body = copy.mergeOrNewOrderPrompt(order.id.slice(-6).toUpperCase(), order.total);
-        try {
-          markTurnReplied();
-          const interactive = await whatsappAdapter.sendMergeDecisionButtons(phone, body);
-          if (interactive) return;
-        } catch (error) {
-          console.warn("[merge-decision:buttons:fallback-text]", error instanceof Error ? error.message : error);
-        }
-        await reply(phone, `${body}\n1. Juntar no pedido\n2. Pedido novo`);
+        await handleSearch(phone, convo.id, user.cep, ctx, text, user.id);
         return;
       }
       const closed = await closeUnpaidOrder(order, "reaberto pelo cliente (item novo)");
@@ -2822,6 +2819,12 @@ async function handleChoosing(
   if (parsed?.type === "skip" && more) parsed = null;
   if (!parsed && !more && !refineAttrs && intent.kind === "reject") parsed = { type: "skip" } as const;
 
+  if (parsed?.type === "name") {
+    current.options = [current.options[parsed.index]];
+    await writeCtx(convoId, ctx);
+    await sendChoices(phone, current, copy.narrowedChoices(current.query));
+    return;
+  }
   if (parsed) {
     if (parsed.type === "skip") {
       ctx.pending = ctx.pending!.slice(1);
@@ -2886,12 +2889,11 @@ async function handleChoosing(
 
   // "coca" com [Fanta, Coca Lata, Coca Pet] na mesa: o cliente está discriminando
   // entre as opções, não pedindo item novo. Uma só bate → escolhe; várias → estreita.
+  // 04/09 (dono): texto que discrimina NUNCA escolhe sozinho — "masculino" com uma só
+  // opção masculina mostrava o card e já fechava. Agora estreita para 1 e o cliente
+  // confirma no botão/número, como em qualquer escolha.
   const narrowed = narrowChoiceByName(text, current.options);
-  if (narrowed.length === 1) {
-    await confirmChosenOption(phone, convoId, ctx, userCep, store, current, current.options[narrowed[0]]);
-    return;
-  }
-  if (narrowed.length > 1 && narrowed.length < current.options.length) {
+  if (narrowed.length >= 1 && narrowed.length < current.options.length) {
     current.options = narrowed.map((i) => current.options[i]);
     await writeCtx(convoId, ctx);
     await sendChoices(phone, current, copy.narrowedChoices(current.query));
@@ -3185,7 +3187,16 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   const p = ctx.pending![0];
   const base = p.baseQuery ?? p.query;
   const refined = `${base} ${attrs.join(" ")}`;
-  const matches = diversifyOptions(refined, await choiceCandidates(store, ctx, p, attrs), 3);
+  let matches = diversifyOptions(refined, await choiceCandidates(store, ctx, p, attrs), 3);
+  let closest = false;
+  if (!matches.length) {
+    // 04/09 (dono): "quero do grande masculino"/"100ml" não podem morrer em "não achei".
+    // Sem item que case os atributos à risca, a busca roda com a frase refinada inteira
+    // (marca + atributos como termos) e mostra o mais perto — verificado ao vivo.
+    const broadened = await choiceCandidates(store, ctx, { ...p, query: refined, baseQuery: undefined, attrs: undefined }, []);
+    matches = diversifyOptions(refined, broadened, 3);
+    closest = matches.length > 0;
+  }
   if (!matches.length) {
     await reply(phone, copy.refineNoResult(refined));
     await sendChoices(phone, p);
@@ -3205,7 +3216,7 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   // repetir. Skus fora do refino atual continuam valendo como "já mostrei isso".
   p.shownSkus = [...new Set([...previouslyShownSkus, ...matches.map((m) => m.sku)])];
   await writeCtx(convoId, ctx);
-  await sendChoices(phone, p);
+  await sendChoices(phone, p, closest ? copy.refineClosest(attrs.join(" ")) : undefined);
 }
 
 // Move to the next pending choice, or quote the finished basket (keeping the

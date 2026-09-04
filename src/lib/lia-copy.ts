@@ -299,6 +299,10 @@ export function staleButtonTap(hasCurrentOptions: boolean): string {
     : "Esse botão é de uma conversa antiga 🙂 Me diz o que você precisa que eu busco de novo.";
 }
 
+export function refineClosest(attrs: string): string {
+  return `Não achei exatamente *${attrs}*. O mais perto que tenho:`;
+}
+
 export function refineNoResult(refined: string): string {
   return `Não achei *${refined}*. O que eu tenho é isso:`;
 }

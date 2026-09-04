@@ -604,8 +604,7 @@ export const whatsappAdapter = {
       [
         { id: `cardpay:${input.attemptId}`, title: `Pagar •••• ${input.last4}` },
         { id: "cardother", title: "Outro cartão" }
-      ],
-      "Cobrança segura via Pagar.me — seus dados não passam pelo chat."
+      ]
     );
   },
 

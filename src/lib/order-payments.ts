@@ -742,7 +742,7 @@ export async function flagCardOutcomeUnknown(orderId: string, attemptId: string,
   await notifyOperator(copy.operatorCardOutcomeUnknownAlert(order.id.slice(-6).toUpperCase(), detail.slice(0, 120)), order.phone);
 }
 
-export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence) {
+export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence, opts: { notifyCustomer?: boolean } = {}) {
   // Revisão 01/09: o webhook marcava "pago" sem conferir VALOR nem QUAL cobrança foi
   // paga. Com a bolha nativa no chat, o código antigo (pedido reaberto/trocado pra
   // cartão) segue pagável por 60 min — pagamento que não bate com a cobrança vigente
@@ -783,7 +783,7 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   await resetConversationForClosedOrder(order, "paid");
   // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
   // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
-  await reply(order.phone, copy.paymentConfirmed());
+  if (opts.notifyCustomer !== false) await reply(order.phone, copy.paymentConfirmed());
   // Pix pago com "juntar ou pedido novo?" aberta: o reset apaga o passo, mas o item
   // novo que o cliente pediu não pode sumir em silêncio (revisão 01/09).
   if (pendingNewItem) await reply(order.phone, copy.newItemAfterPayment(pendingNewItem));

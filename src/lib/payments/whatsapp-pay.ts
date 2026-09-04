@@ -210,19 +210,21 @@ async function sendOrderStatus(
   phone: string,
   referenceId: string,
   input: { body: string; orderStatus?: "processing" | "canceled"; paymentStatus: "captured" | "failed" }
-) {
+): Promise<boolean> {
   try {
     if (paymentFeatureEnabled()) {
       await whatsappAdapter.sendOrderStatus(phone, { referenceId, ...input });
-      return;
+      return true;
     }
     // Sem a Payments API nativa não existe mensagem de order_status: o desfecho vai
     // como texto comum, com o mesmo conteúdo.
     await whatsappAdapter.sendMessage(phone, input.body);
+    return true;
   } catch (error) {
     // Payment state is authoritative. Retrying Meta's notification must never retry
     // the card charge, which is protected separately by Pagar.me idempotency.
     console.error("[whatsapp-pay:order-status]", error);
+    return false;
   }
 }
 
@@ -316,9 +318,12 @@ async function markAttemptCaptured(attemptId: string, provider: { orderId?: stri
     include: { deliveryOrder: true, credential: true }
   });
   if (!attempt) return { handled: false };
+  // UMA confirmação só (dono, 04/09: "me deu duas msgs"): o status nativo atualiza o
+  // card de pagamento e já leva o texto de confirmado; markDeliveryOrderPaid não repete.
+  let statusSent = false;
   if (changed.count === 1) {
-    await sendOrderStatus(attempt.deliveryOrder.phone, attempt.id, {
-      body: "Pagamento aprovado. Preparando seu pedido.",
+    statusSent = await sendOrderStatus(attempt.deliveryOrder.phone, attempt.id, {
+      body: copy.paymentConfirmed(),
       orderStatus: "processing",
       paymentStatus: "captured"
     });
@@ -326,11 +331,15 @@ async function markAttemptCaptured(attemptId: string, provider: { orderId?: stri
   const { markDeliveryOrderPaid } = await import("@/lib/delivery-service");
   // Com evidência: um cartão capturado em pedido que já saiu de awaiting_payment (ops
   // cancelou, cliente reabriu no exato instante) vira nota + alerta, não silêncio.
-  await markDeliveryOrderPaid(attempt.deliveryOrderId, {
-    provider: "pagarme",
-    paymentId: provider.chargeId ?? provider.orderId ?? null,
-    amount: fromCents(attempt.amountCents)
-  });
+  await markDeliveryOrderPaid(
+    attempt.deliveryOrderId,
+    {
+      provider: "pagarme",
+      paymentId: provider.chargeId ?? provider.orderId ?? null,
+      amount: fromCents(attempt.amountCents)
+    },
+    { notifyCustomer: !statusSent }
+  );
   return { handled: true, charged: true };
 }
 

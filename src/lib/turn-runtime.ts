@@ -233,7 +233,8 @@ export async function resetConversationForClosedOrder(
     if (!convo) return;
     const ctx = readCtx(convo.context);
     const movedOn = Boolean(ctx.deliveryOrderId) && ctx.deliveryOrderId !== order.id;
-    const hasNewBasket = (ctx.basket?.length ?? 0) > 0 && ctx.deliveryOrderId !== order.id;
+    // Escolha aberta (pending) também é missão nova em voo (04/09: item novo sem pergunta).
+    const hasNewBasket = ((ctx.basket?.length ?? 0) > 0 || (ctx.pending?.length ?? 0) > 0) && ctx.deliveryOrderId !== order.id;
     if (movedOn || hasNewBasket) return;
     await writeCtx(convo.id, addressOnlyCtx(ctx));
   } catch (error) {

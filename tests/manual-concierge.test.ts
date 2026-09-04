@@ -1747,7 +1747,7 @@ test("01/09: Ver detalhes — 'detalhes 2' devolve a página do produto sem fech
   assert.match(confirmed, /✅/, confirmed.slice(0, 200));
 });
 
-test("01/09: pedido parado + item novo do nada PERGUNTA juntar × novo, nunca funde sozinho", async (t) => {
+test("04/09: pedido parado + item novo do nada = pedido NOVO direto, sem perguntar; o antigo fica como está", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const order = await manualQuoteOrder(c);
@@ -1759,13 +1759,10 @@ test("01/09: pedido parado + item novo do nada PERGUNTA juntar × novo, nunca fu
   await agePaymentIssuedAt(c.userId, 20);
   const ask = await c.send("preciso de um shampoo");
   assert.doesNotMatch(ask, /total anterior não vale/i, `fundiu sozinho: ${ask.slice(0, 300)}`);
-  assert.match(ask, /juntar|pedido novo/i, `não perguntou: ${ask.slice(0, 300)}`);
-  const novo = await c.send("2");
-  assert.match(novo, /Cancelei o \*#/i, novo.slice(0, 300));
-  assert.match(novo, /opç|shampoo/i, `não buscou o item novo: ${novo.slice(0, 400)}`);
+  assert.doesNotMatch(ask, /juntar|pedido novo/i, `perguntou (dono 04/09: só dá o que ele pede): ${ask.slice(0, 300)}`);
+  assert.match(ask, /opç|shampoo/i, `não buscou o item novo: ${ask.slice(0, 400)}`);
   const old = await prisma.deliveryOrder.findUnique({ where: { id: order!.id } });
-  assert.equal(old!.status, "canceled");
-  assert.match(old!.notes ?? "", /pedido novo/);
+  assert.equal(old!.status, "awaiting_payment", "o pedido antigo não é cancelado nem fundido");
 });
 
 // Envelhece a cobrança emitida (ctx.paymentIssuedAt) sem tocar no pedido — é este o
@@ -1793,14 +1790,13 @@ test("01/09 rev: reclamação/atendimento não renova a janela da cobrança — 
   assert.doesNotMatch(human, /juntar|pedido novo/i, human.slice(0, 200));
   const ask = await c.send("preciso de um shampoo");
   assert.doesNotMatch(ask, /total anterior não vale/i, `fundiu sozinho: ${ask.slice(0, 300)}`);
-  assert.match(ask, /juntar|pedido novo/i, `não perguntou: ${ask.slice(0, 300)}`);
-  // "quero outro modelo" durante a pergunta NÃO cancela o Pix emitido: re-pergunta.
-  const refine = await c.send("quero outro modelo");
-  assert.match(refine, /juntar|pedido novo/i, refine.slice(0, 300));
+  // 04/09: sem pergunta — busca o item novo; o Pix antigo continua de pé.
+  assert.doesNotMatch(ask, /juntar|pedido novo/i, ask.slice(0, 300));
+  assert.match(ask, /opç|shampoo/i, ask.slice(0, 400));
   assert.equal((await prisma.deliveryOrder.findUnique({ where: { id: order!.id } }))!.status, "awaiting_payment");
 });
 
-test("01/09 rev: Pix pago com a pergunta aberta não engole o item novo", async (t) => {
+test("04/09: Pix antigo pago enquanto o cliente escolhe o item novo não apaga a escolha em voo", async (t) => {
   if (!dbOk) return t.skip();
   const c = await returningCustomer();
   const order = await manualQuoteOrder(c);
@@ -1809,15 +1805,15 @@ test("01/09 rev: Pix pago com a pergunta aberta não engole o item novo", async 
   await c.send("pix");
   await agePaymentIssuedAt(c.userId, 20);
   const ask = await c.send("preciso de um shampoo");
-  assert.match(ask, /juntar|pedido novo/i, ask.slice(0, 300));
+  assert.match(ask, /opç|shampoo/i, ask.slice(0, 300));
   const before = outbox.length;
   await markDeliveryOrderPaid(order!.id);
   const afterPay = outbox.slice(before).map((m) => m.text).join("\n");
   assert.match(afterPay, /Pagamento confirmado/i, afterPay.slice(0, 300));
-  assert.match(afterPay, /shampoo/i, `item novo sumiu em silêncio: ${afterPay.slice(0, 300)}`);
-  // Resposta atrasada "1" à pergunta não reabre nem cancela o pedido pago.
-  await c.send("1");
   assert.equal((await prisma.deliveryOrder.findUnique({ where: { id: order!.id } }))!.status, "paid");
+  const convo = await prisma.conversation.findFirst({ where: { userId: c.userId }, orderBy: { updatedAt: "desc" } });
+  const ctx = JSON.parse(convo?.context ?? "{}") as { pending?: Array<{ query: string }> };
+  assert.match(ctx.pending?.[0]?.query ?? "", /shampoo/i, "a escolha do shampoo tem que continuar aberta");
 });
 
 test("01/09: botão Editar itens responde o manual curto de edição", async (t) => {

@@ -1,6 +1,11 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-04 (5ª — recursos do WhatsApp)._
+_Última atualização: 2026-09-04 (6ª — conversa real do desodorante)._
+
+> **04/09 (6ª) — conversa real do desodorante.** 5 correções em produção (AGENTS.md 04/09 6ª).
+> **Dono:** pedido #OG9F4M (R$ 20,68, Drogaria SP) está PAGO e sem compra — a compra ainda é
+> manual (decisão pendente de compra automática). Observar: primeiro "Não achei exatamente…"
+> real e a estreita por nome.
 
 > **04/09 (5ª) — recursos do WhatsApp.** Código em produção (AGENTS.md 04/09 5ª).
 > Configuração na Meta via `/api/ops/meta-setup` **concluída pelo Codex em 04/09** (verificada

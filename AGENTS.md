@@ -1,5 +1,31 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (6ª) — conversa real do dono (desodorante): 5 regras novas
+
+Teste real às 14h04 (pedido #OG9F4M, pago no cartão salvo). Decisões do dono, todas em código:
+
+1. **Pedido parado + item novo do nada = pedido NOVO, sem perguntar.** A pergunta "juntar ou
+   pedido novo?" (01/09) saiu: *"se ele esquece do outro e pede outra coisa, só dá o que ele
+   pede."* O contexto vira endereço-só e a busca do item novo roda na hora; o pedido antigo
+   em `awaiting_payment` fica como está (Pix válido até vencer). "Adiciona/bota/mais um" ou
+   cobrança emitida há <10 min continuam fundindo. `resetConversationForClosedOrder` agora
+   preserva escolha em voo (`pending`) quando o Pix antigo é pago no meio.
+2. **Texto que nomeia uma opção NÃO escolhe.** "masculino"/"tio joão"/"a parmalat" com uma
+   só opção batendo mostrava o card e já fechava. Agora `parseChoiceReply` devolve
+   `{ type: "name" }` e `narrowChoiceByName` com 1 resultado estreita para aquele card
+   ("Ficou entre essas…"); só número, ordinal, "mais barato/caro" ou o botão escolhem.
+3. **Refino sem match à risca busca com a frase inteira.** "quero do grande masculino",
+   "100ml": atributo que nenhum candidato casa não morre em "não achei"; `refineOptions`
+   roda `choiceCandidates` com a frase refinada (marca + atributos como termos) e mostra
+   "Não achei exatamente *grande masculino*. O mais perto que tenho:" (`copy.refineClosest`).
+4. **Rodapé "Cobrança segura via Pagar.me" removido** dos botões do cartão salvo.
+5. **Uma confirmação só após o cartão:** o `order_status` nativo leva
+   `copy.paymentConfirmed()` e `markDeliveryOrderPaid(…, { notifyCustomer: false })` não
+   repete; se o status falhar, o texto de sempre sai.
+
+Testes: `choice-refine-2026-09-04` (2 E2E), `manual-concierge` (3 reescritos), `saved-card`,
+`lia-intents` ajustados. Suíte 524/524.
+
 ## Atualização 04/09/2026 (5ª) — recursos do WhatsApp: digitando, localização, lista, boas-vindas, perfil, Flow
 
 Pedido do dono ("implementar esses"). O que entrou no código (`adapters/whatsapp.ts`,

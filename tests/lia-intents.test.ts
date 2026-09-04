@@ -377,12 +377,12 @@ test("escolha de opções: número, ordinal, qualquer, mais barato, marca, nenhu
   assert.deepEqual(parseChoiceReply("mais em conta", options), { type: "cheaper" });
   assert.deepEqual(parseChoiceReply("mais caro", options), { type: "pricier" });
   assert.deepEqual(parseChoiceReply("o mais caro", options), { type: "pick", index: 2 });
-  assert.deepEqual(parseChoiceReply("o parmalat", options), { type: "pick", index: 2 });
+  assert.deepEqual(parseChoiceReply("o parmalat", options), { type: "name", index: 2 });
   assert.deepEqual(parseChoiceReply("nenhuma dessas", options), { type: "skip" });
   // um novo pedido não pode ser interpretado como escolha
   assert.equal(parseChoiceReply("adiciona 2 sabonetes", options), null);
   // regressões do review: "pode ser a X" escolhe a X, não a primeira
-  assert.deepEqual(parseChoiceReply("pode ser a parmalat", options), { type: "pick", index: 2 });
+  assert.deepEqual(parseChoiceReply("pode ser a parmalat", options), { type: "name", index: 2 });
   assert.deepEqual(parseChoiceReply("pode ser a 2", options), { type: "pick", index: 1 });
   assert.deepEqual(parseChoiceReply("quero o 2 por favor", options), { type: "pick", index: 1 });
   assert.deepEqual(parseChoiceReply("pode ser", options), { type: "any" });

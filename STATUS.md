@@ -1,5 +1,12 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (6ª) — conversa real do dono
+
+Cinco correções do teste real do desodorante: item novo com pedido parado vira pedido novo
+sem perguntar; nome digitado estreita em vez de escolher; refino sem match busca a frase
+inteira e mostra o mais perto; rodapé do Pagar.me removido; uma confirmação só após o
+cartão. Detalhe em AGENTS.md (04/09 6ª). Pedido #OG9F4M pago às 14h07 aguarda compra manual.
+
 ## 04/09/2026 (5ª) — recursos do WhatsApp
 
 "Digitando…" em toda mensagem, botão de localização no pedido de endereço (GPS vira CEP),

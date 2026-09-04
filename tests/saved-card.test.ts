@@ -127,7 +127,7 @@ test("cartão salvo DB: toque no botão cobra uma vez, paga o pedido e ignora re
     const charged = await prisma.paymentAttempt.findUniqueOrThrow({ where: { id: attempt.id } });
     assert.equal(charged.status, "charged");
     assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: data.order.id } })).status, "paid");
-    assert.match(textsFor(data.phone), /Pagamento aprovado/i);
+    assert.match(textsFor(data.phone), /Pagamento confirmado/i);
     // O toque responde "Cobrando…" e NUNCA o fallback anti-silêncio (01/09: o botão
     // trazia só o attemptId, o turno saía mudo e a rede mandava "Me perdi aqui").
     assert.match(textsFor(data.phone), /Cobrando no cart(ã|a)o final \*4242\*/i);
@@ -139,7 +139,7 @@ test("cartão salvo DB: toque no botão cobra uma vez, paga o pedido e ignora re
     assert.equal((await prisma.paymentAttempt.findUniqueOrThrow({ where: { id: attempt.id } })).status, "charged");
     // Nenhuma nova mensagem de aprovação (o pipeline trata como duplicado silencioso).
     const after = outbox.slice(before).map((m) => m.text).join("\n");
-    assert.doesNotMatch(after, /Pagamento aprovado/i);
+    assert.doesNotMatch(after, /Pagamento confirmado/i);
     assert.doesNotMatch(after, /Me perdi/i);
   } finally {
     await cleanup(data);
