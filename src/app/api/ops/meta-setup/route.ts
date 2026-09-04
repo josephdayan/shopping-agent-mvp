@@ -10,13 +10,22 @@ export const maxDuration = 60;
 // rotas de operação). GET = status (leitura); POST { action } = grava.
 const ACTIONS: MetaSetupAction[] = ["status", "profile", "picture", "welcome", "flow"];
 
+// GET sem `action` = status. GET ?action=profile|picture|flow|welcome executa a ação —
+// estado por GET de propósito: o operador (ou o Codex) roda tudo abrindo URLs no navegador
+// logado no /ops, sem precisar de JS/POST. Idempotente; auth igual às outras rotas.
 export async function GET(request: Request) {
   const unauthorized = requireOpsKey(request, { allowQuery: true });
   if (unauthorized) return unauthorized;
+  const requested = new URL(request.url).searchParams.get("action") ?? "status";
+  if (!ACTIONS.includes(requested as MetaSetupAction)) return NextResponse.json({ error: "unknown action" }, { status: 400 });
+  const action = requested as MetaSetupAction;
   try {
-    return NextResponse.json({ ok: true, result: await runMetaSetup("status") });
+    const result = await runMetaSetup(action);
+    if (action !== "status") console.log("[ops:meta-setup]", action, JSON.stringify(result).slice(0, 300));
+    return NextResponse.json({ ok: true, action, result });
   } catch (error) {
-    return NextResponse.json({ ok: false, error: error instanceof Error ? error.message.slice(0, 600) : "failed" }, { status: 502 });
+    console.error("[ops:meta-setup:error]", action, error instanceof Error ? error.message : error);
+    return NextResponse.json({ ok: false, action, error: error instanceof Error ? error.message.slice(0, 600) : "failed" }, { status: 502 });
   }
 }
 
