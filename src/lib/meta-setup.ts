@@ -105,7 +105,11 @@ async function ids(token: string) {
     data?: { app_id?: string; granular_scopes?: Array<{ scope: string; target_ids?: string[] }> };
   };
   const appId = dbg.data?.app_id;
-  const waba = dbg.data?.granular_scopes?.find((s) => s.scope === "whatsapp_business_management")?.target_ids?.[0];
+  // Tokens permanentes de System User podem ter a permissão correta sem expor
+  // `target_ids` no debug_token. Nesse caso usamos o WABA explícito do número.
+  const waba =
+    process.env.WHATSAPP_BUSINESS_ACCOUNT_ID?.trim() ||
+    dbg.data?.granular_scopes?.find((s) => s.scope === "whatsapp_business_management")?.target_ids?.[0];
   return { appId, waba };
 }
 
