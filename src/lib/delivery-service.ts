@@ -404,6 +404,47 @@ async function replyPhoto(phone: string, text: string, imageUrl?: string) {
 // Show the (up to 3) options with a product PHOTO each (one image message per option),
 // then the numbered prompt. Falls back to the single numbered-text message when photos
 // are off (LIA_SEND_PHOTOS=false) or none of the options has an image.
+// Pedido de endereço com o botão "Enviar localização" (04/09): no canal Meta a mensagem
+// leva o botão; o cliente toca e o GPS vira CEP (webhook). Texto continua valendo.
+async function askAddress(phone: string, text: string) {
+  if (process.env.WHATSAPP_PROVIDER === "meta") {
+    try {
+      markTurnReplied();
+      const sent = await whatsappAdapter.sendLocationRequest(phone, text);
+      if (sent) return;
+    } catch (error) {
+      console.warn("[whatsapp:meta:location-request:fallback-text]", error instanceof Error ? error.message : error);
+    }
+  }
+  await reply(phone, text);
+}
+
+// Rua/número/complemento com o Flow de endereço (formulário dentro do chat, 04/09) quando
+// LIA_FLOW_ADDRESS_ID está configurado; CEP/rua/bairro/cidade já conhecidos vão
+// pré-preenchidos. A resposta volta pelo webhook como linha de endereço completo.
+// Sem Flow (ou falha), o pedido em texto de sempre.
+async function askStreetAndNumber(phone: string, ctx: DeliveryContext) {
+  const flowId = process.env.LIA_FLOW_ADDRESS_ID?.trim();
+  if (flowId && process.env.WHATSAPP_PROVIDER === "meta") {
+    const parts = (ctx.deliveryAddress ?? "").split(",").map((x) => x.trim());
+    const known = parts.length >= 3 && !/\d/.test(parts[0]) ? { rua: parts[0], bairro: parts[1], cidade: parts[2] } : { rua: "", bairro: "", cidade: "" };
+    try {
+      markTurnReplied();
+      const sent = await whatsappAdapter.sendFlowMessage(phone, {
+        body: "Falta só o número e o complemento. Confere e confirma seu endereço:",
+        cta: "Preencher endereço",
+        flowId,
+        screen: "ADDRESS",
+        data: { cep: ctx.cep ?? "", ...known }
+      });
+      if (sent) return;
+    } catch (error) {
+      console.warn("[whatsapp:meta:flow:fallback-text]", error instanceof Error ? error.message : error);
+    }
+  }
+  await reply(phone, copy.askFullDeliveryAddress());
+}
+
 async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   // Meta supports reply buttons inside the 24h customer-service window. One card per
   // option keeps each "Escolher este" button attached to the correct product.
@@ -794,7 +835,7 @@ async function handleDeliveryTurn(
     ctx.flow = "delivery";
     ctx.step = "need_cep";
     await writeCtx(convo.id, ctx);
-    await reply(phone, copy.askCepAgain());
+    await askAddress(phone, copy.askCepAgain());
     return;
   }
 
@@ -888,12 +929,12 @@ async function handleDeliveryTurn(
       ctx.flow = "delivery";
       ctx.step = "need_address";
       await writeCtx(convo.id, ctx);
-      await reply(phone, copy.welcomeAskFullDeliveryAddress());
+      await askAddress(phone, copy.welcomeAskFullDeliveryAddress());
     } else if (!savedCep) {
       ctx.flow = "delivery";
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
-      await reply(phone, copy.welcomeAskCep());
+      await askAddress(phone, copy.welcomeAskCep());
     } else if (
       ctx.step === "awaiting_operator_quote" ||
       ctx.step === "awaiting_supplier_validation" ||
@@ -1246,7 +1287,7 @@ async function handleDeliveryTurn(
     if (saved) {
       await reply(phone, copy.addressUpdated(saved, ctx.cep ?? user.cep ?? undefined));
     } else {
-      await reply(phone, copy.askFullDeliveryAddress());
+      await askStreetAndNumber(phone, ctx);
     }
     return;
   }
@@ -1608,7 +1649,7 @@ async function handleDeliveryTurn(
       ctx.flow = "delivery";
       ctx.step = "need_address";
       await writeCtx(convo.id, ctx);
-      await reply(phone, copy.askFullDeliveryAddress());
+      await askStreetAndNumber(phone, ctx);
       return;
     }
     // Cliente que abre a conversa mandando o endereço direto (sem "oi") está respondendo
@@ -1627,7 +1668,7 @@ async function handleDeliveryTurn(
     ctx.step = "need_address";
     await writeCtx(convo.id, ctx);
     const noted = ctx.pendingRequest ? parseBasketLines(ctx.pendingRequest).map((line) => `${line.qty}x ${line.phrase}`) : [];
-    await reply(phone, copy.welcomeAskFullDeliveryAddress(noted));
+    await askAddress(phone, copy.welcomeAskFullDeliveryAddress(noted));
     return;
   }
 
@@ -1653,7 +1694,7 @@ async function handleDeliveryTurn(
       ctx.flow = "delivery";
       ctx.step = "need_cep";
       await writeCtx(convo.id, ctx);
-      await reply(phone, copy.askCepAgain());
+      await askAddress(phone, copy.askCepAgain());
       return;
     }
     const lines = intent.kind === "free_text" ? parseBasketLines(text) : [];
@@ -2514,7 +2555,7 @@ async function handleNewCep(
   if (!ctx.deliveryAddressVerified) {
     ctx.step = "need_address";
     await writeCtx(convoId, ctx);
-    await reply(phone, copy.askFullDeliveryAddress());
+    await askStreetAndNumber(phone, ctx);
     return;
   }
 
@@ -2598,7 +2639,7 @@ async function handleDeliveryAddress(
       await reply(phone, copy.serviceAnswer("generic", "o estado de São Paulo"));
       ctx.step = "need_address";
       await writeCtx(convoId, ctx);
-      await reply(phone, copy.askFullDeliveryAddress());
+      await askStreetAndNumber(phone, ctx);
       return;
     }
     // Não é endereço — mas TAMBÉM não é lixo: quem responde "preciso de um carregador"
@@ -2610,7 +2651,7 @@ async function handleDeliveryAddress(
     }
     ctx.step = "need_address";
     await writeCtx(convoId, ctx);
-    await reply(phone, copy.askFullDeliveryAddress());
+    await askStreetAndNumber(phone, ctx);
     return;
   }
 
@@ -4050,7 +4091,7 @@ async function continueAfterBasket(
     ctx.step = "need_address";
     await writeCtx(convoId, ctx);
     if (prefix) await reply(phone, prefix);
-    await reply(phone, copy.askFullDeliveryAddress());
+    await askStreetAndNumber(phone, ctx);
     return;
   }
   {

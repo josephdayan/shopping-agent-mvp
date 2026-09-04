@@ -14,7 +14,11 @@ type RawInbound = {
           interactive?: {
             button_reply?: { id?: string; title?: string };
             list_reply?: { id?: string; title?: string };
+            // Resposta de um Flow (formulário dentro do chat): JSON serializado.
+            nfm_reply?: { response_json?: string; body?: string; name?: string };
           };
+          // Botão "Enviar localização" (04/09): coordenadas + endereço se o cliente quis.
+          location?: { latitude?: number; longitude?: number; name?: string; address?: string };
           type?: string;
         }>;
       };
@@ -260,6 +264,77 @@ export function buildTemplatePayload(to: string, input: WhatsAppTemplateInput) {
   };
 }
 
+export type WhatsAppListInput = {
+  body: string;
+  buttonText: string;
+  footer?: string;
+  sections: Array<{ title?: string; rows: Array<{ id: string; title: string; description?: string }> }>;
+};
+
+export function buildListPayload(to: string, input: WhatsAppListInput) {
+  let budget = 10;
+  const sections = input.sections
+    .map((section) => {
+      const rows = section.rows.slice(0, Math.max(0, budget)).map((row) => ({
+        id: row.id.slice(0, 200),
+        title: row.title.slice(0, 24),
+        ...(row.description ? { description: row.description.slice(0, 72) } : {})
+      }));
+      budget -= rows.length;
+      return { ...(section.title ? { title: section.title.slice(0, 24) } : {}), rows };
+    })
+    .filter((section) => section.rows.length > 0);
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "list",
+      body: { text: input.body.slice(0, 1024) },
+      ...(input.footer ? { footer: { text: input.footer.slice(0, 60) } } : {}),
+      action: { button: input.buttonText.slice(0, 20), sections }
+    }
+  };
+}
+
+export type WhatsAppFlowInput = {
+  body: string;
+  cta: string;
+  flowId: string;
+  screen: string;
+  data?: Record<string, string>;
+  token?: string;
+  header?: string;
+  footer?: string;
+};
+
+export function buildFlowPayload(to: string, input: WhatsAppFlowInput) {
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "interactive",
+    interactive: {
+      type: "flow",
+      ...(input.header ? { header: { type: "text", text: input.header.slice(0, 60) } } : {}),
+      body: { text: input.body.slice(0, 1024) },
+      ...(input.footer ? { footer: { text: input.footer.slice(0, 60) } } : {}),
+      action: {
+        name: "flow",
+        parameters: {
+          flow_message_version: "3",
+          flow_token: input.token ?? `lia-${Date.now()}`,
+          flow_id: input.flowId,
+          flow_cta: input.cta.slice(0, 20),
+          flow_action: "navigate",
+          flow_action_payload: { screen: input.screen, ...(input.data ? { data: input.data } : {}) }
+        }
+      }
+    }
+  };
+}
+
 export function buildOrderStatusPayload(to: string, input: WhatsAppOrderStatusInput) {
   return {
     messaging_product: "whatsapp",
@@ -338,6 +413,16 @@ export function parsePaymentConfirmation(payload: RawInbound): PaymentConfirmati
   return null;
 }
 
+function parseFlowResponse(raw: string | undefined): Record<string, unknown> | undefined {
+  if (!raw) return undefined;
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export const whatsappAdapter = {
   parseInbound(payload: RawInbound) {
     const metaChange = payload.entry?.[0]?.changes?.[0]?.value;
@@ -377,6 +462,13 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id ?? stringFromPayload(payload.messageId),
+      // Localização compartilhada (tipo "location") — o webhook converte em CEP.
+      location:
+        metaMessage?.type === "location" && typeof metaMessage.location?.latitude === "number" && typeof metaMessage.location?.longitude === "number"
+          ? { latitude: metaMessage.location.latitude, longitude: metaMessage.location.longitude, address: metaMessage.location.address, name: metaMessage.location.name }
+          : undefined,
+      // Resposta de Flow (formulário): objeto já parseado, ou undefined.
+      flowResponse: parseFlowResponse(metaMessage?.interactive?.nfm_reply?.response_json),
       // Tipo do conteúdo Meta ("text", "reaction", "audio", "image", "sticker"…) — o
       // webhook decide o que ignorar (reação) e o que avisar ("só leio texto").
       messageType: (metaMessage as { type?: string } | undefined)?.type,
@@ -424,13 +516,21 @@ export const whatsappAdapter = {
 
   async sendQuantityChoices(to: string, productName: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
-    // "Outra quantidade" no lugar do 3 (pedido do dono, 16/08): o toque volta como
-    // qty:other e a Lia pede o número — digitar direto no chat continua valendo.
-    return sendMetaSimpleButtons(to, `Quantas unidades de *${productName}*?`, [
-      { id: "qty:1", title: "1 unidade" },
-      { id: "qty:2", title: "2 unidades" },
-      { id: "qty:other", title: "Outra quantidade" }
-    ], "Ou digita a quantidade direto aqui.");
+    // Lista de 1 a 6 + "Outra" (04/09; antes 3 botões). O toque volta como qty:N e cai
+    // no mesmo handler — digitar direto no chat continua valendo.
+    return this.sendListMessage(to, {
+      body: `Quantas unidades de *${productName}*?`,
+      buttonText: "Escolher quantidade",
+      footer: "Ou digita a quantidade direto aqui.",
+      sections: [
+        {
+          rows: [
+            ...[1, 2, 3, 4, 5, 6].map((n) => ({ id: `qty:${n}`, title: n === 1 ? "1 unidade" : `${n} unidades` })),
+            { id: "qty:other", title: "Outra quantidade", description: "Eu digito o número" }
+          ]
+        }
+      ]
+    });
   },
 
   async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {
@@ -569,6 +669,62 @@ export const whatsappAdapter = {
       { id: "juntar_pedido", title: "Juntar no pedido" },
       { id: "pedido_novo", title: "Pedido novo" }
     ]);
+  },
+
+  // "Digitando…" (Cloud API, 2026): marca a mensagem recebida como lida e mostra o
+  // indicador por até 25 s ou até a resposta sair. A busca leva de 5 a 25 s — sem isso o
+  // cliente ficava no vácuo (princípio de zero espera do dono). Nunca lança.
+  async markReadWithTyping(messageId: string | undefined) {
+    if (!messageId || process.env.WHATSAPP_PROVIDER !== "meta" || process.env.LIA_TYPING_OFF === "true") return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) return null;
+    try {
+      return await sendMetaPayload(phoneNumberId, token, {
+        messaging_product: "whatsapp",
+        status: "read",
+        message_id: messageId,
+        typing_indicator: { type: "text" }
+      });
+    } catch (error) {
+      console.warn("[whatsapp:meta:typing-failed]", error instanceof Error ? error.message : error);
+      return null;
+    }
+  },
+
+  // Botão "Enviar localização" junto do pedido de endereço (04/09): um toque no lugar de
+  // digitar o CEP. O texto continua valendo — quem prefere digitar, digita.
+  async sendLocationRequest(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: normalizeWhatsAppPhone(to),
+      type: "interactive",
+      interactive: { type: "location_request_message", body: { text: body.slice(0, 1024) }, action: { name: "send_location" } }
+    });
+  },
+
+  // Mensagem de lista (até 10 linhas em uma mensagem só). Linha: título ≤ 24, descrição ≤ 72.
+  async sendListMessage(to: string, input: WhatsAppListInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildListPayload(to, input));
+  },
+
+  // Flow (formulário dentro do chat): o id vem de LIA_FLOW_ADDRESS_ID depois de publicado
+  // na Meta. `data` pré-preenche a tela (CEP/rua já conhecidos).
+  async sendFlowMessage(to: string, input: WhatsAppFlowInput) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    return sendMetaPayload(phoneNumberId, token, buildFlowPayload(to, input));
   },
 
   async sendPlanBButtons(to: string, body: string) {

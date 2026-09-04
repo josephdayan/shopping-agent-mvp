@@ -86,6 +86,10 @@ export function askMoreItems(): string {
 }
 
 // Re-pedido de endereço (2ª+ vez) — sem repetir a apresentação.
+export function locationNotResolved(): string {
+  return "Recebi sua localização, mas não consegui achar o CEP dela. Me manda o CEP ou o endereço por texto? 📍";
+}
+
 export function askCepAgain(): string {
   return "Falta seu *endereço completo com CEP* — rua, número, complemento, bairro, cidade e CEP 📍";
 }

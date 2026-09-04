@@ -7,6 +7,8 @@ import { handleDeliveryMessage, runTurnScoped, TurnSupersededError } from "@/lib
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
+import { flowAddressToText, locationToText, reverseGeocode } from "@/lib/reverse-geocode";
+import { locationNotResolved } from "@/lib/lia-copy";
 
 export const dynamic = "force-dynamic";
 // Real Mercado Livre search via Apify can take up to ~55s on a cold start, so the
@@ -15,7 +17,35 @@ export const dynamic = "force-dynamic";
 // request times out.
 export const maxDuration = 300;
 
-async function processDeliveryMessage(inbound: ReturnType<typeof whatsappAdapter.parseInbound>) {
+// Entradas que não são texto mas viram texto para o cérebro (04/09):
+// - request_welcome (cliente abriu o chat pela 1ª vez, boas-vindas ligadas na Meta) → "oi";
+// - location (botão "Enviar localização") → CEP via geocodificação reversa;
+// - nfm_reply (Flow de endereço) → linha de endereço completo.
+async function normalizeInbound(inbound: ReturnType<typeof whatsappAdapter.parseInbound>): Promise<typeof inbound | null> {
+  if (inbound.messageType === "request_welcome") return { ...inbound, text: "oi" };
+  if (inbound.location) {
+    const geo = await reverseGeocode(inbound.location.latitude, inbound.location.longitude);
+    const text = locationToText(geo);
+    if (!text) {
+      try {
+        await whatsappAdapter.sendMessage(inbound.phone, locationNotResolved());
+      } catch (error) {
+        console.error("[whatsapp:location:notify-failed]", error);
+      }
+      return null;
+    }
+    return { ...inbound, text };
+  }
+  if (inbound.flowResponse) {
+    const text = flowAddressToText(inbound.flowResponse);
+    if (text) return { ...inbound, text };
+  }
+  return inbound;
+}
+
+async function processDeliveryMessage(raw: ReturnType<typeof whatsappAdapter.parseInbound>) {
+  const inbound = await normalizeInbound(raw);
+  if (!inbound) return;
   try {
     // WATCHDOG anti-silêncio (caso real 19/08: o turno morreu no teto da função e o
     // cliente ficou sem NENHUMA resposta). Se o processamento passar do prazo, avisa o
@@ -185,6 +215,8 @@ export async function POST(request: Request) {
   }
 
   if (inbound.provider === "meta") {
+    // "Digitando…" + lido, na hora: a resposta pode levar até 25 s (04/09). Fire-and-forget.
+    if (inbound.messageType !== "request_welcome") waitUntil(whatsappAdapter.markReadWithTyping(inbound.messageId).then(() => undefined));
     // A product lookup can take tens of seconds. Acknowledge the webhook first so
     // Meta does not retry the same message while the conversation runs.
     waitUntil(processDeliveryMessage(inbound));

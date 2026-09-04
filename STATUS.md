@@ -1,5 +1,12 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (5ª) — recursos do WhatsApp
+
+"Digitando…" em toda mensagem, botão de localização no pedido de endereço (GPS vira CEP),
+quantidade em lista, boas-vindas com perguntas sugeridas, perfil comercial e Flow de
+endereço (formulário no chat). Carrossel fica de fora: só existe em template de marketing.
+Detalhe em AGENTS.md (04/09 5ª).
+
 ## 04/09/2026 (4ª) — "o de sempre"
 
 Produto que o cliente já comprou vem em primeiro e com destaque ("⭐ Você já pediu este")

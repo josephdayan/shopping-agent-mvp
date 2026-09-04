@@ -1,5 +1,38 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (5ª) — recursos do WhatsApp: digitando, localização, lista, boas-vindas, perfil, Flow
+
+Pedido do dono ("implementar esses"). O que entrou no código (`adapters/whatsapp.ts`,
+webhook, `reverse-geocode.ts`, `meta-setup.ts`):
+
+1. **"Digitando…"** — `markReadWithTyping(messageId)` no webhook, fire-and-forget, antes de
+   processar: marca como lida e mostra o indicador por até 25 s. `LIA_TYPING_OFF=true` desliga.
+2. **Botão "Enviar localização"** — todo pedido de CEP/endereço (`askAddress`) vai como
+   `location_request_message`. A localização volta como tipo `location`; o webhook faz
+   geocodificação reversa (Nominatim, 4 s, `reverseGeocode`) e injeta o **CEP** como texto —
+   o fluxo segue normal (ViaCEP resolve a rua e pede o número). Sem CEP legível →
+   `copy.locationNotResolved`.
+3. **Lista** — `sendListMessage` (≤10 linhas; título 24, descrição 72). Primeiro uso:
+   quantidade virou lista 1–6 + "Outra" (ids `qty:N` de sempre). "Ver outras" continua em
+   cards por decisão de manter a vitrine.
+4. **Boas-vindas + perguntas sugeridas** — configuradas na Meta (`conversational_automation`:
+   welcome + 4 prompts). O primeiro toque chega como `request_welcome` e vira "oi" no webhook
+   (onboarding com botão de localização). Só ligar DEPOIS do deploy do webhook, senão o
+   cliente recebe "só leio texto".
+5. **Perfil comercial** — about/descrição/e-mail/site/vertical + foto
+   (`public/brand/lia-whatsapp-profile-hd.png` via upload resumível).
+6. **Flow de endereço** — formulário no chat (CEP/rua/bairro/cidade pré-preenchidos, número
+   obrigatório, complemento). Criado e publicado via `POST /{WABA}/flows` (`ADDRESS_FLOW_JSON`);
+   enviado em `askStreetAndNumber` quando `LIA_FLOW_ADDRESS_ID` existe; a resposta
+   (`nfm_reply.response_json`) vira linha de endereço completo (`flowAddressToText`) que o
+   parser já entende. Sem env → texto de sempre.
+7. **Carrossel** — NÃO implementado: na Cloud API só existe em **template de marketing**
+   (aprovação + custo de marketing por envio, sem janela grátis). Cards separados ficam.
+
+Configuração na Meta roda de dentro da Vercel (`/api/ops/meta-setup`, sessão do /ops; GET =
+status, POST {action}) porque o token é sensível e não sai da Vercel. Testes:
+`whatsapp-2026-features` (7) + adapter ajustado. Suíte 520/520.
+
 ## Atualização 04/09/2026 (4ª) — "o de sempre": produto já comprado vem primeiro, com destaque
 
 Decisão do dono sobre a vitrine: **fica o modelo de até 3 opções**. A única mudança pedida:
