@@ -1,6 +1,10 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-04 (3ª — pré-voo, plano B, compra automática pendente)._
+_Última atualização: 2026-09-04 (4ª — o de sempre)._
+
+> **04/09 (4ª) — "o de sempre".** Em produção (AGENTS.md 04/09 4ª). Direção futura, sem
+> data: card único + "Ver outras" para pedido específico/básico; pergunta única em ambiguidade.
+> Medir no piloto: posição escolhida e taxa de "outras".
 
 > **04/09 (3ª) — "nunca é pra não ter algo".** Pré-voo + plano B + lembrete 30 min em
 > produção (AGENTS.md 04/09 3ª). **Dono decide (a etapa sem garantia é a COMPRA):**

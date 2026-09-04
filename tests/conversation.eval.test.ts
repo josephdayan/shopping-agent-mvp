@@ -270,8 +270,10 @@ test("memória: produto comprado antes sobe para a primeira opção", async (t) 
     }
   });
   const offer = await c.send("ração");
-  const firstOption = offer.match(/\*1\)\* ([^—\n]+)/)?.[1]?.trim();
+  // 04/09: o já comprado vem com estrela e "você já pediu" na linha.
+  const firstOption = offer.match(/\*1\)\* (?:⭐ )?([^—\n]+)/)?.[1]?.trim();
   assert.equal(firstOption, preferred.name);
+  assert.match(offer.split("\n").find((l) => l.startsWith("*1)*")) ?? "", /⭐ .* · _você já pediu_/);
 });
 
 test("remover item: 'tira o X' recalcula a cesta; cesta vazia é comunicada", async (t) => {

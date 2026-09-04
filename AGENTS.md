@@ -1,5 +1,22 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (4ª) — "o de sempre": produto já comprado vem primeiro, com destaque
+
+Decisão do dono sobre a vitrine: **fica o modelo de até 3 opções**. A única mudança pedida:
+*"quando alguém já pediu algo e pede de novo, tem que ser o primeiro ou ter destaque."*
+Implementado em `buildChoices`: `preferredSkuCounts(userId)` (pedidos pagos/entregues) já
+subia o sku no ranking, mas a IA/diversificação e a ordenação por prazo podiam deixá-lo fora
+ou abaixo. Agora o já comprado (a) **entra garantido** nas opções se sobreviveu à verificação
+ao vivo, (b) **vem primeiro** (`byRepeatThenVerifiedThenEta`), e (c) ganha **destaque**:
+`ChoiceOption.repeat` → card Meta com linha "⭐ Você já pediu este" (`badge`), texto/foto com
+"⭐ … · _você já pediu_" (`choiceLine`). "Ir direto" (pular a escolha) NÃO foi ligado, por
+decisão de manter a escolha. Testes: `repeat-purchase` (3) + eval de memória ajustado.
+
+Registrado como direção futura (não fazer agora): card único com "Ver outras" quando o pedido
+é específico ou básico; pergunta única quando há ambiguidade conhecida ("óleo", "leite").
+Números de 04/09: golden determinístico acerta a 1ª posição em 30/33; no chat real, escolhas
+por número foram "1" 592×, "2" 30×, "3" 10×, "outras" 22× (inflado por outras perguntas).
+
 ## Atualização 04/09/2026 (3ª) — "nunca é pra não ter algo": pré-voo, plano B e lembrete em 30 min
 
 Dono: *"precisamos melhorar tudo pra ter certeza que nunca vai falhar e chegar nesse ponto

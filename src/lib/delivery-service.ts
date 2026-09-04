@@ -238,7 +238,7 @@ async function buildChoices(
     const { line, candidates } = entry;
     const bySku = new Map(candidates.map((c) => [c.item.sku, c]));
     const chosen = rerankedSkus.get(entry);
-    const options: StoreCandidate[] = chosen
+    let options: StoreCandidate[] = chosen
       ? chosen.map((sku) => bySku.get(sku)).filter((c): c is StoreCandidate => Boolean(c))
       : diversifyOptions(line.phrase, candidates.map((c) => c.item), 3).map((item) => bySku.get(item.sku)!);
     if (!options.length) {
@@ -247,6 +247,15 @@ async function buildChoices(
       continue;
     }
     firstStore = firstStore ?? options[0].store;
+    // "O de sempre" (dono, 04/09): quem já comprou um produto vê ele PRIMEIRO e com
+    // destaque quando pede de novo — mesmo que a IA/diversificação não o tenha posto
+    // no top-3 (só não entra se a verificação ao vivo o tirou dos candidatos).
+    const repeatPick = preferredSkus?.size
+      ? candidates
+          .filter((c) => preferredSkus.has(c.item.sku))
+          .sort((a, b) => (preferredSkus.get(b.item.sku) ?? 0) - (preferredSkus.get(a.item.sku) ?? 0))[0]
+      : undefined;
+    if (repeatPick && !options.some((o) => o.item.sku === repeatPick.item.sku)) options = [repeatPick, ...options];
     pending.push({
       query: line.phrase,
       qty: line.qty,
@@ -254,8 +263,11 @@ async function buildChoices(
       ...(line.cap != null ? { cap: line.cap } : {}),
       ...(line.autoPick ? { autoPick: true } : {}),
       options: options
-        .map(({ store, item }) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }, liveChecks.get(liveKey(store.key, item.sku))))
-        .sort(byVerifiedThenEta)
+        .map(({ store, item }) => {
+          const option = toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }, liveChecks.get(liveKey(store.key, item.sku)));
+          return preferredSkus?.has(item.sku) ? { ...option, repeat: true } : option;
+        })
+        .sort(byRepeatThenVerifiedThenEta)
         .slice(0, 3)
     });
   }
@@ -302,6 +314,14 @@ function byVerifiedThenEta(a: ChoiceOption, b: ChoiceOption): number {
   return (a.etaMinutes ?? Number.MAX_SAFE_INTEGER) - (b.etaMinutes ?? Number.MAX_SAFE_INTEGER);
 }
 
+// Já comprado vem antes de tudo; entre iguais, confirmado ao vivo e depois o prazo.
+function byRepeatThenVerifiedThenEta(a: ChoiceOption, b: ChoiceOption): number {
+  const ra = a.repeat ? 1 : 0;
+  const rb = b.repeat ? 1 : 0;
+  if (ra !== rb) return rb - ra;
+  return byVerifiedThenEta(a, b);
+}
+
 // A free-form concierge line: whatever the customer asked for, verbatim. No catalog
 // price yet — the operator sets the real price at quote time. The name-based sku lets
 // mergeBaskets fold duplicates ("mais 2 pães").
@@ -338,7 +358,7 @@ function choiceToBasketItem(o: ChoiceOption, qty: number, store: StoreConnector)
 function choicesTextFor(p: PendingChoice, header?: string): string {
   return copy.choicesText(
     p.query,
-    p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice), delivery: o.delivery })),
+    p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice), delivery: o.delivery, repeat: o.repeat })),
     header
   );
 }
@@ -402,6 +422,7 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
           displayPrice: display(o.unitPrice),
           imageUrl: o.imageUrl,
           delivery: o.delivery,
+          ...(o.repeat ? { badge: "Você já pediu este" } : {}),
           // Liga o botão "Ver detalhes" do card quando o produto tem página real.
           productUrl: o.productUrl,
           sku: o.sku
@@ -428,7 +449,7 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   await reply(phone, header ?? copy.choicesHeader(p.query));
   for (let i = 0; i < p.options.length; i++) {
     const o = p.options[i];
-    await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice), o.delivery), o.imageUrl);
+    await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice), o.delivery, o.repeat), o.imageUrl);
     if (gapMs > 0 && i < p.options.length - 1) await sleep(gapMs);
   }
   await reply(phone, copy.choicesAsk(p.options.length));

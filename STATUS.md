@@ -1,5 +1,11 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (4ª) — "o de sempre"
+
+Produto que o cliente já comprou vem em primeiro e com destaque ("⭐ Você já pediu este")
+quando ele pede de novo; modelo de até 3 opções mantido por decisão do dono. Detalhe em
+AGENTS.md (04/09 4ª).
+
 ## 04/09/2026 (3ª) — pré-voo, plano B e lembrete em 30 min
 
 Antes de cobrar, a loja é consultada de novo com a cesta inteira: sem estoque/entrega → nada

@@ -241,11 +241,14 @@ export function nextChoiceHeader(query: string, remaining: number): string {
   return `Agora *${query}*${tail}.`;
 }
 
-export function choiceLine(index: number, name: string, displayPrice: number, delivery?: string): string {
+export function choiceLine(index: number, name: string, displayPrice: number, delivery?: string, repeat?: boolean): string {
   // `delivery` só existe em vitrine que informa o prazo por anúncio (Mercado Livre):
   // é a promessa da PRÓPRIA loja ("chega hoje"), nunca uma estimativa nossa.
   const prazo = delivery ? ` · _${delivery}_` : "";
-  return `*${index + 1})* ${name} — ${brl(displayPrice)}${prazo}`;
+  // `repeat` (04/09): o cliente já comprou este — destaque na linha.
+  const star = repeat ? "⭐ " : "";
+  const again = repeat ? " · _você já pediu_" : "";
+  return `*${index + 1})* ${star}${name} — ${brl(displayPrice)}${prazo}${again}`;
 }
 
 // O comando *qualquer* continua valendo no parser; saiu só do texto, que oferecia
@@ -257,10 +260,10 @@ export function choicesAsk(count: number): string {
     : `Responde *${nums.slice(0, -1).join("*, *")}* ou *${nums[nums.length - 1]}* — ou *outras* pra ver mais, *pula* pra deixar de fora.`;
 }
 
-export function choicesText(query: string, options: { name: string; displayPrice: number; delivery?: string }[], header?: string): string {
+export function choicesText(query: string, options: { name: string; displayPrice: number; delivery?: string; repeat?: boolean }[], header?: string): string {
   return [
     header ?? choicesHeader(query),
-    ...options.map((o, i) => choiceLine(i, o.name, o.displayPrice, o.delivery)),
+    ...options.map((o, i) => choiceLine(i, o.name, o.displayPrice, o.delivery, o.repeat)),
     "",
     choicesAsk(options.length)
   ].join("\n");

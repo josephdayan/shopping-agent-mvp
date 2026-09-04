@@ -97,6 +97,8 @@ export type WhatsAppDeliveryChoice = {
   displayPrice: number;
   imageUrl?: string;
   delivery?: string;
+  // "Você já pediu este" (04/09): destaque no card do produto já comprado.
+  badge?: string;
   // Página real do produto (anúncio ML, página da loja): liga o botão "Ver detalhes"
   // do card — reviews, fotos e specs ficam a um toque (pedido do dono, 01/09).
   productUrl?: string;
@@ -709,6 +711,7 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
       type: "button",
       body: {
         text: [
+          option.badge ? `⭐ ${option.badge}` : null,
           option.name,
           `*${formatBRL(option.displayPrice)}*`,
           option.delivery ? `Entrega: ${option.delivery}` : null
