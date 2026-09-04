@@ -8,11 +8,10 @@ _Última atualização: 2026-09-04 (login do /ops pelo WhatsApp)._
 > "Não consegui comprar → estornar" no pedido #41EPW0.
 
 > **03/09 (3ª) — janela de 24h.** Aviso proativo fora da janela agora vai por template ou é
-> registrado como não enviado (AGENTS.md 03/09 3ª). **Dono:** criar template Utility no
-> WhatsApp Manager (`pedido_atualizacao`, body "Olá! Aqui é a Lia, com uma atualização sobre o seu pedido {{1}}: {{2}} Se precisar de algo, é só responder esta mensagem."), aprovar e
-> setar `LIA_TEMPLATE_ORDER_UPDATE` na Vercel + redeploy (guia: docs/whatsapp-template-avisos.md). **Aberto:** alerta ao operador por canal que
-> não dependa da janela (e-mail/push); hoje ele só chega se o operador escreveu pra Lia em 24h
-> ou se houver template.
+> registrado como não enviado (AGENTS.md 03/09 3ª). **Feito 04/09 (Codex):** template
+> `pedido_atualizacao` aprovado na Meta e `LIA_TEMPLATE_ORDER_UPDATE` em produção — aviso ao
+> cliente e alerta ao operador fora da janela agora saem por template (guia:
+> docs/whatsapp-template-avisos.md). **Aberto (opcional):** canal extra pro operador (e-mail/push).
 
 > **03/09 (2ª).** Verificação ao vivo antes dos cards + cobrança só do confirmado (AGENTS.md
 > 03/09 2ª). **Aberto:** Carrefour, Petz e Boticário (maiores catálogos) não têm checkout
