@@ -146,7 +146,9 @@ export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: str
   }
   if (action === "status") {
     const profile = await graph(token, `${phoneId}/whatsapp_business_profile?fields=about,address,description,email,profile_picture_url,websites,vertical`);
-    const automation = await graph(token, `${phoneId}/conversational_automation`).catch((e) => ({ error: String(e).slice(0, 300) }));
+    // Leitura é como CAMPO do número (o POST é na sub-rota; o GET na sub-rota dá "#100
+    // nonexisting field" — visto em 04/09).
+    const automation = await graph(token, `${phoneId}?fields=conversational_automation`).catch((e) => ({ error: String(e).slice(0, 300) }));
     const { appId, waba } = await ids(token);
     let flows: unknown = null;
     if (waba) flows = await graph(token, `${waba}/flows?fields=id,name,status`).catch((e) => ({ error: String(e).slice(0, 300) }));
