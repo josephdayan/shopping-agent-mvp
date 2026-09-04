@@ -111,7 +111,7 @@ test("bloqueio → oferta de troca com substituto verificado (loja consultável,
   assert.equal(await offerPlanB(o.orderId), "offered");
   const msg = textsTo(o.phone, start);
   assert.match(msg, /A \*Natural da Terra\* ficou sem \*Ice Tea Pêssego Zero\*/);
-  assert.match(msg, /Encontrei \*Chá Ice Tea Pêssego Zero 1,5L\* na \*Pague Menos\*, chega em 1 dia útil/);
+  assert.match(msg, /Encontrei \*Chá Ice Tea Pêssego Zero 1,5L\* na \*Pague Menos\*, prazo da loja: 1 dia útil/);
   assert.match(msg, /Sem custo extra\. Troco\?/);
   assert.match(textsTo(OPERATOR, start), /ofereci troca ao cliente/);
   const after1 = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } });
@@ -128,7 +128,7 @@ test("'trocar' substitui o item no pedido pago, limpa o bloqueio, reinicia o rel
   assert.equal(await offerPlanB(o.orderId), "offered");
   const start = outbox.length;
   const reply = await send(o.phone, "planb_trocar");
-  assert.match(reply, /Trocado: agora é \*Chá Ice Tea Pêssego Zero 1,5L\* da \*Pague Menos\*, chega em 1 dia útil/);
+  assert.match(reply, /Trocado: agora é \*Chá Ice Tea Pêssego Zero 1,5L\* da \*Pague Menos\*, prazo da loja: 1 dia útil/);
   const after1 = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } });
   assert.equal(after1.status, "paid");
   const items = after1.items as unknown as { sku: string; storeKey: string; lineTotal: number }[];

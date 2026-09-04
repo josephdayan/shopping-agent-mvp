@@ -192,11 +192,11 @@ test("por item: loja fora da simulação, sku fora do padrão ou erro de rede �
 });
 
 test("prazo humano só a partir do formato da loja", () => {
-  assert.equal(humanEstimate("1bd"), "chega em 1 dia útil");
-  assert.equal(humanEstimate("3bd"), "chega em 3 dias úteis");
-  assert.equal(humanEstimate("2h"), "chega em 2h");
-  assert.equal(humanEstimate("45m"), "chega em 45 min");
-  assert.equal(humanEstimate("2d"), "chega em 2 dias");
+  assert.equal(humanEstimate("1bd"), "prazo da loja: 1 dia útil");
+  assert.equal(humanEstimate("3bd"), "prazo da loja: 3 dias úteis");
+  assert.equal(humanEstimate("2h"), "prazo da loja: 2h");
+  assert.equal(humanEstimate("45m"), "prazo da loja: 45 min");
+  assert.equal(humanEstimate("2d"), "prazo da loja: 2 dias");
   assert.equal(humanEstimate("amanhã"), undefined);
   assert.equal(humanEstimate(undefined), undefined);
 });

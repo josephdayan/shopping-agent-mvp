@@ -1,5 +1,11 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (7ª) — prazo é da loja
+
+"Chega em 90 min" virou "prazo da loja: 90 min" em cards e resumo; o resumo da cotação
+instantânea agora mostra o prazo da loja. O prazo conta da compra na loja, que ainda é
+manual. Detalhe em AGENTS.md (04/09 7ª).
+
 ## 04/09/2026 (6ª) — conversa real do dono
 
 Cinco correções do teste real do desodorante: item novo com pedido parado vira pedido novo

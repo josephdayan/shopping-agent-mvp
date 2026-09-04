@@ -71,15 +71,18 @@ export function liveCheckSupported(storeKey: string): boolean {
 
 // Prazo da LOJA para o CEP do cliente, em português ("1bd" → "chega em 1 dia útil"). Só
 // existe quando veio da simulação real — é o único prazo que pode aparecer num card.
+// Redação (04/09, dono: "tava escrito que chegava em 90 min mas não acho que é verdade"):
+// o prazo é DA LOJA e conta a partir da compra na loja — que hoje é manual. "Chega em 90
+// min" fazia o relógio começar no toque do cliente. Agora a frase diz de quem é o prazo.
 export function humanEstimate(estimate?: string): string | undefined {
   const m = /^(\d+)\s*(bd|d|h|m)$/i.exec((estimate ?? "").trim());
   if (!m) return undefined;
   const value = Number(m[1]);
   const unit = m[2].toLowerCase();
-  if (unit === "m") return `chega em ${value} min`;
-  if (unit === "h") return `chega em ${value}h`;
-  if (unit === "d") return value === 1 ? "chega em 1 dia" : `chega em ${value} dias`;
-  return value === 1 ? "chega em 1 dia útil" : `chega em ${value} dias úteis`;
+  if (unit === "m") return `prazo da loja: ${value} min`;
+  if (unit === "h") return `prazo da loja: ${value}h`;
+  if (unit === "d") return value === 1 ? "prazo da loja: 1 dia" : `prazo da loja: ${value} dias`;
+  return value === 1 ? "prazo da loja: 1 dia útil" : `prazo da loja: ${value} dias úteis`;
 }
 
 // "3bd" (dias úteis), "2d", "6h", "45m" → minutos, para comparar prazos entre itens.
@@ -96,7 +99,7 @@ function estimateMinutes(estimate?: string): number {
 }
 
 // A cesta inteira só chega quando o item MAIS LENTO chega.
-function slowestEstimate(estimates: (string | undefined)[]): string | undefined {
+export function slowestEstimate(estimates: (string | undefined)[]): string | undefined {
   let best: string | undefined;
   let bestMinutes = -1;
   for (const estimate of estimates) {

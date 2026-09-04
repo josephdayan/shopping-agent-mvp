@@ -12,7 +12,7 @@ import { cardOnFileEnabled, expireOpenPaymentAttempts, findPendingSavedCardAttem
 
 import { extractShoppingList, rerankShoppingOptions, interpretCustomerMessage } from "@/lib/adapters/ai";
 import { computeStoreFreights, freightBreakdownLabel, instantQuoteEligible, PER_AD_FREIGHT_STORES, storeFreight, type InstantQuoteItem } from "@/lib/instant-quote";
-import { humanEstimate, liveFreightEnabled, liveStoreFreight, type LiveItemCheck } from "@/lib/live-freight";
+import { humanEstimate, liveFreightEnabled, liveStoreFreight, type LiveItemCheck, slowestEstimate } from "@/lib/live-freight";
 import { checkCandidatesLive, liveKey } from "@/lib/live-availability";
 import { mlBasketFreight } from "@/lib/ml-freight";
 import { detectIntent, extractCep, isQuestion, asksRunningTotal, looksLikeMedicine, hasUrgencySignal, isNarrativeSegment, isRequestModifier, sharesProductNoun, stripMedicineNegation, narrowChoiceByName, normalizeMsg, parseBasketLines, parsePriceCap, splitPriceCap, mergeShoppingLines, parseChoiceReply, splitCommandClauses, stripListNumbering, parseRefinement, wantsMoreOptions, looksLikeTobacco, looksLikeSymptomAsk, type Intent, type ParsedLine } from "@/lib/lia-intents";
@@ -4276,6 +4276,9 @@ async function tryPublishInstantQuote(
     // PARALELO com timeout curto — o fechamento nunca espera mais que um timeout. Site
     // respondeu → frete exato daquele endereço (grátis incluso). Site sem entrega pro
     // CEP → operador cota à mão. Falhou/bloqueou → tabela semeada de sempre.
+    // Prazo da loja (SLA da simulação) vai pro resumo (04/09): o card mostrava o prazo e
+    // o resumo não — o cliente ficava com "90 min" na cabeça sem ver de quem era o prazo.
+    const storeEstimates: string[] = [];
     if (liveFreightEnabled() && ctx.cep) {
       const outcomes = await Promise.all(
         freights.map((f) =>
@@ -4305,7 +4308,10 @@ async function tryPublishInstantQuote(
           });
           return { handled: false, holdup };
         }
-        if (outcome.kind === "ok") freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
+        if (outcome.kind === "ok") {
+          freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
+          if (outcome.estimate) storeEstimates.push(outcome.estimate);
+        }
       }
     }
     // Loja sem política de frete calibrada e sem simulação ao vivo = "tarifa padrão", um
@@ -4372,7 +4378,8 @@ async function tryPublishInstantQuote(
       serviceFee: serviceFeeExact,
       fee: totalFee,
       estimate: mlEstimate,
-      stores: freights.length
+      stores: freights.length,
+      storeEstimate: slowestEstimate(storeEstimates)
     });
     // Frete comendo a compra (3+ entregas e frete ≥ 40% dos produtos): dica honesta de
     // como baratear — a recomposição automática vale pra LISTA; cesta montada card a
@@ -4397,14 +4404,17 @@ async function tryPublishInstantQuote(
 // prazo (inventar prazo segue proibido).
 async function publishInstantQuote(
   orderId: string,
-  input: { itemsSubtotal: number; serviceFee?: number; fee: number; estimate?: string; stores: number }
+  input: { itemsSubtotal: number; serviceFee?: number; fee: number; estimate?: string; storeEstimate?: string; stores: number }
 ) {
   const base = input.stores > 1 ? `pela própria loja (${input.stores} entregas)` : "pela própria loja";
+  // ML traz data ("chega até sábado"); loja VTEX traz SLA ("1bd") → "prazo da loja: 1 dia útil".
+  const storeEta = humanEstimate(input.storeEstimate);
+  const promise = input.estimate ? `${base} · chega até ${input.estimate}` : storeEta ? `${base} · ${storeEta}` : base;
   await opsPublishManualQuote(orderId, {
     itemsSubtotal: input.itemsSubtotal,
     serviceFee: input.serviceFee,
     deliveryFee: input.fee,
     deliveryMode: "retailer_delivery",
-    deliveryPromise: input.estimate ? `${base} · chega até ${input.estimate}` : base
+    deliveryPromise: promise
   });
 }

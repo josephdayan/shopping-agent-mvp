@@ -1,5 +1,23 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (7ª) — "chegava em 90 min": prazo é da loja, contado da compra
+
+Dono: *"tava escrito que chegava em 90 min mas não acho que é verdade."* Verificado na
+simulação da Drogaria SP para o CEP dele: a loja realmente tem SLA de 60–90 min (SUPER
+EXPRESSA) e 1 dia útil (NORMAL, R$ 6,90, a que cobramos). O problema não era o dado, era a
+frase: "chega em 90 min" faz o relógio começar no toque do cliente, mas o prazo da loja
+conta a partir da compra na loja — que hoje é manual (o pedido ficou horas sem compra).
+Mudanças:
+1. `humanEstimate` agora escreve **"prazo da loja: 90 min" / "prazo da loja: 1 dia útil"**
+   em cards e mensagens — diz de quem é o prazo. "Chega em" volta quando a compra for
+   automática e o relógio for nosso.
+2. O **resumo da cotação instantânea** passa a mostrar o prazo da loja (SLA da simulação,
+   o mais lento entre as lojas da cesta) — antes só o card mostrava e o resumo saía sem prazo
+   (`publishInstantQuote.storeEstimate`).
+Card e cotação usam o MESMO SLA (o mais barato com entrega), então prazo e frete batem.
+Lembrete estrutural: enquanto a compra for manual, nenhum prazo curto da loja é honesto sem
+alguém comprando em minutos — é a decisão pendente de compra automática.
+
 ## Atualização 04/09/2026 (6ª) — conversa real do dono (desodorante): 5 regras novas
 
 Teste real às 14h04 (pedido #OG9F4M, pago no cartão salvo). Decisões do dono, todas em código:
