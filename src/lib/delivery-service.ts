@@ -1330,6 +1330,10 @@ async function handleDeliveryTurn(
       const method = methodFromIntent(intent);
       if (method) {
         const issued = await issueValidatedRetailerQuotePayment(order.id, method);
+        if (issued.unavailable) {
+          await handlePreflightUnavailable(phone, convo.id, user, ctx, issued.unavailable);
+          return;
+        }
         if (issued.expired) {
           await writeCtx(convo.id, addressOnlyCtx(ctx, user.cep));
           await reply(phone, copy.quoteExpired());
@@ -1684,6 +1688,24 @@ async function handleDeliveryTurn(
 
 
   // ---- step: juntar × pedido novo (pedido não-pago parado + item novo, 01/09) ----
+  // Plano B (04/09): o pedido PAGO travou na loja e a Lia ofereceu um substituto
+  // verificado. "Trocar" substitui os itens e a compra segue; "Devolver" estorna na hora.
+  if (ctx.planB && !ctx.pending?.length) {
+    const n = normalizeMsg(text);
+    const accept = n === "planb_trocar" || (n.length <= 30 && /^(troca|trocar|troque|sim|pode|quero|ok|beleza|blz|isso|fechado)\b/.test(n));
+    const decline = !accept && (n === "planb_devolver" || (n.length <= 40 && /^(devolv|estorn|nao|n|dinheiro|quero o dinheiro|cancela)\b/.test(n)));
+    if (accept || decline) {
+      const planB = await import("./plan-b");
+      if (accept) await planB.acceptPlanB(phone, ctx, convo.id);
+      else await planB.declinePlanB(phone, ctx, convo.id);
+      return;
+    }
+    if (ctx.step === "awaiting_plan_b") {
+      await reply(phone, copy.planBReask(ctx.planB.substitutes.map((s) => s.to.name)));
+      return;
+    }
+  }
+
   if (ctx.step === "awaiting_merge_decision" && ctx.mergeDecision) {
     const pendingMerge = ctx.mergeDecision;
     const n = normalizeMsg(text);
@@ -1756,6 +1778,10 @@ async function handleDeliveryTurn(
     });
     if (quoted) {
       const result = await issueValidatedRetailerQuotePayment(quoted.id, spokenMethod);
+      if (result.unavailable) {
+        await handlePreflightUnavailable(phone, convo.id, user, ctx, result.unavailable);
+        return;
+      }
       if (result.expired) await reply(phone, copy.quoteExpired());
       return;
     }
@@ -3895,6 +3921,33 @@ function packAdjusted(optionName: string, qty: number): { qty: number; note?: st
     return { qty: packs, note: copy.packConversionNote(qty, pack, packs) };
   }
   return { qty };
+}
+
+// Pré-voo barrou a cobrança (04/09): o pedido fechou sem cobrar; o resto da cesta volta
+// pro contexto e os itens que a loja não tem são buscados de novo — a verificação ao vivo
+// tira a loja que falhou e mostra só o que está confirmado para o CEP.
+async function handlePreflightUnavailable(
+  phone: string,
+  convoId: string,
+  user: { id: string; cep: string | null },
+  ctx: DeliveryContext,
+  unavailable: { storeLabel: string; items: BasketItem[]; remaining: BasketItem[] }
+) {
+  const next: DeliveryContext = { ...addressOnlyCtx(ctx, user.cep), basket: unavailable.remaining };
+  await writeCtx(convoId, next);
+  await reply(phone, copy.preflightUnavailable(unavailable.items.map((i) => i.name), unavailable.storeLabel));
+  const query = unavailable.items.map((i) => (i.qty > 1 ? `${i.qty} ${i.name}` : i.name)).join(", ");
+  await handleSearch(phone, convoId, user.cep, next, query, user.id);
+}
+
+// Busca para o plano B (plan-b.ts): as opções da vitrine para um nome de produto, já
+// filtradas pela verificação ao vivo do CEP. Auto-adicionados e pendentes juntos.
+export async function searchOptionsForPlanB(query: string, cep: string): Promise<ChoiceOption[]> {
+  const result = await buildChoices(query, undefined, undefined, undefined, false, cep);
+  const fromAuto: ChoiceOption[] = result.autoAdded.map((b) => ({
+    sku: b.sku, name: b.name, brand: b.brand, unitPrice: b.unitPrice, productUrl: b.productUrl, storeKey: b.storeKey, storeLabel: b.storeLabel, freeShipping: b.freeShipping
+  }));
+  return [...fromAuto, ...result.pending.flatMap((p) => p.options)];
 }
 
 async function handleSearch(

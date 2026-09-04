@@ -1,5 +1,49 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (3ª) — "nunca é pra não ter algo": pré-voo, plano B e lembrete em 30 min
+
+Dono: *"precisamos melhorar tudo pra ter certeza que nunca vai falhar e chegar nesse ponto
+[estorno]."* Três garantias novas em código, na ordem em que a cadeia pode falhar:
+
+1. **Pré-voo antes de cobrar** (`preflightBasket` em `live-freight.ts`, chamado em
+   `issueValidatedRetailerQuotePayment`): no instante em que o cliente diz "pix"/"cartão",
+   a loja consultável é simulada de novo com a cesta inteira e as quantidades reais para o
+   CEP. "Não" definitivo (sem estoque / sem entrega) → **nada é cobrado**, o pedido fecha com
+   nota `🛫 PRÉ-VOO`, o resto da cesta volta pro contexto e os itens que faltaram são buscados
+   de novo (a verificação ao vivo tira a loja que falhou e mostra só o confirmado). Loja fora
+   do ar ou não consultável não inventa indisponibilidade. Gancho de teste
+   `__setPreflightForTests`.
+2. **Plano B automático** (`src/lib/plan-b.ts`): pedido PAGO com nota `🛑 COMPRA BLOQUEADA`
+   → no próximo tick do cron (≤10 min, sem esperar balde) a Lia busca o mesmo item em outra
+   loja consultável, confirma AO VIVO para o CEP (`checkCandidatesLive`), respeita a
+   tolerância de preço (`LIA_PLAN_B_PRICE_TOLERANCE`, 15%), e oferece a troca com botões
+   **Trocar** / **Devolver o dinheiro** (`sendPlanBButtons`; fora da janela de 24h vai por
+   template com instrução em texto). Só troca a cesta inteira (item sem substituto = sem plano
+   B, nota `🔁 PLANO B: sem substituto verificado`). **Trocar** → reconfirma ao vivo,
+   substitui os itens do pedido (continua `paid`), devolve em parcial a diferença a favor do
+   cliente (`refundOrderViaProvider(id, valor)`), absorve até a tolerância, limpa o bloqueio,
+   nota `🔁 PLANO B aceito em <iso>` e alerta o operador com o link para comprar. **Devolver**
+   → estorno integral na hora. Substituto esgotou entre oferta e aceite → estorno com motivo.
+   Contexto: `ctx.planB` + passo `awaiting_plan_b`; handler no cérebro antes de
+   `awaiting_merge_decision`. O relógio do estorno automático reinicia na oferta e no aceite.
+3. **Primeiro lembrete em 30 min** (era 2h): baldes `30min, 2h, 6h, 12h, 24h, 48h, 72h`;
+   bloqueio entra no cron na hora (query com `notes contains 🛑`). Cliente com bloqueio e sem
+   plano B é avisado no primeiro alerta; com plano B já tem a pergunta na tela.
+
+Sequência completa hoje: cards só do confirmado → pré-voo na cobrança → compra → se travar,
+plano B em ≤10 min → sem resposta/sem substituto, estorno automático em 6h. Testes: `plan-b`
+(8 E2E) + `paid-order-watchdog` ajustado. Suíte 510/510.
+
+**O que NÃO é código e depende do dono (registrado em PENDENCIAS):**
+- **Execução da compra.** Hoje 100% das compras são manuais: `ensurePurchaseJobForPaidOrder`
+  só cria job para cesta 100% Mercado Livre, e o prompt do Codex manda parar antes do botão
+  final. Enquanto ninguém aperta o botão, o pedido pago espera um humano — esta é a única
+  etapa sem garantia. Opções: (a) autorizar o Codex a finalizar checkout dentro do teto
+  (`approvalMaxTotal`) com cartão da empresa; (b) job de compra para toda loja consultável
+  com link exato; (c) continuar manual com SLA de 30 min.
+- **Carrefour, Petz e Boticário** não têm checkout consultável: não passam pelo pré-voo nem
+  pelo plano B como destino. Manter via operador, ou tirar da vitrine automática.
+
 ## Atualização 04/09/2026 (2ª) — estorno AUTOMÁTICO quando a compra não dá certo
 
 Decisão do dono (04/09): *"nunca é pra não dar certo, mas às vezes não vai, porque não é

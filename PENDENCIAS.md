@@ -1,6 +1,14 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-04 (2ª — estorno automático)._
+_Última atualização: 2026-09-04 (3ª — pré-voo, plano B, compra automática pendente)._
+
+> **04/09 (3ª) — "nunca é pra não ter algo".** Pré-voo + plano B + lembrete 30 min em
+> produção (AGENTS.md 04/09 3ª). **Dono decide (a etapa sem garantia é a COMPRA):**
+> (a) autorizar o Codex a finalizar o checkout dentro do teto com cartão da empresa;
+> (b) job de compra para toda loja consultável (hoje só Mercado Livre); (c) manual com SLA.
+> E: Carrefour/Petz/Boticário sem checkout consultável — manter via operador ou tirar da
+> vitrine automática. **Observar:** primeiros planos B reais (qualidade do substituto que a
+> IA escolhe; latência da simulação); `LIA_PLAN_B_PRICE_TOLERANCE` (15%).
 
 > **04/09 (2ª) — estorno automático.** Em produção (AGENTS.md 04/09 2ª): bloqueado 6h ou sem
 > compra 24h → estorna sozinho, só para pedidos pagos a partir de 04/09 12:00 UTC. Os 15 `paid`

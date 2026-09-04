@@ -1,5 +1,14 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (3ª) — pré-voo, plano B e lembrete em 30 min
+
+Antes de cobrar, a loja é consultada de novo com a cesta inteira: sem estoque/entrega → nada
+cobrado e o cliente vê alternativas. Pedido pago que trava na loja ganha, em até 10 minutos,
+uma oferta de troca por item confirmado em outra loja (botões Trocar/Devolver), com diferença
+devolvida; só depois disso o estorno automático entra. Primeiro lembrete ao operador aos 30
+min. Etapa ainda sem garantia: apertar o botão de compra (manual). Detalhe em AGENTS.md
+(04/09 3ª).
+
 ## 04/09/2026 (2ª) — estorno automático
 
 Pedido pago que a loja não consegue atender (bloqueado há 6h) ou sem compra há 24h é estornado

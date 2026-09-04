@@ -119,3 +119,15 @@ Você não precisa mais estornar à mão quando a compra não dá certo. O siste
 - Se aparecer "⚠️ ESTORNO AUTOMÁTICO FALHOU" na nota, o provedor recusou; o sistema tenta de
   novo a cada 10 min. Se persistir, use "Estornar pelo provedor" no /ops.
 - Para desligar tudo: `LIA_AUTO_REFUND_OFF=true` na Vercel.
+
+
+## Plano B automático e pré-voo (04/09/2026)
+
+- **Pré-voo:** quando o cliente escolhe Pix/cartão, a loja é consultada de novo. Se o item
+  sumiu, nada é cobrado e o cliente já recebe outras opções. Você não faz nada.
+- **Plano B:** ao registrar "🛑 COMPRA BLOQUEADA: …" na nota de um pedido pago, em até 10
+  minutos a Lia oferece ao cliente um substituto confirmado em outra loja. Se ele aceitar,
+  você recebe "🛒 Pedido #…: cliente aceitou a troca. Comprar agora: <item> — <loja> <link>".
+  Compre exatamente isso. Se recusar, o estorno já saiu sozinho.
+- **Lembretes:** 30 min, 2h, 6h, 12h, 24h sem compra. Bloqueio sem substituto → estorno
+  automático em 6h; sem compra e sem bloqueio → 24h.

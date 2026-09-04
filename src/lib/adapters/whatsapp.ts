@@ -569,6 +569,14 @@ export const whatsappAdapter = {
     ]);
   },
 
+  async sendPlanBButtons(to: string, body: string) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
+    return sendMetaSimpleButtons(to, body, [
+      { id: "planb_trocar", title: "Trocar" },
+      { id: "planb_devolver", title: "Devolver o dinheiro" }
+    ]);
+  },
+
   async sendCartActions(to: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     return sendMetaSimpleButtons(to, "Quer ajustar antes de pagar?", [

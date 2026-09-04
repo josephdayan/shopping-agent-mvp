@@ -168,9 +168,9 @@ test("pedido pago há 3h sem compra e com bloqueio: alerta o operador e avisa o 
   assert.match(order.notes ?? "", /COMPRA PENDENTE 2h/);
 });
 
-test("pedido pago há 30 min é normal: nada dispara; via cron o de 3h conta no relatório", async (t) => {
+test("pedido pago há 10 min é normal: nada dispara; via cron o de 3h conta no relatório", async (t) => {
   if (!dbOk) return t.skip();
-  const fresh = await paidOrder(30 * 60_000);
+  const fresh = await paidOrder(10 * 60_000); // 1º lembrete agora é aos 30 min (04/09)
   assert.equal(await watchPaidOrder(fresh.orderId), "none");
   const stuck = await paidOrder(7 * 60 * 60_000);
   const start = outbox.length;

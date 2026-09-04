@@ -59,6 +59,12 @@ type Sla = { name?: string; price?: number; shippingEstimate?: string; pickupSto
 type SimItem = { id?: string | number; quantity?: number; availability?: string };
 type LogisticsInfo = { itemIndex?: number; slas?: Sla[] };
 
+// Loja com checkout consultável (mapa VTEX_LIVE), independente do kill-switch — o plano B
+// usa isto para filtrar candidatos e injeta a simulação nos testes.
+export function liveCheckConfigured(storeKey: string): boolean {
+  return Boolean(VTEX_LIVE[storeKey]);
+}
+
 export function liveCheckSupported(storeKey: string): boolean {
   return liveFreightEnabled() && Boolean(VTEX_LIVE[storeKey]);
 }
@@ -266,4 +272,36 @@ export async function liveItemAvailability(storeKey: string, skus: string[], cep
   } catch {
     return null;
   }
+}
+
+// ---------- pré-voo antes de cobrar (04/09) ----------
+// A cotação pode ter horas (operador) ou minutos (instantânea); a loja é consultada de
+// novo no instante da cobrança, com a cesta inteira e as quantidades reais. Só um "não"
+// definitivo (sem estoque / sem entrega no CEP) barra a cobrança; loja não consultável
+// ou fora do ar não inventa indisponibilidade.
+export type PreflightFailure = { storeKey: string; kind: "item-unavailable" | "no-delivery"; skus: string[] };
+type PreflightFn = (items: { sku: string; qty: number; storeKey: string }[], cep: string) => Promise<PreflightFailure | null>;
+let preflightOverride: PreflightFn | null = null;
+export function __setPreflightForTests(fn: PreflightFn | null) {
+  preflightOverride = fn;
+}
+
+export async function preflightBasket(items: { sku: string; qty: number; storeKey: string }[], cep: string | null | undefined): Promise<PreflightFailure | null> {
+  if (preflightOverride) return preflightOverride(items, cep ?? "");
+  if (!liveFreightEnabled() || !cep || !items.length) return null;
+  const byStore = new Map<string, { sku: string; qty: number }[]>();
+  for (const item of items) {
+    if (!liveCheckSupported(item.storeKey)) continue;
+    byStore.set(item.storeKey, [...(byStore.get(item.storeKey) ?? []), { sku: item.sku, qty: item.qty }]);
+  }
+  const results = await Promise.all(
+    [...byStore].map(async ([storeKey, list]) => {
+      const outcome = await liveStoreFreight(storeKey, list, cep);
+      if (outcome.kind === "item-unavailable" || outcome.kind === "no-delivery") {
+        return { storeKey, kind: outcome.kind, skus: list.map((i) => i.sku) } as PreflightFailure;
+      }
+      return null;
+    })
+  );
+  return results.find((r): r is PreflightFailure => r !== null) ?? null;
 }

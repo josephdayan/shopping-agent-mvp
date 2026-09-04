@@ -1402,9 +1402,9 @@ export function longTailDeclined(): string {
 
 // ---- pedido pago sem compra (02/09: chá pago às 10h45, bloqueado por falta de estoque,
 // cliente sem notícia o dia inteiro) ----
-export function operatorPaidStuckAlert(shortId: string, hours: number, blockedReason?: string): string {
+export function operatorPaidStuckAlert(shortId: string, age: string, blockedReason?: string): string {
   const why = blockedReason ? ` Bloqueio registrado: ${blockedReason.slice(0, 160)}.` : "";
-  return `🚨 [operador] Pedido #${shortId} PAGO há ${hours}h sem compra.${why} Comprar, ou usar "Não consegui comprar → estornar" no /ops. O cliente ${blockedReason ? "já foi" : "será"} avisado.`;
+  return `🚨 [operador] Pedido #${shortId} PAGO há ${age} sem compra.${why} Comprar, ou usar "Não consegui comprar → estornar" no /ops. O cliente ${blockedReason ? "já foi" : "será"} avisado.`;
 }
 
 export function purchaseDelayedCustomer(shortId: string, blocked: boolean): string {
@@ -1419,6 +1419,46 @@ export function operatorAutoRefundAlert(shortId: string, total: number, reason: 
 
 export function operatorAutoRefundFailedAlert(shortId: string, error: string): string {
   return `⚠️ Estorno automático do pedido #${shortId} FALHOU: ${error.slice(0, 160)}. Tento de novo a cada 10 min; se persistir, estorne à mão no /ops.`;
+}
+
+// ---------- plano B (04/09): pedido pago travou → troca verificada ou estorno ----------
+export function planBOffer(subs: { fromStore: string; from: string; to: string; store: string; delivery?: string }[], refund: number): string {
+  const price = refund > 0 ? `Sai ${brl(refund)} mais barato e eu devolvo a diferença.` : "Sem custo extra.";
+  if (subs.length === 1) {
+    const s = subs[0];
+    return `A *${s.fromStore}* ficou sem *${s.from}* para o seu endereço. Encontrei *${s.to}* na *${s.store}*${s.delivery ? `, ${s.delivery}` : ""}. ${price} Troco?`;
+  }
+  const lines = subs.map((s) => `• *${s.from}* → *${s.to}* (${s.store}${s.delivery ? `, ${s.delivery}` : ""})`).join("\n");
+  return `A loja ficou sem itens do seu pedido para o seu endereço. Encontrei substitutos confirmados:\n${lines}\n${price} Troco?`;
+}
+
+export function planBTextFallback(): string {
+  return "Responda *trocar* ou *devolver*. Sem resposta em 6 horas, devolvo o valor integral.";
+}
+
+export function planBReask(toNames: string[]): string {
+  return `Quer que eu troque por *${toNames.join("*, *")}* ou prefere o dinheiro de volta? Responda *trocar* ou *devolver*.`;
+}
+
+export function planBAccepted(toNames: string[], store: string, delivery?: string, refund?: number): string {
+  const back = refund ? `Devolvi ${brl(refund)} de diferença no mesmo pagamento. ` : "";
+  return `Trocado: agora é *${toNames.join("*, *")}* da *${store}*${delivery ? `, ${delivery}` : ""}. ${back}Te aviso quando a loja confirmar o envio.`;
+}
+
+export function planBStale(): string {
+  return "Esse pedido já foi fechado, então não há mais o que trocar. Se quiser, me manda o que precisa e eu procuro de novo.";
+}
+
+export function preflightUnavailable(names: string[], store: string): string {
+  return `Conferi na *${store}* na hora de cobrar e *${names.join("*, *")}* não está mais disponível para o seu endereço. Nada foi cobrado. Veja outras opções:`;
+}
+
+export function operatorPlanBOffered(shortId: string, summary: string): string {
+  return `🔁 Pedido #${shortId} travou na loja; ofereci troca ao cliente: ${summary.slice(0, 300)}. Se ele aceitar, mando o link para comprar.`;
+}
+
+export function operatorPlanBAccepted(shortId: string, summary: string): string {
+  return `🛒 Pedido #${shortId}: cliente aceitou a troca. Comprar agora: ${summary.slice(0, 400)}`;
 }
 
 export function purchaseFailedRefunded(items: string[], total: number, reason?: string): string {

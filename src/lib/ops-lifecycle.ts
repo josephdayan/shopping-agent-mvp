@@ -11,6 +11,7 @@ import * as copy from "@/lib/lia-copy";
 import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 import { BasketItem, FreightChoiceState, cardTotal, display, orderDateLabel, quoteTtlMinutes, roundMoney } from "./conversation-types";
 import { TurnSupersededError, addressOnlyCtx, deliverNotice, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { PLAN_B_ACCEPTED_PREFIX, PLAN_B_NONE_PREFIX, PLAN_B_OFFERED_PREFIX, blockedReasonOf, planBMarkerAt } from "./plan-b";
 import { issueValidatedRetailerQuotePayment } from "./order-payments";
 
 export async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
@@ -511,7 +512,11 @@ export async function getWaitlist() {
 // O cliente pagou e ninguém comprou: ou o operador ainda não agiu, ou a compra foi
 // bloqueada (sem estoque / sem entrega no CEP / mínimo da loja) e a nota "🛑 COMPRA
 // BLOQUEADA" ficou só no /ops. Chamado pelo cron a cada 10 min; idempotente por marcador.
-const STUCK_BUCKETS_H = [2, 6, 12, 24, 48, 72];
+// Primeiro lembrete em 30 min (04/09: "chega rápido" não combina com 2h de silêncio).
+const STUCK_BUCKETS_MIN = [30, 120, 360, 720, 1440, 2880, 4320];
+function bucketLabel(minutes: number): string {
+  return minutes < 60 ? `${minutes}min` : `${Math.round(minutes / 60)}h`;
+}
 
 // ---- estorno AUTOMÁTICO (decisão do dono, 04/09) ----
 // "Nunca é pra não dar certo, mas às vezes não vai, e aí tem que ir sem mim e sem /ops."
@@ -553,13 +558,15 @@ export function autoRefundDecision(
   // Só pedidos pagos DEPOIS da regra existir: em 04/09 havia 15 pedidos `paid` de
   // junho–agosto (testes/sandbox e pendências antigas) que o cron estornaria em bloco.
   if (input.paidAt.getTime() < autoRefundSince()) return { refund: false };
-  const hours = (now.getTime() - input.paidAt.getTime()) / 3_600_000;
-  const blocked = (input.notes ?? "")
-    .split("\n")
-    .filter((line) => line.startsWith(PURCHASE_BLOCKED_PREFIX))
-    .pop()
-    ?.slice(PURCHASE_BLOCKED_PREFIX.length)
-    .trim();
+  // Relógio: reinicia quando o plano B é oferecido (o cliente precisa de tempo para
+  // responder) e quando é aceito (a compra do substituto recomeça do zero).
+  const clockStart = Math.max(
+    input.paidAt.getTime(),
+    planBMarkerAt(input.notes, PLAN_B_OFFERED_PREFIX)?.getTime() ?? 0,
+    planBMarkerAt(input.notes, PLAN_B_ACCEPTED_PREFIX)?.getTime() ?? 0
+  );
+  const hours = (now.getTime() - clockStart) / 3_600_000;
+  const blocked = blockedReasonOf(input.notes);
   if (blocked && hours >= autoRefundBlockedHours()) {
     return { refund: true, kind: "blocked", reason: blocked, customerReason: customerReasonFromBlock(blocked) };
   }
@@ -574,9 +581,19 @@ const AUTO_REFUND_FAILED_MARKER = "⚠️ ESTORNO AUTOMÁTICO FALHOU";
 export async function watchPaidOrder(
   orderId: string,
   now = new Date()
-): Promise<"none" | "operator" | "operator+customer" | "auto_refunded" | "auto_refund_failed"> {
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+): Promise<"none" | "operator" | "operator+customer" | "auto_refunded" | "auto_refund_failed" | "plan_b_offered"> {
+  let order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order || order.status !== "paid" || order.storeOrderNumber || !order.paidAt) return "none";
+
+  // Plano B antes de tudo (04/09): bloqueio novo → substituto verificado oferecido na
+  // hora. Marcadores na nota evitam repetir; "sem substituto" segue para alerta/estorno.
+  const notes0 = order.notes ?? "";
+  if (blockedReasonOf(notes0) && !notes0.includes(PLAN_B_OFFERED_PREFIX) && !notes0.includes(PLAN_B_NONE_PREFIX) && !notes0.includes(PLAN_B_ACCEPTED_PREFIX)) {
+    const { offerPlanB } = await import("./plan-b");
+    const outcome = await offerPlanB(orderId, {}, now);
+    if (outcome === "offered") return "plan_b_offered";
+    order = (await prisma.deliveryOrder.findUnique({ where: { id: orderId } })) ?? order;
+  }
 
   // Estorno automático vem ANTES de qualquer alerta: não faz sentido avisar "pendente 6h"
   // e devolver o dinheiro no mesmo tick.
@@ -607,25 +624,24 @@ export async function watchPaidOrder(
     }
   }
 
-  const hours = Math.floor((now.getTime() - order.paidAt.getTime()) / 3_600_000);
-  const bucket = [...STUCK_BUCKETS_H].reverse().find((h) => hours >= h);
+  const minutes = Math.floor((now.getTime() - order.paidAt!.getTime()) / 60_000);
+  const bucket = [...STUCK_BUCKETS_MIN].reverse().find((m) => minutes >= m);
   if (!bucket) return "none";
-  const marker = `⏰ COMPRA PENDENTE ${bucket}h`;
+  const marker = `⏰ COMPRA PENDENTE ${bucketLabel(bucket)}`;
   if ((order.notes ?? "").includes(marker)) return "none";
-  const blockedLine = (order.notes ?? "")
-    .split("\n")
-    .filter((line) => line.startsWith(PURCHASE_BLOCKED_PREFIX))
-    .pop();
-  const blockedReason = blockedLine?.slice(PURCHASE_BLOCKED_PREFIX.length).trim();
+  const blockedReason = blockedReasonOf(order.notes);
   await prisma.deliveryOrder.update({
     where: { id: orderId },
     data: { notes: appendOrderNote(order.notes, `${marker}: alerta enviado em ${now.toISOString()}.`) }
   });
   const shortId = order.id.slice(-6).toUpperCase();
-  await notifyOperator(copy.operatorPaidStuckAlert(shortId, hours, blockedReason), order.phone);
-  // Cliente: bloqueio conhecido avisa já no 1º alerta; sem bloqueio, só a partir de 6h e
-  // depois em 24h/48h/72h — nunca a cada 10 min.
-  const tellCustomer = blockedReason ? bucket === 2 || bucket >= 24 : bucket >= 6;
+  await notifyOperator(copy.operatorPaidStuckAlert(shortId, bucketLabel(minutes), blockedReason), order.phone);
+  // Cliente: bloqueio SEM plano B avisa já no 1º alerta ("estou tentando outra loja");
+  // com plano B oferecido ele já tem a pergunta na tela. Sem bloqueio, só a partir de 6h
+  // e depois em 24h/48h/72h — nunca a cada 10 min.
+  const planBOffered = (order.notes ?? "").includes(PLAN_B_OFFERED_PREFIX);
+  const firstAlert = !(order.notes ?? "").includes("⏰ COMPRA PENDENTE");
+  const tellCustomer = blockedReason ? !planBOffered && (firstAlert || bucket >= 1440) : bucket >= 360;
   if (!tellCustomer) return "operator";
   const delivered = await deliverNotice(order.phone, copy.purchaseDelayedCustomer(shortId, Boolean(blockedReason)), { shortId });
   if (delivered === "skipped") {

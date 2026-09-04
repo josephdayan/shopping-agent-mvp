@@ -8,6 +8,7 @@ import { recordPayment } from "@/lib/payments/ledger";
 import { PaymentProviderError, cancelMercadoPagoPayment, checkoutAdapter, pixAdapter } from "@/lib/payments/mercadopago";
 import { cardOnFileEnabled, confirmSavedCardTap, createCardAttempt as createCardAttemptRaw, expireOpenPaymentAttempts, findPendingSavedCardAttempt, getConfirmedPaymentAttempt, getOneClickCredential, hasInFlightCardAttempt } from "@/lib/payments/whatsapp-pay";
 import { prisma } from "@/lib/prisma";
+import { preflightBasket } from "./live-freight";
 import * as copy from "@/lib/lia-copy";
 import { BasketItem, DeliveryContext, cardTotal, roundMoney } from "./conversation-types";
 import { addressOnlyCtx, markTurnReplied, mergeDecisionRequestFor, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
@@ -426,12 +427,35 @@ export async function supersedePixCharge(pixId: string | null | undefined) {
   }
 }
 
-export async function issueValidatedRetailerQuotePayment(orderId: string, method: "pix" | "card"): Promise<{ expired: boolean }> {
+export type PreflightUnavailable = { storeKey: string; storeLabel: string; items: BasketItem[]; remaining: BasketItem[] };
+
+export async function issueValidatedRetailerQuotePayment(
+  orderId: string,
+  method: "pix" | "card"
+): Promise<{ expired: boolean; unavailable?: PreflightUnavailable }> {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order || order.status !== "awaiting_quote_confirmation") return { expired: false };
   if (!order.quoteExpiresAt || order.quoteExpiresAt.getTime() <= Date.now()) {
     await cancelPendingRetailerQuote(order.id);
     return { expired: true };
+  }
+
+  // Pré-voo (04/09): consulta a loja de novo AGORA, cesta inteira, para o CEP. "Não"
+  // definitivo → nada é cobrado, o pedido fecha e o chamador reapresenta alternativas.
+  const basket = ((order.items as unknown as BasketItem[]) ?? []).filter(Boolean);
+  const failure = await preflightBasket(basket.map((i) => ({ sku: i.sku, qty: i.qty, storeKey: i.storeKey })), order.cep);
+  if (failure) {
+    const failed = basket.filter((i) => failure.skus.includes(i.sku));
+    const storeLabel = failed[0]?.storeLabel ?? failure.storeKey;
+    await prisma.deliveryOrder.updateMany({
+      where: { id: order.id, status: "awaiting_quote_confirmation" },
+      data: {
+        status: "canceled",
+        quoteExpiresAt: null,
+        notes: [order.notes, `🛫 PRÉ-VOO (${new Date().toISOString()}): ${storeLabel} ${failure.kind === "no-delivery" ? "sem entrega no CEP" : "sem estoque"} para ${failed.map((i) => i.name).join(", ")}. Nada cobrado; cliente redirecionado para alternativas.`].filter(Boolean).join("\n")
+      }
+    });
+    return { expired: false, unavailable: { storeKey: failure.storeKey, storeLabel, items: failed, remaining: basket.filter((i) => !failure.skus.includes(i.sku)) } };
   }
 
   const isCard = method === "card";

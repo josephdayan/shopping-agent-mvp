@@ -6,6 +6,7 @@
 import { prisma } from "@/lib/prisma";
 import { getMercadoPagoPayment } from "./mercadopago";
 import { reconcilePagarmeOrder, reportCardChargeOutcomeUnknown } from "./whatsapp-pay";
+import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 
 export type ReconcileReport = {
   attemptsChecked: number;
@@ -14,6 +15,7 @@ export type ReconcileReport = {
   pixExpired: number;
   paidStuckAlerts: number;
   autoRefunds: number;
+  planBOffers: number;
   errors: string[];
 };
 
@@ -23,7 +25,7 @@ const PIX_LOOKBACK_MS = 48 * 60 * 60_000;
 export const PIX_EXPIRED_MARKER = "⏰ PIX EXPIROU";
 
 export async function reconcilePayments(now = new Date()): Promise<ReconcileReport> {
-  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, paidStuckAlerts: 0, autoRefunds: 0, errors: [] };
+  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, paidStuckAlerts: 0, autoRefunds: 0, planBOffers: 0, errors: [] };
   const brain = await import("@/lib/delivery-service");
 
   // 1) Cartão salvo: tentativa confirmada há mais de 5 min sem desfecho.
@@ -79,7 +81,12 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
   // estoque, cliente sem notícia o dia inteiro). Alerta o operador e, quando cabe, avisa o
   // cliente com honestidade — idempotente por marcador na nota.
   const stuck = await prisma.deliveryOrder.findMany({
-    where: { status: "paid", storeOrderNumber: null, paidAt: { lt: new Date(now.getTime() - 2 * 60 * 60_000) } },
+    // 30 min sem compra, ou bloqueio registrado a qualquer momento (plano B na hora).
+    where: {
+      status: "paid",
+      storeOrderNumber: null,
+      OR: [{ paidAt: { lt: new Date(now.getTime() - 30 * 60_000) } }, { notes: { contains: PURCHASE_BLOCKED_PREFIX } }]
+    },
     orderBy: { paidAt: "asc" },
     take: 50,
     select: { id: true }
@@ -89,6 +96,7 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
       const { watchPaidOrder } = await import("@/lib/ops-lifecycle");
       const outcome = await watchPaidOrder(order.id, now);
       if (outcome === "auto_refunded") report.autoRefunds += 1;
+      else if (outcome === "plan_b_offered") report.planBOffers += 1;
       else if (outcome !== "none") report.paidStuckAlerts += 1;
     } catch (error) {
       report.errors.push(`stuck ${order.id}: ${error instanceof Error ? error.message : String(error)}`);
