@@ -40,7 +40,8 @@ test("ao vivo: menor ENTREGA vence, retirada é ignorada, preço sai de centavos
     ]
   });
   const out = await liveStoreFreight("paguemenos", ITEMS, "01310-100");
-  assert.deepEqual(out, { kind: "ok", fee: 4.9, estimate: "1bd" });
+  // 04/09: a Expressa (2h, +R$ 2,00) vira a alternativa `faster` — quem escolhe é o cliente.
+  assert.deepEqual(out, { kind: "ok", fee: 4.9, estimate: "1bd", faster: { fee: 6.9, estimate: "2h", name: "Expressa" } });
 });
 
 test("ao vivo: resposta válida SEM entrega = site não atende o CEP (rota do operador)", async () => {
@@ -199,4 +200,39 @@ test("prazo humano só a partir do formato da loja", () => {
   assert.equal(humanEstimate("2d"), "prazo da loja: 2 dias");
   assert.equal(humanEstimate("amanhã"), undefined);
   assert.equal(humanEstimate(undefined), undefined);
+});
+
+// ---- entrega mais rápida da loja (04/09: "tem que dar a opção de super expressa") ----
+test("ao vivo: loja com SUPER EXPRESSA devolve `faster` (mais rápida, extra dentro do teto); sem opção mais rápida, nada", async () => {
+  mockResponse({
+    items: [{ id: "1639750", quantity: 2, availability: "available" }],
+    logisticsInfo: [
+      {
+        slas: [
+          { name: "RETIRE NA LOJA", price: 0, shippingEstimate: "30m", pickupStoreInfo: { isPickupStore: true } },
+          { name: "NORMAL", price: 690, shippingEstimate: "1bd" },
+          { name: "SUPER EXPRESSA", price: 890, shippingEstimate: "60m" },
+          { name: "EXPRESSA", price: 890, shippingEstimate: "6h" },
+          { name: "SEDEX", price: 994, shippingEstimate: "5bd" }
+        ]
+      }
+    ]
+  });
+  const out = await liveStoreFreight("paguemenos", ITEMS, "01229-000");
+  assert.equal(out.kind, "ok");
+  if (out.kind !== "ok") return;
+  assert.equal(out.fee, 6.9);
+  assert.equal(out.estimate, "1bd");
+  assert.deepEqual(out.faster, { fee: 8.9, estimate: "60m", name: "SUPER EXPRESSA" });
+
+  // Extra acima do teto: sem oferta.
+  process.env.LIA_FAST_FREIGHT_MAX_EXTRA = "1";
+  const capped = await liveStoreFreight("paguemenos", ITEMS, "01229-000");
+  delete process.env.LIA_FAST_FREIGHT_MAX_EXTRA;
+  assert.equal(capped.kind === "ok" && capped.faster, undefined);
+
+  // Só uma opção de entrega: nada de faster.
+  mockResponse({ items: [{ id: "1639750", quantity: 2 }], logisticsInfo: [{ slas: [{ name: "NORMAL", price: 690, shippingEstimate: "1bd" }] }] });
+  const single = await liveStoreFreight("paguemenos", ITEMS, "01229-000");
+  assert.equal(single.kind === "ok" && single.faster, undefined);
 });

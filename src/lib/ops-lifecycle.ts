@@ -11,18 +11,23 @@ import * as copy from "@/lib/lia-copy";
 import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 import { BasketItem, FreightChoiceState, cardTotal, display, orderDateLabel, quoteTtlMinutes, roundMoney } from "./conversation-types";
 import { TurnSupersededError, addressOnlyCtx, deliverNotice, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { humanEstimate } from "./live-freight";
 import { PLAN_B_ACCEPTED_PREFIX, PLAN_B_NONE_PREFIX, PLAN_B_OFFERED_PREFIX, blockedReasonOf, planBMarkerAt } from "./plan-b";
 import { issueValidatedRetailerQuotePayment } from "./order-payments";
 
 export async function sendFreightChoice(phone: string, choice: FreightChoiceState) {
   const totalFor = (fee: number) =>
     roundMoney(choice.itemsSubtotal + (choice.serviceFee ?? serviceFeeForSubtotal(choice.itemsSubtotal)) + fee);
-  const barato = { total: totalFor(choice.barato.fee), estimate: choice.barato.estimate };
-  const rapido = { total: totalFor(choice.rapido.fee), estimate: choice.rapido.estimate };
-  const body = copy.shippingSpeedChoice(barato, rapido);
+  // Loja: o SLA cru ("60m") vira "prazo da loja: 60 min" no texto e "60 min" no botão.
+  const kind = choice.kind ?? "ml";
+  const label = (estimate?: string) => (kind === "store" ? humanEstimate(estimate) : estimate);
+  const short = (estimate?: string) => (kind === "store" ? humanEstimate(estimate)?.replace(/^prazo da loja: /, "") : estimate);
+  const barato = { total: totalFor(choice.barato.fee), estimate: label(choice.barato.estimate) };
+  const rapido = { total: totalFor(choice.rapido.fee), estimate: label(choice.rapido.estimate) };
+  const body = copy.shippingSpeedChoice(barato, rapido, kind);
   try {
     markTurnReplied();
-    const interactive = await whatsappAdapter.sendShippingChoices(phone, body, choice.barato, choice.rapido);
+    const interactive = await whatsappAdapter.sendShippingChoices(phone, body, { estimate: short(choice.barato.estimate) }, { estimate: short(choice.rapido.estimate) });
     if (interactive) return;
   } catch (error) {
     console.warn("[whatsapp:shipping-choice:fallback-text]", error instanceof Error ? error.message : error);

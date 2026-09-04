@@ -1,5 +1,22 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (8ª) — entrega expressa da loja é escolha do cliente, com o prazo
+
+Dono: *"tem que dar essa opção de super expressa e expressa na hora pro cara escolher"* e
+*"tem que dar o tempo também, não só rápido e devagar"*. Reaproveitado o fluxo barato × rápido
+do ML (`choosing_freight`):
+1. `liveStoreFreight` devolve `faster` = a entrega mais rápida da loja para a cesta (por item
+   o menor prazo, empate pelo preço), só se for mais rápida que a mais barata e o extra couber
+   em `LIA_FAST_FREIGHT_MAX_EXTRA` (R$ 20). Leva o nome da opção ("SUPER EXPRESSA").
+2. Cotação instantânea de **uma loja só** com `faster` → em vez de publicar direto, manda a
+   escolha: "*1)* Mais barata — R$ X · prazo da loja: 1 dia útil / *2)* Mais rápida — R$ Y ·
+   prazo da loja: 60 min", botões com o tempo ("Mais rápido · 60 min"). `freightChoice.kind =
+   "store"`; ML continua `kind` ausente/"ml" com "chega até <data>".
+3. Escolha → nota ao operador *"comprar com ESSA opção de entrega no site da loja, AGORA (o
+   prazo conta da compra)"* e o resumo sai com o prazo da loja escolhido.
+Cesta com mais de uma loja não oferece (combinação confunde); fica para depois se aparecer.
+Lembrete: com compra manual, a expressa só é honesta se o operador comprar em minutos.
+
 ## Atualização 04/09/2026 (7ª) — "chegava em 90 min": prazo é da loja, contado da compra
 
 Dono: *"tava escrito que chegava em 90 min mas não acho que é verdade."* Verificado na

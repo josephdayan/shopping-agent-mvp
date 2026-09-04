@@ -13,8 +13,11 @@
 //   - Resposta válida SEM opção de entrega = o site não entrega naquele CEP → quem chama
 //     deve cair para a cotação manual do operador (não se cobra entrega que não existe).
 //   - Qualquer erro/timeout → null → tabela. Nunca lança; nunca segura o cliente.
+// `faster` (04/09, dono: "tem que dar a opção de super expressa"): a entrega mais rápida
+// que a loja oferece para a cesta, quando é mais rápida que a mais barata e o extra cabe
+// em LIA_FAST_FREIGHT_MAX_EXTRA (R$ 20). Quem escolhe é o cliente (botão).
 export type LiveFreightOutcome =
-  | { kind: "ok"; fee: number; estimate?: string }
+  | { kind: "ok"; fee: number; estimate?: string; faster?: { fee: number; estimate?: string; name?: string } }
   | { kind: "no-delivery" }
   // O site respondeu, mas algum item da cesta não está disponível pra esse CEP (sem
   // estoque / não vendido na região). Cobrar pela tabela venderia o que a loja não
@@ -35,6 +38,10 @@ const VTEX_LIVE: Record<string, { domain: string; sku: RegExp }> = {
   // a simulação do site responde isso (withoutStock) e agora barra antes de cobrar.
   naturaldaterra: { domain: "www.naturaldaterra.com.br", sku: /^naturaldaterra-(\d+)$/ }
 };
+
+function maxFastExtra(): number {
+  return Number(process.env.LIA_FAST_FREIGHT_MAX_EXTRA ?? 20);
+}
 
 export function liveFreightEnabled(): boolean {
   return process.env.LIA_LIVE_FREIGHT_OFF !== "true";
@@ -183,6 +190,9 @@ export async function liveStoreFreight(
 
     let fee = 0;
     const estimates: (string | undefined)[] = [];
+    let fastFee = 0;
+    const fastEstimates: (string | undefined)[] = [];
+    const fastNames: string[] = [];
     for (const info of infoByItem.values()) {
       const deliveries = (info.slas ?? []).filter(
         (sla) =>
@@ -199,10 +209,32 @@ export async function liveStoreFreight(
       const cheapest = deliveries.reduce((best, sla) => (sla.price! < best.price! ? sla : best));
       fee += cheapest.price! / 100;
       estimates.push(cheapest.shippingEstimate);
+      // Mais rápida do item: menor prazo; empate → mais barata.
+      const fastest = deliveries.reduce((best, sla) => {
+        const a = estimateMinutes(sla.shippingEstimate);
+        const b = estimateMinutes(best.shippingEstimate);
+        if (a < 0) return best;
+        if (b < 0) return sla;
+        if (a !== b) return a < b ? sla : best;
+        return sla.price! < best.price! ? sla : best;
+      });
+      fastFee += fastest.price! / 100;
+      fastEstimates.push(fastest.shippingEstimate);
+      if (fastest.name) fastNames.push(fastest.name);
     }
     fee = Math.round(fee * 100) / 100;
     if (!Number.isFinite(fee) || fee < 0 || fee > maxLiveFee()) return { kind: "unavailable" };
-    return { kind: "ok", fee, estimate: slowestEstimate(estimates) };
+    const estimate = slowestEstimate(estimates);
+    fastFee = Math.round(fastFee * 100) / 100;
+    const fastEstimate = slowestEstimate(fastEstimates);
+    const cheapMinutes = estimateMinutes(estimate);
+    const fastMinutes = estimateMinutes(fastEstimate);
+    const extra = Math.round((fastFee - fee) * 100) / 100;
+    const faster =
+      fastMinutes >= 0 && (cheapMinutes < 0 || fastMinutes < cheapMinutes) && extra >= 0 && extra <= maxFastExtra() && fastFee <= maxLiveFee()
+        ? { fee: fastFee, estimate: fastEstimate, name: [...new Set(fastNames)].join(" + ") || undefined }
+        : undefined;
+    return { kind: "ok", fee, estimate, ...(faster ? { faster } : {}) };
   } catch {
     return { kind: "unavailable" };
   }

@@ -125,8 +125,11 @@ export type DeliveryContext = {
     // recusar um toque de botão feito dias depois, com promessa de entrega já vencida.
     quotedAt?: number;
     stores: number;
+    // "ml": estimate é data do anúncio ("chega até sáb."); "store": SLA da loja ("60m" →
+    // "prazo da loja: 60 min"). Sem kind = ml (contextos antigos).
+    kind?: "ml" | "store";
     barato: { fee: number; estimate?: string };
-    rapido: { fee: number; estimate?: string };
+    rapido: { fee: number; estimate?: string; name?: string };
   };
   storeKey?: string;
   notFound?: string[];

@@ -1,5 +1,11 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (8ª) — entrega expressa é escolha do cliente
+
+Loja com entrega mais rápida na simulação (ex.: Drogaria SP SUPER EXPRESSA 60 min) → a
+cotação oferece "mais barata" e "mais rápida" com preço e prazo da loja em cada botão; o
+operador recebe a instrução de comprar com essa opção. Detalhe em AGENTS.md (04/09 8ª).
+
 ## 04/09/2026 (7ª) — prazo é da loja
 
 "Chega em 90 min" virou "prazo da loja: 90 min" em cards e resumo; o resumo da cotação

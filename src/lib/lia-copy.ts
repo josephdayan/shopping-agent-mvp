@@ -445,9 +445,12 @@ export function minimumOrder(input: {
 // Meta; esta lista numerada é o fallback (e o que o cliente lê pra comparar).
 export function shippingSpeedChoice(
   barato: { total: number; estimate?: string },
-  rapido: { total: number; estimate?: string }
+  rapido: { total: number; estimate?: string },
+  kind: "ml" | "store" = "ml"
 ): string {
-  const quando = (estimate?: string) => (estimate ? `chega até ${estimate}` : "sem data publicada");
+  // ML: data do anúncio ("chega até sáb."). Loja: SLA dela ("prazo da loja: 60 min").
+  const quando = (estimate?: string) =>
+    estimate ? (kind === "store" ? estimate : `chega até ${estimate}`) : kind === "store" ? "sem prazo informado" : "sem data publicada";
   return [
     "Tem duas formas de entrega. Qual você prefere?",
     `*1)* Mais barata — ${brl(barato.total)} · ${quando(barato.estimate)}`,

@@ -1620,7 +1620,9 @@ async function handleDeliveryTurn(
       data: {
         notes: appendOrderNote(
           current?.notes ?? null,
-          `🚚 Cliente escolheu a entrega ${label} (frete ${copy.brl(picked.fee)}${picked.estimate ? `, chega até ${picked.estimate}` : ""}) — comprar ESSA opção de envio no anúncio.`
+          choice.kind === "store"
+            ? `🚚 Cliente escolheu a entrega ${label} da loja (frete ${copy.brl(picked.fee)}${picked.estimate ? `, ${humanEstimate(picked.estimate) ?? picked.estimate}` : ""}${label === "mais rápida" && choice.rapido.name ? `, opção "${choice.rapido.name}"` : ""}) — comprar com ESSA opção de entrega no site da loja, AGORA (o prazo conta da compra).`
+            : `🚚 Cliente escolheu a entrega ${label} (frete ${copy.brl(picked.fee)}${picked.estimate ? `, chega até ${picked.estimate}` : ""}) — comprar ESSA opção de envio no anúncio.`
         )
       }
     });
@@ -1628,7 +1630,7 @@ async function handleDeliveryTurn(
       itemsSubtotal: choice.itemsSubtotal,
       serviceFee: choice.serviceFee,
       fee: picked.fee,
-      estimate: picked.estimate,
+      ...(choice.kind === "store" ? { storeEstimate: picked.estimate } : { estimate: picked.estimate }),
       stores: choice.stores
     });
     return;
@@ -4279,6 +4281,8 @@ async function tryPublishInstantQuote(
     // Prazo da loja (SLA da simulação) vai pro resumo (04/09): o card mostrava o prazo e
     // o resumo não — o cliente ficava com "90 min" na cabeça sem ver de quem era o prazo.
     const storeEstimates: string[] = [];
+    // Entrega mais rápida da loja (SUPER EXPRESSA etc.), por loja da cesta.
+    const storeFaster: Array<{ index: number; cheapFee: number; faster: { fee: number; estimate?: string; name?: string } }> = [];
     if (liveFreightEnabled() && ctx.cep) {
       const outcomes = await Promise.all(
         freights.map((f) =>
@@ -4311,6 +4315,7 @@ async function tryPublishInstantQuote(
         if (outcome.kind === "ok") {
           freights[i] = { ...freights[i], fee: outcome.fee, source: "vivo" };
           if (outcome.estimate) storeEstimates.push(outcome.estimate);
+          if (outcome.faster) storeFaster.push({ index: i, cheapFee: outcome.fee, faster: outcome.faster });
         }
       }
     }
@@ -4360,6 +4365,31 @@ async function tryPublishInstantQuote(
         quotedAt: Date.now(),
         barato: { fee: totalFee, estimate: mlEstimate },
         rapido: { fee: rapidoFee, estimate: mlFaster.estimate }
+      };
+      await writeCtx(convoId, {
+        ...addressOnlyCtx(ctx),
+        deliveryOrderId: orderId,
+        step: "choosing_freight",
+        freightChoice: choice,
+        ...(ctx.lastChoice ? { lastChoice: ctx.lastChoice } : {})
+      });
+      await sendFreightChoice(phone, choice);
+      return { handled: true };
+    }
+
+    // Loja com entrega expressa (04/09, dono): mesma escolha barato × rápido do ML, com o
+    // prazo da loja. Cesta de uma loja só — com várias lojas a combinação vira confusão.
+    if (!mlFaster && storeFaster.length === 1 && freights.length === 1 && convoId) {
+      const sf = storeFaster[0];
+      const choice = {
+        orderId,
+        itemsSubtotal,
+        serviceFee: serviceFeeForItems(items as { unitPrice: number; qty: number }[]),
+        stores: 1,
+        kind: "store" as const,
+        quotedAt: Date.now(),
+        barato: { fee: totalFee, estimate: slowestEstimate(storeEstimates) },
+        rapido: { fee: roundMoney(totalFee - sf.cheapFee + sf.faster.fee), estimate: sf.faster.estimate, name: sf.faster.name }
       };
       await writeCtx(convoId, {
         ...addressOnlyCtx(ctx),
