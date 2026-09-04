@@ -4,7 +4,8 @@ _Última atualização: 2026-09-04 (5ª — recursos do WhatsApp)._
 
 > **04/09 (5ª) — recursos do WhatsApp.** Código em produção (AGENTS.md 04/09 5ª).
 > Configuração na Meta via `/api/ops/meta-setup`: perfil, foto, Flow (→ `LIA_FLOW_ADDRESS_ID`),
-> boas-vindas. **Observar:** primeiro uso real do botão de localização (precisão do CEP pelo
+> boas-vindas — **entregue ao Codex** (docs/prompts/codex-meta-setup-2026-09-04.md); ordem: flow
+> → env → deploy → welcome. **Observar:** primeiro uso real do botão de localização (precisão do CEP pelo
 > Nominatim) e do Flow. Carrossel só em template de marketing — não fazer.
 
 > **04/09 (4ª) — "o de sempre".** Em produção (AGENTS.md 04/09 4ª). Direção futura, sem
