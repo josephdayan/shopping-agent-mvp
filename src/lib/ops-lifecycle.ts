@@ -513,9 +513,93 @@ export async function getWaitlist() {
 // BLOQUEADA" ficou só no /ops. Chamado pelo cron a cada 10 min; idempotente por marcador.
 const STUCK_BUCKETS_H = [2, 6, 12, 24, 48, 72];
 
-export async function watchPaidOrder(orderId: string, now = new Date()): Promise<"none" | "operator" | "operator+customer"> {
+// ---- estorno AUTOMÁTICO (decisão do dono, 04/09) ----
+// "Nunca é pra não dar certo, mas às vezes não vai, e aí tem que ir sem mim e sem /ops."
+// Pedido PAGO sem número de compra na loja: (a) com "🛑 COMPRA BLOQUEADA" há
+// LIA_AUTO_REFUND_BLOCKED_HOURS (6) → estorna sozinho; (b) sem bloqueio mas sem compra há
+// LIA_AUTO_REFUND_STALE_HOURS (24) → idem. Só status `paid`: pedido que o operador moveu
+// para "comprando"/"preparando" nunca é tocado. Kill-switch: LIA_AUTO_REFUND_OFF=true.
+// Puro (testável); o efeito fica em watchPaidOrder, que o cron chama a cada 10 min.
+export type AutoRefundDecision =
+  | { refund: false }
+  | { refund: true; kind: "blocked" | "stale"; reason: string; customerReason: string };
+
+function autoRefundBlockedHours(): number {
+  return Number(process.env.LIA_AUTO_REFUND_BLOCKED_HOURS ?? 6);
+}
+function autoRefundStaleHours(): number {
+  return Number(process.env.LIA_AUTO_REFUND_STALE_HOURS ?? 24);
+}
+
+// O bloqueio é escrito em jargão de operação; o cliente recebe uma frase simples.
+export function customerReasonFromBlock(block: string): string {
+  const b = block.toLowerCase();
+  if (/estoque|indispon|esgot/.test(b)) return "a loja ficou sem o item para o seu endereço";
+  if (/entrega|cep|frete|m[ií]nimo/.test(b)) return "a loja não entrega esse pedido no seu endereço";
+  if (/pre[çc]o|acima|teto|maximum|mais caro/.test(b)) return "o preço na loja subiu acima do combinado";
+  return "a loja não confirmou a compra";
+}
+
+export function autoRefundDecision(
+  input: { status: string; storeOrderNumber?: string | null; paidAt?: Date | null; notes?: string | null },
+  now = new Date()
+): AutoRefundDecision {
+  if (process.env.LIA_AUTO_REFUND_OFF === "true") return { refund: false };
+  if (input.status !== "paid" || input.storeOrderNumber || !input.paidAt) return { refund: false };
+  const hours = (now.getTime() - input.paidAt.getTime()) / 3_600_000;
+  const blocked = (input.notes ?? "")
+    .split("\n")
+    .filter((line) => line.startsWith(PURCHASE_BLOCKED_PREFIX))
+    .pop()
+    ?.slice(PURCHASE_BLOCKED_PREFIX.length)
+    .trim();
+  if (blocked && hours >= autoRefundBlockedHours()) {
+    return { refund: true, kind: "blocked", reason: blocked, customerReason: customerReasonFromBlock(blocked) };
+  }
+  if (hours >= autoRefundStaleHours()) {
+    return { refund: true, kind: "stale", reason: `sem compra confirmada ${Math.floor(hours)}h depois do pagamento`, customerReason: "não consegui confirmar a compra a tempo" };
+  }
+  return { refund: false };
+}
+
+const AUTO_REFUND_FAILED_MARKER = "⚠️ ESTORNO AUTOMÁTICO FALHOU";
+
+export async function watchPaidOrder(
+  orderId: string,
+  now = new Date()
+): Promise<"none" | "operator" | "operator+customer" | "auto_refunded" | "auto_refund_failed"> {
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!order || order.status !== "paid" || order.storeOrderNumber || !order.paidAt) return "none";
+
+  // Estorno automático vem ANTES de qualquer alerta: não faz sentido avisar "pendente 6h"
+  // e devolver o dinheiro no mesmo tick.
+  const decision = autoRefundDecision(order, now);
+  if (decision.refund) {
+    const shortId = order.id.slice(-6).toUpperCase();
+    try {
+      await opsPurchaseFailedRefund(orderId, decision.customerReason, { origin: "auto", internalReason: decision.reason });
+      await notifyOperator(copy.operatorAutoRefundAlert(shortId, Number(order.total), decision.reason), order.phone);
+      return "auto_refunded";
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("[auto-refund:failed]", orderId, message);
+      // Nota + alerta UMA vez; o cron tenta de novo a cada 10 min sem repetir o aviso.
+      if (!(order.notes ?? "").includes(AUTO_REFUND_FAILED_MARKER)) {
+        await prisma.deliveryOrder.update({
+          where: { id: orderId },
+          data: {
+            notes: appendOrderNote(
+              order.notes,
+              `${AUTO_REFUND_FAILED_MARKER}: ${message.replace(/[\r\n]/g, " ").slice(0, 160)} (${now.toISOString()}) — tenta de novo a cada 10 min; se persistir, estornar à mão no /ops.`
+            )
+          }
+        });
+        await notifyOperator(copy.operatorAutoRefundFailedAlert(shortId, message), order.phone);
+      }
+      return "auto_refund_failed";
+    }
+  }
+
   const hours = Math.floor((now.getTime() - order.paidAt.getTime()) / 3_600_000);
   const bucket = [...STUCK_BUCKETS_H].reverse().find((h) => hours >= h);
   if (!bucket) return "none";
@@ -550,7 +634,11 @@ export async function watchPaidOrder(orderId: string, now = new Date()): Promise
 // "Não consegui comprar → estornar": um clique no /ops que estorna pelo provedor,
 // fecha o pedido e explica ao cliente, com o motivo. Sem razão no pagamento
 // (pedido antigo), lança a mensagem legível e o caminho manual continua valendo.
-export async function opsPurchaseFailedRefund(orderId: string, reason?: string) {
+export async function opsPurchaseFailedRefund(
+  orderId: string,
+  reason?: string,
+  opts: { origin?: "ops" | "auto"; internalReason?: string } = {}
+) {
   const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
   if (!current) throw new Error("Order not found");
   if (!["paid", "refund_pending"].includes(current.status)) {
@@ -567,7 +655,12 @@ export async function opsPurchaseFailedRefund(orderId: string, reason?: string) 
     data: {
       status: "refunded",
       notes: appendOrderNote(
-        appendOrderNote(notesWithoutPending, `🧾 Compra não realizada${safeReason ? ` (${safeReason})` : ""} — estorno pelo provedor em ${new Date().toISOString()}.`),
+        appendOrderNote(
+          notesWithoutPending,
+          opts.origin === "auto"
+            ? `🤖 Estorno automático (regra 04/09): compra não realizada — ${(opts.internalReason ?? safeReason).replace(/[\r\n]/g, " ").slice(0, 200)} — pelo provedor em ${new Date().toISOString()}.`
+            : `🧾 Compra não realizada${safeReason ? ` (${safeReason})` : ""} — estorno pelo provedor em ${new Date().toISOString()}.`
+        ),
         `${REFUND_CONFIRMED_PREFIX} integral — ${result.reference}`
       )
     }

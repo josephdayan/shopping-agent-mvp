@@ -18,6 +18,7 @@ import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage, opsPurchaseFailedRefund, watchPaidOrder } from "../src/lib/delivery-service";
 import { reconcilePayments } from "../src/lib/payments/reconcile";
 import { PURCHASE_BLOCKED_PREFIX } from "../src/lib/order-monitor";
+import { autoRefundDecision } from "../src/lib/ops-lifecycle";
 import { AWAITING_OPERATOR_QUOTE_STATUS } from "../src/lib/order-flags";
 import { getStore } from "../src/lib/stores";
 import * as copy from "../src/lib/lia-copy";
@@ -230,6 +231,7 @@ test("cliente fora da janela de 24h: com template configurado o aviso vai por te
   }
 
   // Sem template: nada sai e o pedido registra o porquê (bucket seguinte para não colidir com o marcador de 6h).
+  process.env.LIA_AUTO_REFUND_OFF = "true"; // aqui o assunto é a janela, não o estorno automático
   const stale2 = await paidOrder(13 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque para o CEP.`, 2 * 24 * 60 * 60_000);
   // Bloqueio só avisa em 2h e 24h+: força o bucket de 24h.
   await prisma.deliveryOrder.update({ where: { id: stale2.orderId }, data: { paidAt: new Date(Date.now() - 25 * 60 * 60_000) } });
@@ -240,4 +242,75 @@ test("cliente fora da janela de 24h: com template configurado o aviso vai por te
   assert.equal(textsTo(stale2.phone, start2), "");
   const after = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: stale2.orderId } });
   assert.match(after.notes ?? "", /Aviso ao cliente NÃO enviado: fora da janela/);
+  delete process.env.LIA_AUTO_REFUND_OFF;
+});
+
+
+// ---- estorno AUTOMÁTICO (decisão do dono, 04/09: "tem que ir sem mim e sem /ops") ----
+test("bloqueado há 6h+: estorna sozinho pelo provedor, avisa cliente e operador, fecha o pedido; idempotente", async (t) => {
+  if (!dbOk) return t.skip();
+  const o = await paidOrder(7 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} item sem estoque na Natural da Terra para o CEP; mínimo R$50.`);
+  const start = outbox.length;
+  assert.equal(await watchPaidOrder(o.orderId), "auto_refunded");
+  const after = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } });
+  assert.equal(after.status, "refunded");
+  assert.match(after.notes ?? "", /Estorno automático \(regra 04\/09\)/);
+  assert.match(after.notes ?? "", /ESTORNO CONFIRMADO: integral/);
+  const pay = await prisma.payment.findFirstOrThrow({ where: { deliveryOrderId: o.orderId } });
+  assert.equal(pay.status, "refunded");
+  assert.match(textsTo(o.phone, start), /Não consegui comprar \*Ice Tea Pêssego Zero\* \(a loja ficou sem o item para o seu endereço\)\. Estornei o valor integral de R\$ ?24,14/);
+  assert.match(textsTo(OPERATOR, start), /Estorno automático do pedido #/);
+  assert.equal(await watchPaidOrder(o.orderId), "none", "já estornado: nada a fazer");
+});
+
+test("bloqueado há 3h só alerta; sem bloqueio não estorna em 13h e estorna em 24h+", async (t) => {
+  if (!dbOk) return t.skip();
+  const early = await paidOrder(3 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque.`);
+  assert.equal(await watchPaidOrder(early.orderId), "operator+customer");
+  assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: early.orderId } })).status, "paid");
+
+  const stale13 = await paidOrder(13 * 60 * 60_000);
+  assert.equal(await watchPaidOrder(stale13.orderId), "operator+customer");
+  assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: stale13.orderId } })).status, "paid");
+
+  const stale25 = await paidOrder(25 * 60 * 60_000);
+  const start = outbox.length;
+  assert.equal(await watchPaidOrder(stale25.orderId), "auto_refunded");
+  assert.match(textsTo(stale25.phone, start), /não consegui confirmar a compra a tempo/);
+  assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: stale25.orderId } })).status, "refunded");
+});
+
+test("kill-switch e pedido já em compra nunca estornam sozinhos", async (t) => {
+  if (!dbOk) return t.skip();
+  process.env.LIA_AUTO_REFUND_OFF = "true";
+  try {
+    const o = await paidOrder(30 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque.`);
+    assert.notEqual(await watchPaidOrder(o.orderId), "auto_refunded");
+    assert.equal((await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } })).status, "paid");
+  } finally {
+    delete process.env.LIA_AUTO_REFUND_OFF;
+  }
+  const buying = await paidOrder(30 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque.`);
+  await prisma.deliveryOrder.update({ where: { id: buying.orderId }, data: { status: "operator_buying" } });
+  assert.equal(await watchPaidOrder(buying.orderId), "none");
+  assert.equal(autoRefundDecision({ status: "operator_buying", paidAt: new Date(0), notes: `${PURCHASE_BLOCKED_PREFIX} x` }).refund, false);
+  assert.equal(autoRefundDecision({ status: "paid", storeOrderNumber: "123", paidAt: new Date(0), notes: `${PURCHASE_BLOCKED_PREFIX} x` }).refund, false, "com número de compra na loja não é falha");
+});
+
+test("provedor falha: pedido continua pago, nota e alerta uma vez, tenta de novo sem repetir", async (t) => {
+  if (!dbOk) return t.skip();
+  const o = await paidOrder(7 * 60 * 60_000, `Pagamento: cartão\n${PURCHASE_BLOCKED_PREFIX} sem estoque.`);
+  await prisma.payment.deleteMany({ where: { deliveryOrderId: o.orderId } }); // sem razão → provedor não estorna
+  const start = outbox.length;
+  assert.equal(await watchPaidOrder(o.orderId), "auto_refund_failed");
+  const after = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } });
+  assert.equal(after.status, "paid");
+  assert.match(after.notes ?? "", /ESTORNO AUTOMÁTICO FALHOU/);
+  assert.match(textsTo(OPERATOR, start), /FALHOU/);
+  assert.equal(textsTo(o.phone, start), "", "cliente não recebe nada numa falha interna");
+  const start2 = outbox.length;
+  assert.equal(await watchPaidOrder(o.orderId), "auto_refund_failed");
+  assert.equal(textsTo(OPERATOR, start2), "", "alerta não repete a cada tick");
+  const notes = (await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } })).notes ?? "";
+  assert.equal(notes.split("ESTORNO AUTOMÁTICO FALHOU").length - 1, 1, "nota não repete");
 });

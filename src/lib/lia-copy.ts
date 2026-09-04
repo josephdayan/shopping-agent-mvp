@@ -1413,6 +1413,14 @@ export function purchaseDelayedCustomer(shortId: string, blocked: boolean): stri
     : `Seu pedido *#${shortId}* está demorando mais que o normal para eu fechar a compra na loja. Continuo nele; se não conseguir, devolvo o valor integral e te aviso por aqui.`;
 }
 
+export function operatorAutoRefundAlert(shortId: string, total: number, reason: string): string {
+  return `🤖 Estorno automático do pedido #${shortId}: ${brl(total)} devolvidos ao cliente. Motivo: ${reason.slice(0, 160)}. Nada a fazer — se a compra tinha saído, registre no /ops.`;
+}
+
+export function operatorAutoRefundFailedAlert(shortId: string, error: string): string {
+  return `⚠️ Estorno automático do pedido #${shortId} FALHOU: ${error.slice(0, 160)}. Tento de novo a cada 10 min; se persistir, estorne à mão no /ops.`;
+}
+
 export function purchaseFailedRefunded(items: string[], total: number, reason?: string): string {
   const what = items.length === 1 ? `*${items[0]}*` : items.map((i) => `• ${i}`).join("\n");
   const why = reason ? ` (${reason.slice(0, 120)})` : "";

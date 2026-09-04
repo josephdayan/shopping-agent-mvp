@@ -1,6 +1,11 @@
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-04 (login do /ops pelo WhatsApp)._
+_Última atualização: 2026-09-04 (2ª — estorno automático)._
+
+> **04/09 (2ª) — estorno automático.** Em produção (AGENTS.md 04/09 2ª): bloqueado 6h ou sem
+> compra 24h → estorna sozinho. **Observar** os primeiros casos reais: motivo mostrado ao
+> cliente (`customerReasonFromBlock`) e latência do provedor. Pedido #41EPW0 foi estornado à
+> mão pelo dono às 09:49 de 04/09, antes da regra.
 
 > **04/09 — login do /ops pelo WhatsApp.** Em produção (AGENTS.md 04/09). **Aberto:** link não
 > é de uso único (só expira em 10 min) — se incomodar, guardar nonce usado no banco.

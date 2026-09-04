@@ -1,5 +1,33 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 04/09/2026 (2ª) — estorno AUTOMÁTICO quando a compra não dá certo
+
+Decisão do dono (04/09): *"nunca é pra não dar certo, mas às vezes não vai, porque não é
+perfeito, e aí tem que ir sem mim e sem /ops."* Regra em `autoRefundDecision` +
+`watchPaidOrder` (`ops-lifecycle.ts`), executada pelo cron de reconciliação a cada 10 min:
+
+1. Pedido **pago** (`status = paid`), **sem número de compra na loja** (`storeOrderNumber`
+   vazio) e com nota `🛑 COMPRA BLOQUEADA` (sem estoque, sem entrega, mínimo, preço acima do
+   teto) há **6h** (`LIA_AUTO_REFUND_BLOCKED_HOURS`) → estorno integral pelo provedor
+   (`opsPurchaseFailedRefund` com `origin: "auto"`), pedido `refunded`, nota
+   `🤖 Estorno automático (regra 04/09): …`, cliente avisado com motivo em linguagem simples
+   (`customerReasonFromBlock`: "a loja ficou sem o item para o seu endereço" etc.) e alerta
+   ao operador (`operatorAutoRefundAlert`).
+2. Sem bloqueio mas **sem compra há 24h** (`LIA_AUTO_REFUND_STALE_HOURS`) → idem, motivo
+   "não consegui confirmar a compra a tempo".
+3. **Nunca** toca pedido que o operador moveu para `operator_buying`/`retailer_preparing`
+   nem pedido com número de compra. Kill-switch: `LIA_AUTO_REFUND_OFF=true`.
+4. Estorno vem ANTES do alerta de "pendente Nh" do mesmo tick. Se o provedor falhar, o
+   pedido continua `paid`, nota `⚠️ ESTORNO AUTOMÁTICO FALHOU` + alerta ao operador **uma
+   vez**, e o cron tenta de novo a cada 10 min (`auto_refund_failed`).
+5. Sequência vista pelo cliente com bloqueio: 2h "travou na loja, estou tentando outra; se
+   não der, devolvo" → 6h "não consegui comprar (motivo). Estornei R$X". Sem bloqueio: 6h/12h
+   "está demorando" → 24h estorno.
+
+O botão "Não consegui comprar → estornar" continua no /ops para antecipar. Testes: 4 cenários
+novos em `paid-order-watchdog` (estorna, não estorna cedo, kill-switch/em compra, provedor
+falha). Relatório do cron ganha `autoRefunds`.
+
 ## Atualização 04/09/2026 — login do /ops pelo WhatsApp (acabou o "pega o OPS_TOKEN na Vercel")
 
 Dono, 04/09: *"eu nunca consigo abrir essa droga de ops… odeio entrar na Vercel e pegar

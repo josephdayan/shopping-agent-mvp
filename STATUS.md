@@ -1,5 +1,11 @@
 # Lia — Status do Projeto
 
+## 04/09/2026 (2ª) — estorno automático
+
+Pedido pago que a loja não consegue atender (bloqueado há 6h) ou sem compra há 24h é estornado
+sozinho pelo provedor, com aviso ao cliente e ao operador, sem clique no /ops. Kill-switch
+`LIA_AUTO_REFUND_OFF`. Detalhe em AGENTS.md (04/09 2ª).
+
 ## 04/09/2026 — /ops abre pelo WhatsApp
 
 Operador manda "ops" pra Lia e recebe um link de 10 minutos; ao abrir, fica logado por 1 ano

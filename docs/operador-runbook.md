@@ -104,3 +104,18 @@ dúvida sobre um item de farmácia, trate como remédio e recuse.
 - Cotar um pedido novo em até ~15 min.
 - Reconhecer uma exceção (faltou item, cliente pediu cancelamento) em até ~10 min.
 - Anotar por pedido: quanto tempo levou e quanto sobrou de margem depois do frete.
+
+
+## Estorno automático (04/09/2026)
+
+Você não precisa mais estornar à mão quando a compra não dá certo. O sistema estorna sozinho:
+
+- Pedido pago com nota "🛑 COMPRA BLOQUEADA" (sem estoque, sem entrega no CEP, mínimo da
+  loja, preço acima do teto) há **6 horas** → estorno integral, cliente avisado com o motivo,
+  você recebe "🤖 Estorno automático do pedido #…".
+- Pedido pago **sem compra registrada há 24 horas** → idem.
+- Se você já está comprando, mova o pedido para "comprando" ou registre o número da compra:
+  aí o automático nunca mexe.
+- Se aparecer "⚠️ ESTORNO AUTOMÁTICO FALHOU" na nota, o provedor recusou; o sistema tenta de
+  novo a cada 10 min. Se persistir, use "Estornar pelo provedor" no /ops.
+- Para desligar tudo: `LIA_AUTO_REFUND_OFF=true` na Vercel.
