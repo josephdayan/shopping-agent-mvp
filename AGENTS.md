@@ -17,6 +17,12 @@ perfeito, e aí tem que ir sem mim e sem /ops."* Regra em `autoRefundDecision` +
    "não consegui confirmar a compra a tempo".
 3. **Nunca** toca pedido que o operador moveu para `operator_buying`/`retailer_preparing`
    nem pedido com número de compra. Kill-switch: `LIA_AUTO_REFUND_OFF=true`.
+   **Só pedidos pagos a partir de 04/09/2026 12:00 UTC** (`LIA_AUTO_REFUND_SINCE`): no primeiro
+   tick do cron (13:00 UTC de 04/09) a regra pegou 15 pedidos `paid` antigos de junho–agosto
+   (testes/sandbox sem linha em `Payment`) — nenhum dinheiro saiu (o provedor recusou por
+   falta de razão), mas o operador recebeu 15 alertas "FALHOU" e as notas ganharam o marcador.
+   Corte por data publicado 2 min depois; marcadores limpos no banco. Lição: regra retroativa
+   sobre dinheiro precisa de data de corte desde o primeiro deploy.
 4. Estorno vem ANTES do alerta de "pendente Nh" do mesmo tick. Se o provedor falhar, o
    pedido continua `paid`, nota `⚠️ ESTORNO AUTOMÁTICO FALHOU` + alerta ao operador **uma
    vez**, e o cron tenta de novo a cada 10 min (`auto_refund_failed`).

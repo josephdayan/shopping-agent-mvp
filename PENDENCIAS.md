@@ -3,7 +3,8 @@
 _Última atualização: 2026-09-04 (2ª — estorno automático)._
 
 > **04/09 (2ª) — estorno automático.** Em produção (AGENTS.md 04/09 2ª): bloqueado 6h ou sem
-> compra 24h → estorna sozinho. **Observar** os primeiros casos reais: motivo mostrado ao
+> compra 24h → estorna sozinho, só para pedidos pagos a partir de 04/09 12:00 UTC. Os 15 `paid`
+> antigos (jun–ago, sem razão de pagamento) continuam como estavam: decidir fechar à mão. **Observar** os primeiros casos reais: motivo mostrado ao
 > cliente (`customerReasonFromBlock`) e latência do provedor. Pedido #41EPW0 foi estornado à
 > mão pelo dono às 09:49 de 04/09, antes da regra.
 
