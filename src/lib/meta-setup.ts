@@ -46,7 +46,8 @@ export const ADDRESS_FLOW_JSON = {
               { type: "TextInput", name: "cep", label: "CEP", required: true, "input-type": "text", "init-value": "${data.cep}" },
               { type: "TextInput", name: "rua", label: "Rua", required: true, "init-value": "${data.rua}" },
               { type: "TextInput", name: "numero", label: "Número", required: true, "input-type": "number" },
-              { type: "TextInput", name: "complemento", label: "Complemento (apto, bloco, casa)", required: false },
+              // Rótulo de TextInput: máximo 20 caracteres (regra da Meta — o 1º publish falhou com 31).
+              { type: "TextInput", name: "complemento", label: "Complemento", required: false },
               { type: "TextInput", name: "bairro", label: "Bairro", required: true, "init-value": "${data.bairro}" },
               { type: "TextInput", name: "cidade", label: "Cidade", required: true, "init-value": "${data.cidade}" },
               {
@@ -113,10 +114,34 @@ async function ids(token: string) {
   return { appId, waba };
 }
 
-export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow";
+export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors";
 
-export async function runMetaSetup(action: MetaSetupAction): Promise<Record<string, unknown>> {
+// Erros de validação de um Flow (a Meta cria o rascunho mesmo inválido e recusa publicar).
+async function flowErrors(token: string, flowId: string) {
+  return graph(token, `${flowId}?fields=id,name,status,validation_errors`);
+}
+
+// Atualiza o JSON de um Flow existente (multipart, asset FLOW_JSON) e tenta publicar.
+async function flowUpdateAndPublish(token: string, flowId: string) {
+  const form = new FormData();
+  form.append("name", "flow.json");
+  form.append("asset_type", "FLOW_JSON");
+  form.append("file", new Blob([JSON.stringify(ADDRESS_FLOW_JSON)], { type: "application/json" }), "flow.json");
+  const updated = await graph(token, `${flowId}/assets`, { method: "POST", raw: true, body: form });
+  const errors = await flowErrors(token, flowId);
+  const list = (errors as { validation_errors?: unknown[] }).validation_errors ?? [];
+  if (list.length) return { updated, published: false, validation_errors: list };
+  const published = await graph(token, `${flowId}/publish`, { method: "POST" });
+  return { updated, published, status: await flowErrors(token, flowId) };
+}
+
+export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: string } = {}): Promise<Record<string, unknown>> {
   const { token, phoneId } = creds();
+  if (action === "flow_errors" || action === "flow_update") {
+    const flowId = (opts.flowId ?? process.env.LIA_FLOW_ADDRESS_ID ?? "").trim();
+    if (!/^\d{6,}$/.test(flowId)) throw new Error("flow_id ausente (?flow_id=<id do Flow>)");
+    return action === "flow_errors" ? flowErrors(token, flowId) : flowUpdateAndPublish(token, flowId);
+  }
   if (action === "status") {
     const profile = await graph(token, `${phoneId}/whatsapp_business_profile?fields=about,address,description,email,profile_picture_url,websites,vertical`);
     const automation = await graph(token, `${phoneId}/conversational_automation`).catch((e) => ({ error: String(e).slice(0, 300) }));
@@ -154,15 +179,24 @@ export async function runMetaSetup(action: MetaSetupAction): Promise<Record<stri
   if (action === "flow") {
     const { waba } = await ids(token);
     if (!waba) throw new Error("WABA id não veio do debug_token");
-    return graph(token, `${waba}/flows`, {
-      method: "POST",
-      body: JSON.stringify({
-        name: `endereco_entrega_${Date.now().toString(36)}`,
-        categories: ["OTHER"],
-        flow_json: JSON.stringify(ADDRESS_FLOW_JSON),
-        publish: true
-      })
-    });
+    try {
+      return await graph(token, `${waba}/flows`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: `endereco_entrega_${Date.now().toString(36)}`,
+          categories: ["OTHER"],
+          flow_json: JSON.stringify(ADDRESS_FLOW_JSON),
+          publish: true
+        })
+      });
+    } catch (error) {
+      // "Flow was created, but publishing failed": devolve os erros de validação do
+      // rascunho que ficou, em vez de deixar o operador sem saber o quê consertar.
+      const message = error instanceof Error ? error.message : String(error);
+      const created = message.match(/Flow ID: (\d+)/)?.[1];
+      if (!created) throw error;
+      return { created_id: created, published: false, ...(await flowErrors(token, created)) };
+    }
   }
   throw new Error(`ação desconhecida: ${String(action)}`);
 }
