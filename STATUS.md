@@ -4,8 +4,9 @@
 
 "Digitando…" em toda mensagem, botão de localização no pedido de endereço (GPS vira CEP),
 quantidade em lista, boas-vindas com perguntas sugeridas, perfil comercial e Flow de
-endereço (formulário no chat). Carrossel fica de fora: só existe em template de marketing.
-Detalhe em AGENTS.md (04/09 5ª).
+endereço (formulário no chat). Configuração na Meta concluída e verificada em 04/09 (perfil, foto,
+Flow publicado, boas-vindas com 4 prompts). Carrossel fica de fora: só existe em template de
+marketing. Detalhe em AGENTS.md (04/09 5ª).
 
 ## 04/09/2026 (4ª) — "o de sempre"
 

@@ -3,9 +3,11 @@
 _Última atualização: 2026-09-04 (5ª — recursos do WhatsApp)._
 
 > **04/09 (5ª) — recursos do WhatsApp.** Código em produção (AGENTS.md 04/09 5ª).
-> Configuração na Meta via `/api/ops/meta-setup`: perfil, foto, Flow (→ `LIA_FLOW_ADDRESS_ID`),
-> boas-vindas — **entregue ao Codex** (docs/prompts/codex-meta-setup-2026-09-04.md); ordem: flow
-> → env → deploy → welcome. **Observar:** primeiro uso real do botão de localização (precisão do CEP pelo
+> Configuração na Meta via `/api/ops/meta-setup` **concluída pelo Codex em 04/09** (verificada
+> pelo status): perfil + foto, Flow 1048998724594022 PUBLISHED, `LIA_FLOW_ADDRESS_ID` em
+> produção, boas-vindas com os 4 prompts. Lições: rótulo de TextInput ≤ 20 e sem `init-value`;
+> leitura da automação é campo do número. **Conferir** se a descrição do perfil ficou gravada
+> (sumiu na 2ª leitura) — `?action=profile` regrava. **Observar:** primeiro uso real do botão de localização (precisão do CEP pelo
 > Nominatim) e do Flow. Carrossel só em template de marketing — não fazer.
 
 > **04/09 (4ª) — "o de sempre".** Em produção (AGENTS.md 04/09 4ª). Direção futura, sem
