@@ -105,12 +105,21 @@ function shoppingListText(order: DeliveryOrder): string {
 
 const brl = (v: number) => `R$ ${Number(v ?? 0).toFixed(2).replace(".", ",")}`;
 
+// Idade em dias → horas → minutos (pedido do dono, 04/09: "há 46h05" confundia com hora
+// do relógio). Ex.: "há 1d 22h 5min", "há 5h 12min", "há 12min". O absoluto vai no title.
 function ageLabel(iso?: string | null): string {
   if (!iso) return "";
   const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
-  if (mins < 60) return `há ${mins} min`;
-  const h = Math.floor(mins / 60);
-  return `há ${h}h${String(mins % 60).padStart(2, "0")}`;
+  const d = Math.floor(mins / 1440);
+  const h = Math.floor((mins % 1440) / 60);
+  const m = mins % 60;
+  if (d > 0) return `há ${d}d ${h}h ${m}min`;
+  if (h > 0) return `há ${h}h ${m}min`;
+  return `há ${m}min`;
+}
+function absLabel(iso?: string | null): string {
+  if (!iso) return "";
+  return new Date(iso).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
 export default function OpsBoard() {
@@ -286,7 +295,7 @@ export default function OpsBoard() {
             <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
               <strong>
                 #{o.id.slice(-6).toUpperCase()}{" "}
-                <span style={{ color: "#98a2b3", fontWeight: 400, fontSize: 12 }}>{ageLabel(o.paidAt ?? o.createdAt)}</span>
+                <span title={`${o.paidAt ? "pago em" : "criado em"} ${absLabel(o.paidAt ?? o.createdAt)}`} style={{ color: "#98a2b3", fontWeight: 400, fontSize: 12 }}>{ageLabel(o.paidAt ?? o.createdAt)}</span>
               </strong>
               <span>
                 {urgent && <span style={urgentBadge}>⚡ quer HOJE</span>}{" "}

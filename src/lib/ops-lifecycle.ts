@@ -441,12 +441,29 @@ export async function opsNotifyCustomer(orderId: string, text: string) {
   return order;
 }
 
+// Ordem da fila (04/09): o pedido do amigo do dono, pago e travado, estava no FIM da
+// página atrás de cotações abandonadas de teste ("não tá lá esse pedido"). Agora quem
+// precisa de ação humana vem primeiro e, dentro do grupo, o mais novo em cima.
+const OPS_QUEUE_PRIORITY: Record<string, number> = {
+  refund_pending: 0,
+  paid: 1,
+  awaiting_operator_quote: 2,
+  operator_buying: 3,
+  retailer_preparing: 4,
+  ready_for_pickup: 4,
+  retailer_out_for_delivery: 5,
+  dispatched: 5,
+  awaiting_quote_confirmation: 6,
+  awaiting_payment: 6
+};
+
 export async function getOperatorQueue() {
-  return prisma.deliveryOrder.findMany({
+  const orders = await prisma.deliveryOrder.findMany({
     where: { status: { in: OPS_QUEUE_STATUSES } },
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
     include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } } }
   });
+  return orders.sort((a, b) => (OPS_QUEUE_PRIORITY[a.status] ?? 9) - (OPS_QUEUE_PRIORITY[b.status] ?? 9) || b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 // Someone asked from outside the delivery area. Deduped by (phone, cep); repeats bump

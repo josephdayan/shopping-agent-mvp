@@ -17,6 +17,12 @@ coisas."* A barreira era o `?key=OPS_TOKEN` na URL. Regra nova:
    (fail-closed, revisão 01/09).
 4. `LIA_PUBLIC_URL` só se o domínio não for `liadelivery.com.br`.
 
+Mesmo dia, fila do /ops: pedido pago e travado ficava no FIM da página atrás de cotações
+abandonadas (ordem `createdAt asc`). Agora `getOperatorQueue` ordena por **prioridade de
+ação** (estorno pendente → pago → cotação manual → comprando → preparando → saiu → aguardando
+cliente) e, no grupo, o mais novo em cima. Idade no card virou dias → horas → minutos
+("há 1d 22h 5min"; absoluto no tooltip) porque "há 46h05" parecia hora do relógio.
+
 Limite: o link não é de uso único (expira em 10 min). Se vazar dentro desse tempo, quem abrir
 entra; aceitável no piloto, registrado em PENDENCIAS. Testes: `ops-login-token` (unit) e
 `ops-whatsapp-login` (E2E).

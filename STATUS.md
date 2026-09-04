@@ -3,7 +3,9 @@
 ## 04/09/2026 — /ops abre pelo WhatsApp
 
 Operador manda "ops" pra Lia e recebe um link de 10 minutos; ao abrir, fica logado por 1 ano
-no aparelho. Sem buscar OPS_TOKEN na Vercel. Detalhe em AGENTS.md (04/09).
+no aparelho. Sem buscar OPS_TOKEN na Vercel. Fila reordenada por prioridade de ação (pago e
+travado no topo) e idade em dias/horas/minutos. Template `pedido_atualizacao` aprovado na Meta
+e env setada pelo Codex: avisos fora da janela de 24h já saem. Detalhe em AGENTS.md (04/09).
 
 ## 03/09/2026 (3ª) — avisos fora da janela de 24h da Meta
 
