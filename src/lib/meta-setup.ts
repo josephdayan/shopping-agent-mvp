@@ -39,29 +39,31 @@ export const ADDRESS_FLOW_JSON = {
       layout: {
         type: "SingleColumnLayout",
         children: [
+          // O que já sabemos pelo CEP aparece como texto (TextInput não aceita valor
+          // inicial na Meta — 2º publish falhou por isso); o cliente só digita o que falta.
+          { type: "TextSubheading", text: "Confira seu endereço" },
+          { type: "TextBody", text: "${data.rua}" },
+          { type: "TextCaption", text: "${data.bairro}" },
+          { type: "TextCaption", text: "${data.cidade}" },
+          { type: "TextCaption", text: "${data.cep}" },
           {
             type: "Form",
             name: "form",
             children: [
-              { type: "TextInput", name: "cep", label: "CEP", required: true, "input-type": "text", "init-value": "${data.cep}" },
-              { type: "TextInput", name: "rua", label: "Rua", required: true, "init-value": "${data.rua}" },
               { type: "TextInput", name: "numero", label: "Número", required: true, "input-type": "number" },
-              // Rótulo de TextInput: máximo 20 caracteres (regra da Meta — o 1º publish falhou com 31).
               { type: "TextInput", name: "complemento", label: "Complemento", required: false },
-              { type: "TextInput", name: "bairro", label: "Bairro", required: true, "init-value": "${data.bairro}" },
-              { type: "TextInput", name: "cidade", label: "Cidade", required: true, "init-value": "${data.cidade}" },
               {
                 type: "Footer",
                 label: "Confirmar endereço",
                 "on-click-action": {
                   name: "complete",
                   payload: {
-                    cep: "${form.cep}",
-                    rua: "${form.rua}",
+                    cep: "${data.cep}",
+                    rua: "${data.rua}",
+                    bairro: "${data.bairro}",
+                    cidade: "${data.cidade}",
                     numero: "${form.numero}",
-                    complemento: "${form.complemento}",
-                    bairro: "${form.bairro}",
-                    cidade: "${form.cidade}"
+                    complemento: "${form.complemento}"
                   }
                 }
               }

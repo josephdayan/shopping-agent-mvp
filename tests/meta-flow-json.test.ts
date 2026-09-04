@@ -12,6 +12,7 @@ test("flow de endereço respeita os limites da Meta", () => {
       for (const n of nodes) {
         if (n.type === "TextInput") assert.ok(n.label.length <= 20, `${n.name}: "${n.label}" (${n.label.length})`);
         if (n.type === "Footer") assert.ok(n.label.length <= 35, n.label);
+        assert.equal("init-value" in n, false, `${n.type} ${n.name ?? ""}: init-value não é aceito pela Meta`);
         if (n.children) walk(n.children);
       }
     };

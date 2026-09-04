@@ -425,9 +425,11 @@ async function askAddress(phone: string, text: string) {
 // Sem Flow (ou falha), o pedido em texto de sempre.
 async function askStreetAndNumber(phone: string, ctx: DeliveryContext) {
   const flowId = process.env.LIA_FLOW_ADDRESS_ID?.trim();
-  if (flowId && process.env.WHATSAPP_PROVIDER === "meta") {
-    const parts = (ctx.deliveryAddress ?? "").split(",").map((x) => x.trim());
-    const known = parts.length >= 3 && !/\d/.test(parts[0]) ? { rua: parts[0], bairro: parts[1], cidade: parts[2] } : { rua: "", bairro: "", cidade: "" };
+  const parts = (ctx.deliveryAddress ?? "").split(",").map((x) => x.trim());
+  // O Flow só mostra o que já sabemos e pede número/complemento: precisa de CEP e rua
+  // conhecidos (ViaCEP). Sem rua (CEP geral), o pedido em texto de sempre.
+  const known = parts.length >= 3 && parts[0] && !/\d/.test(parts[0]) ? { rua: parts[0], bairro: parts[1], cidade: parts[2] } : null;
+  if (flowId && known && ctx.cep && process.env.WHATSAPP_PROVIDER === "meta") {
     try {
       markTurnReplied();
       const sent = await whatsappAdapter.sendFlowMessage(phone, {
@@ -435,7 +437,7 @@ async function askStreetAndNumber(phone: string, ctx: DeliveryContext) {
         cta: "Preencher endereço",
         flowId,
         screen: "ADDRESS",
-        data: { cep: ctx.cep ?? "", ...known }
+        data: { cep: ctx.cep, ...known }
       });
       if (sent) return;
     } catch (error) {
