@@ -17,11 +17,19 @@ export function liveKey(storeKey: string, sku: string): string {
   return `${storeKey}:${sku}`;
 }
 
+// Simulação padrão injetável nos testes (o cérebro chama checkCandidatesLive sem deps).
+let simulateOverride: Simulate | null = null;
+let supportedOverride: ((storeKey: string) => boolean) | null = null;
+export function __setLiveSimulateForTests(simulate: Simulate | null, supported?: ((storeKey: string) => boolean) | null) {
+  simulateOverride = simulate;
+  supportedOverride = supported ?? null;
+}
+
 export async function checkCandidatesLive<T extends LiveCandidate>(
   candidates: T[],
   cep: string | null | undefined,
-  simulate: Simulate = liveItemAvailability,
-  supported: (storeKey: string) => boolean = liveCheckSupported
+  simulate: Simulate = simulateOverride ?? liveItemAvailability,
+  supported: (storeKey: string) => boolean = supportedOverride ?? liveCheckSupported
 ): Promise<{ kept: T[]; dropped: T[]; checks: Map<string, LiveItemCheck> }> {
   const checks = new Map<string, LiveItemCheck>();
   if (!cep || !candidates.length) return { kept: candidates, dropped: [], checks };

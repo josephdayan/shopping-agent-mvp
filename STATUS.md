@@ -1,5 +1,12 @@
 # Lia — Status do Projeto
 
+## 05/09/2026 — "preciso pra hoje" e prazo por loja
+
+Com urgência no pedido, a vitrine mostra só o que a loja entrega hoje (entrega mais rápida
+da loja, prazo no card) ou diz que nada chega hoje e mostra o mais rápido. Prazo e frete só
+aparecem para as 9 lojas com simulação ao vivo; as outras vão ao operador. Detalhe em
+AGENTS.md (05/09).
+
 ## 04/09/2026 (8ª) — entrega expressa é escolha do cliente
 
 Loja com entrega mais rápida na simulação (ex.: Drogaria SP SUPER EXPRESSA 60 min) → a

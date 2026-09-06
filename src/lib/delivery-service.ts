@@ -158,6 +158,10 @@ async function buildChoices(
   }
 
   const { lines, greetingOnly, containsMedicine, containsTobacco } = await extractLines(text);
+  // "Preciso pra HOJE" (dono, 04/09): quando tem urgência, a vitrine fica só com o que a
+  // loja entrega em menos de 1 dia (prazo da entrega mais rápida); se ninguém entrega
+  // hoje, o cabeçalho diz isso e mostra o mais rápido.
+  const urgent = hasUrgencySignal(text);
 
   // Candidatos por linha. No concierge sem loja travada a busca é LARGA (todas as
   // vitrines): eleger uma loja única por palpite léxico escondia o item certo — no
@@ -191,6 +195,7 @@ async function buildChoices(
       // Verificação AO VIVO no site de cada loja para o CEP do cliente (03/09: chá cobrado
       // sem estoque). Sem estoque/sem entrega no endereço sai daqui; confirmado ganha o
       // prazo real e vem antes do não-verificável.
+      let noneToday = false;
       if (cep) {
         const wrapped = candidates.map((c) => ({ storeKey: c.store.key, sku: c.item.sku, c }));
         const live = await checkCandidatesLive(wrapped, cep);
@@ -199,10 +204,18 @@ async function buildChoices(
           console.log("[live-check:dropped]", live.dropped.map((w) => `${w.storeKey}:${w.sku}`).join(","));
         }
         candidates = live.kept.map((w) => w.c);
+        if (urgent) {
+          const today = candidates.filter((c) => {
+            const check = liveChecks.get(liveKey(c.store.key, c.item.sku));
+            return check?.available && check.fastEtaMinutes != null && check.fastEtaMinutes < sameDayMaxMinutes();
+          });
+          if (today.length) candidates = today;
+          else noneToday = true;
+        }
       }
       // O teto viaja NA LINHA: paginação, refino e o resgate do ML re-filtram por ele
       // (26/08: "até R$50/100/200" vazou nas opções — o cap morria aqui).
-      return { line: { ...line, phrase: searchPhrase, ...(cap != null ? { cap } : {}) }, candidates };
+      return { line: { ...line, phrase: searchPhrase, ...(cap != null ? { cap } : {}) }, candidates, noneToday };
     })
   );
 
@@ -235,7 +248,7 @@ async function buildChoices(
   const notFoundLines: ParsedLine[] = [];
   let firstStore: StoreConnector | undefined;
   for (const entry of perLine) {
-    const { line, candidates } = entry;
+    const { line, candidates, noneToday } = entry;
     const bySku = new Map(candidates.map((c) => [c.item.sku, c]));
     const chosen = rerankedSkus.get(entry);
     let options: StoreCandidate[] = chosen
@@ -262,9 +275,12 @@ async function buildChoices(
       ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
       ...(line.cap != null ? { cap: line.cap } : {}),
       ...(line.autoPick ? { autoPick: true } : {}),
+      ...(urgent && !noneToday && cep ? { urgent: true } : {}),
+      ...(urgent && noneToday ? { noneToday: true } : {}),
       options: options
         .map(({ store, item }) => {
-          const option = toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }, liveChecks.get(liveKey(store.key, item.sku)));
+          const check = liveChecks.get(liveKey(store.key, item.sku));
+          const option = toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }, check, urgent);
           return preferredSkus?.has(item.sku) ? { ...option, repeat: true } : option;
         })
         .sort(byRepeatThenVerifiedThenEta)
@@ -359,7 +375,7 @@ function choicesTextFor(p: PendingChoice, header?: string): string {
   return copy.choicesText(
     p.query,
     p.options.map((o) => ({ name: customerChoiceName(p, o), displayPrice: display(o.unitPrice), delivery: o.delivery, repeat: o.repeat })),
-    header
+    header ?? choicesHeaderFor(p)
   );
 }
 
@@ -373,12 +389,16 @@ function customerChoiceName(p: PendingChoice, option: ChoiceOption): string {
 function toChoiceOption(
   o: { sku: string; name: string; brand?: string; unitPrice: number; imageUrl?: string; productUrl?: string; category?: string; freeShipping?: boolean },
   storeRef?: { storeKey?: string; storeLabel?: string },
-  live?: LiveItemCheck
+  live?: LiveItemCheck,
+  urgent = false
 ): ChoiceOption {
   // Prazo em card SÓ com dado real da loja para o CEP do cliente (regra de 17/08, agora
   // atendida pela simulação ao vivo de 03/09). Sem simulação, nenhum prazo — nunca uma
-  // estimativa nossa ou a frase genérica do anúncio.
-  const delivery = live?.available ? humanEstimate(live.estimate) : undefined;
+  // estimativa nossa ou a frase genérica do anúncio. Com urgência, o prazo mostrado é o
+  // da entrega MAIS RÁPIDA da loja (a cotação oferece essa opção).
+  const useFast = urgent && live?.available && Boolean(live.fastEstimate);
+  const delivery = live?.available ? humanEstimate(useFast ? live.fastEstimate : live.estimate) : undefined;
+  const eta = useFast ? live!.fastEtaMinutes : live?.etaMinutes;
   return {
     sku: o.sku,
     name: o.name,
@@ -389,7 +409,7 @@ function toChoiceOption(
     ...storeRef,
     ...(delivery ? { delivery } : {}),
     ...(o.freeShipping ? { freeShipping: true } : {}),
-    ...(live?.available ? { verified: true, ...(live.etaMinutes != null ? { etaMinutes: live.etaMinutes } : {}) } : {})
+    ...(live?.available ? { verified: true, ...(eta != null ? { etaMinutes: eta } : {}) } : {})
   };
 }
 
@@ -447,11 +467,22 @@ async function askStreetAndNumber(phone: string, ctx: DeliveryContext) {
   await reply(phone, copy.askFullDeliveryAddress());
 }
 
+function choicesHeaderFor(p: PendingChoice): string {
+  if (p.urgent) return copy.choicesHeaderToday(p.query);
+  if (p.noneToday) return copy.noneTodayHeader(p.query);
+  return copy.choicesHeader(p.query);
+}
+
+// "Hoje" = entrega da loja em menos de um dia (SLA em minutos/horas ou "0bd").
+function sameDayMaxMinutes(): number {
+  return Number(process.env.LIA_SAME_DAY_MAX_MINUTES ?? 24 * 60);
+}
+
 async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   // Meta supports reply buttons inside the 24h customer-service window. One card per
   // option keeps each "Escolher este" button attached to the correct product.
   if (process.env.WHATSAPP_PROVIDER === "meta") {
-    await reply(phone, header ?? copy.choicesHeader(p.query));
+    await reply(phone, header ?? choicesHeaderFor(p));
     try {
       markTurnReplied();
       const interactive = await whatsappAdapter.sendDeliveryChoices(
@@ -489,7 +520,7 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   }
   // Small gap between media messages so WhatsApp keeps them in order.
   const gapMs = process.env.WHATSAPP_PROVIDER === "twilio" ? Number(process.env.TWILIO_PRODUCT_MESSAGE_DELAY_MS ?? 600) : 0;
-  await reply(phone, header ?? copy.choicesHeader(p.query));
+  await reply(phone, header ?? choicesHeaderFor(p));
   for (let i = 0; i < p.options.length; i++) {
     const o = p.options[i];
     await replyPhoto(phone, copy.choiceLine(i, o.name, display(o.unitPrice), o.delivery, o.repeat), o.imageUrl);
@@ -4043,10 +4074,8 @@ async function handleSearch(
   if (looksLikeSymptomAsk(text) && !looksLikeMedicine(text)) {
     await reply(phone, copy.symptomExplainer());
   }
-  // Urgência ("pra HOJE"): honestidade sobre prazo junto da busca (28/08 S14).
-  if (hasUrgencySignal(text)) {
-    await reply(phone, copy.urgencyHonest());
-  }
+  // Urgência ("pra HOJE"): a vitrine responde com dado (04/09) — só o que a loja entrega
+  // hoje, ou "nada chega hoje" com o mais rápido. O aviso genérico de 28/08 saiu.
   await handleConciergeRequest(phone, convoId, userCep, ctx, text, userId);
 }
 

@@ -246,7 +246,9 @@ export async function liveStoreFreight(
 // candidatos da vitrine (qty 1 cada). `available: false` = sem estoque OU sem opção de
 // entrega no endereço — nos dois casos o item não pode aparecer como opção. Item que a
 // loja não ecoou fica fora do mapa (desconhecido). null = loja não consultável/erro.
-export type LiveItemCheck = { sku: string; available: boolean; fee?: number; estimate?: string; etaMinutes?: number };
+// `fast*` (04/09): a entrega mais rápida que a loja oferece pro item — usada quando o cliente
+// pede "pra hoje" (o card mostra esse prazo e a cotação oferece a opção rápida).
+export type LiveItemCheck = { sku: string; available: boolean; fee?: number; estimate?: string; etaMinutes?: number; fastFee?: number; fastEstimate?: string; fastEtaMinutes?: number };
 
 export async function liveItemAvailability(storeKey: string, skus: string[], cep: string): Promise<Map<string, LiveItemCheck> | null> {
   const store = VTEX_LIVE[storeKey];
@@ -297,12 +299,22 @@ export async function liveItemAvailability(storeKey: string, skus: string[], cep
       }
       const cheapest = deliveries.reduce((best, sla) => (sla.price! < best.price! ? sla : best));
       const minutes = estimateMinutes(cheapest.shippingEstimate);
+      const fastest = deliveries.reduce((best, sla) => {
+        const a = estimateMinutes(sla.shippingEstimate);
+        const b = estimateMinutes(best.shippingEstimate);
+        if (a < 0) return best;
+        if (b < 0) return sla;
+        if (a !== b) return a < b ? sla : best;
+        return sla.price! < best.price! ? sla : best;
+      });
+      const fastMinutes = estimateMinutes(fastest.shippingEstimate);
       result.set(entry.sku, {
         sku: entry.sku,
         available: true,
         fee: cheapest.price! / 100,
         estimate: cheapest.shippingEstimate,
-        ...(minutes >= 0 ? { etaMinutes: minutes } : {})
+        ...(minutes >= 0 ? { etaMinutes: minutes } : {}),
+        ...(fastMinutes >= 0 ? { fastFee: fastest.price! / 100, fastEstimate: fastest.shippingEstimate, fastEtaMinutes: fastMinutes } : {})
       });
     });
     return result;

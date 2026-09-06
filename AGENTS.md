@@ -1,5 +1,28 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 05/09/2026 — regra do prazo por loja + "preciso pra hoje"
+
+Dono (05/09): *"pras que está exato você sempre manda; pras que não são, não manda; e se o
+cara fala 'preciso de algo que chega hoje', você precisa achar uma coisa que chega hoje."*
+
+1. **Prazo/frete só de loja consultável** (9 lojas VTEX: Pague Menos, Drogaria SP, Cobasi,
+   Oba, Swift, Divvino, Kopenhagen, Ri Happy, Natural da Terra) — valor e SLA vêm do checkout
+   da própria loja para o CEP e a cesta, no instante. As outras 9 (Carrefour, Petz, Boticário,
+   Decathlon, Kalunga, Cacau Show, Droga Raia, Imigrantes, Giuliana) não mostram prazo, usam
+   tabela semeada e NUNCA são cobradas automático (operador confere). Já era assim; confirmado
+   com amostra real por loja em 05/09 (Oba responde "0bd" = "prazo da loja: hoje").
+2. **"Pra hoje"** (`hasUrgencySignal` no texto do pedido): `liveItemAvailability` passa a
+   devolver também a entrega MAIS RÁPIDA do item (`fastEstimate/fastEtaMinutes/fastFee`);
+   em `buildChoices`, com urgência, a vitrine fica só com candidatos cuja entrega mais rápida
+   é < 1 dia (`LIA_SAME_DAY_MAX_MINUTES`, 1440), o card mostra esse prazo ("prazo da loja:
+   2h") e o cabeçalho vira **"Chega hoje — opções de X:"**. Sem ninguém entregando hoje:
+   **"Nada chega hoje para X nas lojas que consigo confirmar. O mais rápido que tenho:"** com
+   a vitrine normal. O aviso genérico `urgencyHonest` (28/08) saiu. A cotação depois oferece
+   a opção rápida (08/09 8ª) — o cliente escolhe e o operador compra com ela.
+3. Farmácia sem remédio: Drogaria SP, Pague Menos e Droga Raia estão na vitrine; medicamento
+   é barrado pelo filtro ANVISA (`anvisa.ts`) em qualquer loja.
+Gancho de teste: `__setLiveSimulateForTests` (live-availability). Testes: `urgency-today` (3).
+
 ## Atualização 04/09/2026 (8ª) — entrega expressa da loja é escolha do cliente, com o prazo
 
 Dono: *"tem que dar essa opção de super expressa e expressa na hora pro cara escolher"* e

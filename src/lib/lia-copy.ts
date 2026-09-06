@@ -226,6 +226,14 @@ export function rejectedAskAgain(): string {
 
 // ---------- choices ----------
 
+export function choicesHeaderToday(query: string): string {
+  return `Chega hoje — opções de *${query}*:`;
+}
+
+export function noneTodayHeader(query: string): string {
+  return `Nada chega hoje para *${query}* nas lojas que consigo confirmar. O mais rápido que tenho:`;
+}
+
 export function choicesHeader(query: string): string {
   return `Opções de *${query}*:`;
 }
