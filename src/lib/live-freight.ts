@@ -86,6 +86,8 @@ export function humanEstimate(estimate?: string): string | undefined {
   if (!m) return undefined;
   const value = Number(m[1]);
   const unit = m[2].toLowerCase();
+  // "0bd"/"0d" = entrega no mesmo dia (Oba responde assim) — nunca "0 dias úteis".
+  if (value === 0 && (unit === "d" || unit === "bd")) return "prazo da loja: hoje";
   if (unit === "m") return `prazo da loja: ${value} min`;
   if (unit === "h") return `prazo da loja: ${value}h`;
   if (unit === "d") return value === 1 ? "prazo da loja: 1 dia" : `prazo da loja: ${value} dias`;

@@ -198,6 +198,7 @@ test("prazo humano só a partir do formato da loja", () => {
   assert.equal(humanEstimate("2h"), "prazo da loja: 2h");
   assert.equal(humanEstimate("45m"), "prazo da loja: 45 min");
   assert.equal(humanEstimate("2d"), "prazo da loja: 2 dias");
+  assert.equal(humanEstimate("0bd"), "prazo da loja: hoje");
   assert.equal(humanEstimate("amanhã"), undefined);
   assert.equal(humanEstimate(undefined), undefined);
 });
