@@ -20,6 +20,10 @@ export type CatalogItem = {
   // isso). Sem a flag, a cotação cobrava tarifa padrão R$18 num anúncio que estampa
   // "Chegará grátis hoje" (17/08).
   freeShipping?: boolean;
+  // Posição no "mais vendidos" da loja (1 = campeão), gravada no harvest VTEX
+  // (O=OrderByTopSaleDESC) — e, nos catálogos antigos, derivada da ordem do arquivo por
+  // `ensurePopularity`. Só desempata entre itens de MESMA relevância (05/09, dono).
+  popularity?: number;
 };
 
 export type StoreUnit = {
@@ -631,9 +635,36 @@ export function diversifyOptions<T extends Pick<CatalogItem, "name" | "brand">>(
 // (integral/diet/zero…) → mais barato. O desempate infantil existe porque nomes de
 // perfumaria escondem o substantivo no meio ("Celebre Agora Feminino … Colônia") e
 // o empate de score cairia no preço — onde o baby, mais barato, venceria.
+// Os catálogos VTEX já vêm na ordem de mais vendidos da loja (harvest com
+// O=OrderByTopSaleDESC); a posição no arquivo é o rank. Usado pelo backfill (scripts/
+// backfill-popularity.mts) e pelos testes — NÃO roda em runtime, porque catálogos sem
+// ordem de vendas (Carrefour, Petz, Boticário…) não podem ganhar rank pela posição.
+const popularityDone = new WeakSet<CatalogItem[]>();
+export function ensurePopularity(items: CatalogItem[]): void {
+  if (popularityDone.has(items)) return;
+  items.forEach((item, i) => {
+    if (item.popularity == null) item.popularity = i + 1;
+  });
+  popularityDone.add(items);
+}
+
+// Bônus < 1 ponto: só desempata itens com o MESMO score de relevância (scores são
+// inteiros) — nunca passa por cima de marca, atributo ou palavra a mais no match.
+export function popularityBonus(rank?: number): number {
+  if (rank == null || rank <= 0) return 0;
+  if (rank <= 3) return 0.9;
+  if (rank <= 10) return 0.6;
+  if (rank <= 30) return 0.3;
+  return 0;
+}
+
 export function rankCatalog(query: string, items: CatalogItem[], limit: number): CatalogItem[] {
   const childAsked = CHILD_VARIANT_RE.test(normalizeText(query));
   const childRank = (item: CatalogItem) => (!childAsked && isChildVariant(normalizeText(item.name)) ? 1 : 0);
+  // Popularidade (só catálogos VTEX, gravada pelo harvest/backfill) entra DEPOIS de
+  // relevância, variante infantil, embalagem comum e básico-antes-de-variante (regras
+  // deliberadas do dono) e ANTES do preço: entre iguais, o que a loja mais vende vence.
+  const pop = (item: CatalogItem) => item.popularity ?? Number.MAX_SAFE_INTEGER;
   return items
     .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
     .filter((e) => e.score > 0)
@@ -643,6 +674,7 @@ export function rankCatalog(query: string, items: CatalogItem[], limit: number):
         childRank(a.item) - childRank(b.item) ||
         commonPackageRank(query, a.item) - commonPackageRank(query, b.item) ||
         variantCount(query, a.item) - variantCount(query, b.item) ||
+        pop(a.item) - pop(b.item) ||
         a.item.unitPrice - b.item.unitPrice
     )
     .slice(0, limit)

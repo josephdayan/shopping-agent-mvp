@@ -1,5 +1,10 @@
 # Lia — Status do Projeto
 
+## 05/09/2026 (2ª) — mais vendido da loja
+
+Nas 9 lojas VTEX, entre opções de mesma relevância, o produto que a loja mais vende vem
+antes (rank gravado no catálogo pela ordem de vendas do harvest). Detalhe em AGENTS.md (05/09 2ª).
+
 ## 05/09/2026 — "preciso pra hoje" e prazo por loja
 
 Com urgência no pedido, a vitrine mostra só o que a loja entrega hoje (entrega mais rápida

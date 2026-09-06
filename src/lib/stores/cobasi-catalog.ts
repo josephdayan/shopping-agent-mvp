@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095746/Areia-Higienica-MyHug-Milho-e-Mandioca-Granulos-Finos-4kg.webp?v=639087469107230000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-myhug-biodegradavel-granulos-finos-31133810/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-myhug-biodegradavel-granulos-finos-31133810/p",
+  popularity: 1
  },
  {
   sku: "cobasi-915777",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064104/Areia-Higienica-Biodegradavel-Graos-Finos-Viva-Verde-4kg-1.png?v=638681415442200000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-limpeza-plena-viva-verde-3915777/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-limpeza-plena-viva-verde-3915777/p",
+  popularity: 2
  },
  {
   sku: "cobasi-1132377",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107261/racao-golden-special-gatos-adultos-castrados-frango-e-carne-3-1.webp?v=639160966280670000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-special-gatos-adultos-castrados-frango-e-carne-31132377/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-special-gatos-adultos-castrados-frango-e-carne-31132377/p",
+  popularity: 3
  },
  {
   sku: "cobasi-915700",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037683/Choice-Frango-e-Carne-Caes-Adultos-Frente.jpg?v=638793634478100000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-frango-e-carne-caes-adultos-3853925/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-frango-e-carne-caes-adultos-3853925/p",
+  popularity: 4
  },
  {
   sku: "cobasi-811556",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106810/racao-golden-formula-caes-adultos-racas-pequenas-carne-arroz-mini-bits-1-1.webp?v=639159343252300000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-caes-adultos-racas-pequenas-carne-arroz-mini-bits-3811564/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-caes-adultos-racas-pequenas-carne-arroz-mini-bits-3811564/p",
+  popularity: 5
  },
  {
   sku: "cobasi-680303",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1022535/Frente.jpg?v=638719626336900000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-multi-cat-kelco-3680303/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-multi-cat-kelco-3680303/p",
+  popularity: 6
  },
  {
   sku: "cobasi-641006",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106782/racao-golden-gatos-castrados-sabor-salmao-1-1.webp?v=639159186057970000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-sabor-salmao-3641006/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-sabor-salmao-3641006/p",
+  popularity: 7
  },
  {
   sku: "cobasi-587419",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060513/Gatissimo-Embalagem-4kg-Frente.png?v=638606278515630000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-gatissimo-3587419/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-gatissimo-3587419/p",
+  popularity: 8
  },
  {
   sku: "cobasi-580635",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106770/racao-golden-gatos-castrados-frango-1-1.webp?v=639159156635400000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-frango-3580635/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-frango-3580635/p",
+  popularity: 9
  },
  {
   sku: "cobasi-465429",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067916/petisco-churu-atum-e-salmao-para-gatos-frente.jpg?v=638769725344170000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-e-salmao-para-gatos-3465429/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-e-salmao-para-gatos-3465429/p",
+  popularity: 10
  },
  {
   sku: "cobasi-310549",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106741/racao-golden-special-para-caes-adultos-frango-e-carne-15-1.webp?v=639159071953570000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-special-para-caes-adultos-frango-e-carne-3310549/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-special-para-caes-adultos-frango-e-carne-3310549/p",
+  popularity: 11
  },
  {
   sku: "cobasi-203580",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1022341/frente.jpg?v=639167784296830000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-classic-kelco-3203580/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-classic-kelco-3203580/p",
+  popularity: 12
  },
  {
   sku: "cobasi-1191640",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097452/Tapete-Higienico-Slim-Patas-Secas-Petix-30-unidades.webp?v=639101522287770000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-slim-patas-secas-petix-80cm-60cm-31191640/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-slim-patas-secas-petix-80cm-60cm-31191640/p",
+  popularity: 13
  },
  {
   sku: "cobasi-1186752",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096885/tapete-higienico-super-secao-max-citrus-slim-para-caes-30uni.webp?v=639066137605670000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-max-citrus-slim-90x60cm-31186752/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-max-citrus-slim-90x60cm-31186752/p",
+  popularity: 14
  },
  {
   sku: "cobasi-1167723",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076303/Racao-Umida-Pedigree-Sache-Caes-Adultos-Carne-e-Frango-100g.webp?v=638950981074170000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-sache-caes-adultos-carne-e-frango-31167723/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-sache-caes-adultos-carne-e-frango-31167723/p",
+  popularity: 15
  },
  {
   sku: "cobasi-1167715",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076301/Racao-Umida-Pedigree-Sache-Caes-Adultos-Racas-Pequenas-Cordeiro-e-Frango-85g.webp?v=638848207677270000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pedigre-sache-caes-adultos-racas-pequenas-cordeiro-e-frango-31167715/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pedigre-sache-caes-adultos-racas-pequenas-cordeiro-e-frango-31167715/p",
+  popularity: 16
  },
  {
   sku: "cobasi-1167669",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076295/Racao-Umida-Whiskas-Sache-Gatos-Adultos-Carne-Frango-e-Salmao-85g.webp?v=638848212525400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-carne-frango-e-salmao-31167669/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-carne-frango-e-salmao-31167669/p",
+  popularity: 17
  },
  {
   sku: "cobasi-1167650",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076292/Racao-Umida-Whiskas-Sache-Gatos-Adultos-Carne-Frango-e-Atum-85g.webp?v=638950935844600000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-carne-e-frango-31167650/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-carne-e-frango-31167650/p",
+  popularity: 18
  },
  {
   sku: "cobasi-1161318",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069826/Tapete-Higienico-MyHug-80x60cm-Fofinho.png.png?v=638793869416270000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-80x60cm-fofinho-31161318/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-80x60cm-fofinho-31161318/p",
+  popularity: 19
  },
  {
   sku: "cobasi-1142950",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090754/Tapete-Higienico-Go-Pads.png?v=638979630459670000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-go-pads-slim-31142950/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-go-pads-slim-31142950/p",
+  popularity: 20
  },
  {
   sku: "cobasi-1142550",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065082/areia-higienica-kets-gatissimo-4kg.jpg?v=638690954771700000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-gatissimo-sem-perfume-31142550/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-gatissimo-sem-perfume-31142550/p",
+  popularity: 21
  },
  {
   sku: "cobasi-1132440",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107981/racao-golden-special-gatos-adultos-frango-e-carne-10-1.webp?v=639165167936200000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-special-gatos-adultos-frango-e-carne-31132482/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-special-gatos-adultos-frango-e-carne-31132482/p",
+  popularity: 22
  },
  {
   sku: "cobasi-1008099",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1042487/Petiscos-Anti-bola-de-pelo-Whiskas-40g.jpg?v=638753893779770000",
-  productUrl: "https://www.cobasi.com.br/petisco-whiskas-temptations-anti-bola-de-pelo-gatos-adultos-31008099/p"
+  productUrl: "https://www.cobasi.com.br/petisco-whiskas-temptations-anti-bola-de-pelo-gatos-adultos-31008099/p",
+  popularity: 23
  },
  {
   sku: "cobasi-990205",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062015/Racao-Formula-Natural-Fresh-Meat-Sensitive-Caes-Adultos-Portes-Mini-e-Pequeno.png?v=638912027415500000",
-  productUrl: "https://www.cobasi.com.br/formula-natural-fresh-meat-sensitive-caes-adultos-portes-mini-e-pequeno--3990183/p"
+  productUrl: "https://www.cobasi.com.br/formula-natural-fresh-meat-sensitive-caes-adultos-portes-mini-e-pequeno--3990183/p",
+  popularity: 24
  },
  {
   sku: "cobasi-1160664",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066625/racao-origens-class-caes-adultos-carne-e-frango-1.png.png?v=638717891887730000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-class-caes-adultos-carne-e-frango-3982253/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-class-caes-adultos-carne-e-frango-3982253/p",
+  popularity: 25
  },
  {
   sku: "cobasi-954845",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082845/Racao-Premier-Nutricao-Clinica-Caes-Hipoalergenico-Pequeno-Porte-Cordeiro-e-Arroz-2kg-frente.webp?v=638906957421030000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-pequeno-porte-3954845/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-pequeno-porte-3954845/p",
+  popularity: 26
  },
  {
   sku: "cobasi-946087",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082851/Racao-Premier-Nutricao-Clinica-Caes-Hipoalergenico-Racas-Pequenas-Proteina-hidro-2kg-frente.webp?v=638906966253530000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-pequenas-3946087/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-pequenas-3946087/p",
+  popularity: 27
  },
  {
   sku: "cobasi-934097",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062004/Racao-Formula-Natural-Fresh-Meat-Caes-Adultos-Mini-e-Pequeno-Frango.png?v=638912022582200000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-mini-e-pequeno-frango-3934097/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-mini-e-pequeno-frango-3934097/p",
+  popularity: 28
  },
  {
   sku: "cobasi-933902",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza lenco umedecido",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069373/Lenco-Umedecido-Caes-e-Gatos-MyHug-50-unidades.png.png?v=638781848673100000",
-  productUrl: "https://www.cobasi.com.br/toalha-umedecida-myhug-3933902/p"
+  productUrl: "https://www.cobasi.com.br/toalha-umedecida-myhug-3933902/p",
+  popularity: 29
  },
  {
   sku: "cobasi-950092",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108385/Gourmet-Gatos-Adultos-Castrados-Salmao-e-Frango-Frente.jpg?v=639168832166470000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrados-salmao-e-frango-3928453/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrados-salmao-e-frango-3928453/p",
+  popularity: 30
  },
  {
   sku: "cobasi-928410",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037922/Gourmet-Caes-Adultos-Medio-e-Grande-Ovelha-e-Arroz-Frente.jpg?v=638823949182670000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-medio-e-grande-gran-plus-gourmet-ovelha-e-arroz-3928410/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-medio-e-grande-gran-plus-gourmet-ovelha-e-arroz-3928410/p",
+  popularity: 31
  },
  {
   sku: "cobasi-950041",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108289/Gourmet-Caes-Adultos-Mini-Ovelha-e-Arroz-Frente.jpg?v=639168810383830000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-adultos-mini-ovelha-e-arroz-3928402/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-adultos-mini-ovelha-e-arroz-3928402/p",
+  popularity: 32
  },
  {
   sku: "cobasi-927473",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032572/alimento-umido-gran-plus-gourmet-gatos-salmao-e-frango-frente.jpg?v=638043769011570000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-gatos-salmao-e-frango-3927473/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-gatos-salmao-e-frango-3927473/p",
+  popularity: 33
  },
  {
   sku: "cobasi-924008",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107076/racao-golden-selecao-natural-gatos-castrados-frango-com-abobora-e-alecrim-1-1.webp?v=639160910967330000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-castrados-frango-com-abobora-e-alecrim-3924008/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-castrados-frango-com-abobora-e-alecrim-3924008/p",
+  popularity: 34
  },
  {
   sku: "cobasi-915785",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064171/Areia-Higienica-Biodegradavel-Graos-Mistos-Viva-Verde-4kg-1.png?v=638681447909000000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-vida-descomplicada-viva-verde-3915785/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-vida-descomplicada-viva-verde-3915785/p",
+  popularity: 35
  },
  {
   sku: "cobasi-841820",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos probioticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076371/Probiotico Pet para Caes e Gatos Avert 14g.webp?v=638851570452270000",
-  productUrl: "https://www.cobasi.com.br/aditivo-probiotico-pet-14g-avert-3841820/p"
+  productUrl: "https://www.cobasi.com.br/aditivo-probiotico-pet-14g-avert-3841820/p",
+  popularity: 36
  },
  {
   sku: "cobasi-823813",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106842/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-e-arroz-mini-bits-1-1.webp?v=639159387844700000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-e-arroz-mini-bits-3823813/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-e-arroz-mini-bits-3823813/p",
+  popularity: 37
  },
  {
   sku: "cobasi-823767",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106856/racao-golden-gatos-castrados-carne-1-1.webp?v=639159954545400000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-carne-3823767/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-carne-3823767/p",
+  popularity: 38
  },
  {
   sku: "cobasi-823554",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113383/Antipulgas-Simparic-20mg-para-Caes-5-a-10kg.webp?v=639209540011000000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-5-1-a-10--kg-zoetis-3823554/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-5-1-a-10--kg-zoetis-3823554/p",
+  popularity: 39
  },
  {
   sku: "cobasi-819301",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050905/Katbom-Tradicional-3kg.png?v=638761096551730000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-katbom-natural-granulado-higienico-3819301/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-katbom-natural-granulado-higienico-3819301/p",
+  popularity: 40
  },
  {
   sku: "cobasi-805777",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032335/racao-umida-gran-plus-cachorro-adulto-carne-sache-100g-frente.jpg?v=639190308585200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-cachorro-adulto-carne-sache-100g-3805777/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-cachorro-adulto-carne-sache-100g-3805777/p",
+  popularity: 41
  },
  {
   sku: "cobasi-798029",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082655/Racao-Premier-Ambientes-Internos-Caes-Adultos-Racas-Pequenas-Frango-e-Salmao-1kg-frente.webp?v=638905417304930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-adultos-racas-pequenas-3798029/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-adultos-racas-pequenas-3798029/p",
+  popularity: 42
  },
  {
   sku: "cobasi-795267",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082753/Racao-Premier-Formula-Caes-Adultos-Racas-Pequenas-Frango-1kg-frente.webp?v=638906218514600000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-racas-pequenas-caes-adultos-3795267/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-racas-pequenas-caes-adultos-3795267/p",
+  popularity: 43
  },
  {
   sku: "cobasi-848565",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060583/Kets-c--Promo.png?v=638606406273070000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-para-gatos-e-mascotes-kets-3784567/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-para-gatos-e-mascotes-kets-3784567/p",
+  popularity: 44
  },
  {
   sku: "cobasi-757381",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1046928/tapete-higienico-blue-premium-30-unidades-lado.png?v=638828425432770000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-blue-premium-3757381/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-blue-premium-3757381/p",
+  popularity: 45
  },
  {
   sku: "cobasi-708224",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095489/Hero_Petisco-Dreamies-para-Gatos-Adultos-Carne-40g.webp?v=639033998898130000",
-  productUrl: "https://www.cobasi.com.br/petisco-dreamies-carne-para-gatos-adultos-3708224/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dreamies-carne-para-gatos-adultos-3708224/p",
+  popularity: 46
  },
  {
   sku: "cobasi-697818",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052337/racao-umida-nestle-purina-friskies-atum-ao-molho-gatos-adultos.png?v=639003042457330000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-atum-ao-molho-gatos-adultos-3697818/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-atum-ao-molho-gatos-adultos-3697818/p",
+  popularity: 47
  },
  {
   sku: "cobasi-697796",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052332/racao-umida-friskies-frango-ao-molho-gatos-adultos.png?v=639136832565570000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-frango-ao-molho-gatos-adultos-85g-3697796/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-frango-ao-molho-gatos-adultos-85g-3697796/p",
+  popularity: 48
  },
  {
   sku: "cobasi-696960",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106804/racao-golden-gatos-adultos-sabor-carne-1-1.webp?v=639159322108400000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-sabor-carne-3696960/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-sabor-carne-3696960/p",
+  popularity: 49
  },
  {
   sku: "cobasi-643912",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106800/racao-golden-formula-senior-racas-pequenas-frango-e-arroz-mini-bits-3-1.webp?v=639159312411130000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-racas-pequenas-frango-e-arroz-mini-bits-3643912/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-racas-pequenas-frango-e-arroz-mini-bits-3643912/p",
+  popularity: 50
  },
  {
   sku: "cobasi-465275",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067912/petisco-churu-atum-para-gatos-frente.jpg?v=638769606485370000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-para-gatos-3465275/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-para-gatos-3465275/p",
+  popularity: 51
  },
  {
   sku: "cobasi-455385",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/936603/racao-umida-premier-gourmet-gatos-castrados-atum-e-arroz-integral-3455385.jpg?v=638899198171700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-castrados-atum-e-arroz-integral-3455385/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-castrados-atum-e-arroz-integral-3455385/p",
+  popularity: 52
  },
  {
   sku: "cobasi-453382",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057841/Racao-Formula-Natural-Caes-Medio-e-Grande_1.png?v=638537263177530000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-adultos-medio-e-grande-3453382/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-adultos-medio-e-grande-3453382/p",
+  popularity: 53
  },
  {
   sku: "cobasi-453323",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057823/Racao-Formula-Natural-Life-Caes-Adultos-Mini-e-Pequeno_1.png?v=638866525339930000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-adultos-mini-e-pequeno-3453323/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-adultos-mini-e-pequeno-3453323/p",
+  popularity: 54
  },
  {
   sku: "cobasi-301299",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1022487/Frente.jpg?v=639144751576600000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-perfumado-floral-kelco-3301299/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-perfumado-floral-kelco-3301299/p",
+  popularity: 55
  },
  {
   sku: "cobasi-280330",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113389/Prediderm-5-mg-Anti-inflamatorio-para-Caes-embalagem_FRENTE-01.webp?v=639210101326170000",
-  productUrl: "https://www.cobasi.com.br/prediderm-10-comprimidos-ourofino-3280330/p"
+  productUrl: "https://www.cobasi.com.br/prediderm-10-comprimidos-ourofino-3280330/p",
+  popularity: 56
  },
  {
   sku: "cobasi-1186787",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096891/tapete-higienico-super-secao-max-slim-para-caes-10uni.webp?v=639066139725570000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-max-slim-90x60cm-31186787/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-max-slim-90x60cm-31186787/p",
+  popularity: 57
  },
  {
   sku: "cobasi-1175297",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082426/Petisco-Optimum-Gatos-Adultos-Anti-Bola-de-Pelo-Salmao-e-Vegetais.webp?v=638901020295170000",
-  productUrl: "https://www.cobasi.com.br/petisco-optimum-gatos-adultos-anti-bola-de-pelo-carne-e-linhaca-31175297/p"
+  productUrl: "https://www.cobasi.com.br/petisco-optimum-gatos-adultos-anti-bola-de-pelo-carne-e-linhaca-31175297/p",
+  popularity: 58
  },
  {
   sku: "cobasi-1170210",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077297/DrontalPlus-Sabor_10kg-2cps-1.webp?v=638862988851730000",
-  productUrl: "https://www.cobasi.com.br/drontal-plus-mais-sabor-caes-10kg-31170210/p"
+  productUrl: "https://www.cobasi.com.br/drontal-plus-mais-sabor-caes-10kg-31170210/p",
+  popularity: 59
  },
  {
   sku: "cobasi-1167642",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076290/Racao-Umida-Whiskas-Sache-Gatos-Adultos-Castrados-Carne-e-Peixe-85g.webp?v=638950934860400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-castrados-carne-e-peixe-31167642/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-sache-gatos-adultos-castrados-carne-e-peixe-31167642/p",
+  popularity: 60
  },
  {
   sku: "cobasi-1164465",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096595/Racao-Joy-Caes-Adultos-Racas-Medias-e-Grandes-Frango-e-Carne.webp.webp?v=639063489764970000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-high-premium-caes-adultos-racas-medias-e-grandes-frango-e-carne-31164465/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-high-premium-caes-adultos-racas-medias-e-grandes-frango-e-carne-31164465/p",
+  popularity: 61
  },
  {
   sku: "cobasi-1160842",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069835/Granulado-de-Madeira-MyHug-5-kg-png.jpg?v=638793910656470000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-de-madeira-myhug-31160842/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-de-madeira-myhug-31160842/p",
+  popularity: 62
  },
  {
   sku: "cobasi-1157051",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095077/Petisco Friskies Party Mix Frango 40g.webp?v=639015128042530000",
-  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-frango-31157051/p"
+  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-frango-31157051/p",
+  popularity: 63
  },
  {
   sku: "cobasi-1157035",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095073/Petisco Friskies Party Mix Salmao 40g.webp?v=639015127135900000",
-  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-salmao-31157035/p"
+  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-salmao-31157035/p",
+  popularity: 64
  },
  {
   sku: "cobasi-1153811",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1092426/Zenrelia.webp?v=638991626500100000",
-  productUrl: "https://www.cobasi.com.br/zenrelia-8-5mg-antialergico-para-cachorro-31153811/p"
+  productUrl: "https://www.cobasi.com.br/zenrelia-8-5mg-antialergico-para-cachorro-31153811/p",
+  popularity: 65
  },
  {
   sku: "cobasi-1153765",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069840/Areia-Myhug_12kg.jpg.jpg?v=638793907658000000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-mineral-multigraos-myhug-31153765/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-mineral-multigraos-myhug-31153765/p",
+  popularity: 66
  },
  {
   sku: "cobasi-1151649",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064231/Areia-Higienica-Biodegradavel-Graos-Grossos-Viva-Verde-4kg-1.png?v=638681476051100000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-graos-grossos-viva-verde-31151649/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-biodegradavel-graos-grossos-viva-verde-31151649/p",
+  popularity: 67
  },
  {
   sku: "cobasi-1136810",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053263/petisco-bifinho-churrasco-keldog-60g-frente.png?v=638760230533970000",
-  productUrl: "https://www.cobasi.com.br/petisco-bifinho-churrasco-keldog-31135694/p"
+  productUrl: "https://www.cobasi.com.br/petisco-bifinho-churrasco-keldog-31135694/p",
+  popularity: 68
  },
  {
   sku: "cobasi-1135600",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099610/Racao Umida Royal Canin Gastrointestinal Low Fat 420g.webp?v=639113566517000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-gastrointestinal-low-fat-caes-adultos-31135600/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-gastrointestinal-low-fat-caes-adultos-31135600/p",
+  popularity: 69
  },
  {
   sku: "cobasi-1133829",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095757/Areia-Higienica-MyHug-Milho-e-Mandioca-Granulos-Grossos-4kg.webp?v=639088275200530000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-myhug-biodegradavel-granulos-grossos-31133829/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-myhug-biodegradavel-granulos-grossos-31133829/p",
+  popularity: 70
  },
  {
   sku: "cobasi-1008021",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095531/Hero_Petisco-Dreamies-Salmao-Irresistivel-Gatos-40g.webp?v=639034097129800000",
-  productUrl: "https://www.cobasi.com.br/petisco-dreamies-salmao-irresistivel-gatos-adultos-31008021/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dreamies-salmao-irresistivel-gatos-adultos-31008021/p",
+  popularity: 71
  },
  {
   sku: "cobasi-1005847",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107116/racao-golden-selecao-natural-gatos-castrados-frango-com-batata-doce-1-1.webp?v=639160939788370000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-castrados-frango-com-batata-doce-31005847/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-castrados-frango-com-batata-doce-31005847/p",
+  popularity: 72
  },
  {
   sku: "cobasi-999733",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1038029/Menu-Caes-Senior-Portes-Medio-e-Grande-Frango-e-Arroz-Frente.jpg?v=639173256386430000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-menu-caes-senior-porte-medio-frango-e-arroz-3999733/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-menu-caes-senior-porte-medio-frango-e-arroz-3999733/p",
+  popularity: 73
  },
  {
   sku: "cobasi-979740",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052343/racao-umida-friskies-gatos-adultos-cordeiro-ao-molho.png?v=639136831266300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-adultos-cordeiro-ao-molho-3979740/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-adultos-cordeiro-ao-molho-3979740/p",
+  popularity: 74
  },
  {
   sku: "cobasi-953202",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336692/Demi-Glace-com-Frango.jpg?v=638760084073070000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-demi-glace-frango-3953202/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-demi-glace-frango-3953202/p",
+  popularity: 75
  },
  {
   sku: "cobasi-950661",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082821/Racao-Premier-Nattu-Caes-Adultos-Pequeno-Porte-Mandioca-1kg-frente.webp?v=638906946310330000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-mandioca-pequeno-porte-3950661/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-mandioca-pequeno-porte-3950661/p",
+  popularity: 76
  },
  {
   sku: "cobasi-950653",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082819/Racao-Premier-Nattu-Caes-Adultos-Mandioca-12kg-frente.webp?v=639107284555230000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-mandioca-3950653/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-mandioca-3950653/p",
+  popularity: 77
  },
  {
   sku: "cobasi-947989",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108281/Choice-Gatos-Adultos-Frango-e-Carne-Frente.jpg?v=639168802859730000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-gatos-adultos-frango-e-carne-3947989/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-gatos-adultos-frango-e-carne-3947989/p",
+  popularity: 78
  },
  {
   sku: "cobasi-946109",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083703/Racao-Premier-Nutricao-Clinica-Hipoalergenico-Caes-Medio-e-Grande-10.1kg-frente.webp?v=638918286512930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-medio-e-grande-3946109/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-racas-medio-e-grande-3946109/p",
+  popularity: 79
  },
  {
   sku: "cobasi-946052",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082875/Racao-Premier-Nutricao-Clinica-Gastrointestinal-Caes-Racas-Pequenas-2kg-frente.webp?v=638906974163770000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-gastrointestinal-caes-racas-pequenas-3946052/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-gastrointestinal-caes-racas-pequenas-3946052/p",
+  popularity: 80
  },
  {
   sku: "cobasi-934372",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047366/Racao-Formula-Natural-Fresh-Meat-Gatos-Castrados-Salmao.png?v=638923490628300000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-castrado-salmao-3934372/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-castrado-salmao-3934372/p",
+  popularity: 81
  },
  {
   sku: "cobasi-934305",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062028/Racao-Formula-Natural-Fresh-Meat-Caes-Senior-Mini-e-Pequeno-Frango.png?v=638912025603370000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-senior-mini-e-pequeno-frango-3934305/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-senior-mini-e-pequeno-frango-3934305/p",
+  popularity: 82
  },
  {
   sku: "cobasi-934127",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062039/Racao-Formula-Natural-Fresh-Meat-Caes-Adultos-Medio-Frango.png?v=638912022996670000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-medio-frango-3934127/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-medio-frango-3934127/p",
+  popularity: 83
  },
  {
   sku: "cobasi-927511",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032347/alimento-umido-gran-plus-menu-caes-adulto-salmao-100g-frente.jpg?v=638043758948570000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-menu-caes-adulto-salmao-100g-3927511/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-menu-caes-adulto-salmao-100g-3927511/p",
+  popularity: 84
  },
  {
   sku: "cobasi-927481",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032712/alimento-umido-gran-plus-gourmet-gatos-ovelha-e-arroz-frente.jpg?v=638043770446100000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-gatos-ovelha-e-arroz-3927481/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-gatos-ovelha-e-arroz-3927481/p",
+  popularity: 85
  },
  {
   sku: "cobasi-950076",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108345/Gourmet-Gatos-Castrados-Ovelha-e-Arroz-Frente.jpg?v=639168826782900000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrado-ovelha-e-arroz-3927260/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrado-ovelha-e-arroz-3927260/p",
+  popularity: 86
  },
  {
   sku: "cobasi-923974",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106994/racao-para-caes-adultos-golden-selecao-natural-abobora-3-1.webp?v=639160895683170000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-golden-selecao-natural-abobora-3923974/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-golden-selecao-natural-abobora-3923974/p",
+  popularity: 87
  },
  {
   sku: "cobasi-910864",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106170/ND ANCESTRAL SELECTION AD MD frente.webp?v=639155976516130000",
-  productUrl: "https://www.cobasi.com.br/racao-farmina-n-amp-d-ancestral-grain-selection-caes-adultos-racas-medias-3910864/p"
+  productUrl: "https://www.cobasi.com.br/racao-farmina-n-amp-d-ancestral-grain-selection-caes-adultos-racas-medias-3910864/p",
+  popularity: 88
  },
  {
   sku: "cobasi-909920",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107146/Racao-Guabi-Natural-Caes-Adultos-Porte-Medio-Cordeiro-e-Aveia-1.webp?v=639160946028900000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-porte-medio-cordeiro-e-aveia-3909920/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-porte-medio-cordeiro-e-aveia-3909920/p",
+  popularity: 89
  },
  {
   sku: "cobasi-909866",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107080/Racao-Guabi-Natural-Caes-Adultos-Medio-Frango-e-Arroz-1.webp?v=639160913511500000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-medio-frango-e-arroz-3909866/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-medio-frango-e-arroz-3909866/p",
+  popularity: 90
  },
  {
   sku: "cobasi-903256",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052341/racao-umida-friskies-gatos-adultos-carne-ao-molho.png?v=638745505051870000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-adultos-carne-ao-molho-3903256/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-adultos-carne-ao-molho-3903256/p",
+  popularity: 91
  },
  {
   sku: "cobasi-903213",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037749/Menu-Caes-Adultos-Mini-Carne-e-Arroz-Frente.jpg?v=639173258656330000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-caes-adulto-mini-carne-e-arroz-3903213/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-caes-adulto-mini-carne-e-arroz-3903213/p",
+  popularity: 92
  },
  {
   sku: "cobasi-893323",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062465/3893323_BIFINHO-ORIGEM-NAT.-CORDEIRO-60G_1.jpg?v=638828407975600000",
-  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-cordeiro-3893323/p"
+  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-cordeiro-3893323/p",
+  popularity: 93
  },
  {
   sku: "cobasi-865524",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082891/Racao-Premier-Nutricao-Clinica-Obesidade-Caes-Adultos-Medio-e-Grande-Porte-10.1kg-frente.webp?v=638926128243830000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-obesidade-caes-adultos-medio-e-grandes-portes-3865524/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-obesidade-caes-adultos-medio-e-grandes-portes-3865524/p",
+  popularity: 94
  },
  {
   sku: "cobasi-865508",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082894/Racao-Premier-Nutricao-Clinica-Obesidade-Caes-Adultos-Pequeno-Porte-2kg-frente.webp?v=638907096437930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-obesidade-caes-adultos-pequeno-porte-3865516/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-obesidade-caes-adultos-pequeno-porte-3865516/p",
+  popularity: 95
  },
  {
   sku: "cobasi-844500",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065106/0-Racao-Umida-Optimum-Sache-Gatos-Adultos-Castrados-Frango.png?v=638802275243130000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-gatos-castrados-frango-3844500/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-gatos-castrados-frango-3844500/p",
+  popularity: 96
  },
  {
   sku: "cobasi-823880",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106824/racao-golden-selecao-natural-gatos-adulto-frango-arroz-1.webp?v=639159360426100000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-adulto-frango-arroz-3823880/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-adulto-frango-arroz-3823880/p",
+  popularity: 97
  },
  {
   sku: "cobasi-823570",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089387/Antipulgas-Simparic-80mg-para-Caes-20-a-40kg.webp?v=639107572824830000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-20-1-a-40--kg-zoetis-3823570/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-20-1-a-40--kg-zoetis-3823570/p",
+  popularity: 98
  },
  {
   sku: "cobasi-823562",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089375/Antipulgas-Simparic-40mg-para-Caes-10-a-20kg.webp?v=639107572602270000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-10-1-a-20--kg-zoetis-3823562/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-10-1-a-20--kg-zoetis-3823562/p",
+  popularity: 99
  },
  {
   sku: "cobasi-823546",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089298/Antipulgas-Simparic-10mg-Para-Caes-26-a-5kg.webp?v=639107572009000000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-10mg-26-a-5-kg-zoets-3823546/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-10mg-26-a-5-kg-zoets-3823546/p",
+  popularity: 100
  },
  {
   sku: "cobasi-816442",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113437/Apoquel-54-mg---Tratamento-para-coceira-em-Caes-embalagem_FRENTE-01.webp?v=639210198633670000",
-  productUrl: "https://www.cobasi.com.br/apoquel-dermatologico-zoetis-para-cachorro-54mg-3816442/p"
+  productUrl: "https://www.cobasi.com.br/apoquel-dermatologico-zoetis-para-cachorro-54mg-3816442/p",
+  popularity: 101
  },
  {
   sku: "cobasi-811823",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1024356/Racao-Royal-Canin-Canine-Veterinary-Diet-Satiety-Caes-Adultos-1.jpg?v=638779855974670000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-satiety-racas-pequenas-small-dog-3811823/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-satiety-racas-pequenas-small-dog-3811823/p",
+  popularity: 102
  },
  {
   sku: "cobasi-805769",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032332/alimento-umido-gran-plus-gourmet-caes-mini-ovelha-e-arroz-frente.jpg?v=638043753477030000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-caes-mini-ovelha-e-arroz-3805769/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-caes-mini-ovelha-e-arroz-3805769/p",
+  popularity: 103
  },
  {
   sku: "cobasi-797715",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051118/Modelo.png?v=638321928423030000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-carne-gatos-castrados-3797715/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-carne-gatos-castrados-3797715/p",
+  popularity: 104
  },
  {
   sku: "cobasi-794589",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082747/Racao-Premier-Formula-Caes-Adultos-Racas-Medias-Frango-15kg-frente.webp?v=638906168817870000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-medias-sabor-frango-3794589/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-medias-sabor-frango-3794589/p",
+  popularity: 105
  },
  {
   sku: "cobasi-794368",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051443/Racao-Umida-Whiskas-Sache-Atum-ao-Molho-Gatos-Adultos.png?v=638336654231500000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-atum-ao-molho-3794368/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-atum-ao-molho-3794368/p",
+  popularity: 106
  },
  {
   sku: "cobasi-794007",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051140/Racao-Umida-Whiskas-Sache-Cordeiro-ao-Molho-Gatos-Adultos.png?v=638321988906200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-cordeiro-ao-molho-85g-3794007/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-cordeiro-ao-molho-85g-3794007/p",
+  popularity: 107
  },
  {
   sku: "cobasi-793981",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051150/Racao-Umida-Whiskas-Sache-Frango-ao-Molho-Gatos-Adultos.png?v=638322007768230000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-frango-ao-molho-3793981/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-frango-ao-molho-3793981/p",
+  popularity: 108
  },
  {
   sku: "cobasi-784028",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1110784/Tapete-Higienico-Clean-Pads-85x60cm-7-unidades-nova-embalagem.webp?v=639186047883370000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-clean-pads-3784028/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-clean-pads-3784028/p",
+  popularity: 109
  },
  {
   sku: "cobasi-781681",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063087/Petisco-Caes-Origem-Natural-Pele-e-Pelo-65-g.png?v=639013970900200000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-dermative-care-3781681/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-dermative-care-3781681/p",
+  popularity: 110
  },
  {
   sku: "cobasi-781460",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063072/Origem-Natural-Controle-e-Equilibrio-65-g.png?v=639013968823070000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-calming-care-3781460/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-calming-care-3781460/p",
+  popularity: 111
  },
  {
   sku: "cobasi-767590",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos coleira antipulgas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1080746/Seresto-Maior-que-8.webp?v=638929321374700000",
-  productUrl: "https://www.cobasi.com.br/coleira-antipulgas-seresto-caes-acima-de-8-kg-8-meses-de-protecao-3767590/p"
+  productUrl: "https://www.cobasi.com.br/coleira-antipulgas-seresto-caes-acima-de-8-kg-8-meses-de-protecao-3767590/p",
+  popularity: 112
  },
  {
   sku: "cobasi-766488",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/291975/Alimento-Umido-Hypoallergenico-Royal-Canin-200g.jpg?v=638132747310100000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-d-d-hipoallergernic-royal-canin-3766488/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-d-d-hipoallergernic-royal-canin-3766488/p",
+  popularity: 113
  },
  {
   sku: "cobasi-765872",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082245/Antipulgas-e-Carrapatos-Bravecto-45-a-10-kg-sem-sombra.webp?v=639044174168700000",
-  productUrl: "https://www.cobasi.com.br/bravecto-45-a-10-kg-antipulgas-oral-caes-comprimido-mastigavel-3765872/p"
+  productUrl: "https://www.cobasi.com.br/bravecto-45-a-10-kg-antipulgas-oral-caes-comprimido-mastigavel-3765872/p",
+  popularity: 114
  },
  {
   sku: "cobasi-762075",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1112937/Premier Cookie Caes Adultos Racas Pequenas Frutas Vermelhas 250g - Frente.webp?v=639205186914300000",
-  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-pequenos-frutas-vermelhas-aveia-3762075/p"
+  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-pequenos-frutas-vermelhas-aveia-3762075/p",
+  popularity: 115
  },
  {
   sku: "cobasi-755729",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113041/Racao-Royal-Canin-Veterinary-Diet-Hypoallergenic-Small-Dog-Caes-Adultos-1.jpg?v=639207585536030000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-hipoalergenica-small-dog-hypoallergenic-caes-adultos-3755729/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-hipoalergenica-small-dog-hypoallergenic-caes-adultos-3755729/p",
+  popularity: 116
  },
  {
   sku: "cobasi-747742",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/316971/Alimento-Umido-Royal-Feline-Gato-Adulto-Castrado.jpg?v=639003585451930000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-para-gatos-castrados-sterilised-85g-3747742/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-para-gatos-castrados-sterilised-85g-3747742/p",
+  popularity: 117
  },
  {
   sku: "cobasi-1149997",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/666980/Renal-Especial.jpg?v=638926095812700000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-renal-especial-3734691/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-renal-especial-3734691/p",
+  popularity: 118
  },
  {
   sku: "cobasi-815950",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082704/Racao-Premier-Ambientes-Internos-Dermacare-Caes-Adultos-Racas-Pequenas-1kg-frente.webp?v=638906023168700000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-dermacare-racas-pequenas-adultos-salmao-3732141/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-dermacare-racas-pequenas-adultos-salmao-3732141/p",
+  popularity: 119
  },
  {
   sku: "cobasi-708232",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095478/Hero_Petisco Dreamies Frango para Gatos.webp?v=639033972183600000",
-  productUrl: "https://www.cobasi.com.br/petisco-dreamies-frango-para-gatos-adultos-3708232/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dreamies-frango-para-gatos-adultos-3708232/p",
+  popularity: 120
  },
  {
   sku: "cobasi-697800",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052334/racao-umida-friskies-salmao-ao-molho-gatos-adultos.png?v=639136836479830000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-salmao-ao-molho-gatos-adultos-85g-3697800/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-salmao-ao-molho-gatos-adultos-85g-3697800/p",
+  popularity: 121
  },
  {
   sku: "cobasi-697788",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052330/racao-umida-nestle-purina-friskies-peixe-branco-ao-molho-gatos-adultos.png?v=639136835903400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-peixe-branco-ao-molho-gatos-adultos-3697788/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-peixe-branco-ao-molho-gatos-adultos-3697788/p",
+  popularity: 122
  },
  {
   sku: "cobasi-815829",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082688/Racao-Premier-Ambientes-Internos-Caes-Senior-Racas-Pequenas-1kg-frente.webp?v=638906020070200000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-racas-pequenas-senior-3663697/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-racas-pequenas-senior-3663697/p",
+  popularity: 123
  },
  {
   sku: "cobasi-659509",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/993571/GP-Menu-Gato-Adulto-Castrado-Sabor-Frango-e-Arroz-FRONTAL.jpg?v=639173259770970000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-castrado-frango-e-arroz-3659509/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-castrado-frango-e-arroz-3659509/p",
+  popularity: 124
  },
  {
   sku: "cobasi-646830",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004196/646830--1-.jpg?v=638926055973600000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-gastro-intestinal-low-fat-3646830/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-gastro-intestinal-low-fat-3646830/p",
+  popularity: 125
  },
  {
   sku: "cobasi-643904",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106798/racao-golden-formula-senior-frango-e-arroz-15-1.webp?v=639159238542800000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-frango-e-arroz-3643904/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-frango-e-arroz-3643904/p",
+  popularity: 126
  },
  {
   sku: "cobasi-853739",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111165/racao-gran-plus-adulto-carne-e-arroz-frente.jpg?v=639190435158400000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-adulto-carne-e-arroz-3643068/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-adulto-carne-e-arroz-3643068/p",
+  popularity: 127
  },
  {
   sku: "cobasi-640956",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083026/Racao-Premier-Racas-Especificas-Shih-Tzu-Adultos-1kg-frente.webp?v=638907837801170000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-adultos-frango-racas-especificas-3640956/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-adultos-frango-racas-especificas-3640956/p",
+  popularity: 128
  },
  {
   sku: "cobasi-623431",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106788/racao-golden-power-training-adultos-frango-e-arroz-treinamento-e-competicao-15-1.webp?v=639159196475700000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-power-training-adultos-frango-e-arroz-treinamento-e-competicao-3623431/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-power-training-adultos-frango-e-arroz-treinamento-e-competicao-3623431/p",
+  popularity: 129
  },
  {
   sku: "cobasi-616486",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos cicatrizantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947161/7898053584751_2.jpg?v=639062380512000000",
-  productUrl: "https://www.cobasi.com.br/vetaglos-pomada-univet-3616486/p"
+  productUrl: "https://www.cobasi.com.br/vetaglos-pomada-univet-3616486/p",
+  popularity: 130
  },
  {
   sku: "cobasi-608262",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106699/racao-golden-formula-para-caes-adultos-frango-e-arroz-3-1.webp?v=639156746003730000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-para-caes-adultos-frango-e-arroz-3608262/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-para-caes-adultos-frango-e-arroz-3608262/p",
+  popularity: 131
  },
  {
   sku: "cobasi-580651",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106776/racao-golden-gatos-filhotes-sabor-frango-1-1.webp?v=639159160162500000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-filhotes-sabor-frango-3580651/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-filhotes-sabor-frango-3580651/p",
+  popularity: 132
  },
  {
   sku: "cobasi-580570",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108421/racao-golden-gatos-adultos-sabor-frango-1-1.webp?v=639168835011370000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-sabor-frango-3580570/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-sabor-frango-3580570/p",
+  popularity: 133
  },
  {
   sku: "cobasi-555126",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/361961/Recovery.jpg?v=638122457714170000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-recovery-caes-e-gatos-3555126/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-recovery-caes-e-gatos-3555126/p",
+  popularity: 134
  },
  {
   sku: "cobasi-477443",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1009857/orelha-joy-bovina-natural-principal.jpg?v=638991763860930000",
-  productUrl: "https://www.cobasi.com.br/orelha-joy-bovina-natural-3477443/p"
+  productUrl: "https://www.cobasi.com.br/orelha-joy-bovina-natural-3477443/p",
+  popularity: 135
  },
  {
   sku: "cobasi-472352",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044423/789734820124-3-Golden-Gourmet-Gatos-Adultos---Atum-Abobora-E-Arroz-Integral-Fechada.png?v=638157123140870000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-adultos-atum-3472352/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-adultos-atum-3472352/p",
+  popularity: 136
  },
  {
   sku: "cobasi-472247",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044421/789734820150-2-Golden-Gourmet-Gatos-Castrados---Carne-Abobora-e-Arroz-Fechada.png?v=638936544766400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-castrados-carne-3472247/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-castrados-carne-3472247/p",
+  popularity: 137
  },
  {
   sku: "cobasi-472239",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044420/789734820154-0-Golden-Gourmet-Gatos-Castrados---Frango-Abobora-e-Arroz-Fechada.png?v=638157121872200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-castrados-frango-3472239/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-castrados-frango-3472239/p",
+  popularity: 138
  },
  {
   sku: "cobasi-1142143",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057942/FN-LIFE-GATO-CAST-SALMAO-LTR-ESQ.png?v=638866519572900000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-castrados-salmao-3453722/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-castrados-salmao-3453722/p",
+  popularity: 139
  },
  {
   sku: "cobasi-453315",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050899/Katbom-Capim-Limao-3kg.png?v=638761097208500000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-katbom-natural-granulada-higienica-capim-limao-3453315/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-katbom-natural-granulada-higienica-capim-limao-3453315/p",
+  popularity: 140
  },
  {
   sku: "cobasi-446238",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095562/Racao-Premier-Gatos-Castrados-6-Meses-a-6-Anos-Ambientes-Internos-Salmao-500g-frente.png?v=639035615186800000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-6-meses-a-6-anos-ambientes-internos-salmao-3446238/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-6-meses-a-6-anos-ambientes-internos-salmao-3446238/p",
+  popularity: 141
  },
  {
   sku: "cobasi-325830",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088748/00-copiar.webp?v=638966573422300000",
-  productUrl: "https://www.cobasi.com.br/biscrok-multi-pedigree-3325830/p"
+  productUrl: "https://www.cobasi.com.br/biscrok-multi-pedigree-3325830/p",
+  popularity: 142
  },
  {
   sku: "cobasi-299537",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082738/Racao-Premier-Formula-Caes-Adultos-Racas-Grandes-e-Gigantes-Frango-15kg-frente.webp?v=638906082204200000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-sabor-frango-3299537/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-sabor-frango-3299537/p",
+  popularity: 143
  },
  {
   sku: "cobasi-269654",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1112980/Racao-Royal-Canin-Exigent-Gatos-Adultos-Paladar-Exigente.webp?v=639205236386030000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-exigent-35-30-3269654/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-exigent-35-30-3269654/p",
+  popularity: 144
  },
  {
   sku: "cobasi-1195093",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104732/Tapete-Higienico-MyHug-Baby-Slim-60X55-cm-para-Caes-Filhotes-30-unidades.webp?v=639197455263700000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-baby-slim-60x55-cm-para-caes-filhotes-31195093/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-baby-slim-60x55-cm-para-caes-filhotes-31195093/p",
+  popularity: 145
  },
  {
   sku: "cobasi-1193031",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1098867/Embalagem-Petisco-Origens-para-Gatos-Creminho-de-Atum-60g.webp?v=639102417616630000",
-  productUrl: "https://www.cobasi.com.br/petisco-origens-para-gatos-creminho-de-atum-31193031/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origens-para-gatos-creminho-de-atum-31193031/p",
+  popularity: 146
  },
  {
   sku: "cobasi-1192795",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099705/Suplemento-Vitaminico-Happy-Flora-para-Caes-6g.webp?v=639114281046500000",
-  productUrl: "https://www.cobasi.com.br/suplemento-probiotico-happy-flora-para-caes-31192795/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-probiotico-happy-flora-para-caes-31192795/p",
+  popularity: 147
  },
  {
   sku: "cobasi-1186841",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097054/tapete-higienico-para-cachorros-zee-pad-30-unidades.webp?v=639070324674070000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-zeepad-carvao-slim-31186841/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-zeepad-carvao-slim-31186841/p",
+  popularity: 148
  },
  {
   sku: "cobasi-564893",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097005/super-secao-tapete-higienico-para-cachorro-30uni.webp?v=639070184812500000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-80x60cm-31186744/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-80x60cm-31186744/p",
+  popularity: 149
  },
  {
   sku: "cobasi-1184580",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102406/Petisco-Joy-Beef-Carne-para-Caes-65g.webp?v=639138512891930000",
-  productUrl: "https://www.cobasi.com.br/petisco-joy-beef-carne-para-caes-31184580/p"
+  productUrl: "https://www.cobasi.com.br/petisco-joy-beef-carne-para-caes-31184580/p",
+  popularity: 150
  },
  {
   sku: "cobasi-1184199",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1092621/up-flora-mini-suplemento-alimentar-avert-8caps.webp?v=638998411394830000",
-  productUrl: "https://www.cobasi.com.br/up-flora-mini-suplemento-alimentar-avert-31184199/p"
+  productUrl: "https://www.cobasi.com.br/up-flora-mini-suplemento-alimentar-avert-31184199/p",
+  popularity: 151
  },
  {
   sku: "cobasi-1179489",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107968/racao-golden-formula-senior-racas-pequenas-carne-e-arroz-3-1.webp?v=639165126594470000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-racas-pequenas-carne-e-arroz-31179489/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-senior-racas-pequenas-carne-e-arroz-31179489/p",
+  popularity: 152
  },
  {
   sku: "cobasi-1175300",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082435/Petisco-Optimum-Gatos-Adultos-Anti-Pele-e-Pelo-Salmao-e-Vegetais.webp?v=638901028566600000",
-  productUrl: "https://www.cobasi.com.br/petisco-optimum-gatos-adultos-pele-e-pelo-salmao-e-vegetais-31175300/p"
+  productUrl: "https://www.cobasi.com.br/petisco-optimum-gatos-adultos-pele-e-pelo-salmao-e-vegetais-31175300/p",
+  popularity: 153
  },
  {
   sku: "cobasi-1170619",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096730/Racao-Joy-High-Premium-para-Gatos-Castrados-Frango-2kg.webp?v=639063495433430000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-castrados-frango-31170619/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-castrados-frango-31170619/p",
+  popularity: 154
  },
  {
   sku: "cobasi-1170520",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096686/Racao-Joy-Premium-Caes-Adultos-Racas-Pequenas-Frango-e-Carne-2kg.webp?v=639063493327370000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-premium-caes-adultos-racas-pequenas-frango-e-carne-31170520/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-premium-caes-adultos-racas-pequenas-frango-e-carne-31170520/p",
+  popularity: 155
  },
  {
   sku: "cobasi-1170600",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096641/Racao-Joy-High-Premium-para-Gatos-Adultos-Frango-25kg.webp?v=639063491816830000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-adultos-frango-31169980/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-adultos-frango-31169980/p",
+  popularity: 156
  },
  {
   sku: "cobasi-1169955",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077611/Racao-Royal-Canin-Veterinary-Diet-Gastrointestinal-Low-Fat.webp?v=638926152887530000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-veterinary-diet-gastrointestinal-low-fat-para-caes-adultos-de-pequeno-porte-31169955/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-veterinary-diet-gastrointestinal-low-fat-para-caes-adultos-de-pequeno-porte-31169955/p",
+  popularity: 157
  },
  {
   sku: "cobasi-1169904",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077553/Racao-Royal-Canin-Veterinary-Diet-Gastrointestinal-Hydrolysed-Protein-para-Gatos-Adultos.webp?v=638926152492530000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-veterinary-diet-gastrointestinal-hydrolysed-protein-para-gatos-adultos-31169904/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-veterinary-diet-gastrointestinal-hydrolysed-protein-para-gatos-adultos-31169904/p",
+  popularity: 158
  },
  {
   sku: "cobasi-1167677",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076297/Racao-Umida-Optimum-Sache-Caes-Adultos-Mini-e-Pequeno-Carne-e-Frango--85g.webp?v=638848158877530000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-caes-adultos-mini-e-pequeno-carne-e-frango-31167677/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-caes-adultos-mini-e-pequeno-carne-e-frango-31167677/p",
+  popularity: 159
  },
  {
   sku: "cobasi-1167510",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075880/Petisco-Churu-Frango-e-Atum-para-Caes.webp?v=638838718113600000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-e-atum-para-caes-31167510/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-e-atum-para-caes-31167510/p",
+  popularity: 160
  },
  {
   sku: "cobasi-1167502",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075876/Petisco-Churu-Frango-para-Caes.webp?v=638838716687630000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-para-caes-31167502/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-para-caes-31167502/p",
+  popularity: 161
  },
  {
   sku: "cobasi-1160656",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066777/Petisco-Cremoso-Sheba-Frango-e-Frango-com-Peixe-Branco-Gatos-Adultos-48g-Hero.png.png?v=638724577662870000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-gatos-adultos-frango-e-frango-com-peixe-branco-31160656/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-gatos-adultos-frango-e-frango-com-peixe-branco-31160656/p",
+  popularity: 162
  },
  {
   sku: "cobasi-1160630",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066786/Petisco-Cremoso-Sheba-Atum-e-Atum-com-Camarao-Gatos-Adultos-Hero-48g.jpg.jpg?v=638724582429430000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-gatos-adultos-atum-e-atum-com-camarao-31160630/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-gatos-adultos-atum-e-atum-com-camarao-31160630/p",
+  popularity: 163
  },
  {
   sku: "cobasi-1159186",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1074807/Tapete-Higienico-MyHug-Slim-Grande.png.png?v=638828249942670000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-90x60cm-slim-grande-31159186/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-90x60cm-slim-grande-31159186/p",
+  popularity: 164
  },
  {
   sku: "cobasi-1191705",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100033/Racao-Bionatural-Prime-Caes-Adultos-Racas-Medias-e-Grandes-Frango-Frente.png?v=639118797885030000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-adultos-racas-medias-e-grandes-frango-31157752/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-adultos-racas-medias-e-grandes-frango-31157752/p",
+  popularity: 165
  },
  {
   sku: "cobasi-1157043",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095081/Petisco Friskies Party Mix Carne 40g.webp?v=639015128994530000",
-  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-carne-31157043/p"
+  productUrl: "https://www.cobasi.com.br/petisco-friskies-party-mix-carne-31157043/p",
+  popularity: 166
  },
  {
   sku: "cobasi-1153820",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062245/Zenrelia-15mg-eficacia-e-praticidade.jpg?v=638705536439270000",
-  productUrl: "https://www.cobasi.com.br/zenrelia-15mg-antialergico-para-cachorro-31153820/p"
+  productUrl: "https://www.cobasi.com.br/zenrelia-15mg-antialergico-para-cachorro-31153820/p",
+  popularity: 167
  },
  {
   sku: "cobasi-1153803",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062241/Zenrelia-6-4mg-eficacia-e-praticidade.jpg?v=638705535710470000",
-  productUrl: "https://www.cobasi.com.br/zenrelia-6-4mg-antialergico-para-cachorro-31153803/p"
+  productUrl: "https://www.cobasi.com.br/zenrelia-6-4mg-antialergico-para-cachorro-31153803/p",
+  popularity: 168
  },
  {
   sku: "cobasi-1153790",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062238/Zenrelia-4-8mg-eficacia-e-praticidade.jpg?v=638705537493900000",
-  productUrl: "https://www.cobasi.com.br/zenrelia-4-8mg-antialergico-para-cachorro-31153790/p"
+  productUrl: "https://www.cobasi.com.br/zenrelia-4-8mg-antialergico-para-cachorro-31153790/p",
+  popularity: 169
  },
  {
   sku: "cobasi-1153463",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069418/Tapete-Higienico-MyHug-Tradicional.webp.webp?v=638784312226100000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-80x60cm-31153463/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-80x60cm-31153463/p",
+  popularity: 170
  },
  {
   sku: "cobasi-1152602",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061587/Petisco-Cremoso-Nutrisco-para-Gatos-Atum-e-Salmao.png?v=638814540998700000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-salmao-31152602/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-salmao-31152602/p",
+  popularity: 171
  },
  {
   sku: "cobasi-1152564",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061585/Petisco-Cremoso-Nutrisco-para-Gatos-Frango.png?v=638814542123200000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-frango-31152564/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-frango-31152564/p",
+  popularity: 172
  },
  {
   sku: "cobasi-1149768",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060980/Racao-Umida-Optimum-Sache-Gatos-Adultos-Castrados-Salmao-85g.png?v=638802276517000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-salmao-31149768/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-salmao-31149768/p",
+  popularity: 173
  },
  {
   sku: "cobasi-1149750",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060995/Racao-Umida-Optimum-Sache-Gatos-Adultos-Castrados-Carne-85g.png?v=638802278251800000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-carne-31149750/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-carne-31149750/p",
+  popularity: 174
  },
  {
   sku: "cobasi-1142240",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057665/Origens-Gatos-Castrados-Salmao.png?v=638520909894900000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-castrados-salmao-31142240/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-castrados-salmao-31142240/p",
+  popularity: 175
  },
  {
   sku: "cobasi-1142232",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057663/Origens-Gatos-Castrados-Frango-Carne.png?v=638520908112830000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-castrados-frango-e-carne-31142232/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-castrados-frango-e-carne-31142232/p",
+  popularity: 176
  },
  {
   sku: "cobasi-1142224",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057661/Origens-Gatos-Carne-ao-Molho.png?v=638520896405300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-carne-ao-molho-31142224/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-gatos-carne-ao-molho-31142224/p",
+  popularity: 177
  },
  {
   sku: "cobasi-1140523",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107985/racao-golden-special-caes-adultos-porte-pequeno-frango-e-carne-3-1.webp?v=639165173922130000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-special-caes-adultos-porte-pequeno-frango-e-carne-31140523/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-special-caes-adultos-porte-pequeno-frango-e-carne-31140523/p",
+  popularity: 178
  },
  {
   sku: "cobasi-1134159",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza coletor de fezes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069076/1-Refil-Saquinhos-Higienicos-MyHug-4-unidades.webp.webp?v=638781566541900000",
-  productUrl: "https://www.cobasi.com.br/refil-saquinhos-higienicos-myhug-31134159/p"
+  productUrl: "https://www.cobasi.com.br/refil-saquinhos-higienicos-myhug-31134159/p",
+  popularity: 179
  },
  {
   sku: "cobasi-1133420",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063426/Stick-Oral-Care-Menta-Caes-Racas-Pequenas-Origem-Natural-3.png?v=638760227119300000",
-  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-pequenas-origem-natural-31133420/p"
+  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-pequenas-origem-natural-31133420/p",
+  popularity: 180
  },
  {
   sku: "cobasi-1132784",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051550/Racao-Magnus-Todo-Dia-Caes-Adultos-Carne-Frente.png?v=638786765666970000",
-  productUrl: "https://www.cobasi.com.br/racao-magnus-todo-dia-caes-adultos-carne-31132784/p"
+  productUrl: "https://www.cobasi.com.br/racao-magnus-todo-dia-caes-adultos-carne-31132784/p",
+  popularity: 181
  },
  {
   sku: "cobasi-1132458",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104554/Racao-N-D-Tropical-Selection-Gatos-Castrados-Frango.webp?v=639154218304670000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-frango-31132458/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-frango-31132458/p",
+  popularity: 182
  },
  {
   sku: "cobasi-1128710",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050383/churu-galinha-e-caranguejo--2-.png?v=638748849821200000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-para-gatos-galinha-e-caranguejo-31128710/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-para-gatos-galinha-e-caranguejo-31128710/p",
+  popularity: 183
  },
  {
   sku: "cobasi-1125494",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062137/Petisco-Formula-Natural-Dog-Biscuits-Batata-Doce-Caes-Adultos-Pequeno-Porte.png?v=638635651595500000",
-  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-batata-doce-caes-adultos-pequeno-porte-31125494/p"
+  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-batata-doce-caes-adultos-pequeno-porte-31125494/p",
+  popularity: 184
  },
  {
   sku: "cobasi-1140841",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057234/Areia-Higienica-para-Gatos-Bob-Esconde-4kg.png?v=638714277498970000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-para-gatos-bob-esconde-31122800/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-para-gatos-bob-esconde-31122800/p",
+  popularity: 185
  },
  {
   sku: "cobasi-1007696",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082906/Racao-Premier-Nutricao-Clinica-Renal-Caes-Adultos-Porte-Pequeno-2kg-frente.webp?v=638907100222170000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-caes-adultos-nutricao-clinica-renal-racas-pequenas-31007696/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-caes-adultos-nutricao-clinica-renal-racas-pequenas-31007696/p",
+  popularity: 186
  },
  {
   sku: "cobasi-1005987",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083236/Jornal-Liso-para-Pet-Pets-Paper-50-Folhas.webp?v=638912148771270000",
-  productUrl: "https://www.cobasi.com.br/jornal-liso-para-pet-pets-paper-31005987/p"
+  productUrl: "https://www.cobasi.com.br/jornal-liso-para-pet-pets-paper-31005987/p",
+  popularity: 187
  },
  {
   sku: "cobasi-1004794",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1035400/Vet-Care-Recuperacao.jpg?v=638053272952700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-vet-care-recuperacao-caes-e-gatos-31004794/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-vet-care-recuperacao-caes-e-gatos-31004794/p",
+  popularity: 188
  },
  {
   sku: "cobasi-1004328",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108406/Gran-Plus-Gourmet-Gato-Filhote-Salmao-e-Frango.jpg?v=639168833070070000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-filhotes-salmao-e-frango-31004328/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-filhotes-salmao-e-frango-31004328/p",
+  popularity: 189
  },
  {
   sku: "cobasi-1004174",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109387/Racao-Biofresh-Gatos-Castrados-Salmao_400g_FRENTE-01.webp?v=639173074856530000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-castrados-salmao-31004174/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-castrados-salmao-31004174/p",
+  popularity: 190
  },
  {
   sku: "cobasi-1004000",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076195/Racao-Formula-Natural-Vet-Care-Gatos-Urinaria.webp?v=638847460544630000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-gatos-urinaria-31004000/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-gatos-urinaria-31004000/p",
+  popularity: 191
  },
  {
   sku: "cobasi-1003810",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101485/racao-formula-natural-vet-care-hipoalergenica-caes-mini-e-pequeno.jpg?v=639135975966470000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-hipoalergenica-caes-mini-e-pequeno-31003810/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-hipoalergenica-caes-mini-e-pequeno-31003810/p",
+  popularity: 192
  },
  {
   sku: "cobasi-1001132",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1092449/Joy-Orelha-Desitrada.jpg?v=638991766342170000",
-  productUrl: "https://www.cobasi.com.br/petisco-joy-orelha-bovina-natural-desidratada-31001132/p"
+  productUrl: "https://www.cobasi.com.br/petisco-joy-orelha-bovina-natural-desidratada-31001132/p",
+  popularity: 193
  },
  {
   sku: "cobasi-1000071",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiemeticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1006899/Emedron-Embalagem.jpg?v=637963557730600000",
-  productUrl: "https://www.cobasi.com.br/antiemetico-emedron-5-mg-para-caes-e-gatos-agener-uniao-31000071/p"
+  productUrl: "https://www.cobasi.com.br/antiemetico-emedron-5-mg-para-caes-e-gatos-agener-uniao-31000071/p",
+  popularity: 194
  },
  {
   sku: "cobasi-998400",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066994/origem_nature_cordeiro_com_espinafre_e_legumes.jpg?v=638731558919230000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-cordeiro-com-espinafre-e-legumes-3998400/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-cordeiro-com-espinafre-e-legumes-3998400/p",
+  popularity: 195
  },
  {
   sku: "cobasi-998389",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066982/origem_nature_light_carne_com_espinafre_legumes_300g.jpg?v=638731557313430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-carne-com-espinafre-e-legumes-3998389/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-carne-com-espinafre-e-legumes-3998389/p",
+  popularity: 196
  },
  {
   sku: "cobasi-998230",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/813901/Petisco-Golden-Cookie-Caes-Adultos-Porte-Pequeno-350g.jpg?v=637655893228370000",
-  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-porte-pequeno-3998230/p"
+  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-porte-pequeno-3998230/p",
+  popularity: 197
  },
  {
   sku: "cobasi-992666",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113182/NexGard Spectra 15,1 a 30kg Antipulgas, Carrapatos e Vermifugo embalagem_FRENTE-01.webp?v=639208459439500000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-15-1-a-30-kg-3992666/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-15-1-a-30-kg-3992666/p",
+  popularity: 198
  },
  {
   sku: "cobasi-992658",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113172/NexGard-Spectra-76kg-a-15kg-Antipulgas-Carrapatos-e-Vermifugo-embalagem_FRENTE-01.webp?v=639210316495100000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-7-6-a-15-kg-3992658/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-7-6-a-15-kg-3992658/p",
+  popularity: 199
  },
  {
   sku: "cobasi-992640",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113162/NexGard-Spectra-36kg-a-75kg-Antipulgas-Carrapatos-e-Vermifugo-embalagem_FRENTE-01.webp?v=639208436973870000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-3-6-a-7-5-kg-3992640/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-3-6-a-7-5-kg-3992640/p",
+  popularity: 200
  },
  {
   sku: "cobasi-981575",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1009705/52742040332_2.jpg?v=639198270211130000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-hills-ad-para-caes-e-gatos-urgent-care-3981575/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-hills-ad-para-caes-e-gatos-urgent-care-3981575/p",
+  popularity: 201
  },
  {
   sku: "cobasi-981400",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052345/racao-umida-friskies-gatos-filhotes-carne-ao-molho.png?v=639136832258100000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-filhotes-carne-ao-molho-3981400/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-friskies-gatos-filhotes-carne-ao-molho-3981400/p",
+  popularity: 202
  },
  {
   sku: "cobasi-974382",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113059/Moderate-Calore.jpg?v=639207598975630000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-adultos-veterinary-hypoallergenic-moderate-calorie-3974404/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-adultos-veterinary-hypoallergenic-moderate-calorie-3974404/p",
+  popularity: 203
  },
  {
   sku: "cobasi-968340",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/384313/Meloxicam.jpg?v=637420165086600000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-gatos-meloxicam-mellis-vet-avert-3968340/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-gatos-meloxicam-mellis-vet-avert-3968340/p",
+  popularity: 204
  },
  {
   sku: "cobasi-1159275",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096180/Racao-Hills-Science-Diet-Caes-Adultos-Pequenos-e-Mini-frente.webp?v=639058320015830000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-racas-pequenas-e-mini-3964476/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-racas-pequenas-e-mini-3964476/p",
+  popularity: 205
  },
  {
   sku: "cobasi-964360",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095582/Cookie-Premier-Fit-Caes-Adultos-Frango-com-Batata-Doce-250g-frente.png?v=639035696205730000",
-  productUrl: "https://www.cobasi.com.br/premier-cookie-fit-caes-adultos-frango-com-batata-doce-3964360/p"
+  productUrl: "https://www.cobasi.com.br/premier-cookie-fit-caes-adultos-frango-com-batata-doce-3964360/p",
+  popularity: 206
  },
  {
   sku: "cobasi-954861",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083706/Racao-Premier-Nut-Clinica-Hipoalergenico-Caes-Med-e-Gde-Cordeiro-10.1kg-frente.webp?v=638918286793230000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-porte-medio-e-grande-3954861/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-hipoalergenico-caes-porte-medio-e-grande-3954861/p",
+  popularity: 207
  },
  {
   sku: "cobasi-954837",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011385/ORIGENS-AD-SENIOR-MEDIO-GRANDE-7898363315397---7898363316943.jpg?v=638138077837630000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-caes-senior-medio-e-grande-frango-e-cereais-3954837/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-caes-senior-medio-e-grande-frango-e-cereais-3954837/p",
+  popularity: 208
  },
  {
   sku: "cobasi-953199",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067825/Goulash-Com-Atum.jpg?v=638745561376400000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-goulash-atum-3953199/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-goulash-atum-3953199/p",
+  popularity: 209
  },
  {
   sku: "cobasi-953180",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336690/Demi-Glace-Com-Carne.jpg?v=638760085763400000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-demi-glace-carne-3953180/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-demi-glace-carne-3953180/p",
+  popularity: 210
  },
  {
   sku: "cobasi-953091",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336689/Petit-Filets-Com-Salmao.jpg?v=638760085554700000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-petit-filet-salmao-3953091/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-petit-filet-salmao-3953091/p",
+  popularity: 211
  },
  {
   sku: "cobasi-950726",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082808/Racao-Premier-Nattu-Caes-Adultos-Pequeno-Porte-Abobora-1kg-frente.webp?v=638906295371600000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-abobora-pequeno-porte-3950726/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-abobora-pequeno-porte-3950726/p",
+  popularity: 212
  },
  {
   sku: "cobasi-949051",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/416925/alimento-umido-royal-canin-gatos-gastrointestinal-s-o-wet-85g--3949051.jpg?v=638955327343900000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-gastrointestinal-s-o-wet-85g--3949051/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-gastrointestinal-s-o-wet-85g--3949051/p",
+  popularity: 213
  },
  {
   sku: "cobasi-946079",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082872/Racao-Premier-Nutricao-Clinica-Gastrointestinal-Caes-Racas-Medias-e-Grandes-10.1kg-frente.webp?v=638926133537430000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-gastrointestinal-caes-racas-medio-e-grande-3946079/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-gastrointestinal-caes-racas-medio-e-grande-3946079/p",
+  popularity: 214
  },
  {
   sku: "cobasi-945676",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113429/Suplemento Beneflora Vet Avert embalagem_FRENTE-01.webp?v=639210128498230000",
-  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-beneflora-vet-3945676/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-beneflora-vet-3945676/p",
+  popularity: 215
  },
  {
   sku: "cobasi-944971",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082649/Racao-Premier-Ambientes-Internos-Caes-Adultos-Porte-Medio-Frango-e-Salmao-2.5kg-Frente.webp?v=638905411321500000",
-  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adultos-medio-frango-e-salmao-premier-ambientes-internos-3944971/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adultos-medio-frango-e-salmao-premier-ambientes-internos-3944971/p",
+  popularity: 216
  },
  {
   sku: "cobasi-941077",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089071/REVOLUTION6--45MG-GATOS-1BIS.webp.webp?v=638972742473630000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-6-gatos-de-2-6-a-7-5-kg-zoetis-3940623/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-6-gatos-de-2-6-a-7-5-kg-zoetis-3940623/p",
+  popularity: 217
  },
  {
   sku: "cobasi-934461",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047379/Racao-Formula-Natural-Fresh-Meat-Gatos-Senior-Frango.png?v=638714243960370000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-senior-frango-3934461/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-senior-frango-3934461/p",
+  popularity: 218
  },
  {
   sku: "cobasi-934399",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047369/Racao-Formula-Natural-Fresh-Meat-Gatos-Adultos-Frango.png?v=638923491642730000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-adulto-frango-3934399/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-adulto-frango-3934399/p",
+  popularity: 219
  },
  {
   sku: "cobasi-934356",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047363/Racao-Formula-Natural-Fresh-Meat-Gatos-Castrados-Carne.png?v=638923491990700000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-castrado-carne-3934356/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-castrado-carne-3934356/p",
+  popularity: 220
  },
  {
   sku: "cobasi-934283",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062408/Racao-Formula-Natural-Fresh-Meat-Light-Caes-Medio-e-Grande-Frango-LE.png?v=638912025252570000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-light-medio-e-grande-frango-3934283/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-light-medio-e-grande-frango-3934283/p",
+  popularity: 221
  },
  {
   sku: "cobasi-934259",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062399/Racao-Formula-Natural-Fresh-Meat-Light-Caes-Mini-e-Pequeno-Frango-LE.png?v=638912024229900000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-light-mini-e-pequeno-frango-3934259/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-light-mini-e-pequeno-frango-3934259/p",
+  popularity: 222
  },
  {
   sku: "cobasi-934178",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062022/Racao-Formula-Natural-Fresh-Meat-Caes-Filhotes-Portes-Mini-e-Pequeno-Frango.png?v=638912023502900000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-mini-e-pequeno-frango-3934178/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-mini-e-pequeno-frango-3934178/p",
+  popularity: 223
  },
  {
   sku: "cobasi-1006088",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1084815/Areia Silica MyHug Micro Cristais 1.8kg.webp?v=638944234818900000",
-  productUrl: "https://www.cobasi.com.br/areia-silica-myhug-micro-3928844/p"
+  productUrl: "https://www.cobasi.com.br/areia-silica-myhug-micro-3928844/p",
+  popularity: 224
  },
  {
   sku: "cobasi-1006096",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069819/Areia-Silica-MyHug-Regular-para-Gatos.png.png?v=638793864641400000",
-  productUrl: "https://www.cobasi.com.br/areia-silica-myhug-regular-3928682/p"
+  productUrl: "https://www.cobasi.com.br/areia-silica-myhug-regular-3928682/p",
+  popularity: 225
  },
  {
   sku: "cobasi-927490",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032716/alimento-umido-gran-plus-gatos-adulto-atum-85g-frente.jpg?v=638043771617630000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gatos-adulto-atum-85g-3927490/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gatos-adulto-atum-85g-3927490/p",
+  popularity: 226
  },
  {
   sku: "cobasi-992011",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108304/Gourmet-Caes-Adultos-Medio-e-Grande-Salmao-e-Frango-Frente.jpg?v=639168822705430000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-medio-e-grande-gran-plus-gourmet-salmao-e-frango-3927465/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-medio-e-grande-gran-plus-gourmet-salmao-e-frango-3927465/p",
+  popularity: 227
  },
  {
   sku: "cobasi-920681",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011400/920681--1-.jpg?v=638137317579700000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-gatos--3920681/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-gatos--3920681/p",
+  popularity: 228
  },
  {
   sku: "cobasi-919586",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011216/ORIGENS-AD-CARNE-7898363314185---7898363315380---7898363314277---7898363315472.jpg?v=639095462948400000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-carne-e-cereais-3919586/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-carne-e-cereais-3919586/p",
+  popularity: 229
  },
  {
   sku: "cobasi-916293",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063686/Racao-Umida-Royal-Canin-Mini-Adult-Caes-Adultos-85g.png?v=639040748059300000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-racas-mini-royal-canin-3916293/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-racas-mini-royal-canin-3916293/p",
+  popularity: 230
  },
  {
   sku: "cobasi-912395",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiemeticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/285318/Antimetico-para-Caes-Vonau-Vet-Avert.jpg?v=638137306043830000",
-  productUrl: "https://www.cobasi.com.br/antiemetico-para-caes-vonau-vet-avert-3912395/p"
+  productUrl: "https://www.cobasi.com.br/antiemetico-para-caes-vonau-vet-avert-3912395/p",
+  popularity: 231
  },
  {
   sku: "cobasi-911054",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106176/ND ANCESTRAL SELECTION AD MAX_GIG frente.webp?v=639155976981700000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-ancestral-selection-caes-adultos-grande-3911054/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-ancestral-selection-caes-adultos-grande-3911054/p",
+  popularity: 232
  },
  {
   sku: "cobasi-910147",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064939/0-Racao-Optimum-para-Gatos-Adultos-Castrados-Carne-1kg.png?v=638887170296130000",
-  productUrl: "https://www.cobasi.com.br/racao-optimum-gatos-adultos-castrados-carne-3910147/p"
+  productUrl: "https://www.cobasi.com.br/racao-optimum-gatos-adultos-castrados-carne-3910147/p",
+  popularity: 233
  },
  {
   sku: "cobasi-909904",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107122/Racao-Guabi-Natural-Caes-Adultos-Racas-Mini-e-Pequeno-Cordeiro-e-Aveia-1.webp?v=639160943495000000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-cordeiro-e-aveia-3909904/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-cordeiro-e-aveia-3909904/p",
+  popularity: 234
  },
  {
   sku: "cobasi-909831",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107052/Racao-Guabi-Natural-Caes-Adultos-Racas-Mini-e-Pequenas-Frango-e-Arroz-Integral-1.webp?v=639160907599300000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-frango-e-arroz-3909831/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-frango-e-arroz-3909831/p",
+  popularity: 235
  },
  {
   sku: "cobasi-982571",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106998/Racao Guabi Natural Caes Adultos Grandes Frango e Arroz 1.webp?v=639160897046930000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-grandes-e-gigantes-frango-e-arroz-3909084/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-grandes-e-gigantes-frango-e-arroz-3909084/p",
+  popularity: 236
  },
  {
   sku: "cobasi-908428",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077044/Racao Umida Pet Delicia Caes Panelinha de Carne.webp?v=638854205570000000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-gatos-panelinha-de-carne-3908428/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-gatos-panelinha-de-carne-3908428/p",
+  popularity: 237
  },
  {
   sku: "cobasi-903795",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037799/Menu-Caes-Adultos-Light-Frango-e-Arroz-Frente.jpg?v=638066372159470000",
-  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-adultos-light-frango-e-arroz-3903795/p"
+  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-adultos-light-frango-e-arroz-3903795/p",
+  popularity: 238
  },
  {
   sku: "cobasi-897248",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/202580/Granulado-Higienico-de-Madeira-ProGato.jpg?v=638735960008130000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-de-madeira-progato-3897230/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-de-madeira-progato-3897230/p",
+  popularity: 239
  },
  {
   sku: "cobasi-893382",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037725/Menu-Caes-Mini-Senior-Frango-e-Arroz-Frente.jpg?v=639190444879070000",
-  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-mini-senior-frango-e-arroz-3893382/p"
+  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-mini-senior-frango-e-arroz-3893382/p",
+  popularity: 240
  },
  {
   sku: "cobasi-893218",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062458/3893218_BIFINHO-ORIGEM-NAT.-BIOATIVO-60G_1.jpg?v=638646167000030000",
-  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-bioativo-3893218/p"
+  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-bioativo-3893218/p",
+  popularity: 241
  },
  {
   sku: "cobasi-893196",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062440/3893196_BIFINHO-ORIGEM-NAT.-MIX-DE-FRUTAS-60G.jpg?v=638646149761330000",
-  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-mix-de-frutas-3893196/p"
+  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-mix-de-frutas-3893196/p",
+  popularity: 242
  },
  {
   sku: "cobasi-884162",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-hipertensivos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/282235/Vetmedin-Boehringer-Ingelheim-50-comprimidos-125mg.jpg?v=638127636716930000",
-  productUrl: "https://www.cobasi.com.br/vetmedin-boehringer-ingelheim-3884162/p"
+  productUrl: "https://www.cobasi.com.br/vetmedin-boehringer-ingelheim-3884162/p",
+  popularity: 243
  },
  {
   sku: "cobasi-881295",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106882/racao-golden-gatos-senior-frango-1-1.webp?v=639160836825370000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-senior-frango-3881295/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-senior-frango-3881295/p",
+  popularity: 244
  },
  {
   sku: "cobasi-871192",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1022545/Frente-.jpg?v=639144751768270000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-ultra-dry-kelco-3871192/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-ultra-dry-kelco-3871192/p",
+  popularity: 245
  },
  {
   sku: "cobasi-871176",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083055/Racao-Premier-Racas-Especificas-Spitz-Alemao-Adultos-2.5kg-frente.webp?v=638907880553370000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-spitz-alemao-adulto-3871168/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-spitz-alemao-adulto-3871168/p",
+  popularity: 246
  },
  {
   sku: "cobasi-854298",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108624/Petisco-DentaLife-Gatos-Adultos-1.webp?v=639171315005200000",
-  productUrl: "https://www.cobasi.com.br/petisco-dentallife-gato-adulto-3854298/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dentallife-gato-adulto-3854298/p",
+  popularity: 247
  },
  {
   sku: "cobasi-851795",
@@ -2483,7 +2730,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111861/1.webp?v=639197449646370000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-cat-chow-castrados-peixe-nestle-purina-3851795/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-cat-chow-castrados-peixe-nestle-purina-3851795/p",
+  popularity: 248
  },
  {
   sku: "cobasi-827967",
@@ -2493,7 +2741,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106848/racao-golden-selecao-natural-caes-adultos-frango-e-arroz-3-1.webp?v=639159393037000000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-frango-e-arroz-3827967/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-frango-e-arroz-3827967/p",
+  popularity: 249
  },
  {
   sku: "cobasi-827380",
@@ -2503,7 +2752,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1024361/Racao-Royal-Canin-Veterinary-Diet-Urinary-Small-Dog-Caes-Adultos-1.jpg?v=638926126764500000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-urinary-s-o-racas-pequenas-small-dog-3827380/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-urinary-s-o-racas-pequenas-small-dog-3827380/p",
+  popularity: 250
  },
  {
   sku: "cobasi-826863",
@@ -2513,7 +2763,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111829/7891000240205-1.webp?v=639197427522730000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-cat-chow-castrados-carne-nestle-purina-85g-3826863/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-cat-chow-castrados-carne-nestle-purina-85g-3826863/p",
+  popularity: 251
  },
  {
   sku: "cobasi-823910",
@@ -2523,7 +2774,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106830/racao-golden-selecao-natural-gatos-filhotes-frango-arroz-1-1.webp?v=639159366116600000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-filhotes-frango-arroz-3823910/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-gatos-filhotes-frango-arroz-3823910/p",
+  popularity: 252
  },
  {
   sku: "cobasi-821802",
@@ -2533,7 +2785,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095584/Cookie-Premier-Caes-Adultos-Porte-Pequeno-frente.png?v=639035696779630000",
-  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-pequenos-3821802/p"
+  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-pequenos-3821802/p",
+  popularity: 253
  },
  {
   sku: "cobasi-820733",
@@ -2543,7 +2796,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058969/Racao-Umida-Sheba-Gatos-Adultos-Sache-Atum-Marinado-85g.png?v=638804099383370000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-atum-marinado-3820733/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-atum-marinado-3820733/p",
+  popularity: 254
  },
  {
   sku: "cobasi-816434",
@@ -2553,7 +2807,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089481/Apoquel 3,6 mg - Tratamento para coceira em Caes.webp?v=638974314087830000",
-  productUrl: "https://www.cobasi.com.br/apoquel-dermatologico-zoetis-para-cachorro-3-6-mg-3816434/p"
+  productUrl: "https://www.cobasi.com.br/apoquel-dermatologico-zoetis-para-cachorro-3-6-mg-3816434/p",
+  popularity: 255
  },
  {
   sku: "cobasi-815047",
@@ -2563,7 +2818,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101425/Racao-Vet-Life-Natural-Feline-Gastro-Intestinal.jpg?v=639135153449530000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-feline-gastro-intestinal-3815047/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-feline-gastro-intestinal-3815047/p",
+  popularity: 256
  },
  {
   sku: "cobasi-813729",
@@ -2573,7 +2829,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083860/Racao-Royal-Canin-Super-Premium-Cat-para-Gatos-Adultos-Castrados.webp?v=638924324314830000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-premium-cat-castrado-gatos-adultos-3813729/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-premium-cat-castrado-gatos-adultos-3813729/p",
+  popularity: 257
  },
  {
   sku: "cobasi-1169890",
@@ -2583,7 +2840,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077700/Racao-Royal-Canin-Veterinary-Diet-Satiety-para-Gatos-Adultos.webp?v=638926112088170000",
-  productUrl: "https://www.cobasi.com.br/racao-feline-satiety-royal-canin-3811840/p"
+  productUrl: "https://www.cobasi.com.br/racao-feline-satiety-royal-canin-3811840/p",
+  popularity: 258
  },
  {
   sku: "cobasi-806153",
@@ -2593,7 +2851,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032366/alimento-umido-gran-plus-gatos-trato-urinario-frango-85g-frente.jpg?v=638043767765400000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gatos-trato-urinario-frango-85g-3806153/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gatos-trato-urinario-frango-85g-3806153/p",
+  popularity: 259
  },
  {
   sku: "cobasi-805840",
@@ -2603,7 +2862,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032353/racao-umida-gran-plus-gatos-castrados-frente.jpg?v=638043763331970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-gatos-castrados-3805840/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-gatos-castrados-3805840/p",
+  popularity: 260
  },
  {
   sku: "cobasi-805785",
@@ -2613,7 +2873,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032339/alimento-umido-gran-plus-caes-adultos-frango-100g-frente.jpg?v=638043756086130000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-caes-adulto-frango-100g-3805785/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-caes-adulto-frango-100g-3805785/p",
+  popularity: 261
  },
  {
   sku: "cobasi-805491",
@@ -2623,7 +2884,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032350/racao-umida-granplus-gatos-adultos-sache-carne-frente.jpg?v=638043761166570000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-sache-carne-3805491/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-sache-carne-3805491/p",
+  popularity: 262
  },
  {
   sku: "cobasi-803391",
@@ -2633,7 +2895,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056113/Racao-Umida-Royal-Canin-Bolas-de-Pelo-Gatos-Adultos-85g.png?v=638484454959700000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-feline-hairball-care-wet-100g-royal-canin-3803391/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-feline-hairball-care-wet-100g-royal-canin-3803391/p",
+  popularity: 263
  },
  {
   sku: "cobasi-798550",
@@ -2643,7 +2906,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082676/Racao-Premier-Ambientes-Internos-Caes-Filhotes-Racas-Pequenas-1kg-frente.webp?v=638905994165630000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-racas-pequenas-filhote-3798550/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-racas-pequenas-filhote-3798550/p",
+  popularity: 264
  },
  {
   sku: "cobasi-797723",
@@ -2653,7 +2917,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051172/Racao-Umida-Whiskas-Sache-Peixe-ao-Molho-Gatos-Adultos-Castrados.png?v=638322153406230000",
-  productUrl: "https://www.cobasi.com.br/sache-castrado-peixe-85g-whiskas-3797723/p"
+  productUrl: "https://www.cobasi.com.br/sache-castrado-peixe-85g-whiskas-3797723/p",
+  popularity: 265
  },
  {
   sku: "cobasi-796875",
@@ -2663,7 +2928,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051162/Racao-Umida-Whiskas-Sache-Frango-ao-Molho-Gatos-Filhotes--1-.png?v=638322116816400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-filhotes-frango-ao-molho-3796875/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-filhotes-frango-ao-molho-3796875/p",
+  popularity: 266
  },
  {
   sku: "cobasi-796867",
@@ -2673,7 +2939,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051108/Racao-umida-Whiskas-Sabor-Carne-Filhotes-Gatitos.png?v=638321919003000000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-sache-filhote-carne-3796867/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-sache-filhote-carne-3796867/p",
+  popularity: 267
  },
  {
   sku: "cobasi-794384",
@@ -2683,7 +2950,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051192/Racao-Umida-Whiskas-Sache-Salmao-ao-Molho-Gatos-Adultos-frente.png?v=638322202739730000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-salmao-ao-molho-3794384/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-salmao-ao-molho-3794384/p",
+  popularity: 268
  },
  {
   sku: "cobasi-793639",
@@ -2693,7 +2961,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090462/Racao-Royal-Canin-Mini-Adult-Caes-Adultos.png.png?v=638978651071830000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-caes-adultos-ate-10-kg-3793639/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-caes-adultos-ate-10-kg-3793639/p",
+  popularity: 269
  },
  {
   sku: "cobasi-790621",
@@ -2703,7 +2972,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106715/racao-golden-mega-para-caes-adultos-racas-grandes-frango-e-arroz-1.webp?v=639156756760670000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-mega-para-caes-adultos-racas-grandes-frango-e-arroz-3790621/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-mega-para-caes-adultos-racas-grandes-frango-e-arroz-3790621/p",
+  popularity: 270
  },
  {
   sku: "cobasi-784001",
@@ -2713,7 +2983,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069737/Tapete Higienico Sapecao 80x60cm 30 unidades.webp.webp?v=638793637621330000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-sapecao-3783900/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-sapecao-3783900/p",
+  popularity: 271
  },
  {
   sku: "cobasi-783293",
@@ -2723,7 +2994,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao terras e substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/783903/terra-vegetal-biomix-2kg.jpg?v=638132793672200000",
-  productUrl: "https://www.cobasi.com.br/terra-vegetal-biomix-3783293/p"
+  productUrl: "https://www.cobasi.com.br/terra-vegetal-biomix-3783293/p",
+  popularity: 272
  },
  {
   sku: "cobasi-471836",
@@ -2733,7 +3005,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064732/0-WHISKAS-ADULTO-CARNE-2kg.png?v=638838887956370000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-carne-3782017/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-carne-3782017/p",
+  popularity: 273
  },
  {
   sku: "cobasi-781690",
@@ -2743,7 +3016,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063099/Origem-Natural-Digestivo-65-g.png?v=639013972736200000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-digestive-care-3781690/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-digestive-care-3781690/p",
+  popularity: 274
  },
  {
   sku: "cobasi-781592",
@@ -2753,7 +3027,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/398862/Renal-com-Frango.jpg?v=639205212949900000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-renal-gatos-85g-3781592/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-renal-gatos-85g-3781592/p",
+  popularity: 275
  },
  {
   sku: "cobasi-776335",
@@ -2763,7 +3038,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981430/7899638312936.jpg?v=638772272400200000",
-  productUrl: "https://www.cobasi.com.br/rotula-bovina-bona-pet-osso-para-cachorro-3776335/p"
+  productUrl: "https://www.cobasi.com.br/rotula-bovina-bona-pet-osso-para-cachorro-3776335/p",
+  popularity: 276
  },
  {
   sku: "cobasi-776319",
@@ -2773,7 +3049,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981428/7899638312905.jpg?v=638772271376130000",
-  productUrl: "https://www.cobasi.com.br/osso-natural-pipe-bona-pet-3776327/p"
+  productUrl: "https://www.cobasi.com.br/osso-natural-pipe-bona-pet-3776327/p",
+  popularity: 277
  },
  {
   sku: "cobasi-776246",
@@ -2783,7 +3060,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981425/7899638312820.jpg?v=638134715691000000",
-  productUrl: "https://www.cobasi.com.br/osso-esofago-desidratado-bona-pet-3776246/p"
+  productUrl: "https://www.cobasi.com.br/osso-esofago-desidratado-bona-pet-3776246/p",
+  popularity: 278
  },
  {
   sku: "cobasi-772321",
@@ -2793,7 +3071,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101161/NexGard Antipulgas e Carrapatos para Caes de 10,1 a 25kg_Frontal.webp?v=639130801983330000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-10-1-a-25-kg-3772321/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-10-1-a-25-kg-3772321/p",
+  popularity: 279
  },
  {
   sku: "cobasi-772313",
@@ -2803,7 +3082,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101155/NEXGARD_1 Tablete Frontal.jpg?v=639130787722700000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-4-1-a-10-kg-28-3-mg-3772313/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-4-1-a-10-kg-28-3-mg-3772313/p",
+  popularity: 280
  },
  {
   sku: "cobasi-769991",
@@ -2813,7 +3093,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076950/Racao Umida Pet Delicia Caes Risotinho de Frango.webp?v=638854178264400000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-risotinho-de-frango-320g-pet-delicia-3769991/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-risotinho-de-frango-320g-pet-delicia-3769991/p",
+  popularity: 281
  },
  {
   sku: "cobasi-767549",
@@ -2823,7 +3104,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos coleira antipulgas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1081118/Seresto-Menor-Igual-8.webp?v=638929321522100000",
-  productUrl: "https://www.cobasi.com.br/coleira-antipulgas-seresto-caes-e-gatos-ate-8-kg-elanco-3767549/p"
+  productUrl: "https://www.cobasi.com.br/coleira-antipulgas-seresto-caes-e-gatos-ate-8-kg-elanco-3767549/p",
+  popularity: 282
  },
  {
   sku: "cobasi-766046",
@@ -2833,7 +3115,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061186/petisco-biodog-gourmet-soft-strips-file-de-frango-frente.png?v=638621090787100000",
-  productUrl: "https://www.cobasi.com.br/petisco-biodog-gourmet-soft-strips-file-de-frango-3766046/p"
+  productUrl: "https://www.cobasi.com.br/petisco-biodog-gourmet-soft-strips-file-de-frango-3766046/p",
+  popularity: 283
  },
  {
   sku: "cobasi-765899",
@@ -2843,7 +3126,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113465/Antipulgas-e-Carrapatos-Bravecto-embalagem_FRENTE-01.webp?v=639210232426070000",
-  productUrl: "https://www.cobasi.com.br/bravecto-20-a-40-kg-antipulgas-oral-caes-comprimido-mastigavel-1000mgl-3765899/p"
+  productUrl: "https://www.cobasi.com.br/bravecto-20-a-40-kg-antipulgas-oral-caes-comprimido-mastigavel-1000mgl-3765899/p",
+  popularity: 284
  },
  {
   sku: "cobasi-765880",
@@ -2853,7 +3137,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068329/Bravecto-Caes-comp-500mg-2.png?v=638756778186000000",
-  productUrl: "https://www.cobasi.com.br/bravecto-10-a-20--kg-antipulgas-oral-caes-comprimido-mastigavel-500mg-3765880/p"
+  productUrl: "https://www.cobasi.com.br/bravecto-10-a-20--kg-antipulgas-oral-caes-comprimido-mastigavel-500mg-3765880/p",
+  popularity: 285
  },
  {
   sku: "cobasi-765864",
@@ -2863,7 +3148,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068340/Bravecto-Caes-Comp-112.5mg-2.png?v=638756778615430000",
-  productUrl: "https://www.cobasi.com.br/bravecto-ate-4-5-kg-antipulgas-oral-caes-comprimido-mastigavel-112-5-mg-3765864/p"
+  productUrl: "https://www.cobasi.com.br/bravecto-ate-4-5-kg-antipulgas-oral-caes-comprimido-mastigavel-112-5-mg-3765864/p",
+  popularity: 286
  },
  {
   sku: "cobasi-765740",
@@ -2873,7 +3159,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066164/ograx-3-500mg-caes-e-gatos-avert-jpg.jpg?v=638715335791900000",
-  productUrl: "https://www.cobasi.com.br/suplemento-ograx-3-caes-e-gatos-avert-3765740/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-ograx-3-caes-e-gatos-avert-3765740/p",
+  popularity: 287
  },
  {
   sku: "cobasi-761850",
@@ -2883,7 +3170,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082866/Racao-Premier-Nutricao-Clinica-Diabetes-Caes-Adultos-e-Filhotes-Racas-Pequenas-2kg-frente.webp?v=638906971156830000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-adultos-pequeno-porte-nutricao-clinica-diabetes-3761850/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-adultos-pequeno-porte-nutricao-clinica-diabetes-3761850/p",
+  popularity: 288
  },
  {
   sku: "cobasi-759198",
@@ -2893,7 +3181,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048919/Novo-Projeto.png?v=638277080388500000",
-  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-raca-grande-7-unidades-3759198/p"
+  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-raca-grande-7-unidades-3759198/p",
+  popularity: 289
  },
  {
   sku: "cobasi-759180",
@@ -2903,7 +3192,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/776729/7896029052341_1_Pedigree_759180.jpg?v=638753911544800000",
-  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-cuidado-oral-caes-adultos-racas-medias-3759180/p"
+  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-cuidado-oral-caes-adultos-racas-medias-3759180/p",
+  popularity: 290
  },
  {
   sku: "cobasi-759163",
@@ -2913,7 +3203,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/776753/7896029052327_1_Pedigree_759163.jpg?v=638753913790200000",
-  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-cuidado-oral-caes-adultos-racas-pequenas-3759163/p"
+  productUrl: "https://www.cobasi.com.br/petisco-pedigree-dentastix-cuidado-oral-caes-adultos-racas-pequenas-3759163/p",
+  popularity: 291
  },
  {
   sku: "cobasi-749958",
@@ -2923,7 +3214,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004156/7896181217213--1-.jpg?v=639179940611170000",
-  productUrl: "https://www.cobasi.com.br/racao-f-baby-cat-instinct-195g-royal-canin-3749958/p"
+  productUrl: "https://www.cobasi.com.br/racao-f-baby-cat-instinct-195g-royal-canin-3749958/p",
+  popularity: 292
  },
  {
   sku: "cobasi-733407",
@@ -2933,7 +3225,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais coelhos racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085529/733407-COELHO-ADULTO-500g.webp?v=638954435171430000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-coelho-adulto-super-premium-3733407/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-coelho-adulto-super-premium-3733407/p",
+  popularity: 293
  },
  {
   sku: "cobasi-732125",
@@ -2943,7 +3236,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082800/Racao-Premier-Formula-Light-Caes-Adultos-Racas-Grandes-e-Gigantes-Frango-15kg-frente.webp?v=639106633087230000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-light-sabor-frango-3732125/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-light-sabor-frango-3732125/p",
+  popularity: 294
  },
  {
   sku: "cobasi-732109",
@@ -2953,7 +3247,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082921/Racao-Premier-Nutricao-Clinica-Urinario-Gatos-Adultos-0.5kg-frente.webp?v=638907115703830000",
-  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-urinario-premier-3732109/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-urinario-premier-3732109/p",
+  popularity: 295
  },
  {
   sku: "cobasi-732079",
@@ -2963,7 +3258,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082900/Racao-Premier-Nutricao-Clinica-Obesidade-Gatos-Adultos-1.5kg-frente.webp?v=638926087220900000",
-  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-obesidade-premier-3732060/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-obesidade-premier-3732060/p",
+  popularity: 296
  },
  {
   sku: "cobasi-731684",
@@ -2973,7 +3269,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062481/Agemoxi-CL-250mg.png?v=638646209336470000",
-  productUrl: "https://www.cobasi.com.br/antibiotico-agemoxi-cl-250-mg-3731684/p"
+  productUrl: "https://www.cobasi.com.br/antibiotico-agemoxi-cl-250-mg-3731684/p",
+  popularity: 297
  },
  {
   sku: "cobasi-731676",
@@ -2983,7 +3280,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062480/Agemoxi-CL-50mg.png?v=638646209617000000",
-  productUrl: "https://www.cobasi.com.br/agemoxi-cl-agener-3731676/p"
+  productUrl: "https://www.cobasi.com.br/agemoxi-cl-agener-3731676/p",
+  popularity: 298
  },
  {
   sku: "cobasi-728861",
@@ -2993,7 +3291,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1049754/Castrado-Salmao-e-Arroz.png?v=639173256810530000",
-  productUrl: "https://www.cobasi.com.br/racao-gatos-castrados-salmao-e-arroz-gran-plus-3728853/p"
+  productUrl: "https://www.cobasi.com.br/racao-gatos-castrados-salmao-e-arroz-gran-plus-3728853/p",
+  popularity: 299
  },
  {
   sku: "cobasi-727539",
@@ -3003,7 +3302,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064676/0-WHISKAS-ADULTO-CASTRADOS-CARNE-500g.png?v=638844603408830000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-gatos-castrados-carne-3727547/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-gatos-castrados-carne-3727547/p",
+  popularity: 300
  },
  {
   sku: "cobasi-815942",
@@ -3013,7 +3313,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082667/Racao-Premier-Ambientes-Internos-Caes-Castrados-Adultos-Frango-e-Salmao-1kg-frente.webp?v=638905977692930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-caes-castrados-adultos-frango-e-salmao-3707783/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-caes-castrados-adultos-frango-e-salmao-3707783/p",
+  popularity: 301
  },
  {
   sku: "cobasi-1169874",
@@ -3023,7 +3324,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1078019/Racao-Royal-Canin-Veterinary-Diet-Gastrointestinal-Gatos-Adultos.webp?v=638926076249430000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-gastro-intestinal-veterinary-diet-3702323/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-gastro-intestinal-veterinary-diet-3702323/p",
+  popularity: 302
  },
  {
   sku: "cobasi-701416",
@@ -3033,7 +3335,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047384/Areia-para-Gatos-Like-Cat-Granulado-Higienico-de-Madeira-2.png?v=638228612147400000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gatos-like-cat-granulado-higienico-de-madeira-3701416/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gatos-like-cat-granulado-higienico-de-madeira-3701416/p",
+  popularity: 303
  },
  {
   sku: "cobasi-701335",
@@ -3043,7 +3346,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiemeticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111576/Antiemetico Cerenia 16mg para Caes.webp?v=639196365837000000",
-  productUrl: "https://www.cobasi.com.br/cerenia-antiemetico-zoetis-3701335/p"
+  productUrl: "https://www.cobasi.com.br/cerenia-antiemetico-zoetis-3701335/p",
+  popularity: 304
  },
  {
   sku: "cobasi-697826",
@@ -3053,7 +3357,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052339/acao-umida-nestle-purina-friskies-peru-ao-molho-gatos-adultos.png?v=639136836173970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-peru-ao-molho-gatos-adultos-3697826/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-nestle-purina-friskies-peru-ao-molho-gatos-adultos-3697826/p",
+  popularity: 305
  },
  {
   sku: "cobasi-696676",
@@ -3063,7 +3368,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/316968/Royal-Cannin-Gato-Idoso.jpg?v=638868847188100000",
-  productUrl: "https://www.cobasi.com.br/racao-feline-sterilised-12--royal-canin-3696676/p"
+  productUrl: "https://www.cobasi.com.br/racao-feline-sterilised-12--royal-canin-3696676/p",
+  popularity: 306
  },
  {
   sku: "cobasi-1169700",
@@ -3073,7 +3379,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113029/Racao-Royal-Canin-Veterinary-Diet-Hypoallergenic-para-Gatos-Adultos.webp?v=639207583187570000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-hipoalergenica-hypoallergenic-gatos-3695882/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-hipoalergenica-hypoallergenic-gatos-3695882/p",
+  popularity: 307
  },
  {
   sku: "cobasi-686646",
@@ -3083,7 +3390,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004316/686646--1-.jpg?v=638779276525130000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-satiety-caes-adultos-3686646/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-satiety-caes-adultos-3686646/p",
+  popularity: 308
  },
  {
   sku: "cobasi-663719",
@@ -3093,7 +3401,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082783/Racao Premier Formula Caes Senior Racas Grande e Gigante Cordeiro 15kg frente.webp?v=638906260135470000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-senior-racas-grandes-cordeiro-3663719/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-senior-racas-grandes-cordeiro-3663719/p",
+  popularity: 309
  },
  {
   sku: "cobasi-661023",
@@ -3103,7 +3412,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/995106/661023--1-.jpg?v=639179940025600000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-gatos-adultos-sache-3661023/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-gatos-adultos-sache-3661023/p",
+  popularity: 310
  },
  {
   sku: "cobasi-660990",
@@ -3113,7 +3423,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1023611/7896181214137--1-.jpg?v=639179940218430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-gato-filhote-3660990/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-gato-filhote-3660990/p",
+  popularity: 311
  },
  {
   sku: "cobasi-659932",
@@ -3123,7 +3434,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083176/Racao-Premier-Ambientes-Internos-Gatos-Adultos-Frango-0.5kg-frente.webp?v=638908651199730000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-pet-ambientes-internos-gato-adulto-frango-3659932/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-pet-ambientes-internos-gato-adulto-frango-3659932/p",
+  popularity: 312
  },
  {
   sku: "cobasi-659339",
@@ -3133,7 +3445,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085472/3659339-CALOPSITA-NATURAL-300G.webp?v=638953727880400000",
-  productUrl: "https://www.cobasi.com.br/racao-para-calopsitas-natural-nutropica-3659339/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-calopsitas-natural-nutropica-3659339/p",
+  popularity: 313
  },
  {
   sku: "cobasi-656640",
@@ -3143,7 +3456,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062335/racao-umida-pedigree-adulto-racas-pequenas-carne-ao-molho.png?v=638639221431400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-racas-pequenas-carne-ao-molho-3656640/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-racas-pequenas-carne-ao-molho-3656640/p",
+  popularity: 314
  },
  {
   sku: "cobasi-647942",
@@ -3153,7 +3467,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/316962/Gato-Adulto-Castrado.jpg?v=638127719556300000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-castrados-sterilised-3647942/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-castrados-sterilised-3647942/p",
+  popularity: 315
  },
  {
   sku: "cobasi-853755",
@@ -3163,7 +3478,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108437/racao-gran-plus-filhote-carne-e-cereais-frente.jpg?v=639168837271570000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-filhote-carne-e-cereais-3642983/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-filhote-carne-e-cereais-3642983/p",
+  popularity: 316
  },
  {
   sku: "cobasi-640999",
@@ -3173,7 +3489,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082950/Racao Premier Racas Especificas Golden Retriever Adultos 12kg frente.webp?v=638907760480500000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-golden-retriever-adultos-3640999/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-golden-retriever-adultos-3640999/p",
+  popularity: 317
  },
  {
   sku: "cobasi-638668",
@@ -3183,7 +3500,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051241/Racao-Umida-Whiskas-Pate-Frango-290-g.png?v=638324632706170000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-frango-3638668/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-frango-3638668/p",
+  popularity: 318
  },
  {
   sku: "cobasi-638650",
@@ -3193,7 +3511,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051231/Racao-Umida-Whiskas-Pate-Carne-290-g.png?v=638324606186930000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-carne-3638650/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-carne-3638650/p",
+  popularity: 319
  },
  {
   sku: "cobasi-638641",
@@ -3203,7 +3522,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051221/Racao-Umida-Whiskas-Pate-Atum-290-g.png?v=638324581807800000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-atum-3638641/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-atum-3638641/p",
+  popularity: 320
  },
  {
   sku: "cobasi-635693",
@@ -3213,7 +3533,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza fraldas e calcinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088901/Fralda-Higienica-Ecofralda-Macho-Dogs-Care-12-unidades.webp?v=638968473107670000",
-  productUrl: "https://www.cobasi.com.br/fralda-higienica-ecofralda-macho-dogs-care-3635693/p"
+  productUrl: "https://www.cobasi.com.br/fralda-higienica-ecofralda-macho-dogs-care-3635693/p",
+  popularity: 321
  },
  {
   sku: "cobasi-635090",
@@ -3223,7 +3544,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100253/racao-farmina-nd-prime-caes-adultos-mini-cordeiro-e-blueberry-1.webp?v=639119585996430000",
-  productUrl: "https://www.cobasi.com.br/racao-farmina-nd-prime-caes-adultos-mini-cordeiro-e-blueberry-3635090/p"
+  productUrl: "https://www.cobasi.com.br/racao-farmina-nd-prime-caes-adultos-mini-cordeiro-e-blueberry-3635090/p",
+  popularity: 322
  },
  {
   sku: "cobasi-627208",
@@ -3233,7 +3555,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106708/racao-golden-fomula-caes-filhotes-frango-e-arroz-3627208-3kg-Frente.jpg?v=639159147769500000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-fomula-caes-filhotes-frango-e-arroz-3627208/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-fomula-caes-filhotes-frango-e-arroz-3627208/p",
+  popularity: 323
  },
  {
   sku: "cobasi-684945",
@@ -3243,7 +3566,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106792/racao-golden-light-mini-bits-1-1.webp?v=639159208412970000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-light-mini-bits-3624950/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-light-mini-bits-3624950/p",
+  popularity: 324
  },
  {
   sku: "cobasi-616648",
@@ -3253,7 +3577,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052576/osso-femur-suino-ll-pet.png?v=638779096906300000",
-  productUrl: "https://www.cobasi.com.br/osso-femur-suino-ll-pet-3616648/p"
+  productUrl: "https://www.cobasi.com.br/osso-femur-suino-ll-pet-3616648/p",
+  popularity: 325
  },
  {
   sku: "cobasi-616516",
@@ -3263,7 +3588,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096052/Vetmax-Plus.webp?v=639052212241530000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-vetmax-plus-comprimido-vetnil-3616516/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-vetmax-plus-comprimido-vetnil-3616516/p",
+  popularity: 326
  },
  {
   sku: "cobasi-615560",
@@ -3273,7 +3599,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106958/Racao-Guabi-Natural-Caes-Adultos-Sensitive-Racas-Mini-Pequeno-e-Medio-Salmao-e-Aveia-1.webp?v=639160883637200000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-sensitive-racas-mini-e-pequena-salmao-e-aveia-3615560/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-sensitive-racas-mini-e-pequena-salmao-e-aveia-3615560/p",
+  popularity: 327
  },
  {
   sku: "cobasi-684937",
@@ -3283,7 +3610,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106721/racao-para-caes-adultos-racas-pequenas-golden-formula-salmao-e-arroz-1-1.webp?v=639156768246070000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-pequenas-golden-formula-salmao-e-arroz-3615501/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-pequenas-golden-formula-salmao-e-arroz-3615501/p",
+  popularity: 328
  },
  {
   sku: "cobasi-982601",
@@ -3293,7 +3621,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106952/Racao Guabi Natural Light Caes Adultos Portes Medio e Grande Peru e Aveia 1.webp?v=639160881212500000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-light-racas-medias-e-grandes-peru-e-aveia-3615471/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-adultos-light-racas-medias-e-grandes-peru-e-aveia-3615471/p",
+  popularity: 329
  },
  {
   sku: "cobasi-615463",
@@ -3303,7 +3632,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106729/racao-golden-formula-para-caes-adultos-carne-e-arroz-3-1.webp?v=639156774256000000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-para-caes-adultos-carne-e-arroz-3615463/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-para-caes-adultos-carne-e-arroz-3615463/p",
+  popularity: 330
  },
  {
   sku: "cobasi-1140450",
@@ -3313,7 +3643,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos otologicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057126/Auritop.png?v=638828438504900000",
-  productUrl: "https://www.cobasi.com.br/auritop-ourofino-3605778/p"
+  productUrl: "https://www.cobasi.com.br/auritop-ourofino-3605778/p",
+  popularity: 331
  },
  {
   sku: "cobasi-575445",
@@ -3323,7 +3654,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083067/Racao-Premier-Racas-Especificas-Yorkshire-Adultos-1kg-frente.webp?v=638907940082300000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-yorkshire-adultos-3575445/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-yorkshire-adultos-3575445/p",
+  popularity: 332
  },
  {
   sku: "cobasi-541257",
@@ -3333,7 +3665,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro protecao e adestramento colar elizabetano",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048505/Colar-Elizabetano-Sao-Benedito.png?v=638260807951100000",
-  productUrl: "https://www.cobasi.com.br/colar-elizabetano-com-capuz-cirurgico-sao-benedito-3541257/p"
+  productUrl: "https://www.cobasi.com.br/colar-elizabetano-com-capuz-cirurgico-sao-benedito-3541257/p",
+  popularity: 333
  },
  {
   sku: "cobasi-540234",
@@ -3343,7 +3676,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiparasitario",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1078038/Scalibor-Caes-Pequenos-e-Medios-48-cm_1.webp?v=638871440589730000",
-  productUrl: "https://www.cobasi.com.br/coleira-antiparasitaria-scalibor-48-cm-caes-pequenos-e-medios-3540234/p"
+  productUrl: "https://www.cobasi.com.br/coleira-antiparasitaria-scalibor-48-cm-caes-pequenos-e-medios-3540234/p",
+  popularity: 334
  },
  {
   sku: "cobasi-529176",
@@ -3353,7 +3687,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082732/Racao-Premier-Formula-Caes-Adultos-Racas-Grandes-e-Gigantes-15kg-frente.webp?v=639106631924670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-carne-3529176/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-grandes-carne-3529176/p",
+  popularity: 335
  },
  {
   sku: "cobasi-527874",
@@ -3363,7 +3698,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106751/racao-golden-formula-light-caes-adultos-frango-e-arroz-15-1.webp?v=639159087302230000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-light-caes-adultos-frango-e-arroz-3527874/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-light-caes-adultos-frango-e-arroz-3527874/p",
+  popularity: 336
  },
  {
   sku: "cobasi-527246",
@@ -3373,7 +3709,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102429/Vermifugo Fenzol Pet 500mg para Caes Nova_embalagem.webp?v=639138657078230000",
-  productUrl: "https://www.cobasi.com.br/fenzol-pet-agener-3527246/p"
+  productUrl: "https://www.cobasi.com.br/fenzol-pet-agener-3527246/p",
+  popularity: 337
  },
  {
   sku: "cobasi-518123",
@@ -3383,7 +3720,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais coelhos racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062386/Racao-Funny-Bunny-500g.png?v=638760170171100000",
-  productUrl: "https://www.cobasi.com.br/racao-coelho-funny-bunny-supra-3518123/p"
+  productUrl: "https://www.cobasi.com.br/racao-coelho-funny-bunny-supra-3518123/p",
+  popularity: 338
  },
  {
   sku: "cobasi-507873",
@@ -3393,7 +3731,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/300525/507873-Mistura-Calopsita-Agapornes-e-Rose-Faces-500g.jpg?v=638760169213200000",
-  productUrl: "https://www.cobasi.com.br/mistura-calopsita-agapornes-e-rose-faces-3507873/p"
+  productUrl: "https://www.cobasi.com.br/mistura-calopsita-agapornes-e-rose-faces-3507873/p",
+  popularity: 339
  },
  {
   sku: "cobasi-472212",
@@ -3403,7 +3742,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044419/789734820157-1-Golden-Gourmet-Gatos-Filhote---Frango-Abobora-e-Arroz-Fechada.png?v=638157120921970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-filhotes-frango-3472212/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-filhotes-frango-3472212/p",
+  popularity: 340
  },
  {
   sku: "cobasi-472182",
@@ -3413,7 +3753,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044694/Racao-Umida-Golden-Gourmet-Caes-Adultos-Porte-Pequeno-Carne-85g.png?v=638163140813200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-caes-adultos-porte-pequeno-carne-3472182/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-caes-adultos-porte-pequeno-carne-3472182/p",
+  popularity: 341
  },
  {
   sku: "cobasi-472107",
@@ -3423,7 +3764,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044673/Racao-Umida-Golden-Gourmet-Caes-Adultos-Porte-Pequeno-Frango-85g-frente.png?v=639039135519700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-caes-adultos-porte-pequeno-frango-3472107/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-caes-adultos-porte-pequeno-frango-3472107/p",
+  popularity: 342
  },
  {
   sku: "cobasi-471704",
@@ -3433,7 +3775,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais roedores feno e alfafa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097752/Feno Premium Belas Aves e Roedores 500g.webp?v=639078071120130000",
-  productUrl: "https://www.cobasi.com.br/feno-belas-aves-e-roedores-3471704/p"
+  productUrl: "https://www.cobasi.com.br/feno-belas-aves-e-roedores-3471704/p",
+  popularity: 343
  },
  {
   sku: "cobasi-468550",
@@ -3443,7 +3786,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063177/Gatos-Origem-Natural-Sensations-Dental-Care.png?v=638769752728830000",
-  productUrl: "https://www.cobasi.com.br/petisco-gatos-origem-natural-sensations-dental-care-3468550/p"
+  productUrl: "https://www.cobasi.com.br/petisco-gatos-origem-natural-sensations-dental-care-3468550/p",
+  popularity: 344
  },
  {
   sku: "cobasi-465437",
@@ -3453,7 +3797,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067929/petisco-churu-galinha-e-camarao-para-gatos-frente.jpg?v=638769726095830000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-galinha-e-camarao-para-gatos-3465437/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-galinha-e-camarao-para-gatos-3465437/p",
+  popularity: 345
  },
  {
   sku: "cobasi-465402",
@@ -3463,7 +3808,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067925/petisco-churu-galinha-e-queijo-para-gatos-frente.jpg?v=638750553691570000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-galinha-e-queijo-para-gatos-3465402/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-galinha-e-queijo-para-gatos-3465402/p",
+  popularity: 346
  },
  {
   sku: "cobasi-465364",
@@ -3473,7 +3819,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067920/petisco-churu-atum-e-galinha-para-gatos-frente.jpg?v=638769607235000000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-e-galinha-para-gatos-3465364/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-atum-e-galinha-para-gatos-3465364/p",
+  popularity: 347
  },
  {
   sku: "cobasi-457060",
@@ -3483,7 +3830,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108990/Racao-Biofresh-Caes-Adultos-Racas-Pequenas-e-Minis_1KG_FRENTE.webp?v=639172986293670000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-pequenas-e-minis-3457060/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-pequenas-e-minis-3457060/p",
+  popularity: 348
  },
  {
   sku: "cobasi-456764",
@@ -3493,7 +3841,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060092/Vermivet-Composto-para-Caes--e-Gatos.png?v=638596956015770000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-biovet-vermivet-composto-600-mg-3456764/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-biovet-vermivet-composto-600-mg-3456764/p",
+  popularity: 349
  },
  {
   sku: "cobasi-455326",
@@ -3503,7 +3852,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/936588/racao-umida-premier-gourmet-gatos-castrados-peito-de-frango-e-arroz-integral-3455326.jpg?v=638899197926470000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-castrados-peito-de-frango-e-arroz-integral-3455326/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-castrados-peito-de-frango-e-arroz-integral-3455326/p",
+  popularity: 350
  },
  {
   sku: "cobasi-1142135",
@@ -3513,7 +3863,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1055721/FN-LIFE-GATO-CAST-FRANGO-LTR-ESQ.png?v=638866518132800000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-castrados-frango-3453714/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-castrados-frango-3453714/p",
+  popularity: 351
  },
  {
   sku: "cobasi-453587",
@@ -3523,7 +3874,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057871/Racao-Formula-Natural-Life-Caes-Senior-Mini-e-Pequeno-1.png?v=638866515724030000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-senior-mini-e-pequeno-3453587/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-senior-mini-e-pequeno-3453587/p",
+  popularity: 352
  },
  {
   sku: "cobasi-453390",
@@ -3533,7 +3885,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057845/Racao-Formula-Natural-Life-Caes-Filhotes-Minis-e-Pequenos_1.png?v=638866526323670000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-filhotes-mini-e-pequeno-3453390/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-filhotes-mini-e-pequeno-3453390/p",
+  popularity: 353
  },
  {
   sku: "cobasi-448095",
@@ -3543,7 +3896,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044688/Racao-Umida-Premier-Cachorros-Adultos-Gourmet-Peito-de-Frango-e-Arroz-Integral-85g.png?v=638899188754670000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-cachorros-adultos-gourmet-peito-de-frango-e-arroz-integral-3448095/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-cachorros-adultos-gourmet-peito-de-frango-e-arroz-integral-3448095/p",
+  popularity: 354
  },
  {
   sku: "cobasi-446297",
@@ -3553,7 +3907,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095571/Racao-Premier-Gatos-Castrados-7-a-11-Anos-Ambientes-Internos-Frango-500g-frente.png?v=639035615414000000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-7-a-11-anos-ambientes-internos-frango-3446297/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-7-a-11-anos-ambientes-internos-frango-3446297/p",
+  popularity: 355
  },
  {
   sku: "cobasi-446173",
@@ -3563,7 +3918,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095553/racao-premier-gatos-castrados-6-meses-a-6-anos-ambientes-internos-frango-500g-frente.png?v=639035614924370000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-6-meses-a-6-anos-ambientes-internos-frango-3446173/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-gatos-castrados-6-meses-a-6-anos-ambientes-internos-frango-3446173/p",
+  popularity: 356
  },
  {
   sku: "cobasi-815837",
@@ -3573,7 +3929,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082713/Racao-Premier-Ambientes-Internos-Light-Caes-Adultos-Frango-e-Salmao-1kg-frente.webp?v=638906036794930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-light-caes-adultos-frango-e-salmao-3329100/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-light-caes-adultos-frango-e-salmao-3329100/p",
+  popularity: 357
  },
  {
   sku: "cobasi-934089",
@@ -3583,7 +3940,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088718/00-copiar.webp?v=638966555391570000",
-  productUrl: "https://www.cobasi.com.br/biscoito-pedigree-biscrok-caes-adultos-racas-pequenas-3325783/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-pedigree-biscrok-caes-adultos-racas-pequenas-3325783/p",
+  popularity: 358
  },
  {
   sku: "cobasi-316148",
@@ -3593,7 +3951,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113009/Racao-Royal-Canin-Mini-Indoor-Adult-Caes-Adultos.png.png?v=639207577457470000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-indoor-adult-caes-pequenos-3318701/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-indoor-adult-caes-pequenos-3318701/p",
+  popularity: 359
  },
  {
   sku: "cobasi-280348",
@@ -3603,7 +3962,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113394/Prediderm-20mg-Anti-inflamatorio-para-Caes-embalagem_FRENTE-01.webp?v=639210100911670000",
-  productUrl: "https://www.cobasi.com.br/prediderm-20-mg-3280348/p"
+  productUrl: "https://www.cobasi.com.br/prediderm-20-mg-3280348/p",
+  popularity: 360
  },
  {
   sku: "cobasi-273414",
@@ -3613,7 +3973,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos shampoo medicamentoso",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/985905/273414-200ml.jpg?v=638122443150400000",
-  productUrl: "https://www.cobasi.com.br/shampoo-cloresten-antifungico-e-bacteriano-dr-clean-caes-e-gatos-agener-3273414/p"
+  productUrl: "https://www.cobasi.com.br/shampoo-cloresten-antifungico-e-bacteriano-dr-clean-caes-e-gatos-agener-3273414/p",
+  popularity: 361
  },
  {
   sku: "cobasi-203572",
@@ -3623,7 +3984,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1046352/Mitzi-4.png?v=638198545837000000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-mitzi-granulado-sanitario-kelco-3203572/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-mitzi-granulado-sanitario-kelco-3203572/p",
+  popularity: 362
  },
  {
   sku: "cobasi-135313",
@@ -3633,7 +3995,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos probioticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056116/Seringa-de-Probiotico-Vetnil-14g.png?v=639130590539400000",
-  productUrl: "https://www.cobasi.com.br/probiotico-14-g-vetnil-3135313/p"
+  productUrl: "https://www.cobasi.com.br/probiotico-14-g-vetnil-3135313/p",
+  popularity: 363
  },
  {
   sku: "cobasi-695920",
@@ -3643,7 +4006,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336306/Royal-Canin_Atualizada.jpg?v=638779268641900000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-urinary-s-o-veterinary-diet-3126446/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-urinary-s-o-veterinary-diet-3126446/p",
+  popularity: 364
  },
  {
   sku: "cobasi-516171",
@@ -3653,7 +4017,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062543/Vermifugo-Endogard-Caes-ate-10kg-2-comprimidos.png?v=638647061240100000",
-  productUrl: "https://www.cobasi.com.br/endogard-caes-10kg-virbac-3100110/p"
+  productUrl: "https://www.cobasi.com.br/endogard-caes-10kg-virbac-3100110/p",
+  popularity: 365
  },
  {
   sku: "cobasi-1193422",
@@ -3663,7 +4028,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101236/Numelvi-72-mg-para-caes.webp?v=639136162792400000",
-  productUrl: "https://www.cobasi.com.br/numelvi-7-2-mg-tratamento-para-coceira-em-caes-31193422/p"
+  productUrl: "https://www.cobasi.com.br/numelvi-7-2-mg-tratamento-para-coceira-em-caes-31193422/p",
+  popularity: 366
  },
  {
   sku: "cobasi-1193406",
@@ -3673,7 +4039,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101230/Numelvi-48-mg-para-Caes.webp?v=639136162983370000",
-  productUrl: "https://www.cobasi.com.br/numelvi-4-8-mg-tratamento-para-coceira-em-caes-31193406/p"
+  productUrl: "https://www.cobasi.com.br/numelvi-4-8-mg-tratamento-para-coceira-em-caes-31193406/p",
+  popularity: 367
  },
  {
   sku: "cobasi-1192930",
@@ -3683,7 +4050,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102667/Racao Formula Natural Pro Caes Senior Mini_MD.webp?v=639142144390770000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-senior-mini-e-pequeno-31192930/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-senior-mini-e-pequeno-31192930/p",
+  popularity: 368
  },
  {
   sku: "cobasi-1192914",
@@ -3693,7 +4061,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102659/Racao Formula Natural Pro Caes Adultos MD_GD.webp?v=639142134532100000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-adultos-medio-e-grande-31192914/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-adultos-medio-e-grande-31192914/p",
+  popularity: 369
  },
  {
   sku: "cobasi-1192590",
@@ -3703,7 +4072,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097842/Racao-Umida-Royal-Canin-Ageing-11--85g.webp?v=639086814354700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-ageing-11-gatos-adultos-31192590/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-ageing-11-gatos-adultos-31192590/p",
+  popularity: 370
  },
  {
   sku: "cobasi-1192388",
@@ -3713,7 +4083,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099152/Snack-Disfarca-Comprimidos-Happy-Med-para-Caes-36g.webp?v=639107390098670000",
-  productUrl: "https://www.cobasi.com.br/snack-disfarca-comprimidos-happy-med-para-caes-31192388/p"
+  productUrl: "https://www.cobasi.com.br/snack-disfarca-comprimidos-happy-med-para-caes-31192388/p",
+  popularity: 371
  },
  {
   sku: "cobasi-1186809",
@@ -3723,7 +4094,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097024/tapete-higienico-super-secao-black-slim-30uni.webp?v=639070246683770000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-black-premium-slim-90x60-cm-31186809/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-black-premium-slim-90x60-cm-31186809/p",
+  popularity: 372
  },
  {
   sku: "cobasi-1184849",
@@ -3733,7 +4105,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos probioticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1093279/Biocanis Pro para Caes e Gatos 14g.webp?v=639004714140970000",
-  productUrl: "https://www.cobasi.com.br/bio-canis-pro-14-g-ourofino-31184849/p"
+  productUrl: "https://www.cobasi.com.br/bio-canis-pro-14-g-ourofino-31184849/p",
+  popularity: 373
  },
  {
   sku: "cobasi-1184610",
@@ -3743,7 +4116,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102418/Petisco-Joy-Beef-Frango-para-Caes-65g.webp?v=639138513252300000",
-  productUrl: "https://www.cobasi.com.br/petisco-joy-beef-frango-para-caes-31184610/p"
+  productUrl: "https://www.cobasi.com.br/petisco-joy-beef-frango-para-caes-31184610/p",
+  popularity: 374
  },
  {
   sku: "cobasi-1183710",
@@ -3753,7 +4127,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108735/Racao-Umida-Joy-Pate-para-Gatos-Carne-280g.webp?v=639171526548870000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-carne-31183710/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-carne-31183710/p",
+  popularity: 375
  },
  {
   sku: "cobasi-1183672",
@@ -3763,7 +4138,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108695/Racao-Umida-Joy-Pate-para-Caes-Adultos-Carne-280g.webp?v=639171498149130000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-caes-adultos-carne-31183672/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-caes-adultos-carne-31183672/p",
+  popularity: 376
  },
  {
   sku: "cobasi-1181378",
@@ -3773,7 +4149,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090231/Sanus-100-mg-para-Caes-e-Gatos-Avert.webp?v=638977714462830000",
-  productUrl: "https://www.cobasi.com.br/sanus-100-mg-para-caes-e-gatos-avert-31181378/p"
+  productUrl: "https://www.cobasi.com.br/sanus-100-mg-para-caes-e-gatos-avert-31181378/p",
+  popularity: 377
  },
  {
   sku: "cobasi-1180134",
@@ -3783,7 +4160,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1091646/Biscoito-Joy-Cook-Original-para-Caes-Mini-500g.webp?v=638987285180870000",
-  productUrl: "https://www.cobasi.com.br/biscoito-joy-cook-original-para-caes-mini-31180134/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-joy-cook-original-para-caes-mini-31180134/p",
+  popularity: 378
  },
  {
   sku: "cobasi-1180118",
@@ -3793,7 +4171,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1091660/Biscoito-Joy-Cook-Original-para-Caes-Big-500g.webp?v=638987287360430000",
-  productUrl: "https://www.cobasi.com.br/biscoito-joy-cook-original-para-caes-big-31180118/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-joy-cook-original-para-caes-big-31180118/p",
+  popularity: 379
  },
  {
   sku: "cobasi-1179462",
@@ -3803,7 +4182,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096000/Racao Premier Formula Caes Adultos Racas Pequenas Carne e  Batata Doce 2.5kg.webp?v=639046302930500000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-pequenas-carne-e-batata-doce-31179462/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-adultos-racas-pequenas-carne-e-batata-doce-31179462/p",
+  popularity: 380
  },
  {
   sku: "cobasi-1177150",
@@ -3813,7 +4193,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095149/Cookies-Formula-Natural-Fresh-Meat-Caes-Adultos-Cordeiro-150g.webp?v=639015796752300000",
-  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-caes-adultos-cordeiro-31177150/p"
+  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-caes-adultos-cordeiro-31177150/p",
+  popularity: 381
  },
  {
   sku: "cobasi-1175319",
@@ -3823,7 +4204,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082444/Petisco-Cremoso-Sheba-para-Gatos-Adultos-Salmao-com-Frango-e-Atum-com-Camarao.webp?v=638901036023470000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-para-gatos-adultos-atum-com-salmao-e-frango-com-camarao-31175319/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-para-gatos-adultos-atum-com-salmao-e-frango-com-camarao-31175319/p",
+  popularity: 382
  },
  {
   sku: "cobasi-1175050",
@@ -3833,7 +4215,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095064/Petisco-Pe-de-Galinha-Desidratado-LL-Pet.webp?v=639057438135900000",
-  productUrl: "https://www.cobasi.com.br/petisco-pe-de-galinha-desidratado-ll-pet-31175050/p"
+  productUrl: "https://www.cobasi.com.br/petisco-pe-de-galinha-desidratado-ll-pet-31175050/p",
+  popularity: 383
  },
  {
   sku: "cobasi-1170554",
@@ -3843,7 +4226,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096708/Racao-Joy-Premium-Caes-Filhotes-Racas-Medias-e-Grandes-Frango-e-Carne-2kg.webp?v=639063494672670000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-premium-caes-filhotes-racas-medias-e-grandes-frango-e-carne-31170554/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-premium-caes-filhotes-racas-medias-e-grandes-frango-e-carne-31170554/p",
+  popularity: 384
  },
  {
   sku: "cobasi-1170236",
@@ -3853,7 +4237,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077319/Drontal_Plus-Sabor_35kg_1.webp?v=638863018252400000",
-  productUrl: "https://www.cobasi.com.br/drontal-plus-mais-sabor-caes-35kg-31170236/p"
+  productUrl: "https://www.cobasi.com.br/drontal-plus-mais-sabor-caes-35kg-31170236/p",
+  popularity: 385
  },
  {
   sku: "cobasi-1170090",
@@ -3863,7 +4248,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiacidos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1078432/Gaviz-V-5mg.webp?v=638874993191500000",
-  productUrl: "https://www.cobasi.com.br/gaviz-v-c-50-comprimidos-agener-31170090/p"
+  productUrl: "https://www.cobasi.com.br/gaviz-v-c-50-comprimidos-agener-31170090/p",
+  popularity: 386
  },
  {
   sku: "cobasi-1169882",
@@ -3873,7 +4259,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077545/Racao Umida Royal Canin Pate Cuidado Digestivo para Gatos Adultos.webp?v=638866389338830000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pate-cuidado-digestivo-para-gatos-adultos-31169882/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pate-cuidado-digestivo-para-gatos-adultos-31169882/p",
+  popularity: 387
  },
  {
   sku: "cobasi-1167685",
@@ -3883,7 +4270,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076299/Racao-Umida-Optimum-Sache-Gatos-Adultos-Castrados-Carne-Frango-e-Salmao-85g.webp?v=638950933741300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-carne-frango-e-salmao-31167685/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-castrados-carne-frango-e-salmao-31167685/p",
+  popularity: 388
  },
  {
   sku: "cobasi-1167545",
@@ -3893,7 +4281,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075892/Petisco-Churu-Frango-com-Vegetais-para-Caes.webp?v=638838723617900000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-com-vegetais-para-caes-31167545/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-com-vegetais-para-caes-31167545/p",
+  popularity: 389
  },
  {
   sku: "cobasi-1167537",
@@ -3903,7 +4292,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075888/Petisco-Churu-Frango-e-Queijo-para-Caes.webp?v=638838722491900000",
-  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-e-queijo-para-caes-31167537/p"
+  productUrl: "https://www.cobasi.com.br/petisco-churu-frango-e-queijo-para-caes-31167537/p",
+  popularity: 390
  },
  {
   sku: "cobasi-1160753",
@@ -3913,7 +4303,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066661/racao-origens-class-gatos-castrados-salmao-e-frango-1.png.png?v=638718467789600000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-class-gatos-castrados-salmao-e-frango-31160753/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-class-gatos-castrados-salmao-e-frango-31160753/p",
+  popularity: 391
  },
  {
   sku: "cobasi-1160729",
@@ -3923,7 +4314,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066635/racao-origens-class-caes-adultos-minis-e-pequenos-carne-e-frango-1-png.png?v=638717914928230000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-class-caes-adultos-minis-e-pequenos-carne-e-frango-31160729/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-class-caes-adultos-minis-e-pequenos-carne-e-frango-31160729/p",
+  popularity: 392
  },
  {
   sku: "cobasi-1157817",
@@ -3933,7 +4325,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100054/Racao-Bionatural-Prime-Caes-Adultos-Racas-Pequenas-Cordeiro-Frente.png?v=639118799648300000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-adultos-racas-pequenas-cordeiro-31157817/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-adultos-racas-pequenas-cordeiro-31157817/p",
+  popularity: 393
  },
  {
   sku: "cobasi-1157736",
@@ -3943,7 +4336,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064001/Special-Dog-Gold-Life-Adultos-Sabor-Carne-e-Frango-com-Batata-doce.jpg?v=638678929131970000",
-  productUrl: "https://www.cobasi.com.br/racao-special-dog-gold-life-caes-adultos-carne-frango-e-batata-doce-31157736/p"
+  productUrl: "https://www.cobasi.com.br/racao-special-dog-gold-life-caes-adultos-carne-frango-e-batata-doce-31157736/p",
+  popularity: 394
  },
  {
   sku: "cobasi-1157329",
@@ -3953,7 +4347,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099977/Bionatural-Prime-Gatos-Castrados-Salmao-Frente.png?v=639118791746330000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-gatos-castrados-salmao-31157329/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-gatos-castrados-salmao-31157329/p",
+  popularity: 395
  },
  {
   sku: "cobasi-1157310",
@@ -3963,7 +4358,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099956/Bionatural-Prime-Gatos-Castrados-Frango-Frente.png?v=639118789749700000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-gatos-castrados-frango-31157310/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-gatos-castrados-frango-31157310/p",
+  popularity: 396
  },
  {
   sku: "cobasi-1156071",
@@ -3973,7 +4369,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064639/Racao-Umida-Premier-Nattu-Gatos-Castrados-Frango-e-Abobora-70g.png?v=638899201011500000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-castrados-frango-e-abobora-31156071/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-castrados-frango-e-abobora-31156071/p",
+  popularity: 397
  },
  {
   sku: "cobasi-1156055",
@@ -3983,7 +4380,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064637/Racao-Umida-Premier-Nattu-Caes-Adultos-Porte-Pequeno-Frango-e-Batata-Doce-85g.png?v=638875792766030000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-caes-filhotes-porte-pequeno-frango-e-batata-doce-31156055/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-caes-filhotes-porte-pequeno-frango-e-batata-doce-31156055/p",
+  popularity: 398
  },
  {
   sku: "cobasi-1156039",
@@ -3993,7 +4391,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064629/Racao-Umida-Premier-Nattu-Caes-Adultos-Porte-Pequeno-Frango-e-Abobora-85g.png?v=638899197282630000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-caes-filhotes-porte-pequeno-frango-e-abobora-31156039/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-caes-filhotes-porte-pequeno-frango-e-abobora-31156039/p",
+  popularity: 399
  },
  {
   sku: "cobasi-1155563",
@@ -4003,7 +4402,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082792/Racao-Premier-Formula-Gatos-Castrados-Salmao-1.5kg-frente.webp?v=638906284054330000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-gatos-castrados-salmao-31155563/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-gatos-castrados-salmao-31155563/p",
+  popularity: 400
  },
  {
   sku: "cobasi-1155148",
@@ -4013,7 +4413,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066606/Cookies-Origem-Natural-Caes-Frutas-Vermelhas.png.png?v=638760239049130000",
-  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-frutas-vermelhas-31155148/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-frutas-vermelhas-31155148/p",
+  popularity: 401
  },
  {
   sku: "cobasi-1155130",
@@ -4023,7 +4424,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066602/Cookies-Origem-Natural-Caes-Banana-com-Mirtilo.png.png?v=638760238719470000",
-  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-banana-com-mirtilo-31155130/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-banana-com-mirtilo-31155130/p",
+  popularity: 402
  },
  {
   sku: "cobasi-1153471",
@@ -4033,7 +4435,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069410/Myhug_capim_limao.png.png?v=638784244194800000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-capim-limao-80x60cm-31153471/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-myhug-capim-limao-80x60cm-31153471/p",
+  popularity: 403
  },
  {
   sku: "cobasi-1152718",
@@ -4043,7 +4446,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos roupas pos-cirurgica e aliviadoras de dores",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064338/Roupa-Pos-Cirurgica-Elastic-Feminino-Zetta-Pet.png?v=638682446005700000",
-  productUrl: "https://www.cobasi.com.br/roupa-pos-cirurgica-elastic-femea-zetta-pet-31152718/p"
+  productUrl: "https://www.cobasi.com.br/roupa-pos-cirurgica-elastic-femea-zetta-pet-31152718/p",
+  popularity: 404
  },
  {
   sku: "cobasi-1152670",
@@ -4053,7 +4457,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061595/Petisco-Cremoso-Nutrisco-para-Gatos-Atum-e-Camarao.png?v=638814541551330000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-camarao-31152670/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-camarao-31152670/p",
+  popularity: 405
  },
  {
   sku: "cobasi-1152661",
@@ -4063,7 +4468,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061593/Petisco-Cremoso-Nutrisco-para-Gatos-Atum-e-Bacalhau.png?v=638814541311400000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-bacalhau-31152661/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-bacalhau-31152661/p",
+  popularity: 406
  },
  {
   sku: "cobasi-1152637",
@@ -4073,7 +4479,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061589/Petisco-Cremoso-Nutrisco-para-Gatos-Atum-e-Caranguejo.png?v=638814541870000000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-caranguejo-31152637/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-e-caranguejo-31152637/p",
+  popularity: 407
  },
  {
   sku: "cobasi-1152580",
@@ -4083,7 +4490,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101290/Nexgard-Combo-Antipulgas-Sarna-e-Vermifugo-com-1_Frente.webp?v=639131550985070000",
-  productUrl: "https://www.cobasi.com.br/nexgard-combo-antipulgas-para-gatos-2-5-a-7-5-kg-31152580/p"
+  productUrl: "https://www.cobasi.com.br/nexgard-combo-antipulgas-para-gatos-2-5-a-7-5-kg-31152580/p",
+  popularity: 408
  },
  {
   sku: "cobasi-1152521",
@@ -4093,7 +4501,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061582/Petisco-Cremoso-Nutrisco-para-Gatos-Atum.png?v=638814542375400000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-31152521/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-atum-31152521/p",
+  popularity: 409
  },
  {
   sku: "cobasi-1149865",
@@ -4103,7 +4512,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060362/Suplemento-Promun-Defense-Boost-Dog-Organnact.png?v=638913975945170000",
-  productUrl: "https://www.cobasi.com.br/suplemento-promun-defense-boost-dog-organnact-31149865/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-promun-defense-boost-dog-organnact-31149865/p",
+  popularity: 410
  },
  {
   sku: "cobasi-1149857",
@@ -4113,7 +4523,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060361/Suplemento-Promun-Defense-Boost-Cat-Organnact.png?v=638913964488570000",
-  productUrl: "https://www.cobasi.com.br/suplemento-promun-defense-boost-cat-organnact-31149857/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-promun-defense-boost-cat-organnact-31149857/p",
+  popularity: 411
  },
  {
   sku: "cobasi-1149695",
@@ -4123,7 +4534,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063556/Macrogard-Pasta.png?v=638665977815870000",
-  productUrl: "https://www.cobasi.com.br/macrogard-pet-pasta-suplemento-alimentar-para-gatos-avert-31149695/p"
+  productUrl: "https://www.cobasi.com.br/macrogard-pet-pasta-suplemento-alimentar-para-gatos-avert-31149695/p",
+  popularity: 412
  },
  {
   sku: "cobasi-1149431",
@@ -4133,7 +4545,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069755/Desinfetante-Herbalvet-T.A.-Ourofino-1L.webp.webp?v=638908544913100000",
-  productUrl: "https://www.cobasi.com.br/desinfetante-herbalvet-ta-ouro-fino-31149431/p"
+  productUrl: "https://www.cobasi.com.br/desinfetante-herbalvet-ta-ouro-fino-31149431/p",
+  popularity: 413
  },
  {
   sku: "cobasi-1145282",
@@ -4143,7 +4556,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085492/1145282-CALOPSITA-NATURAL-MINI-BITS-300G-.webp?v=638953781127200000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-calopsita-extrusado-natural-mini-bits-31145282/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-calopsita-extrusado-natural-mini-bits-31145282/p",
+  popularity: 414
  },
  {
   sku: "cobasi-1144251",
@@ -4153,7 +4567,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058889/Racao-Umida-Royal-Canin-Sache-Hair-e-Skin-Gatos-Adultos-85g.png?v=639148955345170000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-sache-hair-e-skin-gatos-adultos-31144251/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-sache-hair-e-skin-gatos-adultos-31144251/p",
+  popularity: 415
  },
  {
   sku: "cobasi-1142194",
@@ -4163,7 +4578,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057655/Origens-Caes-Adultos-Carne-Abobora.png?v=638520885199430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-adultos-carne-com-abobora-31142194/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-adultos-carne-com-abobora-31142194/p",
+  popularity: 416
  },
  {
   sku: "cobasi-1142178",
@@ -4173,7 +4589,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077589/Gatos-Filhotes-Life-Frango-Salmao.png?v=638866524262600000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-filhotes-frango-e-salmao-31142178/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-filhotes-frango-e-salmao-31142178/p",
+  popularity: 417
  },
  {
   sku: "cobasi-1140280",
@@ -4183,7 +4600,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antissepticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058448/shampoo-clorexidina-para-caes-e-gatos.png?v=638550025267700000",
-  productUrl: "https://www.cobasi.com.br/shampoo-clorexidina-para-caes-e-gatos-31140280/p"
+  productUrl: "https://www.cobasi.com.br/shampoo-clorexidina-para-caes-e-gatos-31140280/p",
+  popularity: 418
  },
  {
   sku: "cobasi-1140248",
@@ -4193,7 +4611,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058444/enronew-50mg-para-caes-e-gatos.png?v=638549437141500000",
-  productUrl: "https://www.cobasi.com.br/enronew-50mg-para-caes-e-gatos-31140248/p"
+  productUrl: "https://www.cobasi.com.br/enronew-50mg-para-caes-e-gatos-31140248/p",
+  popularity: 419
  },
  {
   sku: "cobasi-1137212",
@@ -4203,7 +4622,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075042/Racao-Umida-GranPlus-Gatos-Adultos-Castrados-Pate-Gourmet-Anti-Bolas-de-Pelo-Salmao.webp.webp?v=638834569592430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-castrados-pate-gourmet-anti-bolas-de-pelo-salmao-31137212/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-castrados-pate-gourmet-anti-bolas-de-pelo-salmao-31137212/p",
+  popularity: 420
  },
  {
   sku: "cobasi-1137190",
@@ -4213,7 +4633,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075030/Racao-Umida-GranPlus-Gatos-Adultos-Pate-Gourmet-Carne-100-g.webp?v=638834570683500000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-pate-gourmet-carne-31137190/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-pate-gourmet-carne-31137190/p",
+  popularity: 421
  },
  {
   sku: "cobasi-1137158",
@@ -4223,7 +4644,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053556/Pate-Caes-Adultos-Carne-e-Cenoura-Embalagem.jpg?v=638445538789100000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-adultos-pate-gourmet-carne-e-cenoura-31137158/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-adultos-pate-gourmet-carne-e-cenoura-31137158/p",
+  popularity: 422
  },
  {
   sku: "cobasi-1136852",
@@ -4233,7 +4655,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053267/petisco-keldog-bifinho-mix-de-cereais-e-maca-frente-55g.png?v=638760231726930000",
-  productUrl: "https://www.cobasi.com.br/petisco-keldog-bifinho-mix-de-cereais-e-maca-31136852/p"
+  productUrl: "https://www.cobasi.com.br/petisco-keldog-bifinho-mix-de-cereais-e-maca-31136852/p",
+  popularity: 423
  },
  {
   sku: "cobasi-1136828",
@@ -4243,7 +4666,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053272/petisco-keldog-bifinho-frango-grelhado-frente-60g.png?v=639198835046770000",
-  productUrl: "https://www.cobasi.com.br/petisco-keldog-bifinho-frango-grelhado-31136828/p"
+  productUrl: "https://www.cobasi.com.br/petisco-keldog-bifinho-frango-grelhado-31136828/p",
+  popularity: 424
  },
  {
   sku: "cobasi-1136283",
@@ -4253,7 +4677,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057266/Up-Flora-Suplemento-Alimentar-Avert-para-caes-e-gatos.png?v=639155105936470000",
-  productUrl: "https://www.cobasi.com.br/up-flora-suplemento-alimentar-avert-31136283/p"
+  productUrl: "https://www.cobasi.com.br/up-flora-suplemento-alimentar-avert-31136283/p",
+  popularity: 425
  },
  {
   sku: "cobasi-1135708",
@@ -4263,7 +4688,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052615/Petisco-Minibifinhos-Carne-treinamento-Carne.png?v=638760230951200000",
-  productUrl: "https://www.cobasi.com.br/petisco-keldog-treinamento-carne-31135708/p"
+  productUrl: "https://www.cobasi.com.br/petisco-keldog-treinamento-carne-31135708/p",
+  popularity: 426
  },
  {
   sku: "cobasi-1135627",
@@ -4273,7 +4699,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077126/Racao Umida Pet Delicia Caes Carreteiro Suino.webp?v=638854232653370000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pet-delicia-caes-carreteiro-suino-31135627/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pet-delicia-caes-carreteiro-suino-31135627/p",
+  popularity: 427
  },
  {
   sku: "cobasi-1133667",
@@ -4283,7 +4710,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052070/racao-umida-premier-gourmet-carne-batata-doce-e-brocolis.png?v=638899196473430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-caes-adultos-porte-pequeno-carne-batata-doce-e-brocolis-31133667/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-caes-adultos-porte-pequeno-carne-batata-doce-e-brocolis-31133667/p",
+  popularity: 428
  },
  {
   sku: "cobasi-1133659",
@@ -4293,7 +4721,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052077/Racao-Umida-premier-gourmet-carne-espinafre-e-arroz-integral-gatos-adultos.png?v=638899200118130000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-adultos-carne-espinafre-e-arroz-integral-31133659/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-adultos-carne-espinafre-e-arroz-integral-31133659/p",
+  popularity: 429
  },
  {
   sku: "cobasi-1133497",
@@ -4303,7 +4732,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107311/racao-golden-gatos-castrados-peixe-10-1.webp?v=639161031169670000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-peixe-31133500/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-castrados-peixe-31133500/p",
+  popularity: 430
  },
  {
   sku: "cobasi-1133446",
@@ -4313,7 +4743,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063368/Stick-Oral-Care-Menta-Caes-Racas-Medias-Origem-Natural-3.png?v=638760228379700000",
-  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-medias-origem-natural-31133446/p"
+  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-medias-origem-natural-31133446/p",
+  popularity: 431
  },
  {
   sku: "cobasi-1132571",
@@ -4323,7 +4754,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108662/Racao-Vet-Life-Natural-Gatos-Adultos-Hypoallergenic-Porco-e-Batata-1.webp?v=639171439440300000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-gatos-adultos-hypoallergenic-porco-e-batata-31132571/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-gatos-adultos-hypoallergenic-porco-e-batata-31132571/p",
+  popularity: 432
  },
  {
   sku: "cobasi-1132393",
@@ -4333,7 +4765,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104515/Racao-N-D-Tropical-Selection-Gatos-Castrados-Cordeiro.webp?v=639154218017470000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-cordeiro-31132393/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-cordeiro-31132393/p",
+  popularity: 433
  },
  {
   sku: "cobasi-1132350",
@@ -4343,7 +4776,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104414/Racao-N-D-Tropical-Selection-Gatos-Adultos-Frango.webp?v=639154217740170000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-adultos-frango-31132350/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-adultos-frango-31132350/p",
+  popularity: 434
  },
  {
   sku: "cobasi-1132270",
@@ -4353,7 +4787,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104075/Racao-N-D-Tropical-Selection-Caes-Adultos-Mini-Suino-e-Cereais.webp?v=639154188075170000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-suino-31132270/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-suino-31132270/p",
+  popularity: 435
  },
  {
   sku: "cobasi-1132130",
@@ -4363,7 +4798,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104170/Racao-N-D-Tropical-Selection-Caes-Adultos-Medium-e-Maxi-Cordeiro.webp?v=639154228084900000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-cordeiro-31132130/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-cordeiro-31132130/p",
+  popularity: 436
  },
  {
   sku: "cobasi-1129961",
@@ -4373,7 +4809,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051408/Racao-Umida-ND-Natural-Atum.png?v=638331536514470000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-n-d-natural-gatos-atum-31129961/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-n-d-natural-gatos-atum-31129961/p",
+  popularity: 437
  },
  {
   sku: "cobasi-1125982",
@@ -4383,7 +4820,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050427/Credeli-gatos-48mg.png?v=638306661277100000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-credeli-48mg-gatos-2kg-a-8kg-31125982/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-credeli-48mg-gatos-2kg-a-8kg-31125982/p",
+  popularity: 438
  },
  {
   sku: "cobasi-1092987",
@@ -4393,7 +4831,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1081114/Silmox CL 150mg Antibiotico Vansil.webp?v=638884669893270000",
-  productUrl: "https://www.cobasi.com.br/antibacteriano-silmox-cl-150-mg-vansil-31092987/p"
+  productUrl: "https://www.cobasi.com.br/antibacteriano-silmox-cl-150-mg-vansil-31092987/p",
+  popularity: 439
  },
  {
   sku: "cobasi-1066285",
@@ -4403,7 +4842,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062132/Petisco-Formula-Natural-Dog-Biscuits-Abobora-Caes-Adultos-Pequeno-Porte.png?v=638635650292600000",
-  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-abobora-caes-adultos-pequeno-porte-31066285/p"
+  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-abobora-caes-adultos-pequeno-porte-31066285/p",
+  popularity: 440
  },
  {
   sku: "cobasi-1066277",
@@ -4413,7 +4853,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062127/Petisco-Formula-Natural-Dog-Biscuits-Batata-Doce-Caes-Adultos.png?v=638635648993830000",
-  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-batata-doce-caes-adultos-31066277/p"
+  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-batata-doce-caes-adultos-31066277/p",
+  popularity: 441
  },
  {
   sku: "cobasi-1060104",
@@ -4423,7 +4864,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113067/Suplemento Nuxcell Fel para Gatos 2g.webp?v=639207648542530000",
-  productUrl: "https://www.cobasi.com.br/suplemento-nuxcell-fel-para-gatos-31060104/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-nuxcell-fel-para-gatos-31060104/p",
+  popularity: 442
  },
  {
   sku: "cobasi-1011332",
@@ -4433,7 +4875,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076182/Carecat-Perfumada-4kg.webp?v=638944965392130000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-carecat-perfumada-31011332/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-carecat-perfumada-31011332/p",
+  popularity: 443
  },
  {
   sku: "cobasi-1011324",
@@ -4443,7 +4886,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076174/Carecat-Tradicional-4kg.webp?v=638959650179770000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-carecat-tradicional-31011324/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-carecat-tradicional-31011324/p",
+  popularity: 444
  },
  {
   sku: "cobasi-1008064",
@@ -4453,7 +4897,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1042476/Petiscos-Pelo-saudavel-Whiskas-40g.jpg?v=638935585427370000",
-  productUrl: "https://www.cobasi.com.br/petisco-whiskas-pelo-saudavel-gatos-adultos-31008064/p"
+  productUrl: "https://www.cobasi.com.br/petisco-whiskas-pelo-saudavel-gatos-adultos-31008064/p",
+  popularity: 445
  },
  {
   sku: "cobasi-1005880",
@@ -4463,7 +4908,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107216/racao-golden-selecao-natural-caes-senior-porte-pequeno-frango-e-arroz-3-1.webp?v=639160959853730000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-senior-porte-pequeno-frango-e-arroz-31005880/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-senior-porte-pequeno-frango-e-arroz-31005880/p",
+  popularity: 446
  },
  {
   sku: "cobasi-1005812",
@@ -4473,7 +4919,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106693/racao-golden-selecao-natural-caes-adultos-frango-com-batata-doce-1.webp?v=639156732402070000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-frango-com-batata-doce-31005812/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-frango-com-batata-doce-31005812/p",
+  popularity: 447
  },
  {
   sku: "cobasi-1005766",
@@ -4483,7 +4930,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza limpa orelhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062577/Epiotic.png?v=638768033609770000",
-  productUrl: "https://www.cobasi.com.br/solucao-otologica-epiotic-31005766/p"
+  productUrl: "https://www.cobasi.com.br/solucao-otologica-epiotic-31005766/p",
+  popularity: 448
  },
  {
   sku: "cobasi-1004824",
@@ -4493,7 +4941,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1035404/Vet-Care-Gato-Renal.jpg?v=638053278970770000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-vet-care-renal-gatos-31004824/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-vet-care-renal-gatos-31004824/p",
+  popularity: 449
  },
  {
   sku: "cobasi-1004204",
@@ -4503,7 +4952,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109411/Racao-Biofresh-Gatos-Senior-Peixe-Branco_15KG_FRENTE-01.webp?v=639173077162270000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-senior-peixe-branco-31004204/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-senior-peixe-branco-31004204/p",
+  popularity: 450
  },
  {
   sku: "cobasi-1004085",
@@ -4513,7 +4963,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109363/Racao-Biofresh-Gatos-Castrados-Frango_400g_FRENTE-01.webp?v=639173071995770000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-castrados-frango-31004085/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-castrados-frango-31004085/p",
+  popularity: 451
  },
  {
   sku: "cobasi-1004018",
@@ -4523,7 +4974,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1034365/racao-formula-natural-vet-care-gatos-renal.jpg?v=638047392457130000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-gatos-renal-31004018/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-gatos-renal-31004018/p",
+  popularity: 452
  },
  {
   sku: "cobasi-1003917",
@@ -4533,7 +4985,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101497/racao-formula-natural-vet-care-obesidade-caes-medio-e-grande.jpg?v=639135995967900000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-obesidade-caes-medio-e-grande-31003917/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-obesidade-caes-medio-e-grande-31003917/p",
+  popularity: 453
  },
  {
   sku: "cobasi-1003852",
@@ -4543,7 +4996,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101511/racao-formula-natural-vet-care-obesidade-caes-mini-e-pequeno.jpg?v=639136007484570000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-obesidade-caes-mini-e-pequeno-31003852/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-obesidade-caes-mini-e-pequeno-31003852/p",
+  popularity: 454
  },
  {
   sku: "cobasi-1003836",
@@ -4553,7 +5007,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1034341/racao-formula-natural-vet-care-hipoalergenica-caes-medio-e-grande.jpg?v=639135856847200000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-hipoalergenica-caes-medio-e-grande-31003836/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-hipoalergenica-caes-medio-e-grande-31003836/p",
+  popularity: 455
  },
  {
   sku: "cobasi-1000861",
@@ -4563,7 +5018,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082835/Racao-Premier-Nattu-Gatos-Adultos-Castrados-Abobora-1.5kg-frente.webp?v=638906951065730000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-gatos-adultos-castrados-abobora-31000861/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-gatos-adultos-castrados-abobora-31000861/p",
+  popularity: 456
  },
  {
   sku: "cobasi-1000349",
@@ -4573,7 +5029,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067026/origem_nature_cao_senior_300g.jpg?v=638731560643600000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-para-caes-senior-joy-origem-nature-31000349/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-para-caes-senior-joy-origem-nature-31000349/p",
+  popularity: 457
  },
  {
   sku: "cobasi-1000314",
@@ -4583,7 +5040,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos otologicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1008248/Solucao-Otologica-Otocalm-caes-e-gatos-14-ml.jpg?v=637975513991000000",
-  productUrl: "https://www.cobasi.com.br/solucao-otologica-otocalm-31000314/p"
+  productUrl: "https://www.cobasi.com.br/solucao-otologica-otocalm-31000314/p",
+  popularity: 458
  },
  {
   sku: "cobasi-998761",
@@ -4593,7 +5051,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1020786/52742339405_2.jpg?v=638949178526430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-hills-prescription-diet-kd-gatos-cuidado-renal-atum-e-vegetais-3998761/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-hills-prescription-diet-kd-gatos-cuidado-renal-atum-e-vegetais-3998761/p",
+  popularity: 459
  },
  {
   sku: "cobasi-998540",
@@ -4603,7 +5062,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antiestresse",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100439/IMAGEM-ILUSTRATIVA-DE-MEDICAMENTO.webp?v=639120525928930000",
-  productUrl: "https://www.cobasi.com.br/mirtz-gatos-agener-3998540/p"
+  productUrl: "https://www.cobasi.com.br/mirtz-gatos-agener-3998540/p",
+  popularity: 460
  },
  {
   sku: "cobasi-998397",
@@ -4613,7 +5073,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066988/origem_nature_frango_com_espinafre_legumes_300g_1.jpg?v=638731557831200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-frango-com-espinafre-e-legumess-3998397/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-frango-com-espinafre-e-legumess-3998397/p",
+  popularity: 461
  },
  {
   sku: "cobasi-998249",
@@ -4623,7 +5084,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/813902/Petisco-Golden-Cookie-Caes-Adultos-350g.jpg?v=637655893545100000",
-  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-3998249/p"
+  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-3998249/p",
+  popularity: 462
  },
  {
   sku: "cobasi-995460",
@@ -4633,7 +5095,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro brinquedos brinquedos de corda",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067052/Brinquedo-Bolinha-Cordao-Flicks.png.png?v=638731565228900000",
-  productUrl: "https://www.cobasi.com.br/brinquedo-bolinha-cordao-flicks-3995460/p"
+  productUrl: "https://www.cobasi.com.br/brinquedo-bolinha-cordao-flicks-3995460/p",
+  popularity: 463
  },
  {
   sku: "cobasi-992674",
@@ -4643,7 +5106,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113192/NexGard Spectra 30,1kg a 60kg Antipulgas, Carrapatos e Vermifugo embalagem_FRENTE-01.webp?v=639208464039630000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-30-1-a-60-kg-3992674/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-30-1-a-60-kg-3992674/p",
+  popularity: 464
  },
  {
   sku: "cobasi-981524",
@@ -4653,7 +5117,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/543130/Petisco-Golden-Cookie-Caes-Adultos-Racas-Pequenas-Salmao-e-Quinoa-3981524.jpg?v=637556579950600000",
-  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-racas-pequenas-salmao-e-quinoa-3981524/p"
+  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-caes-adultos-racas-pequenas-salmao-e-quinoa-3981524/p",
+  popularity: 465
  },
  {
   sku: "cobasi-979759",
@@ -4663,7 +5128,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069626/Racao-Umida-Caes-Adultos-Cordeiro_1.jpg?v=638790244336530000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-caes-adultos-cordeiro-3979759/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-caes-adultos-cordeiro-3979759/p",
+  popularity: 466
  },
  {
   sku: "cobasi-976326",
@@ -4673,7 +5139,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/887855/Petisco-Natural-Barkkies-Soft-Bites-Frango.jpg?v=638772288129070000",
-  productUrl: "https://www.cobasi.com.br/petisco-natural-barkkies-soft-bites-frango-3976326/p"
+  productUrl: "https://www.cobasi.com.br/petisco-natural-barkkies-soft-bites-frango-3976326/p",
+  popularity: 467
  },
  {
   sku: "cobasi-974790",
@@ -4683,7 +5150,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/995130/974790--1-.jpg?v=638282338708270000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pate-gatos-adultos-castrados-sterilised-3974790/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pate-gatos-adultos-castrados-sterilised-3974790/p",
+  popularity: 468
  },
  {
   sku: "cobasi-974471",
@@ -4693,7 +5161,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/914182/racao-umida-royal-canin-jelly-gatos-adultos-castrados-sterilised-85g-frente.jpg?v=639179941708970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-jelly-gatos-adultos-castrados-sterilised-3974471/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-jelly-gatos-adultos-castrados-sterilised-3974471/p",
+  popularity: 469
  },
  {
   sku: "cobasi-973777",
@@ -4703,7 +5172,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/536812/suplemento-alimentar-paracaes-e-gatos-macrogard-pet-avert-30-comprimidos-22g.jpg?v=638513846365170000",
-  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-para-caes-e-gatos-macrogard-pet-avert-3973777/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-para-caes-e-gatos-macrogard-pet-avert-3973777/p",
+  popularity: 470
  },
  {
   sku: "cobasi-973742",
@@ -4713,7 +5183,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiacidos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/925013/antiacido-gastroblock-omeprazol-biovet-10mg.jpg?v=637811578199930000",
-  productUrl: "https://www.cobasi.com.br/antiacido-gastroblock-omeprazol-biovet-3973742/p"
+  productUrl: "https://www.cobasi.com.br/antiacido-gastroblock-omeprazol-biovet-3973742/p",
+  popularity: 471
  },
  {
   sku: "cobasi-971162",
@@ -4723,7 +5194,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056115/Racao-Umida-Royal-Canin-Gatos-Light-Weight-Care-85g.png?v=638484463827230000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-gatos-light-weight-care-3971162/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-gatos-light-weight-care-3971162/p",
+  popularity: 472
  },
  {
   sku: "cobasi-970140",
@@ -4733,7 +5205,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063310/petisco-origem-natural-crost-crostine-prime-rib-1.png?v=638760206698930000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-prime-rib-3970140/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-prime-rib-3970140/p",
+  popularity: 473
  },
  {
   sku: "cobasi-970085",
@@ -4743,7 +5216,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063166/petisco-origem-natural-crost-crostine-angus-1.png?v=638760201110500000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-angus-3970085/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-angus-3970085/p",
+  popularity: 474
  },
  {
   sku: "cobasi-1159879",
@@ -4753,7 +5227,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096248/Racao-Hills-Science-Diet-Pedacos-Pequenos-Caes-Adultos-frente.webp?v=639058355255330000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-pedacos-pequenos-3965391/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-pedacos-pequenos-3965391/p",
+  popularity: 475
  },
  {
   sku: "cobasi-963720",
@@ -4763,7 +5238,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro acessorios para transporte caixa de transporte",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1071599/Caixa-de-Transporte-C-Pet-Lateral-Direita.png?v=638816133282830000",
-  productUrl: "https://www.cobasi.com.br/caixa-de-transporte-gomoov-3963720/p"
+  productUrl: "https://www.cobasi.com.br/caixa-de-transporte-gomoov-3963720/p",
+  popularity: 476
  },
  {
   sku: "cobasi-962430",
@@ -4773,7 +5249,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro brinquedos bichinhos de pelucia",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065503/Macaco-de-Pelucia-Buddy-Flicks.jpg?v=638723739745500000",
-  productUrl: "https://www.cobasi.com.br/brinquedo-pelucia-macaco-buddy-flicks-3962430/p"
+  productUrl: "https://www.cobasi.com.br/brinquedo-pelucia-macaco-buddy-flicks-3962430/p",
+  popularity: 477
  },
  {
   sku: "cobasi-471950",
@@ -4783,7 +5260,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064714/0-WHISKAS-ADULTO-CASTRADOS-PEIXE-900G.png?v=638689394610930000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-gatos-castrados-peixe-3958476/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-gatos-castrados-peixe-3958476/p",
+  popularity: 478
  },
  {
   sku: "cobasi-958360",
@@ -4793,7 +5271,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061166/petisco-gourmet-para-caes-loop-file-de-frango-bio-dog-frente.png?v=638621079370200000",
-  productUrl: "https://www.cobasi.com.br/petisco-gourmet-para-caes-loop-file-de-frango-bio-dog-3958360/p"
+  productUrl: "https://www.cobasi.com.br/petisco-gourmet-para-caes-loop-file-de-frango-bio-dog-3958360/p",
+  popularity: 479
  },
  {
   sku: "cobasi-953377",
@@ -4803,7 +5282,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao terras e substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/776704/Argila-Expandida_foto-unica_sem-peso_.jpg?v=638203808007800000",
-  productUrl: "https://www.cobasi.com.br/argila-expandida-cinexpan-3953385/p"
+  productUrl: "https://www.cobasi.com.br/argila-expandida-cinexpan-3953385/p",
+  popularity: 480
  },
  {
   sku: "cobasi-953210",
@@ -4813,7 +5293,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336693/Casserole-com-Frango-e-Peru.jpg?v=638760200099730000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-casserole-frango-e-peru-3953210/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-casserole-frango-e-peru-3953210/p",
+  popularity: 481
  },
  {
   sku: "cobasi-953075",
@@ -4823,7 +5304,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336687/Casserole-com-atum-e-salmao.jpg?v=638760085414370000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-casserole-atum-3953075/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-casserole-atum-3953075/p",
+  popularity: 482
  },
  {
   sku: "cobasi-952761",
@@ -4833,7 +5315,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063361/Gatos-Origem-Natural-Sensations-Frango.png?v=638912006441130000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-frango-3952761/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-frango-3952761/p",
+  popularity: 483
  },
  {
   sku: "cobasi-952753",
@@ -4843,7 +5326,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063356/Gatos-Origem-Natural-Sensations-Carne.png?v=638912006139700000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-carne-3952753/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-carne-3952753/p",
+  popularity: 484
  },
  {
   sku: "cobasi-952745",
@@ -4853,7 +5337,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063268/Gatos-Origem-Natural-Sensations-Atum.png?v=638912005874500000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-atum-3952745/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-atum-3952745/p",
+  popularity: 485
  },
  {
   sku: "cobasi-952737",
@@ -4863,7 +5348,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063240/Gatos-Origem-Natural-Sensations-Salmao.png?v=638769448653570000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-salmao-3952737/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-sensations-para-gatos-salmao-3952737/p",
+  popularity: 486
  },
  {
   sku: "cobasi-950750",
@@ -4873,7 +5359,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082827/Racao-Premier-Nattu-Caes-Filhotes-Mandioca-2.5kg-frente.webp?v=638906947888730000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-filhotes-mandioca-3950750/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-filhotes-mandioca-3950750/p",
+  popularity: 487
  },
  {
   sku: "cobasi-950718",
@@ -4883,7 +5370,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082806/Racao-Premier-Nattu-Caes-Adultos-Abobora-12kg-frente.webp?v=639107291371800000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-abobora-3950718/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-adultos-abobora-3950718/p",
+  popularity: 488
  },
  {
   sku: "cobasi-949850",
@@ -4893,7 +5381,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947028/7898053597614.jpg?v=637871013450170000",
-  productUrl: "https://www.cobasi.com.br/furolisin-vetnil-10-comp-3949850/p"
+  productUrl: "https://www.cobasi.com.br/furolisin-vetnil-10-comp-3949850/p",
+  popularity: 489
  },
  {
   sku: "cobasi-949000",
@@ -4903,7 +5392,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095586/Racao-Premier-Nutricao-Clinica-Hipoalergenico-Caes-Medio-e-Grande-Porte-frente.png?v=639035697357800000",
-  productUrl: "https://www.cobasi.com.br/premier-cookie-caes-adultos-racas-pequenas-coco-e-aveia-3949000/p"
+  productUrl: "https://www.cobasi.com.br/premier-cookie-caes-adultos-racas-pequenas-coco-e-aveia-3949000/p",
+  popularity: 490
  },
  {
   sku: "cobasi-948888",
@@ -4913,7 +5403,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065118/0-Racao-Umida-Optimum-Sache-Gatos-Filhotes-Frango.png?v=638802275856800000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-gatos-filhotes-frango-85g-3948888/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-gatos-filhotes-frango-85g-3948888/p",
+  popularity: 491
  },
  {
   sku: "cobasi-948870",
@@ -4923,7 +5414,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065045/0-Racao-Umida-Optimum-Sache-Gatos-Adultos-Frango.png?v=638802276185130000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-gatos-adultos-frango-85g-3948870/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-gatos-adultos-frango-85g-3948870/p",
+  popularity: 492
  },
  {
   sku: "cobasi-948039",
@@ -4933,7 +5425,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/334395/carne.jpg?v=638790303213800000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-carne-3948039/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-carne-3948039/p",
+  popularity: 493
  },
  {
   sku: "cobasi-947652",
@@ -4943,7 +5436,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/353337/Sardinha_Edit.jpg?v=638322166906700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-sardinha-85g-3947652/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-sardinha-85g-3947652/p",
+  popularity: 494
  },
  {
   sku: "cobasi-947644",
@@ -4953,7 +5447,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/341200/Salmao_edit.jpg?v=638322166637100000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-salmao-3947644/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-salmao-3947644/p",
+  popularity: 495
  },
  {
   sku: "cobasi-947636",
@@ -4963,7 +5458,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/341199/Frango_Edita.jpg?v=638322166129300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-frango-3947636/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-frango-3947636/p",
+  popularity: 496
  },
  {
   sku: "cobasi-946036",
@@ -4973,7 +5469,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083163/Racao-Premier-Selecao-Natural-Gatos-Castrados-Frango-1.5kg-frente.webp?v=638908010734530000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-gatos-castrados-frango-korin-3946036/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-gatos-castrados-frango-korin-3946036/p",
+  popularity: 497
  },
  {
   sku: "cobasi-945684",
@@ -4983,7 +5480,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/315082/Suplemento-para-Caes-e-Gatos-Ograx-Derme-10-30-capsulas.jpg?v=638138073904730000",
-  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-ograx-derme-10-3945684/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-ograx-derme-10-3945684/p",
+  popularity: 498
  },
  {
   sku: "cobasi-940160",
@@ -4993,7 +5491,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-hipertensivos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1112007/Fortekor Flavour 5 mg para Insuficiencia Cardiaca.webp?v=639198958482000000",
-  productUrl: "https://www.cobasi.com.br/fortekor-elanco-5mg-insuficiencia-cardiaca-e-renal-3940160/p"
+  productUrl: "https://www.cobasi.com.br/fortekor-elanco-5mg-insuficiencia-cardiaca-e-renal-3940160/p",
+  popularity: 499
  },
  {
   sku: "cobasi-934968",
@@ -5003,7 +5502,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107355/Racao Umida Guabi Natural Grain Free Gatos Castrado Salmao e Frango 1.webp?v=639162616074330000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gato-castrado-guabi-natural-grain-free-salmao-e-frango-3934968/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gato-castrado-guabi-natural-grain-free-salmao-e-frango-3934968/p",
+  popularity: 500
  },
  {
   sku: "cobasi-934950",
@@ -5013,7 +5513,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107306/Racao Umida Guabi Natural Gatos Castrado Salmao e Frango 1.webp?v=639160979417400000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gato-castrado-guabi-natural-salmao-e-frango-3934950/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gato-castrado-guabi-natural-salmao-e-frango-3934950/p",
+  popularity: 501
  },
  {
   sku: "cobasi-934941",
@@ -5023,7 +5524,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107301/Racao Umida Guabi Natural Gatos Frango, Cereais Integrais e Vegetais 1.webp?v=639160978858470000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-guabi-natural-gatos-frango-3934941/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-guabi-natural-gatos-frango-3934941/p",
+  popularity: 502
  },
  {
   sku: "cobasi-934933",
@@ -5033,7 +5535,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107295/Racao Umida Guabi Natural Grain Free Caes Adultos Salmao Frango e Vegetais 1.webp?v=639160976119470000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cachorro-adulto-guabi-natural-grain-free-salmao-e-frango-3934933/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cachorro-adulto-guabi-natural-grain-free-salmao-e-frango-3934933/p",
+  popularity: 503
  },
  {
   sku: "cobasi-934917",
@@ -5043,7 +5546,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107285/Racao Umida Guabi Natural Caes Adultos Frango e Cereais 1.webp?v=639160971941830000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cachorro-adulto-guabi-natural-frango-e-cereais-3934917/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cachorro-adulto-guabi-natural-frango-e-cereais-3934917/p",
+  popularity: 504
  },
  {
   sku: "cobasi-934879",
@@ -5053,7 +5557,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107275/Racao-Guabi-Natural-Grain-Free-Caes-Adultos-Racas-Medias-Frango-e-Lentilha-1.webp?v=639160970371770000",
-  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adulto-guabi-natural-grain-free-racas-media-frango-e-lentilha-3934879/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adulto-guabi-natural-grain-free-racas-media-frango-e-lentilha-3934879/p",
+  popularity: 505
  },
  {
   sku: "cobasi-934810",
@@ -5063,7 +5568,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050972/tapete-higienico-super-blue-premium-expet-menos-borda-mais-absorcao-lado.png?v=638737755635700000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-blue-premium-expet-menos-borda-mais-absorcao-3934810/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-blue-premium-expet-menos-borda-mais-absorcao-3934810/p",
+  popularity: 506
  },
  {
   sku: "cobasi-934445",
@@ -5073,7 +5579,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047375/Racao-Formula-Natural-Fresh-Meat-Gatos-Filhote-Frango.png?v=638847454559970000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-filhote-frango-3934445/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-gato-filhote-frango-3934445/p",
+  popularity: 507
  },
  {
   sku: "cobasi-934330",
@@ -5083,7 +5590,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062034/Racao-Formula-Natural-Fresh-Meat-Caes-Senior-Medio-e-Grande-Frango.png?v=638912025891300000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-senior-medio-e-grande-frango-3934330/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-senior-medio-e-grande-frango-3934330/p",
+  popularity: 508
  },
  {
   sku: "cobasi-934151",
@@ -5093,7 +5601,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062049/Racao-Formula-Natural-Fresh-Meat-Caes-Adultos-Grande-e-Gigante-Frango.png?v=638912023243030000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-grande-e-gigante-frango-3934151/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-adulto-grande-e-gigante-frango-3934151/p",
+  popularity: 509
  },
  {
   sku: "cobasi-933082",
@@ -5103,7 +5612,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/891701/suplemento-alimentar-para-caes-e-gatos-cistimicin-vet.jpg?v=638137883220600000",
-  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-para-caes-gatos-cistimicin-vet-avert-3933082/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-para-caes-gatos-cistimicin-vet-avert-3933082/p",
+  popularity: 510
  },
  {
   sku: "cobasi-933007",
@@ -5113,7 +5623,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/993706/933007--1-.jpg?v=639040751622370000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-adultos-digestive-care-3933007/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-adultos-digestive-care-3933007/p",
+  popularity: 511
  },
  {
   sku: "cobasi-928917",
@@ -5123,7 +5634,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/304045/VHN-URINARY-URINARY_S_O_CAT_LOAF_POUCH-POUCH_PACKSHOT__.jpg?v=638282443321200000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-urinary-3928917/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-urinary-3928917/p",
+  popularity: 512
  },
  {
   sku: "cobasi-950068",
@@ -5133,7 +5645,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108312/Gourmet-Caes-Adultos-Mini-Salmao-e-Frango-Frente.jpg?v=639168823868100000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-adultos-mini-salmao-e-frango-3928437/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-adultos-mini-salmao-e-frango-3928437/p",
+  popularity: 513
  },
  {
   sku: "cobasi-927937",
@@ -5143,7 +5656,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/334045/927937-Puretoy-racas-pequenas-e-medias-3-cascos-bovinos-tratada.jpg?v=637304227553330000",
-  productUrl: "https://www.cobasi.com.br/casco-bovino-mastigavel-para-cachorro-pure-toy-3927937/p"
+  productUrl: "https://www.cobasi.com.br/casco-bovino-mastigavel-para-cachorro-pure-toy-3927937/p",
+  popularity: 514
  },
  {
   sku: "cobasi-927813",
@@ -5153,7 +5667,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/178532/Canex-Composto-Ceva.jpg?v=638532780984000000",
-  productUrl: "https://www.cobasi.com.br/canex-composto-ceva-3927813/p"
+  productUrl: "https://www.cobasi.com.br/canex-composto-ceva-3927813/p",
+  popularity: 515
  },
  {
   sku: "cobasi-927694",
@@ -5163,7 +5678,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos dermatite",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/210392/Panolog-Pomada-Elanco.jpg?v=638828440236900000",
-  productUrl: "https://www.cobasi.com.br/panolog-15-ml-elanco-3927694/p"
+  productUrl: "https://www.cobasi.com.br/panolog-15-ml-elanco-3927694/p",
+  popularity: 516
  },
  {
   sku: "cobasi-927503",
@@ -5173,7 +5689,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032344/alimento-umido-gran-plus-gourmet-caes-medio-e-grande-salmao-e-frango-frente.jpg?v=638043757481970000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-caes-medio-e-grande-salmao-e-frango-3927503/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-gourmet-caes-medio-e-grande-salmao-e-frango-3927503/p",
+  popularity: 517
  },
  {
   sku: "cobasi-927171",
@@ -5183,7 +5700,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011388/ORIGENS-AD-SENIOR-MINI-PEQ.-7898363315229---7898363315212---7898363316936.jpg?v=637995527237570000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-cao-senior-mini-e-pequeno-frango-e-cereais-3927171/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-cao-senior-mini-e-pequeno-frango-e-cereais-3927171/p",
+  popularity: 518
  },
  {
   sku: "cobasi-925535",
@@ -5193,7 +5711,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057984/Racao-Allcanis-Premium-Caes-Adultos-Frango-Carne-e-Arroz.png?v=638838649214330000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-allcanis-premium-frango-carne-e-arroz-3925551/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-allcanis-premium-frango-carne-e-arroz-3925551/p",
+  popularity: 519
  },
  {
   sku: "cobasi-924970",
@@ -5203,7 +5722,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/724273/carbovet.jpg?v=638398839453000000",
-  productUrl: "https://www.cobasi.com.br/antibiotico-carbovet-biofarm-3924970/p"
+  productUrl: "https://www.cobasi.com.br/antibiotico-carbovet-biofarm-3924970/p",
+  popularity: 520
  },
  {
   sku: "cobasi-923940",
@@ -5213,7 +5733,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106936/racao-para-caes-adultos-racas-pequenas-golden-selecao-natural-abobora-3-1.webp?v=639160876679200000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-pequenas-golden-selecao-natural-abobora-3923940/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-pequenas-golden-selecao-natural-abobora-3923940/p",
+  popularity: 521
  },
  {
   sku: "cobasi-923028",
@@ -5223,7 +5744,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos otologicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/201131/Otomax-15g-MSD-Saude-Animal.jpg?v=636725159956400000",
-  productUrl: "https://www.cobasi.com.br/otomax-15g-msd-saude-animal-3923028/p"
+  productUrl: "https://www.cobasi.com.br/otomax-15g-msd-saude-animal-3923028/p",
+  popularity: 522
  },
  {
   sku: "cobasi-920312",
@@ -5233,7 +5755,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011394/920312--1-.jpg?v=638137317235200000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-caes-de-1-a-10kg-3920312/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-caes-de-1-a-10kg-3920312/p",
+  popularity: 523
  },
  {
   sku: "cobasi-920282",
@@ -5243,7 +5766,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060137/drontal-puppy-capa.png?v=638602818800700000",
-  productUrl: "https://www.cobasi.com.br/drontal-puppy-suspensao-vermifugo-20ml-elanco-3920282/p"
+  productUrl: "https://www.cobasi.com.br/drontal-puppy-suspensao-vermifugo-20ml-elanco-3920282/p",
+  popularity: 524
  },
  {
   sku: "cobasi-919691",
@@ -5253,7 +5777,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011381/ORIGENS-AD-PEQ.-PORTE-7898363314192---7898363314284---7898363314499.jpg?v=639095476271100000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-racas-pequenas-frango-e-cereais-3919691/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-racas-pequenas-frango-e-cereais-3919691/p",
+  popularity: 525
  },
  {
   sku: "cobasi-910279",
@@ -5263,7 +5788,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza coletor de fezes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048308/Saquinhos-Higienicos-Eco-Green-Biodegradaveis-Jambo-embalagem.png?v=638319369349800000",
-  productUrl: "https://www.cobasi.com.br/saquinhos-higienicos-eco-green-3910279/p"
+  productUrl: "https://www.cobasi.com.br/saquinhos-higienicos-eco-green-3910279/p",
+  popularity: 526
  },
  {
   sku: "cobasi-910139",
@@ -5273,7 +5799,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064900/0-Racao-Optimum-para-Gatos-Adultos-Castrados-Frango-1kg.png?v=638690236962800000",
-  productUrl: "https://www.cobasi.com.br/racao-optimum-gatos-adultos-castrados-frango-3910139/p"
+  productUrl: "https://www.cobasi.com.br/racao-optimum-gatos-adultos-castrados-frango-3910139/p",
+  popularity: 527
  },
  {
   sku: "cobasi-910031",
@@ -5283,7 +5810,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107227/Racao-Guabi-Natural-Gatos-Adultos-Castrados-Cordeiro-e-Aveia-1.webp?v=639160962055870000",
-  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-castrados-guabi-natural-cordeiro-e-aveia-3910031/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-castrados-guabi-natural-cordeiro-e-aveia-3910031/p",
+  popularity: 528
  },
  {
   sku: "cobasi-910023",
@@ -5293,7 +5821,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107209/Racao-Guabi-Natural-Gatos-Adultos-Salmao-e-Cevada-1.webp?v=639160960102170000",
-  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-castrados-guabi-natural-salmao-e-cevada-3910015/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-castrados-guabi-natural-salmao-e-cevada-3910015/p",
+  popularity: 529
  },
  {
   sku: "cobasi-909998",
@@ -5303,7 +5832,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107185/Racao-Guabi-Natural-Gatos-Filhotes-Frango-e-Arroz-Integral-1.webp?v=639160956230500000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-gato-adulto-castrado-frango-e-arroz-integral-3909980/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-gato-adulto-castrado-frango-e-arroz-integral-3909980/p",
+  popularity: 530
  },
  {
   sku: "cobasi-909874",
@@ -5313,7 +5843,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107098/Racao-Guabi-Natural-Caes-Adultos-Racas-Mini-e-Pequenas-Salmao-e-Cevada-1.webp?v=639160915657530000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-salmao-e-cevada-3909874/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-mini-e-pequenas-guabi-natural-salmao-e-cevada-3909874/p",
+  popularity: 531
  },
  {
   sku: "cobasi-982580",
@@ -5323,7 +5854,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107010/Racao Guabi Natural Caes Adultos Grandes Salmao e Cevada 1.webp?v=639160898428230000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-grandes-e-gigantes-guabi-natural-salmao-e-cevada-3909335/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-grandes-e-gigantes-guabi-natural-salmao-e-cevada-3909335/p",
+  popularity: 532
  },
  {
   sku: "cobasi-948055",
@@ -5333,7 +5865,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077063/Racao Umida Pet Delicia Gatos Hipercalorica.webp?v=638854209781830000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-gatos-hipercalorica-3908436/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-gatos-hipercalorica-3908436/p",
+  popularity: 533
  },
  {
   sku: "cobasi-896845",
@@ -5343,7 +5876,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/293531/Granulado-Higienico-ProGato-Tradicional.jpg?v=638215908933370000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-progato-tradicional-3896845/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-progato-tradicional-3896845/p",
+  popularity: 534
  },
  {
   sku: "cobasi-894915",
@@ -5353,7 +5887,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1049763/Senior-Castrado-Frango-e-Arroz.png?v=639072109413300000",
-  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-gato-senior-castrados-frango-e-arroz-3894915/p"
+  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-gato-senior-castrados-frango-e-arroz-3894915/p",
+  popularity: 535
  },
  {
   sku: "cobasi-893200",
@@ -5363,7 +5898,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062450/3893200_BIFINHO-ORIGEM-NAT.-MIX-DE-VEGETAIS-60G_1.jpg?v=638646163758430000",
-  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-mix-de-vegetais-3893200/p"
+  productUrl: "https://www.cobasi.com.br/bifinho-origem-natural-mix-de-vegetais-3893200/p",
+  popularity: 536
  },
  {
   sku: "cobasi-892858",
@@ -5373,7 +5909,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/536678/50MG.jpg?v=638134656377700000",
-  productUrl: "https://www.cobasi.com.br/antibacteriano--silmox-cl-vansil-3892858/p"
+  productUrl: "https://www.cobasi.com.br/antibacteriano--silmox-cl-vansil-3892858/p",
+  popularity: 537
  },
  {
   sku: "cobasi-892688",
@@ -5383,7 +5920,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077407/tapete-higienico-slim-pads-petmais_1.webp?v=638864816158100000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-slim-pads-petmais-3892688/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-slim-pads-petmais-3892688/p",
+  popularity: 538
  },
  {
   sku: "cobasi-878650",
@@ -5393,7 +5931,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083130/Racao-Premier-Selecao-Natural-Caes-Adultos-Racas-Pequenas-Frango-com-Batata-Doce-1kg-frente.webp?v=638907993757400000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-racas-pequenas-frango-com-batata-doce-3878650/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-racas-pequenas-frango-com-batata-doce-3878650/p",
+  popularity: 539
  },
  {
   sku: "cobasi-874817",
@@ -5403,7 +5942,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza pa higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/206395/Pa-Higienica-Preta-Furacao-Pet.jpg?v=636803935426100000",
-  productUrl: "https://www.cobasi.com.br/pa-higienica-preta-furacao-pet-3874817/p"
+  productUrl: "https://www.cobasi.com.br/pa-higienica-preta-furacao-pet-3874817/p",
+  popularity: 540
  },
  {
   sku: "cobasi-871150",
@@ -5413,7 +5953,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/193357/Anti-inflamatorio-para-Gatos-Flamavet.jpg?v=638134622151400000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-para-gatos-flamavet-3871150/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-para-gatos-flamavet-3871150/p",
+  popularity: 541
  },
  {
   sku: "cobasi-871141",
@@ -5423,7 +5964,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/193356/Anti-inflamatorio-para-Caes-Flamavet.jpg?v=638134621731570000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-para-cachorro-flamavet-3871141/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-para-cachorro-flamavet-3871141/p",
+  popularity: 542
  },
  {
   sku: "cobasi-903353",
@@ -5433,7 +5975,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1049758/Castrado-Carne-e-Arroz.png?v=639168838333470000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-castrado-carne-e-arroz-3870137/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-castrado-carne-e-arroz-3870137/p",
+  popularity: 543
  },
  {
   sku: "cobasi-866598",
@@ -5443,7 +5986,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/192558/proplan-wet-cats-85g-sterelized-AT.jpg?v=638760183219270000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-sterilized-frango-ao-molho-3866598/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-sterilized-frango-ao-molho-3866598/p",
+  popularity: 544
  },
  {
   sku: "cobasi-866580",
@@ -5453,7 +5997,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/816146/racao-umida-para-gatos-adultos-salmao-ao-molho-85g_1.jpg?v=638760085922770000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pro-plan-salmao-ao-molho-purina-gatos-adult-85g-3866580/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pro-plan-salmao-ao-molho-purina-gatos-adult-85g-3866580/p",
+  popularity: 545
  },
  {
   sku: "cobasi-866571",
@@ -5463,7 +6008,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/862612/Alimento-Umido-Pro-Plan-Adult-Frango-ao-Molho-85g-1.jpg?v=638760086175100000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-adult-frango-ao-molho-3866571/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-adult-frango-ao-molho-3866571/p",
+  popularity: 546
  },
  {
   sku: "cobasi-861421",
@@ -5473,7 +6019,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/910807/vermifugo-mebendazole-vetnil-10-comprimidos.jpg?v=638538773886900000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-mebendazole-vetnil-3861421/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-mebendazole-vetnil-3861421/p",
+  popularity: 547
  },
  {
   sku: "cobasi-857971",
@@ -5483,7 +6030,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1043967/Florentero-Bioctal-Frente.png?v=638880918401170000",
-  productUrl: "https://www.cobasi.com.br/florentero-10-comprimidos-bioctal-3857971/p"
+  productUrl: "https://www.cobasi.com.br/florentero-10-comprimidos-bioctal-3857971/p",
+  popularity: 548
  },
  {
   sku: "cobasi-857882",
@@ -5493,7 +6041,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/941847/7898053586373.jpg?v=638817846155770000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-vetmax-plus-vetnil-3857882/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-vetmax-plus-vetnil-3857882/p",
+  popularity: 549
  },
  {
   sku: "cobasi-854280",
@@ -5503,7 +6052,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/815629/petisco-para-caes-adultos-racas-pequenas-frango-42g_1.jpg?v=638781704697670000",
-  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-pequeno-3854263/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-pequeno-3854263/p",
+  popularity: 550
  },
  {
   sku: "cobasi-851809",
@@ -5513,7 +6063,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111840/7891000244012-1.webp?v=639197438564000000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-filhotes-frango-3851809/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-filhotes-frango-3851809/p",
+  popularity: 551
  },
  {
   sku: "cobasi-851787",
@@ -5523,7 +6074,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111872/1.webp?v=639197453873530000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-adulto-frango-85g-3851787/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-adulto-frango-85g-3851787/p",
+  popularity: 552
  },
  {
   sku: "cobasi-846848",
@@ -5533,7 +6085,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083035/Racao-Premier-Racas-Especificas-Shih-Tzu-Adultos-Salmao-1kg-frente.webp?v=638907839699670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-adultos-salmao-3846848/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-adultos-salmao-3846848/p",
+  popularity: 553
  },
  {
   sku: "cobasi-828009",
@@ -5543,7 +6096,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106733/racao-golden-selecao-natural-caes-filhotes-frango-e-arroz-3.webp?v=639156780407230000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-filhotes-frango-e-arroz-3828009/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-filhotes-frango-e-arroz-3828009/p",
+  popularity: 554
  },
  {
   sku: "cobasi-823848",
@@ -5553,7 +6107,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106836/racao-golden-selecao-natural-caes-filhotes-frango-arroz-mini-bits-1-1.webp?v=639159370552300000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-filhotes-frango-arroz-mini-bits-3823848/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-filhotes-frango-arroz-mini-bits-3823848/p",
+  popularity: 555
  },
  {
   sku: "cobasi-823589",
@@ -5563,7 +6118,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089434/Antipulgas-Simparic-120mg-para-Caes-40-a-60kg.webp?v=639107573106670000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-120mg-401-a-60-kg-zoets-3823589/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-120mg-401-a-60-kg-zoets-3823589/p",
+  popularity: 556
  },
  {
   sku: "cobasi-823449",
@@ -5573,7 +6129,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza higiene bucal",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099433/Kit-C.E.T.-Higiene-Oral.png?v=639112467548370000",
-  productUrl: "https://www.cobasi.com.br/kit-cet-higiene-oral-pasta-escova-necessaire-virbac-3823449/p"
+  productUrl: "https://www.cobasi.com.br/kit-cet-higiene-oral-pasta-escova-necessaire-virbac-3823449/p",
+  popularity: 557
  },
  {
   sku: "cobasi-821799",
@@ -5583,7 +6140,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095598/Cookie-Premier-Caes-Adultos-frente.png?v=639035705257470000",
-  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-3821799/p"
+  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-adultos-3821799/p",
+  popularity: 558
  },
  {
   sku: "cobasi-821500",
@@ -5593,7 +6151,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/841974/racao-umida-caes-adultos-cesar-file-mignon-85g-1.jpg?v=638352187465570000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-file-mignon-3821500/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-file-mignon-3821500/p",
+  popularity: 559
  },
  {
   sku: "cobasi-820903",
@@ -5603,7 +6162,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059014/Racao-Umida-Sheba-Gatos-Adultos-Sache-Salmao-ao-Molho-85g.png?v=638804100695630000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-salmao-ao-molho-3820903/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-salmao-ao-molho-3820903/p",
+  popularity: 560
  },
  {
   sku: "cobasi-1184032",
@@ -5613,7 +6173,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095169/Embalagem-de-25-kg-da-Racao-Dog-Chow-Caes-Adultos-Medios-e-Grandes-Carne-Frango-e-Arroz.webp?v=639016008972770000",
-  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-frango-arroz-3820849/p"
+  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-frango-arroz-3820849/p",
+  popularity: 561
  },
  {
   sku: "cobasi-820660",
@@ -5623,7 +6184,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058992/Racao-Umida-Sheba-Gatos-Adultos-Sache-Frango-Assado-85g.png?v=638804099755970000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-frango-assado-3820660/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-frango-assado-3820660/p",
+  popularity: 562
  },
  {
   sku: "cobasi-820644",
@@ -5633,7 +6195,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058977/Racao-Umida-Sheba-Gatos-Adultos-Sache-Carne-ao-Molho-85g.png?v=638804100045600000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-carne-ao-molho-3820644/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-adultos-sheba-carne-ao-molho-3820644/p",
+  popularity: 563
  },
  {
   sku: "cobasi-1125559",
@@ -5643,7 +6206,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais roedores racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085649/3820601-TWISTER-300g.webp?v=638954634070570000",
-  productUrl: "https://www.cobasi.com.br/racao-twister-nutropica-3820601/p"
+  productUrl: "https://www.cobasi.com.br/racao-twister-nutropica-3820601/p",
+  popularity: 564
  },
  {
   sku: "cobasi-819468",
@@ -5653,7 +6217,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060666/Kets-Premium-4kg.png?v=638735853154600000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-premium-3819468/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-premium-3819468/p",
+  popularity: 565
  },
  {
   sku: "cobasi-816450",
@@ -5663,7 +6228,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089499/1-Apoquel 16 mg - Tratamento para coceira em Caes.webp?v=638974316343470000",
-  productUrl: "https://www.cobasi.com.br/-apoquel-dermatologico-zoetis-para-cachorro-3816450/p"
+  productUrl: "https://www.cobasi.com.br/-apoquel-dermatologico-zoetis-para-cachorro-3816450/p",
+  popularity: 566
  },
  {
   sku: "cobasi-816426",
@@ -5673,7 +6239,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100185/Posatex-MSD-175ml.jpg?v=639118824181900000",
-  productUrl: "https://www.cobasi.com.br/posatex-msd-saude-animal-3816426/p"
+  productUrl: "https://www.cobasi.com.br/posatex-msd-saude-animal-3816426/p",
+  popularity: 567
  },
  {
   sku: "cobasi-813753",
@@ -5683,7 +6250,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083870/Racao-Royal-Canin-Super-Premium-Cat-Vitalidade-para-Gatos-Adultos.webp?v=638924324927630000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-premium-cat-vitalidade-gatos-adultos-3813753/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-premium-cat-vitalidade-gatos-adultos-3813753/p",
+  popularity: 568
  },
  {
   sku: "cobasi-893994",
@@ -5693,7 +6261,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077652/Racao Royal Canin Cuidado Digestivo para Gatos Adultos.webp?v=638868958101700000",
-  productUrl: "https://www.cobasi.com.br/racao-digestive-care-feline-royal-canin-3811858/p"
+  productUrl: "https://www.cobasi.com.br/racao-digestive-care-feline-royal-canin-3811858/p",
+  popularity: 569
  },
  {
   sku: "cobasi-811521",
@@ -5703,7 +6272,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106818/racao-golden-filhotes-carne-e-arroz-mini-bits-1-1.webp?v=639159354042630000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-filhotes-carne-e-arroz-mini-bits-3811530/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-filhotes-carne-e-arroz-mini-bits-3811530/p",
+  popularity: 570
  },
  {
   sku: "cobasi-808296",
@@ -5713,7 +6283,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1112940/Golden Cookie Caes Adultos Banana, Aveia e Mel 350g.webp?v=639205192395700000",
-  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-banana-aveia-e-mel-caes-adultos-3808296/p"
+  productUrl: "https://www.cobasi.com.br/petisco-golden-cookie-banana-aveia-e-mel-caes-adultos-3808296/p",
+  popularity: 571
  },
  {
   sku: "cobasi-958727",
@@ -5723,7 +6294,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082930/Racao-Premier-Racas-Especificas-Bulldog-Frances-Adultos-Frango-1kg-frente.webp?v=638907129134670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-bulldog-frances-adulto-3807990/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-bulldog-frances-adulto-3807990/p",
+  popularity: 572
  },
  {
   sku: "cobasi-806706",
@@ -5733,7 +6305,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004211/806706--1-.jpg?v=638827637541670000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-gastro-intestinal-3806706/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-gastro-intestinal-3806706/p",
+  popularity: 573
  },
  {
   sku: "cobasi-806099",
@@ -5743,7 +6316,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032359/racao-umida-gran-plus-salmao-sache-gatos-adultos-frente.jpg?v=638043766165400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-salmao-sache-gatos-adultos-3806099/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-salmao-sache-gatos-adultos-3806099/p",
+  popularity: 574
  },
  {
   sku: "cobasi-805947",
@@ -5753,7 +6327,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032356/racao-umida-gran-plus-gato-filhote-sache-frango-affinity-petcare-frente.jpg?v=638043764537930000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-gato-filhote-sache-frango-affinity-petcare-3805947/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-gran-plus-gato-filhote-sache-frango-affinity-petcare-3805947/p",
+  popularity: 575
  },
  {
   sku: "cobasi-853690",
@@ -5763,7 +6338,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111208/Menu-Caes-Adultos-Mini-Frango-e-Arroz-frente.jpg?v=639190443303630000",
-  productUrl: "https://www.cobasi.com.br/racao-adulto-mini-frango-e-arroz-gran-plus-3803944/p"
+  productUrl: "https://www.cobasi.com.br/racao-adulto-mini-frango-e-arroz-gran-plus-3803944/p",
+  popularity: 576
  },
  {
   sku: "cobasi-803456",
@@ -5773,7 +6349,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004311/803456--1-.jpg?v=638133737675500000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-royal-canin-medicamentosa-satiety-3803405/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-royal-canin-medicamentosa-satiety-3803405/p",
+  popularity: 577
  },
  {
   sku: "cobasi-799904",
@@ -5783,7 +6360,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113150/Petisco Purina Doguitos Linguicinha.webp?v=639208390618370000",
-  productUrl: "https://www.cobasi.com.br/petisco-linguicinha-doguitos-purina-3799904/p"
+  productUrl: "https://www.cobasi.com.br/petisco-linguicinha-doguitos-purina-3799904/p",
+  popularity: 578
  },
  {
   sku: "cobasi-798738",
@@ -5793,7 +6371,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/725870/Petisco-Bifinho-de-Carne-para-Caes-Bilisko-65G.jpg?v=638290082539330000",
-  productUrl: "https://www.cobasi.com.br/bifinho-de-carne-para-caes-bilisko-3798738/p"
+  productUrl: "https://www.cobasi.com.br/bifinho-de-carne-para-caes-bilisko-3798738/p",
+  popularity: 579
  },
  {
   sku: "cobasi-471810",
@@ -5803,7 +6382,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058724/Racao-Pedigree-Caes-Adultos-Racas-Medias-e-Grandes-Carne-e-Vegetais-900g.png?v=638887169791230000",
-  productUrl: "https://www.cobasi.com.br/racao-pedigree-carne-e-vegetais-3798037/p"
+  productUrl: "https://www.cobasi.com.br/racao-pedigree-carne-e-vegetais-3798037/p",
+  popularity: 580
  },
  {
   sku: "cobasi-797987",
@@ -5813,7 +6393,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082771/Racao-Premier-Formula-Caes-Filhotes-Racas-Pequenas-Frango-1kg-frente.webp?v=638906257731670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-racas-pequenas-caes-filhotes-sabor-frango-3797987/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-racas-pequenas-caes-filhotes-sabor-frango-3797987/p",
+  popularity: 581
  },
  {
   sku: "cobasi-471801",
@@ -5823,7 +6404,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058793/Racao-Pedigree-Caes-Adultos-Racas-Pequenas-e-Minis-Carne-e-Vegetais-900g.png?v=638844604117430000",
-  productUrl: "https://www.cobasi.com.br/racao-pedigree-racas-pequenas-3797871/p"
+  productUrl: "https://www.cobasi.com.br/racao-pedigree-racas-pequenas-3797871/p",
+  popularity: 582
  },
  {
   sku: "cobasi-797707",
@@ -5833,7 +6415,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095404/Racao Umida Pedigree Sache Caes Filhotes Carne ao Molho.webp?v=639033225153600000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-sache-junior-carne-100g-pedigree-3797707/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-sache-junior-carne-100g-pedigree-3797707/p",
+  popularity: 583
  },
  {
   sku: "cobasi-797693",
@@ -5843,7 +6426,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062341/racao-umida-pedigree-adulto-7-carne-ao-molho-sache-100g.png?v=638639228924800000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-7-carne-ao-molho-sache-100g-3797693/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-7-carne-ao-molho-sache-100g-3797693/p",
+  popularity: 584
  },
  {
   sku: "cobasi-797251",
@@ -5853,7 +6437,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/215328/Petisco-Doguitos-Rodizio-Carne-Purina.jpg?v=637661104909370000",
-  productUrl: "https://www.cobasi.com.br/petisco-doguitos-carne-purina-3797251/p"
+  productUrl: "https://www.cobasi.com.br/petisco-doguitos-carne-purina-3797251/p",
+  popularity: 585
  },
  {
   sku: "cobasi-793973",
@@ -5863,7 +6448,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051087/Whiskas-saber-carne-ao-molho-frente.png?v=638321291172300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-carne-ao-molho-3793973/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-whiskas-carne-ao-molho-3793973/p",
+  popularity: 586
  },
  {
   sku: "cobasi-1164295",
@@ -5873,7 +6459,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090487/Racao-Royal-Canin-Maxi-Adult-para-Caes-Adultos-Porte-Grande.webp.webp?v=638978653209970000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-maxi-caes-adultos-grandes-3793680/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-maxi-caes-adultos-grandes-3793680/p",
+  popularity: 587
  },
  {
   sku: "cobasi-821446",
@@ -5883,7 +6470,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090509/Racao-Royal-Canin-Medium-Adult-para-Caes-Adultos-Porte-Medio.webp.webp?v=638978659389800000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-medium-adult-3793655/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-medium-adult-3793655/p",
+  popularity: 588
  },
  {
   sku: "cobasi-793302",
@@ -5893,7 +6481,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/197395/Racao-Royal-Canin-Gatos-Sensible.jpg?v=636681985332400000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-sensible-33-3793302/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-sensible-33-3793302/p",
+  popularity: 589
  },
  {
   sku: "cobasi-792969",
@@ -5903,7 +6492,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao papagaio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044401/Alimento-para-Papagaios-Nutripassaros-com-Frutas-500g-frente.png?v=638156168253230000",
-  productUrl: "https://www.cobasi.com.br/mistura-para-papagaios-com-frutas-3792969/p"
+  productUrl: "https://www.cobasi.com.br/mistura-para-papagaios-com-frutas-3792969/p",
+  popularity: 590
  },
  {
   sku: "cobasi-791075",
@@ -5913,7 +6503,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077004/Racao Umida Pet Delicia Gatos Picadinho de Carne.webp?v=638854195635630000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-picadinho-de-carne-320g-pet-delicia-3791075/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-picadinho-de-carne-320g-pet-delicia-3791075/p",
+  popularity: 591
  },
  {
   sku: "cobasi-797537",
@@ -5923,7 +6514,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064764/0-WHISKAS-ADULTO-PEIXE-500g.png?v=639065012794430000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-peixe-3782734/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-peixe-3782734/p",
+  popularity: 592
  },
  {
   sku: "cobasi-818054",
@@ -5933,7 +6525,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083085/Racao-Premier-Selecao-Natural-Caes-Adultos-Frango-Korin-2.5kg-frente.webp?v=638907959679800000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-frango-korin-3782220/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-frango-korin-3782220/p",
+  popularity: 593
  },
  {
   sku: "cobasi-782130",
@@ -5943,7 +6536,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/325165/Doxifin-Tabs-14-comprimidos-Ourofino-50mg.jpg?v=638132792528330000",
-  productUrl: "https://www.cobasi.com.br/doxifin-tabs-com-14-comprimidos-ourofino-3782130/p"
+  productUrl: "https://www.cobasi.com.br/doxifin-tabs-com-14-comprimidos-ourofino-3782130/p",
+  popularity: 594
  },
  {
   sku: "cobasi-781568",
@@ -5953,7 +6547,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063077/Origem-Natural-Longevidade-Care-65-g.png?v=639013969027000000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-longetive-care-3781568/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-longetive-care-3781568/p",
+  popularity: 595
  },
  {
   sku: "cobasi-781541",
@@ -5963,7 +6558,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza fraldas e calcinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097035/fralda-descartavel-super-secao-para-caes-machos-P.webp?v=639070307386570000",
-  productUrl: "https://www.cobasi.com.br/fralda-descartavel-para-macho-supersecao-petix-3781541/p"
+  productUrl: "https://www.cobasi.com.br/fralda-descartavel-para-macho-supersecao-petix-3781541/p",
+  popularity: 596
  },
  {
   sku: "cobasi-771830",
@@ -5973,7 +6569,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos otologicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062567/EasOtic-para-Caes-10-ml-Fora-da-Embalagem.png?v=638647072449200000",
-  productUrl: "https://www.cobasi.com.br/easotic-10ml-virbac-3771830/p"
+  productUrl: "https://www.cobasi.com.br/easotic-10ml-virbac-3771830/p",
+  popularity: 597
  },
  {
   sku: "cobasi-770388",
@@ -5983,7 +6580,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza banho a seco",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047165/banho-a-seco-500ml-pet-clean-frente-1.png?v=638222669808330000",
-  productUrl: "https://www.cobasi.com.br/banho-a-seco-500ml-pet-clean-3770388/p"
+  productUrl: "https://www.cobasi.com.br/banho-a-seco-500ml-pet-clean-3770388/p",
+  popularity: 598
  },
  {
   sku: "cobasi-770019",
@@ -5993,7 +6591,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076971/Racao-Umida-Pet-Delicia-Gatos-Maravilha-de-Frango.webp?v=638854187045030000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-maravilha-de-frango-320g-pet-delicia-3770019/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-maravilha-de-frango-320g-pet-delicia-3770019/p",
+  popularity: 599
  },
  {
   sku: "cobasi-769975",
@@ -6003,7 +6602,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076909/Racao-Umida-Pet-Delicia-Caes-Cacarolinha-de-Carne.webp?v=638854174694270000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-cacarolinha-pet-delicia-3769975/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-cacarolinha-pet-delicia-3769975/p",
+  popularity: 600
  },
  {
   sku: "cobasi-766550",
@@ -6013,7 +6613,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/995101/766550--1-.jpg?v=639179941513200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-7-mais-gatos-adultos-3766550/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-instinctive-7-mais-gatos-adultos-3766550/p",
+  popularity: 601
  },
  {
   sku: "cobasi-766283",
@@ -6023,7 +6624,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085477/3766283-SELECAO-NATURAL-CALOPSITA-300g.webp?v=638953748587230000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-selecao-natural-calopsitas-3766283/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-selecao-natural-calopsitas-3766283/p",
+  popularity: 602
  },
  {
   sku: "cobasi-765759",
@@ -6033,7 +6635,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066165/ograx-3-1000mg-caes-e-gatos-avert.jpg.jpg?v=638705588010500000",
-  productUrl: "https://www.cobasi.com.br/ograx-3-1000mg-3765759/p"
+  productUrl: "https://www.cobasi.com.br/ograx-3-1000mg-3765759/p",
+  popularity: 603
  },
  {
   sku: "cobasi-759538",
@@ -6043,7 +6646,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1042272/capstar-57-mg-frente.jpg?v=638918952347000000",
-  productUrl: "https://www.cobasi.com.br/capstar-570mg-novartis-3759538/p"
+  productUrl: "https://www.cobasi.com.br/capstar-570mg-novartis-3759538/p",
+  popularity: 604
  },
  {
   sku: "cobasi-759520",
@@ -6053,7 +6657,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1042264/capstar-114-mg-frente.jpg?v=638128677671030000",
-  productUrl: "https://www.cobasi.com.br/capstar-114mg-caes-e-gatos-novartis-3759520/p"
+  productUrl: "https://www.cobasi.com.br/capstar-114mg-caes-e-gatos-novartis-3759520/p",
+  popularity: 605
  },
  {
   sku: "cobasi-759252",
@@ -6063,7 +6668,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051182/Racao-Umida-Whiskas-Sache-Peixe-Jelly-Gatos-Adultos--1-.png?v=638714276657830000",
-  productUrl: "https://www.cobasi.com.br/whiskas-sache-jelly-peixe-3759252/p"
+  productUrl: "https://www.cobasi.com.br/whiskas-sache-jelly-peixe-3759252/p",
+  popularity: 606
  },
  {
   sku: "cobasi-739057",
@@ -6073,7 +6679,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/928790/petisco-bilisko-palito-fino-para-caes-carne-65g.jpg?v=638151711328270000",
-  productUrl: "https://www.cobasi.com.br/palito-fino-de-carne-para-caes-bilisko-3739057/p"
+  productUrl: "https://www.cobasi.com.br/palito-fino-de-carne-para-caes-bilisko-3739057/p",
+  popularity: 607
  },
  {
   sku: "cobasi-734390",
@@ -6083,7 +6690,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza higiene bucal",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/941846/7898053586182.jpg?v=638128487416370000",
-  productUrl: "https://www.cobasi.com.br/higienizador-bucal-periovet-spray-vetnil-3734390/p"
+  productUrl: "https://www.cobasi.com.br/higienizador-bucal-periovet-spray-vetnil-3734390/p",
+  popularity: 608
  },
  {
   sku: "cobasi-1125532",
@@ -6093,7 +6701,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais roedores racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085623/1125540-PORQUINHO-DA-INDIA-300G.webp?v=638954504903630000",
-  productUrl: "https://www.cobasi.com.br/racao-porquinho-da-india-nutropica-3733423/p"
+  productUrl: "https://www.cobasi.com.br/racao-porquinho-da-india-nutropica-3733423/p",
+  popularity: 609
  },
  {
   sku: "cobasi-732087",
@@ -6103,7 +6712,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082915/Racao-Premier-Nutricao-Clinica-Renal-Gatos-Adultos-0.5kg-frente.webp?v=638907113822630000",
-  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-renal-premier-3732087/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutricao-clinica-gatos-ad-renal-premier-3732087/p",
+  popularity: 610
  },
  {
   sku: "cobasi-727865",
@@ -6113,7 +6723,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037611/Gatos-Adultos-Frango-e-Arroz-Frente.jpg?v=639173260001370000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-adulto-frango-arroz-3727873/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-adulto-frango-arroz-3727873/p",
+  popularity: 611
  },
  {
   sku: "cobasi-727768",
@@ -6123,7 +6734,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076899/Racao-Umida-Pet-Delicia-Caes-Senior.webp?v=639153279706730000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-natural-caes-senior-3727768/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pet-delicia-natural-caes-senior-3727768/p",
+  popularity: 612
  },
  {
   sku: "cobasi-717770",
@@ -6133,7 +6745,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097010/super-secao-citrus-tapete-higienico-petix-para-caes-30-uni-2.webp?v=639070218264430000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-citrus-80x60cm-3717770/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-citrus-80x60cm-3717770/p",
+  popularity: 613
  },
  {
   sku: "cobasi-714046",
@@ -6143,7 +6756,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052578/osso-no-2-3-ll-pet-para-cachorro.png?v=638391890221700000",
-  productUrl: "https://www.cobasi.com.br/ossinho-no-2-3-para-caes-ll-pet-3714046/p"
+  productUrl: "https://www.cobasi.com.br/ossinho-no-2-3-para-caes-ll-pet-3714046/p",
+  popularity: 614
  },
  {
   sku: "cobasi-713724",
@@ -6153,7 +6767,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/353997/CAMPESTRE.jpg?v=638721121382030000",
-  productUrl: "https://www.cobasi.com.br/aditivo-antiodor-campestre-500g-pipicat-3713724/p"
+  productUrl: "https://www.cobasi.com.br/aditivo-antiodor-campestre-500g-pipicat-3713724/p",
+  popularity: 615
  },
  {
   sku: "cobasi-713716",
@@ -6163,7 +6778,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/449820/Aditivo-Antiodor-Pipicat-Floral-500g.jpg?v=638721120540530000",
-  productUrl: "https://www.cobasi.com.br/aditivo-antiodor-floral-500g-pipicat-3713716/p"
+  productUrl: "https://www.cobasi.com.br/aditivo-antiodor-floral-500g-pipicat-3713716/p",
+  popularity: 616
  },
  {
   sku: "cobasi-708240",
@@ -6173,7 +6789,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095520/Hero_Petisco Dreamies Queijo para Gatos 40g.webp?v=639034072919600000",
-  productUrl: "https://www.cobasi.com.br/petisco-dreamies-queijo-para-gatos-adultos-3708240/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dreamies-queijo-para-gatos-adultos-3708240/p",
+  popularity: 617
  },
  {
   sku: "cobasi-703397",
@@ -6183,7 +6800,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/860062/racao-origens-caes-adultos-racas-especificas-shitzu-e-lhasa-1kg.jpg?v=638149133822100000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-racas-especificas-shitzu-e-lhasa-3703397/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-racas-especificas-shitzu-e-lhasa-3703397/p",
+  popularity: 618
  },
  {
   sku: "cobasi-703311",
@@ -6193,7 +6811,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108482/Racao Vet Life Natural Feline Renal 1.webp?v=639168884046430000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-feline-renal-3703311/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-feline-renal-3703311/p",
+  popularity: 619
  },
  {
   sku: "cobasi-701432",
@@ -6203,7 +6822,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais roedores higiene e limpeza",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047382/Granulado-Higienico-Like-Pet-Roedores-2.png?v=638228608747570000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-roedores-like-pet-3701432/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-roedores-like-pet-3701432/p",
+  popularity: 620
  },
  {
   sku: "cobasi-1162527",
@@ -6213,7 +6833,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067903/Racao-Megazoo-Mix-Calopsitas--1-.png.png?v=638820637126900000",
-  productUrl: "https://www.cobasi.com.br/racao-para-calopsita-mix-megazoo-3696986/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-calopsita-mix-megazoo-3696986/p",
+  popularity: 621
  },
  {
   sku: "cobasi-696692",
@@ -6223,7 +6844,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/316965/Gato-Castrado-7-.jpg?v=638127772940870000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-castrados-sterilised-7-3696692/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-castrados-sterilised-7-3696692/p",
+  popularity: 622
  },
  {
   sku: "cobasi-684902",
@@ -6233,7 +6855,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106790/racao-golden-power-training-filhotes-frango-e-arroz-treinamento-e-competicao-15-1.webp?v=639159196894630000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-power-training-filhotes-frango-e-arroz-treinamento-e-competicao-3684902/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-power-training-filhotes-frango-e-arroz-treinamento-e-competicao-3684902/p",
+  popularity: 623
  },
  {
   sku: "cobasi-1162543",
@@ -6243,7 +6866,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067902/Racao-Nutropica-Calopsita-e-Periquito--1-.png.png?v=638908546574130000",
-  productUrl: "https://www.cobasi.com.br/racao-para-calopsita-e-periquito-megazoo-3681644/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-calopsita-e-periquito-megazoo-3681644/p",
+  popularity: 624
  },
  {
   sku: "cobasi-680532",
@@ -6253,7 +6877,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056384/Petisco-Muffin-de-Chocolate-Pet-Dog-30g.png?v=638762577907900000",
-  productUrl: "https://www.cobasi.com.br/petisco-muffin-de-chocolate-pet-dog-3680532/p"
+  productUrl: "https://www.cobasi.com.br/petisco-muffin-de-chocolate-pet-dog-3680532/p",
+  popularity: 625
  },
  {
   sku: "cobasi-640980",
@@ -6263,7 +6888,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083044/Racao-Premier-Racas-Especificas-Shih-Tzu-Filhotes-1kg-frente.webp?v=638907841148930000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-filhotes-frango-racas-especificas-3679402/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-shih-tzu-filhotes-frango-racas-especificas-3679402/p",
+  popularity: 626
  },
  {
   sku: "cobasi-676128",
@@ -6273,7 +6899,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos dermatite",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048116/Dermotrat-Creme-para-Caes-e-Gatos-20g.png?v=638941551312530000",
-  productUrl: "https://www.cobasi.com.br/dermotrat-creme-20-g-virbac-3676128/p"
+  productUrl: "https://www.cobasi.com.br/dermotrat-creme-20-g-virbac-3676128/p",
+  popularity: 627
  },
  {
   sku: "cobasi-676110",
@@ -6283,7 +6910,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113400/Dermotrat Spray para Caes e Gatos embalagem_FRENTE-01.webp?v=639210101697900000",
-  productUrl: "https://www.cobasi.com.br/dermotrat-aerosol-75-g-ourofino-3676110/p"
+  productUrl: "https://www.cobasi.com.br/dermotrat-aerosol-75-g-ourofino-3676110/p",
+  popularity: 628
  },
  {
   sku: "cobasi-670294",
@@ -6293,7 +6921,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068243/Eliminador-Odores-Original-Sanol.png.png?v=638754159487800000",
-  productUrl: "https://www.cobasi.com.br/eliminador-odores-original-sanol-3670294/p"
+  productUrl: "https://www.cobasi.com.br/eliminador-odores-original-sanol-3670294/p",
+  popularity: 629
  },
  {
   sku: "cobasi-666475",
@@ -6303,7 +6932,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos analgesicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/925011/dipirona-gotas-para-caes-e-gatos-biovet-20ml.jpg?v=638157990330900000",
-  productUrl: "https://www.cobasi.com.br/dipirona-gotas-biovet-3666475/p"
+  productUrl: "https://www.cobasi.com.br/dipirona-gotas-biovet-3666475/p",
+  popularity: 630
  },
  {
   sku: "cobasi-666211",
@@ -6313,7 +6943,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1055035/Hepvet-suplemento-para-o-metabolismo-do-seu-pet.png?v=638742034151130000",
-  productUrl: "https://www.cobasi.com.br/suplemento-hepvet-vetnil-3666211/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-hepvet-vetnil-3666211/p",
+  popularity: 631
  },
  {
   sku: "cobasi-660795",
@@ -6323,7 +6954,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "piscina limpeza de piscina cloros",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061164/Pastilha-Genco---Tablete-Multi-Acao-3-em-1.png?v=638742076230870000",
-  productUrl: "https://www.cobasi.com.br/tablete-multiacao-3-em-1-genco-cloro-para-piscina-3660795/p"
+  productUrl: "https://www.cobasi.com.br/tablete-multiacao-3-em-1-genco-cloro-para-piscina-3660795/p",
+  popularity: 632
  },
  {
   sku: "cobasi-303321",
@@ -6333,7 +6965,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083210/Racao-Premier-Ambientes-Internos-Light-Gatos-Adultos-Salmao-1.5kg-frente.webp?v=638908665684500000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-light-gatos-adultos-salmao-3659967/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-light-gatos-adultos-salmao-3659967/p",
+  popularity: 633
  },
  {
   sku: "cobasi-659959",
@@ -6343,7 +6976,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083188/Racao-Premier-Ambientes-Internos-Gatos-Adultos-Pelos-Longos-Salmao-0.5kg-frente.webp?v=638908654556770000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-gatos-adultos-pelos-longos-salmao-3659959/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-ambientes-internos-gatos-adultos-pelos-longos-salmao-3659959/p",
+  popularity: 634
  },
  {
   sku: "cobasi-659916",
@@ -6353,7 +6987,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083198/Racao-Premier-Ambientes-Internos-Gatos-Filhotes-Frango-0.5kg-frente.webp?v=638908657051600000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-pet-ambientes-internos-gato-filhote-frango-3659916/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-pet-ambientes-internos-gato-filhote-frango-3659916/p",
+  popularity: 635
  },
  {
   sku: "cobasi-659533",
@@ -6363,7 +6998,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037578/Filhote-Frango-Arroz-frente.jpg?v=639173258426000000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-filhotes-frango-e-arroz-3659533/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gatos-filhotes-frango-e-arroz-3659533/p",
+  popularity: 636
  },
  {
   sku: "cobasi-656631",
@@ -6373,7 +7009,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062334/Sache-Caes-Adultos-Racas-Pequenas-Cordeiro-ao-Molho.png?v=638639218778770000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-racas-pequenas-cordeiro-ao-molho-3656631/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-pedigree-adulto-racas-pequenas-cordeiro-ao-molho-3656631/p",
+  popularity: 637
  },
  {
   sku: "cobasi-915165",
@@ -6383,7 +7020,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004137/647900--1-.jpg?v=639040742466770000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-kitten-34-3647900/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-kitten-34-3647900/p",
+  popularity: 638
  },
  {
   sku: "cobasi-646857",
@@ -6393,7 +7031,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/398867/GASTROINTESTINAL.jpg?v=638127661689600000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-gastro-intestinal-3646857/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-gastro-intestinal-3646857/p",
+  popularity: 639
  },
  {
   sku: "cobasi-646776",
@@ -6403,7 +7042,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056656/Areia-Pipicat-Bianco-para-Gatos-18kg.png?v=639174708288900000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-pipicat-bianco-3646776/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-pipicat-bianco-3646776/p",
+  popularity: 640
  },
  {
   sku: "cobasi-646768",
@@ -6413,7 +7053,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1008478/condroplex-sticks-para-caes-avert-Principal.jpg?v=638158881104600000",
-  productUrl: "https://www.cobasi.com.br/condroplex-sticks-para-caes-avert--315g-3646768/p"
+  productUrl: "https://www.cobasi.com.br/condroplex-sticks-para-caes-avert--315g-3646768/p",
+  popularity: 641
  },
  {
   sku: "cobasi-467413",
@@ -6423,7 +7064,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111147/racao-gran-plus-adulto-frango-e-arroz-frente.jpg?v=639190426182930000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-adulto-frango-e-arroz-3643009/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-adulto-frango-e-arroz-3643009/p",
+  popularity: 642
  },
  {
   sku: "cobasi-641928",
@@ -6433,7 +7075,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza hidratante",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/985907/HIDRAPET-CREME-100G---AGENER.jpg?v=638715338578200000",
-  productUrl: "https://www.cobasi.com.br/hidrapet-creme-agener-3641928/p"
+  productUrl: "https://www.cobasi.com.br/hidrapet-creme-agener-3641928/p",
+  popularity: 643
  },
  {
   sku: "cobasi-638676",
@@ -6443,7 +7086,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051252/Racao-Umida-Whiskas-Pate-Peixe-290-g.jpg?v=638324692903470000",
-  productUrl: "https://www.cobasi.com.br/racao-whiskas-peixe-3638676/p"
+  productUrl: "https://www.cobasi.com.br/racao-whiskas-peixe-3638676/p",
+  popularity: 644
  },
  {
   sku: "cobasi-638609",
@@ -6453,7 +7097,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095361/7896029079508.webp?v=639033196020530000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pedigree-carne-3638609/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pedigree-carne-3638609/p",
+  popularity: 645
  },
  {
   sku: "cobasi-636886",
@@ -6463,7 +7108,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao terras e substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/805988/humus-de-minhoca-all-garden-2kg.jpg?v=638134695735870000",
-  productUrl: "https://www.cobasi.com.br/humus-de-minhoca-all-garden-3636886/p"
+  productUrl: "https://www.cobasi.com.br/humus-de-minhoca-all-garden-3636886/p",
+  popularity: 646
  },
  {
   sku: "cobasi-636800",
@@ -6473,7 +7119,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao terras e substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/805981/all-garden-turfa-5kg.jpg?v=639167996840130000",
-  productUrl: "https://www.cobasi.com.br/all-garden-turfa-3636800/p"
+  productUrl: "https://www.cobasi.com.br/all-garden-turfa-3636800/p",
+  popularity: 647
  },
  {
   sku: "cobasi-635650",
@@ -6483,7 +7130,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza fraldas e calcinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/210676/Fralda-Higienica-Ecofralda-Femea-12-unidades-Dogs-Care-.jpg?v=638947414442430000",
-  productUrl: "https://www.cobasi.com.br/fralda-higienica-ecofralda-femea-dogs-care-3635650/p"
+  productUrl: "https://www.cobasi.com.br/fralda-higienica-ecofralda-femea-dogs-care-3635650/p",
+  popularity: 648
  },
  {
   sku: "cobasi-635251",
@@ -6493,7 +7141,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100515/racao-farmina-n-d-prime-gatos-adultos-castrados-frango-e-roma-1.webp?v=639123047446330000",
-  productUrl: "https://www.cobasi.com.br/racao-farmina-n-d-prime-gatos-adultos-castrados-frango-e-roma-3635251/p"
+  productUrl: "https://www.cobasi.com.br/racao-farmina-n-d-prime-gatos-adultos-castrados-frango-e-roma-3635251/p",
+  popularity: 649
  },
  {
   sku: "cobasi-634271",
@@ -6503,7 +7152,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1023133/7898329492339.jpg?v=638157731933430000",
-  productUrl: "https://www.cobasi.com.br/mistura-para-calopsita-e-agapornes-passaro-forte-3634271/p"
+  productUrl: "https://www.cobasi.com.br/mistura-para-calopsita-e-agapornes-passaro-forte-3634271/p",
+  popularity: 650
  },
  {
   sku: "cobasi-621579",
@@ -6513,7 +7163,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106737/racao-golden-formula-caes-filhotes-carne-e-arroz-3-1.webp?v=639156790885500000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-formula-caes-filhotes-carne-e-arroz-3621579/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-formula-caes-filhotes-carne-e-arroz-3621579/p",
+  popularity: 651
  },
  {
   sku: "cobasi-616630",
@@ -6523,7 +7174,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052570/osso-combo-twister-ll-pet.png?v=639080749226100000",
-  productUrl: "https://www.cobasi.com.br/osso-combo-twister-ll-pet-3616630/p"
+  productUrl: "https://www.cobasi.com.br/osso-combo-twister-ll-pet-3616630/p",
+  popularity: 652
  },
  {
   sku: "cobasi-615668",
@@ -6533,7 +7185,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106970/Racao-Guabi-Natural-Gatos-Senior-Castrados-Frango-e-Arroz-Integral-1.webp?v=639160889709630000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-gato-senior-castrado-frango-e-arroz-3615668/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-gato-senior-castrado-frango-e-arroz-3615668/p",
+  popularity: 653
  },
  {
   sku: "cobasi-982610",
@@ -6543,7 +7196,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106930/Racao Guabi Natural Caes Senior Porte Medio e Grande Frango e Arroz Integral 1.webp?v=639160875774070000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-senior-racas-medias-e-grandes-frango-e-arroz-3615196/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-senior-racas-medias-e-grandes-frango-e-arroz-3615196/p",
+  popularity: 654
  },
  {
   sku: "cobasi-615064",
@@ -6553,7 +7207,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106918/Racao-Guabi-Natural-Caes-Senior-Racas-Mini-e-Pequeno-Frango-e-Arroz-Integral-1.webp?v=639160868836870000",
-  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-senior-racas-mini-e-pequeno-frango-e-arroz-3615064/p"
+  productUrl: "https://www.cobasi.com.br/racao-guabi-natural-caes-senior-racas-mini-e-pequeno-frango-e-arroz-3615064/p",
+  popularity: 655
  },
  {
   sku: "cobasi-607355",
@@ -6563,7 +7218,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1080689/granulado-higienico-cat-mais-pratico-1.8kg-1.webp?v=638882659492070000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-cat-mais-petmais-3607355/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-cat-mais-petmais-3607355/p",
+  popularity: 656
  },
  {
   sku: "cobasi-658146",
@@ -6573,7 +7229,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083172/Racao-Premier-Ambientes-Internos-Gatos-Adultos-Castrados--12-anos-0.5kg-frente.webp?v=638908649560800000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-gato-adulto-ambientes-internos-castrado--12-anos-3595306/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-gato-adulto-ambientes-internos-castrado--12-anos-3595306/p",
+  popularity: 657
  },
  {
   sku: "cobasi-642070",
@@ -6583,7 +7240,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "piscina limpeza de piscina cloros",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069694/Cloro-Genco-Multi-Acao---3-em-1-25kg.png.png?v=638793029344170000",
-  productUrl: "https://www.cobasi.com.br/cloro-genco-multi-acao-3-em-1-l-e-3584673/p"
+  productUrl: "https://www.cobasi.com.br/cloro-genco-multi-acao-3-em-1-l-e-3584673/p",
+  popularity: 658
  },
  {
   sku: "cobasi-580694",
@@ -6593,7 +7251,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082993/Racao-Premier-Racas-Especificas-Maltes-Adultos-1kg-frente.webp?v=638907829572070000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-maltes-adultos-3580694/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-maltes-adultos-3580694/p",
+  popularity: 659
  },
  {
   sku: "cobasi-580619",
@@ -6603,7 +7262,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106757/racao-golden-gatos-adultos-salmao-3-1.webp?v=639159123559170000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-salmao-3580600/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-gatos-adultos-salmao-3580600/p",
+  popularity: 660
  },
  {
   sku: "cobasi-575429",
@@ -6613,7 +7273,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082803/Racao Premier Formula Light Caes Adultos Racas Medias Frango 15kg frente.webp?v=638906288201030000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-light-caes-adultos-racas-medias-frango-3575429/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-light-caes-adultos-racas-medias-frango-3575429/p",
+  popularity: 661
  },
  {
   sku: "cobasi-566764",
@@ -6623,7 +7284,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099441/racao-nd-ancestral-grain-caes-adulto-mini-frango-1.webp?v=639112658529970000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-ancestral-grain-caes-adulto-mini-frango-3566764/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-ancestral-grain-caes-adulto-mini-frango-3566764/p",
+  popularity: 662
  },
  {
   sku: "cobasi-558109",
@@ -6633,7 +7295,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/194649/Vermifugo-Milbemax-C-Caes-ate-5kg-Elanco.jpg?v=638126757092430000",
-  productUrl: "https://www.cobasi.com.br/milbemax-c-para-caes-de-5kg-a-25kg-novartis-3558109/p"
+  productUrl: "https://www.cobasi.com.br/milbemax-c-para-caes-de-5kg-a-25kg-novartis-3558109/p",
+  popularity: 663
  },
  {
   sku: "cobasi-553867",
@@ -6643,7 +7306,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1022284/Frente.jpg?v=638022120321070000",
-  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-perfumada-campestre-kelco-3553867/p"
+  productUrl: "https://www.cobasi.com.br/areia-para-gato-pipicat-perfumada-campestre-kelco-3553867/p",
+  popularity: 664
  },
  {
   sku: "cobasi-547174",
@@ -6653,7 +7317,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102433/Vermifugo Helfine Plus para Caes.webp?v=639138682065000000",
-  productUrl: "https://www.cobasi.com.br/helfine-plus-caes-agener-3547174/p"
+  productUrl: "https://www.cobasi.com.br/helfine-plus-caes-agener-3547174/p",
+  popularity: 665
  },
  {
   sku: "cobasi-574910",
@@ -6663,7 +7328,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao terras e substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/922441/substrato-para-plantas-flores-e-folhagens-biomix-2kg.jpg?v=638134652288470000",
-  productUrl: "https://www.cobasi.com.br/substrato-para-plantas-flores-e-folhagens-biomix-3543942/p"
+  productUrl: "https://www.cobasi.com.br/substrato-para-plantas-flores-e-folhagens-biomix-3543942/p",
+  popularity: 666
  },
  {
   sku: "cobasi-540242",
@@ -6673,7 +7339,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiparasitario",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063455/Scalibor-Coleira-Caes-Grandes-1.jpg?v=638793978418800000",
-  productUrl: "https://www.cobasi.com.br/coleira-antiparasitaria-scalibor-25gr-65cm-3540242/p"
+  productUrl: "https://www.cobasi.com.br/coleira-antiparasitaria-scalibor-25gr-65cm-3540242/p",
+  popularity: 667
  },
  {
   sku: "cobasi-1145398",
@@ -6683,7 +7350,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao papagaio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085498/3530565-PAPAGAIO-NATURAL-300G.webp?v=638953791729970000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-papagaio-natural-3530565/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-papagaio-natural-3530565/p",
+  popularity: 668
  },
  {
   sku: "cobasi-522554",
@@ -6693,7 +7361,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao papagaio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085446/3522554-Racao-Nutropica-para-Papagaios-com-Frutas-300G.webp?v=638953628330900000",
-  productUrl: "https://www.cobasi.com.br/racao-para-papagaios-com-frutas-nutropica-3522554/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-papagaios-com-frutas-nutropica-3522554/p",
+  popularity: 669
  },
  {
   sku: "cobasi-510602",
@@ -6703,7 +7372,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/302558/Racao-para-Shih-Tzu-Adulto-Royal-Canin-510602.jpg?v=639001905773000000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-shih-tzu-adulto-3510602/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-shih-tzu-adulto-3510602/p",
+  popularity: 670
  },
  {
   sku: "cobasi-505455",
@@ -6713,7 +7383,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1043730/Maxicam-05-mg-Ourofino.png?v=638146602336800000",
-  productUrl: "https://www.cobasi.com.br/maxicam-10-comp-ourofino-3505455/p"
+  productUrl: "https://www.cobasi.com.br/maxicam-10-comp-ourofino-3505455/p",
+  popularity: 671
  },
  {
   sku: "cobasi-503134",
@@ -6723,7 +7394,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/325158/Maxicam-OuroFino-2mg-10-comprimidos.jpg?v=638126699766000000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-maxicam-ourofino-2-mg-3503134/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-maxicam-ourofino-2-mg-3503134/p",
+  popularity: 672
  },
  {
   sku: "cobasi-472395",
@@ -6733,7 +7405,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/996043/472395.png?v=638899198541800000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-filhotes-peito-de-frango-e-arroz-integral-3472395/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-gatos-filhotes-peito-de-frango-e-arroz-integral-3472395/p",
+  popularity: 673
  },
  {
   sku: "cobasi-472360",
@@ -6743,7 +7416,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044687/Racao-Umida-Premier-Gourmet-Caes-Adultos-Portes-Medio-e-Grande-Peito-de-Frango-85g-frente.png?v=638899190469770000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-caes-adultos-portes-medio-e-grande-peito-de-frango-batata-doce-e-brocolis-3472360/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-gourmet-caes-adultos-portes-medio-e-grande-peito-de-frango-batata-doce-e-brocolis-3472360/p",
+  popularity: 674
  },
  {
   sku: "cobasi-472336",
@@ -6753,7 +7427,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044422/789734820139-7--Golden-Gourmet-Gatos-Adultos---Frango-e-Arroz-Fechada.png?v=638157122644030000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-adultos-frango-3472336/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-golden-gourmet-gatos-adultos-frango-3472336/p",
+  popularity: 675
  },
  {
   sku: "cobasi-470562",
@@ -6763,7 +7438,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085313/470562_1.webp?v=638949285024230000",
-  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-herbal-myhug-3470562/p"
+  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-herbal-myhug-3470562/p",
+  popularity: 676
  },
  {
   sku: "cobasi-468525",
@@ -6773,7 +7449,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063136/Gatos-Origem-Natural-Sensations-Hairball.png?v=638769750283200000",
-  productUrl: "https://www.cobasi.com.br/petisco-gatos-origem-natural-sensations-hairball-3468525/p"
+  productUrl: "https://www.cobasi.com.br/petisco-gatos-origem-natural-sensations-hairball-3468525/p",
+  popularity: 677
  },
  {
   sku: "cobasi-458279",
@@ -6783,7 +7460,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066163/ograx-gatos-suplemento-avert.jpg.jpg?v=638705583334070000",
-  productUrl: "https://www.cobasi.com.br/suplemento-gatos-ograx-avert-3458279/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-gatos-ograx-avert-3458279/p",
+  popularity: 678
  },
  {
   sku: "cobasi-457213",
@@ -6793,7 +7471,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109173/Racao-Biofresh-Caes-Senior-Racas-Medias_3KG_FRENTE.webp?v=639173012165870000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-senior-racas-medias-3457213/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-senior-racas-medias-3457213/p",
+  popularity: 679
  },
  {
   sku: "cobasi-457191",
@@ -6803,7 +7482,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109018/Racao-Biofresh-Caes-Adultos-Racas-Medias_3KG_FRENTE.webp?v=639172989924370000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-medias-3457191/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-medias-3457191/p",
+  popularity: 680
  },
  {
   sku: "cobasi-457140",
@@ -6813,7 +7493,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109201/Racao Biofresh Caes Castrados Racas Pequenas e Minis_1KG_FRENTE.webp?v=639173033548770000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-castrados-racas-pequenas-e-minis-3457140/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-castrados-racas-pequenas-e-minis-3457140/p",
+  popularity: 681
  },
  {
   sku: "cobasi-457132",
@@ -6823,7 +7504,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109194/Racao Biofresh Light Caes Adultos Racas Pequenas e Minis_1KG_FRENTE.webp?v=639173013720300000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-light-caes-adultos-racas-pequenas-e-minis-3457132/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-light-caes-adultos-racas-pequenas-e-minis-3457132/p",
+  popularity: 682
  },
  {
   sku: "cobasi-457108",
@@ -6833,7 +7515,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109159/Racao-Biofresh-Caes-Senior-Racas-Pequenas-e-Minis_1KG_FRENTE.webp?v=639173010403430000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-senior-racas-pequenas-e-minis-3457108/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-senior-racas-pequenas-e-minis-3457108/p",
+  popularity: 683
  },
  {
   sku: "cobasi-453676",
@@ -6843,7 +7526,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057884/Racao-Formula-Natural-Life-Caes-Senior-Racas-Medio-e-Grande_1.png?v=638533934446070000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-senior-medio-e-grande-3453676/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-senior-medio-e-grande-3453676/p",
+  popularity: 684
  },
  {
   sku: "cobasi-453528",
@@ -6853,7 +7537,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057862/Racao-Formula-Natural-Life-Caes-Filhotes-Medio-e-Grande_1.png?v=638866513851700000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-filhotes-medio-e-grande-3453528/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-caes-filhotes-medio-e-grande-3453528/p",
+  popularity: 685
  },
  {
   sku: "cobasi-453463",
@@ -6863,7 +7548,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1001801/453463--1-.jpg?v=638134541142270000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-adultos-gastro-intestinal-fibre-response-3453463/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-adultos-gastro-intestinal-fibre-response-3453463/p",
+  popularity: 686
  },
  {
   sku: "cobasi-453307",
@@ -6873,7 +7559,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/933089/suplemento-para-caes-e-gatos-omega-top-3-500-mg.jpg?v=638134522113030000",
-  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-omega-top-3-500mg-3453307/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-omega-top-3-500mg-3453307/p",
+  popularity: 687
  },
  {
   sku: "cobasi-449512",
@@ -6883,7 +7570,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/932201/449512.jpg?v=638134521519170000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-defend-pro-para-gatos-biovet-3449512/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-defend-pro-para-gatos-biovet-3449512/p",
+  popularity: 688
  },
  {
   sku: "cobasi-448109",
@@ -6893,7 +7581,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044686/Racao-Umida-Premier-Cachorros-Adultos-Gourmet-Salmao-e-Arroz-Integral-85g.png?v=638899190128000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-cachorros-adultos-gourmet-salmao-e-arroz-integral-3448109/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-cachorros-adultos-gourmet-salmao-e-arroz-integral-3448109/p",
+  popularity: 689
  },
  {
   sku: "cobasi-325791",
@@ -6903,7 +7592,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088806/00-copiar.webp?v=638966600050600000",
-  productUrl: "https://www.cobasi.com.br/biscoito-para-caes-marrobone-pedigree-3325791/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-para-caes-marrobone-pedigree-3325791/p",
+  popularity: 690
  },
  {
   sku: "cobasi-325775",
@@ -6913,7 +7603,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088772/00-copiar.webp?v=638966590689570000",
-  productUrl: "https://www.cobasi.com.br/biscrok-maxi-pedigree-3325775/p"
+  productUrl: "https://www.cobasi.com.br/biscrok-maxi-pedigree-3325775/p",
+  popularity: 691
  },
  {
   sku: "cobasi-321451",
@@ -6923,7 +7614,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069914/1-Antipulgas-Advocate-Gatos-entre-4-e-8kg-1-pipeta.webp.webp?v=638796525103470000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-advocate-gatos-entre-4-e-8-kg-3321451/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-advocate-gatos-entre-4-e-8-kg-3321451/p",
+  popularity: 692
  },
  {
   sku: "cobasi-299529",
@@ -6933,7 +7625,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082765/Racao-Premier-Formula-Caes-Filhotes-Racas-Grandes-e-Gigantes-Frango-15kg-frente.webp?v=639189571776670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-filhotes-racas-grandes-3299529/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-filhotes-racas-grandes-3299529/p",
+  popularity: 693
  },
  {
   sku: "cobasi-281484",
@@ -6943,7 +7636,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos shampoo medicamentoso",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062552/Shampoo-Hexadene-Spherulites-250-ml.png?v=638647064401400000",
-  productUrl: "https://www.cobasi.com.br/hexadene-spherulites-250-ml-virbac-3281484/p"
+  productUrl: "https://www.cobasi.com.br/hexadene-spherulites-250-ml-virbac-3281484/p",
+  popularity: 694
  },
  {
   sku: "cobasi-1193449",
@@ -6953,7 +7647,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101248/Numelvi-216-mg-para-caes.webp?v=639136162595500000",
-  productUrl: "https://www.cobasi.com.br/numelvi-21-6-mg-tratamento-para-coceira-em-caes-31193449/p"
+  productUrl: "https://www.cobasi.com.br/numelvi-21-6-mg-tratamento-para-coceira-em-caes-31193449/p",
+  popularity: 695
  },
  {
   sku: "cobasi-1193350",
@@ -6963,7 +7658,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100207/Racao-GranPlus-Gourmet-Caes-Filhotes-Todos-os-Portes-Ovelha-e-Arroz-3kg.webp?v=639119424647400000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-filhotes-todos-os-portes-ovelha-e-arroz-31193350/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-caes-filhotes-todos-os-portes-ovelha-e-arroz-31193350/p",
+  popularity: 696
  },
  {
   sku: "cobasi-1192981",
@@ -6973,7 +7669,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099709/Cookies-Formula-Natural-Gatos-Sabor-Salmao_frente.webp?v=639114400331800000",
-  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-gatos-adultos-salmao-31192981/p"
+  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-gatos-adultos-salmao-31192981/p",
+  popularity: 697
  },
  {
   sku: "cobasi-1192876",
@@ -6983,7 +7680,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102643/Racao Formula Natural Pro Caes Adultos Mini e Pequeno.webp?v=639142087089430000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-adultos-mini-e-pequeno-31192876/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-adultos-mini-e-pequeno-31192876/p",
+  popularity: 698
  },
  {
   sku: "cobasi-1192825",
@@ -6993,7 +7691,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102623/Racao Formula Natural Pro Caes Filhotes Mini e Pequeno.webp?v=639141987141070000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-filhotes-mini-e-pequeno-31192825/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-filhotes-mini-e-pequeno-31192825/p",
+  popularity: 699
  },
  {
   sku: "cobasi-1192817",
@@ -7003,7 +7702,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099703/Suplemento-Vitaminico-Happy-Flora-para-Gatos-6g.webp?v=639119393557070000",
-  productUrl: "https://www.cobasi.com.br/suplemento-happy-flora-probiotico-happy-med-para-gatos-31192817/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-happy-flora-probiotico-happy-med-para-gatos-31192817/p",
+  popularity: 700
  },
  {
   sku: "cobasi-1192850",
@@ -7013,7 +7713,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1102635/Racao Formula Natural Pro Caes Filhotes Medio e Grande.webp?v=639142010100470000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-filhotes-medio-e-grande-31192580/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-pro-caes-filhotes-medio-e-grande-31192580/p",
+  popularity: 701
  },
  {
   sku: "cobasi-1192574",
@@ -7023,7 +7724,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101469/racao-umida-formula-natural-gourmet-gatos-atum-em-pedacos-1.webp?v=639135841874730000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-atum-em-pedacos-31192574/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-atum-em-pedacos-31192574/p",
+  popularity: 702
  },
  {
   sku: "cobasi-1192566",
@@ -7033,7 +7735,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101467/racao-umida-formula-natural-gourmet-gatos-peito-de-frango-1.webp?v=639135839988470000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-peito-de-frango-31192566/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-peito-de-frango-31192566/p",
+  popularity: 703
  },
  {
   sku: "cobasi-1192558",
@@ -7043,7 +7746,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101465/racao-umida-formula-natural-gourmet-gatos-carne-desfiada-1.webp?v=639135836310970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-carne-desfiada-31192558/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-gatos-carne-desfiada-31192558/p",
+  popularity: 704
  },
  {
   sku: "cobasi-1192523",
@@ -7053,7 +7757,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101459/racao-umida-formula-natural-gourmet-caes-carne-abobora-e-chia-1.webp?v=639135832376400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-caes-carne-abobora-e-chia-31192523/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-gourmet-caes-carne-abobora-e-chia-31192523/p",
+  popularity: 705
  },
  {
   sku: "cobasi-1192396",
@@ -7063,7 +7768,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099123/Snack-Disfarca-Comprimidos-Happy-Med-para-Gatos-36g.webp?v=639105829059770000",
-  productUrl: "https://www.cobasi.com.br/snack-disfarca-comprimidos-happy-med-para-gatos-31192396/p"
+  productUrl: "https://www.cobasi.com.br/snack-disfarca-comprimidos-happy-med-para-gatos-31192396/p",
+  popularity: 706
  },
  {
   sku: "cobasi-1191632",
@@ -7073,7 +7779,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1100149/Racao-Bionatural-Prime-Caes-Senior-7--Racas-Pequenas-Frango-Frente.webp?v=639118811879930000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-senior-7-racas-pequenas-frango-31191632/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-caes-senior-7-racas-pequenas-frango-31191632/p",
+  popularity: 707
  },
  {
   sku: "cobasi-1191543",
@@ -7083,7 +7790,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109462/Petisco-Origem-Natural-Fazenda-Esofago-Bovino.webp?v=639173846575830000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-fazenda-esofago-bovino-31191543/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-fazenda-esofago-bovino-31191543/p",
+  popularity: 708
  },
  {
   sku: "cobasi-1188135",
@@ -7093,7 +7801,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097825/Petisco Joy Nuggets para Gatos Salmao e Atum 85g.webp?v=639081631071300000",
-  productUrl: "https://www.cobasi.com.br/petisco-joy-nuggets-para-gatos-salmao-e-atum-31188135/p"
+  productUrl: "https://www.cobasi.com.br/petisco-joy-nuggets-para-gatos-salmao-e-atum-31188135/p",
+  popularity: 709
  },
  {
   sku: "cobasi-1186825",
@@ -7103,7 +7812,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096890/tapete-higienico-para-cachorros-zee-pad-branco-30uni.webp?v=639066139651970000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-zeepad-white-slim-31186825/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-zeepad-white-slim-31186825/p",
+  popularity: 710
  },
  {
   sku: "cobasi-1186736",
@@ -7113,7 +7823,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097016/tapete-higienico-super-secao-black-premium-para-caes-30-unidades-2.webp?v=639070231591700000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-black-premium-80x60cm-31186736/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-super-secao-black-premium-80x60cm-31186736/p",
+  popularity: 711
  },
  {
   sku: "cobasi-1186639",
@@ -7123,7 +7834,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099262/antipulgas-simparic-trio-12mg-para-caes-5-1-a-10kg-1comp.webp?v=639110719925030000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-trio-12mg-para-caes-5-1-a-10kg-31186639/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-simparic-trio-12mg-para-caes-5-1-a-10kg-31186639/p",
+  popularity: 712
  },
  {
   sku: "cobasi-1185527",
@@ -7133,7 +7845,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095603/Racao-Bionatural-Sensitive-Caes-Adultos-Racas-Pequenas-Peixe.webp?v=639038200860030000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-sensitive-caes-adultos-racas-pequenas-peixe-31185527/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-sensitive-caes-adultos-racas-pequenas-peixe-31185527/p",
+  popularity: 713
  },
  {
   sku: "cobasi-1184245",
@@ -7143,7 +7856,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro acessorios para transporte focinheira",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095094/Focinheira-para-Caes-Savana-Pet.webp?v=639015174798200000",
-  productUrl: "https://www.cobasi.com.br/focinheira-para-caes-savana-pet-bege-31184245/p"
+  productUrl: "https://www.cobasi.com.br/focinheira-para-caes-savana-pet-bege-31184245/p",
+  popularity: 714
  },
  {
   sku: "cobasi-1184156",
@@ -7153,7 +7867,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108705/Racao-Vet-Life-Gastrointestinal-UltraCare-Low-Fat-para-Caes-Adultos-1.webp?v=639171507325030000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-gastrointestinal-ultracare-low-fat-para-caes-adultos-31184156/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-gastrointestinal-ultracare-low-fat-para-caes-adultos-31184156/p",
+  popularity: 715
  },
  {
   sku: "cobasi-1184148",
@@ -7163,7 +7878,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108713/Racao Vet Life Gastrointestinal UltraCare Low Fat  1.webp?v=639171514740970000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-gastrointestinal-ultracare-low-fat-para-caes-adultos-racas-mini-e-pequenas-31184148/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-gastrointestinal-ultracare-low-fat-para-caes-adultos-racas-mini-e-pequenas-31184148/p",
+  popularity: 716
  },
  {
   sku: "cobasi-1183737",
@@ -7173,7 +7889,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108793/Racao-Umida-Joy-Pate-para-Gatos-Peixe-280g.webp?v=639172112608100000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-peixe-31183737/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-peixe-31183737/p",
+  popularity: 717
  },
  {
   sku: "cobasi-1183729",
@@ -7183,7 +7900,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108742/Racao-Umida-Joy-Pate-para-Gatos-Frango--280g.webp?v=639172073898530000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-frango-31183729/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-gatos-frango-31183729/p",
+  popularity: 718
  },
  {
   sku: "cobasi-1183699",
@@ -7193,7 +7911,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108723/Racao-Umida-Joy-Pate-para-Caes-Adultos-Cordeiro-280g.webp?v=639171524359530000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-caes-adultos-cordeiro-31183699/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-pate-para-caes-adultos-cordeiro-31183699/p",
+  popularity: 719
  },
  {
   sku: "cobasi-1183192",
@@ -7203,7 +7922,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096065/Eliminador-de-Odores-Lavanda-MyHug-2L.webp?v=639056301870930000",
-  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-lavanda-myhug-31183192/p"
+  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-lavanda-myhug-31183192/p",
+  popularity: 720
  },
  {
   sku: "cobasi-1182323",
@@ -7213,7 +7933,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1091542/3-Racao Magnus Cat para Gatos Adultos Carne 20kg.webp?v=638984843265800000",
-  productUrl: "https://www.cobasi.com.br/racao-magnus-cat-para-gatos-adultos-carne-31182323/p"
+  productUrl: "https://www.cobasi.com.br/racao-magnus-cat-para-gatos-adultos-carne-31182323/p",
+  popularity: 721
  },
  {
   sku: "cobasi-1181394",
@@ -7223,7 +7944,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090229/Ograx-Plus-5-para-Caes-e-Gatos-Avert.webp?v=638977634213730000",
-  productUrl: "https://www.cobasi.com.br/ograx-plus-5-para-caes-e-gatos-avert-31181394/p"
+  productUrl: "https://www.cobasi.com.br/ograx-plus-5-para-caes-e-gatos-avert-31181394/p",
+  popularity: 722
  },
  {
   sku: "cobasi-1179934",
@@ -7233,7 +7955,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088794/petisco-origens-para-gatos-creminho-de-salmao-frente.webp?v=638966588791030000",
-  productUrl: "https://www.cobasi.com.br/petisco-origens-para-gatos-creminho-de-salmao-31179934/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origens-para-gatos-creminho-de-salmao-31179934/p",
+  popularity: 723
  },
  {
   sku: "cobasi-1179446",
@@ -7243,7 +7966,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095996/Racao-Premier-Nattu-Grain-Free-Caes-2.5kg.webp?v=639107279940830000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-grain-free-caes-adultos-porte-pequeno-frango-31179446/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-grain-free-caes-adultos-porte-pequeno-frango-31179446/p",
+  popularity: 724
  },
  {
   sku: "cobasi-1177940",
@@ -7253,7 +7977,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086061/Antipulgas-Revolution-Plus-para-Gatos-de-26-kg-a-5-kg-1-pipeta.webp?v=638957386436400000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-plus-para-gatos-de-2-6-kg-a-5-kg-31177940/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-plus-para-gatos-de-2-6-kg-a-5-kg-31177940/p",
+  popularity: 725
  },
  {
   sku: "cobasi-1177648",
@@ -7263,7 +7988,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos arranhadores e brinquedos varinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086336/VARINHAS_HALLOWEN_SAVANA_CAVEIRA.jpg?v=638959814224900000",
-  productUrl: "https://www.cobasi.com.br/brinquedo-varinha-com-caveira-savana-31177648/p"
+  productUrl: "https://www.cobasi.com.br/brinquedo-varinha-com-caveira-savana-31177648/p",
+  popularity: 726
  },
  {
   sku: "cobasi-1177168",
@@ -7273,7 +7999,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095153/Cookies-Formula-Natural-Fresh-Meat-Caes-Adultos-Frango-150g.webp?v=639015953470170000",
-  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-caes-adultos-frango-31177168/p"
+  productUrl: "https://www.cobasi.com.br/cookies-formula-natural-fresh-meat-caes-adultos-frango-31177168/p",
+  popularity: 727
  },
  {
   sku: "cobasi-1175289",
@@ -7283,7 +8010,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082417/Petisco-Optimum-Caes-Adultos-Pele-e-Pelo-Salmao-e-Linhaca.webp?v=638901000888630000",
-  productUrl: "https://www.cobasi.com.br/petisco-optimum-caes-adultos-pele-e-pelo-salmao-e-linhaca-31175289/p"
+  productUrl: "https://www.cobasi.com.br/petisco-optimum-caes-adultos-pele-e-pelo-salmao-e-linhaca-31175289/p",
+  popularity: 728
  },
  {
   sku: "cobasi-1170392",
@@ -7293,7 +8021,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1078617/Cookie Golden Krypto para Caes Adultos Edicao Limitada.webp?v=638875177575430000",
-  productUrl: "https://www.cobasi.com.br/cookie-golden-kripto-caes-adultos-edicao-limitada-31170392/p"
+  productUrl: "https://www.cobasi.com.br/cookie-golden-kripto-caes-adultos-edicao-limitada-31170392/p",
+  popularity: 729
  },
  {
   sku: "cobasi-1170589",
@@ -7303,7 +8032,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096617/Racao-Joy-High-Premium-para-Gatos-Filhotes-Frango-1kg.webp?v=639063490978400000",
-  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-filhotes-frango-31169971/p"
+  productUrl: "https://www.cobasi.com.br/racao-joy-premium-para-gatos-filhotes-frango-31169971/p",
+  popularity: 730
  },
  {
   sku: "cobasi-1169939",
@@ -7313,7 +8043,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077538/Racao Umida Royal Canin Cuidado Digestivo para Gatos Adultos 85g.webp?v=638866379145930000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pedacos-ao-molho-cuidado-digestivo-para-gatos-adultos-31169939/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-pedacos-ao-molho-cuidado-digestivo-para-gatos-adultos-31169939/p",
+  popularity: 731
  },
  {
   sku: "cobasi-1169866",
@@ -7323,7 +8054,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077546/Racao-Umida-Royal-Canin-Veterinary-Diet-Renal-com-Peixe-para-Gatos.webp?v=638896602186500000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-veterinary-diet-renal-com-peixe-para-gatos-31169866/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-veterinary-diet-renal-com-peixe-para-gatos-31169866/p",
+  popularity: 732
  },
  {
   sku: "cobasi-1169602",
@@ -7333,7 +8065,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085433/Racao-Umida-Formula-Natural-Receita-Caseira-Caes-Picadinho-270g.webp?v=639184368821130000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-receita-caseira-caes-adultos-picadinho-de-carne-31169602/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-formula-natural-receita-caseira-caes-adultos-picadinho-de-carne-31169602/p",
+  popularity: 733
  },
  {
   sku: "cobasi-1169467",
@@ -7343,7 +8076,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076321/Racao-Formula-Natural-Fresh-Meat-Hairball-Gatos-Adultos.webp?v=638850782831070000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-hairball-gatos-adultos-salmao-com-cenoura-31169467/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-hairball-gatos-adultos-salmao-com-cenoura-31169467/p",
+  popularity: 734
  },
  {
   sku: "cobasi-1167944",
@@ -7353,7 +8087,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075915/Beneflora-Gatos.webp?v=638840346604370000",
-  productUrl: "https://www.cobasi.com.br/suplemento-pasta-beneflora-gatos-avert-31167944/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-pasta-beneflora-gatos-avert-31167944/p",
+  popularity: 735
  },
  {
   sku: "cobasi-1167740",
@@ -7363,7 +8098,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095417/Racao Pedigree Nutri Essencial Caes Adultos Carne.webp?v=639033272559000000",
-  productUrl: "https://www.cobasi.com.br/racao-pedigree-nutri-essencial-caes-adultos-carne-31167740/p"
+  productUrl: "https://www.cobasi.com.br/racao-pedigree-nutri-essencial-caes-adultos-carne-31167740/p",
+  popularity: 736
  },
  {
   sku: "cobasi-1165801",
@@ -7373,7 +8109,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1071845/Racao-Quatree-Life-Gatos-Castrados-Salmao-e-Arroz.webp.webp?v=638826514825500000",
-  productUrl: "https://www.cobasi.com.br/racao-quatree-life-gatos-castrados-salmao-e-arroz-31165798/p"
+  productUrl: "https://www.cobasi.com.br/racao-quatree-life-gatos-castrados-salmao-e-arroz-31165798/p",
+  popularity: 737
  },
  {
   sku: "cobasi-1169750",
@@ -7383,7 +8120,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076231/Racao-Origens-Gatos-Castrados-Carne.webp?v=638847473052470000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrados-carne-31165534/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrados-carne-31165534/p",
+  popularity: 738
  },
  {
   sku: "cobasi-1164767",
@@ -7393,7 +8131,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086027/1164767_1.webp?v=638957140386630000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-castrados-atum-ao-molho-31164767/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-castrados-atum-ao-molho-31164767/p",
+  popularity: 739
  },
  {
   sku: "cobasi-1164759",
@@ -7403,7 +8142,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086018/1164759_1.webp?v=638957100494530000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-frango-ao-molho-31164759/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-frango-ao-molho-31164759/p",
+  popularity: 740
  },
  {
   sku: "cobasi-1164732",
@@ -7413,7 +8153,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086015/1164732_1.webp?v=638957099556330000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-salmao-ao-molho-31164732/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-salmao-ao-molho-31164732/p",
+  popularity: 741
  },
  {
   sku: "cobasi-1164724",
@@ -7423,7 +8164,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1086009/1164724_1.webp?v=638957098873430000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-carne-ao-molho-31164724/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-gatos-adultos-carne-ao-molho-31164724/p",
+  popularity: 742
  },
  {
   sku: "cobasi-1164376",
@@ -7433,7 +8175,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1070359/Petisco-Casco-Bovino-Natural-Farm-Bacon-e-Queijo-6-unidades.webp.webp?v=638802567317200000",
-  productUrl: "https://www.cobasi.com.br/petisco-casco-bovino-natural-farm-31164376/p"
+  productUrl: "https://www.cobasi.com.br/petisco-casco-bovino-natural-farm-31164376/p",
+  popularity: 743
  },
  {
   sku: "cobasi-1164333",
@@ -7443,7 +8186,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069861/Petisco BioDog Soft Strips Sensitive Pato e Cordeiro 100g.webp.webp?v=638793941356730000",
-  productUrl: "https://www.cobasi.com.br/petisco-biodog-soft-strips-sensitive-pato-e-cordeiro-31164333/p"
+  productUrl: "https://www.cobasi.com.br/petisco-biodog-soft-strips-sensitive-pato-e-cordeiro-31164333/p",
+  popularity: 744
  },
  {
   sku: "cobasi-1162810",
@@ -7453,7 +8197,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos arranhadores e brinquedos varinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068963/BRINQ-VARINHA-RATO-PELUCIA---SAVANA.png.png?v=638773870558470000",
-  productUrl: "https://www.cobasi.com.br/varinha-para-gatos-ratinho-de-pelucia-savana-pet-31162810/p"
+  productUrl: "https://www.cobasi.com.br/varinha-para-gatos-ratinho-de-pelucia-savana-pet-31162810/p",
+  popularity: 745
  },
  {
   sku: "cobasi-1161687",
@@ -7463,7 +8208,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066872/Serenlac-75mg-Suplemento-Alimentar-Avert-15-comprimidos.png.png?v=638726409188630000",
-  productUrl: "https://www.cobasi.com.br/serenlac-75-mg-suplemento-alimentar-avert-31161687/p"
+  productUrl: "https://www.cobasi.com.br/serenlac-75-mg-suplemento-alimentar-avert-31161687/p",
+  popularity: 746
  },
  {
   sku: "cobasi-1161644",
@@ -7473,7 +8219,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066588/Preditabs-5mg-png.png?v=638717687710670000",
-  productUrl: "https://www.cobasi.com.br/preditabs-5-mg-anti-inflamatorio-para-caes-e-gatos-31161644/p"
+  productUrl: "https://www.cobasi.com.br/preditabs-5-mg-anti-inflamatorio-para-caes-e-gatos-31161644/p",
+  popularity: 747
  },
  {
   sku: "cobasi-1160583",
@@ -7483,7 +8230,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1088685/Petisco-Cremoso-Sheba-Atum-para-Gatos-Adultos-24g-1-png.jpg?v=638965893762270000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-para-gatos-adultos-atum-31160583/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-sheba-para-gatos-adultos-atum-31160583/p",
+  popularity: 748
  },
  {
   sku: "cobasi-1157957",
@@ -7493,7 +8241,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063907/Racao-Bionatural-Prime-Light-Caes-Adultos-Racas-Medias-e-Grandes-Castrados-Frango.png?v=638851681141800000",
-  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-light-caes-adultos-racas-medias-e-grandes-castrados-frango-31157957/p"
+  productUrl: "https://www.cobasi.com.br/racao-bionatural-prime-light-caes-adultos-racas-medias-e-grandes-castrados-frango-31157957/p",
+  popularity: 749
  },
  {
   sku: "cobasi-1157558",
@@ -7503,7 +8252,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107317/Racao Special Dog Ultralife Performance Caes Adultos Carne e Frango embalagem.webp?v=639161069495800000",
-  productUrl: "https://www.cobasi.com.br/racao-special-dog-gold-performance-caes-adultos-frango-e-carne-31157558/p"
+  productUrl: "https://www.cobasi.com.br/racao-special-dog-gold-performance-caes-adultos-frango-e-carne-31157558/p",
+  popularity: 750
  },
  {
   sku: "cobasi-1157221",
@@ -7513,7 +8263,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064063/Special-Dog-Ultralife-Sache-Adultos-Racas-Pequenas-Sabor-Cordeiro.jpg?v=638678986873000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-special-dog-ultralife-caes-adultos-racas-pequenas-cordeiro-31157221/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-special-dog-ultralife-caes-adultos-racas-pequenas-cordeiro-31157221/p",
+  popularity: 751
  },
  {
   sku: "cobasi-1157132",
@@ -7523,7 +8274,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063993/Special-Cat-Ultralife-Sache-Adultos-Sabor-Salmao.jpg?v=638678871448030000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-special-cat-ultralife-gatos-adultos-salmao-31157132/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-special-cat-ultralife-gatos-adultos-salmao-31157132/p",
+  popularity: 752
  },
  {
   sku: "cobasi-1156241",
@@ -7533,7 +8285,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos roupas pos-cirurgica e aliviadoras de dores",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064346/Roupa-Pos-Cirurgica-Elastic-Gato-Zetta-Pet.png?v=638872292277170000",
-  productUrl: "https://www.cobasi.com.br/roupa-pos-cirurgica-elastic-gato-zetta-pet-31156241/p"
+  productUrl: "https://www.cobasi.com.br/roupa-pos-cirurgica-elastic-gato-zetta-pet-31156241/p",
+  popularity: 753
  },
  {
   sku: "cobasi-1156080",
@@ -7543,7 +8296,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064640/Racao-Umida-Premier-Nattu-Gatos-Adultos-Frango-e-Batata-Doce-70g.png?v=638779850839570000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-castrados-frango-e-batata-doce-31156080/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-castrados-frango-e-batata-doce-31156080/p",
+  popularity: 754
  },
  {
   sku: "cobasi-1156063",
@@ -7553,7 +8307,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064638/Racao-Umida-Premier-Nattu-Gatos-Filhotes-Frango-e-Abobora-70g.png?v=638899200609100000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-filhotes-frango-e-abobora-31156063/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-nattu-gatos-filhotes-frango-e-abobora-31156063/p",
+  popularity: 755
  },
  {
   sku: "cobasi-1155555",
@@ -7563,7 +8318,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082788/Racao-Premier-Formula-Gatos-Castrados-Frango-1.5kg-frente.webp?v=638906282489200000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-gatos-castrados-frango-31155555/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-gatos-castrados-frango-31155555/p",
+  popularity: 756
  },
  {
   sku: "cobasi-1155296",
@@ -7573,7 +8329,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063849/petisco-pedigree-tasty-bites-caes-adultos-carne-suculenta-hero-40g.png?v=639173258596500000",
-  productUrl: "https://www.cobasi.com.br/petisco-pedigree-tasty-bites-caes-adultos-carne-suculenta-31155296/p"
+  productUrl: "https://www.cobasi.com.br/petisco-pedigree-tasty-bites-caes-adultos-carne-suculenta-31155296/p",
+  popularity: 757
  },
  {
   sku: "cobasi-1155164",
@@ -7583,7 +8340,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066614/Cookies-Origem-Natural-Caes-Cordeiro.png.png?v=638760240018700000",
-  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-cordeiro-31155164/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-cordeiro-31155164/p",
+  popularity: 758
  },
  {
   sku: "cobasi-1155156",
@@ -7593,7 +8351,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066610/Cookies-Origem-Natural-Caes-Bioativo.png.png?v=638760239512600000",
-  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-bioativo-31155156/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-bioativo-31155156/p",
+  popularity: 759
  },
  {
   sku: "cobasi-1155121",
@@ -7603,7 +8362,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066598/Cookies-Origem-Natural-Caes-Maca-Com-Canela.png.png?v=638760238311370000",
-  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-maca-com-canela-31155121/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cookies-origem-natural-caes-maca-com-canela-31155121/p",
+  popularity: 760
  },
  {
   sku: "cobasi-1154591",
@@ -7613,7 +8373,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos acessorios de alimentacao fonte",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1078501/Refil do Filtro para Fontes Flicks.webp?v=638875103985200000",
-  productUrl: "https://www.cobasi.com.br/refil-do-filtro-para-fontes-flicks-31154591/p"
+  productUrl: "https://www.cobasi.com.br/refil-do-filtro-para-fontes-flicks-31154591/p",
+  popularity: 761
  },
  {
   sku: "cobasi-1153951",
@@ -7623,7 +8384,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109256/Racao-Biofresh-Caes-Adultos-Racas-Medias-Lombo-e-Abacaxi_3KG_FRENTE.webp?v=639173052231600000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-medias-lombo-e-abacaxi-31153951/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-medias-lombo-e-abacaxi-31153951/p",
+  popularity: 762
  },
  {
   sku: "cobasi-1153935",
@@ -7633,7 +8395,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109236/Racao-Biofresh-Caes-Adultos-Racas-Minis-e-Pequenas-Lombo-e-Abacaxi_1KG_FRENTE.webp?v=639173050213170000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-minis-e-pequenas-lombo-e-abacaxi-31153935/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-caes-adultos-racas-minis-e-pequenas-lombo-e-abacaxi-31153935/p",
+  popularity: 763
  },
  {
   sku: "cobasi-1153579",
@@ -7643,7 +8406,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza acessorios de higiene",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067550/2_Higienizador-Limpa-Patas-Sem-Enxague-MyHug-150ml.png.png?v=638744612817300000",
-  productUrl: "https://www.cobasi.com.br/higienizador-limpa-patas-sem-enxague-myhug-31153579/p"
+  productUrl: "https://www.cobasi.com.br/higienizador-limpa-patas-sem-enxague-myhug-31153579/p",
+  popularity: 764
  },
  {
   sku: "cobasi-1152700",
@@ -7653,7 +8417,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061599/Petisco-Cremoso-Nutrisco-para-Caes-Salmao.png?v=638811854605600000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-caes-salmao-31152700/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-caes-salmao-31152700/p",
+  popularity: 765
  },
  {
   sku: "cobasi-1152696",
@@ -7663,7 +8428,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061597/Petisco-Cremoso-Nutrisco-para-Caes-Frango.png?v=638935647304430000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-caes-frango-31152696/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-caes-frango-31152696/p",
+  popularity: 766
  },
  {
   sku: "cobasi-1152653",
@@ -7673,7 +8439,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061591/Petisco-Cremoso-Nutrisco-para-Gatos-Frango-e-Caranguejo.png?v=638814540743170000",
-  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-frango-e-caranguejo-31152653/p"
+  productUrl: "https://www.cobasi.com.br/petisco-cremoso-nutrisco-para-gatos-frango-e-caranguejo-31152653/p",
+  popularity: 767
  },
  {
   sku: "cobasi-1150006",
@@ -7683,7 +8450,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos otologicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061129/cortotic-solucao-otologica-virbac.png?v=638618540029970000",
-  productUrl: "https://www.cobasi.com.br/cortotic-solucao-otologica-virbac-31150006/p"
+  productUrl: "https://www.cobasi.com.br/cortotic-solucao-otologica-virbac-31150006/p",
+  popularity: 768
  },
  {
   sku: "cobasi-1149830",
@@ -7693,7 +8461,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060359/Lactobac-Dog-Plus-Organnact-Suplemento-Vitaminico.png?v=638604726674300000",
-  productUrl: "https://www.cobasi.com.br/lactobac-dog-plus-organnact-suplemento-vitaminico-31149830/p"
+  productUrl: "https://www.cobasi.com.br/lactobac-dog-plus-organnact-suplemento-vitaminico-31149830/p",
+  popularity: 769
  },
  {
   sku: "cobasi-1149806",
@@ -7703,7 +8472,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antiestresse",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063560/FeliComfort-Spray-Avert-30ml.png?v=638665988208530000",
-  productUrl: "https://www.cobasi.com.br/felicomfort-spray-avert-31149806/p"
+  productUrl: "https://www.cobasi.com.br/felicomfort-spray-avert-31149806/p",
+  popularity: 770
  },
  {
   sku: "cobasi-1149784",
@@ -7713,7 +8483,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antiestresse",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064096/FeliComfort_Difusor_e_Refil_48ml.png?v=638790401676530000",
-  productUrl: "https://www.cobasi.com.br/felicomfort-difusor-e-refil-avert-31149784/p"
+  productUrl: "https://www.cobasi.com.br/felicomfort-difusor-e-refil-avert-31149784/p",
+  popularity: 771
  },
  {
   sku: "cobasi-1149776",
@@ -7723,7 +8494,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061006/Racao-Umida-Optimum-Sache-Gatos-Adultos-Salmao-85g.png?v=638802277740930000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-salmao-31149776/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-salmao-31149776/p",
+  popularity: 772
  },
  {
   sku: "cobasi-1149571",
@@ -7733,7 +8505,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060946/Racao-Umida-Optimum-Sache-Gatos-Adultos-Carne-85g.png?v=638802278482700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-carne-31149571/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-gatos-adultos-carne-31149571/p",
+  popularity: 773
  },
  {
   sku: "cobasi-1149458",
@@ -7743,7 +8516,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061018/Racao-Umida-Optimum-Sache-Caes-Adultos-Racas-Pequenas-e-Mini-Carne-100g.png?v=638803140581400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-caes-adultos-racas-pequenas-e-mini-carne-31149458/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-optimum-sache-caes-adultos-racas-pequenas-e-mini-carne-31149458/p",
+  popularity: 774
  },
  {
   sku: "cobasi-1145312",
@@ -7753,7 +8527,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085495/1145312 SELECAO-NATURAL-CALOPSITA-MINI-BITS-300G.png?v=638953782720170000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-calopsita-selecao-natural-sementes-e-extrusado-mini-bits-31145312/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-para-calopsita-selecao-natural-sementes-e-extrusado-mini-bits-31145312/p",
+  popularity: 775
  },
  {
   sku: "cobasi-1145045",
@@ -7763,7 +8538,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza pa higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068996/1-Pa-Higienica-Inox-Malha-Fina-MyHug.png.png?v=638774005178270000",
-  productUrl: "https://www.cobasi.com.br/pa-higienica-inox-malha-fina-myhug-31145045/p"
+  productUrl: "https://www.cobasi.com.br/pa-higienica-inox-malha-fina-myhug-31145045/p",
+  popularity: 776
  },
  {
   sku: "cobasi-1142810",
@@ -7773,7 +8549,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058122/Pet-Milk-100g.png?v=639047942252100000",
-  productUrl: "https://www.cobasi.com.br/pet-milk-sache-vetnil-31142810/p"
+  productUrl: "https://www.cobasi.com.br/pet-milk-sache-vetnil-31142810/p",
+  popularity: 777
  },
  {
   sku: "cobasi-1142690",
@@ -7783,7 +8560,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058038/enziclim-spray-220ml-1.png?v=638543391167170000",
-  productUrl: "https://www.cobasi.com.br/enziclim-spray-31142690/p"
+  productUrl: "https://www.cobasi.com.br/enziclim-spray-31142690/p",
+  popularity: 778
  },
  {
   sku: "cobasi-1142399",
@@ -7793,7 +8571,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065056/granulado-higienico-kets-bio-d-1.png?v=638751560229470000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-kets-bio-d-31142399/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-kets-bio-d-31142399/p",
+  popularity: 779
  },
  {
   sku: "cobasi-1142216",
@@ -7803,7 +8582,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057659/Origens-Caes-Filhotes-Carne-Frango-Batata.png?v=638520894009730000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-filhotes-carne-e-frango-com-batata-doce-31142216/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-filhotes-carne-e-frango-com-batata-doce-31142216/p",
+  popularity: 780
  },
  {
   sku: "cobasi-1142208",
@@ -7813,7 +8593,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057657/Origens-Caes-Adultos-Frango-Cenoura.png?v=638520887694700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-adultos-porte-pequeno-frango-com-cenoura-31142208/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origens-caes-adultos-porte-pequeno-frango-com-cenoura-31142208/p",
+  popularity: 781
  },
  {
   sku: "cobasi-1142151",
@@ -7823,7 +8604,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057651/Gatos-Adultos-Life-Frango-Salmao.png?v=638866517204230000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-adultos-frango-e-salmao-31142151/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-life-gatos-adultos-frango-e-salmao-31142151/p",
+  popularity: 782
  },
  {
   sku: "cobasi-1142011",
@@ -7833,7 +8615,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro brinquedos brinquedos de corda",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059646/Brinquedo-Pelucia-Macaco-Marrom-Claro-Com-Corda.png?v=638585671549500000",
-  productUrl: "https://www.cobasi.com.br/brinquedo-pelucia-macaco-marrom-claro-com-corda-savana-31142011/p"
+  productUrl: "https://www.cobasi.com.br/brinquedo-pelucia-macaco-marrom-claro-com-corda-savana-31142011/p",
+  popularity: 783
  },
  {
   sku: "cobasi-1140426",
@@ -7843,7 +8626,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056746/Defenza-Antipulgas-e-Carrapatos-para-Caes-de-10-a-20kg-1-comprimido.png?v=638753896392070000",
-  productUrl: "https://www.cobasi.com.br/defenza-antipulgas-e-carrapatos-para-caes-de-10-a-20kg-31140426/p"
+  productUrl: "https://www.cobasi.com.br/defenza-antipulgas-e-carrapatos-para-caes-de-10-a-20kg-31140426/p",
+  popularity: 784
  },
  {
   sku: "cobasi-1140418",
@@ -7853,7 +8637,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082697/Defenza Caes ate 10kg.webp?v=638906022218170000",
-  productUrl: "https://www.cobasi.com.br/defenza-antipulgas-e-carrapatos-para-caes-de-4-5-a-10kg-31140418/p"
+  productUrl: "https://www.cobasi.com.br/defenza-antipulgas-e-carrapatos-para-caes-de-4-5-a-10kg-31140418/p",
+  popularity: 785
  },
  {
   sku: "cobasi-1140230",
@@ -7863,7 +8648,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058443/enronew-150mg-para-caes-e-gatos.png?v=638549429164630000",
-  productUrl: "https://www.cobasi.com.br/enronew-150mg-caes-31140230/p"
+  productUrl: "https://www.cobasi.com.br/enronew-150mg-caes-31140230/p",
+  popularity: 786
  },
  {
   sku: "cobasi-1138383",
@@ -7873,7 +8659,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097066/biscoito-formula-natural-organic-caes-adultos-banana-1.webp?v=639070358872900000",
-  productUrl: "https://www.cobasi.com.br/biscoito-formula-natural-organic-caes-adultos-banana-31138383/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-formula-natural-organic-caes-adultos-banana-31138383/p",
+  popularity: 787
  },
  {
   sku: "cobasi-1138367",
@@ -7883,7 +8670,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097071/biscoito-formula-natural-organic-caes-adultos-maracuja.webp?v=639070377938600000",
-  productUrl: "https://www.cobasi.com.br/biscoito-formula-natural-organic-caes-adultos-maracuja-31138367/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-formula-natural-organic-caes-adultos-maracuja-31138367/p",
+  popularity: 788
  },
  {
   sku: "cobasi-1138286",
@@ -7893,7 +8681,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053603/Racao-Origens-Energy-Caes-Adultos-Frente.png?v=638447387678230000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-energy-caes-adultos-frango-e-cereais-31138286/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-energy-caes-adultos-frango-e-cereais-31138286/p",
+  popularity: 789
  },
  {
   sku: "cobasi-1137220",
@@ -7903,7 +8692,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1075049/Racao-Umida-GranPlus-Gatos-Adultos-Castrados-Pate-Gourmet-Frango-100-g.webp?v=638834569834500000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-castrados-pate-gourmet-frango-31137220/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-gatos-adultos-castrados-pate-gourmet-frango-31137220/p",
+  popularity: 790
  },
  {
   sku: "cobasi-1137182",
@@ -7913,7 +8703,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053560/Pate-Frango-Senior-embalagem.jpg?v=639168840982300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-senior-pate-gourmet-frango-31137182/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-senior-pate-gourmet-frango-31137182/p",
+  popularity: 791
  },
  {
   sku: "cobasi-1137166",
@@ -7923,7 +8714,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053552/Pate-Cao-Adulto-Ovelha-Embalagem.jpg?v=639168840778800000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-adultos-pate-gourmet-ovelha-31137166/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-granplus-caes-adultos-pate-gourmet-ovelha-31137166/p",
+  popularity: 792
  },
  {
   sku: "cobasi-1136984",
@@ -7933,7 +8725,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053525/Biscoito-Carne-Embalagem.jpg?v=638748742152100000",
-  productUrl: "https://www.cobasi.com.br/biscoito-granplus-caes-adultos-carne-31136984/p"
+  productUrl: "https://www.cobasi.com.br/biscoito-granplus-caes-adultos-carne-31136984/p",
+  popularity: 793
  },
  {
   sku: "cobasi-1136909",
@@ -7943,7 +8736,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1053295/petisco-keldog-mini-linguica-artesanal-frente.png?v=638760233164130000",
-  productUrl: "https://www.cobasi.com.br/petisco-keldog-mini-linguica-artesanal-31136909/p"
+  productUrl: "https://www.cobasi.com.br/petisco-keldog-mini-linguica-artesanal-31136909/p",
+  popularity: 794
  },
  {
   sku: "cobasi-1135740",
@@ -7953,7 +8747,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082912/Racao-Premier-Nutricao-Clinica-Renal-Estagios-Iniciais-Gatos-Adultos-1.5kg-frente.webp?v=638926149636370000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-renal-estagios-iniciais-gatos-adultos-31135740/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nutricao-clinica-renal-estagios-iniciais-gatos-adultos-31135740/p",
+  popularity: 795
  },
  {
   sku: "cobasi-1134671",
@@ -7963,7 +8758,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza limpa orelhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1054824/Solucao-Otologica-Sept-Clean-Oto-Agener-100ml-fora-da-caixa.png?v=638767768626130000",
-  productUrl: "https://www.cobasi.com.br/solucao-otologica-sept-clean-oto-agener--31134671/p"
+  productUrl: "https://www.cobasi.com.br/solucao-otologica-sept-clean-oto-agener--31134671/p",
+  popularity: 796
  },
  {
   sku: "cobasi-1134639",
@@ -7973,7 +8769,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063442/petisco-origem-natural-crost-crostine-cordeiro-1.png?v=638760229535530000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-cordeiro-31134639/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-crostine-cordeiro-31134639/p",
+  popularity: 797
  },
  {
   sku: "cobasi-1133462",
@@ -7983,7 +8780,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063408/Stick-Oral-Care-Menta-Caes-Racas-Grandes-Origem-Natural-3.png?v=638760228899630000",
-  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-grandes-origem-natural-31133462/p"
+  productUrl: "https://www.cobasi.com.br/petisco-stick-oral-care-menta-caes-racas-grandes-origem-natural-31133462/p",
+  popularity: 798
  },
  {
   sku: "cobasi-1132857",
@@ -7993,7 +8791,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1064470/Petisco-Origem-Natural-Topper-Carne-Desidratada.png?v=638684802553270000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-topper-carne-desidratada-31132857/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-topper-carne-desidratada-31132857/p",
+  popularity: 799
  },
  {
   sku: "cobasi-1132555",
@@ -8003,7 +8802,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108594/Racao Vet Life Natural Caes Adultos Hypoallergenic Porco e Batata 1.webp?v=639171258739530000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-caes-adultos-hypoallergenic-porco-e-batata-31132555/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-caes-adultos-hypoallergenic-porco-e-batata-31132555/p",
+  popularity: 800
  },
  {
   sku: "cobasi-1132520",
@@ -8013,7 +8813,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113416/Racao N-D White para Caes Adultos Racas Mini e Pequenas embalagem_FRENTE-03.webp?v=639210123380730000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-white-caes-adultos-mini-31132520/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-white-caes-adultos-mini-31132520/p",
+  popularity: 801
  },
  {
   sku: "cobasi-1132490",
@@ -8023,7 +8824,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104593/Racao-N-D-Tropical-Selection-Gatos-Castrados-Suino.webp?v=639154218548400000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-suino-31132490/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-gatos-castrados-suino-31132490/p",
+  popularity: 802
  },
  {
   sku: "cobasi-1192680",
@@ -8033,7 +8835,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1105182/Racao-N-D-Tropical-Selection-Caes-Adultos-Mini-Cordeiro.webp?v=639154187137530000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-cordeiro-31132288/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-cordeiro-31132288/p",
+  popularity: 803
  },
  {
   sku: "cobasi-1132261",
@@ -8043,7 +8846,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104062/Racao-N-D-Tropical-Selection-Caes-Adultos-Mini-Salmao.webp?v=639154187680130000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-salmao-31132261/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-mini-salmao-31132261/p",
+  popularity: 804
  },
  {
   sku: "cobasi-1132237",
@@ -8053,7 +8857,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104257/Racao-N-D-Tropical-Selection-Caes-Adultos-Medium-e-Maxi-Suino.webp?v=639154229159700000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-suino-31132237/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-suino-31132237/p",
+  popularity: 805
  },
  {
   sku: "cobasi-1132202",
@@ -8063,7 +8868,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1104218/Racao-N-D-Tropical-Selection-Caes-Adultos-Medium-e-Maxi-Salmao.webp?v=639154228400930000",
-  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-salmao-31132202/p"
+  productUrl: "https://www.cobasi.com.br/racao-nd-tropical-selection-caes-adultos-medium-e-maxi-salmao-31132202/p",
+  popularity: 806
  },
  {
   sku: "cobasi-1131958",
@@ -8073,7 +8879,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza limpa orelhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1051614/Limpa-Orelhas-Pet-Clean.png?v=638342716050200000",
-  productUrl: "https://www.cobasi.com.br/limpa-orelhas-pet-clean-31131958/p"
+  productUrl: "https://www.cobasi.com.br/limpa-orelhas-pet-clean-31131958/p",
+  popularity: 807
  },
  {
   sku: "cobasi-1129635",
@@ -8083,7 +8890,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1067047/origem_nature_light_cuidados_especiais_300g.jpg?v=638731564634200000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-origem-nature-caes-adultos-light-31129635/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-origem-nature-caes-adultos-light-31129635/p",
+  popularity: 808
  },
  {
   sku: "cobasi-1159470",
@@ -8093,7 +8901,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1103624/Racao-N-D-Quinoa-Controle-de-Peso-Caes-Ad-Mini-Cordeiro.webp?v=639149032643470000",
-  productUrl: "https://www.cobasi.com.br/racao-n-d-quinoa-controle-de-peso-caes-adultos-racas-mini-cordeiro-31127381/p"
+  productUrl: "https://www.cobasi.com.br/racao-n-d-quinoa-controle-de-peso-caes-adultos-racas-mini-cordeiro-31127381/p",
+  popularity: 809
  },
  {
   sku: "cobasi-1127268",
@@ -8103,7 +8912,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050350/Ring-Neck-300g.png?v=638303861167530000",
-  productUrl: "https://www.cobasi.com.br/racao-extrusada-megazoo-para-calopsitas-e-ring-necks-mm15-31127268/p"
+  productUrl: "https://www.cobasi.com.br/racao-extrusada-megazoo-para-calopsitas-e-ring-necks-mm15-31127268/p",
+  popularity: 810
  },
  {
   sku: "cobasi-1126717",
@@ -8113,7 +8923,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048229/Granulado-sanitario-Pipicat-ultra-control-frente.png?v=638767758624730000",
-  productUrl: "https://www.cobasi.com.br/granulado-sanitario-para-gatos-pipicat-ultra-control-31126717/p"
+  productUrl: "https://www.cobasi.com.br/granulado-sanitario-para-gatos-pipicat-ultra-control-31126717/p",
+  popularity: 811
  },
  {
   sku: "cobasi-1126369",
@@ -8123,7 +8934,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066741/Banni-3-Antipulgas-para-Gatos-de-2,6kg-a-7,5kg-0,9-ml.png.png?v=638721205619230000",
-  productUrl: "https://www.cobasi.com.br/banni-3-antipulgas-para-gatos-de-2-6kg-a-7-5kg-31126369/p"
+  productUrl: "https://www.cobasi.com.br/banni-3-antipulgas-para-gatos-de-2-6kg-a-7-5kg-31126369/p",
+  popularity: 812
  },
  {
   sku: "cobasi-1126156",
@@ -8133,7 +8945,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097439/Racao Hill's Prescription Diet GI Biome Stress Gatos.webp?v=639074569380600000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-prescription-diet-gatos-adultos-gastrointestinal-biome-31126156/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-prescription-diet-gatos-adultos-gastrointestinal-biome-31126156/p",
+  popularity: 813
  },
  {
   sku: "cobasi-1125516",
@@ -8143,7 +8956,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050424/Vermifugo-Canex-Giardia-30-comprimidos.jpg?v=638306597921800000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-canex-giardia-ceva-31125516/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-canex-giardia-ceva-31125516/p",
+  popularity: 814
  },
  {
   sku: "cobasi-1125508",
@@ -8153,7 +8967,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062142/Petisco-Formula-Natural-Dog-Biscuits-Abobora-Caes-Adultos.png?v=638635652638370000",
-  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-abobora-caes-adultos-31125508/p"
+  productUrl: "https://www.cobasi.com.br/petisco-formula-natural-dog-biscuits-abobora-caes-adultos-31125508/p",
+  popularity: 815
  },
  {
   sku: "cobasi-1123777",
@@ -8163,7 +8978,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047990/Racao-Umida-N-D-Gatos-Wet-Natural-Atum-com-Salmao-70g.png?v=638246947453300000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-nd-natural-gatos-adultos-atum-e-salmao-31123777/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-nd-natural-gatos-adultos-atum-e-salmao-31123777/p",
+  popularity: 816
  },
  {
   sku: "cobasi-1123211",
@@ -8173,7 +8989,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos shampoo medicamentoso",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062582/Allermyl-Virbac-250ml.png?v=638647079865930000",
-  productUrl: "https://www.cobasi.com.br/shampoo-dermatologico-allermyl-virbac-31123211/p"
+  productUrl: "https://www.cobasi.com.br/shampoo-dermatologico-allermyl-virbac-31123211/p",
+  popularity: 817
  },
  {
   sku: "cobasi-1073095",
@@ -8183,7 +9000,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065435/PETISCO-JUST---STEAK-FRANGO-55G.png?v=638695449449930000",
-  productUrl: "https://www.cobasi.com.br/petisco-just-steak-de-frango-para-caes-e-gatos-31073095/p"
+  productUrl: "https://www.cobasi.com.br/petisco-just-steak-de-frango-para-caes-e-gatos-31073095/p",
+  popularity: 818
  },
  {
   sku: "cobasi-1073087",
@@ -8193,7 +9011,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065459/PETISCO-JUST---STEAK-DE-PATO-55G.png?v=638695462517230000",
-  productUrl: "https://www.cobasi.com.br/petisco-just-steak-de-pato-para-caes-e-gatos-31073087/p"
+  productUrl: "https://www.cobasi.com.br/petisco-just-steak-de-pato-para-caes-e-gatos-31073087/p",
+  popularity: 819
  },
  {
   sku: "cobasi-1073052",
@@ -8203,7 +9022,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065419/PETISCO-JUST---CUBOS-PATO-55G.png?v=638695417545100000",
-  productUrl: "https://www.cobasi.com.br/petisco-just-cubos-de-pato-para-caes-e-gatos-31073052/p"
+  productUrl: "https://www.cobasi.com.br/petisco-just-cubos-de-pato-para-caes-e-gatos-31073052/p",
+  popularity: 820
  },
  {
   sku: "cobasi-1073044",
@@ -8213,7 +9033,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065414/PETISCO-JUST---CUBOS-FRANGO-55G.png?v=638695413933630000",
-  productUrl: "https://www.cobasi.com.br/petisco-just-cubos-de-frango-para-caes-e-gatos-31073044/p"
+  productUrl: "https://www.cobasi.com.br/petisco-just-cubos-de-frango-para-caes-e-gatos-31073044/p",
+  popularity: 821
  },
  {
   sku: "cobasi-1060120",
@@ -8223,7 +9044,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113079/Suplemento Nuxcell Plus para Caes e Gatos 2g.webp?v=639207675788170000",
-  productUrl: "https://www.cobasi.com.br/suplemento-nuxcell-plus-para-caes-e-gatos-31060120/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-nuxcell-plus-para-caes-e-gatos-31060120/p",
+  popularity: 822
  },
  {
   sku: "cobasi-1016814",
@@ -8233,7 +9055,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1081863/Racao-Formula-Natural-Fresh-Meat-Sensitive-Caes-Adultos-Portes-Medio-e-Grande.webp?v=638893912507200000",
-  productUrl: "https://www.cobasi.com.br/formula-natural-fresh-meat-sensitive-caes-adultos-portes-medio-e-grande-31016814/p"
+  productUrl: "https://www.cobasi.com.br/formula-natural-fresh-meat-sensitive-caes-adultos-portes-medio-e-grande-31016814/p",
+  popularity: 823
  },
  {
   sku: "cobasi-1010301",
@@ -8243,7 +9066,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044561/Racao-Umida-Premier-Organico-para-Gatos-Adultos-Frango.png?v=638161340608000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-organico-para-gatos-adultos-frango-31010301/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-organico-para-gatos-adultos-frango-31010301/p",
+  popularity: 824
  },
  {
   sku: "cobasi-1010298",
@@ -8253,7 +9077,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1044560/Racao-Umida-Premier-Organico-para-Caes-Adultos-Porte-Pequeno-Frango.png?v=638899194468900000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-premier-organico-para-caes-adultos-porte-pequeno-frango-31010298/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-premier-organico-para-caes-adultos-porte-pequeno-frango-31010298/p",
+  popularity: 825
  },
  {
   sku: "cobasi-1010115",
@@ -8263,7 +9088,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108654/Racao-Vet-Life-Natural-para-Caes-Obesidade-e-Diabete-Peixe-1.webp?v=639171428917830000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-para-caes-obesidade-e-diabete-peixe-31010115/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-para-caes-obesidade-e-diabete-peixe-31010115/p",
+  popularity: 826
  },
  {
   sku: "cobasi-1007726",
@@ -8273,7 +9099,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082903/Racao-Premier-Nutricao-Clinica-Renal-Caes-Adultos-Porte-Medio-e-Grande-10.1kg-frente.webp?v=638926144448370000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-caes-adultos-nutricao-clinica-renal-porte-medio-e-grande-31007726/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-caes-adultos-nutricao-clinica-renal-porte-medio-e-grande-31007726/p",
+  popularity: 827
  },
  {
   sku: "cobasi-1005820",
@@ -8283,7 +9110,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106695/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-com-batata-doce-1.webp?v=639156738784030000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-com-batata-doce-31005820/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-selecao-natural-caes-adultos-porte-pequeno-frango-com-batata-doce-31005820/p",
+  popularity: 828
  },
  {
   sku: "cobasi-1005804",
@@ -8293,7 +9121,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082953/Racao Premier Racas Especificas Golden Retriever Filhotes 10.1kg frente.webp?v=638907761270000000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-racas-especificas-golden-retriever-filhotes-sabor-frango-31005804/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-racas-especificas-golden-retriever-filhotes-sabor-frango-31005804/p",
+  popularity: 829
  },
  {
   sku: "cobasi-1005790",
@@ -8303,7 +9132,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082780/Racao-Premier-Formula-Caes-Senior-Racas-Grande-e-Gigante-Frango-15kg-frente.webp?v=639189592623630000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-senior-porte-grande-e-gigante-sabor-frango-31005790/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-formula-caes-senior-porte-grande-e-gigante-sabor-frango-31005790/p",
+  popularity: 830
  },
  {
   sku: "cobasi-1004395",
@@ -8313,7 +9143,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063473/Stick-Care-Caes-Origem-Natural-Cordeiro-e-Linhaca-50.png?v=638753902463230000",
-  productUrl: "https://www.cobasi.com.br/petisco-stick-care-caes-origem-natural-cordeiro-e-linhaca-31004395/p"
+  productUrl: "https://www.cobasi.com.br/petisco-stick-care-caes-origem-natural-cordeiro-e-linhaca-31004395/p",
+  popularity: 831
  },
  {
   sku: "cobasi-1004387",
@@ -8323,7 +9154,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063464/Stick-Care-Caes-Origem-Natural-Carne-e-Linhaca-50g.png?v=638753902233830000",
-  productUrl: "https://www.cobasi.com.br/petisco-stick-care-caes-origem-natural-carne-e-linhaca-31004387/p"
+  productUrl: "https://www.cobasi.com.br/petisco-stick-care-caes-origem-natural-carne-e-linhaca-31004387/p",
+  popularity: 832
  },
  {
   sku: "cobasi-1004255",
@@ -8333,7 +9165,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1035350/Gran-Plus-Choice-Caes-Filhotes-Frango-e-Carne.jpg?v=638052334571870000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-caes-filhotes-frango-e-carne-31004255/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-choice-caes-filhotes-frango-e-carne-31004255/p",
+  popularity: 833
  },
  {
   sku: "cobasi-1004140",
@@ -8343,7 +9176,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109347/Racao-Biofresh-Gatos-Adultos-Salmao_400g_FRENTE-01.webp?v=639173066598030000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-adultos-salmao-31004140/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-adultos-salmao-31004140/p",
+  popularity: 834
  },
  {
   sku: "cobasi-1004123",
@@ -8353,7 +9187,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109315/Racao-Biofresh-Gatos-Filhotes-Salmao_400g_FRENTE-01.webp?v=639173062906600000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-filhotes-salmao-31004123/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-filhotes-salmao-31004123/p",
+  popularity: 835
  },
  {
   sku: "cobasi-1004050",
@@ -8363,7 +9198,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1109331/Racao-Biofresh-Gatos-Adultos-Frango_400g_FRENTE-01.webp?v=639173064997270000",
-  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-adultos-frango-31004050/p"
+  productUrl: "https://www.cobasi.com.br/racao-biofresh-gatos-adultos-frango-31004050/p",
+  popularity: 836
  },
  {
   sku: "cobasi-1003984",
@@ -8373,7 +9209,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1034360/racao-formula-natural-vet-care-caes-renal.jpg?v=638047384899630000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-caes-renal-31003984/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-vet-care-caes-renal-31003984/p",
+  popularity: 837
  },
  {
   sku: "cobasi-1003542",
@@ -8383,7 +9220,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1035233/Suplemento-Alimentar-HB-Fel-para-Gatos-Avert.jpg?v=638049006672070000",
-  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-hb-fel-para-gatos-avert-31003542/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-alimentar-hb-fel-para-gatos-avert-31003542/p",
+  popularity: 838
  },
  {
   sku: "cobasi-1003372",
@@ -8393,7 +9231,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1027684/Prednon.jpg?v=638037707752230000",
-  productUrl: "https://www.cobasi.com.br/prednon-anti-inflamatorio-para-caes-agener-31003372/p"
+  productUrl: "https://www.cobasi.com.br/prednon-anti-inflamatorio-para-caes-agener-31003372/p",
+  popularity: 839
  },
  {
   sku: "cobasi-1003348",
@@ -8403,7 +9242,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos probioticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1030012/suplemento-vitaminico-levuflora-pre-e-probiotico-biovet.jpg?v=638043105671370000",
-  productUrl: "https://www.cobasi.com.br/levuflora-pre-e-probiotico-biovet-31003348/p"
+  productUrl: "https://www.cobasi.com.br/levuflora-pre-e-probiotico-biovet-31003348/p",
+  popularity: 840
  },
  {
   sku: "cobasi-1003232",
@@ -8413,7 +9253,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-hipertensivos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1027685/Becordil.jpg?v=638037709061770000",
-  productUrl: "https://www.cobasi.com.br/becordil-5mg-anti-hipertensivo-para-caes-avert-31003232/p"
+  productUrl: "https://www.cobasi.com.br/becordil-5mg-anti-hipertensivo-para-caes-avert-31003232/p",
+  popularity: 841
  },
  {
   sku: "cobasi-1000845",
@@ -8423,7 +9264,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082839/Racao-Premier-Nattu-Gatos-Adultos-Castrados-Mandioca-1.5kg-frente.webp?v=638906952355030000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-gatos-adultos-castrados-mandioca-31000845/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-gatos-adultos-castrados-mandioca-31000845/p",
+  popularity: 842
  },
  {
   sku: "cobasi-1000438",
@@ -8433,7 +9275,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065478/Magnus-Chips-Caes-Adultos-Carne-e-Frango.png?v=638696026072870000",
-  productUrl: "https://www.cobasi.com.br/racao-magnus-chips-caes-adultos-carne-e-frango-31000438/p"
+  productUrl: "https://www.cobasi.com.br/racao-magnus-chips-caes-adultos-carne-e-frango-31000438/p",
+  popularity: 843
  },
  {
   sku: "cobasi-1000098",
@@ -8443,7 +9286,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antiemeticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1006921/Emedron-20-mg.jpg?v=637963650131330000",
-  productUrl: "https://www.cobasi.com.br/antiemetico-emedron-20-mg-para-caes-e-gatos-31000098/p"
+  productUrl: "https://www.cobasi.com.br/antiemetico-emedron-20-mg-para-caes-e-gatos-31000098/p",
+  popularity: 844
  },
  {
   sku: "cobasi-999288",
@@ -8453,7 +9297,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza cortador de unhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1084844/3-Alicate-de-Unha-para-Caes-e-Gatos-MyHug-PQ.webp?v=638944309288530000",
-  productUrl: "https://www.cobasi.com.br/alicate-de-unha-myhug-3999288/p"
+  productUrl: "https://www.cobasi.com.br/alicate-de-unha-myhug-3999288/p",
+  popularity: 845
  },
  {
   sku: "cobasi-998907",
@@ -8463,7 +9308,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050763/racao-hills-prescription-diet-cd-multicare-stress-gatos-adultos-cuidado-urinario-frente.png?v=638314227458800000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-prescription-diet-cd-multicare-stress-gatos-adultos-cuidado-urinario-3998907/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-prescription-diet-cd-multicare-stress-gatos-adultos-cuidado-urinario-3998907/p",
+  popularity: 846
  },
  {
   sku: "cobasi-998885",
@@ -8473,7 +9319,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1020617/52742008882_2.jpg?v=638926140401830000",
-  productUrl: "https://www.cobasi.com.br/racao-hillss-prescription-diet-z-d-caes-adultos-pedacos-pequenos-alergia-alimentares-e-da-pele-3998885/p"
+  productUrl: "https://www.cobasi.com.br/racao-hillss-prescription-diet-z-d-caes-adultos-pedacos-pequenos-alergia-alimentares-e-da-pele-3998885/p",
+  popularity: 847
  },
  {
   sku: "cobasi-998532",
@@ -8483,7 +9330,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050766/racao-umida-hills-prescription-diet-id-gatos-adultos-cuidado-digestivo-principal.png?v=638998400039170000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-hills-prescription-diet-id-gatos-adultos-cuidado-digestivo-3998532/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-hills-prescription-diet-id-gatos-adultos-cuidado-digestivo-3998532/p",
+  popularity: 848
  },
  {
   sku: "cobasi-998419",
@@ -8493,7 +9341,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066999/origem_nature_light_peixe_com_espinafre_300g.jpg?v=638731559251000000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-peixe-com-espinafre-e-legumes-3998419/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-joy-origem-nature-peixe-com-espinafre-e-legumes-3998419/p",
+  popularity: 849
  },
  {
   sku: "cobasi-997471",
@@ -8503,7 +9352,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/814815/Suplemento-Mineral-para-Caes-e-Gatos-Kalium-Vet-Avert-21-g.jpg?v=638524064345670000",
-  productUrl: "https://www.cobasi.com.br/suplemento-mineral-para-caes-e-gatos-kalium-vet-avert-3997471/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-mineral-para-caes-e-gatos-kalium-vet-avert-3997471/p",
+  popularity: 850
  },
  {
   sku: "cobasi-994103",
@@ -8513,7 +9363,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1068373/Bravecto-Gatos-Plus-Transdermal-250mg-2.png?v=638756780007200000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-bravecto-plus-gatos-2-8-a-6-25-kg-3994103/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-bravecto-plus-gatos-2-8-a-6-25-kg-3994103/p",
+  popularity: 851
  },
  {
   sku: "cobasi-992631",
@@ -8523,7 +9374,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1113152/NexGard-Spectra-2kg-a-35kg-Antipulgas-Carrapatos-e-Vermifugo-emabalagem_FRENTE-01.webp?v=639208434598600000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-2-a-3-5-kg-3992631/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-spectra-para-caes-2-a-3-5-kg-3992631/p",
+  popularity: 852
  },
  {
   sku: "cobasi-975761",
@@ -8533,7 +9385,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/887853/Petisco-Natural-Barkkies-Soft-Stick-Frango.jpg?v=638772286847270000",
-  productUrl: "https://www.cobasi.com.br/petisco-natural-barkkies-soft-stick-frango-3975761/p"
+  productUrl: "https://www.cobasi.com.br/petisco-natural-barkkies-soft-stick-frango-3975761/p",
+  popularity: 853
  },
  {
   sku: "cobasi-970166",
@@ -8543,7 +9396,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos petiscos naturais",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063348/petisco-origem-natural-crost-filezinho-de-frango-1.png?v=638664087169870000",
-  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-filezinho-de-frango-3970166/p"
+  productUrl: "https://www.cobasi.com.br/petisco-origem-natural-crost-filezinho-de-frango-3970166/p",
+  popularity: 854
  },
  {
   sku: "cobasi-968358",
@@ -8553,7 +9407,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/982055/Ograx-artro-10.jpg?v=638138107875830000",
-  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-ograx-artro-10-3968358/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-e-gatos-ograx-artro-10-3968358/p",
+  popularity: 855
  },
  {
   sku: "cobasi-966746",
@@ -8563,7 +9418,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/451476/Cabeca-do-Femur.jpg?v=637520406281870000",
-  productUrl: "https://www.cobasi.com.br/osso-para-caes-defumado-cabeca-do-femur-petiscao-3966746/p"
+  productUrl: "https://www.cobasi.com.br/osso-para-caes-defumado-cabeca-do-femur-petiscao-3966746/p",
+  popularity: 856
  },
  {
   sku: "cobasi-1143662",
@@ -8573,7 +9429,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059241/racao-hills-caes-adultos-pele-sensivel-pedacos-pequenos-1.jpg?v=638720249657500000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-pele-sensivel-pedacos-pequenos-3966002/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-pele-sensivel-pedacos-pequenos-3966002/p",
+  popularity: 857
  },
  {
   sku: "cobasi-1143158",
@@ -8583,7 +9440,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1096194/Racao-Hills-Science-Diet-Adulto-7-Mais-Caes-Idosos-Pequenos-e-Mini-frente.webp?v=639058325491770000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-7-mais-racas-minis-e-pequenas-frango-3964794/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-caes-adultos-7-mais-racas-minis-e-pequenas-frango-3964794/p",
+  popularity: 858
  },
  {
   sku: "cobasi-963933",
@@ -8593,7 +9451,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/622274/antibiotico-marbocyl-p-para-caes-e-gatos-vetoquinol-20mg.jpg?v=637571322448000000",
-  productUrl: "https://www.cobasi.com.br/antibiotico-marbocyl-p-20mg-vetoquinol-3963933/p"
+  productUrl: "https://www.cobasi.com.br/antibiotico-marbocyl-p-20mg-vetoquinol-3963933/p",
+  popularity: 859
  },
  {
   sku: "cobasi-963143",
@@ -8603,7 +9462,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947001/7898053598314.jpg?v=637871004048400000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-metilvet-5mg-3963143/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-metilvet-5mg-3963143/p",
+  popularity: 860
  },
  {
   sku: "cobasi-958883",
@@ -8613,7 +9473,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/901189/Imagem1.jpg?v=639026036591170000",
-  productUrl: "https://www.cobasi.com.br/-vermifugo-para-gatos-spot-on-drontal-3958883/p"
+  productUrl: "https://www.cobasi.com.br/-vermifugo-para-gatos-spot-on-drontal-3958883/p",
+  popularity: 861
  },
  {
   sku: "cobasi-958379",
@@ -8623,7 +9484,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1061174/petisco-gourmet-para-caes-love-bits-carne-bio-dog-frente.png?v=638621084534100000",
-  productUrl: "https://www.cobasi.com.br/petisco-gourmet-para-caes-love-bits-carne-bio-dog-3958379/p"
+  productUrl: "https://www.cobasi.com.br/petisco-gourmet-para-caes-love-bits-carne-bio-dog-3958379/p",
+  popularity: 862
  },
  {
   sku: "cobasi-953083",
@@ -8633,7 +9495,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/816834/racao-umida-para-gatos-adultos-peru_1.jpg?v=638760198083370000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-goulash-peru-3953083/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-fancy-feast-goulash-peru-3953083/p",
+  popularity: 863
  },
  {
   sku: "cobasi-950777",
@@ -8643,7 +9506,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082831/Racao-Premier-Nattu-Caes-Filhotes-Pequeno-Porte-Mandioca-1kg-frente.webp?v=638906949117730000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-filhotes-mandioca-pequeno-porte-3950777/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-nattu-caes-filhotes-mandioca-pequeno-porte-3950777/p",
+  popularity: 864
  },
  {
   sku: "cobasi-950025",
@@ -8653,7 +9517,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/993680/950025--1-.jpg?v=639040751043730000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-shih-tzu-3950025/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-shih-tzu-3950025/p",
+  popularity: 865
  },
  {
   sku: "cobasi-949981",
@@ -8663,7 +9528,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/993670/949981--1-.jpg?v=638266716876230000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-adulto-pomeranian-3949981/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-caes-adulto-pomeranian-3949981/p",
+  popularity: 866
  },
  {
   sku: "cobasi-949914",
@@ -8673,7 +9539,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/339096/Anti-inflamatorio-Caes-Mellis-Vet-2mg-Avert_949906.jpg?v=638174154960030000",
-  productUrl: "https://www.cobasi.com.br/mellis-vet-2mg-anti-inflamatorio-para-caes-3949914/p"
+  productUrl: "https://www.cobasi.com.br/mellis-vet-2mg-anti-inflamatorio-para-caes-3949914/p",
+  popularity: 867
  },
  {
   sku: "cobasi-949906",
@@ -8683,7 +9550,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/339093/Anti-inflamatorio-Caes-Mellis-Vet-05mg-Avert_949906.jpg?v=637333564805000000",
-  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-caes-mellis-vet-avert-3949906/p"
+  productUrl: "https://www.cobasi.com.br/anti-inflamatorio-caes-mellis-vet-avert-3949906/p",
+  popularity: 868
  },
  {
   sku: "cobasi-949868",
@@ -8693,7 +9561,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947029/7898053597638.jpg?v=637871013769370000",
-  productUrl: "https://www.cobasi.com.br/furolisin-20mg-3949868/p"
+  productUrl: "https://www.cobasi.com.br/furolisin-20mg-3949868/p",
+  popularity: 869
  },
  {
   sku: "cobasi-949787",
@@ -8703,7 +9572,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos dermatite",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062514/Cyclavance-100mg-para-Caes-Virbac-15-ml.png?v=638900039468870000",
-  productUrl: "https://www.cobasi.com.br/cyclavance-para-caes-virbac-3949787/p"
+  productUrl: "https://www.cobasi.com.br/cyclavance-para-caes-virbac-3949787/p",
+  popularity: 870
  },
  {
   sku: "cobasi-948110",
@@ -8713,7 +9583,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao calopsita",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1085482/3948110-CALOPSITA-GOURMET-300g.webp?v=638953758237370000",
-  productUrl: "https://www.cobasi.com.br/racao-nutropica-calopsita-gourmet-3948110/p"
+  productUrl: "https://www.cobasi.com.br/racao-nutropica-calopsita-gourmet-3948110/p",
+  popularity: 871
  },
  {
   sku: "cobasi-948063",
@@ -8723,7 +9594,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069619/Mini-Carne2.jpg?v=638787893592400000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-mini-e-pequenos-carne-3948063/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-mini-e-pequenos-carne-3948063/p",
+  popularity: 872
  },
  {
   sku: "cobasi-948020",
@@ -8733,7 +9605,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069534/Frango.jpg?v=638787593086730000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-frango-3948020/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-dog-chow-caes-adultos-frango-3948020/p",
+  popularity: 873
  },
  {
   sku: "cobasi-947679",
@@ -8743,7 +9616,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/341204/Cordeiro_Edit.jpg?v=638322165859900000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-cordeiro-3947679/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-cordeiro-3947679/p",
+  popularity: 874
  },
  {
   sku: "cobasi-947660",
@@ -8753,7 +9627,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/341201/Bacalhau_Edi.jpg?v=638322165596330000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-bacalhau-85g-3947660/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-matisse-mousse-gatos-adultos-bacalhau-85g-3947660/p",
+  popularity: 875
  },
  {
   sku: "cobasi-947520",
@@ -8763,7 +9638,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108642/Racao-Umida-Para-Gato-Renal-Vet-Life-1.webp?v=639171415452230000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-renal-vetlife-farmina-3947520/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-renal-vetlife-farmina-3947520/p",
+  popularity: 876
  },
  {
   sku: "cobasi-947512",
@@ -8773,7 +9649,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/319198/Alimento-Umido-Gato-Gastro-Farmina.jpg?v=637273436485870000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-gastrointestinal-vetlife-farmina-3947512/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-gastrointestinal-vetlife-farmina-3947512/p",
+  popularity: 877
  },
  {
   sku: "cobasi-947504",
@@ -8783,7 +9660,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108634/Racao Umida Para Gato Convalescenca Vet Life 1.webp?v=639171324169970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-convalescenca-vetlife-farmina-3947504/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-para-gato-convalescenca-vetlife-farmina-3947504/p",
+  popularity: 878
  },
  {
   sku: "cobasi-947474",
@@ -8793,7 +9671,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108582/Racao Umida Vet Life Caes Hipoalergenico 1.webp?v=639171245771970000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cao-hipoalergenico-vetlife-farmina-3947474/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-cao-hipoalergenico-vetlife-farmina-3947474/p",
+  popularity: 879
  },
  {
   sku: "cobasi-947466",
@@ -8803,7 +9682,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108578/Racao Umida Vet Life Gastrointestinal Farmina 1.webp?v=639171239103970000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-vetlife-gastrointestinal-farmina-3947466/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-vetlife-gastrointestinal-farmina-3947466/p",
+  popularity: 880
  },
  {
   sku: "cobasi-946168",
@@ -8813,7 +9693,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais coelhos racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/335717/7898348038877.jpg?v=638842337102770000",
-  productUrl: "https://www.cobasi.com.br/racao-para-hamster-e-coelho-pic-nic-zootekna-3946168/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-hamster-e-coelho-pic-nic-zootekna-3946168/p",
+  popularity: 881
  },
  {
   sku: "cobasi-945706",
@@ -8823,7 +9704,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/982053/Ograx-Artro-20.jpg?v=638138074418830000",
-  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-ograx-artro-3945706/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-para-caes-ograx-artro-3945706/p",
+  popularity: 882
  },
  {
   sku: "cobasi-1143603",
@@ -8833,7 +9715,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059159/racao-hills-id-caes-adultos-cuidado-gastro-intestinal-pedacos-pequenos-1.png?v=638720412999030000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-id-caes-adultos-cuidado-gastro-intestinal-pedacos-pequenos-3943428/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-id-caes-adultos-cuidado-gastro-intestinal-pedacos-pequenos-3943428/p",
+  popularity: 883
  },
  {
   sku: "cobasi-941557",
@@ -8843,7 +9726,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011416/941557--1-.jpg?v=638130991674100000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-frontline-plus-gatos-3941557/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-frontline-plus-gatos-3941557/p",
+  popularity: 884
  },
  {
   sku: "cobasi-941514",
@@ -8853,7 +9737,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011408/941514--1-.jpg?v=638138072976430000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-plus-para-caes-de-ate-10kg-3941514/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-plus-para-caes-de-ate-10kg-3941514/p",
+  popularity: 885
  },
  {
   sku: "cobasi-639583",
@@ -8863,7 +9748,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059133/racao-hills-rd-obesidade-caes-adultos-1.png?v=638737753639900000",
-  productUrl: "https://www.cobasi.com.br/racao-hills-rd-caes-adultos-obesos-3941395/p"
+  productUrl: "https://www.cobasi.com.br/racao-hills-rd-caes-adultos-obesos-3941395/p",
+  popularity: 886
  },
  {
   sku: "cobasi-940992",
@@ -8873,7 +9759,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antialergico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/211596/Crema-6-A.jpg?v=638437113440270000",
-  productUrl: "https://www.cobasi.com.br/crema-6a-labyes-3940992/p"
+  productUrl: "https://www.cobasi.com.br/crema-6a-labyes-3940992/p",
+  popularity: 887
  },
  {
   sku: "cobasi-940887",
@@ -8883,7 +9770,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antitoxico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032328/enterex-8-g-vetnil-sache.jpg?v=638043750932630000",
-  productUrl: "https://www.cobasi.com.br/enterex-8-g-vetnil--3940887/p"
+  productUrl: "https://www.cobasi.com.br/enterex-8-g-vetnil--3940887/p",
+  popularity: 888
  },
  {
   sku: "cobasi-941034",
@@ -8893,7 +9781,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089095/REVOLUTION12--60MG-CAES-5-A-10KG-1BIS.webp.webp?v=638972794726430000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-12--60mg-caes-51-a-10kg-3940658/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-12--60mg-caes-51-a-10kg-3940658/p",
+  popularity: 889
  },
  {
   sku: "cobasi-941069",
@@ -8903,7 +9792,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089053/REVOLUTION6--15MG-CAES-GATOS-1BIS.webp.webp?v=638972721123970000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-6--15mg-caes-e-gatos-25kg-3940615/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-revolution-6--15mg-caes-e-gatos-25kg-3940615/p",
+  popularity: 890
  },
  {
   sku: "cobasi-940585",
@@ -8913,7 +9803,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947116/7898053580340.jpg?v=638518240976000000",
-  productUrl: "https://www.cobasi.com.br/glicopan-pet-30ml-vetnil-3940585/p"
+  productUrl: "https://www.cobasi.com.br/glicopan-pet-30ml-vetnil-3940585/p",
+  popularity: 891
  },
  {
   sku: "cobasi-940542",
@@ -8923,7 +9814,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/947067/7898053583136_2.jpg?v=638138069786500000",
-  productUrl: "https://www.cobasi.com.br/keravit-pomada-oftalmica-univet-3940542/p"
+  productUrl: "https://www.cobasi.com.br/keravit-pomada-oftalmica-univet-3940542/p",
+  popularity: 892
  },
  {
   sku: "cobasi-937002",
@@ -8933,7 +9825,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza tapete higienico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/336261/Azul-P.jpg?v=638737766981030000",
-  productUrl: "https://www.cobasi.com.br/tapete-higienico-water-clean-azul-russso-e-russo-3937002/p"
+  productUrl: "https://www.cobasi.com.br/tapete-higienico-water-clean-azul-russso-e-russo-3937002/p",
+  popularity: 893
  },
  {
   sku: "cobasi-936367",
@@ -8943,7 +9836,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro acessorios para alimentacao comedouro",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/392863/Comedouro-Aluminio-Pesado-NF-Pet_150ml.jpg?v=637430783205000000",
-  productUrl: "https://www.cobasi.com.br/comedouro-aluminio-pesado-nf-pet-3936367/p"
+  productUrl: "https://www.cobasi.com.br/comedouro-aluminio-pesado-nf-pet-3936367/p",
+  popularity: 894
  },
  {
   sku: "cobasi-934887",
@@ -8953,7 +9847,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107270/Racao Guabi Natural Grain Free Gatos Castrados Salmao e Lentilha 1.webp?v=639160968501000000",
-  productUrl: "https://www.cobasi.com.br/racao-para-gato-castrado-guabi-natural-grain-free-salmao-e-lentilha-3934860/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-gato-castrado-guabi-natural-grain-free-salmao-e-lentilha-3934860/p",
+  popularity: 895
  },
  {
   sku: "cobasi-934852",
@@ -8963,7 +9858,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108859/Racao-Guabi-Natural-Grain-Free-Caes-Adultos-Racas-Mini-Pequeno-Frango-e-Lentilha-1.webp?v=639172166944300000",
-  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adulto-guabi-natural-grain-free-racas-mini-pequeno-frango-e-lentilha-3934852/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-adulto-guabi-natural-grain-free-racas-mini-pequeno-frango-e-lentilha-3934852/p",
+  popularity: 896
  },
  {
   sku: "cobasi-934232",
@@ -8973,7 +9869,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062010/Racao-Formula-Natural-Fresh-Meat-Caes-Filhote-Grande-e-Gigante-Frango.png?v=638912024033530000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-grande-e-gigante-frango-3934232/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-grande-e-gigante-frango-3934232/p",
+  popularity: 897
  },
  {
   sku: "cobasi-934208",
@@ -8983,7 +9880,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062044/Racao-Formula-Natural-Fresh-Meat-Caes-Filhote-Medio-Frango.png?v=638877678481700000",
-  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-medio-frango-3934208/p"
+  productUrl: "https://www.cobasi.com.br/racao-formula-natural-fresh-meat-filhote-medio-frango-3934208/p",
+  popularity: 898
  },
  {
   sku: "cobasi-932990",
@@ -8993,7 +9891,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/993711/932990--1-.jpg?v=639040751338100000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-adultos-light-weight-care-3932990/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-caes-adultos-light-weight-care-3932990/p",
+  popularity: 899
  },
  {
   sku: "cobasi-931110",
@@ -9003,7 +9902,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1042521/antimicrobiano-cefa-sid-vansil-110-mg.png?v=638119999176370000",
-  productUrl: "https://www.cobasi.com.br/antimicrobiano-cefa-sid-vansil-3931110/p"
+  productUrl: "https://www.cobasi.com.br/antimicrobiano-cefa-sid-vansil-3931110/p",
+  popularity: 900
  },
  {
   sku: "cobasi-929840",
@@ -9013,7 +9913,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antitoxico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/177353/Mecepton-Oral-20ml.jpg?v=639047786410100000",
-  productUrl: "https://www.cobasi.com.br/mercepton-oral-20-ml-bravet-3929840/p"
+  productUrl: "https://www.cobasi.com.br/mercepton-oral-20-ml-bravet-3929840/p",
+  popularity: 901
  },
  {
   sku: "cobasi-929603",
@@ -9023,7 +9924,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011402/929603--1-.jpg?v=639130713224070000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-spray-para-caes-e-gatos-100ml-3929603/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-spray-para-caes-e-gatos-100ml-3929603/p",
+  popularity: 902
  },
  {
   sku: "cobasi-928445",
@@ -9033,7 +9935,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037978/Gourmet-Gatos-Castrados-Peru-e-Arroz-Frente.jpg?v=638912244461000000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrado-peru-e-arroz-3928445/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-gourmet-gatos-castrado-peru-e-arroz-3928445/p",
+  popularity: 903
  },
  {
   sku: "cobasi-927783",
@@ -9043,7 +9946,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1008079/Stomorgyl-2-foto-nova.jpg?v=637974692228570000",
-  productUrl: "https://www.cobasi.com.br/stomorgyl-20-comp-merial-saude-3927783/p"
+  productUrl: "https://www.cobasi.com.br/stomorgyl-20-comp-merial-saude-3927783/p",
+  popularity: 904
  },
  {
   sku: "cobasi-927198",
@@ -9053,7 +9957,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011375/ORIGENS-AD-GRANDE-7898363316905---7898363315182---7898363315489.jpg?v=637995494941330000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-cao-adulto-grande-carne-e-cereais-3927198/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-cao-adulto-grande-carne-e-cereais-3927198/p",
+  popularity: 905
  },
  {
   sku: "cobasi-924113",
@@ -9063,7 +9968,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/298983/Petisco-Extra-Life-Dog-Chow-3-Unidades-80g.jpg?v=637146956511000000",
-  productUrl: "https://www.cobasi.com.br/petisco-dog-chow-extra-life-saude-oral-caes-medios-e-grandes-3924113/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dog-chow-extra-life-saude-oral-caes-medios-e-grandes-3924113/p",
+  popularity: 906
  },
  {
   sku: "cobasi-924083",
@@ -9073,7 +9979,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1069238/Petisco-Extra-Life-Dog-Chow-3-Unidades.jpg?v=638781800883130000",
-  productUrl: "https://www.cobasi.com.br/petisco-extra-life-dog-chow-adultos-minis-e-pequenos-3924083/p"
+  productUrl: "https://www.cobasi.com.br/petisco-extra-life-dog-chow-adultos-minis-e-pequenos-3924083/p",
+  popularity: 907
  },
  {
   sku: "cobasi-924016",
@@ -9083,7 +9990,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais animais de grande porte medicamentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/175652/Butox-20-ml-Pulverizacao-Intervet.jpg?v=637671369465570000",
-  productUrl: "https://www.cobasi.com.br/butox-20-ml-pulverizacao-intervet-3924016/p"
+  productUrl: "https://www.cobasi.com.br/butox-20-ml-pulverizacao-intervet-3924016/p",
+  popularity: 908
  },
  {
   sku: "cobasi-921670",
@@ -9093,7 +10001,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos anti-inflamatorio",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/193262/Meticorten-MSD-5mg.jpg?v=636566179940030000",
-  productUrl: "https://www.cobasi.com.br/meticorten-veterinario-msd-saude-animal-3921670/p"
+  productUrl: "https://www.cobasi.com.br/meticorten-veterinario-msd-saude-animal-3921670/p",
+  popularity: 909
  },
  {
   sku: "cobasi-921661",
@@ -9103,7 +10012,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004506/Drontal-Gatos-4-comprimidos.jpg?v=638866303578270000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-drontal-gatos-comprimido-elanco-3921661/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-drontal-gatos-comprimido-elanco-3921661/p",
+  popularity: 910
  },
  {
   sku: "cobasi-921408",
@@ -9113,7 +10023,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/180584/DOXITRAT-80-mg-copy.jpg?v=639112774069800000",
-  productUrl: "https://www.cobasi.com.br/doxitrat-80mg-12-comp-agener-3921408/p"
+  productUrl: "https://www.cobasi.com.br/doxitrat-80mg-12-comp-agener-3921408/p",
+  popularity: 911
  },
  {
   sku: "cobasi-920673",
@@ -9123,7 +10034,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011398/920673--1-.jpg?v=638427615711270000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-caes-de-20-a-40kg-3920673/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-frontline-topspot-para-caes-de-20-a-40kg-3920673/p",
+  popularity: 912
  },
  {
   sku: "cobasi-919993",
@@ -9133,7 +10045,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1081937/4-Racao-Origens-Gatos-Castrados-Salmao.webp?v=638894018582170000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrado-salmao-3919993/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrado-salmao-3919993/p",
+  popularity: 913
  },
  {
   sku: "cobasi-919896",
@@ -9143,7 +10056,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082971/1-Racao Origens Gatos Castrados Frango.webp?v=638907776360600000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrado-frango-3919896/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-gatos-castrado-frango-3919896/p",
+  popularity: 914
  },
  {
   sku: "cobasi-919640",
@@ -9153,7 +10067,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1011346/ORIGENS-AD-FRANGO-7898363314475---7898363314468---7898363314482.jpg?v=637995482363000000",
-  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-frango-e-cereais-3919640/p"
+  productUrl: "https://www.cobasi.com.br/racao-origens-caes-adultos-frango-e-cereais-3919640/p",
+  popularity: 915
  },
  {
   sku: "cobasi-916307",
@@ -9163,7 +10078,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063690/Racao-Umida-Royal-Canin-Mini-Ageing-12--Caes-Idosos-85g.png?v=639040748467700000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-mini-ageing-12-mais-caes-idosos-3916307/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-mini-ageing-12-mais-caes-idosos-3916307/p",
+  popularity: 916
  },
  {
   sku: "cobasi-916285",
@@ -9173,7 +10089,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056617/alimento-umido-para-caes-filhotes-racas-mini-royal-canin-1.png?v=639003588168330000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-filhotes-racas-mini-royal-canin-3916285/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-filhotes-racas-mini-royal-canin-3916285/p",
+  popularity: 917
  },
  {
   sku: "cobasi-1142623",
@@ -9183,7 +10100,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060738/Finissimo-Embalagem-4-kg.png?v=638608804216700000",
-  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-finissimo-3916005/p"
+  productUrl: "https://www.cobasi.com.br/areia-higienica-kets-finissimo-3916005/p",
+  popularity: 918
  },
  {
   sku: "cobasi-913111",
@@ -9193,7 +10111,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro brinquedos bichinhos divertidos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1065829/Mordedor-Abacaxi-Flicks.jpg?v=638814679471500000",
-  productUrl: "https://www.cobasi.com.br/brinquedo-abacaxi-flicks-3913111/p"
+  productUrl: "https://www.cobasi.com.br/brinquedo-abacaxi-flicks-3913111/p",
+  popularity: 919
  },
  {
   sku: "cobasi-911933",
@@ -9203,7 +10122,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062362/Racao-Optimum-para-Caes-Adultos-Racas-Pequenas-e-Mini-Frango-e-Arroz-1-kg.png?v=638639925328030000",
-  productUrl: "https://www.cobasi.com.br/racao-optimum-para-caes-adultos-racas-pequenas-e-mini-frango-e-arroz-3911933/p"
+  productUrl: "https://www.cobasi.com.br/racao-optimum-para-caes-adultos-racas-pequenas-e-mini-frango-e-arroz-3911933/p",
+  popularity: 920
  },
  {
   sku: "cobasi-982598",
@@ -9213,7 +10133,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107241/Racao Guabi Natural Caes Adultos Grandes Cordeiro e Aveia 1.webp?v=639160963316730000",
-  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-grandes-e-gigantes-guabi-natural-cordeiro-e-aveia-3910040/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-caes-adultos-racas-grandes-e-gigantes-guabi-natural-cordeiro-e-aveia-3910040/p",
+  popularity: 921
  },
  {
   sku: "cobasi-909971",
@@ -9223,7 +10144,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107165/Racao-Guabi-Natural-Gatos-Filhotes-Frango-e-Arroz-Integral-1.webp?v=639160953234170000",
-  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-guabi-natural-frango-e-arroz-3909971/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-gatos-adultos-guabi-natural-frango-e-arroz-3909971/p",
+  popularity: 922
  },
  {
   sku: "cobasi-909777",
@@ -9233,7 +10155,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1107016/Racao-Guabi-Natural-Caes-Filhotes-Racas-Mini-e-Pequenas-Frango-e-Arroz-Integral-1.webp?v=639160901368330000",
-  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-filhote-raca-mini-e-pequena-guabi-natural-frango-e-arroz-3909777/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-filhote-raca-mini-e-pequena-guabi-natural-frango-e-arroz-3909777/p",
+  popularity: 923
  },
  {
   sku: "cobasi-982539",
@@ -9243,7 +10166,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106982/Racao-Guabi-Natural-Caes-Filhotes-Grande-e-Gigante-Frango-e-Arroz-1.webp?v=639160895461830000",
-  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-filhote-guabi-natural-grandes-e-gigantes-frango-e-arroz-3909025/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-cachorro-filhote-guabi-natural-grandes-e-gigantes-frango-e-arroz-3909025/p",
+  popularity: 924
  },
  {
   sku: "cobasi-907332",
@@ -9253,7 +10177,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "casa limpeza eliminador de odores e desinfetantes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077710/Enzimac_gatos_150ml.webp?v=638869106487630000",
-  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-e-manchas-labgard-3907332/p"
+  productUrl: "https://www.cobasi.com.br/eliminador-de-odores-e-manchas-labgard-3907332/p",
+  popularity: 925
  },
  {
   sku: "cobasi-903914",
@@ -9263,7 +10188,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1056112/Racao-Umida-Royal-Canin-Controle-do-Apetite-Gatos-Adultos-85g.png?v=638484451680270000",
-  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-sache-gatos-care-appetite-control-3903914/p"
+  productUrl: "https://www.cobasi.com.br/racao-umida-royal-canin-sache-gatos-care-appetite-control-3903914/p",
+  popularity: 926
  },
  {
   sku: "cobasi-903264",
@@ -9273,7 +10199,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082213/Racao-Dog-Chow-Caes-Adultos-7--Longevidade-15kg.webp?v=639168916228570000",
-  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-senior-3903272/p"
+  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-senior-3903272/p",
+  popularity: 927
  },
  {
   sku: "cobasi-903051",
@@ -9283,7 +10210,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/201017/Vermifugo-Milbemax-G-Gatos-Elanco-2-a-8kg-copia.jpg?v=638137297399230000",
-  productUrl: "https://www.cobasi.com.br/vermifugo-milbemax-g-gatos-elanco-2-a-8kg-3903051/p"
+  productUrl: "https://www.cobasi.com.br/vermifugo-milbemax-g-gatos-elanco-2-a-8kg-3903051/p",
+  popularity: 928
  },
  {
   sku: "cobasi-900508",
@@ -9293,7 +10221,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083082/Racao Premier Selecao Natural Caes Adultos Frango com Batata Doce 12kg frente.webp?v=638907958048900000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-frango-com-batata-doce-3900508/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-selecao-natural-caes-adultos-frango-com-batata-doce-3900508/p",
+  popularity: 929
  },
  {
   sku: "cobasi-897256",
@@ -9303,7 +10232,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos higiene e limpeza areia higienica",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/202583/Granulado-Higienico-ProGato-Sensitive.jpg?v=638134665802730000",
-  productUrl: "https://www.cobasi.com.br/granulado-higienico-progato-sensitive-3897256/p"
+  productUrl: "https://www.cobasi.com.br/granulado-higienico-progato-sensitive-3897256/p",
+  popularity: 930
  },
  {
   sku: "cobasi-893854",
@@ -9313,7 +10243,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004387/893854--1-.jpg?v=638955326835000000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-satiety-feline-wet-3893854/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-royal-canin-gatos-satiety-feline-wet-3893854/p",
+  popularity: 931
  },
  {
   sku: "cobasi-892866",
@@ -9323,7 +10254,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/536677/300MG.jpg?v=638134656611900000",
-  productUrl: "https://www.cobasi.com.br/antibacteriano-silmox-cl-300-mg-vansil-3892866/p"
+  productUrl: "https://www.cobasi.com.br/antibacteriano-silmox-cl-300-mg-vansil-3892866/p",
+  popularity: 932
  },
  {
   sku: "cobasi-887307",
@@ -9333,7 +10265,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037703/Menu-Caes-Mini-Adultos-Light-Frango-e-Arroz-Frente.jpg?v=639190444427970000",
-  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-mini-adultos-light-frango-e-arroz-3887307/p"
+  productUrl: "https://www.cobasi.com.br/racaes-gran-plus-menu-caes-mini-adultos-light-frango-e-arroz-3887307/p",
+  popularity: 933
  },
  {
   sku: "cobasi-886769",
@@ -9343,7 +10276,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108077/Racao Vet Life Natural Caes UltraHypo Racas Pequenas 1.webp?v=639165467004500000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-caes-ultrahypo-racas-pequenas-3886769/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-natural-caes-ultrahypo-racas-pequenas-3886769/p",
+  popularity: 934
  },
  {
   sku: "cobasi-875007",
@@ -9353,7 +10287,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037018/Sticks-Carne-Kadi.jpg?v=638328181339730000",
-  productUrl: "https://www.cobasi.com.br/sticks-carne-kadi-3875007/p"
+  productUrl: "https://www.cobasi.com.br/sticks-carne-kadi-3875007/p",
+  popularity: 935
  },
  {
   sku: "cobasi-874922",
@@ -9363,7 +10298,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037017/Sticks-Original-Kadi.jpg?v=638328180833430000",
-  productUrl: "https://www.cobasi.com.br/sticks-original-kadi-3874922/p"
+  productUrl: "https://www.cobasi.com.br/sticks-original-kadi-3874922/p",
+  popularity: 936
  },
  {
   sku: "cobasi-871109",
@@ -9373,7 +10309,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083061/Racao-Premier-Racas-Especificas-Spitz-Alemao-Filhotes-1kg-frente.webp?v=638907938442670000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-spitz-alemao-filhotes-3871109/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-spitz-alemao-filhotes-3871109/p",
+  popularity: 937
  },
  {
   sku: "cobasi-866563",
@@ -9383,7 +10320,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/816057/racao-umida-para-gatos-filhotes-frango-ao-molho-85g_1.jpg?v=637662034540900000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-kitten-frango-ao-molho-3866563/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pro-plan-kitten-frango-ao-molho-3866563/p",
+  popularity: 938
  },
  {
   sku: "cobasi-860824",
@@ -9393,7 +10331,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1055043/Suplemento-Aminoacido-Organew-Vetnil-12g.png?v=639084084331930000",
-  productUrl: "https://www.cobasi.com.br/suplemento-aminoacido-organew-vetnil-3860824/p"
+  productUrl: "https://www.cobasi.com.br/suplemento-aminoacido-organew-vetnil-3860824/p",
+  popularity: 939
  },
  {
   sku: "cobasi-859745",
@@ -9403,7 +10342,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza limpa orelhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047613/Limpeza-Auricular-Oto-Clean-Up-Soft-Care.png?v=638907736355630000",
-  productUrl: "https://www.cobasi.com.br/locao-oto-clean-up-soft-care-pet-society-3859745/p"
+  productUrl: "https://www.cobasi.com.br/locao-oto-clean-up-soft-care-pet-society-3859745/p",
+  popularity: 940
  },
  {
   sku: "cobasi-857173",
@@ -9413,7 +10353,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1092551/Petisco-Joy-Bifinho-Bola-Carne.jpg?v=638991830178270000",
-  productUrl: "https://www.cobasi.com.br/petisco-joy-bifinho-bola-carne-3857173/p"
+  productUrl: "https://www.cobasi.com.br/petisco-joy-bifinho-bola-carne-3857173/p",
+  popularity: 941
  },
  {
   sku: "cobasi-856517",
@@ -9423,7 +10364,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1066170/ograx-3-1500mg-caes-avert.jpg.jpg?v=638705589505270000",
-  productUrl: "https://www.cobasi.com.br/ograx-3-1500mg-3856517/p"
+  productUrl: "https://www.cobasi.com.br/ograx-3-1500mg-3856517/p",
+  popularity: 942
  },
  {
   sku: "cobasi-854247",
@@ -9433,7 +10375,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1047378/Petisco-DentaLife-Caes-Adultos-Medios-7-unidades.png?v=638780964551230000",
-  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-medio-3854255/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-medio-3854255/p",
+  popularity: 943
  },
  {
   sku: "cobasi-854220",
@@ -9443,7 +10386,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/818033/Untitled-1.jpg?v=638781696441600000",
-  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-grande-3854239/p"
+  productUrl: "https://www.cobasi.com.br/petisco-dentallife-cao-adulto-grande-3854239/p",
+  popularity: 944
  },
  {
   sku: "cobasi-1127861",
@@ -9453,7 +10397,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050666/racao-cat-chow-castrados-frango-1kg-frente.png?v=638312474596000000",
-  productUrl: "https://www.cobasi.com.br/racao-cat-chow-castrados-frango-3854085/p"
+  productUrl: "https://www.cobasi.com.br/racao-cat-chow-castrados-frango-3854085/p",
+  popularity: 945
  },
  {
   sku: "cobasi-853704",
@@ -9463,7 +10408,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1037654/Menu-Caes-Filhotes-Mini-Frango-e-Arroz-Frente.jpg?v=638784203431430000",
-  productUrl: "https://www.cobasi.com.br/racao-gran-plus-cao-mini-filhote-frango-e-arroz-3853704/p"
+  productUrl: "https://www.cobasi.com.br/racao-gran-plus-cao-mini-filhote-frango-e-arroz-3853704/p",
+  popularity: 946
  },
  {
   sku: "cobasi-1127829",
@@ -9473,7 +10419,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1050646/racao-cat-chow-adultos-carne-quantidade-frente.png?v=638790294338070000",
-  productUrl: "https://www.cobasi.com.br/racao-cat-chow-adultos-carne-3853674/p"
+  productUrl: "https://www.cobasi.com.br/racao-cat-chow-adultos-carne-3853674/p",
+  popularity: 947
  },
  {
   sku: "cobasi-845817",
@@ -9483,7 +10430,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1077024/Racao Umida Pet Delicia Gatos Frango com Mamao.webp?v=638854199473000000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gato-pet-delicia-frango-com-mamao-3845817/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gato-pet-delicia-frango-com-mamao-3845817/p",
+  popularity: 948
  },
  {
   sku: "cobasi-845205",
@@ -9493,7 +10441,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza higiene bucal",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1099428/Veggiedent-Fr3sh-para-Caes-Pequenos.png?v=639112447130130000",
-  productUrl: "https://www.cobasi.com.br/veggie-dent-fr3sh-para-caes-pequenos-3845205/p"
+  productUrl: "https://www.cobasi.com.br/veggie-dent-fr3sh-para-caes-pequenos-3845205/p",
+  popularity: 949
  },
  {
   sku: "cobasi-844519",
@@ -9503,7 +10452,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062271/Sache-Gatos-Adultos-Manutencao-de-Peso-Frango-Hero.png?v=638802277958470000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-sache-gatos-adultos-manutencao-de-peso-frango-85g-3844519/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-optimum-sache-gatos-adultos-manutencao-de-peso-frango-85g-3844519/p",
+  popularity: 950
  },
  {
   sku: "cobasi-842893",
@@ -9513,7 +10463,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "outros-animais coelhos racao e alimentos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/212062/7898929878540.jpg?v=638639126403830000",
-  productUrl: "https://www.cobasi.com.br/racao-para-coelhos-ornamentais-adultos-megazoo-3842893/p"
+  productUrl: "https://www.cobasi.com.br/racao-para-coelhos-ornamentais-adultos-megazoo-3842893/p",
+  popularity: 951
  },
  {
   sku: "cobasi-167762",
@@ -9523,7 +10474,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "peixes decoracao substratos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1103191/Cascalho-para-Aquario-Nº-00-Aqua-Pedras.webp?v=639147987176930000",
-  productUrl: "https://www.cobasi.com.br/cascalho-para-aquario-aqua-pedras-n%C2%BA00-3834637/p"
+  productUrl: "https://www.cobasi.com.br/cascalho-para-aquario-aqua-pedras-n%C2%BA00-3834637/p",
+  popularity: 952
  },
  {
   sku: "cobasi-829650",
@@ -9533,7 +10485,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro acessorios para alimentacao dosador de racao",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1071484/Fecho-para-Embalagem-Pet-Games-P.webp.webp?v=638815347254100000",
-  productUrl: "https://www.cobasi.com.br/fecho-para-embalagem-pet-games-3829650/p"
+  productUrl: "https://www.cobasi.com.br/fecho-para-embalagem-pet-games-3829650/p",
+  popularity: 953
  },
  {
   sku: "cobasi-829013",
@@ -9543,7 +10496,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos acessorios de saude",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1063497/Aplicador-de-Comprimidos-para-Caes-e-Gatos.jpg?v=638665793199900000",
-  productUrl: "https://www.cobasi.com.br/aplicador-de-comprimidos-animalissimo-3829013/p"
+  productUrl: "https://www.cobasi.com.br/aplicador-de-comprimidos-animalissimo-3829013/p",
+  popularity: 954
  },
  {
   sku: "cobasi-826820",
@@ -9553,7 +10507,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1111818/7891000113066-1.webp?v=639197424249670000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-carne-adultos-85g-3826820/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-cat-chow-carne-adultos-85g-3826820/p",
+  popularity: 955
  },
  {
   sku: "cobasi-826197",
@@ -9563,7 +10518,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza coletor de fezes",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1048310/Refil-Saquinhos-Higienicos-Basic-Jambo-embalagem.png?v=638737719836070000",
-  productUrl: "https://www.cobasi.com.br/refil-cata-caca-basic-jambo-3826197/p"
+  productUrl: "https://www.cobasi.com.br/refil-cata-caca-basic-jambo-3826197/p",
+  popularity: 956
  },
  {
   sku: "cobasi-825786",
@@ -9573,7 +10529,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jardim cultivo e manutencao acessorios de cultivo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/206642/Manta-Drenadim.jpg?v=636809112914130000",
-  productUrl: "https://www.cobasi.com.br/manta-drenagem-do-solo-drenadim-3825786/p"
+  productUrl: "https://www.cobasi.com.br/manta-drenagem-do-solo-drenadim-3825786/p",
+  popularity: 957
  },
  {
   sku: "cobasi-823538",
@@ -9583,7 +10540,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1089132/Antipulgas-Simparic-5mg-Para-Caes-13-a-25kg.webp?v=638975051603970000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-5mg-13-a-25-kg-zoets-3823538/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-caes-simparic-5mg-13-a-25-kg-zoets-3823538/p",
+  popularity: 958
  },
  {
   sku: "cobasi-821810",
@@ -9593,7 +10551,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos cookies e biscoitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095590/Cookie-Premier-Caes-Filhotes-Frente.png?v=639035702929070000",
-  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-filhotes-3821810/p"
+  productUrl: "https://www.cobasi.com.br/petisco-premier-cookie-caes-filhotes-3821810/p",
+  popularity: 959
  },
  {
   sku: "cobasi-821748",
@@ -9603,7 +10562,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083008/Racao Premier Racas Especificas Pitbull Adulto 12kg frente.webp?v=638907831585370000",
-  productUrl: "https://www.cobasi.com.br/racao-premier-pitbull-adultos-frango-3821748/p"
+  productUrl: "https://www.cobasi.com.br/racao-premier-pitbull-adultos-frango-3821748/p",
+  popularity: 960
  },
  {
   sku: "cobasi-730971",
@@ -9613,7 +10573,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1090492/821560--1-.jpg?v=638978658001300000",
-  productUrl: "https://www.cobasi.com.br/racao-mini-dermacomfort-royal-canin-3821560/p"
+  productUrl: "https://www.cobasi.com.br/racao-mini-dermacomfort-royal-canin-3821560/p",
+  popularity: 961
  },
  {
   sku: "cobasi-821543",
@@ -9623,7 +10584,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/841966/racao-umida-caes-adultos-cesar-cordeiro-assado-ao-molho-85g-1.jpg?v=638352188735630000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-cordeiro-assado-ao-molho-3821543/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-cordeiro-assado-ao-molho-3821543/p",
+  popularity: 962
  },
  {
   sku: "cobasi-821381",
@@ -9633,7 +10595,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/841981/racao-umida-caes-adultos-cesar-frango-marinado-molho-85g-1.jpg?v=638352185060300000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-frango-marinado-ao-molho-3821381/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-frango-marinado-ao-molho-3821381/p",
+  popularity: 963
  },
  {
   sku: "cobasi-821322",
@@ -9643,7 +10606,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/841959/Racao-Umida-para-Caes-Adultos-Cesar-Carne-Assada-ao-Molho-85g-1.jpg?v=638352183509530000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-carne-assada-ao-molho-3821322/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-caes-adultos-cesar-carne-assada-ao-molho-3821322/p",
+  popularity: 964
  },
  {
   sku: "cobasi-821217",
@@ -9653,7 +10617,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1059039/Racao-Umida-Sheba-Gatos-Filhotes-Sache-Atum-Marinado-85g.png?v=638744478917000000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-filhotes-sheba-atum-marinado-3821217/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-para-gatos-filhotes-sheba-atum-marinado-3821217/p",
+  popularity: 965
  },
  {
   sku: "cobasi-1184024",
@@ -9663,7 +10628,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1095193/Embalagem-da-Racao-Dog-Chow-Caes-Adultos-Minis-e-Pequenos-Carne-Frango-e-Arroz.webp?v=639016676042500000",
-  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-racas-pequenas-frango-arroz-3820814/p"
+  productUrl: "https://www.cobasi.com.br/racao-dog-chow-adulto-racas-pequenas-frango-arroz-3820814/p",
+  popularity: 966
  },
  {
   sku: "cobasi-816647",
@@ -9673,7 +10639,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos sticks e palitos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052600/palito-5x6-llpet-1kg.png?v=638391973571070000",
-  productUrl: "https://www.cobasi.com.br/palito-5x6-llpet-1kg-3816647/p"
+  productUrl: "https://www.cobasi.com.br/palito-5x6-llpet-1kg-3816647/p",
+  popularity: 967
  },
  {
   sku: "cobasi-816604",
@@ -9683,7 +10650,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vitaminas e suplementos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1008493/condroplex-lb--60-comp-caes-avert-Principal.jpg?v=638137126401700000",
-  productUrl: "https://www.cobasi.com.br/condroplex-lb--60-comp-caes-avert-3816604/p"
+  productUrl: "https://www.cobasi.com.br/condroplex-lb--60-comp-caes-avert-3816604/p",
+  popularity: 968
  },
  {
   sku: "cobasi-814911",
@@ -9693,7 +10661,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108562/Racao Vet Life Natural Mini Canine Obesity e Diabetic 1.webp?v=639168925713600000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-canine-obesity-diabetic-mini-natural-3814911/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-canine-obesity-diabetic-mini-natural-3814911/p",
+  popularity: 969
  },
  {
   sku: "cobasi-814890",
@@ -9703,7 +10672,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108546/Racao-Vet-Life-Natural-Mini-Canine-Hypoallergenic-1.webp?v=639168925875800000",
-  productUrl: "https://www.cobasi.com.br/racao-canine-vet-life-hypoallergenic-mini-natural-3814890/p"
+  productUrl: "https://www.cobasi.com.br/racao-canine-vet-life-hypoallergenic-mini-natural-3814890/p",
+  popularity: 970
  },
  {
   sku: "cobasi-813702",
@@ -9713,7 +10683,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083850/Racao-Royal-Canin-Super-Premium-Cat-para-Gatos-Adultos-Beleza-da-Pelagem.webp?v=638924323516370000",
-  productUrl: "https://www.cobasi.com.br/racao-gatos-adulto-beleza-da-pelagem-premium-3813702/p"
+  productUrl: "https://www.cobasi.com.br/racao-gatos-adulto-beleza-da-pelagem-premium-3813702/p",
+  popularity: 971
  },
  {
   sku: "cobasi-813265",
@@ -9723,7 +10694,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza limpa orelhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1060136/surosolve-elanco.png?v=638727433559870000",
-  productUrl: "https://www.cobasi.com.br/locao-surosolve-elanco-3813265/p"
+  productUrl: "https://www.cobasi.com.br/locao-surosolve-elanco-3813265/p",
+  popularity: 972
  },
  {
   sku: "cobasi-805637",
@@ -9733,7 +10705,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1032329/alimento-umido-gran-plus-caes-filhote-frango-100g-frente.jpg?v=638043752255030000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-caes-filhote-frango-100g-3805637/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-gran-plus-caes-filhote-frango-100g-3805637/p",
+  popularity: 973
  },
  {
   sku: "cobasi-804568",
@@ -9743,7 +10716,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108534/Racao-Vet-Life-Natural-Gatos-Urinary-Struvite1.webp?v=639168886944630000",
-  productUrl: "https://www.cobasi.com.br/racao-feline-struvite-natural-vet-life-3804568/p"
+  productUrl: "https://www.cobasi.com.br/racao-feline-struvite-natural-vet-life-3804568/p",
+  popularity: 974
  },
  {
   sku: "cobasi-799548",
@@ -9753,7 +10727,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1108510/Racao Vet Life Natural Obesity e Diabetic Caes Adultos Obesidade 1.webp?v=639168885781630000",
-  productUrl: "https://www.cobasi.com.br/racao-vet-life-canine-obesity-diabetic-natural-3799548/p"
+  productUrl: "https://www.cobasi.com.br/racao-vet-life-canine-obesity-diabetic-natural-3799548/p",
+  popularity: 975
  },
  {
   sku: "cobasi-798886",
@@ -9763,7 +10738,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao medicamentosa",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/316663/Royal-Cannin-Urinary.jpg?v=638926102506900000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-canine-urinary-s-o-3798886/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-canine-urinary-s-o-3798886/p",
+  popularity: 976
  },
  {
   sku: "cobasi-797782",
@@ -9773,7 +10749,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/995091/647950--1-.jpg?v=637925319217800000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-indoor-3797782/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-indoor-3797782/p",
+  popularity: 977
  },
  {
   sku: "cobasi-797022",
@@ -9783,7 +10760,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1062337/alimento-umido-pedigree-sache-carne-ao-molho.png?v=638745498549300000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-pedigree-sache-carne-ao-molho-3797022/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-pedigree-sache-carne-ao-molho-3797022/p",
+  popularity: 978
  },
  {
   sku: "cobasi-796530",
@@ -9793,7 +10771,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao periquito",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/300551/796530-Mistura-para-Passaros-com-Mel-Periquitos-500g.jpg?v=637154070999670000",
-  productUrl: "https://www.cobasi.com.br/mistura-para-passaros-com-mel-periquitos-3796530/p"
+  productUrl: "https://www.cobasi.com.br/mistura-para-passaros-com-mel-periquitos-3796530/p",
+  popularity: 979
  },
  {
   sku: "cobasi-796522",
@@ -9803,7 +10782,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "passaros racao canario",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/300530/796522-Mistura-para-Passaro-Canario-com-Mel-500g.jpg?v=637154726557130000",
-  productUrl: "https://www.cobasi.com.br/mistura-para-passaro-canario-com-mel-3796522/p"
+  productUrl: "https://www.cobasi.com.br/mistura-para-passaro-canario-com-mel-3796522/p",
+  popularity: 980
  },
  {
   sku: "cobasi-795364",
@@ -9813,7 +10793,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1004174/795364--1-.jpg?v=638881211712070000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-junior-3795364/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-mini-junior-3795364/p",
+  popularity: 981
  },
  {
   sku: "cobasi-793450",
@@ -9823,7 +10804,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antibiotico",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/293535/Tobrasyn.jpg?v=638133585550970000",
-  productUrl: "https://www.cobasi.com.br/tobrasyn-colirio-5ml-syntec-3793450/p"
+  productUrl: "https://www.cobasi.com.br/tobrasyn-colirio-5ml-syntec-3793450/p",
+  popularity: 982
  },
  {
   sku: "cobasi-793299",
@@ -9833,7 +10815,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/994478/647918--1-.jpg?v=637921141863670000",
-  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-fit-32-3793299/p"
+  productUrl: "https://www.cobasi.com.br/racao-royal-canin-gatos-fit-32-3793299/p",
+  popularity: 983
  },
  {
   sku: "cobasi-792586",
@@ -9843,7 +10826,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos bifinhos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1092479/JOY_COMBO_FRANGO_65g.jpg?v=638991800271500000",
-  productUrl: "https://www.cobasi.com.br/petisco-bifinho-joy-beef-frango-3792586/p"
+  productUrl: "https://www.cobasi.com.br/petisco-bifinho-joy-beef-frango-3792586/p",
+  popularity: 984
  },
  {
   sku: "cobasi-790648",
@@ -9853,7 +10837,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1106713/racao-golden-mega-para-caes-filhotes-racas-grandes-frango-e-arroz.webp?v=639156755134530000",
-  productUrl: "https://www.cobasi.com.br/racao-golden-mega-para-caes-filhotes-racas-grandes-frango-e-arroz-3790648/p"
+  productUrl: "https://www.cobasi.com.br/racao-golden-mega-para-caes-filhotes-racas-grandes-frango-e-arroz-3790648/p",
+  popularity: 985
  },
  {
   sku: "cobasi-789470",
@@ -9863,7 +10848,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos probioticos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/225721/Untitled-1.jpg?v=638134719000630000",
-  productUrl: "https://www.cobasi.com.br/nutrafases-probiotico-suplemento-alimentar-para-caes-3789470/p"
+  productUrl: "https://www.cobasi.com.br/nutrafases-probiotico-suplemento-alimentar-para-caes-3789470/p",
+  popularity: 986
  },
  {
   sku: "cobasi-781665",
@@ -9873,7 +10859,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao seca",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1083121/Racao-Premier-Selecao-Natural-Caes-Adultos-Racas-Pequenas-Frango-1kg-frente.webp?v=638907990011230000",
-  productUrl: "https://www.cobasi.com.br/racao-selecao-natural-caes-adultos-racas-pequenas-premier-3781665/p"
+  productUrl: "https://www.cobasi.com.br/racao-selecao-natural-caes-adultos-racas-pequenas-premier-3781665/p",
+  popularity: 987
  },
  {
   sku: "cobasi-781509",
@@ -9883,7 +10870,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro higiene e limpeza fraldas e calcinhas",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1097044/fralda-descartavel-super-secao-para-caes-femeas-PP.webp?v=639070320779770000",
-  productUrl: "https://www.cobasi.com.br/fralda-descartavel-para-femeas-supersecao-petix-3781509/p"
+  productUrl: "https://www.cobasi.com.br/fralda-descartavel-para-femeas-supersecao-petix-3781509/p",
+  popularity: 988
  },
  {
   sku: "cobasi-780022",
@@ -9893,7 +10881,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1052563/orelha-bovina-ll-pet-1unidade.png?v=638786090878570000",
-  productUrl: "https://www.cobasi.com.br/orelha-bovina-ll-pet-3780022/p"
+  productUrl: "https://www.cobasi.com.br/orelha-bovina-ll-pet-3780022/p",
+  popularity: 989
  },
  {
   sku: "cobasi-1001604",
@@ -9903,7 +10892,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1082090/Antipulgas-Credeli-225mg-Caes-55-a-11kg-1-comprimido.webp?v=638899140304330000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-credeli-225mg-caes-55-a-11kg-3779318/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-credeli-225mg-caes-55-a-11kg-3779318/p",
+  popularity: 990
  },
  {
   sku: "cobasi-777781",
@@ -9913,7 +10903,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos analgesicos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1058457/Imagem-Medicacao-controlada-Receita.png?v=638550974782700000",
-  productUrl: "https://www.cobasi.com.br/analgesico-cronidor-caes-e-gatos-agener-3777781/p"
+  productUrl: "https://www.cobasi.com.br/analgesico-cronidor-caes-e-gatos-agener-3777781/p",
+  popularity: 991
  },
  {
   sku: "cobasi-776386",
@@ -9923,7 +10914,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981434/7899638312851.jpg?v=638781688432770000",
-  productUrl: "https://www.cobasi.com.br/ossinho-recheado-frango-bona-pet-3776386/p"
+  productUrl: "https://www.cobasi.com.br/ossinho-recheado-frango-bona-pet-3776386/p",
+  popularity: 992
  },
  {
   sku: "cobasi-776343",
@@ -9933,7 +10925,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981431/7899638314459.jpg?v=638772273079570000",
-  productUrl: "https://www.cobasi.com.br/osso-natural-mistao-de-viceras-bovinas-bona-pet-3776343/p"
+  productUrl: "https://www.cobasi.com.br/osso-natural-mistao-de-viceras-bovinas-bona-pet-3776343/p",
+  popularity: 993
  },
  {
   sku: "cobasi-776254",
@@ -9943,7 +10936,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro petiscos ossinhos e petiscos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/981426/7899638312837.jpg?v=638772268131930000",
-  productUrl: "https://www.cobasi.com.br/osso-natural-femur-bona-pet-3776254/p"
+  productUrl: "https://www.cobasi.com.br/osso-natural-femur-bona-pet-3776254/p",
+  popularity: 994
  },
  {
   sku: "cobasi-775487",
@@ -9953,7 +10947,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro racao racao umida",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1076993/Racao Umida Pet Delicia Caes Light.webp?v=638854190609870000",
-  productUrl: "https://www.cobasi.com.br/alimento-umido-frango-com-maca-pet-delicia-3775487/p"
+  productUrl: "https://www.cobasi.com.br/alimento-umido-frango-com-maca-pet-delicia-3775487/p",
+  popularity: 995
  },
  {
   sku: "cobasi-772992",
@@ -9963,7 +10958,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gatos medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057675/chemital-gatos-chemitec-4-comprimidos-frente.png?v=638525907916870000",
-  productUrl: "https://www.cobasi.com.br/chemital-gatos-chemitec-4-comprimidos-3772992/p"
+  productUrl: "https://www.cobasi.com.br/chemital-gatos-chemitec-4-comprimidos-3772992/p",
+  popularity: 996
  },
  {
   sku: "cobasi-772976",
@@ -9973,7 +10969,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos vermifugo",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1057678/chemital-plus-para-caes-com-4-comprimidos-chemitec-embalagem.png?v=638525914206670000",
-  productUrl: "https://www.cobasi.com.br/chemital-plus-para-caes-com-4-comprimidos-chemitec-3772976/p"
+  productUrl: "https://www.cobasi.com.br/chemital-plus-para-caes-com-4-comprimidos-chemitec-3772976/p",
+  popularity: 997
  },
  {
   sku: "cobasi-772330",
@@ -9983,6 +10980,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cachorro medicamentos antipulgas e carrapatos",
   imageUrl: "https://cobasi.vteximg.com.br/arquivos/ids/1101175/NexGard Antipulgas 1 tablete de 25,1 a 50 kg_Frontal.webp?v=639130817083470000",
-  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-25-a-50kg-3772330/p"
+  productUrl: "https://www.cobasi.com.br/antipulgas-e-carrapatos-nexgard-para-caes-de-25-a-50kg-3772330/p",
+  popularity: 998
  }
 ];

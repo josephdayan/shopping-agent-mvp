@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10004396/Jogo-De-Cartas---Pokemon---Box-Colecao-Ilustracao---Parceiro-Inicial---Serie-02---Copag-0.jpg?v=639166274264500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-colecao-ilustracao-parceiro-inicial-serie-02-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-colecao-ilustracao-parceiro-inicial-serie-02-copag/p",
+  popularity: 1
  },
  {
   sku: "rihappy-1003048511",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9755874/Jogo-de-Cartas---Pokemon---ME02----Modelos-Sortidos---Copag--0.jpg?v=639077438122030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-booster-display-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-booster-display-copag/p",
+  popularity: 2
  },
  {
   sku: "rihappy-1003048384",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323680/Jogo-De-Cartas---Pokemon---ME02---Blister-Triplo---Copag-0.jpg?v=638975322964930000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-blister-triplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-blister-triplo-copag/p",
+  popularity: 3
  },
  {
   sku: "rihappy-1003047966",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323834/Jogo-De-Cartas---Pokemon---ME02---Blister-Quadruplo---Copag-0.jpg?v=638975340926870000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-blister-quadruplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me02-blister-quadruplo-copag/p",
+  popularity: 4
  },
  {
   sku: "rihappy-1002816893",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6244175/Boneca-Articulada---Baby-Alive---Brincando-de-Spa-Loira---Hasbro-0.jpg?v=638495018892900000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-baby-alive-brincando-de-spa-loira-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-baby-alive-brincando-de-spa-loira-hasbro/p",
+  popularity: 5
  },
  {
   sku: "rihappy-1002128253",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6406147/Massa-de-Modelar---Play-Doh---Mini-Sorveteria-Divertida-com-2-Cores-de-Massinha---Hasbro-0.jpg?v=638606352461770000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-molelar---play-doh---mini-sorveteria-divertida-com-2-cores-de-massinha---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-molelar---play-doh---mini-sorveteria-divertida-com-2-cores-de-massinha---hasbro/p",
+  popularity: 6
  },
  {
   sku: "rihappy-1003159339",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9909318/Jogo-De-Cartas---Pokemon-TCG---ME04---Blister-Triplo---Copag-0.jpg?v=639147879034570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-me04-blister-triplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-me04-blister-triplo-copag/p",
+  popularity: 7
  },
  {
   sku: "rihappy-1003151978",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis montagem e modelismo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9810882/Mini-Brands---Fill-The-Fridge---Mini-Minis---Refil-Mini-Geladeira---Candide-0.jpg?v=639129081596600000",
-  productUrl: "https://www.rihappy.com.br/mini-brands-fill-the-fridge-mini-minis-refil-mini-geladeira-candide/p"
+  productUrl: "https://www.rihappy.com.br/mini-brands-fill-the-fridge-mini-minis-refil-mini-geladeira-candide/p",
+  popularity: 8
  },
  {
   sku: "rihappy-1003150376",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10009506/Jogo-De-Cartas---Monopoly---FIFA---Copa-Do-Mundo---Booster-Pack---Hasbro-0.jpg?v=639159124318600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-monopoly-fifa-copa-do-mundo-booster-pack-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-monopoly-fifa-copa-do-mundo-booster-pack-hasbro/p",
+  popularity: 9
  },
  {
   sku: "rihappy-1003139840",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749683/Jogo-De-Cartas---Pokemon---Box---Colecao-Parceiros-Iniciais-ME25---Copag-0.jpg?v=639075381098500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-pin-collection-me25-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-pin-collection-me25-copag/p",
+  popularity: 10
  },
  {
   sku: "rihappy-1003139809",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9913372/Jogo-de-Cartas---Pokemon---ME03---Blister-Unitario---Copag---Modelos-Unitarios-Sortidos-0.jpg?v=639143854287670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-unitario-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-unitario-copag/p",
+  popularity: 11
  },
  {
   sku: "rihappy-1003139157",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10036651/Jogo-De-Cartas---Pokemon---Box---Pokemon-Day-2026---Copag-0.jpg?v=639174763716200000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-pokemon-day-2026-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-pokemon-day-2026-copag/p",
+  popularity: 12
  },
  {
   sku: "rihappy-1003109693",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9476344/Jogo-De-Cartas---Pokemon---Mega-Kangaskhan-Ex----Copag-0.jpg?v=638998105068530000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-kangaskhan-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-kangaskhan-ex-copag/p",
+  popularity: 13
  },
  {
   sku: "rihappy-1003047964",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323711/Jogo-De-Cartas---Pokemon---Mega-Lucario-Ex---Copag-0.jpg?v=638975327254030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-lucario-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-lucario-ex-copag/p",
+  popularity: 14
  },
  {
   sku: "rihappy-1002942246",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7127674/LEGO---Ninjago---Traje-de-Meca-de-Batalha-do-Zane---71827-0.jpg?v=638703048532800000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-traje-de-meca-de-batalha-do-zane-71827/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-traje-de-meca-de-batalha-do-zane-71827/p",
+  popularity: 15
  },
  {
   sku: "rihappy-1002800242",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545640/Conjunto-de-Massa-de-Modelar---Play-Doh---Smoothies-Coloridos---Playset---5-Potes---Hasbro-0.jpg?v=638623645318830000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-playdoh-smoothies-coloridos-playset-5-potes-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-playdoh-smoothies-coloridos-playset-5-potes-hasbro/p",
+  popularity: 16
  },
  {
   sku: "rihappy-1002126315",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6414532/Massa-de-Molelar---Play-Doh---Mini-Kit-Brincando-de-Dentista---Hasbro-0.jpg?v=638610497824500000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-molelar---play-doh---mini-kit-brincando-de-dentista---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-molelar---play-doh---mini-kit-brincando-de-dentista---hasbro/p",
+  popularity: 17
  },
  {
   sku: "rihappy-1002103479",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6765712/Massinha-de-Modelar---Play-Doh---Pet-Shop---Veterinario---Hasbro-0.jpg?v=638639515078500000",
-  productUrl: "https://www.rihappy.com.br/play-doh-massinha-pet-shop-play-doh-amarelo-05-potes-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/play-doh-massinha-pet-shop-play-doh-amarelo-05-potes-hasbro/p",
+  popularity: 18
  },
  {
   sku: "rihappy-1002095905",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6413408/Balde-Primeiros-Blocos---Fisher-Price---20cm---10-Blocos-0.jpg?v=638610070483470000",
-  productUrl: "https://www.rihappy.com.br/balde-primeiros-blocos-fisher-price-20cm-10-blocos/p"
+  productUrl: "https://www.rihappy.com.br/balde-primeiros-blocos-fisher-price-20cm-10-blocos/p",
+  popularity: 19
  },
  {
   sku: "rihappy-100150106",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao cara a cara",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/346281/Jogo-Cara-a-Cara-2018---Estrela.jpg?v=636555978748130000",
-  productUrl: "https://www.rihappy.com.br/jogo-cara-a-cara-2018-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-cara-a-cara-2018-estrela/p",
+  popularity: 20
  },
  {
   sku: "rihappy-100110518",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1317329/Jogo-Detetive-com-App---Estrela_Frente.jpg?v=637539374373670000",
-  productUrl: "https://www.rihappy.com.br/jogo-detetive-com-app-estrela-100000084-copy-100110860-/p"
+  productUrl: "https://www.rihappy.com.br/jogo-detetive-com-app-estrela-100000084-copy-100110860-/p",
+  popularity: 21
  },
  {
   sku: "rihappy-100103329",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/387299/Jogo-Eu-Sou-Cartas-Novas---Jogo-com-App_Frente.jpg?v=636963804923670000",
-  productUrl: "https://www.rihappy.com.br/jogo-eu-sou-novas-cartas-e-app-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-eu-sou-novas-cartas-e-app-estrela/p",
+  popularity: 22
  },
  {
   sku: "rihappy-100000085",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/219948/17060_1.jpg?v=634804788155270000",
-  productUrl: "https://www.rihappy.com.br/jogo-pula-macaco-estrela-100000085/p"
+  productUrl: "https://www.rihappy.com.br/jogo-pula-macaco-estrela-100000085/p",
+  popularity: 23
  },
  {
   sku: "rihappy-1003156075",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985586/Jogo-De-Cartas---Pokemon---ME04---Blister-Unitario---Copag-0.jpg?v=639150470863000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-blister-unitario-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-blister-unitario-copag/p",
+  popularity: 24
  },
  {
   sku: "rihappy-1003151979",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis montagem e modelismo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9911538/-Geladeira---Mini-Brands---Fill-The-Fridge---Mini-Minis---Candide-0.jpg?v=639131498781700000",
-  productUrl: "https://www.rihappy.com.br/geladeira-mini-brands-fill-the-fridge-mini-minis-candide/p"
+  productUrl: "https://www.rihappy.com.br/geladeira-mini-brands-fill-the-fridge-mini-minis-candide/p",
+  popularity: 25
  },
  {
   sku: "rihappy-1003150653",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9789112/Sylvanian-Families---Serie-Dos-Bebes-Com-Fantasias-De-Fadas-Do-Bosque---Surpresa---Epoch-0.jpg?v=639088357341970000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-serie-dos-bebes-com-fantasias-de-fadas-do-bosque-surpresa-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-serie-dos-bebes-com-fantasias-de-fadas-do-bosque-surpresa-epoch/p",
+  popularity: 26
  },
  {
   sku: "rihappy-1003150375",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9781436/Jogo-De-Tabuleiro---Monopoly---FIFA---Copa-Do-Mundo---Hasbro-0.jpg?v=639114478876730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-fifa-copa-do-mundo-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-fifa-copa-do-mundo-hasbro/p",
+  popularity: 27
  },
  {
   sku: "rihappy-1003137045",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520560/LEGO---Sonic---Sonic--Speedster-Lightning---77117-0.jpg?v=639010520682270000",
-  productUrl: "https://www.rihappy.com.br/lego-sonic-sonic-speedster-lightning-77117/p"
+  productUrl: "https://www.rihappy.com.br/lego-sonic-sonic-speedster-lightning-77117/p",
+  popularity: 28
  },
  {
   sku: "rihappy-1003109695",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9476346/Jogo-de-Cartas---Pokemon---Box-Premium-Ex---Copag--0.jpg?v=638998107075700000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-premium-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-premium-ex-copag/p",
+  popularity: 29
  },
  {
   sku: "rihappy-1003055606",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9972361/Jogo-De-Acao---Tapalavras---Multikids-0.jpg?v=639142095059170000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapalavras-multikids/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapalavras-multikids/p",
+  popularity: 30
  },
  {
   sku: "rihappy-1003051273",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8389117/Carro-De-Corrida---Hot-Whells---Sprint-1-24-Rc---2-Canais---Vermelho-0.jpg?v=638863723830000000",
-  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-sprint-124-rc-2-canais-vermelho/p"
+  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-sprint-124-rc-2-canais-vermelho/p",
+  popularity: 31
  },
  {
   sku: "rihappy-1003049168",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8775351/Jogo-De-Acao---Chave-Magica---Hot-Wheels---Elka-0.jpg?v=638914117899830000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-chave-magica-hot-wheels-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-chave-magica-hot-wheels-elka/p",
+  popularity: 32
  },
  {
   sku: "rihappy-1003048510",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323837/Jogo-de-Cartas---Blister-Unitario---ME02---Pokemon---Copag-0.jpg?v=638975342646230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-blister-unitario-me02-pokemon-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-blister-unitario-me02-pokemon-copag/p",
+  popularity: 33
  },
  {
   sku: "rihappy-1003047453",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9095117/Jogo-De-Cartas---Pokemon---ME01---Blister-Quadruplo---Copag-0.jpg?v=638945147262170000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me01-blister-quadruplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me01-blister-quadruplo-copag/p",
+  popularity: 34
  },
  {
   sku: "rihappy-1003045878",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8360668/Jogo-De-Tabuleiro---Monopoly---Pokemon---Hasbro-0.jpg?v=638900910672470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-pokemon-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-pokemon-hasbro/p",
+  popularity: 35
  },
  {
   sku: "rihappy-1003002974",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738590/Boneca-Articulada---Emilly-Vick---Rosa---Novabrink-0.jpg?v=639071096259530000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-emilly-vick-rosa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-emilly-vick-rosa-novabrink/p",
+  popularity: 36
  },
  {
   sku: "rihappy-1002996212",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8078661/Boneca---Baby-Alive---Festinha-do-Cha---Loira---Hasbro-0.jpg?v=638787638082700000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-festinha-do-cha-loira-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-festinha-do-cha-loira-hasbro/p",
+  popularity: 37
  },
  {
   sku: "rihappy-1002991579",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7859804/Jogo-de-Raciocinio-Logico---Jogo-Senha---Grow-0.jpg?v=638774929866230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-raciocinio-logico-jogo-senha-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-raciocinio-logico-jogo-senha-grow/p",
+  popularity: 38
  },
  {
   sku: "rihappy-1002969951",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9983296/Jogo-de-Tabuleiro---Mercado-da-Bola---Nig-Brinquedos-0.jpg?v=639147081876230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-mercado-da-bola-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-mercado-da-bola-nig-brinquedos/p",
+  popularity: 39
  },
  {
   sku: "rihappy-1002969253",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056917/LEGO---Speed-Champions---Carro-de-Corrida-Ferrari-SF-24-F1---77242-0.jpg?v=638942367416500000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-ferrari-sf24-f1-77242/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-ferrari-sf24-f1-77242/p",
+  popularity: 40
  },
  {
   sku: "rihappy-1002959277",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7224606/Boneca-Bebe-com-Acessorios---Baby-Alive---Festa-do-Cha-Borbulhante---Hasbro-0.jpg?v=638727358664130000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-festa-do-cha-borbulhante-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-festa-do-cha-borbulhante-hasbro/p",
+  popularity: 41
  },
  {
   sku: "rihappy-1002946484",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7181943/Pista-de-Percurso---Hot-Wheels---T-Rex-X---Quartel-de-Bombeiros---Mattel-0.jpg?v=638721159615970000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-trex-x-quartel-de-bombeiros-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-trex-x-quartel-de-bombeiros-mattel/p",
+  popularity: 42
  },
  {
   sku: "rihappy-1002941206",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7113999/LEGO---Super-Heroes-Marvel---Robo-do-Homem-Aranha-vs-Anti-Venom---76308-0.jpg?v=638696984803500000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-homemaranha-vs-antivenom-76308/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-homemaranha-vs-antivenom-76308/p",
+  popularity: 43
  },
  {
   sku: "rihappy-1002940917",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114937/LEGO---Minecraft---A-Batalha-de-Lava-no-Nether---21266-0.jpg?v=638697008252770000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-batalha-de-lava-no-nether-21266/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-batalha-de-lava-no-nether-21266/p",
+  popularity: 44
  },
  {
   sku: "rihappy-1002836835",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056769/Figura-Interativa---Senhor-Cabeca-De-Batata---Hasbro-0.jpg?v=638942340165800000",
-  productUrl: "https://www.rihappy.com.br/figura-interativa-senhor-cabeca-de-batata-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-interativa-senhor-cabeca-de-batata-hasbro/p",
+  popularity: 45
  },
  {
   sku: "rihappy-1002828559",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545506/Boneca-Bebe---Baby-Alive---Pequenos-sonhos---Dottie-Doodle---Hasbro-0.jpg?v=638623621624200000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-pequenos-sonhos-dottie-doodle-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-pequenos-sonhos-dottie-doodle-hasbro/p",
+  popularity: 46
  },
  {
   sku: "rihappy-1002814531",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6233969/Jogo-da-Memoria---Patrulha-Canina---24-Pares---Elka-0.jpg?v=638479304217330000",
-  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-patrulha-canina-24-pares-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-patrulha-canina-24-pares-elka/p",
+  popularity: 47
  },
  {
   sku: "rihappy-1002800281",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7158408/Carrinho-com-Controle-Remoto---Marvel---Homem-Aranha---Autoracing---Candide-0.jpg?v=638717857677200000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-marvel-homemaranha-autoracing-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-marvel-homemaranha-autoracing-candide/p",
+  popularity: 48
  },
  {
   sku: "rihappy-1002800279",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152203/Carrinho-com-Controle-Remoto---Batman---Smart-Driver---Candide-0.jpg?v=638436026360000000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-batman-smart-driver-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-batman-smart-driver-candide/p",
+  popularity: 49
  },
  {
   sku: "rihappy-1002800274",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152140/Carrinho-com-Controle-Remoto---Batman---Autoracing---Candide-0.jpg?v=638436015055200000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-batman-autoracing-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-batman-autoracing-candide/p",
+  popularity: 50
  },
  {
   sku: "rihappy-1002797584",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7295130/Boneca-E-Acessorios---Baby-Alive---Swimmer---Roxo---Hasbro-0.jpg?v=638735848478730000",
-  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-baby-alive-swimmer-roxo-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-baby-alive-swimmer-roxo-hasbro/p",
+  popularity: 51
  },
  {
   sku: "rihappy-1002795607",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545470/Boneca-Bebe---Baby-Alive---Sophia-Sparkle---Bolhas-Magicas---Hasbro-0.jpg?v=638623619630500000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-sophia-sparkle-bolhas-magicas-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-sophia-sparkle-bolhas-magicas-hasbro/p",
+  popularity: 52
  },
  {
   sku: "rihappy-1002787682",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6470664/Jogo-de-Cartas---UNO---Show--Em-No-Mercy---Mattel-0.jpg?v=638620960020430000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-show-em-no-mercy-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-show-em-no-mercy-mattel/p",
+  popularity: 53
  },
  {
   sku: "rihappy-1002759110",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6120818/Jogo-de-Tabuleiro---Bloqueio---Preto---Grow-0.jpg?v=638417163868400000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-bloqueio-preto-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-bloqueio-preto-grow/p",
+  popularity: 54
  },
  {
   sku: "rihappy-1002722741",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5757713/Jogo-Educativo---O-Show-da-Luna---Laboratorio-Criativo---Nig-Brinquedos-0.jpg?v=638206250317000000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-o-show-da-luna-laboratorio-criativo-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-o-show-da-luna-laboratorio-criativo-nig-brinquedos/p",
+  popularity: 55
  },
  {
   sku: "rihappy-1002722253",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos bingo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5756458/Jogo-Classico---Bingo---48-Cartelas---Nig-Brinquedos-0.jpg?v=638204627084730000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-bingo-48-cartelas-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-bingo-48-cartelas-nig-brinquedos/p",
+  popularity: 56
  },
  {
   sku: "rihappy-1002718993",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro banco imobiliario",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5993500/Jogo-de-Tabuleiro---Banco-Imobiliario---Estrela-0.jpg?v=638350514803630000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-banco-imobiliario-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-banco-imobiliario-estrela/p",
+  popularity: 57
  },
  {
   sku: "rihappy-1002697771",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7243929/LEGO-Creator---Unicornio-Magico-3-em-1---31140-0.jpg?v=638730590708830000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-unicornio-magico-3-em-1-31140/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-unicornio-magico-3-em-1-31140/p",
+  popularity: 58
  },
  {
   sku: "rihappy-1002692998",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas dobble",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8036302/Jogo-de-Cartas---Dobble---Eco-sleeve---Galapagos-0.jpg?v=638784394668530000",
-  productUrl: "https://www.rihappy.com.br/dobble-ecosleeve-jogo-de-cartas-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/dobble-ecosleeve-jogo-de-cartas-galapagos/p",
+  popularity: 59
  },
  {
   sku: "rihappy-1002685911",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6490109/Sylvanian-Families---Conjunto-A-Primeira-Casa---Epoch-0.jpg?v=638621170514730000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-a-primeira-casa-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-a-primeira-casa-epoch/p",
+  popularity: 60
  },
  {
   sku: "rihappy-1002633157",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6992030/Boneca-Articulada---Barbie---Dreamtopia---Sereias---Modelo-Unitario-Sortido---Mattel-0.jpg?v=638679126693170000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-dreamtopia-boneca-sereias-barbie-colorido-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-dreamtopia-boneca-sereias-barbie-colorido-mattel/p",
+  popularity: 61
  },
  {
   sku: "rihappy-100466969",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogo da vida",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1636489/jogo-da-vida-nova-embalagem-estrela-100466969_Frente.jpg?v=637647381629200000",
-  productUrl: "https://www.rihappy.com.br/jogo-da-vida-nova-embalagem-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-da-vida-nova-embalagem-estrela/p",
+  popularity: 62
  },
  {
   sku: "rihappy-100421004",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6413002/Volante---Fom-Fom---Elka-0.jpg?v=638610017749830000",
-  productUrl: "https://www.rihappy.com.br/volante-fom-fom-elka/p"
+  productUrl: "https://www.rihappy.com.br/volante-fom-fom-elka/p",
+  popularity: 63
  },
  {
   sku: "rihappy-100329918",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6304864/Barbie-Estate---Pet-Shop-0.jpg?v=638536210342870000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-pet-shop-animais-de-estimacao-grg90-1001928884/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-pet-shop-animais-de-estimacao-grg90-1001928884/p",
+  popularity: 64
  },
  {
   sku: "rihappy-100326062",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6441948/Lancador-De-Dardos---Nerf---Elite-20---Commander---Hasbro-0.jpg?v=638612471956470000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-commander-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-commander-hasbro/p",
+  popularity: 65
  },
  {
   sku: "rihappy-100326061",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores nerf",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4718787/Lancador-De-Dardos---Nerf---Elite-20---Volt-SD-1---Hasbro-0.jpg?v=637987785059870000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-volt-sd-1-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-volt-sd-1-hasbro/p",
+  popularity: 66
  },
  {
   sku: "rihappy-100270346",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6047696/Boneco-Articulado---Marvel---Olympus-Thor---Hasbro-0.jpg?v=638369663303570000",
-  productUrl: "https://www.rihappy.com.br/figura-acao---24-cm---disney---marvel---avengers---thor---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-acao---24-cm---disney---marvel---avengers---thor---hasbro/p",
+  popularity: 67
  },
  {
   sku: "rihappy-100270288",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6047700/Figura-de-Acao---24-Cm---Disney---Marvel---Avenges---Homem-Aranha---Hasbro-0.jpg?v=638369664618970000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-24-cm-disney-marvel-avenges-homem-aranha-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-24-cm-disney-marvel-avenges-homem-aranha-hasbro/p",
+  popularity: 68
  },
  {
   sku: "rihappy-100002050",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4124363/100002050_1.jpg?v=637919391828170000",
-  productUrl: "https://www.rihappy.com.br/girafa-com-blocos-fisher-price-1001807749/p"
+  productUrl: "https://www.rihappy.com.br/girafa-com-blocos-fisher-price-1001807749/p",
+  popularity: 69
  },
  {
   sku: "rihappy-100184971",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4912807/100184971_1.jpg?v=638018919603830000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-homem-aranha-titan-hero-series-1001776851/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-homem-aranha-titan-hero-series-1001776851/p",
+  popularity: 70
  },
  {
   sku: "rihappy-100175575",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6052388/Conjunto-Aplicador-de-Micangas---Cabelos-Estilosos---FanFun-0.jpg?v=638374088082870000",
-  productUrl: "https://www.rihappy.com.br/conjunto-aplicador-de-micangas-cabelos-estilosos-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-aplicador-de-micangas-cabelos-estilosos-fanfun/p",
+  popularity: 71
  },
  {
   sku: "rihappy-100174252",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6256984/Conjunto-de-Massinhas---Play-Doh---Moldes-de-Numeros---Hasbro-0.jpg?v=638503415502330000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-play-doh-moldes-de-numeros-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-play-doh-moldes-de-numeros-hasbro/p",
+  popularity: 72
  },
  {
   sku: "rihappy-100154823",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3760841/100154823_1.jpg?v=637893173603400000",
-  productUrl: "https://www.rihappy.com.br/lego-classic-maleta-criativa-10713/p"
+  productUrl: "https://www.rihappy.com.br/lego-classic-maleta-criativa-10713/p",
+  popularity: 73
  },
  {
   sku: "rihappy-100134015",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6415885/Pelucia---Patrulha-Canina---Skye---30-cm---Sunny-0.jpg?v=638610510588730000",
-  productUrl: "https://www.rihappy.com.br/pelucia-20-cm-patrulha-canina-skye-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-20-cm-patrulha-canina-skye-sunny/p",
+  popularity: 74
  },
  {
   sku: "rihappy-100001810",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/338641/Carrinho-Hot-Wheels---Veiculos-Basicos--unidade----Mattel.jpg?v=636408161306030000",
-  productUrl: "https://www.rihappy.com.br/hot-wheels-veiculos-basicos-unidade-100001810/p"
+  productUrl: "https://www.rihappy.com.br/hot-wheels-veiculos-basicos-unidade-100001810/p",
+  popularity: 75
  },
  {
   sku: "rihappy-100000093",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/210570/30090.jpg?v=634804658008000000",
-  productUrl: "https://www.rihappy.com.br/jogo-identidade-secreta-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-identidade-secreta-grow/p",
+  popularity: 76
  },
  {
   sku: "rihappy-100000061",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/210538/13757.jpg?v=634804657420800000",
-  productUrl: "https://www.rihappy.com.br/jogo-puxa-puxa-batatinha-100000061/p"
+  productUrl: "https://www.rihappy.com.br/jogo-puxa-puxa-batatinha-100000061/p",
+  popularity: 77
  },
  {
   sku: "rihappy-1003156081",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9988852/Jogo-De-Cartas---Pokemon---ME04---Combo-Booster---Copag-0.jpg?v=639150472906600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-combo-booster-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-combo-booster-copag/p",
+  popularity: 78
  },
  {
   sku: "rihappy-1003156078",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985593/Jogo-De-Cartas---Pokemon---ME04---Box---Colecao-Mega-Zygarde-EX---Copag-0.jpg?v=639150473833330000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-box-colecao-mega-zygarde-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-box-colecao-mega-zygarde-ex-copag/p",
+  popularity: 79
  },
  {
   sku: "rihappy-1003156076",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985624/Jogo-De-Cartas---Pokemon---ME04---Treinador-Avancado---Copag-0.jpg?v=639150472163730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-treinador-avancado-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-treinador-avancado-copag/p",
+  popularity: 80
  },
  {
   sku: "rihappy-1003156001",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977087/Boneca-Musical---Dos-Rosa---Emilly-Vick---Novabrink-0.jpg?v=639143703403930000",
-  productUrl: "https://www.rihappy.com.br/boneca-musical-dos-rosa-emilly-vick-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-musical-dos-rosa-emilly-vick-novabrink/p",
+  popularity: 81
  },
  {
   sku: "rihappy-1003151993",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985302/Boneco-Articulado---Disney---Pixar---Toy-Story-5---Modelos-Unitarios---Sortidos---Mattel-0.jpg?v=639147943758270000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-disney-pixar-toy-story-5-modelos-unitarios-soritdos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-disney-pixar-toy-story-5-modelos-unitarios-soritdos-mattel/p",
+  popularity: 82
  },
  {
   sku: "rihappy-1003143748",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9661319/Boneca---Barbie---Color-Reveal---Sereia-Surpresa---Modelos-Sortidos---Mattel-0.jpg?v=639050389870600000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-color-reveal-sereia-surpresa-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-color-reveal-sereia-surpresa-modelos-sortidos-mattel/p",
+  popularity: 83
  },
  {
   sku: "rihappy-1003140112",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria album de figurinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10007700/Box-Caixa-Premium---Fifa---Copa-Do-Mundo-2026---Album-Capa-Dura-Ouro-Com-350-Figurinhas---Panini-0.jpg?v=639166927682130000",
-  productUrl: "https://www.rihappy.com.br/fifa-copa-do-mundo-2026-box-caixa-premium-com-cinta/p"
+  productUrl: "https://www.rihappy.com.br/fifa-copa-do-mundo-2026-box-caixa-premium-com-cinta/p",
+  popularity: 84
  },
  {
   sku: "rihappy-1003139680",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9776456/Jogo-De-Cartas---Pokemon---ME03---Blister-Triplo---Copag-0.jpg?v=639102468993900000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-triplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-triplo-copag/p",
+  popularity: 85
  },
  {
   sku: "rihappy-1003139614",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9662489/Quebra-Cabeca---Guerreiras-Do-K-Pop---200-Pecas---Grow-0.jpg?v=639050490759830000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-guerreiras-do-kpop-200-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-guerreiras-do-kpop-200-pecas-grow/p",
+  popularity: 86
  },
  {
   sku: "rihappy-1003138104",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9546206/Jogo-De-Acao---Perfil-8---Grow--0.jpg?v=639016607327800000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-perfil-8-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-perfil-8-grow/p",
+  popularity: 87
  },
  {
   sku: "rihappy-1003137234",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520258/LEGO---Disney---Speed-Champions---Relampago-Mcqueen---77255-0.jpg?v=639010518869170000",
-  productUrl: "https://www.rihappy.com.br/lego-disney-speed-champions-relampago-mcqueen-77255/p"
+  productUrl: "https://www.rihappy.com.br/lego-disney-speed-champions-relampago-mcqueen-77255/p",
+  popularity: 88
  },
  {
   sku: "rihappy-1003137121",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520308/LEGO---Super-Heroes-Marvel---Homem-Aranha-Vs-Motoqueiro-Fantasma---76335-0.jpg?v=639010519062730000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homemaranha-vs-motoqueiro-fantasma-76335/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homemaranha-vs-motoqueiro-fantasma-76335/p",
+  popularity: 89
  },
  {
   sku: "rihappy-1003137061",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520445/LEGO---Spidey---Spidey-Em-Sua-Motocicleta-Vs-Rhino---11206-0.jpg?v=639010520269530000",
-  productUrl: "https://www.rihappy.com.br/lego-spidey-spidey-em-sua-motocicleta-vs-rhino-11206/p"
+  productUrl: "https://www.rihappy.com.br/lego-spidey-spidey-em-sua-motocicleta-vs-rhino-11206/p",
+  popularity: 90
  },
  {
   sku: "rihappy-1003136909",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520538/LEGO---Ninjago---Pack-De-Combate-Dragao-Meca-Do-Kai---71851-0.jpg?v=639010520602130000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-pack-de-combate-dragao-meca-do-kai-71851/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-pack-de-combate-dragao-meca-do-kai-71851/p",
+  popularity: 91
  },
  {
   sku: "rihappy-1003051265",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9118730/Jogo-de-Cartas---Pokemon---Box-Greninja---Kingdra-Ex---Copag-0.jpg?v=638948496969830000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-greninja--kingdra-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-greninja--kingdra-ex-copag/p",
+  popularity: 92
  },
  {
   sku: "rihappy-1003047707",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8499652/Brinquedo-Interativo---Minimi---Casinha-Pets---Modelos-Sortidos---Jxp-Brink-0.jpg?v=638881157566900000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-casinha-pets-modelos-sortidos-jxp-brink/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-casinha-pets-modelos-sortidos-jxp-brink/p",
+  popularity: 93
  },
  {
   sku: "rihappy-1003047706",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8499649/Brinquedo-Interativo---Minimi---Centopeia-Pula-Pula---Modelos-Sortidos---Jxp-Brink-0.jpg?v=638881157507870000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-centopeia-pula-pula-modelos-sortidos-jxp-brink/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-centopeia-pula-pula-modelos-sortidos-jxp-brink/p",
+  popularity: 94
  },
  {
   sku: "rihappy-1003047106",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8356353/Carrinho-De-Controle-Remoto---Sprint---Hot-Wheels---2-Canais---Multikids-0.jpg?v=638850895168830000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-sprint-hot-wheels-2-canais-multikids/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-sprint-hot-wheels-2-canais-multikids/p",
+  popularity: 95
  },
  {
   sku: "rihappy-1003046904",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9277021/Pista-De-Percurso---Hot-Wheels---Loja-De-Doces---City---Mattel-0.jpg?v=638966767552370000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-loja-de-doces-city-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-loja-de-doces-city-mattel/p",
+  popularity: 96
  },
  {
   sku: "rihappy-1003046894",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8351843/LEGO---Ninjago---Corrida-de-Motocicleta-Veloz-do-Kai---71838-0.jpg?v=638848292511100000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-corrida-de-motocicleta-veloz-do-kai-71838/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-corrida-de-motocicleta-veloz-do-kai-71838/p",
+  popularity: 97
  },
  {
   sku: "rihappy-1003046398",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8352476/Boneca---Baby-Alive---Vitamina-Doce---Gigi----Hasbro-0.jpg?v=638848430576230000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-vitamina-doce-gigi-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-vitamina-doce-gigi-hasbro/p",
+  popularity: 98
  },
  {
   sku: "rihappy-1003044980",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8346654/LEGO---Speed-Champions---Honda-S2000-de-2-Fast-2-Furious---77241-0.jpg?v=638846678806870000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-honda-s2000-de-2-fast-2-furious-77241/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-honda-s2000-de-2-fast-2-furious-77241/p",
+  popularity: 99
  },
  {
   sku: "rihappy-1003044977",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8346704/LEGO---Minecraft---O-Encontro-com-o-Guarda---21274-0.jpg?v=638846683679570000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-encontro-com-o-guarda-21274/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-encontro-com-o-guarda-21274/p",
+  popularity: 100
  },
  {
   sku: "rihappy-1003025496",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8280523/Boneca-Articulada---Barbie---Bailarina---Mattel-0.jpg?v=638835151819800000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-bailarina-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-bailarina-mattel/p",
+  popularity: 101
  },
  {
   sku: "rihappy-1003015586",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8360968/Jogo-Dia-De-Compras---Disney---Toy-Story---Nig-0.jpg?v=638852503400630000",
-  productUrl: "https://www.rihappy.com.br/jogo-dia-de-compras-disney-toy-story-nig/p"
+  productUrl: "https://www.rihappy.com.br/jogo-dia-de-compras-disney-toy-story-nig/p",
+  popularity: 102
  },
  {
   sku: "rihappy-1003013414",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8348537/Cards-Pokemon---Blister-Quadruplo---EV10---Modelos-Sortidos---Copag-0.jpg?v=638847212988900000",
-  productUrl: "https://www.rihappy.com.br/cards-pokemon-blister-quadruplo-ev10-kangaskhan-copag/p"
+  productUrl: "https://www.rihappy.com.br/cards-pokemon-blister-quadruplo-ev10-kangaskhan-copag/p",
+  popularity: 103
  },
  {
   sku: "rihappy-1003009821",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9522319/Figura-de-Acao---Jurassic-World---Dinossauro-Rebirth---Modelos-Sortidos---Mattel-0.jpg?v=639010849689170000",
-  productUrl: "https://www.rihappy.com.br/jurassic-world-dinossauro-de-brinquedo-rebirth-de-12-mattel-jgc04/p"
+  productUrl: "https://www.rihappy.com.br/jurassic-world-dinossauro-de-brinquedo-rebirth-de-12-mattel-jgc04/p",
+  popularity: 104
  },
  {
   sku: "rihappy-1002999968",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8366646/Beyblade---Conjunto-Inicial---Modelos-Sortidos---Hasbro-0.jpg?v=638854341232670000",
-  productUrl: "https://www.rihappy.com.br/beyblade-x-courage-dran-s-660v-cx-conjunto-inicial-g1677al00-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/beyblade-x-courage-dran-s-660v-cx-conjunto-inicial-g1677al00-hasbro/p",
+  popularity: 105
  },
  {
   sku: "rihappy-1002997935",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8108036/Boneca-com-Acessorios---Baby-Alive---Vitamina-Doce---Hasbro-0.jpg?v=638791075916130000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-vitamina-doce-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-vitamina-doce-hasbro/p",
+  popularity: 106
  },
  {
   sku: "rihappy-1002994937",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8049701/Conjunto-de-Artes---2-Mini-Pelucia---Surpresa---Para-Pintar---Airbrush---Fun-0.jpg?v=638785288665170000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-2-mini-pelucia-surpresa-para-pintar-airbrush-fun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-2-mini-pelucia-surpresa-para-pintar-airbrush-fun/p",
+  popularity: 107
  },
  {
   sku: "rihappy-1002989797",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7841550/Figura-de-Acao---Dinossauro---Tina-Rex---Papa-Tudo---Elka-0.jpg?v=638773917495930000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-dinossauro-tina-rex-papa-tudo-elka/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-dinossauro-tina-rex-papa-tudo-elka/p",
+  popularity: 108
  },
  {
   sku: "rihappy-1002975598",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de anatomia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7532585/Jogo-de-Anatomia---Operando---A-partir-de-01-Jogador---Hasbro-0.jpg?v=638760927621300000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-anatomia-operando-a-partir-de-01-jogador-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-anatomia-operando-a-partir-de-01-jogador-hasbro/p",
+  popularity: 109
  },
  {
   sku: "rihappy-1002969261",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9052789/LEGO---Speed-Champions---Carro-de-Corrida-Oracle-Red-Bull-Racing-RB20-F1---77243-0.jpg?v=638941678990030000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-oracle-red-bull-racing-rb20-f1-77243/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-oracle-red-bull-racing-rb20-f1-77243/p",
+  popularity: 110
  },
  {
   sku: "rihappy-1002950739",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7196518/Pista-de-Percurso---Hot-Wheels---Desafio-Turbina-de-Acao---Mattel-0.jpg?v=638724639241100000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-desafio-turbina-de-acao-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-desafio-turbina-de-acao-mattel/p",
+  popularity: 111
  },
  {
   sku: "rihappy-1002941205",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114689/LEGO---Super-Heroes-Marvel---Robo-do-Homem-de-Ferro-vs-Ultron---76307-0.jpg?v=638697003483770000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-homem-de-ferro-vs-ultron-76307/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-homem-de-ferro-vs-ultron-76307/p",
+  popularity: 112
  },
  {
   sku: "rihappy-1002941138",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114889/LEGO---LEGO-Creator---Animais-Selvagens--Aranha-Surpreendente---31159-0.jpg?v=638697007602330000",
-  productUrl: "https://www.rihappy.com.br/lego-lego-creator-animais-selvagens-aranha-surpreendente-31159/p"
+  productUrl: "https://www.rihappy.com.br/lego-lego-creator-animais-selvagens-aranha-surpreendente-31159/p",
+  popularity: 113
  },
  {
   sku: "rihappy-1002941006",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7113955/LEGO---Minecraft---A-Patrulha-de-Illagers-no-Deserto---21267-0.jpg?v=638696984418770000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-patrulha-de-illagers-no-deserto-21267/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-patrulha-de-illagers-no-deserto-21267/p",
+  popularity: 114
  },
  {
   sku: "rihappy-1002846014",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6974140/Boneca-Articulada---Disney-Princesas---Moana-2---Mattel-0.jpg?v=638677864942470000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-mini-bonecos-dc-super-friends-serie-1-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-mini-bonecos-dc-super-friends-serie-1-mattel/p",
+  popularity: 115
  },
  {
   sku: "rihappy-1002843633",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6384999/Brinquedo-Educativo---Fisher-Price---Esquadrao-Musical---Raposa-0.jpg?v=638597552401100000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-fisher-price-esquadrao-musical-raposa/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-fisher-price-esquadrao-musical-raposa/p",
+  popularity: 116
  },
  {
   sku: "rihappy-1002843289",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6389304/Conjunto-De-Pintura---Patrulha-Canina---Skye---Elka-0.jpg?v=638598620968800000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-patrulha-canina-skye-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-patrulha-canina-skye-elka/p",
+  popularity: 117
  },
  {
   sku: "rihappy-1002835443",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6341563/Boneca---Baby-Alive---Minha-Melhor-Amiga---Sophia-Sparkle---Hasbro-0.jpg?v=638554448280070000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-minha-melhor-amiga-sophia-sparkle-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-minha-melhor-amiga-sophia-sparkle-hasbro/p",
+  popularity: 118
  },
  {
   sku: "rihappy-1002828686",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6914087/Boneca-Articulada---Disney---Frozen-I-e-II---Elsa-e-Anna---Modelos-Sortidos---Mattel--0.jpg?v=638665923008530000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-frozen-i-e-ii-elsa-e-anna-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-frozen-i-e-ii-elsa-e-anna-surpresa-mattel/p",
+  popularity: 119
  },
  {
   sku: "rihappy-1002828606",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10017053/Boneco-de-Acao---Woody---Com-Som---Toy-Story---Toyng--0.jpg?v=639166109936200000",
-  productUrl: "https://www.rihappy.com.br/boneco-de-acao-woody-com-som-toy-story-toyng/p"
+  productUrl: "https://www.rihappy.com.br/boneco-de-acao-woody-com-som-toy-story-toyng/p",
+  popularity: 120
  },
  {
   sku: "rihappy-1002818641",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6256896/Jogo-de-Perguntas-e-Respostas---Inventa-ou-Responde---Manual-do-Mundo---Nig-Brinquedos-0.jpg?v=638503363930570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-perguntas-e-respostas-inventa-ou-responde-manual-do-mundo-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-perguntas-e-respostas-inventa-ou-responde-manual-do-mundo-nig-brinquedos/p",
+  popularity: 121
  },
  {
   sku: "rihappy-1002813035",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8727241/Figura-com-Acessorio---Disney-Pixar---Toy-Story---Buzz-Lightyear-com-Foguete---Mattel-0.jpg?v=638908882678600000",
-  productUrl: "https://www.rihappy.com.br/figura-com-acessorio-disney-pixar-toy-story-buzz-lightyear-com-foguete-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-com-acessorio-disney-pixar-toy-story-buzz-lightyear-com-foguete-mattel/p",
+  popularity: 122
  },
  {
   sku: "rihappy-1002807204",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7251377/Lego---Harry-Potter---Ford-Anglia-Voador---76424-0.jpg?v=638731655023000000",
-  productUrl: "https://www.rihappy.com.br/lego-harry-potter-ford-anglia-voador-76424/p"
+  productUrl: "https://www.rihappy.com.br/lego-harry-potter-ford-anglia-voador-76424/p",
+  popularity: 123
  },
  {
   sku: "rihappy-1002800273",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152123/Carrinho-com-Controle-Remoto---Homem-Aranha---Smart-Driver---Candide-0.jpg?v=638436013727570000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-homemaranha-smart-driver-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-homemaranha-smart-driver-candide/p",
+  popularity: 124
  },
  {
   sku: "rihappy-1002793308",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7434015/Boneca-Articulada-com-Acessorio---Barbie-Profissoes---Modelos-Unitarios-Sortidos---Mattel-0.jpg?v=638750553649300000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-com-acessorio-barbie-profissoes-jogadora-de-volei-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-com-acessorio-barbie-profissoes-jogadora-de-volei-mattel/p",
+  popularity: 125
  },
  {
   sku: "rihappy-1002788704",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545483/Boneca-Bebe-com-Acessorios---Baby-Alive---Bebe-Shampoo---Harper-Hugs-Loira---Hasbro-0.jpg?v=638623620389070000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-bebe-shampoo-harper-hugs-loira-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-bebe-shampoo-harper-hugs-loira-hasbro/p",
+  popularity: 126
  },
  {
   sku: "rihappy-1002787887",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6103370/Conjunto-De-Boneca-E-Acessorios---Barbie---Piscina---Mattel-0.jpg?v=638412933345130000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-boneca-e-acessorios-barbie-piscina-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-boneca-e-acessorios-barbie-piscina-mattel/p",
+  popularity: 127
  },
  {
   sku: "rihappy-1002787753",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7244798/Conjunto-de-Pista-e-Carrinho---Hot-Wheels-City---Ataque-da-Cobra---Mattel-0.jpg?v=638730757451970000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinho-hot-wheels-city-ataque-da-cobra-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinho-hot-wheels-city-ataque-da-cobra-mattel/p",
+  popularity: 128
  },
  {
   sku: "rihappy-1002787199",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6142747/Conjunto-De-Pista-E-Carrinhos---Hot-Wheels---Giro-Veloz---Mattel-0.jpg?v=638429117680570000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinhos-hot-wheels-giro-veloz-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinhos-hot-wheels-giro-veloz-mattel/p",
+  popularity: 129
  },
  {
   sku: "rihappy-1002767370",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5993696/Conjunto-Musical---Disney---Frozen---Boombox-Karaoke---Candide-0.jpg?v=638350599089670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-musical-disney-frozen-boombox-karaoke-candide/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-musical-disney-frozen-boombox-karaoke-candide/p",
+  popularity: 130
  },
  {
   sku: "rihappy-1002759880",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5959350/Jogo-Educativo---Meu-Primeiro-Domino---Madera---Toyster-0.jpg?v=638343542846600000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-meu-primeiro-domino-madera-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-meu-primeiro-domino-madera-toyster/p",
+  popularity: 131
  },
  {
   sku: "rihappy-1002756629",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5944280/Boneco-de-Pano---Woody---Com-Som---Toy-Story---Toyng-0.jpg?v=638332491065330000",
-  productUrl: "https://www.rihappy.com.br/boneco-de-pano-woody-com-som-toy-story-toyng/p"
+  productUrl: "https://www.rihappy.com.br/boneco-de-pano-woody-com-som-toy-story-toyng/p",
+  popularity: 132
  },
  {
   sku: "rihappy-1002750567",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6240706/Brinquedo-Musical---Patrulha-Canina---Boombox-Karaoke---Candide-0.jpg?v=638489724761130000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-musical-patrulha-canina-boombox-karaoke-candide/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-musical-patrulha-canina-boombox-karaoke-candide/p",
+  popularity: 133
  },
  {
   sku: "rihappy-1002749529",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro war",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5904211/jogo-de-tabuleiro--war-o-jogo-da-estrategia-grow_frente.jpg?v=638308073173030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro--war-o-jogo-da-estrategia-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro--war-o-jogo-da-estrategia-grow/p",
+  popularity: 134
  },
  {
   sku: "rihappy-1002732102",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5822792/Brinquedo-Didatico---Baby-Land---Mipuxa---Cardoso-0.jpg?v=638258194312200000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-didatico-baby-land-mipuxa-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-didatico-baby-land-mipuxa-cardoso/p",
+  popularity: 135
  },
  {
   sku: "rihappy-1002731188",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9040762/Pelucia---Serie-Bluey---Modelos-Sortidos---Candide-0.jpg?v=638939077832800000",
-  productUrl: "https://www.rihappy.com.br/pelucia-serie-bluey-modelos-sortidos-candide/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-serie-bluey-modelos-sortidos-candide/p",
+  popularity: 136
  },
  {
   sku: "rihappy-1002602708",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5885227/Jogo-de-Tabuleiro---Formula-Turbo---Grow-0.jpg?v=638303208949630000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-formula-turbo-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-formula-turbo-grow/p",
+  popularity: 137
  },
  {
   sku: "rihappy-1002428094",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4219703/Playset-e-Mini-Veiculo---Hot-Wheels---City---Lava-Rapido-Mega-Tower---Mattel-0.jpg?v=637929084227830000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-veiculo-hot-wheels-city-lava-rapido-mega-tower-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-veiculo-hot-wheels-city-lava-rapido-mega-tower-mattel/p",
+  popularity: 138
  },
  {
   sku: "rihappy-1002413426",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4126989/Jogo-Tira-Varetas---Nickelodeon---Patrulha-Canina---2-a-4-Jogadores---Elka-0.jpg?v=637919587885400000",
-  productUrl: "https://www.rihappy.com.br/jogo-tira-varetas-nickelodeon-patrulha-canina-2-a-4-jogadores-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-tira-varetas-nickelodeon-patrulha-canina-2-a-4-jogadores-elka/p",
+  popularity: 139
  },
  {
   sku: "rihappy-1002401603",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6417814/Andador---Totokinha---Cardoso----Azul-0.jpg?v=638610563872170000",
-  productUrl: "https://www.rihappy.com.br/mini-veiculo-totokinha-azul-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/mini-veiculo-totokinha-azul-cardoso/p",
+  popularity: 140
  },
  {
   sku: "rihappy-1002376756",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores nerf",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6786880/Lancador-de-Agua---Nerf-Super-Soaker---Torrent---Capacidade-236ml---Hasbro-0.jpg?v=638641840218830000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-agua-nerf-super-soaker-torrent-capacidade-236ml-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-agua-nerf-super-soaker-torrent-capacidade-236ml-hasbro/p",
+  popularity: 141
  },
  {
   sku: "rihappy-1002374820",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4425532/Jogo-Tira-Varetas---Marvel---Avengers---Com-Bolinhas---2-a-4-Jogadores---Elka-0.jpg?v=637940229987300000",
-  productUrl: "https://www.rihappy.com.br/jogo-tira-varetas-marvel-avengers-com-bolinhas-2-a-4-jogadores-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-tira-varetas-marvel-avengers-com-bolinhas-2-a-4-jogadores-elka/p",
+  popularity: 142
  },
  {
   sku: "rihappy-1002330031",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5722116/Brinquedo-de-Encaixe---Topi-Escolar---Cardoso---Cores-Sortidas-0.jpg?v=638186284036900000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-encaixe---topi-escolar---cardoso/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-encaixe---topi-escolar---cardoso/p",
+  popularity: 143
  },
  {
   sku: "rihappy-1002126307",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6765734/Massa-de-Modelar---Play-Doh---Barbearia-de-massinha-e-acessorios---Hasbro-0.jpg?v=638639517608900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-barbearia-de-massinha-e-acessorios-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-barbearia-de-massinha-e-acessorios-hasbro/p",
+  popularity: 144
  },
  {
   sku: "rihappy-1002111906",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6765804/Boneco-Articulado---Disney---Marvel---Amazing-Friends---Homem-Aranha---Hasbro-0.jpg?v=638639552792270000",
-  productUrl: "https://www.rihappy.com.br/marvel-spider-man-figura-saf-supersized-spidey-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/marvel-spider-man-figura-saf-supersized-spidey-hasbro/p",
+  popularity: 145
  },
  {
   sku: "rihappy-100550964",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446409/Quebra-Cabeca---Barbie---60-Pecas---23cm-x-31cm---Grow-0.jpg?v=638870752297600000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-barbie-60-pecas-23cm-x-31cm-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-barbie-60-pecas-23cm-x-31cm-grow/p",
+  popularity: 146
  },
  {
   sku: "rihappy-100451995",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao imagem e acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6373965/jogo-imagem-e-acao-junior-448-pecas-grow_frente.jpg?v=638581373857330000",
-  productUrl: "https://www.rihappy.com.br/jogo-imagem-e-acao-junior-448-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-imagem-e-acao-junior-448-pecas-grow/p",
+  popularity: 147
  },
  {
   sku: "rihappy-100429098",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6786626/Jogo---Qual-E-A-Palavra---Grow-0.jpg?v=638641831416730000",
-  productUrl: "https://www.rihappy.com.br/jogo-qual-e-a-palavra---grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-qual-e-a-palavra---grow/p",
+  popularity: 148
  },
  {
   sku: "rihappy-100421006",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6002104/Bate-Rebate---Minhoquinhas---Martelinho---Elka-frente.jpg?v=638357579243400000",
-  productUrl: "https://www.rihappy.com.br/bate-rebate---minhoquinhas---martelinho---elka/p"
+  productUrl: "https://www.rihappy.com.br/bate-rebate---minhoquinhas---martelinho---elka/p",
+  popularity: 149
  },
  {
   sku: "rihappy-100411316",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9114454/Laptop---Patrulha-Canina---Bilingue---Modelos-Sortidos---Candide-0.jpg?v=638947694655270000",
-  productUrl: "https://www.rihappy.com.br/laptop-do-paw-patrol-bilingue-pawpatrol-candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-do-paw-patrol-bilingue-pawpatrol-candide/p",
+  popularity: 150
  },
  {
   sku: "rihappy-100327827",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9092811/Conjunto-Massinha---Play-Doh---Brincando-de-Dentista---Hasbro-0.jpg?v=638945084359700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-brincando-de-dentista-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-brincando-de-dentista-hasbro/p",
+  popularity: 151
  },
  {
   sku: "rihappy-100305699",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6242042/Boneco---Marvel---Hulk---Hasbro-0.jpg?v=638490455299470000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-olympus-hulk-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-olympus-hulk-hasbro/p",
+  popularity: 152
  },
  {
   sku: "rihappy-100296804",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro banco imobiliario",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6744894/jogo-super-banco-imobiliario-nova-edicao-estrela_frente.jpg?v=638635781242900000",
-  productUrl: "https://www.rihappy.com.br/jogo-super-banco-imobiliario-nova-edicao-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-super-banco-imobiliario-nova-edicao-estrela/p",
+  popularity: 153
  },
  {
   sku: "rihappy-100271457",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6288358/Figura-de-Acao---Disney---Marvel---Avengers---Capitao-America---Hasbro-0.jpg?v=638527755570970000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao---24-cm---disney---marvel---avengers---capitao-america---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao---24-cm---disney---marvel---avengers---capitao-america---hasbro/p",
+  popularity: 154
  },
  {
   sku: "rihappy-100270356",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6288350/Figura-Acao---Disney---Marvel---Avengers---Miles-Morales---Hasbro-0.jpg?v=638527750689770000",
-  productUrl: "https://www.rihappy.com.br/figura-acao-24-cm-disney-marvel-avengers-miles-morales-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-acao-24-cm-disney-marvel-avengers-miles-morales-hasbro/p",
+  popularity: 155
  },
  {
   sku: "rihappy-100270263",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5952217/Figura-de-Acao---24-Cm---Disney---Marvel---Avengers---Homem-de-Ferro---Hasbro-0.jpg?v=638337634381600000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-24-cm-disney-marvel-avengers-homem-de-ferro-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-24-cm-disney-marvel-avengers-homem-de-ferro-hasbro/p",
+  popularity: 156
  },
  {
   sku: "rihappy-100266232",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5915416/Laptop-de-Atividades---Barbie---Bilingue---Candide-0.jpg?v=638314424634600000",
-  productUrl: "https://www.rihappy.com.br/laptop-de-atividades-barbie-bilingue-candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-de-atividades-barbie-bilingue-candide/p",
+  popularity: 157
  },
  {
   sku: "rihappy-100223719",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9666341/Boneco-Articulado---28-Cm---Jp---Novabrink-0.jpg?v=639052283545530000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-28-cm-jp-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-28-cm-jp-novabrink/p",
+  popularity: 158
  },
  {
   sku: "rihappy-100223706",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9666327/Boneca-Articulada---Maria-Clara---24-cm---Novabrink-0.jpg?v=639052280138230000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-21-cm-maria-clara-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-21-cm-maria-clara-novabrink/p",
+  popularity: 159
  },
  {
   sku: "rihappy-100222379",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5904171/Bumbo---Patrulha-Canina---Elka-0.jpg?v=638307729974970000",
-  productUrl: "https://www.rihappy.com.br/bumbo-patrulha-canina-elka/p"
+  productUrl: "https://www.rihappy.com.br/bumbo-patrulha-canina-elka/p",
+  popularity: 160
  },
  {
   sku: "rihappy-100186357",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7258809/Conjunto-de-Acessorios---Pulseiras-e-Micangas---Art-Bijoux---FanFun-0.jpg?v=638732479488670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-art-bijoux-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-art-bijoux-fanfun/p",
+  popularity: 161
  },
  {
   sku: "rihappy-100161645",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6121989/Veiculo-Die-Cast---Hot-Wheels---Escala-1-64---Monster-Trucks---Sortidos---Mattel-0.jpg?v=638418740141270000",
-  productUrl: "https://www.rihappy.com.br/veiculo-die-cast-hot-wheels-1-64-monster-trucks-v8-bomber-mattel/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-die-cast-hot-wheels-1-64-monster-trucks-v8-bomber-mattel/p",
+  popularity: 162
  },
  {
   sku: "rihappy-100159594",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5615142/Conjunto-de-Veiculos---Hot-Wheels---Pacote-com-10-Carros---Surpresa---Mattel-0.jpg?v=638149153690670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-pacote-com-10-carros-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-pacote-com-10-carros-surpresa-mattel/p",
+  popularity: 163
  },
  {
   sku: "rihappy-100158887",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/367995/jogo-de-tabuleiro-hamburgueria-maluca-grow-3574_Frente.jpg?v=636789215443500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-hamburgueria-maluca-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-hamburgueria-maluca-grow/p",
+  popularity: 164
  },
  {
   sku: "rihappy-100155002",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6122219/Jogo-de-Tabuleiro---Geomundo---Grow-0.jpg?v=638418984099400000",
-  productUrl: "https://www.rihappy.com.br/jogo-geomundo-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-geomundo-grow/p",
+  popularity: 165
  },
  {
   sku: "rihappy-100154187",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8428356/Carrinhos---Hot-Wheels---Pacote-com-5-Carros---Sortidos---Mattel-0.jpg?v=638866491682470000",
-  productUrl: "https://www.rihappy.com.br/hot-wheels-pacote-5-carros-flames-mattel/p"
+  productUrl: "https://www.rihappy.com.br/hot-wheels-pacote-5-carros-flames-mattel/p",
+  popularity: 166
  },
  {
   sku: "rihappy-100152139",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5740602/Jogo---Flat-Ball---Air-Soccer---Multikids_frente.jpg?v=638197507190730000",
-  productUrl: "https://www.rihappy.com.br/jogo-flat-ball-air-soccer-multikids/p"
+  productUrl: "https://www.rihappy.com.br/jogo-flat-ball-air-soccer-multikids/p",
+  popularity: 167
  },
  {
   sku: "rihappy-100147957",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7043153/Pista-de-Percurso-Com-Carrinho---Hot-Wheels---Lancador-de-Bolso---Modelos-Sortidos---Mattel-0.jpg?v=638681800729370000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-veiculos-hot-wheels-azul-mattel/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-veiculos-hot-wheels-azul-mattel/p",
+  popularity: 168
  },
  {
   sku: "rihappy-100143556",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro banco imobiliario",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3526703/100143556_1.jpg?v=637887783829130000",
-  productUrl: "https://www.rihappy.com.br/jogo-banco-imobiliario-junior-2017-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-banco-imobiliario-junior-2017-estrela/p",
+  popularity: 169
  },
  {
   sku: "rihappy-100137590",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/332649/jogo-tapa-certo-animais-estrela-1201609200045_Embalagem.jpg?v=636328755523370000",
-  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-animais-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-animais-estrela/p",
+  popularity: 170
  },
  {
   sku: "rihappy-100127366",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9360465/Figura-de-Acao---Dino-Papa-Tudo---Elka-0.jpg?v=638984825599700000",
-  productUrl: "https://www.rihappy.com.br/dino-papa-tudo-elka/p"
+  productUrl: "https://www.rihappy.com.br/dino-papa-tudo-elka/p",
+  popularity: 171
  },
  {
   sku: "rihappy-100122609",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/309885/100122609-Carrinho-de-Controle-Remoto---Spider-Flip---Marvel---Spider-Man---Candide.jpg?v=636033171713370000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-spider-flip-marvel-spider-man-candide-5048161/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-spider-flip-marvel-spider-man-candide-5048161/p",
+  popularity: 172
  },
  {
   sku: "rihappy-100121554",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3119100/Pelucia-Patrulha-Canina---30cm---Chase---Sunny-0.jpg?v=637872053928230000",
-  productUrl: "https://www.rihappy.com.br/pelucia-patrulha-canina-30cm-chase-sunny-5047015/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-patrulha-canina-30cm-chase-sunny-5047015/p",
+  popularity: 173
  },
  {
   sku: "rihappy-100109004",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3156919/100109004_2.jpg?v=637873805394530000",
-  productUrl: "https://www.rihappy.com.br/blocos-surpresa-zebra-fisher-price-5038884/p"
+  productUrl: "https://www.rihappy.com.br/blocos-surpresa-zebra-fisher-price-5038884/p",
+  popularity: 174
  },
  {
   sku: "rihappy-100107280",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5376632/Boneca-Minnie-Patinadora-com-Sons---Elka---Disney-0.jpg?v=638094981711070000",
-  productUrl: "https://www.rihappy.com.br/boneca-minnie-patinadora-com-sons-elka-5036856/p"
+  productUrl: "https://www.rihappy.com.br/boneca-minnie-patinadora-com-sons-elka-5036856/p",
+  popularity: 175
  },
  {
   sku: "rihappy-100103790",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3142615/100103790_1.jpg?v=637873272227530000",
-  productUrl: "https://www.rihappy.com.br/lego-classic-caixa-media-de-pecas-criativas-10696/p"
+  productUrl: "https://www.rihappy.com.br/lego-classic-caixa-media-de-pecas-criativas-10696/p",
+  popularity: 176
  },
  {
   sku: "rihappy-100072737",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6122078/Jogo-de-Tabuleiro---Lince---Grow-0.jpg?v=638418864936900000",
-  productUrl: "https://www.rihappy.com.br/jogo-lince-grow-34657/p"
+  productUrl: "https://www.rihappy.com.br/jogo-lince-grow-34657/p",
+  popularity: 177
  },
  {
   sku: "rihappy-100002091",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/212578/762008.jpg?v=634804688947370000",
-  productUrl: "https://www.rihappy.com.br/fisher-price-brilliant-basics-potinhos-empilhar-rolar-w4472-100002091/p"
+  productUrl: "https://www.rihappy.com.br/fisher-price-brilliant-basics-potinhos-empilhar-rolar-w4472-100002091/p",
+  popularity: 178
  },
  {
   sku: "rihappy-100000057",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/317872/Caixa-Encaixa-Estrela-Baby-1001104000005-Frente.jpg?v=636093841476430000",
-  productUrl: "https://www.rihappy.com.br/pim-pam-pum-caixa-encaixa-100000057/p"
+  productUrl: "https://www.rihappy.com.br/pim-pam-pum-caixa-encaixa-100000057/p",
+  popularity: 179
  },
  {
   sku: "rihappy-100000048",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos kit de jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4135111/100000048_1.jpg?v=637921257852070000",
-  productUrl: "https://www.rihappy.com.br/jogo-cilada-estrela-tabuleiro-estrela-100000048/p"
+  productUrl: "https://www.rihappy.com.br/jogo-cilada-estrela-tabuleiro-estrela-100000048/p",
+  popularity: 180
  },
  {
   sku: "rihappy-90047052",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6977101/boneca-barbie-fashion-and-beauty-modelos-sortidos-mattel_frente.jpg?v=638678226132970000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-fashion-and-beauty-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-fashion-and-beauty-modelos-sortidos-mattel/p",
+  popularity: 181
  },
  {
   sku: "rihappy-1003172748",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9990982/Jogo-De-Cartas---Hitster--Lado-B---Asmodee-0.jpg?v=639149664257600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-hitster-lado-b-asmodee/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-hitster-lado-b-asmodee/p",
+  popularity: 182
  },
  {
   sku: "rihappy-1003156753",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9871211/Jogo-De-Cartas---Pokemon---Deck-Mega-Lucario-EX---Copag-0.jpg?v=639147879737000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-mega-lucario-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-mega-lucario-ex-copag/p",
+  popularity: 183
  },
  {
   sku: "rihappy-1003156074",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985591/Jogo-De-Cartas---Pokemon---ME04---Blister-Quadruplo---Copag-0.jpg?v=639150471763370000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-blister-quadruplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me04-blister-quadruplo-copag/p",
+  popularity: 184
  },
  {
   sku: "rihappy-1003155998",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977093/Boneca-musical---Katlen---Dos-Rosa---Novabrink--0.jpg?v=639143703888430000",
-  productUrl: "https://www.rihappy.com.br/boneca-musical-katlen-dos-rosa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-musical-katlen-dos-rosa-novabrink/p",
+  popularity: 185
  },
  {
   sku: "rihappy-1003152913",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes slimes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9821100/Conjunto-De-Acessorios---Fabrica-Faca-Seu-Squishy---Fun-0.jpg?v=639099576193000000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-fabrica-faca-seu-squishy-fun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-fabrica-faca-seu-squishy-fun/p",
+  popularity: 186
  },
  {
   sku: "rihappy-1003152480",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9819399/Jogo-De-Acao---Tira-Varetas---Marvel---Homem-Aranha---Elka-0.jpg?v=639098674338170000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-marvel-homemaranha-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-marvel-homemaranha-elka/p",
+  popularity: 187
  },
  {
   sku: "rihappy-1003150734",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9789054/Jogo-De-Cartas---Pokemon-TCG---Pokemon-Day---2026-Collection---Ingles---Galapagos-0.jpg?v=639088349389670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-pokemon-day-2026-collection-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-pokemon-day-2026-collection-ingles-galapagos/p",
+  popularity: 188
  },
  {
   sku: "rihappy-1003147188",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722122/Pista-De-Percurso---Hot-Wheels---City---Downtown---Mattel---Modelos-Unitarios-Sortidos-0.jpg?v=639065003981730000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-city-downtown-mattel-modelos-unitarios-sortidos/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-city-downtown-mattel-modelos-unitarios-sortidos/p",
+  popularity: 189
  },
  {
   sku: "rihappy-1003142874",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9640749/Jogo-De-Cartas---Pokemon-TCG---Mega-Charizard-Tin---Ingles---Galapagos-0.jpg?v=639045158276270000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-mega-charizard-tin-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-mega-charizard-tin-ingles-galapagos/p",
+  popularity: 190
  },
  {
   sku: "rihappy-1003142755",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9632773/Pokemon---TCG---Poke-Ball-Tin--Q4-2025----Ingles---Galapagos-0.jpg?v=639041856038270000",
-  productUrl: "https://www.rihappy.com.br/pokemon-tcg-poke-ball-tin-q4-2025-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/pokemon-tcg-poke-ball-tin-q4-2025-ingles-galapagos/p",
+  popularity: 191
  },
  {
   sku: "rihappy-1003140115",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria album de figurinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9846027/Conjunto-Com-Figurinhas---Fifa---Copa-Do-Mundo---2026---12-Envelopes---Panini-0.jpg?v=639106745116900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-com-figurinhas-fifa-copa-do-mundo-2026-12-envelopes-panini/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-com-figurinhas-fifa-copa-do-mundo-2026-12-envelopes-panini/p",
+  popularity: 192
  },
  {
   sku: "rihappy-1003140114",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria album de figurinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9846030/Envelopes-De-Figurinha---Fifa---Copa-Do-Mundo---2026---Panini-0.jpg?v=639106745088670000",
-  productUrl: "https://www.rihappy.com.br/envelopes-de-figurinha-fifa-copa-do-mundo-2026-panini/p"
+  productUrl: "https://www.rihappy.com.br/envelopes-de-figurinha-fifa-copa-do-mundo-2026-panini/p",
+  popularity: 193
  },
  {
   sku: "rihappy-1003139729",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9913377/Jogo-De-Cartas---Pokemon---ME03---Blister-Quadruplo---Copag-0.jpg?v=639143855702830000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-quadruplo-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me03-blister-quadruplo-copag/p",
+  popularity: 194
  },
  {
   sku: "rihappy-1003137934",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9542678/LEGO---Speed-Champions---Maquina-do-Tempo-De-Volta-Para-O-Futuro---77256-0.jpg?v=639015781342100000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-maquina-do-tempo-de-volta-para-o-futuro-77256/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-maquina-do-tempo-de-volta-para-o-futuro-77256/p",
+  popularity: 195
  },
  {
   sku: "rihappy-1003137827",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9535075/LEGO---Minecraft---Aventura-do-Steve-na-Taiga---21583-0.jpg?v=639014069927900000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-aventura-do-steve-na-taiga-21583/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-aventura-do-steve-na-taiga-21583/p",
+  popularity: 196
  },
  {
   sku: "rihappy-1003137235",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520356/LEGO---City-Great-Vehicles---Supercarro-Eletrico---60486-0.jpg?v=639010519981030000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-supercarro-eletrico-60486/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-supercarro-eletrico-60486/p",
+  popularity: 197
  },
  {
   sku: "rihappy-1003137232",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520194/LEGO---Minecraft---O-Jardim-Palido---21586-0.jpg?v=639010518710500000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-jardim-palido-21586/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-jardim-palido-21586/p",
+  popularity: 198
  },
  {
   sku: "rihappy-1003113040",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9322335/Boneca-Articulada---Ana-Castela---Novabrink-0.jpg?v=638975128541600000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-ana-castela-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-ana-castela-novabrink/p",
+  popularity: 199
  },
  {
   sku: "rihappy-1003112388",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323885/Jogo-De-Acao---Batalha-Dos-Copos---Dos-Rosa---Nig-0.jpg?v=638975357085200000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-batalha-dos-copos-dos-rosa-nig/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-batalha-dos-copos-dos-rosa-nig/p",
+  popularity: 200
  },
  {
   sku: "rihappy-1003051164",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8517076/Andador---Aprenda-Comigo-Amigo-Macaco---Fisher-Price-0.jpg?v=638884439620230000",
-  productUrl: "https://www.rihappy.com.br/andador-aprenda-comigo-amigo-macaco-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/andador-aprenda-comigo-amigo-macaco-fisherprice/p",
+  popularity: 201
  },
  {
   sku: "rihappy-1003048585",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372761/LEGO---Ninjago---Duelo-De-Carros-De-Corrida-De-Rogue-Vs-Drix---71840-0.jpg?v=638856936833600000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-duelo-de-carros-de-corrida-de-rogue-vs-drix-71840/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-duelo-de-carros-de-corrida-de-rogue-vs-drix-71840/p",
+  popularity: 202
  },
  {
   sku: "rihappy-1003047962",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9341427/Jogo-De-Cartas---Pokemon---Mega-Latias-Ex---Copag-0.jpg?v=638979651107500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-latias-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-mega-latias-ex-copag/p",
+  popularity: 203
  },
  {
   sku: "rihappy-1003047770",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8366047/Playset-E-Mini-Figura---Little-Live-Pets-Mama-Surprise-Families---Casinha---Fun-0.jpg?v=638854252287800000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-figura-little-live-pets-mama-surprise-families-casinha-fun/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-figura-little-live-pets-mama-surprise-families-casinha-fun/p",
+  popularity: 204
  },
  {
   sku: "rihappy-1003047708",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8499655/Brinquedo-Interativo---Minimi---Croco-Ball---Modelos-Sortidos---Jxp-Brink-0.jpg?v=638881157653230000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-croco-ball-modelos-sortidos-jxp-brink/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-minimi-croco-ball-modelos-sortidos-jxp-brink/p",
+  popularity: 205
  },
  {
   sku: "rihappy-1003047426",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9095134/Jogo-De-Cartas---Blister-Unitario--ME01---Pokemon---Copag-0.jpg?v=638945147859900000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-blister-unitario-me01-pokemon-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-blister-unitario-me01-pokemon-copag/p",
+  popularity: 206
  },
  {
   sku: "rihappy-1003047096",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8359547/Boneca---Baby-Alive---Bebe-Cresce---Lala---Hasbro-0.jpg?v=638931059001670000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-bebe-cresce-lala-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-bebe-cresce-lala-hasbro/p",
+  popularity: 207
  },
  {
   sku: "rihappy-1003046901",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9277045/Boneca-Articulada---Barbie---Sereia-Com-Transformacao-De-Flor---Cabelo-Rosa---Mattel-0.jpg?v=638966778213130000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-sereia-com-transformacao-de-flor-cabelo-rosa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-sereia-com-transformacao-de-flor-cabelo-rosa-mattel/p",
+  popularity: 208
  },
  {
   sku: "rihappy-1003046007",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8352647/Boneca---Barbie---Pop-Reveal---Doces-Surpresa---Mattel-0.jpg?v=638848445203430000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-pop-reveal-doces-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-pop-reveal-doces-surpresa-mattel/p",
+  popularity: 209
  },
  {
   sku: "rihappy-1003044299",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8342265/Projetor-De-Desenhos---Barbie---Rosa---Multikids-0.jpg?v=639192888250070000",
-  productUrl: "https://www.rihappy.com.br/projetor-de-desenhos-barbie-rosa-multikids/p"
+  productUrl: "https://www.rihappy.com.br/projetor-de-desenhos-barbie-rosa-multikids/p",
+  popularity: 210
  },
  {
   sku: "rihappy-1003016060",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9094161/Lego---Bluey---Diversao-No-Parquinho-Com-Bluey-E-Chloe---11201-0.jpg?v=638945122577770000",
-  productUrl: "https://www.rihappy.com.br/lego-bluey-diversao-no-parquinho-com-bluey-e-chloe-11201/p"
+  productUrl: "https://www.rihappy.com.br/lego-bluey-diversao-no-parquinho-com-bluey-e-chloe-11201/p",
+  popularity: 211
  },
  {
   sku: "rihappy-1003015536",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8360834/Conjunto-De-Pinturas---Disney---Princesas---Nig-0.jpg?v=638852494410030000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-disney-princesas-nig/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-disney-princesas-nig/p",
+  popularity: 212
  },
  {
   sku: "rihappy-1003002977",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738587/Boneca-Articulada---katlen---Roxo---Novabrink-0.jpg?v=639071095820030000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-katlen-roxo-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-katlen-roxo-novabrink/p",
+  popularity: 213
  },
  {
   sku: "rihappy-1003000593",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "beleza e perfumaria maquiagem kits de maquiagem",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9345104/Maleta-de-maquiagem---Glam---Barbie---Rosa---Multikids-0.jpg?v=638980607194270000",
-  productUrl: "https://www.rihappy.com.br/maleta-de-maquiagem-glam-barbie-rosa-multikids/p"
+  productUrl: "https://www.rihappy.com.br/maleta-de-maquiagem-glam-barbie-rosa-multikids/p",
+  popularity: 214
  },
  {
   sku: "rihappy-1002997953",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9249890/Conjunto-de-Massinhas---Play-Doh---8-potes---Hasbro-0.jpg?v=638959844829770000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-playdoh-8-potes-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-playdoh-8-potes-hasbro/p",
+  popularity: 215
  },
  {
   sku: "rihappy-1002996063",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8078651/Boneca-Bebe---Baby-Alive-Dia-no-Spa-Cabelo-Preto---Hasbro-0.jpg?v=638787636798300000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-dia-no-spa-cabelo-preto-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-dia-no-spa-cabelo-preto-hasbro/p",
+  popularity: 216
  },
  {
   sku: "rihappy-1002992102",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7872663/Conjunto-de-Pintura---Bluey-e-Bingo---Elka-0.jpg?v=638775629236700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-bluey-e-bingo-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-bluey-e-bingo-elka/p",
+  popularity: 217
  },
  {
   sku: "rihappy-1002969196",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7465064/Jogo-de-Tabuleiro---Monopoly---De-02-a-06-Jogadores---Hasbro-0.jpg?v=638754243179670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-de-02-a-06-jogadores-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-de-02-a-06-jogadores-hasbro/p",
+  popularity: 218
  },
  {
   sku: "rihappy-1002968486",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9369415/LEGO---Recruitment-Bags---Mini-Monster-Truck-Conversivel---30691-0.jpg?v=638986447959870000",
-  productUrl: "https://www.rihappy.com.br/lego-recruitment-bags-mini-monster-truck-conversivel-30691/p"
+  productUrl: "https://www.rihappy.com.br/lego-recruitment-bags-mini-monster-truck-conversivel-30691/p",
+  popularity: 219
  },
  {
   sku: "rihappy-1002968482",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8342464/Lousa-Magica-Magnetica---Desenha-Comigo---Sortida---Fisher-Price-0.jpg?v=638845885307630000",
-  productUrl: "https://www.rihappy.com.br/lousa-magica-magnetica-fisher-price-desenha-comigo-gatinho-marrom/p"
+  productUrl: "https://www.rihappy.com.br/lousa-magica-magnetica-fisher-price-desenha-comigo-gatinho-marrom/p",
+  popularity: 220
  },
  {
   sku: "rihappy-1002966944",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7412671/Boneca-Articulada---Disney---Girar-e-Revelar---Frozen---Anna---Mattel-0.jpg?v=638748765465900000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-girar-e-revelar-frozen-anna-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-girar-e-revelar-frozen-anna-mattel/p",
+  popularity: 221
  },
  {
   sku: "rihappy-1002965148",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7303122/Jogo-de-Cartas---Coup---2a-Edicao---Grok-Games-0.jpg?v=638736670922230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-coup-2-edicao-grok-games/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-coup-2-edicao-grok-games/p",
+  popularity: 222
  },
  {
   sku: "rihappy-1002944808",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9178359/Pelucia---Aprender-e-Brincar---Irma-do-Cachorrinho---Aprende-Comigo---Fisher-Price-0.jpg?v=638951203006800000",
-  productUrl: "https://www.rihappy.com.br/pelucia-aprender-e-brincar-irma-do-cachorrinho-aprende-comigo-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-aprender-e-brincar-irma-do-cachorrinho-aprende-comigo-fisherprice/p",
+  popularity: 223
  },
  {
   sku: "rihappy-1002944271",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7167387/Pista-de-Percurso---Hot-Wheels---City---Super-Delegacia-de-Policia---Mattel-0.jpg?v=638718735308530000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-city-super-delegacia-de-policia-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-city-super-delegacia-de-policia-mattel/p",
+  popularity: 224
  },
  {
   sku: "rihappy-1002942248",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7127750/LEGO---Sonic---Batalha-na-Fogueira-do-Sonic---77001-0.jpg?v=638703051521070000",
-  productUrl: "https://www.rihappy.com.br/lego-sonic-batalha-na-fogueira-do-sonic-77001/p"
+  productUrl: "https://www.rihappy.com.br/lego-sonic-batalha-na-fogueira-do-sonic-77001/p",
+  popularity: 225
  },
  {
   sku: "rihappy-1002942187",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7128068/Jogo---Sintonia---Wavelength---Galapagos-0.jpg?v=638703078651500000",
-  productUrl: "https://www.rihappy.com.br/jogo-sintonia-wavelength-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-sintonia-wavelength-galapagos/p",
+  popularity: 226
  },
  {
   sku: "rihappy-1002940894",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114348/LEGO---City-Fire---Caminhao-dos-Bombeiros-com-Escada-de-Combate-ao-Fogo---60463-0.jpg?v=638696998673300000",
-  productUrl: "https://www.rihappy.com.br/lego-city-fire-caminhao-dos-bombeiros-com-escada-de-combate-ao-fogo-60463/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-fire-caminhao-dos-bombeiros-com-escada-de-combate-ao-fogo-60463/p",
+  popularity: 227
  },
  {
   sku: "rihappy-1002903645",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8547624/Laptop-Infantil---Minigame---Bluey---Com-Tela-Incorporada---Candide-0.jpg?v=638889669976730000",
-  productUrl: "https://www.rihappy.com.br/laptop-infantil-minigame-bluey-com-tela-incorporada-candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-infantil-minigame-bluey-com-tela-incorporada-candide/p",
+  popularity: 228
  },
  {
   sku: "rihappy-1002903496",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7922758/Massa-de-Modelar---Play-Doh---Modelos-Sortidos---Pote-112g---Hasbro-0.jpg?v=638778185520830000",
-  productUrl: "https://www.rihappy.com.br/massa-de-modelar-playdoh-pote-112g-verde-radiante-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/massa-de-modelar-playdoh-pote-112g-verde-radiante-hasbro/p",
+  popularity: 229
  },
  {
   sku: "rihappy-1002903269",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos para alfabetizacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6874892/Minhas-Letras-E-Palavras---Jogo-Educativo---Madera---Toyster-0.jpg?v=638657268288970000",
-  productUrl: "https://www.rihappy.com.br/https---rihappy-com-br-minhas-letras-e-palavras--jogo-educativo--madera--toyster/p"
+  productUrl: "https://www.rihappy.com.br/https---rihappy-com-br-minhas-letras-e-palavras--jogo-educativo--madera--toyster/p",
+  popularity: 230
  },
  {
   sku: "rihappy-1002852647",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601652/Playset---Disney-Princesas---Filme-Moana-2---Canoa---Surpresa---Mattel-0.jpg?v=638896704199900000",
-  productUrl: "https://www.rihappy.com.br/playset-disney-princesas-moana-2-canoa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-disney-princesas-moana-2-canoa-mattel/p",
+  popularity: 231
  },
  {
   sku: "rihappy-1002850076",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6444085/Jogo-de-Piao---Beyblade-X---Sting-Unicorn---Verde---Hasbro-0.jpg?v=638614851509670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-piao-beyblade-x-sting-unicorn-verde-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-piao-beyblade-x-sting-unicorn-verde-hasbro/p",
+  popularity: 232
  },
  {
   sku: "rihappy-1002846803",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas roupinhas para bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6406330/Conjunto-Boneca-Articulada-e-Acessorios---Wicked---Glinda---Mattel-0.jpg?v=638606465703730000",
-  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-wicked-glinda-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-wicked-glinda-mattel/p",
+  popularity: 233
  },
  {
   sku: "rihappy-1002844282",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601532/Boneca---Monster-High---Pocoes-Monstro---Surpresa---Mattel-0.jpg?v=638896689398830000",
-  productUrl: "https://www.rihappy.com.br/boneca-monster-high-pocoes-monstro-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-monster-high-pocoes-monstro-surpresa-mattel/p",
+  popularity: 234
  },
  {
   sku: "rihappy-1002838608",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6656766/Brincando-de-Ser---Caixa-Registradora-Unique---Barbie---Fun-0.jpg?v=638629799747000000",
-  productUrl: "https://www.rihappy.com.br/brincando-de-ser-caixa-registradora-unique-barbie-fun/p"
+  productUrl: "https://www.rihappy.com.br/brincando-de-ser-caixa-registradora-unique-barbie-fun/p",
+  popularity: 235
  },
  {
   sku: "rihappy-1002835925",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545781/Massa-de-Modelar---Mesa-De-Atividades-Coloridas---Play-Doh---Hasbro-0.jpg?v=638623677363930000",
-  productUrl: "https://www.rihappy.com.br/mesa-de-atividades-coloridas-playdoh-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/mesa-de-atividades-coloridas-playdoh-hasbro/p",
+  popularity: 236
  },
  {
   sku: "rihappy-1002835711",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7244916/Jogo-De-Cartas---Exploding-Kittens---De-2-a-5-Jogadores---Galapagos-0.jpg?v=638730801986400000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-exploding-kittens-de-2-a-5-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-exploding-kittens-de-2-a-5-jogadores-galapagos/p",
+  popularity: 237
  },
  {
   sku: "rihappy-1002835121",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas veiculos de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7126169/Carrinho-de-Boneca---Barbie---Mini-Barbieland---Modelos-Sortidos---Mattel--0.jpg?v=638702109093530000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca-barbie-mini-barbieland-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca-barbie-mini-barbieland-surpresa-mattel/p",
+  popularity: 238
  },
  {
   sku: "rihappy-1002829589",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6315836/Guitarra-Eletronica---3-em-1---Disney-Baby---Yes-Toys-0.jpg?v=638544150207400000",
-  productUrl: "https://www.rihappy.com.br/guitarra-eletronica-3-em-1-disney-baby-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/guitarra-eletronica-3-em-1-disney-baby-yes-toys/p",
+  popularity: 239
  },
  {
   sku: "rihappy-1002828688",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8147809/Jogo---Dobble--Harry-Potter---2-a-8-jogadores---Galapagos-0.jpg?v=638798908720500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-harry-potter-dobble-de-2-a-8-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-harry-potter-dobble-de-2-a-8-jogadores-galapagos/p",
+  popularity: 240
  },
  {
   sku: "rihappy-1002827493",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6301607/Jogo-de-Cartas---Uno---Flip---Mattel-0.jpg?v=638533677445230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-flip-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-flip-mattel/p",
+  popularity: 241
  },
  {
   sku: "rihappy-1002826754",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8717150/LEGO---Minecraft---A-Viagem-Do-Barco-Pirata---21259-0.jpg?v=638907981009300000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-viagem-do-barco-pirata-21259/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-viagem-do-barco-pirata-21259/p",
+  popularity: 242
  },
  {
   sku: "rihappy-1002826745",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6370710/Mini-Carrinho---Homem-Aranha---Carrinho-de-Friccao---vermelho---Toyng-0.jpg?v=638579565226130000",
-  productUrl: "https://www.rihappy.com.br/mini-carrinho-homem-aranha-carrinho-de-friccao-vermelho-toyng/p"
+  productUrl: "https://www.rihappy.com.br/mini-carrinho-homem-aranha-carrinho-de-friccao-vermelho-toyng/p",
+  popularity: 243
  },
  {
   sku: "rihappy-1002825512",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6289374/Beyblade-X---Keel-Shark---Piao---Booster-Pack---Hasbro-0.jpg?v=638530534913530000",
-  productUrl: "https://www.rihappy.com.br/beyblade-x-keel-shark-piao-booster-pack-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/beyblade-x-keel-shark-piao-booster-pack-hasbro/p",
+  popularity: 244
  },
  {
   sku: "rihappy-1002825509",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias unicornio de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6766917/Pelucia---Furby-Furblets---Modelos-Unitarios-Sortidos---Hasbro-0.jpg?v=638639908975370000",
-  productUrl: "https://www.rihappy.com.br/pelucia-furby-furblets-modelos-unitarios-sortidos-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-furby-furblets-modelos-unitarios-sortidos-hasbro/p",
+  popularity: 245
  },
  {
   sku: "rihappy-1002824157",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6282269/-Jogo-de-Estrategia---Rummikub-Joy---Grow-0.jpg?v=638524962463230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-rummikub-joy-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-rummikub-joy-grow/p",
+  popularity: 246
  },
  {
   sku: "rihappy-1002824136",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6281880/Jogo-Massa-De-Modelar---Play-Doh---Carrossel-De-Sorvete---Hasbro-0.jpg?v=638524318971930000",
-  productUrl: "https://www.rihappy.com.br/jogo-massa-de-modelar-playdoh-carrossel-de-sorvete-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-massa-de-modelar-playdoh-carrossel-de-sorvete-hasbro/p",
+  popularity: 247
  },
  {
   sku: "rihappy-1002817032",
@@ -2483,7 +2730,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6246835/Jogo-Da-Memoria---Bluey---24-Pares---Elka-0.jpg?v=638496511515530000",
-  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-bluey-24-pares-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-bluey-24-pares-elka/p",
+  popularity: 248
  },
  {
   sku: "rihappy-1002816602",
@@ -2493,7 +2741,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes basquete tabela de basquete",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6244516/Tabela-de-Basquete---Nba---Elka-0.jpg?v=638495811212170000",
-  productUrl: "https://www.rihappy.com.br/tabela-de-basquete-nba-elka/p"
+  productUrl: "https://www.rihappy.com.br/tabela-de-basquete-nba-elka/p",
+  popularity: 249
  },
  {
   sku: "rihappy-1002815820",
@@ -2503,7 +2752,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-objetos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545612/Lancador-de-Teia---Marvel---Homem-Aranha---Hasbro-0.jpg?v=638623634990100000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-teia-marvel-homemaranha-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-teia-marvel-homemaranha-hasbro/p",
+  popularity: 250
  },
  {
   sku: "rihappy-1002814846",
@@ -2513,7 +2763,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mordedores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7112740/Conjunto-de-Mordedores---Disney-Baby---Meu-Primeiro-Kit---Bda---Toyster-0.jpg?v=638696329877770000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-mordedores-disney-baby-meu-primeiro-kit-bda-toyster/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-mordedores-disney-baby-meu-primeiro-kit-bda-toyster/p",
+  popularity: 251
  },
  {
   sku: "rihappy-1002814518",
@@ -2523,7 +2774,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7244887/Conjunto-de-Pintura---Chase---Patrulha-Canina---Elka-0.jpg?v=638730786694900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-chase-patrulha-canina-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-chase-patrulha-canina-elka/p",
+  popularity: 252
  },
  {
   sku: "rihappy-1002809224",
@@ -2533,7 +2785,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738581/Boneco---Enaldinho---Youtuber---Novabrink-0.jpg?v=639071094353200000",
-  productUrl: "https://www.rihappy.com.br/boneco-enaldinho-youtuber-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-enaldinho-youtuber-novabrink/p",
+  popularity: 253
  },
  {
   sku: "rihappy-1002809222",
@@ -2543,7 +2796,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6206375/Sylvanian-Families---Conjunto-de-Banho---Epoch-0.jpg?v=638459492092900000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-de-banho-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-de-banho-epoch/p",
+  popularity: 254
  },
  {
   sku: "rihappy-1002800755",
@@ -2553,7 +2807,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6405026/Miniatura---Colecionavel---Toy-Story---Sortidos---Embalagem-Unitaria---Disney-0.jpg?v=638605526176800000",
-  productUrl: "https://www.rihappy.com.br/slp-toystory/p"
+  productUrl: "https://www.rihappy.com.br/slp-toystory/p",
+  popularity: 255
  },
  {
   sku: "rihappy-1002800280",
@@ -2563,7 +2818,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152221/Carrinho-com-Controle-Remoto---Sonic---Autoracing---Candide-0.jpg?v=638436026910930000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-autoracing-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-autoracing-candide/p",
+  popularity: 256
  },
  {
   sku: "rihappy-1002800275",
@@ -2573,7 +2829,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152143/Carrinho-com-Controle-Remoto---Sonic---Smart-Driver---Candide-0.jpg?v=638436015205400000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-smart-driver-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-smart-driver-candide/p",
+  popularity: 257
  },
  {
   sku: "rihappy-1002800241",
@@ -2583,7 +2840,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152155/Jogo-de-Tabuleiro---Grab-and-Go-Monopoly---Versao-Portatil-para-2-a-4-Jogadores---Hasbro-0.jpg?v=638436021244570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-grab-and-go-monopoly-versao-portatil-para-2-a-4-jogadores-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-grab-and-go-monopoly-versao-portatil-para-2-a-4-jogadores-hasbro/p",
+  popularity: 258
  },
  {
   sku: "rihappy-1002800236",
@@ -2593,7 +2851,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545632/Conjunto-de-Massa-de-Modelar---Play-Doh---Cabelos-Coloridos-com-Estilo---Hasbro-0.jpg?v=638623643004230000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-playdoh-cabelos-coloridos-com-estilo-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-playdoh-cabelos-coloridos-com-estilo-hasbro/p",
+  popularity: 259
  },
  {
   sku: "rihappy-1002793274",
@@ -2603,7 +2862,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes tapete de atividades para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6433600/Tapete-de-Atividades---Fisher-Price---Pianinho-Brilha-e-Cresce-0.jpg?v=638610809920530000",
-  productUrl: "https://www.rihappy.com.br/tapete-de-atividades-fisherprice-pianinho-brilha-e-cresce/p"
+  productUrl: "https://www.rihappy.com.br/tapete-de-atividades-fisherprice-pianinho-brilha-e-cresce/p",
+  popularity: 260
  },
  {
   sku: "rihappy-1002788614",
@@ -2613,7 +2873,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mordedores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7502404/Mordedor---Sensimals---Modelos-Sortidos---Fisher-Price-0.jpg?v=638756852404000000",
-  productUrl: "https://www.rihappy.com.br/mordedor-fisherprice-sensimals-coelhinho-amarelo/p"
+  productUrl: "https://www.rihappy.com.br/mordedor-fisherprice-sensimals-coelhinho-amarelo/p",
+  popularity: 261
  },
  {
   sku: "rihappy-1002788453",
@@ -2623,7 +2884,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6092444/Conjunto-de-Pista-e-Carrinho---Hot-Wheels-City---Sorveteria---Mattel-0.jpg?v=638410073876700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinho-hot-wheels-city-sorveteria-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pista-e-carrinho-hot-wheels-city-sorveteria-mattel/p",
+  popularity: 262
  },
  {
   sku: "rihappy-1002788373",
@@ -2633,7 +2895,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6433568/Brinquedo-Educativo---Piramide-De-Argolas---Fisher-Price-0.jpg?v=638610808434900000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-piramide-de-argolas-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-piramide-de-argolas-fisherprice/p",
+  popularity: 263
  },
  {
   sku: "rihappy-1002787831",
@@ -2643,7 +2906,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6109868/Quebra-Cabeca---1500-Pecas---Por-do-Sol-em-Praga---Grow-0.jpg?v=638415250633300000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-por-do-sol-em-praga-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-por-do-sol-em-praga-grow/p",
+  popularity: 264
  },
  {
   sku: "rihappy-1002787795",
@@ -2653,7 +2917,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6991311/Boneca---Barbie-Profissoes---Bailarinas---Modelos-Sortidos---Mattel-0.jpg?v=638678988137770000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-profissoes-bailarinas-cabelo-loiro-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-profissoes-bailarinas-cabelo-loiro-mattel/p",
+  popularity: 265
  },
  {
   sku: "rihappy-1002787208",
@@ -2663,7 +2928,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6085406/Boneca-Articulada---Barbie---65-Historias-Inspiradoras---Safira---Mattel-0.jpg?v=638404851640100000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-65-historias-inspiradoras-safira-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-65-historias-inspiradoras-safira-mattel/p",
+  popularity: 266
  },
  {
   sku: "rihappy-1002783908",
@@ -2673,7 +2939,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7250905/LEGO---City-Great-Vehicles---Monster-Truck-Azul---60402-0.jpg?v=638731616878130000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-monster-truck-azul-60402/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-monster-truck-azul-60402/p",
+  popularity: 267
  },
  {
   sku: "rihappy-1002783761",
@@ -2683,7 +2950,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7250562/Lego-Creator---Dragao-Vermelho---31145-0.jpg?v=638731601142100000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-dragao-vermelho-31145/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-dragao-vermelho-31145/p",
+  popularity: 268
  },
  {
   sku: "rihappy-1002781762",
@@ -2693,7 +2961,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7224682/Lego---Minecraft---O-Deposito-de-Armas---21252-0.jpg?v=638727360777200000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-deposito-de-armas-21252/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-o-deposito-de-armas-21252/p",
+  popularity: 269
  },
  {
   sku: "rihappy-1002759485",
@@ -2703,7 +2972,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113846/Figura-Articulada---Disney-Pixar---Toy-Story---Buzz-Lightyear---Toyng-0.jpg?v=638947657615470000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-disney-pixar-toy-story-buzz-lightyear-toyng/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-disney-pixar-toy-story-buzz-lightyear-toyng/p",
+  popularity: 270
  },
  {
   sku: "rihappy-1002750575",
@@ -2713,7 +2983,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "tecnologia caixa de som outras caixas de som",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7777824/Brinquedo-Musical---Boombox-Karaoke---Homem-Aranha---Candide-0.jpg?v=638772115598970000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-musical-patrulha-canina-boombox-karaoke-spiderman-candide/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-musical-patrulha-canina-boombox-karaoke-spiderman-candide/p",
+  popularity: 271
  },
  {
   sku: "rihappy-1002732429",
@@ -2723,7 +2994,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jogos de advinhacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5939352/Jogo-de-Logica---Investigato---Toyster-0.jpg?v=638328270058170000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-logica-investigato-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-logica-investigato-toyster/p",
+  popularity: 272
  },
  {
   sku: "rihappy-1002724903",
@@ -2733,7 +3005,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9709078/Boneca-Fashion-Articulada---Barbie---Maio---Modelos-Sortidos---Mattel-0.jpg?v=639062357731070000",
-  productUrl: "https://www.rihappy.com.br/boneca-fashion-articulada-barbie-maio-rosa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-fashion-articulada-barbie-maio-rosa-mattel/p",
+  popularity: 273
  },
  {
   sku: "rihappy-1002724877",
@@ -2743,7 +3016,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5827056/Brinquedo-De-Atividades---Projetor-De-Pintura---Galinha-Pintadinha---Yes-Toys-0.jpg?v=638264154246030000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividades-projetor-de-pintura-galinha-pintadinha-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividades-projetor-de-pintura-galinha-pintadinha-yes-toys/p",
+  popularity: 274
  },
  {
   sku: "rihappy-1002704027",
@@ -2753,7 +3027,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais pianos de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5827000/Brinquedo-Musical-Infantil---Patrulha-Canina---Piano-Xilofone---Yes-Toys-0.jpg?v=638264152383930000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-musical-infantil-patrulha-canina-piano-xilofone-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-musical-infantil-patrulha-canina-piano-xilofone-yes-toys/p",
+  popularity: 275
  },
  {
   sku: "rihappy-1002703269",
@@ -2763,7 +3038,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5667311/Jogo-de-Tabuleiro---Roubo-No-Museu---Game-Office---Toyster--0.jpg?v=638170794805870000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-roubo-no-museu-game-office-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-roubo-no-museu-game-office-toyster/p",
+  popularity: 276
  },
  {
   sku: "rihappy-1002699797",
@@ -2773,7 +3049,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8314409/Quebra-Cabeca---500-Pecas-Nano---Colecao-Obras-de-Arte---Van-Gogh--A-Noite-Estrelada---Toyster-0.jpg?v=638840375863370000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-500-pecas-nano-colecao-obras-de-arte-van-gogh-a-noite-estrelada-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-500-pecas-nano-colecao-obras-de-arte-van-gogh-a-noite-estrelada-toyster/p",
+  popularity: 277
  },
  {
   sku: "rihappy-1002697772",
@@ -2783,7 +3060,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7224575/Lego---Lego-Creator---Onibus-Espacial---31134-0.jpg?v=638727357980430000",
-  productUrl: "https://www.rihappy.com.br/lego-lego-creator-onibus-espacial-31134/p"
+  productUrl: "https://www.rihappy.com.br/lego-lego-creator-onibus-espacial-31134/p",
+  popularity: 278
  },
  {
   sku: "rihappy-1002693668",
@@ -2793,7 +3071,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446940/Quebra-Cabeca---Bluey---Lente-Magica---60-Pecas---Elka-0.jpg?v=638870781594300000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-bluey-lente-magica-60-pecas-elka/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-bluey-lente-magica-60-pecas-elka/p",
+  popularity: 279
  },
  {
   sku: "rihappy-1002628560",
@@ -2803,7 +3082,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5581081/LEGO-Ninjago---Carro-de-Corrida-Ninja-EVO-do-Kai---71780-0.jpg?v=638139915763300000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-carro-de-corrida-ninja-evo-do-kai-71780/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-carro-de-corrida-ninja-evo-do-kai-71780/p",
+  popularity: 280
  },
  {
   sku: "rihappy-1002459051",
@@ -2813,7 +3093,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza unhas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6196797/Conjunto-De-Pintura-Para-Unhas---Cool-Maker---Go-Glam-U-Nique-Nail-Salon---Sunny-0.jpg?v=638452681783330000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-para-unhas-cool-maker-go-glam-unique-nail-salon-sunny/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-para-unhas-cool-maker-go-glam-unique-nail-salon-sunny/p",
+  popularity: 281
  },
  {
   sku: "rihappy-1002452021",
@@ -2823,7 +3104,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4482117/Conjunto-De-Pintura-E-Acessorios---Patrulha-Canina---04-Telas---Nig-Brinquedos-0.jpg?v=637949832374970000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-e-acessorios-patrulha-canina-04-telas-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-e-acessorios-patrulha-canina-04-telas-nig-brinquedos/p",
+  popularity: 282
  },
  {
   sku: "rihappy-1002433048",
@@ -2833,7 +3115,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9666325/Boneca---Maria-Clara-E-Jp---Maria-Clara---Frases---Rosa---32cm----Novabrink-0.jpg?v=639052279128870000",
-  productUrl: "https://www.rihappy.com.br/boneca-maria-clara-e-jp-maria-clara-frases-rosa-32cm-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-maria-clara-e-jp-maria-clara-frases-rosa-32cm-novabrink/p",
+  popularity: 283
  },
  {
   sku: "rihappy-1002393887",
@@ -2843,7 +3126,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4020369/Pelucia---Disney---Stitch---20cm---Fun-0.jpg?v=637904642603270000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-stitch-20cm-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-stitch-20cm-fun/p",
+  popularity: 284
  },
  {
   sku: "rihappy-1002391525",
@@ -2853,7 +3137,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6417748/Primeiros-Passos---Totokinha---Bolinha---Cardoso---Rosa-0.jpg?v=638610560271770000",
-  productUrl: "https://www.rihappy.com.br/conjunto-andador-infantil-totokinha-bolinha-menina-rosa-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-andador-infantil-totokinha-bolinha-menina-rosa-cardoso/p",
+  popularity: 285
  },
  {
   sku: "rihappy-1002175945",
@@ -2863,7 +3148,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza maquiagem de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4773192/FAF-CABELOS-CUSTOMIZADOS-0.jpg?v=637994820516200000",
-  productUrl: "https://www.rihappy.com.br/faf-cabelos-customizados/p"
+  productUrl: "https://www.rihappy.com.br/faf-cabelos-customizados/p",
+  popularity: 286
  },
  {
   sku: "rihappy-1002162970",
@@ -2873,7 +3159,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9741060/Conjunto---Pulseiras-Criativas---FanFun-0.jpg?v=639071954948470000",
-  productUrl: "https://www.rihappy.com.br/faf-kit-pulseiras-criativas/p"
+  productUrl: "https://www.rihappy.com.br/faf-kit-pulseiras-criativas/p",
+  popularity: 287
  },
  {
   sku: "rihappy-1002146533",
@@ -2883,7 +3170,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7427866/Conjunto-de-Micangas---Preciosas---FanFun-0.jpg?v=638749972273330000",
-  productUrl: "https://www.rihappy.com.br/faf-kit-de-micangas/p"
+  productUrl: "https://www.rihappy.com.br/faf-kit-de-micangas/p",
+  popularity: 288
  },
  {
   sku: "rihappy-1002124935",
@@ -2893,7 +3181,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6048081/Boneco-Articulado---Marvel---Homem-Aranha---Armored-Blindado---Hasbro-0.jpg?v=638370413072630000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado---marvel---armored-blindado---homem-aranha---cinza---figura-de-24-cm---hasbro-/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado---marvel---armored-blindado---homem-aranha---cinza---figura-de-24-cm---hasbro-/p",
+  popularity: 289
  },
  {
   sku: "rihappy-1002101106",
@@ -2903,7 +3192,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7251284/LEGO-City---Police-Car---60312-0.jpg?v=638731640879300000",
-  productUrl: "https://www.rihappy.com.br/lego-city-police-car-60312/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-police-car-60312/p",
+  popularity: 290
  },
  {
   sku: "rihappy-1002095936",
@@ -2913,7 +3203,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7414410/Boneca---Barbie---Cachorrinhos-Recem-Nascidos---Mattel-0.jpg?v=638748897610400000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-cachorrinhos-recem-nascidos-32cm-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-cachorrinhos-recem-nascidos-32cm-mattel/p",
+  popularity: 291
  },
  {
   sku: "rihappy-1002095786",
@@ -2923,7 +3214,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6413039/Brinquedo-Educativo---Laptop---Fisher-Price---33Cm---Azul-0.jpg?v=638610020197630000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-laptop-fisher-price-33cm-azul/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-laptop-fisher-price-33cm-azul/p",
+  popularity: 292
  },
  {
   sku: "rihappy-100583474",
@@ -2933,7 +3225,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6047790/Boneco-Articulado---Marvel---Wolverine---Hasbro-0.jpg?v=638369729719600000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-wolverine-hasbro-f5078/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-wolverine-hasbro-f5078/p",
+  popularity: 293
  },
  {
   sku: "rihappy-100583404",
@@ -2943,7 +3236,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores nerf",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6765790/Lancador-de-Dardos---Nerf-Elite-20---EAGLEPOINT---Hasbro-0.jpg?v=638639535579700000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-eaglepoint-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-dardos-nerf-elite-2-0-eaglepoint-hasbro/p",
+  popularity: 294
  },
  {
   sku: "rihappy-100569084",
@@ -2953,7 +3247,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5898282/Jogo-de-Tabuleiro---Dixit-2---3-a-8-Jogadores---Galapagos-0.jpg?v=638304066872000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-2-3-a-8-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-2-3-a-8-jogadores-galapagos/p",
+  popularity: 295
  },
  {
   sku: "rihappy-100550954",
@@ -2963,7 +3258,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446787/Quebra-Cabeca---Hot-Wheels---150-Pecas---31cm-x-46cm---Grow-0.jpg?v=638870770459270000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca---hot-wheels---150-pecas---31cm-x-46cm---grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca---hot-wheels---150-pecas---31cm-x-46cm---grow/p",
+  popularity: 296
  },
  {
   sku: "rihappy-100550837",
@@ -2973,7 +3269,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6786781/Quebra-Cabeca---Hot-Wheels---60-Pecas---Grow-0.jpg?v=638641838325300000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-hot-wheels-60-pecas-22cm-x-31cm-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-hot-wheels-60-pecas-22cm-x-31cm-grow/p",
+  popularity: 297
  },
  {
   sku: "rihappy-100461169",
@@ -2983,7 +3280,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5829098/Piano-e-Xilofone---Disney-Baby---Mickey-e-Amigos---Yes-Toys-0.jpg?v=638265755205600000",
-  productUrl: "https://www.rihappy.com.br/piano-e-xilofone-disney-baby-mickey-e-amigos-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/piano-e-xilofone-disney-baby-mickey-e-amigos-yes-toys/p",
+  popularity: 298
  },
  {
   sku: "rihappy-100442952",
@@ -2993,7 +3291,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5463210/Laptop-de-Atividades---Charm-Tech---Bilingue---Barbie---Candide-0.jpg?v=638115662021930000",
-  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---charm-tech---bilingue---barbie---candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---charm-tech---bilingue---barbie---candide/p",
+  popularity: 299
  },
  {
   sku: "rihappy-100437506",
@@ -3003,7 +3302,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8337160/Mochila---Barbie---Doutora-Medica---Com---15-Pecas---Fun-0.jpg?v=638845541850170000",
-  productUrl: "https://www.rihappy.com.br/mochila-barbie-doutora-medica-com-15-pecas-fun/p"
+  productUrl: "https://www.rihappy.com.br/mochila-barbie-doutora-medica-com-15-pecas-fun/p",
+  popularity: 300
  },
  {
   sku: "rihappy-100436658",
@@ -3013,7 +3313,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6048037/Boneco-Marvel-Olympus-Figura-de-24-cm-para-Criancas-Acima-de-4-Anos---Venom---F0995---Hasbro-0.jpg?v=638370345782900000",
-  productUrl: "https://www.rihappy.com.br/boneco-marvel-olympus-figura-de-24-cm-para-criancas-acima-de-4-anos-venom-f0995-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-marvel-olympus-figura-de-24-cm-para-criancas-acima-de-4-anos-venom-f0995-hasbro/p",
+  popularity: 301
  },
  {
   sku: "rihappy-100370967",
@@ -3023,7 +3324,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1200448/Sylvanian-Families---Conjunto-Cuidando-Trigemeos---Epoch-0.jpg?v=637514358068830000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-cuidando-trigemeos-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-cuidando-trigemeos-epoch/p",
+  popularity: 302
  },
  {
   sku: "rihappy-100329823",
@@ -3033,7 +3335,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-objetos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7043179/Lancador---Hot-Wheels-City---Nemesis---Modelos-Sortidos---Mattel-0.jpg?v=638681835996830000",
-  productUrl: "https://www.rihappy.com.br/hot-wheels-city---lancadores-nemesis---dinossauro-t-rex---mattel/p"
+  productUrl: "https://www.rihappy.com.br/hot-wheels-city---lancadores-nemesis---dinossauro-t-rex---mattel/p",
+  popularity: 303
  },
  {
   sku: "rihappy-100323010",
@@ -3043,7 +3346,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7097722/Hot-Wheels---Monster-Trucks---Pneus-Para-Todo-Terreno---Modelos-Sortidos---1-43---Mattel-0.jpg?v=638691130928400000",
-  productUrl: "https://www.rihappy.com.br/hot-wheels---monster-trucks---pneus-para-todo-terreno---bone-shaker---1-43---mattel/p"
+  productUrl: "https://www.rihappy.com.br/hot-wheels---monster-trucks---pneus-para-todo-terreno---bone-shaker---1-43---mattel/p",
+  popularity: 304
  },
  {
   sku: "rihappy-100302784",
@@ -3053,7 +3357,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao twister",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/912572/Jogo-Twister---Nova-Embalagem---Hasbro_Frente.jpg?v=637420121406730000",
-  productUrl: "https://www.rihappy.com.br/jogo-twister-nova-embalagem-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-twister-nova-embalagem-hasbro/p",
+  popularity: 305
  },
  {
   sku: "rihappy-100292972",
@@ -3063,7 +3368,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas carrinho de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8211020/Carrinho-de-Boneca---Ninos---64cm---Sortido---Cotiplas-0.jpg?v=638819279384030000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca---ninos---64cm---cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca---ninos---64cm---cotiplas/p",
+  popularity: 306
  },
  {
   sku: "rihappy-100265492",
@@ -3073,7 +3379,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5462115/Laptop-de-Atividades---Disney---Frozen---Bilingue---Candide-0.jpg?v=638115602966500000",
-  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---disney---frozen---bilingue---candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---disney---frozen---bilingue---candide/p",
+  popularity: 307
  },
  {
   sku: "rihappy-100224362",
@@ -3083,7 +3390,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre brinquedos para o ar livre",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5790935/Pogobol---Amarelo-e-Laranja---Estrela-0.jpg?v=638234599875800000",
-  productUrl: "https://www.rihappy.com.br/pogobol-amarelo-e-laranja-estrela/p"
+  productUrl: "https://www.rihappy.com.br/pogobol-amarelo-e-laranja-estrela/p",
+  popularity: 308
  },
  {
   sku: "rihappy-100223887",
@@ -3093,7 +3401,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre brinquedos para o ar livre",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5787773/Pogobol---Roxo-e-Verde---Estrela-0.jpg?v=638231427255400000",
-  productUrl: "https://www.rihappy.com.br/pogobol-roxo-e-verde-estrela/p"
+  productUrl: "https://www.rihappy.com.br/pogobol-roxo-e-verde-estrela/p",
+  popularity: 309
  },
  {
   sku: "rihappy-100222539",
@@ -3103,7 +3412,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446477/Quebra-Cabeca---100-Pecas---Conhecendo-os-Planetas---Grow-0.jpg?v=638870755876870000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-100-pecas-conhecendo-os-planetas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-100-pecas-conhecendo-os-planetas-grow/p",
+  popularity: 310
  },
  {
   sku: "rihappy-100219605",
@@ -3113,7 +3423,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5763581/Jogo-Simon-Classico---Hasbro-0.jpg?v=638210614319270000",
-  productUrl: "https://www.rihappy.com.br/jogo-simon-classico---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-simon-classico---hasbro/p",
+  popularity: 311
  },
  {
   sku: "rihappy-100216623",
@@ -3123,7 +3434,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9605174/Conjunto-de-Pulseira-e-Micangas---Super-Fashion---FanFun-0.jpg?v=639034794682230000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pulseira-e-micangas-super-fashion-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pulseira-e-micangas-super-fashion-fanfun/p",
+  popularity: 312
  },
  {
   sku: "rihappy-100215238",
@@ -3133,7 +3445,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6285850/Playset-Com-Mini-Veiculos---Super-Parking---Minimi-0.jpg?v=638526086079770000",
-  productUrl: "https://www.rihappy.com.br/playset-com-mini-veiculos-super-parking-minimi/p"
+  productUrl: "https://www.rihappy.com.br/playset-com-mini-veiculos-super-parking-minimi/p",
+  popularity: 313
  },
  {
   sku: "rihappy-100184437",
@@ -3143,7 +3456,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/538873/rummikub.jpg?v=637214311782670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia---rummikub---junior---grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia---rummikub---junior---grow/p",
+  popularity: 314
  },
  {
   sku: "rihappy-100183707",
@@ -3153,7 +3467,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/411206/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-hulk-blast-gear-hasbro-E7475_Frente.jpg?v=637166780108100000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-hulk-blast-gear-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-hulk-blast-gear-hasbro/p",
+  popularity: 315
  },
  {
   sku: "rihappy-100176276",
@@ -3163,7 +3478,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3127226/100176276_1.jpg?v=637872294706670000",
-  productUrl: "https://www.rihappy.com.br/jogo-disney-frozen-2-tira-varetas-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-disney-frozen-2-tira-varetas-elka/p",
+  popularity: 316
  },
  {
   sku: "rihappy-100174249",
@@ -3173,7 +3489,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6726454/Conjunto-Massa-de-Modelar---Play-Doh---Kit-de-Letras---6-Potes-de-Massinha---Hasbro-0.jpg?v=638632959414070000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-play-doh-moldes-de-letras-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-play-doh-moldes-de-letras-hasbro/p",
+  popularity: 317
  },
  {
   sku: "rihappy-100165271",
@@ -3183,7 +3500,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/380241/Jogo-Lanca-Bolinhas-Patrulha-Canina-Elka-1112_frente.jpg?v=636916152757830000",
-  productUrl: "https://www.rihappy.com.br/jogo-lanca-bolinhas-patrulha-canina-100165031/p"
+  productUrl: "https://www.rihappy.com.br/jogo-lanca-bolinhas-patrulha-canina-100165031/p",
+  popularity: 318
  },
  {
   sku: "rihappy-100163921",
@@ -3193,7 +3511,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/380240/Pelucia-de-algodao---Turma-da-monica---Sansao---Novabrink.jpg?v=636916152624900000",
-  productUrl: "https://www.rihappy.com.br/pelucia-de-algodao-turma-da-monica-sansao-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-de-algodao-turma-da-monica-sansao-novabrink/p",
+  popularity: 319
  },
  {
   sku: "rihappy-100150778",
@@ -3203,7 +3522,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/350272/telefone-sonoro-disney-minnie-elka-1061_Frente.jpg?v=636594792503830000",
-  productUrl: "https://www.rihappy.com.br/telefone-sonoro-disney-minnie-elka/p"
+  productUrl: "https://www.rihappy.com.br/telefone-sonoro-disney-minnie-elka/p",
+  popularity: 320
  },
  {
   sku: "rihappy-100148403",
@@ -3213,7 +3533,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/345916/andador-cachorrinho-que-anda-fisher-price-FRC78_Frente.jpg?v=636554254902630000",
-  productUrl: "https://www.rihappy.com.br/andador-cachorrinho-que-anda-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/andador-cachorrinho-que-anda-fisher-price/p",
+  popularity: 321
  },
  {
   sku: "rihappy-100143293",
@@ -3223,7 +3544,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/339377/03448_Grow_Lince-Alfabeto.jpg?v=636416864300730000",
-  productUrl: "https://www.rihappy.com.br/jogo-lince-alfabeto-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-lince-alfabeto-grow/p",
+  popularity: 322
  },
  {
   sku: "rihappy-100137601",
@@ -3233,7 +3555,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3545489/100137601_1.jpg?v=637890041678200000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-lab-42-experiencias-estrela/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-lab-42-experiencias-estrela/p",
+  popularity: 323
  },
  {
   sku: "rihappy-100134019",
@@ -3243,7 +3566,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias pelucias para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3121387/Pelucia-30-Cm---Patrulha-Canina---Rubble---Sunny-0.jpg?v=637872101891500000",
-  productUrl: "https://www.rihappy.com.br/pelucia-12-cm-patrulha-canina-rubble-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-12-cm-patrulha-canina-rubble-sunny/p",
+  popularity: 324
  },
  {
   sku: "rihappy-100132319",
@@ -3253,7 +3577,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos celular de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3436090/100132319_2.jpg?v=637886351076600000",
-  productUrl: "https://www.rihappy.com.br/telefone-feliz-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/telefone-feliz-fisher-price/p",
+  popularity: 325
  },
  {
   sku: "rihappy-100130976",
@@ -3263,7 +3588,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6847104/Xilofone-para-Bebes---Fisher-Price---Colorido-0.jpg?v=639001504316170000",
-  productUrl: "https://www.rihappy.com.br/xilofone-colorido-e-carrinho-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/xilofone-colorido-e-carrinho-fisher-price/p",
+  popularity: 326
  },
  {
   sku: "rihappy-100121553",
@@ -3273,7 +3599,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4522220/Pelucia---Patrulha-Canina---Marshall---30-cm---Sunny-0.jpg?v=637953031820630000",
-  productUrl: "https://www.rihappy.com.br/pelucia-patrulha-canina-30cm-marshall-sunny-5047014/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-patrulha-canina-30cm-marshall-sunny-5047014/p",
+  popularity: 327
  },
  {
   sku: "rihappy-100120830",
@@ -3283,7 +3610,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/303775/100120830-DLH48-andador-com-atividades-zebrinha-com-luzes-e-sons-fisher-price-5046542_1.jpg?v=635942544798730000",
-  productUrl: "https://www.rihappy.com.br/andador-com-atividades-zebrinha-com-luzes-e-sons-fisher-price-5046542/p"
+  productUrl: "https://www.rihappy.com.br/andador-com-atividades-zebrinha-com-luzes-e-sons-fisher-price-5046542/p",
+  popularity: 328
  },
  {
   sku: "rihappy-100101288",
@@ -3293,7 +3621,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6765795/Brinquedo-de-Encaixe---Encaixa-Borboleta---Colorido---Fisher-Price--0.jpg?v=638639537633370000",
-  productUrl: "https://www.rihappy.com.br/encaixa-pecas-borboleta-fisher-price-5029883/p"
+  productUrl: "https://www.rihappy.com.br/encaixa-pecas-borboleta-fisher-price-5029883/p",
+  popularity: 329
  },
  {
   sku: "rihappy-100073345",
@@ -3303,7 +3632,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo caminhao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6337065/caminhao-didatico-dino-sabidinho-cardoso_frente.jpg?v=638549495927770000",
-  productUrl: "https://www.rihappy.com.br/caminhao-didatico-dino-sabidinho-cardoso-5008380/p"
+  productUrl: "https://www.rihappy.com.br/caminhao-didatico-dino-sabidinho-cardoso-5008380/p",
+  popularity: 330
  },
  {
   sku: "rihappy-100008358",
@@ -3313,7 +3643,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/240755/Cachorrinho-com-coleira-Fisher-Price---Meu-Primeiro-Cachorrinho.jpg?v=635004116788830000",
-  productUrl: "https://www.rihappy.com.br/fisher-price-meu-primeiro-cachorrinho/p"
+  productUrl: "https://www.rihappy.com.br/fisher-price-meu-primeiro-cachorrinho/p",
+  popularity: 331
  },
  {
   sku: "rihappy-100000191",
@@ -3323,7 +3654,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jogos de advinhacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/567743/jogo-perfil-junior-1979_Atualizada1.jpg?v=637227440274670000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-perfil-junior-2-100000191/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-perfil-junior-2-100000191/p",
+  popularity: 332
  },
  {
   sku: "rihappy-100000178",
@@ -3333,7 +3665,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6389806/jogo-scotland-yard-grow_frente.jpg?v=638599275420330000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-scotland-yard-100000178/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-scotland-yard-100000178/p",
+  popularity: 333
  },
  {
   sku: "rihappy-100000145",
@@ -3343,7 +3676,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/210622/31518.jpg?v=634804659150870000",
-  productUrl: "https://www.rihappy.com.br/jogo-pizzaria-maluca-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-pizzaria-maluca-grow/p",
+  popularity: 334
  },
  {
   sku: "rihappy-100000011",
@@ -3353,7 +3687,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pula pirata",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/219678/10367_1.jpg?v=634804784484430000",
-  productUrl: "https://www.rihappy.com.br/jogo-pula-pirata/p"
+  productUrl: "https://www.rihappy.com.br/jogo-pula-pirata/p",
+  popularity: 335
  },
  {
   sku: "rihappy-1003181035",
@@ -3363,7 +3698,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10119370/Jogo-De-Cartas---Pokemon---Box---Colecao-Ilustracao---Parceiro-Inicial---Serie-03---Copag-0.jpg?v=639203338223000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-colecao-ilustracao-parceiro-inicial-serie-03-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-colecao-ilustracao-parceiro-inicial-serie-03-copag/p",
+  popularity: 336
  },
  {
   sku: "rihappy-1003160575",
@@ -3373,7 +3709,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9923818/LEGO---Mini-Figuras---Serie-29---71052-0.jpg?v=639135841243800000",
-  productUrl: "https://www.rihappy.com.br/lego-mini-figuras-serie-29-71052/p"
+  productUrl: "https://www.rihappy.com.br/lego-mini-figuras-serie-29-71052/p",
+  popularity: 337
  },
  {
   sku: "rihappy-1003160260",
@@ -3383,7 +3720,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9924075/LEGO---Disney---Pixar---Toy-Story---Lotso---43306-0.jpg?v=639135853462700000",
-  productUrl: "https://www.rihappy.com.br/lego-disney-pixar-toy-story-lotso-43306/p"
+  productUrl: "https://www.rihappy.com.br/lego-disney-pixar-toy-story-lotso-43306/p",
+  popularity: 338
  },
  {
   sku: "rihappy-1003159824",
@@ -3393,7 +3731,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9913436/Jogo-De-Acao---Desenrola---Disney---Pixar---Toy-Story-5---Elka-0.jpg?v=639131650755900000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-desenrola-disney-pixar-toy-story-5-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-desenrola-disney-pixar-toy-story-5-elka/p",
+  popularity: 339
  },
  {
   sku: "rihappy-1003159821",
@@ -3403,7 +3742,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9913430/Jogo-De-Memoria---Memo-Play---Disney---Pixar---Toy-Story-5---Elka-0.jpg?v=639131636730200000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-memo-play-disney-pixar-toy-story-5-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-memo-play-disney-pixar-toy-story-5-elka/p",
+  popularity: 340
  },
  {
   sku: "rihappy-1003158518",
@@ -3413,7 +3753,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos com acessorios",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9893870/Boneco---Disney---Pixar---Toy-Story-5---Monte-O-Garfinho---Toyng-0.jpg?v=639123128288070000",
-  productUrl: "https://www.rihappy.com.br/boneco-disney-pixar-toy-story-5-monte-o-garfinho-toyng/p"
+  productUrl: "https://www.rihappy.com.br/boneco-disney-pixar-toy-story-5-monte-o-garfinho-toyng/p",
+  popularity: 341
  },
  {
   sku: "rihappy-1003156084",
@@ -3423,7 +3764,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9860714/Boneca-Interativa---Cry-Babies---Meus-Primeiros-Passos---Coney---Multikids-0.jpg?v=639110983228400000",
-  productUrl: "https://www.rihappy.com.br/boneca-interativa-cry-babies-meus-primeiros-passos-coney-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-interativa-cry-babies-meus-primeiros-passos-coney-multikids/p",
+  popularity: 342
  },
  {
   sku: "rihappy-1003156046",
@@ -3433,7 +3775,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977105/Boneco-Articulado---JP---Tweem---Novabrink-0.jpg?v=639143705930530000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-jp-tweem-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-jp-tweem-novabrink/p",
+  popularity: 343
  },
  {
   sku: "rihappy-1003156003",
@@ -3443,7 +3786,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977099/Boneca-Articulada---Maria-Clara---Tweem---Novabrink-0.jpg?v=639143704679100000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-maria-clara-tweem-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-maria-clara-tweem-novabrink/p",
+  popularity: 344
  },
  {
   sku: "rihappy-1003154180",
@@ -3453,7 +3797,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9835760/Pelucia---Disney---Pixar---Toy-Story---Jessie---Fun-0.jpg?v=639104765409270000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-jessie-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-jessie-fun/p",
+  popularity: 345
  },
  {
   sku: "rihappy-1003152954",
@@ -3463,7 +3808,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977197/Blocos-De-Montar---Fofo-Blocos---Navio-Pirata---12-Pcs---Elka-0.jpg?v=639143763258500000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar-fofo-blocos-navio-pirata-12-pcs-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar-fofo-blocos-navio-pirata-12-pcs-elka/p",
+  popularity: 346
  },
  {
   sku: "rihappy-1003152934",
@@ -3473,7 +3819,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9824165/Pelucia---Disney----Pixar---Toy-Story---Bala-no-Alvo---Fun-0.jpg?v=639100450848200000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-bala-no-alvo-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-bala-no-alvo-fun/p",
+  popularity: 347
  },
  {
   sku: "rihappy-1003152914",
@@ -3483,7 +3830,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9972422/Jogo-De-Memoria---Disney---Pixar---Toy-Story-5---Toyster-0.jpg?v=639142169422530000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-disney-pixar-toy-story-5-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-disney-pixar-toy-story-5-toyster/p",
+  popularity: 348
  },
  {
   sku: "rihappy-1003152896",
@@ -3493,7 +3841,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9821089/Decore-Sua-Luminaria---Style-4-Ever---Unicornio-Kawaii---Fun-0.jpg?v=639099575733200000",
-  productUrl: "https://www.rihappy.com.br/decore-sua-luminaria-style-4-ever-unicornio-kawaii-fun/p"
+  productUrl: "https://www.rihappy.com.br/decore-sua-luminaria-style-4-ever-unicornio-kawaii-fun/p",
+  popularity: 349
  },
  {
   sku: "rihappy-1003152389",
@@ -3503,7 +3852,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9820004/Boneca-Articulada---Disney---Princesas---Ariel-Sereia---Com-Cauda-Rosa---Mattel-0.jpg?v=639144657573870000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-ariel-sereia-com-cauda-rosa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-ariel-sereia-com-cauda-rosa-mattel/p",
+  popularity: 350
  },
  {
   sku: "rihappy-1003151980",
@@ -3513,7 +3863,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9972426/Quebra-Cabeca---Disney---Pixar---Toy-Story-5---200-Pecas---Toyster-0.jpg?v=639142169908100000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-pixar-toy-story-5-200-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-pixar-toy-story-5-200-pecas-toyster/p",
+  popularity: 351
  },
  {
   sku: "rihappy-1003151974",
@@ -3523,7 +3874,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes patinetes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9808931/-Patinete---Skatenet---Led---Dobravel---Bandeirante-0.jpg?v=639148106558430000",
-  productUrl: "https://www.rihappy.com.br/patinete-skatenet-led-dobravel-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/patinete-skatenet-led-dobravel-bandeirante/p",
+  popularity: 352
  },
  {
   sku: "rihappy-1003150934",
@@ -3533,7 +3885,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9792312/Sylvanian-Families---Familia-Dos-Passaros-Citricos---Epoch-0.jpg?v=639089249994370000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-familia-dos-passaros-citricos-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-familia-dos-passaros-citricos-epoch/p",
+  popularity: 353
  },
  {
   sku: "rihappy-1003150229",
@@ -3543,7 +3896,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9785942/Jogo-De-Tabuleiro---Fanaticos-Da-Bola---Nig-Brinquedos-0.jpg?v=639087398383230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fanaticos-da-bola-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fanaticos-da-bola-nig-brinquedos/p",
+  popularity: 354
  },
  {
   sku: "rihappy-1003150081",
@@ -3553,7 +3907,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9772391/Jogo-De-Cartas---Uno---Liar-S---Mattel-0.jpg?v=639083214539600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-liars-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-liars-mattel/p",
+  popularity: 355
  },
  {
   sku: "rihappy-1003147218",
@@ -3563,7 +3918,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722171/Boneca---Barbie---Chelsea---Sortida---Mattel---Modelos-Unitarios-Sortidos-0.jpg?v=639065006489200000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-chelsea-sortida-mattel-modelos-unitarios-sortidos/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-chelsea-sortida-mattel-modelos-unitarios-sortidos/p",
+  popularity: 356
  },
  {
   sku: "rihappy-1003147203",
@@ -3573,7 +3929,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722140/Pista---Hot-Wheels---City---Torre-De-Policia---Mattel-0.jpg?v=639065004581000000",
-  productUrl: "https://www.rihappy.com.br/pista-hot-wheels-city-torre-de-policia-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-hot-wheels-city-torre-de-policia-mattel/p",
+  popularity: 357
  },
  {
   sku: "rihappy-1003146228",
@@ -3583,7 +3940,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9729492/LEGO---Super-Heroes-DC---Batmovel-De-Batman-E-Robin---76333-0.jpg?v=639067035786100000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batmovel-de-batman-e-robin-76333/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batmovel-de-batman-e-robin-76333/p",
+  popularity: 358
  },
  {
   sku: "rihappy-1003145196",
@@ -3593,7 +3951,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10064724/LEGO---Editions-Sports---Trofeu-Oficial-Do-Campeonato-Do-Mundo-Da-FIFA---43020-0.jpg?v=639180997891400000",
-  productUrl: "https://www.rihappy.com.br/lego-editions-sports-trofeu-oficial-do-campeonato-do-mundo-da-fifa-43020/p"
+  productUrl: "https://www.rihappy.com.br/lego-editions-sports-trofeu-oficial-do-campeonato-do-mundo-da-fifa-43020/p",
+  popularity: 359
  },
  {
   sku: "rihappy-1003144858",
@@ -3603,7 +3962,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9974673/Boneco---Surpresa---Fifa---Copa-Do-Mundo-2026---PDQ-25---Modelos-Sortidos---Candide-0.jpg?v=639142814481630000",
-  productUrl: "https://www.rihappy.com.br/boneco-surpresa-fifa-copa-do-mundo-2026-pdq-25-modelos-sortidos-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-surpresa-fifa-copa-do-mundo-2026-pdq-25-modelos-sortidos-candide/p",
+  popularity: 360
  },
  {
   sku: "rihappy-1003143867",
@@ -3613,7 +3973,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9661309/Boneca---Barbie---Reveal-Flores---Surpresa---Mattel-0.jpg?v=639050389497230000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-reveal-flores-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-reveal-flores-surpresa-mattel/p",
+  popularity: 361
  },
  {
   sku: "rihappy-1003142870",
@@ -3623,7 +3984,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9640754/Pokemon-TCG---Poke-Ball---Tin-2021---Ingles---Galapagos-0.jpg?v=639045158460170000",
-  productUrl: "https://www.rihappy.com.br/pokemon-tcg-poke-ball-tin-2021-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/pokemon-tcg-poke-ball-tin-2021-ingles-galapagos/p",
+  popularity: 362
  },
  {
   sku: "rihappy-1003141194",
@@ -3633,7 +3995,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9626346/Conjunto-De-Cartas---Pokemon-TCG---Team-Rocket-s-Mewtwo-Ex-Box---Ingles---Galapagos--0.jpg?v=639040083780670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-cartas-pokemon-tcg-team-rockets-mewtwo-ex-box-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-cartas-pokemon-tcg-team-rockets-mewtwo-ex-box-ingles-galapagos/p",
+  popularity: 363
  },
  {
   sku: "rihappy-1003140894",
@@ -3643,7 +4006,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9615306/Pokemon-TCG---Mega-Gengar-ex--Mega-Diancie-ex---Ingles---Galapagos-0.jpg?v=639038189468700000",
-  productUrl: "https://www.rihappy.com.br/pokemon-tcg-mega-gengar-ex-mega-diancie-ex-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/pokemon-tcg-mega-gengar-ex-mega-diancie-ex-ingles-galapagos/p",
+  popularity: 364
  },
  {
   sku: "rihappy-1003139625",
@@ -3653,7 +4017,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749510/Quebra-Cabeca---Guerreiras-Do-K-Pop---500-Pecas---Grow-0.jpg?v=639075340766430000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-guerreiras-do-kpop-500-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-guerreiras-do-kpop-500-pecas-grow/p",
+  popularity: 365
  },
  {
   sku: "rihappy-1003139611",
@@ -3663,7 +4028,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9662777/Quebra-Cabeca---Panorama---Guerreiras-Do-K-Pop---350-Pecas---Grow-0.jpg?v=639050604670000000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-panorama-guerreiras-do-kpop-350-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-panorama-guerreiras-do-kpop-350-pecas-grow/p",
+  popularity: 366
  },
  {
   sku: "rihappy-1003138124",
@@ -3673,7 +4039,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9653855/LEGO---Speed-Champions---F1---O-Filme---Carro-De-Corrida-Da-Equipe-APXGP-F1---77252-0.jpg?v=639047825658330000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-f1-o-filme-carro-de-corrida-da-equipe-apxgp-f1-77252/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-f1-o-filme-carro-de-corrida-da-equipe-apxgp-f1-77252/p",
+  popularity: 367
  },
  {
   sku: "rihappy-1003137842",
@@ -3683,7 +4050,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9547033/LEGO---Harry-Potter---Fuga-Da-Rua-Dos-Alfeneiros-De-Hagrid-E-Harry---76459-0.jpg?v=639016851400770000",
-  productUrl: "https://www.rihappy.com.br/lego-harry-potter-fuga-da-rua-dos-alfeneiros-de-hagrid-e-harry-76459/p"
+  productUrl: "https://www.rihappy.com.br/lego-harry-potter-fuga-da-rua-dos-alfeneiros-de-hagrid-e-harry-76459/p",
+  popularity: 368
  },
  {
   sku: "rihappy-1003137229",
@@ -3693,7 +4061,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520183/LEGO---Minecraft---Fazenda-de-Galinhas---21585-0.jpg?v=639010518639470000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-fazenda-de-galinhas-21585/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-fazenda-de-galinhas-21585/p",
+  popularity: 369
  },
  {
   sku: "rihappy-1003137120",
@@ -3703,7 +4072,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520311/LEGO---City-Great-Vehicles---Hot-Rod---60485-0.jpg?v=639010519074000000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-hot-rod-60485/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-hot-rod-60485/p",
+  popularity: 370
  },
  {
   sku: "rihappy-1003136882",
@@ -3713,7 +4083,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520495/LEGO---Technic---Ceifeira-Com-Rodas-John-Deere-1470H---42218-0.jpg?v=639010520468100000",
-  productUrl: "https://www.rihappy.com.br/lego-technic-ceifeira-com-rodas-john-deere-1470h-42218/p"
+  productUrl: "https://www.rihappy.com.br/lego-technic-ceifeira-com-rodas-john-deere-1470h-42218/p",
+  popularity: 371
  },
  {
   sku: "rihappy-1003136880",
@@ -3723,7 +4094,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9606788/LEGO---Creator---Tartaruga-Com-Uma-Flor-Lirio-De-Agua---31377-0.jpg?v=639034969494400000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-tartaruga-com-uma-flor-liriodeagua-31377/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-tartaruga-com-uma-flor-liriodeagua-31377/p",
+  popularity: 372
  },
  {
   sku: "rihappy-1003135703",
@@ -3733,7 +4105,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos para alfabetizacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9488838/Jogo-Educativo---Cartas-Geniais---Bandeiras-do-Mundo---Toyster-0.jpg?v=639001954936300000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-cartas-geniais-bandeiras-do-mundo-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-cartas-geniais-bandeiras-do-mundo-toyster/p",
+  popularity: 373
  },
  {
   sku: "rihappy-1003135354",
@@ -3743,7 +4116,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "fantasias espadas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9496801/Acessorio-De-Fantasia---Disney---Pixar---Toy-Story---Espada-Buzz-Lightyear---Toyng-0.jpg?v=639004669799300000",
-  productUrl: "https://www.rihappy.com.br/acessorio-de-fantasia-disney-pixar-toy-story-espada-buzz-lightyear-toyng/p"
+  productUrl: "https://www.rihappy.com.br/acessorio-de-fantasia-disney-pixar-toy-story-espada-buzz-lightyear-toyng/p",
+  popularity: 374
  },
  {
   sku: "rihappy-1003134878",
@@ -3753,7 +4127,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos jogos de mesa",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9477883/Jogo-de-Cartas---Uno---Original---Mattel-0.jpg?v=638998476196700000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-original-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-original-mattel/p",
+  popularity: 375
  },
  {
   sku: "rihappy-1003133630",
@@ -3763,7 +4138,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de series",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9543242/PRE-VENDA--Boneco---Funko-Pop---Guerreiras-Do-K-Pop---Rumi---Candide-0.jpg?v=639015824302100000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-rumi-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-rumi-candide/p",
+  popularity: 376
  },
  {
   sku: "rihappy-1003115389",
@@ -3773,7 +4149,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738577/Boneco-Articulado---Leozin---Dos-Rosa---Novabrink--0.jpg?v=639071093412130000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-leozin-dos-rosa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-leozin-dos-rosa-novabrink/p",
+  popularity: 377
  },
  {
   sku: "rihappy-1003110698",
@@ -3783,7 +4160,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9285340/Jogo-de-Cartas---Pokemon---Deck---Batalha-de-Liga---Mewtwo-Ex---Copag-0.jpg?v=638969020819970000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-mewtwo-ex-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-mewtwo-ex-copag/p",
+  popularity: 378
  },
  {
   sku: "rihappy-1003110639",
@@ -3793,7 +4171,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9285801/Jogo-Memo-Play---Dos-Rosa----Dos-Rosa---Papel---Elka-0.jpg?v=638969132831530000",
-  productUrl: "https://www.rihappy.com.br/jogo-memo-play-dos-rosa-dos-rosa-papel-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-memo-play-dos-rosa-dos-rosa-papel-elka/p",
+  popularity: 379
  },
  {
   sku: "rihappy-1003110418",
@@ -3803,7 +4182,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis carrinhos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9859896/Blocos-De-Montar---Hot-Wheels---Brick-Shop---94-Audi-Avant-RS2---Mattel-0.jpg?v=639110841219370000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar-hot-wheels-brick-shop-94-audi-avant-rs2-mattel/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar-hot-wheels-brick-shop-94-audi-avant-rs2-mattel/p",
+  popularity: 380
  },
  {
   sku: "rihappy-1003093964",
@@ -3813,7 +4193,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes futebol bola de futebol",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9178044/Bola-De-Futebol---Fifa---Mundial---Copa-2026---Numero-5---Sportcom-0.jpg?v=638951116427130000",
-  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-mundial-copa-2026-numero-5-sportcom/p"
+  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-mundial-copa-2026-numero-5-sportcom/p",
+  popularity: 381
  },
  {
   sku: "rihappy-1003093957",
@@ -3823,7 +4204,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes futebol bola de futebol",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9175710/Bola-De-Futebol---Fifa---Paises---Brasil---2026---Numero-5---Sportcom-0.jpg?v=638950984807970000",
-  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-paises-brasil-2026-numero-5-sportcom/p"
+  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-paises-brasil-2026-numero-5-sportcom/p",
+  popularity: 382
  },
  {
   sku: "rihappy-1003055600",
@@ -3833,7 +4215,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9002759/EXCLUSIVO---Jogo-De-Tabuleiro---Perfection---Hasbro-0.jpg?v=638937141913270000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-perfection-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-perfection-hasbro/p",
+  popularity: 383
  },
  {
   sku: "rihappy-1003055395",
@@ -3843,7 +4226,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos mini game",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8697695/Minigame-Portatil---Marvel---Homem-Aranha---Candide-0.jpg?v=638906261209900000",
-  productUrl: "https://www.rihappy.com.br/minigame-portatil-marvel-homemaranha-candide/p"
+  productUrl: "https://www.rihappy.com.br/minigame-portatil-marvel-homemaranha-candide/p",
+  popularity: 384
  },
  {
   sku: "rihappy-1003054478",
@@ -3853,7 +4237,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601490/Carro-Bate-E-Vira---Disney---Carros---Mcqueen---Toyng-0.jpg?v=638896673583370000",
-  productUrl: "https://www.rihappy.com.br/carro-bate-e-vira-disney-carros-mcqueen-toyng/p"
+  productUrl: "https://www.rihappy.com.br/carro-bate-e-vira-disney-carros-mcqueen-toyng/p",
+  popularity: 385
  },
  {
   sku: "rihappy-1003054467",
@@ -3863,7 +4248,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo caminhao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601489/Caminhao-De-Friccao---Disney---Carros---Mack---Toyng-0.jpg?v=638896673245800000",
-  productUrl: "https://www.rihappy.com.br/caminhao-de-friccao-disney-carros-mack-toyng/p"
+  productUrl: "https://www.rihappy.com.br/caminhao-de-friccao-disney-carros-mack-toyng/p",
+  popularity: 386
  },
  {
   sku: "rihappy-1003050984",
@@ -3873,7 +4259,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9662768/Carro-De-Corrida---Hot-Whells---Small-Stunt---1-24-Rc---4-Canais---Azul-0.jpg?v=639050603076100000",
-  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-small-stunt-124-rc-4-canais-azul/p"
+  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-small-stunt-124-rc-4-canais-azul/p",
+  popularity: 387
  },
  {
   sku: "rihappy-1003050336",
@@ -3883,7 +4270,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9365580/Boneca-Articulada---Barbie---Chelsea-Doces-Surpresas---Mattel--0.jpg?v=638985510015530000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-chelsea-doces-surpresas-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-chelsea-doces-surpresas-mattel/p",
+  popularity: 388
  },
  {
   sku: "rihappy-1003050109",
@@ -3893,7 +4281,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8499658/Brinquedo-Educativo---Casinha-A-e-i-o-u---Sortido---JXP-0.jpg?v=638881157775030000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-casinha-aeiou-minimi/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-casinha-aeiou-minimi/p",
+  popularity: 389
  },
  {
   sku: "rihappy-1003049170",
@@ -3903,7 +4292,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9094193/Mini-Playset---Patrulha-Canina---Chase---Lancador-De-Veiculo---Sunny-0.jpg?v=638945123478530000",
-  productUrl: "https://www.rihappy.com.br/mini-playset-patrulha-canina-chase-lancador-de-veiculo-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-playset-patrulha-canina-chase-lancador-de-veiculo-sunny/p",
+  popularity: 390
  },
  {
   sku: "rihappy-1003049043",
@@ -3913,7 +4303,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro war",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9057263/Jogo-De-Tabuleiro---War-II---Grow-0.jpg?v=638942494693370000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-war-ii-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-war-ii-grow/p",
+  popularity: 391
  },
  {
   sku: "rihappy-1003048530",
@@ -3923,7 +4314,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9119375/Jogo-De-Acao---Tira-Varetas---Dos-Rosa---Elka-0.jpg?v=638948549846230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-dos-rosas-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-dos-rosas-elka/p",
+  popularity: 392
  },
  {
   sku: "rihappy-1003048527",
@@ -3933,7 +4325,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774949/Figura-De-Acao---Peppa-Pig---Evie-Quer-Colinho---Hasbro-0.jpg?v=638914031735570000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-evie-quer-colinho-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-evie-quer-colinho-hasbro/p",
+  popularity: 393
  },
  {
   sku: "rihappy-1003047443",
@@ -3943,7 +4336,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9276913/Jogo-De-Cartas---Pokemon---ME01---Booster-Display---Copag-0.jpg?v=638966755384000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me01-booster-display-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-me01-booster-display-copag/p",
+  popularity: 394
  },
  {
   sku: "rihappy-1003046908",
@@ -3953,7 +4347,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323986/Brinquedo-Educativo---Estimulo-E-Diversao-Com-Rinocerontes---Fisher-Price-0.jpg?v=638975380146170000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-estimulo-e-diversao-com-rinocerontes-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-estimulo-e-diversao-com-rinocerontes-fisherprice/p",
+  popularity: 395
  },
  {
   sku: "rihappy-1003046387",
@@ -3963,7 +4358,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8705773/Boneca---Disney---Princesas---Moana---Nadadora---Mattel-0.jpg?v=638906938452770000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-moana-nadadora-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-moana-nadadora-mattel/p",
+  popularity: 396
  },
  {
   sku: "rihappy-1003045919",
@@ -3973,7 +4369,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8352562/Playset-E-Mini-Bonecas---Polly-Pocket---Estojo-Gabby-S-Dollhouse---Mattel-0.jpg?v=638848442088900000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-bonecas-polly-pocket-estojo-gabbys-dollhouse-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-bonecas-polly-pocket-estojo-gabbys-dollhouse-mattel/p",
+  popularity: 397
  },
  {
   sku: "rihappy-1003043609",
@@ -3983,7 +4380,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8352536/Boneca---Cry-Babies---Dreamy---Day-Care---Multikids-0.jpg?v=638848435585730000",
-  productUrl: "https://www.rihappy.com.br/boneca-cry-babies-dreamy-day-care-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-cry-babies-dreamy-day-care-multikids/p",
+  popularity: 398
  },
  {
   sku: "rihappy-1003040932",
@@ -3993,7 +4391,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8363021/Playset---Barbie---Piscina-Dos-Sonhos---Mattel-0.jpg?v=638853266922070000",
-  productUrl: "https://www.rihappy.com.br/playset-barbie-piscina-dos-sonhos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-barbie-piscina-dos-sonhos-mattel/p",
+  popularity: 399
  },
  {
   sku: "rihappy-1003036977",
@@ -4003,7 +4402,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8327956/PRE-VENDA--Jogo-de-Tabuleiro---Monopoly---Harry-Potter---Hasbro-0.jpg?v=638858452517600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-harry-potter-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-monopoly-harry-potter-hasbro/p",
+  popularity: 400
  },
  {
   sku: "rihappy-1003025505",
@@ -4013,7 +4413,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8280547/Boneca---Barbie---Festa-Na-Piscina-Com-Cachorrinhos---Mattel-0.jpg?v=638835153775770000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-festa-na-piscina-com-cachorrinhos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-festa-na-piscina-com-cachorrinhos-mattel/p",
+  popularity: 401
  },
  {
   sku: "rihappy-1003009628",
@@ -4023,7 +4424,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8190048/Mini-Playset---Polly-Pocket---Compacto-Revel---Comidinha-Rapida---Mattel-0.jpg?v=638811808945670000",
-  productUrl: "https://www.rihappy.com.br/mini-playset-polly-pocket-compacto-revel-comidinha-rapida-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-playset-polly-pocket-compacto-revel-comidinha-rapida-mattel/p",
+  popularity: 402
  },
  {
   sku: "rihappy-1003003794",
@@ -4033,7 +4435,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9666369/Mini-Boneco---Maria-Clara-e-Jp---Novabrink-0.jpg?v=639052295622370000",
-  productUrl: "https://www.rihappy.com.br/mini-boneco-maria-clara-e-jp-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneco-maria-clara-e-jp-novabrink/p",
+  popularity: 403
  },
  {
   sku: "rihappy-1002999485",
@@ -4043,7 +4446,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8716062/LEGO---Minifigure---Carro-de-Corrida-Colecionavel-de-F1---71049---Modelos-Sortidos-0.jpg?v=638907918478100000",
-  productUrl: "https://www.rihappy.com.br/lego-minifigures-carros-de-corrida-colecionavel-de-f1-71049/p"
+  productUrl: "https://www.rihappy.com.br/lego-minifigures-carros-de-corrida-colecionavel-de-f1-71049/p",
+  popularity: 404
  },
  {
   sku: "rihappy-1002996061",
@@ -4053,7 +4457,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8078754/Boneca-com-Acessorios---Baby-Alive---Festinha-do-Cha---Cabelo-Preto---Hasbro-0.jpg?v=638787640022200000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-festinha-do-cha-cabelo-preto-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-festinha-do-cha-cabelo-preto-hasbro/p",
+  popularity: 405
  },
  {
   sku: "rihappy-1002993392",
@@ -4063,7 +4468,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7961493/Blocos-de-Montar---Disney---Minnie---Elka-0.jpg?v=638780037076800000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar-disney-minnie-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar-disney-minnie-elka/p",
+  popularity: 406
  },
  {
   sku: "rihappy-1002993386",
@@ -4073,7 +4479,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7961520/Instumento-Musical-de-Brinquedo---Guitarra---Bluey---Azul---Elka-0.jpg?v=638780039567030000",
-  productUrl: "https://www.rihappy.com.br/instumento-musical-de-brinquedo-guitarra-bluey-azul-elka/p"
+  productUrl: "https://www.rihappy.com.br/instumento-musical-de-brinquedo-guitarra-bluey-azul-elka/p",
+  popularity: 407
  },
  {
   sku: "rihappy-1002985913",
@@ -4083,7 +4490,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7841047/Conjunto-De-Massa-De-Modelar-E-Acessorios---Marvel---Spidey-Amigos---Cotiplas-0.jpg?v=638773870203270000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-e-acessorios-marvel-spidey-amigos-cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-e-acessorios-marvel-spidey-amigos-cotiplas/p",
+  popularity: 408
  },
  {
   sku: "rihappy-1002984794",
@@ -4093,7 +4501,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7942819/Jogo-de-Cartas---Unstable-Unicorns---De-2-a-8-Jogadores---Galapagos-0.jpg?v=638779308284400000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-unstable-unicorns-de-2-a-8-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-unstable-unicorns-de-2-a-8-jogadores-galapagos/p",
+  popularity: 409
  },
  {
   sku: "rihappy-1002970522",
@@ -4103,7 +4512,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9277042/Jogo-de-Cartas---Pokemon---Deck---Batalha-de-Liga---Dragapult---Copag-0.jpg?v=638966773458530000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-dragpult-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-dragpult-copag/p",
+  popularity: 410
  },
  {
   sku: "rihappy-1002969449",
@@ -4113,7 +4523,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7473355/Jogo-de-Tabuleiro---Fato-ou-Fake---2-ou-mais-Jogadores---Nig-Brinquedos-0.jpg?v=638754996925030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-2-ou-mais-jogadores-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-2-ou-mais-jogadores-nig-brinquedos/p",
+  popularity: 411
  },
  {
   sku: "rihappy-1002969227",
@@ -4123,7 +4534,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8814638/Lancador-de-Dardos---Nerf---Series-Purestrike---2-Dardos-Oficiais-N1---Hasbro-0.jpg?v=638918268756000000",
-  productUrl: "https://www.rihappy.com.br/lancadores-de-agua-nerf-series-purestrike-2-dardos-oficiais-n1-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancadores-de-agua-nerf-series-purestrike-2-dardos-oficiais-n1-hasbro/p",
+  popularity: 412
  },
  {
   sku: "rihappy-1002966494",
@@ -4133,7 +4545,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7367218/Jogo---Tapa-Certo-Stitch---2-jogadores---Estrela-0.jpg?v=638743544870370000",
-  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-stitch-2-jogadores-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-stitch-2-jogadores-estrela/p",
+  popularity: 413
  },
  {
   sku: "rihappy-1002965147",
@@ -4143,7 +4556,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7303075/Boneca-Surpresa---Disney-Princesas---Torre-Reveal---Mattel-0.jpg?v=638736667651700000",
-  productUrl: "https://www.rihappy.com.br/boneca-surpresa-disney-princesas-torre-reveal-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-surpresa-disney-princesas-torre-reveal-mattel/p",
+  popularity: 414
  },
  {
   sku: "rihappy-1002963644",
@@ -4153,7 +4567,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7433478/Boneca-Articulada---Disney---Princesas---Vestido-de-Festa---Modelos-Sortidos---Mattel-0.jpg?v=639117000666300000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-vestido-de-festa-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-vestido-de-festa-modelos-sortidos-mattel/p",
+  popularity: 415
  },
  {
   sku: "rihappy-1002958145",
@@ -4163,7 +4578,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7422560/Boneca---Gabbys-Dollhouse----Gabby-Girl---Sunny-0.jpg?v=638749666580270000",
-  productUrl: "https://www.rihappy.com.br/boneca-gabbys-dollhouse-gabby-girl-sunny/p"
+  productUrl: "https://www.rihappy.com.br/boneca-gabbys-dollhouse-gabby-girl-sunny/p",
+  popularity: 416
  },
  {
   sku: "rihappy-1002952093",
@@ -4173,7 +4589,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601675/Meu-Primeiro-Quebra-cabeca-de-Madeira---Modelos-Sortidos---Fisher-Price-0.jpg?v=638896705934770000",
-  productUrl: "https://www.rihappy.com.br/meu-primeiro-quebracabeca-de-madeira-modelos-sortidos-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/meu-primeiro-quebracabeca-de-madeira-modelos-sortidos-fisherprice/p",
+  popularity: 417
  },
  {
   sku: "rihappy-1002951693",
@@ -4183,7 +4600,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7196167/Playset---Barbie---Mini-BarbieLand---Modelos-Sortidos---Mattel-0.jpg?v=638724560275400000",
-  productUrl: "https://www.rihappy.com.br/playset-barbie-mini-barbieland-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-barbie-mini-barbieland-modelos-sortidos-mattel/p",
+  popularity: 418
  },
  {
   sku: "rihappy-1002951684",
@@ -4193,7 +4611,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7533693/Boneca-Articulada---Barbie---Donzela---Modelos-Sortidos---Mattel-0.jpg?v=638760997059200000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-donzela-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-donzela-modelos-sortidos-mattel/p",
+  popularity: 419
  },
  {
   sku: "rihappy-1002950217",
@@ -4203,7 +4622,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7181015/Boneca-e-Acessorios---Barbie---Carro-Conversivel---Roxo---Mattel-0.jpg?v=638721123971100000",
-  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-barbie-carro-conversivel-roxo-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-barbie-carro-conversivel-roxo-mattel/p",
+  popularity: 420
  },
  {
   sku: "rihappy-1002948325",
@@ -4213,7 +4633,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7196657/Playset---Disney---Frozen---Castelo-Empilhavel---Surpresa---Mattel-0.jpg?v=638724658840700000",
-  productUrl: "https://www.rihappy.com.br/playset-disney-frozen-castelo-empilhavel-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-disney-frozen-castelo-empilhavel-surpresa-mattel/p",
+  popularity: 421
  },
  {
   sku: "rihappy-1002948235",
@@ -4223,7 +4644,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7181678/Boneca-Articulada---Barbie---Receita-da-Amizade---Teresa---Mattel-0.jpg?v=638721146557930000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-receita-da-amizade-teresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-receita-da-amizade-teresa-mattel/p",
+  popularity: 422
  },
  {
   sku: "rihappy-1002942383",
@@ -4233,7 +4655,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7133446/LEGO---LEGO-Creator---Aeronave--Aviao-de-Corrida---31160-0.jpg?v=638708249300630000",
-  productUrl: "https://www.rihappy.com.br/lego-lego-creator-aeronave-aviao-de-corrida-31160/p"
+  productUrl: "https://www.rihappy.com.br/lego-lego-creator-aeronave-aviao-de-corrida-31160/p",
+  popularity: 423
  },
  {
   sku: "rihappy-1002942373",
@@ -4243,7 +4666,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7132131/LEGO---City-Great-Vehicles---Motorhome-de-Aventuras-Festivas---60454-0.jpg?v=638706501060000000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-motorhome-de-aventuras-festivas-60454/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-motorhome-de-aventuras-festivas-60454/p",
+  popularity: 424
  },
  {
   sku: "rihappy-1002941069",
@@ -4253,7 +4677,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114521/LEGO---City-Great-Vehicles---Utilitario-Off-Road-4x4---60447-0.jpg?v=638697000711370000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-utilitario-offroad-4x4-60447/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-utilitario-offroad-4x4-60447/p",
+  popularity: 425
  },
  {
   sku: "rihappy-1002940908",
@@ -4263,7 +4688,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114798/LEGO---City-Great-Vehicles---Pack-de-Carros-de-Corrida-Aviao-vs-Leito-de-Hospital---60459-0.jpg?v=638697006355770000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-pack-de-carros-de-corrida-aviao-vs-leito-de-hospital-60459/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-pack-de-carros-de-corrida-aviao-vs-leito-de-hospital-60459/p",
+  popularity: 426
  },
  {
   sku: "rihappy-1002940904",
@@ -4273,7 +4699,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7115034/LEGO---City-Great-Vehicles---Caminhao-de-Donuts---60452-0.jpg?v=638697009336730000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-caminhao-de-donuts-60452/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-caminhao-de-donuts-60452/p",
+  popularity: 427
  },
  {
   sku: "rihappy-1002940902",
@@ -4283,7 +4710,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114751/LEGO---City-Great-Vehicles---Ambulancia-de-Emergencia---60451-0.jpg?v=638697004521500000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-ambulancia-de-emergencia-60451/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-ambulancia-de-emergencia-60451/p",
+  popularity: 428
  },
  {
   sku: "rihappy-1002940898",
@@ -4293,7 +4721,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8716816/LEGO---City-Formula-1---Piloto-de-F1-com-Carro-de-Corrida-da-Mclaren---60442-0.jpg?v=638907954073130000",
-  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-piloto-de-f1-com-carro-de-corrida-da-mclaren-60442/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-piloto-de-f1-com-carro-de-corrida-da-mclaren-60442/p",
+  popularity: 429
  },
  {
   sku: "rihappy-1002903751",
@@ -4303,7 +4732,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais microfone de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8875531/Aparelho-de-Karaoke---Boombox---Infantil---Bluey---Candide-0.jpg?v=638925276725770000",
-  productUrl: "https://www.rihappy.com.br/aparelho-de-karaoke-boombox-karaoke-infantil-bluey-candide/p"
+  productUrl: "https://www.rihappy.com.br/aparelho-de-karaoke-boombox-karaoke-infantil-bluey-candide/p",
+  popularity: 430
  },
  {
   sku: "rihappy-1002898346",
@@ -4313,7 +4743,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6825913/Disney-Pelucia-Divertida-Mente-2---Tedio-0.jpg?v=638648531291800000",
-  productUrl: "https://www.rihappy.com.br/disney-pelucia-divertida-mente-2-tedio/p"
+  productUrl: "https://www.rihappy.com.br/disney-pelucia-divertida-mente-2-tedio/p",
+  popularity: 431
  },
  {
   sku: "rihappy-1002898345",
@@ -4323,7 +4754,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6825905/Figura-de-Pelucia---Disney---Divertidamente-2---Ansiedade---Fun-0.jpg?v=638648531201930000",
-  productUrl: "https://www.rihappy.com.br/figura-de-pelucia-disney-divertidamente-2-ansiedade-fun/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-pelucia-disney-divertidamente-2-ansiedade-fun/p",
+  popularity: 432
  },
  {
   sku: "rihappy-1002852648",
@@ -4333,7 +4765,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8601703/Playset---Disney-Princesas---Filme-Moana-2---Barco---Mattel-0.jpg?v=638896706652600000",
-  productUrl: "https://www.rihappy.com.br/playset-disney-princesas-moana-2-barco-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-disney-princesas-moana-2-barco-mattel/p",
+  popularity: 433
  },
  {
   sku: "rihappy-1002851040",
@@ -4343,7 +4776,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6454001/Kit-de-Massa-de-Modelar---Play-Doh---10-Cores---Hasbro-0.jpg?v=638616640671200000",
-  productUrl: "https://www.rihappy.com.br/kit-de-massa-de-modelar-playdoh-10-cores-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/kit-de-massa-de-modelar-playdoh-10-cores-hasbro/p",
+  popularity: 434
  },
  {
   sku: "rihappy-1002851026",
@@ -4353,7 +4787,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7509524/Conjunto-de-Massinhas---Play-Doh---Modelos-Sortidos---448g---Hasbro-0.jpg?v=638757446514400000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-playdoh-448g-dinossauros-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massinhas-playdoh-448g-dinossauros-hasbro/p",
+  popularity: 435
  },
  {
   sku: "rihappy-1002850077",
@@ -4363,7 +4798,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6444078/Jogo-de-Piao---Beyblade-X---Roar-Tyranno---Azul---Hasbro-0.jpg?v=638614848368600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-piao-beyblade-x-roar-tyranno-azul-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-piao-beyblade-x-roar-tyranno-azul-hasbro/p",
+  popularity: 436
  },
  {
   sku: "rihappy-1002846802",
@@ -4373,7 +4809,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6406319/Conjunto-Boneca-Articulada-e-Acessorios---Wicked---Elphaba---Mattel-0.jpg?v=638606465468930000",
-  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-wicked-elphaba-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-wicked-elphaba-mattel/p",
+  popularity: 437
  },
  {
   sku: "rihappy-1002843816",
@@ -4383,7 +4820,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6396287/Quebra-Cabeca---Trem-pela-Cidade---Quebra-Cabeca-1000-Pecas---Toyster-0.jpg?v=638602920822200000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-trem-pela-cidade-quebracabeca-1000-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-trem-pela-cidade-quebracabeca-1000-pecas-toyster/p",
+  popularity: 438
  },
  {
   sku: "rihappy-1002838033",
@@ -4393,7 +4831,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6357671/Boneca-Articulada---Barbie-Fashion---Dia-de-Praia---Mattel-0.jpg?v=638574303448500000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fashion-dia-de-praia-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fashion-dia-de-praia-mattel/p",
+  popularity: 439
  },
  {
   sku: "rihappy-1002837824",
@@ -4403,7 +4842,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de guerra",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6367445/Jogo-de-Tabuleiro---Batalha-das-Esferas---Dragon-Ball-Z---Elka-0.jpg?v=638578688983930000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-batalha-das-esferas-dragon-ball-z-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-batalha-das-esferas-dragon-ball-z-elka/p",
+  popularity: 440
  },
  {
   sku: "rihappy-1002837280",
@@ -4413,7 +4853,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8762603/Pista-de-Percurso---Pista-Eletrica---Carros---Disney---Toyng-0.jpg?v=638912937936630000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-pista-eletrica-carros-disney-toyng/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-pista-eletrica-carros-disney-toyng/p",
+  popularity: 441
  },
  {
   sku: "rihappy-1002836843",
@@ -4423,7 +4864,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6349447/Boneca-Com-Acessorios---Disney---Moana---Novabrink-0.jpg?v=638560430130600000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-disney-moana-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-disney-moana-novabrink/p",
+  popularity: 442
  },
  {
   sku: "rihappy-1002836789",
@@ -4433,7 +4875,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10064715/LEGO---Super-Heroes-Marvel---Homem-de-Ferro-com-Motocicleta-e-o-Hulk---76287-0.jpg?v=639180958664300000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homem-de-ferro-com-motocicleta-e-o-hulk-76287/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homem-de-ferro-com-motocicleta-e-o-hulk-76287/p",
+  popularity: 443
  },
  {
   sku: "rihappy-1002836785",
@@ -4443,7 +4886,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6799289/LEGO---Speed-Champions---Supercarro-Ferrari-F40---76934-0.jpg?v=638642576560070000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-supercarro-ferrari-f40-76934/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-supercarro-ferrari-f40-76934/p",
+  popularity: 444
  },
  {
   sku: "rihappy-1002836779",
@@ -4453,7 +4897,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6434957/Brinquedo-Interativo---Disney---Baby---Pula-Monstros-Sa---Yestoys-0.jpg?v=638610880472970000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-disney-baby-pula-monstros-sa-yestoys/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-disney-baby-pula-monstros-sa-yestoys/p",
+  popularity: 445
  },
  {
   sku: "rihappy-1002836298",
@@ -4463,7 +4908,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7102805/Jogo-De-Cartas---Phase-10---De-2-a-6-Jogadores---Mattel-0.jpg?v=638693621010770000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-phase-10-de-2-a-6-jogadores-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-phase-10-de-2-a-6-jogadores-mattel/p",
+  popularity: 446
  },
  {
   sku: "rihappy-1002836028",
@@ -4473,7 +4919,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes artesanato",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6346413/Conjunto-De-Artesanato---Aquabeads---Decorator-s--Mala-De-Transporte---Epoch-0.jpg?v=638556914949730000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artesanato-aquabeads-decorators-mala-de-transporte-epoch/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artesanato-aquabeads-decorators-mala-de-transporte-epoch/p",
+  popularity: 447
  },
  {
   sku: "rihappy-1002835648",
@@ -4483,7 +4930,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9057457/Pelucia---Little-Live-Pets---Meu-Baby-Macaquinho---Fun-0.jpg?v=638942521284000000",
-  productUrl: "https://www.rihappy.com.br/pelucia-little-live-pets-meu-baby-macaquinho-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-little-live-pets-meu-baby-macaquinho-fun/p",
+  popularity: 448
  },
  {
   sku: "rihappy-1002835474",
@@ -4493,7 +4941,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes futebol traves futebol",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6342362/Kit-com-2-Traves-e-uma-Bola-de-Vinil---Chute-a-Gol---Sonic---Lider-0.jpg?v=638555222279700000",
-  productUrl: "https://www.rihappy.com.br/kit-com-2-traves-e-uma-bola-de-vinil-chute-a-gol-sonic-lider/p"
+  productUrl: "https://www.rihappy.com.br/kit-com-2-traves-e-uma-bola-de-vinil-chute-a-gol-sonic-lider/p",
+  popularity: 449
  },
  {
   sku: "rihappy-1002835125",
@@ -4503,7 +4952,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6434796/Brinquedo-Primeira-Infancia---Volante-de-Atividades---Interativo---Fisher-Price-0.jpg?v=638610871470770000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-primeira-infancia-volante-de-atividades-interativo-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-primeira-infancia-volante-de-atividades-interativo-fisherprice/p",
+  popularity: 450
  },
  {
   sku: "rihappy-1002834949",
@@ -4513,7 +4963,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6353350/Boneca-Bebe---Baby-Alive---Minha-Melhor-Amiga---Katie-Kat---Hasbro-0.jpg?v=638564062663870000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-minha-melhor-amiga-katie-kat-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-minha-melhor-amiga-katie-kat-hasbro/p",
+  popularity: 451
  },
  {
   sku: "rihappy-1002834923",
@@ -4523,7 +4974,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7875273/Boneca-Articulada---Elsa---Toddler---Frozen---Multikids-0.jpg?v=638775749283300000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-elsa-toddler-frozen-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-elsa-toddler-frozen-multikids/p",
+  popularity: 452
  },
  {
   sku: "rihappy-1002833520",
@@ -4533,7 +4985,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8031630/Ovo-Surpresa---Zuru---Rainbocorn-Kittycorn---Modelos-Sortidos---Fun-0.jpg?v=638784193755800000",
-  productUrl: "https://www.rihappy.com.br/ovo-surpresa-zuru-rainbocorn-kittycorn-rosa-fun/p"
+  productUrl: "https://www.rihappy.com.br/ovo-surpresa-zuru-rainbocorn-kittycorn-rosa-fun/p",
+  popularity: 453
  },
  {
   sku: "rihappy-1002830504",
@@ -4543,7 +4996,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6319172/Quebra-Cabeca---200-Pecas---Harry-Potter---Grow-0.jpg?v=638545702596500000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-200-pecas-harry-potter-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-200-pecas-harry-potter-grow/p",
+  popularity: 454
  },
  {
   sku: "rihappy-1002828658",
@@ -4553,7 +5007,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao imagem e acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6453529/Jogo-De-Acao---Imagem-E-Acao-Maluco---Grow-0.jpg?v=638615959877200000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-imagem-e-acao-maluco-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-imagem-e-acao-maluco-grow/p",
+  popularity: 455
  },
  {
   sku: "rihappy-1002828522",
@@ -4563,7 +5018,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6494712/Quebra-Cabeca---Hello-Kitty---200-Pecas---Grow-0.jpg?v=638621805472670000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-hello-kitty-200-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-hello-kitty-200-pecas-grow/p",
+  popularity: 456
  },
  {
   sku: "rihappy-1002826747",
@@ -4573,7 +5029,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8468386/Relogio-Projetor---Patrulha-Canina--Toyng-0.jpg?v=638874965067870000",
-  productUrl: "https://www.rihappy.com.br/relogio-projetor-patrulha-canina-toyng/p"
+  productUrl: "https://www.rihappy.com.br/relogio-projetor-patrulha-canina-toyng/p",
+  popularity: 457
  },
  {
   sku: "rihappy-1002826296",
@@ -4583,7 +5040,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6301346/Figura-De-Vinil---Babyland---Polvo-Musical---Com-Sons-E-Luzes---Azul---Cardoso-0.jpg?v=638533668711430000",
-  productUrl: "https://www.rihappy.com.br/figura-de-vinil-babyland-polvo-musical-com-sons-e-luzes-azul-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-vinil-babyland-polvo-musical-com-sons-e-luzes-azul-cardoso/p",
+  popularity: 458
  },
  {
   sku: "rihappy-1002826138",
@@ -4593,7 +5051,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7377919/Mini-Bonecas---Mini-Bebes---Series-Surpresa---Mini-Brands---Modelos-Unitarios-Sortidos---Candide-0.jpg?v=638744517318200000",
-  productUrl: "https://www.rihappy.com.br/mini-bonecas-mini-bebes-series-surpresa-mini-brands-modelos-unitarios-sortidos-candide/p"
+  productUrl: "https://www.rihappy.com.br/mini-bonecas-mini-bebes-series-surpresa-mini-brands-modelos-unitarios-sortidos-candide/p",
+  popularity: 459
  },
  {
   sku: "rihappy-1002822010",
@@ -4603,7 +5062,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6943790/Carreta-Monstruosa---Maquinas-Furiosas---Fanfun-0.jpg?v=638672036667570000",
-  productUrl: "https://www.rihappy.com.br/carreta-monstruosa-maquinas-furiosas-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/carreta-monstruosa-maquinas-furiosas-fanfun/p",
+  popularity: 460
  },
  {
   sku: "rihappy-1002821973",
@@ -4613,7 +5073,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7925841/Lava-Rapido-Irado---Piranha---Maquinas-Furiosas---Fanfun-0.jpg?v=638778335792800000",
-  productUrl: "https://www.rihappy.com.br/lava-rapido-irado-piranha-maquinas-furiosas-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/lava-rapido-irado-piranha-maquinas-furiosas-fanfun/p",
+  popularity: 461
  },
  {
   sku: "rihappy-1002821958",
@@ -4623,7 +5084,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8326496/Guindaste---Super-Divertido---Racing---Fanfun-0.jpg?v=638841706194000000",
-  productUrl: "https://www.rihappy.com.br/super-guindaste-guindaste-super-divertido-fanfun-racing-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/super-guindaste-guindaste-super-divertido-fanfun-racing-fanfun/p",
+  popularity: 462
  },
  {
   sku: "rihappy-1002821189",
@@ -4633,7 +5095,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes futebol bola de futebol",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6271856/Bola-de-Futebol---Real-Madrid---Tamanho-5---Maccabi-0.jpg?v=638519091279300000",
-  productUrl: "https://www.rihappy.com.br/bola-de-futebol-real-madrid-tamanho-5-maccabi/p"
+  productUrl: "https://www.rihappy.com.br/bola-de-futebol-real-madrid-tamanho-5-maccabi/p",
+  popularity: 463
  },
  {
   sku: "rihappy-1002820330",
@@ -4643,7 +5106,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9087554/Mini-Carrinho---Disney-e-Pixar---Diecast---Modelos-Unitarios-Sortidos---Mattel-0.jpg?v=638944223270330000",
-  productUrl: "https://www.rihappy.com.br/mini-carrinho-disney-e-pixar-diecast-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-carrinho-disney-e-pixar-diecast-mattel/p",
+  popularity: 464
  },
  {
   sku: "rihappy-1002820309",
@@ -4653,7 +5117,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7046512/Pulseiras-Magicas---Mundo-Unicorino---Fanfun-0.jpg?v=638682463097700000",
-  productUrl: "https://www.rihappy.com.br/pulseiras-mundo-unicorino-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/pulseiras-mundo-unicorino-fanfun/p",
+  popularity: 465
  },
  {
   sku: "rihappy-1002819906",
@@ -4663,7 +5128,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos mesa para criancas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7726298/Mesa-de-Atividades---ABC---Minimi-0.jpg?v=638769703634030000",
-  productUrl: "https://www.rihappy.com.br/mesa-de-atividades-abc-minimi/p"
+  productUrl: "https://www.rihappy.com.br/mesa-de-atividades-abc-minimi/p",
+  popularity: 466
  },
  {
   sku: "rihappy-1002819353",
@@ -4673,7 +5139,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722484/Cabelos-Rainbow---Maquina-de-Terere---Fanfun-0.jpg?v=639065161906500000",
-  productUrl: "https://www.rihappy.com.br/cabelos-rainbow-maquina-de-terere-fanfun-expressar-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/cabelos-rainbow-maquina-de-terere-fanfun-expressar-fanfun/p",
+  popularity: 467
  },
  {
   sku: "rihappy-1002819109",
@@ -4683,7 +5150,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6799493/Conjunto-de-Micangas---Faca-Voce-Mesmo---Fashion---Fanfun-0.jpg?v=638642667210630000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-faca-voce-mesmo-fashion-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-faca-voce-mesmo-fashion-fanfun/p",
+  popularity: 468
  },
  {
   sku: "rihappy-1002818639",
@@ -4693,7 +5161,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6256634/Jogo-de-Tabuleiro---Fato-ou-Fake---Harry-Potter---2-ou---Jogadores---Nig-Brinquedos-0.jpg?v=638500818998600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-harry-potter-2-ou--jogadores-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-harry-potter-2-ou--jogadores-nig-brinquedos/p",
+  popularity: 469
  },
  {
   sku: "rihappy-1002815930",
@@ -4703,7 +5172,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545748/Conjunto-Massa-de-Modelar---Play-doh---Brincando-de-Sorveteria---Hasbro-0.jpg?v=638623660840700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-playdoh-brincando-de-sorveteria-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-playdoh-brincando-de-sorveteria-hasbro/p",
+  popularity: 470
  },
  {
   sku: "rihappy-1002813044",
@@ -4713,7 +5183,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6349022/Jogo-Educativo---Geobrasil---Grow-0.jpg?v=638557888923000000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-geobrasil-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-geobrasil-grow/p",
+  popularity: 471
  },
  {
   sku: "rihappy-1002813042",
@@ -4723,7 +5194,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6234290/Quebra-Cabeca---200-Pecas---Espaco-Sideral---Grow-0.jpg?v=638479374490930000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-200-pecas-espaco-sideral-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-200-pecas-espaco-sideral-grow/p",
+  popularity: 472
  },
  {
   sku: "rihappy-1002811078",
@@ -4733,7 +5205,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977170/Pirulito-Com-Acucar-Explosivo---Pop-Shoks---Sabores-Sortidos---Kidszone-0.jpg?v=639143747245870000",
-  productUrl: "https://www.rihappy.com.br/pirulito-com-acucar-explosivo-pop-shoks-kidszone/p"
+  productUrl: "https://www.rihappy.com.br/pirulito-com-acucar-explosivo-pop-shoks-kidszone/p",
+  popularity: 473
  },
  {
   sku: "rihappy-1002809223",
@@ -4743,7 +5216,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6205652/Sylvanian-Families---Conjunto-Festa-de-Doces---Epoch-0.jpg?v=638459332663370000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-festa-de-doces-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-festa-de-doces-epoch/p",
+  popularity: 474
  },
  {
   sku: "rihappy-1002807178",
@@ -4753,7 +5227,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7244931/LEGO---Speed-Champions---Carro-Esportivo-Ford-Mustang-Dark-Horse---76920-0.jpg?v=638730806440530000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-ford-mustang-dark-horse-76920/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-ford-mustang-dark-horse-76920/p",
+  popularity: 475
  },
  {
   sku: "rihappy-1002804178",
@@ -4763,7 +5238,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6471031/Jogo-de-Acao---Cai-Nao-Cai---Tetris---Estrela-0.jpg?v=638620964495870000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-cai-nao-cai-tetris-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-cai-nao-cai-tetris-estrela/p",
+  popularity: 476
  },
  {
   sku: "rihappy-1002804093",
@@ -4773,7 +5249,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9985363/Lego---Botanicals---Girassois---40524-0.jpg?v=639147996096330000",
-  productUrl: "https://www.rihappy.com.br/lego-lel-flowers-girassois-40524/p"
+  productUrl: "https://www.rihappy.com.br/lego-lel-flowers-girassois-40524/p",
+  popularity: 477
  },
  {
   sku: "rihappy-1002799494",
@@ -4783,7 +5260,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6471003/Pelucia---Sonic---Candide-0.jpg?v=638620962705600000",
-  productUrl: "https://www.rihappy.com.br/pelucia-sonic-candide/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-sonic-candide/p",
+  popularity: 478
  },
  {
   sku: "rihappy-1002794304",
@@ -4793,7 +5271,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7377684/Brinquedo-para-Bebes---Controle-Videogame---Fisher-Price-0.jpg?v=638744499989800000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-para-bebes-controle-videogame-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-para-bebes-controle-videogame-fisherprice/p",
+  popularity: 479
  },
  {
   sku: "rihappy-1002788487",
@@ -4803,7 +5282,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6092486/Conjunto-Boneca-E-Acessorios---Barbie---Chelsea-Piloto-De-Aviao---Mattel-0.jpg?v=638410074107000000",
-  productUrl: "https://www.rihappy.com.br/conjunto-boneca-e-acessorios-barbie-chelsea-piloto-de-aviao-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-boneca-e-acessorios-barbie-chelsea-piloto-de-aviao-mattel/p",
+  popularity: 480
  },
  {
   sku: "rihappy-1002788135",
@@ -4813,7 +5293,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7182254/Brinquedo-Educativo---Controle-Remoto---Irma-Do-Cachorrinho---Fisher-Price-0.jpg?v=638721294286000000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-controle-remoto-irma-do-cachorrinho-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-controle-remoto-irma-do-cachorrinho-fisherprice/p",
+  popularity: 481
  },
  {
   sku: "rihappy-1002787760",
@@ -4823,7 +5304,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6404000/Boneca---Barbie-Sereia---Modelos-Sortidos---Embalagem-Unitaria---Mattel-0.jpg?v=638605340844770000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-sereia-cabelo-verde-e-azul-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-sereia-cabelo-verde-e-azul-mattel/p",
+  popularity: 482
  },
  {
   sku: "rihappy-1002784102",
@@ -4833,7 +5315,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056628/LEGO---City-Fire---Helicoptero-de-Resgate-dos-Bombeiros---60411-0.jpg?v=638942324325430000",
-  productUrl: "https://www.rihappy.com.br/lego-city-fire-helicoptero-de-resgate-dos-bombeiros-60411/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-fire-helicoptero-de-resgate-dos-bombeiros-60411/p",
+  popularity: 483
  },
  {
   sku: "rihappy-1002783883",
@@ -4843,7 +5326,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6101230/LEGO---City-Space---Nave-Espacial-Interestelar---60430-0.jpg?v=638412080020170000",
-  productUrl: "https://www.rihappy.com.br/lego-city-space-nave-espacial-interestelar-60430/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-space-nave-espacial-interestelar-60430/p",
+  popularity: 484
  },
  {
   sku: "rihappy-1002783821",
@@ -4853,7 +5337,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7251292/Lego-Creator---Camara-Retro---31147-0.jpg?v=638731641938630000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-camara-retro-31147/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-camara-retro-31147/p",
+  popularity: 485
  },
  {
   sku: "rihappy-1002783298",
@@ -4863,7 +5348,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6070444/Mini-Boneco---Homem-Aranha---Marvel---Toyng-0.jpg?v=638388630869730000",
-  productUrl: "https://www.rihappy.com.br/mini-boneco-homem-aranha-marvel-toyng/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneco-homem-aranha-marvel-toyng/p",
+  popularity: 486
  },
  {
   sku: "rihappy-1002781754",
@@ -4873,7 +5359,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7248418/Lego---Sonic---Fuga-do-Shadow-The-Hedgehog---76995-0.jpg?v=638731504688600000",
-  productUrl: "https://www.rihappy.com.br/lego-sonic-fuga-do-shadow-the-hedgehog-76995/p"
+  productUrl: "https://www.rihappy.com.br/lego-sonic-fuga-do-shadow-the-hedgehog-76995/p",
+  popularity: 487
  },
  {
   sku: "rihappy-1002759878",
@@ -4883,7 +5370,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5959505/Conjunto-de-Jogos-Educativos---Super-Kit-Junior-3-em-1---Toyster-0.jpg?v=638343617903700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-jogos-educativos-super-kit-junior-3-em-1-toyster/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-jogos-educativos-super-kit-junior-3-em-1-toyster/p",
+  popularity: 488
  },
  {
   sku: "rihappy-1002733220",
@@ -4893,7 +5381,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5826500/Laptop-Infantil---C--Tela-Incorp---Sonic---Minigame---Candide-0.jpg?v=638264133004000000",
-  productUrl: "https://www.rihappy.com.br/laptop-infantil-c-tela-incorp-sonic-minigame-candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-infantil-c-tela-incorp-sonic-minigame-candide/p",
+  popularity: 489
  },
  {
   sku: "rihappy-1002732742",
@@ -4903,7 +5392,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5826157/Quebra-Cabeca---Snoopy---Peanuts---500-Pecas---Grow-0.jpg?v=638260015382800000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-snoopy-peanuts-500-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-snoopy-peanuts-500-pecas-grow/p",
+  popularity: 490
  },
  {
   sku: "rihappy-1002732427",
@@ -4913,7 +5403,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8708455/Quebra-Cabeca---Leonardo-da-Vinci---Mona-Lisa---500-Pecas-Nano---Toyster-0.jpg?v=638907130803100000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-leonardo-da-vinci-mona-lisa-500-pecas-nano-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-leonardo-da-vinci-mona-lisa-500-pecas-nano-toyster/p",
+  popularity: 491
  },
  {
   sku: "rihappy-1002731683",
@@ -4923,7 +5414,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5822879/Carrinho-Com-Controle-Remoto---Sonic-O-Ourico---Sonic-Mestre-Piloto---Candide---Azul-0.jpg?v=638258220605270000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-o-ourico-sonic-mestre-piloto-candide-azul/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-sonic-o-ourico-sonic-mestre-piloto-candide-azul/p",
+  popularity: 492
  },
  {
   sku: "rihappy-1002725484",
@@ -4933,7 +5425,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6048033/Boneco-Articulado---Marvel---Titan-Heroes---X-Men---Wolverine---Hasbro-0.jpg?v=638370344347470000",
-  productUrl: "https://www.rihappy.com.br/boneco-marvel-titan-heroes-xmen-figura-de-30-cm-wolverine-f7972-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-marvel-titan-heroes-xmen-figura-de-30-cm-wolverine-f7972-hasbro/p",
+  popularity: 493
  },
  {
   sku: "rihappy-1002722731",
@@ -4943,7 +5436,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos stop",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5756597/Jogo-Classico---Stop----2-a-4-Jogadores---Nig-Brinquedos-0.jpg?v=638204634629300000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-stop-2-a-4-jogadores-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-stop-2-a-4-jogadores-nig-brinquedos/p",
+  popularity: 494
  },
  {
   sku: "rihappy-1002718298",
@@ -4953,7 +5447,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5831722/Boneca-Articulada---Disney---Princesas---Ariel---Multikids-0.jpg?v=638272072433870000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-ariel-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-ariel-multikids/p",
+  popularity: 495
  },
  {
   sku: "rihappy-1002716282",
@@ -4963,7 +5458,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7072305/quebra-cabeca-60-pecas-patrulha-canina-modelos-sortidos-grow_frente.jpg?v=638684281162530000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-quebra-cabeca-60-pecas-patrulha-canina-azul-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-quebra-cabeca-60-pecas-patrulha-canina-azul-grow/p",
+  popularity: 496
  },
  {
   sku: "rihappy-1002693667",
@@ -4973,7 +5469,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha utensilios de cozinha de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6356493/Jogo-De-Cha---18-Pecas---Fanfun-0.jpg?v=638570142706670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cha-18-pecas-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cha-18-pecas-fanfun/p",
+  popularity: 497
  },
  {
   sku: "rihappy-1002693018",
@@ -4983,7 +5480,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9626642/Maleta-Do-Medico---Fanfun---Maleta---Vermelho---New-Toys-0.jpg?v=639040106973930000",
-  productUrl: "https://www.rihappy.com.br/maleta-do-medico-fanfun-maleta-vermelho-new-toys/p"
+  productUrl: "https://www.rihappy.com.br/maleta-do-medico-fanfun-maleta-vermelho-new-toys/p",
+  popularity: 498
  },
  {
   sku: "rihappy-1002688581",
@@ -4993,7 +5491,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5615170/Conjunto-De-Micangas---Aquabeads---500-Perolas---Epoch-0.jpg?v=638149162444130000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-aquabeads-500-perolas-epoch/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-aquabeads-500-perolas-epoch/p",
+  popularity: 499
  },
  {
   sku: "rihappy-1002642270",
@@ -5003,7 +5502,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo brinquedos de dedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5400888/Skate-de-Dedo-com-Acessorio---Hot-Wheels---Tony-Hawk---Sortido---Mattel-0.jpg?v=638101035659930000",
-  productUrl: "https://www.rihappy.com.br/skate-de-dedo-com-acessorio-hot-wheels-tony-hawk-sortido-mattel/p"
+  productUrl: "https://www.rihappy.com.br/skate-de-dedo-com-acessorio-hot-wheels-tony-hawk-sortido-mattel/p",
+  popularity: 500
  },
  {
   sku: "rihappy-1002627693",
@@ -5013,7 +5513,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8727021/Boneca-Articulada---Barbie-Profissoes---Bailarina-Luzes-Brilhantes---Mattel-0.jpg?v=638908881865370000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-profissoes-bailarina-luzes-brilhantes-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-profissoes-bailarina-luzes-brilhantes-mattel/p",
+  popularity: 501
  },
  {
   sku: "rihappy-1002602713",
@@ -5023,7 +5524,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446952/Quebra-Cabeca-Progressivo---Patrulha-Canina---Grow-0.jpg?v=638870782999430000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-progressivo-patrulha-canina-12-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-progressivo-patrulha-canina-12-pecas-grow/p",
+  popularity: 502
  },
  {
   sku: "rihappy-1002580525",
@@ -5033,7 +5535,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby cadeiras para bebes booster",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738765/Assento-elevatorio-para-automoveis---Gofit-Plus---Preto---Chicco-0.jpg?v=639071307874570000",
-  productUrl: "https://www.rihappy.com.br/assento-elevatorio-para-automoveis-gofit-plus-preto-chicco/p"
+  productUrl: "https://www.rihappy.com.br/assento-elevatorio-para-automoveis-gofit-plus-preto-chicco/p",
+  popularity: 503
  },
  {
   sku: "rihappy-1002576275",
@@ -5043,7 +5546,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5073998/Jogo-Educativo---Paises-e-Suas-Bandeiras---Toyster-0.jpg?v=638043926595830000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-paises-e-suas-bandeiras-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-paises-e-suas-bandeiras-toyster/p",
+  popularity: 504
  },
  {
   sku: "rihappy-1002550947",
@@ -5053,7 +5557,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4957946/Carrinho-de-Controle-Remoto---Disney---Marvel---Homem-Aranha---Web-Control---Candide-0.jpg?v=638024092450130000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-disney-marvel-homem-aranha-web-control-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-disney-marvel-homem-aranha-web-control-candide/p",
+  popularity: 505
  },
  {
   sku: "rihappy-1002452022",
@@ -5063,7 +5568,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4482126/Jogo-De-Acao---Tapa-Na-Mesa---Patrulha-Canina---48-Pares---Nig-Brinquedos-0.jpg?v=637949836804500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-patrulha-canina-48-pares-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-patrulha-canina-48-pares-nig-brinquedos/p",
+  popularity: 506
  },
  {
   sku: "rihappy-1002424261",
@@ -5073,7 +5579,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinho de friccao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4169824/Figura-de-Acao---Dinozoom---Movimento-Por-Friccao---Verde---Elka-0.jpg?v=637927371354470000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-dinozoom-movimento-por-friccao-verde-elka/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-dinozoom-movimento-por-friccao-verde-elka/p",
+  popularity: 507
  },
  {
   sku: "rihappy-1002401602",
@@ -5083,7 +5590,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6417812/Andador---Totokinha---Cardoso---Rosa-0.jpg?v=638610563572800000",
-  productUrl: "https://www.rihappy.com.br/mini-veiculo-totokinha-rosa-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/mini-veiculo-totokinha-rosa-cardoso/p",
+  popularity: 508
  },
  {
   sku: "rihappy-1002398347",
@@ -5093,7 +5601,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5521656/Laptop-Infantil---Adventure-Tech-Bilingue---Candide---Patrulha-Canina-0.jpg?v=638132030983370000",
-  productUrl: "https://www.rihappy.com.br/laptop-infantil-adventure-tech-bilingue-candide-patrulha-canina/p"
+  productUrl: "https://www.rihappy.com.br/laptop-infantil-adventure-tech-bilingue-candide-patrulha-canina/p",
+  popularity: 509
  },
  {
   sku: "rihappy-1002391549",
@@ -5103,7 +5612,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas de pano",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9143490/Boneca-Fofolete---Colecao-Bebezinha---Modelos-Sortidos---Estrela-0.jpg?v=638950091684530000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecas-fofolete-colecao-bebezinhas-coloridas-estrela/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecas-fofolete-colecao-bebezinhas-coloridas-estrela/p",
+  popularity: 510
  },
  {
   sku: "rihappy-1002389809",
@@ -5113,7 +5623,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6417648/Primeiros-Passos---Totokinha---Bolinha---Cardoso---Azul-0.jpg?v=638610556352600000",
-  productUrl: "https://www.rihappy.com.br/carrinho-totokinha-bolinha-cardoso-azul/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-totokinha-bolinha-cardoso-azul/p",
+  popularity: 511
  },
  {
   sku: "rihappy-1002388260",
@@ -5123,7 +5634,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas veiculos de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3901155/Boneca-e-Acessorios---Barbie---Passeio-De-Bicicleta---18cm---Mattel-0.jpg?v=637897910445000000",
-  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-barbie-passeio-de-bicicleta-18cm-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-barbie-passeio-de-bicicleta-18cm-mattel/p",
+  popularity: 512
  },
  {
   sku: "rihappy-1002362670",
@@ -5133,7 +5645,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7110662/Blocos-de-Encaixar---Topi---Mileva---5-Pecas---Modelos-Sortidos---Cardoso-0.jpg?v=638696083723230000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-encaixar-cardoso-topi-mileva-5-pecas/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-encaixar-cardoso-topi-mileva-5-pecas/p",
+  popularity: 513
  },
  {
   sku: "rihappy-1002326384",
@@ -5143,7 +5656,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8763721/Brinquedo-Musical---Gabby-S-Dollhouse---Orelhas-Magicas---Sunny-0.jpg?v=638912968828200000",
-  productUrl: "https://www.rihappy.com.br/orelhas-magicas-musical-gabby-s-dollhouse-sunny-brinquedos-3064/p"
+  productUrl: "https://www.rihappy.com.br/orelhas-magicas-musical-gabby-s-dollhouse-sunny-brinquedos-3064/p",
+  popularity: 514
  },
  {
   sku: "rihappy-1002176470",
@@ -5153,7 +5667,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7472706/Conjunto---Cabelos-Rainbow---Giz-Colorido---Fanfun-0.jpg?v=638754961693400000",
-  productUrl: "https://www.rihappy.com.br/faf-cabelos-rainbow--giz-colorido/p"
+  productUrl: "https://www.rihappy.com.br/faf-cabelos-rainbow--giz-colorido/p",
+  popularity: 515
  },
  {
   sku: "rihappy-1002162974",
@@ -5163,7 +5678,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9741046/Conjunto---Relogio-Personalizado---FanFun-0.jpg?v=639071945117230000",
-  productUrl: "https://www.rihappy.com.br/faf-relogio-personalizado/p"
+  productUrl: "https://www.rihappy.com.br/faf-relogio-personalizado/p",
+  popularity: 516
  },
  {
   sku: "rihappy-1002162954",
@@ -5173,7 +5689,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9605176/Conjunto---Pulseira-com-Pingentes---FanFun-0.jpg?v=639034794834400000",
-  productUrl: "https://www.rihappy.com.br/faf-kit-de-pulseira-com-pingentes/p"
+  productUrl: "https://www.rihappy.com.br/faf-kit-de-pulseira-com-pingentes/p",
+  popularity: 517
  },
  {
   sku: "rihappy-1002161560",
@@ -5183,7 +5700,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2572809/Conjunto-de-Figuras---Sylvanian-Families---Familia-dos-Huskys---Epoch-0.jpg?v=637813238607500000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras---sylvanian-families---familia-dos-huskys---epoch/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras---sylvanian-families---familia-dos-huskys---epoch/p",
+  popularity: 518
  },
  {
   sku: "rihappy-1002145746",
@@ -5193,7 +5711,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6208376/Figura-Elastica---Sonic---Goo-Jit-Zu---Super-Elastico---Azul---Sunny-0.jpg?v=638459702892000000",
-  productUrl: "https://www.rihappy.com.br/figura-elastica-sonic-goo-jit-zu-super-elastico-azul-sunny/p"
+  productUrl: "https://www.rihappy.com.br/figura-elastica-sonic-goo-jit-zu-super-elastico-azul-sunny/p",
+  popularity: 519
  },
  {
   sku: "rihappy-1002136437",
@@ -5203,7 +5722,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2466630/Lego---Base-de-Construcao-Verde---11023-0.jpg?v=637799247577370000",
-  productUrl: "https://www.rihappy.com.br/lego---base-de-construcao-verde---11023/p"
+  productUrl: "https://www.rihappy.com.br/lego---base-de-construcao-verde---11023/p",
+  popularity: 520
  },
  {
   sku: "rihappy-100558577",
@@ -5213,7 +5733,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedo de banho para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7085972/Brinquedo-de-Banho---Baleia---Modelos-Unitarios-Sortidos---Buba-0.jpg?v=638689133205200000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-banho---baleia---azul---buba/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-banho---baleia---azul---buba/p",
+  popularity: 521
  },
  {
   sku: "rihappy-100554691",
@@ -5223,7 +5744,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2097145/Playset-e-Acessorios---Disney---Mickey-e-Amigos---Pet-Shop-da-Minnie---Elka-0.jpg?v=637720029332500000",
-  productUrl: "https://www.rihappy.com.br/playset-e-acessorios-disney-mickey-e-amigos-pet-shop-da-minnie-elka/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-acessorios-disney-mickey-e-amigos-pet-shop-da-minnie-elka/p",
+  popularity: 522
  },
  {
   sku: "rihappy-100469589",
@@ -5233,7 +5755,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6241955/Maleta-de-Maquiagem---My-Style-Beauty---Maleta-Luxo---Multikids-0.jpg?v=638489853937870000",
-  productUrl: "https://www.rihappy.com.br/maleta-de-maquiagem-my-style-beauty-maleta-luxo-multikids/p"
+  productUrl: "https://www.rihappy.com.br/maleta-de-maquiagem-my-style-beauty-maleta-luxo-multikids/p",
+  popularity: 523
  },
  {
   sku: "rihappy-100467518",
@@ -5243,7 +5766,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5787094/Jogo-de-Cartas---The-Mind---2-a-4-Jogadores---Galapagos-0.jpg?v=638231204689470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-the-mind-2-a-4-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-the-mind-2-a-4-jogadores-galapagos/p",
+  popularity: 524
  },
  {
   sku: "rihappy-100443596",
@@ -5253,7 +5777,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6745329/Quebra-Cabeca---Marvel---Spidey---60-Pecas---Jak---Toyster-0.jpg?v=638635838771470000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-marvel-spidey-60-pecas-jak-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-marvel-spidey-60-pecas-jak-toyster/p",
+  popularity: 525
  },
  {
   sku: "rihappy-100443591",
@@ -5263,7 +5788,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446665/Quebra-Cabeca---Vincent-Van-Gogh---A-Noite-Estrelada---1000-Pecas---Game-Office---Toyster-0.jpg?v=638870763044700000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-vincent-van-gogh-a-noite-estrelada-1000-pecas-game-office-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-vincent-van-gogh-a-noite-estrelada-1000-pecas-game-office-toyster/p",
+  popularity: 526
  },
  {
   sku: "rihappy-100435457",
@@ -5273,7 +5799,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5677671/Boneca-Articulada---Moana-Bebe---36-cm---Cotiplas-0.jpg?v=638174310516570000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-moana-bebe-44-cm-cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-moana-bebe-44-cm-cotiplas/p",
+  popularity: 527
  },
  {
   sku: "rihappy-100430862",
@@ -5283,7 +5810,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos boneco com veiculo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8830815/McQueen-Relampago---Elka-0.jpg?v=638919849329230000",
-  productUrl: "https://www.rihappy.com.br/mcqueen-relampago-elka/p"
+  productUrl: "https://www.rihappy.com.br/mcqueen-relampago-elka/p",
+  popularity: 528
  },
  {
   sku: "rihappy-100420396",
@@ -5293,7 +5821,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9772808/Figura---Minions---Stuart---24-cm---Novabrink-0.jpg?v=639083306771730000",
-  productUrl: "https://www.rihappy.com.br/figura---minions---stuart---24-cm---novabrink/p"
+  productUrl: "https://www.rihappy.com.br/figura---minions---stuart---24-cm---novabrink/p",
+  popularity: 529
  },
  {
   sku: "rihappy-100417892",
@@ -5303,7 +5832,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446391/Quebra-Cabeca---Puzzle---Batalhas-dos-Dinossauros---200-Pecas---Grow-0.jpg?v=638870750732330000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca---puzzle---batalhas-dos-dinossauros---200-pecas---grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca---puzzle---batalhas-dos-dinossauros---200-pecas---grow/p",
+  popularity: 530
  },
  {
   sku: "rihappy-100370971",
@@ -5313,7 +5843,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas veiculos de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1200548/Sylvian-Families---Van-Piquenique-Da-Familia---Epoch-0.jpg?v=637514377244730000",
-  productUrl: "https://www.rihappy.com.br/sylvian-families---van-piquenique-da-familia---epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvian-families---van-piquenique-da-familia---epoch/p",
+  popularity: 531
  },
  {
   sku: "rihappy-100357151",
@@ -5323,7 +5854,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5827206/Piano-Xilofone---Galinha-Pintadinha---Yes-Toys-0.jpg?v=638264157889300000",
-  productUrl: "https://www.rihappy.com.br/piano-xilofone---galinha-pintadinha---yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/piano-xilofone---galinha-pintadinha---yes-toys/p",
+  popularity: 532
  },
  {
   sku: "rihappy-100329821",
@@ -5333,7 +5865,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6304848/Hot-Wheels-City---Guincho-Pista-De-Corridas---Mattel-0.jpg?v=638974416944500000",
-  productUrl: "https://www.rihappy.com.br/hot-wheels-city-guincho-pista-de-corridas-mattel/p"
+  productUrl: "https://www.rihappy.com.br/hot-wheels-city-guincho-pista-de-corridas-mattel/p",
+  popularity: 533
  },
  {
   sku: "rihappy-100326058",
@@ -5343,7 +5876,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores refil dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6787390/Refil-20-Dardos---Elite-20---Nerf---Hasbro-0.jpg?v=638641878865300000",
-  productUrl: "https://www.rihappy.com.br/refil-20-dardos---elite-2-0---nerf---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/refil-20-dardos---elite-2-0---nerf---hasbro/p",
+  popularity: 534
  },
  {
   sku: "rihappy-100293084",
@@ -5353,7 +5887,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8920387/Pelucia---Marie-Big-Feet---45-cm---Disney---Fun-0.jpg?v=638930147577730000",
-  productUrl: "https://www.rihappy.com.br/pelucias-marie-big-feet-45-cm-disney-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucias-marie-big-feet-45-cm-disney-fun/p",
+  popularity: 535
  },
  {
   sku: "rihappy-100291506",
@@ -5363,7 +5898,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas veiculos de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7324928/Veiculo-de-Controle-Remoto---Barbie---Glamour-Flip---Modelos-Sortidos---Candide-0.jpg?v=638738484949330000",
-  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---barbie---glamour-flip---candide/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---barbie---glamour-flip---candide/p",
+  popularity: 536
  },
  {
   sku: "rihappy-100270287",
@@ -5373,7 +5909,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6047708/Figura-de-Acao---24-Cm---Disney---Marvel---Avengers---Pantera-Negra---Hasbro-0.jpg?v=638369667617630000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao---24-cm---disney---marvel---avengers---pantera-negra---hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao---24-cm---disney---marvel---avengers---pantera-negra---hasbro/p",
+  popularity: 537
  },
  {
   sku: "rihappy-100264388",
@@ -5383,7 +5920,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5046228/Laptop-de-Atividades---Disney---Marvel---Spider-Man---Bilingue---Candide-0.jpg?v=638037736419200000",
-  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---disney---marvel---spider-man---bilingue---candide/p"
+  productUrl: "https://www.rihappy.com.br/laptop-de-atividades---disney---marvel---spider-man---bilingue---candide/p",
+  popularity: 538
  },
  {
   sku: "rihappy-100240543",
@@ -5393,7 +5931,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5884449/Conjunto-De-Atividades---Caixa-De-Brincadeiras---surpressa---Elka-0.jpg?v=638303161561330000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-caixa-de-brincadeiras-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-caixa-de-brincadeiras-elka/p",
+  popularity: 539
  },
  {
   sku: "rihappy-100234215",
@@ -5403,7 +5942,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6441959/Pista-e-Veiculo---Hot-Wheels---City-Garagem---Mattel-0.jpg?v=638612473792400000",
-  productUrl: "https://www.rihappy.com.br/pista-e-veiculo-hot-wheels-city-garagem-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-e-veiculo-hot-wheels-city-garagem-mattel/p",
+  popularity: 540
  },
  {
   sku: "rihappy-100233155",
@@ -5413,7 +5953,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5701163/Brinquedo-de-Atividade---Baby-Land-Trenzinho-Didatico---28-pecas---Cardoso-0.jpg?v=638179626020170000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividade-baby-land-trenzinho-didatico-28-pecas-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividade-baby-land-trenzinho-didatico-28-pecas-cardoso/p",
+  popularity: 541
  },
  {
   sku: "rihappy-100222380",
@@ -5423,7 +5964,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais violoes de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7043169/brinquedo-musical-violao-patrulha-canina-modelos-sortidos-elka_frente.jpg?v=638681808649970000",
-  productUrl: "https://www.rihappy.com.br/violao---patrulha-canina---elka/p"
+  productUrl: "https://www.rihappy.com.br/violao---patrulha-canina---elka/p",
+  popularity: 542
  },
  {
   sku: "rihappy-100184969",
@@ -5433,7 +5975,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112733/Boneco---Thor---Vingadores-Th---Marvel---Hasbro-0.jpg?v=638947492490170000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-30-cm-marvel-ragnarok-thor-titan-hero-series-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-30-cm-marvel-ragnarok-thor-titan-hero-series-hasbro/p",
+  popularity: 543
  },
  {
   sku: "rihappy-100181954",
@@ -5443,7 +5986,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/409045/lego-duplo-caixa-de-pecas-10913_Frente.jpg?v=637152060752030000",
-  productUrl: "https://www.rihappy.com.br/lego-duplo-caixa-de-pecas-10913/p"
+  productUrl: "https://www.rihappy.com.br/lego-duplo-caixa-de-pecas-10913/p",
+  popularity: 544
  },
  {
   sku: "rihappy-100180555",
@@ -5453,7 +5997,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6372823/jogo-alquimia-45-esperiencias-grow_frente.jpg?v=638580294645700000",
-  productUrl: "https://www.rihappy.com.br/jogo-alquimia-45-experiencias-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-alquimia-45-experiencias-grow/p",
+  popularity: 545
  },
  {
   sku: "rihappy-100177680",
@@ -5463,7 +6008,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6454416/Brinquedo-Interativo---Andador-Infantil---Passo-a-Passo-Divertido---Dreams-ABC---Minimi-0.jpg?v=638617455435270000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-andador-infantil-passo-a-passo-divertido-dreams-abc-minimi/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativo-andador-infantil-passo-a-passo-divertido-dreams-abc-minimi/p",
+  popularity: 546
  },
  {
   sku: "rihappy-100174375",
@@ -5473,7 +6019,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9607416/Conjunto-de-Pulseira-e-Micangas---Box-de-Luxo---FanFun-0.jpg?v=639035040168270000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pulseira-e-micangas-box-de-luxo-minimi/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pulseira-e-micangas-box-de-luxo-minimi/p",
+  popularity: 547
  },
  {
   sku: "rihappy-100174226",
@@ -5483,7 +6030,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/393535/boneca-de-vinil-36-cm-turma-da-monica-monica-classica-novabrink-1025_Frente.jpg?v=637015790246370000",
-  productUrl: "https://www.rihappy.com.br/boneca-de-vinil-36-cm-turma-da-monica-monica-classica-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-de-vinil-36-cm-turma-da-monica-monica-classica-novabrink/p",
+  popularity: 548
  },
  {
   sku: "rihappy-100166885",
@@ -5493,7 +6041,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca sala de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/381568/conjunto-sala-de-jantar-classica-15-pecas-sylvanian-families-epoch-5340_frente.jpg?v=636924227628970000",
-  productUrl: "https://www.rihappy.com.br/conjunto-sala-de-jantar-classica-15-pecas-sylvanian-families-epoch/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-sala-de-jantar-classica-15-pecas-sylvanian-families-epoch/p",
+  popularity: 549
  },
  {
   sku: "rihappy-100164477",
@@ -5503,7 +6052,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/377493/fun-barbie-kit-de-pintura-8420-6_Frente.jpg?v=636901094940270000",
-  productUrl: "https://www.rihappy.com.br/kit-de-pintura-barbie-princesas-disney-fun/p"
+  productUrl: "https://www.rihappy.com.br/kit-de-pintura-barbie-princesas-disney-fun/p",
+  popularity: 550
  },
  {
   sku: "rihappy-100161467",
@@ -5513,7 +6063,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7473765/boneca-e-acessorios-polly-pocket-modelos-sortidos-mattel_frente.jpg?v=638755013987570000",
-  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-polly-pocket-polly-happy-hour-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-e-acessorios-polly-pocket-polly-happy-hour-mattel/p",
+  popularity: 551
  },
  {
   sku: "rihappy-100161426",
@@ -5523,7 +6074,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/374674/caminhao-hot-wheels-hw-mega-mattel-GHR48_Frente.jpg?v=636887602026870000",
-  productUrl: "https://www.rihappy.com.br/caminhao-hot-wheels-hw-mega-mattel/p"
+  productUrl: "https://www.rihappy.com.br/caminhao-hot-wheels-hw-mega-mattel/p",
+  popularity: 552
  },
  {
   sku: "rihappy-100158931",
@@ -5533,7 +6085,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/368000/quebra-cabeca-harry-potter-150-pecas-grow-3616_Frente.jpg?v=636789215548330000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-harry-potter-150-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-harry-potter-150-pecas-grow/p",
+  popularity: 553
  },
  {
   sku: "rihappy-100155359",
@@ -5543,7 +6096,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos batalha naval",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1333625/jogo-batalha-naval-novo-grow-1853_Frente.jpg?v=637545453449930000",
-  productUrl: "https://www.rihappy.com.br/jogo-batalha-naval-novo-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-batalha-naval-novo-grow/p",
+  popularity: 554
  },
  {
   sku: "rihappy-100150742",
@@ -5553,7 +6107,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6002189/boneco-articulado-meu-amigo-buzz-lightyear-elka_frente.jpg?v=638357590929130000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-20-cm-meu-amigo-buzz-lightyear-elka/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-20-cm-meu-amigo-buzz-lightyear-elka/p",
+  popularity: 555
  },
  {
   sku: "rihappy-100149847",
@@ -5563,7 +6118,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/352712/jogo-passa-a-letra-grow-3587_Frente.jpg?v=636626854064100000",
-  productUrl: "https://www.rihappy.com.br/jogo-passa-a-letra-grow5070423/p"
+  productUrl: "https://www.rihappy.com.br/jogo-passa-a-letra-grow5070423/p",
+  popularity: 556
  },
  {
   sku: "rihappy-100147989",
@@ -5573,7 +6129,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jogos de advinhacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6375245/jogo-perfil-7-grow_frente.jpg?v=638585714392930000",
-  productUrl: "https://www.rihappy.com.br/jogo-perfil-7-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-perfil-7-grow/p",
+  popularity: 557
  },
  {
   sku: "rihappy-100137602",
@@ -5583,7 +6140,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/332652/jogo-tapa-certo-spider-man-marvel-estrela-1201609200043_Embalagem.jpg?v=636328757568730000",
-  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-spider-man-marvel-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-tapa-certo-spider-man-marvel-estrela/p",
+  popularity: 558
  },
  {
   sku: "rihappy-100127301",
@@ -5593,7 +6151,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/339333/Caixa-Registradora---Creative-Fun---Rosa---Multikids.jpg?v=636416684191430000",
-  productUrl: "https://www.rihappy.com.br/caixa-registradora-creative-fun-rosa-multikids/p"
+  productUrl: "https://www.rihappy.com.br/caixa-registradora-creative-fun-rosa-multikids/p",
+  popularity: 559
  },
  {
   sku: "rihappy-100109857",
@@ -5603,7 +6162,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/298447/100109857-W2085-jogo-de-cartas-uno-mattel-5039722_1.jpg?v=635830272621470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-mattel-5039722/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-mattel-5039722/p",
+  popularity: 560
  },
  {
   sku: "rihappy-100101361",
@@ -5613,7 +6173,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3134775/100101361_1.jpg?v=637872750812130000",
-  productUrl: "https://www.rihappy.com.br/estacao-cientifica-hot-wheels-color-change-mattel-5030020/p"
+  productUrl: "https://www.rihappy.com.br/estacao-cientifica-hot-wheels-color-change-mattel-5030020/p",
+  popularity: 561
  },
  {
   sku: "rihappy-100094573",
@@ -5623,7 +6184,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3135544/100094573_1.jpg?v=637872791331530000",
-  productUrl: "https://www.rihappy.com.br/boneco-mickey-radical-elka-900/p"
+  productUrl: "https://www.rihappy.com.br/boneco-mickey-radical-elka-900/p",
+  popularity: 562
  },
  {
   sku: "rihappy-100071254",
@@ -5633,7 +6195,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/268224/BGX29-Veiculos-dos-Animais-Tartaruga-Fisher-Price_1.jpg?v=635313488701030000",
-  productUrl: "https://www.rihappy.com.br/veiculos-dos-animais-sortido--fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/veiculos-dos-animais-sortido--fisher-price/p",
+  popularity: 563
  },
  {
   sku: "rihappy-100000276",
@@ -5643,7 +6206,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5785251/Quebra-Cabeca---Santa-Ceia---1000-Pecas---Grow-0.jpg?v=638228893044500000",
-  productUrl: "https://www.rihappy.com.br/grow-quebra-cabeca-santa-ceia-1000-pecas-100000276/p"
+  productUrl: "https://www.rihappy.com.br/grow-quebra-cabeca-santa-ceia-1000-pecas-100000276/p",
+  popularity: 564
  },
  {
   sku: "rihappy-100000220",
@@ -5653,7 +6217,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/280188/02343_Grow_Super-Lince-2014-.jpg?v=635501060576330000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-super-lince-100000220/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-super-lince-100000220/p",
+  popularity: 565
  },
  {
   sku: "rihappy-100000182",
@@ -5663,7 +6228,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao imagem e acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3128906/100000182_1.jpg?v=637872595951870000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-imagem-e-acao-ii-100000182/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-imagem-e-acao-ii-100000182/p",
+  popularity: 566
  },
  {
   sku: "rihappy-100000166",
@@ -5673,7 +6239,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6389796/jogo-rummikub-grow_frente.jpg?v=638598726714230000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-rummikub-100000166/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-rummikub-100000166/p",
+  popularity: 567
  },
  {
   sku: "rihappy-1003174536",
@@ -5683,7 +6250,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10006834/LEGO---City-Great-Vehicles---Mountain-Bike-Adventure-Van---60512-0.jpg?v=639156221569900000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-mountain-bike-adventure-van-60512/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-mountain-bike-adventure-van-60512/p",
+  popularity: 568
  },
  {
   sku: "rihappy-1003173356",
@@ -5693,7 +6261,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9994634/Boneca-Articulada---Barbie---Career-Burst---Jogadora-De-Futebol---Mattel-0.jpg?v=639150589844800000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-career-burst-jogadora-de-futebol-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-career-burst-jogadora-de-futebol-mattel/p",
+  popularity: 569
  },
  {
   sku: "rihappy-1003171995",
@@ -5703,7 +6272,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9974602/Jogo-De-Cartas---Nao-Pode---Party-Games-0.jpg?v=639142791558700000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-nao-pode-party-games/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-nao-pode-party-games/p",
+  popularity: 570
  },
  {
   sku: "rihappy-1003160263",
@@ -5713,7 +6283,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9923490/LEGO---Pokemon---Eevee---72151-0.jpg?v=639135837866770000",
-  productUrl: "https://www.rihappy.com.br/lego-pokemon-eevee-72151/p"
+  productUrl: "https://www.rihappy.com.br/lego-pokemon-eevee-72151/p",
+  popularity: 571
  },
  {
   sku: "rihappy-1003159819",
@@ -5723,7 +6294,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9913417/Jogo-De-Acao---Acerte-A-Cesta---Disney---Pixar---Toy-Story-5---Elka-0.jpg?v=639148118092470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-acerte-a-cesta-disney-pixar-toy-story-5-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-acerte-a-cesta-disney-pixar-toy-story-5-elka/p",
+  popularity: 572
  },
  {
   sku: "rihappy-1003159204",
@@ -5733,7 +6305,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas dobble",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9909569/Jogo-De-Cartas---Dobble---Super-Mario---Galapagos-0.jpg?v=639129948609500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-super-mario-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-super-mario-galapagos/p",
+  popularity: 573
  },
  {
   sku: "rihappy-1003158864",
@@ -5743,7 +6316,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9898241/Carrinho-Com-Controle-Remoto---Marvel---Homem-Aranha---Piloto-Esportivo---3-Funcoes---Candide-0.jpg?v=639125467338500000",
-  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-marvel-homemaranha-piloto-esportivo-3-funcoes-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-com-controle-remoto-marvel-homemaranha-piloto-esportivo-3-funcoes-candide/p",
+  popularity: 574
  },
  {
   sku: "rihappy-1003158517",
@@ -5753,7 +6327,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9893865/Relogio-Projetor---Marvel---Homem-Aranha---Toyng-0.jpg?v=639123127767570000",
-  productUrl: "https://www.rihappy.com.br/relogio-projetor-marvel-homemaranha-toyng/p"
+  productUrl: "https://www.rihappy.com.br/relogio-projetor-marvel-homemaranha-toyng/p",
+  popularity: 575
  },
  {
   sku: "rihappy-1003156750",
@@ -5763,7 +6338,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9988995/Jogo---Disney---Pixar---Toy-Story-5---Toyster-0.jpg?v=639148961167300000",
-  productUrl: "https://www.rihappy.com.br/jogo-disney-pixar-toy-story-5-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-disney-pixar-toy-story-5-toyster/p",
+  popularity: 576
  },
  {
   sku: "rihappy-1003156083",
@@ -5773,7 +6349,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9860605/Boneca-Interativa---Cry-Babies---Meus-Primeiros-Passos---Dreamy---Multikids-0.jpg?v=639110981975870000",
-  productUrl: "https://www.rihappy.com.br/boneca-interativa-cry-babies-meus-primeiros-passos-dreamy-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-interativa-cry-babies-meus-primeiros-passos-dreamy-multikids/p",
+  popularity: 577
  },
  {
   sku: "rihappy-1003156044",
@@ -5783,7 +6360,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9860068/Figura-Com-Som---Jurassic-World---Dinossauro---Modelos-Sortidos---Mattel-0.jpg?v=639110931780870000",
-  productUrl: "https://www.rihappy.com.br/figura-com-som-jurassic-world-dinossauro-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-com-som-jurassic-world-dinossauro-modelos-sortidos-mattel/p",
+  popularity: 578
  },
  {
   sku: "rihappy-1003155822",
@@ -5793,7 +6371,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "moda acessorios de moda relogios",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9852589/-Relogio---De-Pulso---Digital---Disney---Pixar---Toy-Story---Toyng-0.jpg?v=639107543258570000",
-  productUrl: "https://www.rihappy.com.br/relogio-de-pulso-digital-disney-pixar-toy-story-toyng/p"
+  productUrl: "https://www.rihappy.com.br/relogio-de-pulso-digital-disney-pixar-toy-story-toyng/p",
+  popularity: 579
  },
  {
   sku: "rihappy-1003155361",
@@ -5803,7 +6382,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9851914/Pista-De-Percurso---Hot-Wheels---Action---Acrobacias---Modelos-Sortidos---Surpresa---Mattel-0.jpg?v=639107333441800000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-action-acrobacias-modelos-sortidos-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-hot-wheels-action-acrobacias-modelos-sortidos-surpresa-mattel/p",
+  popularity: 580
  },
  {
   sku: "rihappy-1003154906",
@@ -5813,7 +6393,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9847266/Kit---Style-4-Ever---Faca-Seus-Chaveiros---Fun-0.jpg?v=639106574995130000",
-  productUrl: "https://www.rihappy.com.br/kit-style-4-ever-faca-seus-chaveiros-fun/p"
+  productUrl: "https://www.rihappy.com.br/kit-style-4-ever-faca-seus-chaveiros-fun/p",
+  popularity: 581
  },
  {
   sku: "rihappy-1003154413",
@@ -5823,7 +6404,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10039275/Lousa-Magica---Disney---Pixar---Toy-Story-5---Lilipad---Toyng-0.jpg?v=639178394826100000",
-  productUrl: "https://www.rihappy.com.br/lousa-magica-disney-pixar-toy-story-5-lilipad-toyng/p"
+  productUrl: "https://www.rihappy.com.br/lousa-magica-disney-pixar-toy-story-5-lilipad-toyng/p",
+  popularity: 582
  },
  {
   sku: "rihappy-1003153268",
@@ -5833,7 +6415,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9989000/Conjunto-Massa-De-Modelar---Play-Doh---Guloseimas-Para-Viagem---Hasbro-0.jpg?v=639148963494400000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-guloseimas-para-viagem-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-play-doh-guloseimas-para-viagem-hasbro/p",
+  popularity: 583
  },
  {
   sku: "rihappy-1003152935",
@@ -5843,7 +6426,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9824150/Pelucia---Disney----Pixar---Toy-Story---Buzz-Classico---Fun-0.jpg?v=639100447581170000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-buzz-classico-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-buzz-classico-fun/p",
+  popularity: 584
  },
  {
   sku: "rihappy-1003152564",
@@ -5853,7 +6437,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9972430/Quebra-Cabeca---Disney---Pixar---Toy-Story-5---100-Pecas---Toyster-0.jpg?v=639142170233630000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-pixar-toy-story-5-100-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-pixar-toy-story-5-100-pecas-toyster/p",
+  popularity: 585
  },
  {
   sku: "rihappy-1003152471",
@@ -5863,7 +6448,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9820016/Conjunto-De-Veiculos---Hot-Wheels---Modelos-Sortidos---Com-5-Carros---Mattel-0.jpg?v=639153990313900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-modelos-sortidos-com-5-carros-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-modelos-sortidos-com-5-carros-mattel/p",
+  popularity: 586
  },
  {
   sku: "rihappy-1003152436",
@@ -5873,7 +6459,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9976586/Brinquedo-De-Atividades---Animal-Friends---Modelos-Unitarios-Sortidos---Fisher-Price-0.jpg?v=639143606136400000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividades-animal-friends-modelos-unitarios-sortidos-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-atividades-animal-friends-modelos-unitarios-sortidos-fisherprice/p",
+  popularity: 587
  },
  {
   sku: "rihappy-1003150768",
@@ -5883,7 +6470,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9792291/Sylvanian-Families---Gemeos-Urso-Biscoito---Epoch-0.jpg?v=639089248772500000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-gemeos-urso-biscoito-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-gemeos-urso-biscoito-epoch/p",
+  popularity: 588
  },
  {
   sku: "rihappy-1003150374",
@@ -5893,7 +6481,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9783951/Jogo-De-Tabuleiro---O-Que-E-O-Que-E----Disney---Pixar---Toy-Story---Nig-Brinquedos-0.jpg?v=639086795511570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-o-que-e-o-que-e-disney-pixar-toy-story-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-o-que-e-o-que-e-disney-pixar-toy-story-nig-brinquedos/p",
+  popularity: 589
  },
  {
   sku: "rihappy-1003149965",
@@ -5903,7 +6492,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9772372/Pacote-De-Expansao-De-Cartas---UNO---No-Mercy---Mattel-0.jpg?v=639083209225570000",
-  productUrl: "https://www.rihappy.com.br/pacote-de-expansao-de-cartas-uno-no-mercy-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pacote-de-expansao-de-cartas-uno-no-mercy-mattel/p",
+  popularity: 590
  },
  {
   sku: "rihappy-1003148841",
@@ -5913,7 +6503,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9753194/LEGO---Creator---Gato-Laranja---30714-0.jpg?v=639118844918400000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-gato-laranja-30714/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-gato-laranja-30714/p",
+  popularity: 591
  },
  {
   sku: "rihappy-1003148836",
@@ -5923,7 +6514,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9788968/Mini-Portfolio---Pokemon---TCG----Q1-2026----Ingles---Galapagos-0.jpg?v=639088323365330000",
-  productUrl: "https://www.rihappy.com.br/mini-portfolio-pokemon-tcg-q1-2026-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/mini-portfolio-pokemon-tcg-q1-2026-ingles-galapagos/p",
+  popularity: 592
  },
  {
   sku: "rihappy-1003147386",
@@ -5933,7 +6525,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas acessorios de alimentacao para boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749627/Acessorios-Para-Boneca---Baby-Alive---Lanche-Magico---Hasbro-0.jpg?v=639075356095700000",
-  productUrl: "https://www.rihappy.com.br/acessorios-para-boneca-baby-alive-lanche-magico-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/acessorios-para-boneca-baby-alive-lanche-magico-hasbro/p",
+  popularity: 593
  },
  {
   sku: "rihappy-1003146229",
@@ -5943,7 +6536,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9729613/LEGO---Super-Heroes-DC---Batmovel-De-Batman-Vs-Superman---76331-0.jpg?v=639067042040170000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batmovel-de-batman-vs-superman-76331/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batmovel-de-batman-vs-superman-76331/p",
+  popularity: 594
  },
  {
   sku: "rihappy-1003146227",
@@ -5953,7 +6547,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9729600/LEGO---Super-Heroes-DC---O-Batmovel-Do-Batman---76332-0.jpg?v=639067041714970000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-o-batmovel-do-batman-76332/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-o-batmovel-do-batman-76332/p",
+  popularity: 595
  },
  {
   sku: "rihappy-1003145194",
@@ -5963,7 +6558,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9718812/LEGO---Ninjago---Combate-Com-O-Robo-Dragao-Do-Jay---71853-0.jpg?v=639064160773470000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-combate-com-o-robo-dragao-do-jay-71853/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-combate-com-o-robo-dragao-do-jay-71853/p",
+  popularity: 596
  },
  {
   sku: "rihappy-1003144859",
@@ -5973,7 +6569,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9686298/Lancador-De-Veiculo---Disney---Pixar--Impacto-Secreto---Toy-Story-5---Imaginext---Mattel-0.jpg?v=639056421864070000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-veiculo-disney-pixar-impacto-secreto-toy-story-5-imaginext-mattel/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-veiculo-disney-pixar-impacto-secreto-toy-story-5-imaginext-mattel/p",
+  popularity: 597
  },
  {
   sku: "rihappy-1003144553",
@@ -5983,7 +6580,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9685762/Figura-De-Acao---Filme-Sonic-3---Shadow---Com-Luz---Sunny-0.jpg?v=639056376939970000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-filme-sonic-3-shadow-com-luz-sunny/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-filme-sonic-3-shadow-com-luz-sunny/p",
+  popularity: 598
  },
  {
   sku: "rihappy-1003144494",
@@ -5993,7 +6591,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9685837/Figura-Articulada---Pokemon---Mega-Charizard-X---Sunny-0.jpg?v=639056380633370000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-pokemon-mega-charizard-x-sunny/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-pokemon-mega-charizard-x-sunny/p",
+  popularity: 599
  },
  {
   sku: "rihappy-1003143865",
@@ -6003,7 +6602,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738604/Boneca-Articulada---Turma-Da-Boiaderinha---Ana-Castela---Novabrink-0.jpg?v=639071097752500000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-turma-da-boiaderinha-ana-castela-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-turma-da-boiaderinha-ana-castela-novabrink/p",
+  popularity: 600
  },
  {
   sku: "rihappy-1003143812",
@@ -6013,7 +6613,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9660959/Pelucia-no-Pote---Magic-Jellykins---Surpresa---Sunny-0.jpg?v=639050331747670000",
-  productUrl: "https://www.rihappy.com.br/pelucia-no-pote-magic-jellykins-surpresa-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-no-pote-magic-jellykins-surpresa-sunny/p",
+  popularity: 601
  },
  {
   sku: "rihappy-1003143762",
@@ -6023,7 +6624,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9661462/Mini-Playset---Polly-Pocket---Bob-Esponja---Compacto---Mattel-0.jpg?v=639050435797430000",
-  productUrl: "https://www.rihappy.com.br/mini-playset-polly-pocket-bob-esponja-compacto-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-playset-polly-pocket-bob-esponja-compacto-mattel/p",
+  popularity: 602
  },
  {
   sku: "rihappy-1003143237",
@@ -6033,7 +6635,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9694916/Boneca---Barbie---Fashionista---Com-Autismo---Mattel--0.jpg?v=639058250831200000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-fashionista-com-autismo-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-fashionista-com-autismo-mattel/p",
+  popularity: 603
  },
  {
   sku: "rihappy-1003143214",
@@ -6043,7 +6646,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo barcos de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9648675/Veiculo-Com-Figura---Patrulha-Canina---Rescue---Search---Patrulha-Maritima---Chase---Sunny-0.jpg?v=639046268293330000",
-  productUrl: "https://www.rihappy.com.br/veiculo-com-figura-patrulha-canina-rescue--search-patrulha-maritima-chase-sunny/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-com-figura-patrulha-canina-rescue--search-patrulha-maritima-chase-sunny/p",
+  popularity: 604
  },
  {
   sku: "rihappy-1003143069",
@@ -6053,7 +6657,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749531/Figura-Transformavel---Super-Wings---Robo-Aviao---Sunny-0.jpg?v=639075341141030000",
-  productUrl: "https://www.rihappy.com.br/figura-transformavel-super-wings-robo-aviao-sunny/p"
+  productUrl: "https://www.rihappy.com.br/figura-transformavel-super-wings-robo-aviao-sunny/p",
+  popularity: 605
  },
  {
   sku: "rihappy-1003139839",
@@ -6063,7 +6668,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977248/Jogo-De-Cartas---Pokemon---Box---Mega-Charizard---Copag-0.jpg?v=639143847271130000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-mega-charizard-x-e-mega-charizard-y-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-box-mega-charizard-x-e-mega-charizard-y-copag/p",
+  popularity: 606
  },
  {
   sku: "rihappy-1003138456",
@@ -6073,7 +6679,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9564935/-Veiculo---Controle-Remoto---Homem-Aranha---Teia-Radical---Candide-0.jpg?v=639021740454930000",
-  productUrl: "https://www.rihappy.com.br/veiculo-controle-remoto-homem-aranha-teia-radical-candide/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-controle-remoto-homem-aranha-teia-radical-candide/p",
+  popularity: 607
  },
  {
   sku: "rihappy-1003138105",
@@ -6083,7 +6690,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9721187/Jogo-Educativo---Astronomia---Grow--0.jpg?v=639064334036170000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-astronomia-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-astronomia-grow/p",
+  popularity: 608
  },
  {
   sku: "rihappy-1003137932",
@@ -6093,7 +6701,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9542635/LEGO---Ninjago---Nya-vs-Girador-De-Monstro-Mutante---71849-0.jpg?v=639015780366530000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-nya-vs-girador-de-monstro-mutante-71849/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-nya-vs-girador-de-monstro-mutante-71849/p",
+  popularity: 609
  },
  {
   sku: "rihappy-1003137924",
@@ -6103,7 +6712,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9542748/LEGO---City-Great-Vehicles---Food-Truck-De-Batatas-Fritas---60488-0.jpg?v=639015783245900000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-food-truck-de-batatas-fritas-60488/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-food-truck-de-batatas-fritas-60488/p",
+  popularity: 610
  },
  {
   sku: "rihappy-1003137823",
@@ -6113,7 +6723,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9535041/LEGO---Ninjago---Meca-de-Missao-do-Cole-e-Zane-Dragao---71854-0.jpg?v=639014069060830000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-meca-de-missao-do-cole-e-zane-dragao-71854/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-meca-de-missao-do-cole-e-zane-dragao-71854/p",
+  popularity: 611
  },
  {
   sku: "rihappy-1003137629",
@@ -6123,7 +6734,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9522305/LEGO---Super-Heroes-Marvel---Batalha-Epica--Homem-Aranha-Vs-Homem-Areia---76334-0.jpg?v=639010837559100000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-batalha-epica-homemaranha-vs-homemareia-76334/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-batalha-epica-homemaranha-vs-homemareia-76334/p",
+  popularity: 612
  },
  {
   sku: "rihappy-1003137489",
@@ -6133,7 +6745,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9606757/LEGO---Creator---Hamster-Adoravel-Com-Uma-Flor---31376-0.jpg?v=639034948083500000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-hamster-adoravel-com-uma-flor-31376/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-hamster-adoravel-com-uma-flor-31376/p",
+  popularity: 613
  },
  {
   sku: "rihappy-1003137250",
@@ -6143,7 +6756,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520396/LEGO---Speed-Champions---Carro-Esportivo-Ferrari-SF90-XX-Stradale---77254-0.jpg?v=639149075685570000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-ferrari-sf90-xx-stradale-77254/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-ferrari-sf90-xx-stradale-77254/p",
+  popularity: 614
  },
  {
   sku: "rihappy-1003137233",
@@ -6153,7 +6767,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520200/LEGO---Super-Heroes-Marvel---Robo-do-Miles-Morales-vs-Spider-Man-2099---76337-0.jpg?v=639010518728470000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-miles-morales-vs-spiderman-2099-76337/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-robo-do-miles-morales-vs-spiderman-2099-76337/p",
+  popularity: 615
  },
  {
   sku: "rihappy-1003137231",
@@ -6163,7 +6778,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520186/LEGO---Minifigures---Animais-Serie-28---71051-0.jpg?v=639010518672500000",
-  productUrl: "https://www.rihappy.com.br/lego-minifigures-animais-serie-28-71051/p"
+  productUrl: "https://www.rihappy.com.br/lego-minifigures-animais-serie-28-71051/p",
+  popularity: 616
  },
  {
   sku: "rihappy-1003137122",
@@ -6173,7 +6789,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520208/LEGO---Disney---Princesas---Mini-Palacio-Magico-Da-Ariel---43285-0.jpg?v=639010518749570000",
-  productUrl: "https://www.rihappy.com.br/lego-disney-princesas-mini-palacio-magico-da-ariel-43285/p"
+  productUrl: "https://www.rihappy.com.br/lego-disney-princesas-mini-palacio-magico-da-ariel-43285/p",
+  popularity: 617
  },
  {
   sku: "rihappy-1003136970",
@@ -6183,7 +6800,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520552/LEGO---Super-Heroes-Marvel---Carro-Do-Homem-Aranha-Vs-Wolverine-Venomizado---76336-0.jpg?v=639010520650170000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-carro-do-homemaranha-vs-wolverine-venomizado-76336/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-carro-do-homemaranha-vs-wolverine-venomizado-76336/p",
+  popularity: 618
  },
  {
   sku: "rihappy-1003136904",
@@ -6193,7 +6811,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520589/LEGO---Minecraft---Jornada-Ao-Nether-E-Portal-Do-End---21584-0.jpg?v=639010521068170000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-jornada-ao-nether-e-portal-do-end-21584/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-jornada-ao-nether-e-portal-do-end-21584/p",
+  popularity: 619
  },
  {
   sku: "rihappy-1003136893",
@@ -6203,7 +6822,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520511/LEGO---City-Brick-Rides---Veiculos--Carro-De-Corrida-De-Videogame---60484-0.jpg?v=639010520526000000",
-  productUrl: "https://www.rihappy.com.br/lego-city-brick-rides-veiculos-carro-de-corrida-de-videogame-60484/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-brick-rides-veiculos-carro-de-corrida-de-videogame-60484/p",
+  popularity: 620
  },
  {
   sku: "rihappy-1003133654",
@@ -6213,7 +6833,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de series",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9543255/PRE-VENDA--Boneco---Funko-Pop---Guerreiras-Do-K-Pop---Mira---Candide-0.jpg?v=639015849776700000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-mira-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-mira-candide/p",
+  popularity: 621
  },
  {
   sku: "rihappy-1003133650",
@@ -6223,7 +6844,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de series",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9543264/PRE-VENDA--Boneco---Funko-Pop---Guerreiras-Do-K-Pop---Zoey---Candide-0.jpg?v=639015855613400000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-zoey-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-zoey-candide/p",
+  popularity: 622
  },
  {
   sku: "rihappy-1003113227",
@@ -6233,7 +6855,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9835562/Jogo-De-Cartas---Pokemon-TCG---Collector-Chest--Q4-2025----Candide-0.jpg?v=639104744507300000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-collector-chest-q4-2025-candide/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-collector-chest-q4-2025-candide/p",
+  popularity: 623
  },
  {
   sku: "rihappy-1003113089",
@@ -6243,7 +6866,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738573/Boneco-Articulado---Dos-Rosa---Void---Novabrink-0.jpg?v=639071092956130000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-dos-rosa-void-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-dos-rosa-void-novabrink/p",
+  popularity: 624
  },
  {
   sku: "rihappy-1003112411",
@@ -6253,7 +6877,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9792682/Jogo-De-Cartas---Pokemon-Tcg--Pokeball-Tin---Ingles---Modelos-Sortidos---Galapagos-0.jpg?v=639089344453000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-pokeball-tin-ingles-modelos-sortidos-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-pokeball-tin-ingles-modelos-sortidos-galapagos/p",
+  popularity: 625
  },
  {
   sku: "rihappy-1003112404",
@@ -6263,7 +6888,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9521619/Carrinho-De-Controle-Remoto---McLaren---1-20---7-Funcoes---Candide-0.jpg?v=639010752437400000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-mclaren-120-7-funcoes-candide/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-mclaren-120-7-funcoes-candide/p",
+  popularity: 626
  },
  {
   sku: "rihappy-1003112387",
@@ -6273,7 +6899,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9322319/Jogo-De-Acao---Olho-Magico---Barbie---Elka-0.jpg?v=638975126262930000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-olho-magico-barbie-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-olho-magico-barbie-elka/p",
+  popularity: 627
  },
  {
   sku: "rihappy-1003112132",
@@ -6283,7 +6910,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738569/Boneco-Articulado---Robson-Dos-Rosa---Novabrink-0.jpg?v=639071092526900000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-robson-dos-rosa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-robson-dos-rosa-novabrink/p",
+  popularity: 628
  },
  {
   sku: "rihappy-1003110674",
@@ -6293,7 +6921,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9283336/Jogo-De-Acao---Tapa-Na-Mesa---Dos-Rosa---Nig-Brinquedos-0.jpg?v=638968402256470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-dos-rosa-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-dos-rosa-nig-brinquedos/p",
+  popularity: 629
  },
  {
   sku: "rihappy-1003109573",
@@ -6303,7 +6932,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9273148/Boneca---Wicked---Glinda---Cantora--Wicked-Musical---Mattel-0.jpg?v=638965968308930000",
-  productUrl: "https://www.rihappy.com.br/boneca-wicked-glinda-cantora-wicked-musical-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-wicked-glinda-cantora-wicked-musical-mattel/p",
+  popularity: 630
  },
  {
   sku: "rihappy-1003083488",
@@ -6313,7 +6943,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9036758/Conjunto-De-Bonecos---Sonic-3---Sunny-0.jpg?v=638938173751030000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecos-sonic-3-sunny/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecos-sonic-3-sunny/p",
+  popularity: 631
  },
  {
   sku: "rihappy-1003083448",
@@ -6323,7 +6954,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes tenis raquete de tenis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9092437/Jogo-De-Raquetes---Barbie---Fun-0.jpg?v=638945066645670000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-raquetes-barbie-fun/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-raquetes-barbie-fun/p",
+  popularity: 632
  },
  {
   sku: "rihappy-1003081695",
@@ -6333,7 +6965,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby passeio do bebe caderinha de bebe para carro",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8964177/Booster---Andiamo---Infanti---Preto---Dorel-0.jpg?v=638932151975570000",
-  productUrl: "https://www.rihappy.com.br/booster-andiamo-infanti-preto-dorel/p"
+  productUrl: "https://www.rihappy.com.br/booster-andiamo-infanti-preto-dorel/p",
+  popularity: 633
  },
  {
   sku: "rihappy-1003067096",
@@ -6343,7 +6976,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis action figure mini action figure",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112719/EXCLUSIVO--Chaveiro-Miniatura-Colecionavel---Glasses-Up---Barbie-0.jpg?v=638947489988830000",
-  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-glasses-up-barbie/p"
+  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-glasses-up-barbie/p",
+  popularity: 634
  },
  {
   sku: "rihappy-1003061503",
@@ -6353,7 +6987,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9750307/Boneca-Articulada---Barbie---Aniversario-De-80-Anos---Mattel-0.jpg?v=639075519616400000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-aniversario-de-80-anos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-aniversario-de-80-anos-mattel/p",
+  popularity: 635
  },
  {
   sku: "rihappy-1003058846",
@@ -6363,7 +6998,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mini veiculos bicicleta de equilibrio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252150/EXCLUSIVO---Bicicleta-De-Equilibrio---Fisher-Price---Baby-0.jpg?v=638960403910070000",
-  productUrl: "https://www.rihappy.com.br/bicicleta-de-equilibrio-fisherprice-baby-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/bicicleta-de-equilibrio-fisherprice-baby-bandeirante/p",
+  popularity: 636
  },
  {
   sku: "rihappy-1003058454",
@@ -6373,7 +7009,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8508917/Boneca-Com-Acessorios---Our-Generation---Paulina---Candide-0.jpg?v=638882868171800000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-our-generation-paulina-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-our-generation-paulina-candide/p",
+  popularity: 637
  },
  {
   sku: "rihappy-1003057440",
@@ -6383,7 +7020,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8490246/Sylvanian-Families---Conjunto-Familia-Dos-Leopardos----Da-Neve---Epoch-0.jpg?v=638878372008500000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-familia-dos-leopardos-da-neve-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-familia-dos-leopardos-da-neve-epoch/p",
+  popularity: 638
  },
  {
   sku: "rihappy-1003057396",
@@ -6393,7 +7031,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8509037/Notebook-Infantil---Disney---Princesas---Candide-0.jpg?v=638882869061500000",
-  productUrl: "https://www.rihappy.com.br/notebook-infantil-disney-princesas-candide/p"
+  productUrl: "https://www.rihappy.com.br/notebook-infantil-disney-princesas-candide/p",
+  popularity: 639
  },
  {
   sku: "rihappy-1003056186",
@@ -6403,7 +7042,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "fantasias fantasia infantil fantasias de personagens",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9569719/Fantasia---A-Casa-Magica-Da-Gabby---Novabrink---Tam-M-0.jpg?v=639023758156570000",
-  productUrl: "https://www.rihappy.com.br/fantasia-a-casa-magica-da-gabby-novabrink-tam-m/p"
+  productUrl: "https://www.rihappy.com.br/fantasia-a-casa-magica-da-gabby-novabrink-tam-m/p",
+  popularity: 640
  },
  {
   sku: "rihappy-1003056059",
@@ -6413,7 +7053,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais microfone de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8715015/Microfone-Musical---Disney---Frozen---Com-Bluetooth---Candide-0.jpg?v=638907728761430000",
-  productUrl: "https://www.rihappy.com.br/microfone-musical-disney-frozen-com-bluetooth-candide/p"
+  productUrl: "https://www.rihappy.com.br/microfone-musical-disney-frozen-com-bluetooth-candide/p",
+  popularity: 641
  },
  {
   sku: "rihappy-1003055272",
@@ -6423,7 +7064,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes skates skatenet",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252186/Skatenet---Homem-Aranha---Bandeirante-0.jpg?v=638960406495200000",
-  productUrl: "https://www.rihappy.com.br/skatenet-homemaranha-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/skatenet-homemaranha-bandeirante/p",
+  popularity: 642
  },
  {
   sku: "rihappy-1003055123",
@@ -6433,7 +7075,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9275633/Jogo-De-Tabuleiro---Cores-Com-Dicas---Grok-Games-0.jpg?v=638966692556730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-cores-com-dicas-grok-games/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-cores-com-dicas-grok-games/p",
+  popularity: 643
  },
  {
   sku: "rihappy-1003055054",
@@ -6443,7 +7086,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9052005/Jogo-De-Tabuleiro---Fuga-Da-Mansao---Toyster-0.jpg?v=638941631969770000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fuga-da-mansao-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fuga-da-mansao-toyster/p",
+  popularity: 644
  },
  {
   sku: "rihappy-1003053808",
@@ -6453,7 +7097,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8428628/Pelucia---Rainbocorns---Sereia-Surpresa---Serie-7---Grande---Fun-0.jpg?v=638866556247670000",
-  productUrl: "https://www.rihappy.com.br/pelucia-rainbocorns-sereia-surpresa-serie-7-grande-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-rainbocorns-sereia-surpresa-serie-7-grande-fun/p",
+  popularity: 645
  },
  {
   sku: "rihappy-1003052962",
@@ -6463,7 +7108,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes bicicletas bicicleta aro 14",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252157/EXCLUSIVO---Bicicleta---Disney---Princesas---Ariel---Aro-14---Bandeirante-0.jpg?v=638960404177300000",
-  productUrl: "https://www.rihappy.com.br/bicicleta-disney-princesas-ariel-aro-14-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/bicicleta-disney-princesas-ariel-aro-14-bandeirante/p",
+  popularity: 646
  },
  {
   sku: "rihappy-1003051830",
@@ -6473,7 +7119,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8413272/Guitarra-Eletronica---Galinha-Pintadinha---Com-Som-E-Luz---Yes-Toys-0.jpg?v=638865434416770000",
-  productUrl: "https://www.rihappy.com.br/guitarra-eletronica-galinha-pintadinha-com-som-e-luz-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/guitarra-eletronica-galinha-pintadinha-com-som-e-luz-yes-toys/p",
+  popularity: 647
  },
  {
   sku: "rihappy-1003051531",
@@ -6483,7 +7130,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9286414/Jogo-De-Cartas---Uno---Party---168-Cartas---Mattel-0.jpg?v=638969337362230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-party-168-cartas-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-party-168-cartas-mattel/p",
+  popularity: 648
  },
  {
   sku: "rihappy-1003051472",
@@ -6493,7 +7141,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes bicicletas bicicleta aro 14",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252166/EXCLUSIVO---Bicicleta---Hot-Whells---Aro-14---Bandeirante-0.jpg?v=638960404957370000",
-  productUrl: "https://www.rihappy.com.br/bicicleta-aro-14-bandeirante-hot-whells/p"
+  productUrl: "https://www.rihappy.com.br/bicicleta-aro-14-bandeirante-hot-whells/p",
+  popularity: 649
  },
  {
   sku: "rihappy-1003051355",
@@ -6503,7 +7152,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha utensilios de cozinha de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8391114/Conjunto-De-Acessorios---Barbie---Pic-Nic-No-Parque---Elka-0.jpg?v=638864576671300000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-barbie-pic-nic-no-parque-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-barbie-pic-nic-no-parque-elka/p",
+  popularity: 650
  },
  {
   sku: "rihappy-1003051310",
@@ -6513,7 +7163,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774791/Conjunto-De-Brinquedo---Peppa-Pig---Guarda-Roupa-De-Estilos-Divertidos---Hasbro-0.jpg?v=638914011132430000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-brinquedo-peppa-pig-guardaroupa-de-estilos-divertidos-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-brinquedo-peppa-pig-guardaroupa-de-estilos-divertidos-hasbro/p",
+  popularity: 651
  },
  {
   sku: "rihappy-1003050946",
@@ -6523,7 +7174,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8386950/Carrinho-De-Radio-Controle---Hot-Wheels---De-Corrida-Com-Luzes---Multikids-0.jpg?v=638862853671070000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-radio-controle-hot-wheels-de-corrida-com-luzes-multikids/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-radio-controle-hot-wheels-de-corrida-com-luzes-multikids/p",
+  popularity: 652
  },
  {
   sku: "rihappy-1003050532",
@@ -6533,7 +7185,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8387660/-Pelucia-Com-Acessorios---Pets-Alive---Mamae-Coelha---Candide-0.jpg?v=638863130200930000",
-  productUrl: "https://www.rihappy.com.br/pelucia-com-acessorios-pets-alive-mamae-coelha-candide/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-com-acessorios-pets-alive-mamae-coelha-candide/p",
+  popularity: 653
  },
  {
   sku: "rihappy-1003050484",
@@ -6543,7 +7196,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes artesanato",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8756196/Brinquedo-De-Madeira---Jardim-Magico---Fisher-Price-0.jpg?v=638912268304100000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-de-madeira-jardim-magico-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-de-madeira-jardim-magico-fisherprice/p",
+  popularity: 654
  },
  {
   sku: "rihappy-1003050406",
@@ -6553,7 +7207,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9738598/Conjunto-De-Acessorios---Emily-Vick-E-Katlen---Bolsinha-Biju---Elka-0.jpg?v=639071097244970000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-emily-vick-e-katlen-bolsinha-biju-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-emily-vick-e-katlen-bolsinha-biju-elka/p",
+  popularity: 655
  },
  {
   sku: "rihappy-1003050403",
@@ -6563,7 +7218,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta walkie talkie",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8697681/Radio-Comunicadores---Homem-Aranha---Candide-0.jpg?v=638906259659700000",
-  productUrl: "https://www.rihappy.com.br/radio-comunicadores-homem-aranha-candide/p"
+  productUrl: "https://www.rihappy.com.br/radio-comunicadores-homem-aranha-candide/p",
+  popularity: 656
  },
  {
   sku: "rihappy-1003050310",
@@ -6573,7 +7229,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8379512/Busto-De-Boneca-e-Acessorios---Styling-Head---My-Size---Disney---Frozen---Elsa---Novabrink-0.jpg?v=638858549740770000",
-  productUrl: "https://www.rihappy.com.br/busto-de-boneca-e-acessorios-styling-head-my-size-disney-frozen-elsa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/busto-de-boneca-e-acessorios-styling-head-my-size-disney-frozen-elsa-novabrink/p",
+  popularity: 657
  },
  {
   sku: "rihappy-1003049171",
@@ -6583,7 +7240,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9114007/Jogo-De-Acao---Avalanche---Barbie---Elka-0.jpg?v=638947660529900000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-avalanche-barbie-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-avalanche-barbie-elka/p",
+  popularity: 658
  },
  {
   sku: "rihappy-1003049083",
@@ -6593,7 +7251,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8600981/Quebra-Cabeca---Capivaras---100-Pecas---Grow-0.jpg?v=638896586998700000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-capivaras-100-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-capivaras-100-pecas-grow/p",
+  popularity: 659
  },
  {
   sku: "rihappy-1003048932",
@@ -6603,7 +7262,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372757/LEGO---Speed-Champions---Supercarro-Porsche-911-GT3-RS---77239-0.jpg?v=638856936644270000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-supercarro-porsche-911-gt3-rs-77239/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-supercarro-porsche-911-gt3-rs-77239/p",
+  popularity: 660
  },
  {
   sku: "rihappy-1003048930",
@@ -6613,7 +7273,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372872/LEGO---Speed-Champions---Carro-Esportivo-Dodge-Challenger-Srt-Hellcat---77237-0.jpg?v=638856939412130000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-dodge-challenger-srt-hellcat-77237/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-esportivo-dodge-challenger-srt-hellcat-77237/p",
+  popularity: 661
  },
  {
   sku: "rihappy-1003048917",
@@ -6623,7 +7284,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372855/LEGO---Super-Heroes-Marvel---Cena-De-Homem-Aranha-Vs-Doc-Ock-No-Trem-Do-Metro---76321-0.jpg?v=638856938861030000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-cena-de-homemaranha-vs-doc-ock-no-trem-do-metro-76321/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-cena-de-homemaranha-vs-doc-ock-no-trem-do-metro-76321/p",
+  popularity: 662
  },
  {
   sku: "rihappy-1003048592",
@@ -6633,7 +7295,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372777/LEGO---City-Police---Perseguicao-Com-Motocicleta-Da-Policia---60455-0.jpg?v=638856937050430000",
-  productUrl: "https://www.rihappy.com.br/lego-city-police-perseguicao-com-motocicleta-da-policia-60455/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-police-perseguicao-com-motocicleta-da-policia-60455/p",
+  popularity: 663
  },
  {
   sku: "rihappy-1003048580",
@@ -6643,7 +7306,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jogos de advinhacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9114038/Jogo-Eu-Sou-Princesas-Brinquedos-Estrela-0.jpg?v=638947661429200000",
-  productUrl: "https://www.rihappy.com.br/jogo-eu-sou-princesas-brinquedos-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-eu-sou-princesas-brinquedos-estrela/p",
+  popularity: 664
  },
  {
   sku: "rihappy-1003048575",
@@ -6653,7 +7317,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113430/Quebra-Cabeca---Dos-Rosa---100-Pecas---Elka-0.jpg?v=638947588610770000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-dos-rosa-100-pecas-elka/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-dos-rosa-100-pecas-elka/p",
+  popularity: 665
  },
  {
   sku: "rihappy-1003048574",
@@ -6663,7 +7328,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9058599/Jogo-De-Tabuleiro---Banco-Imobiliario---Disney---Estrela-0.jpg?v=638942541957000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-banco-imobiliario-disney-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-banco-imobiliario-disney-estrela/p",
+  popularity: 666
  },
  {
   sku: "rihappy-1003048572",
@@ -6673,7 +7339,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais microfone de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8697155/Boombox-Karaoke-Infantil---Disney---Princesas---Candide-0.jpg?v=638906197286970000",
-  productUrl: "https://www.rihappy.com.br/boombox-karaoke-infantil-disney-princesas-candide/p"
+  productUrl: "https://www.rihappy.com.br/boombox-karaoke-infantil-disney-princesas-candide/p",
+  popularity: 667
  },
  {
   sku: "rihappy-1003048569",
@@ -6683,7 +7350,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8366194/Pelucia---Kiki-Cones---Modelos-Unitarios-Sortidos---Fun-0.jpg?v=638854265108600000",
-  productUrl: "https://www.rihappy.com.br/pelucia-kiki-cones-modelos-unitarios-sortidos-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-kiki-cones-modelos-unitarios-sortidos-fun/p",
+  popularity: 668
  },
  {
   sku: "rihappy-1003047778",
@@ -6693,7 +7361,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8366121/Playset-E-Mini-Figura---Little-Live-Pets-Mama-Surprise-Families---Adocao---Fun-0.jpg?v=638854259145470000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-figura-little-live-pets-mama-surprise-families-adocao-fun/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-figura-little-live-pets-mama-surprise-families-adocao-fun/p",
+  popularity: 669
  },
  {
   sku: "rihappy-1003047454",
@@ -6703,7 +7372,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8361454/Bon---Barbie---Chelsea---Ursinhos-Carinhosos-Coloridos-Surpresa----Modelos-Unitarios-Sortidos-0.jpg?v=638852678163000000",
-  productUrl: "https://www.rihappy.com.br/bon-barbie-chelsea-ursinhos-carinhosos-coloridos-surpresa-modelos-unitarios-sortidos/p"
+  productUrl: "https://www.rihappy.com.br/bon-barbie-chelsea-ursinhos-carinhosos-coloridos-surpresa-modelos-unitarios-sortidos/p",
+  popularity: 670
  },
  {
   sku: "rihappy-1003047104",
@@ -6713,7 +7383,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446453/Mini-Boneca---Barbie---Mini-Reveal-e-Party-Unboxed-Surpresa---Mattel-0.jpg?v=638870753945900000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-mini-reveal-e-party-unboxed-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-mini-reveal-e-party-unboxed-surpresa-mattel/p",
+  popularity: 671
  },
  {
   sku: "rihappy-1003047041",
@@ -6723,7 +7394,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8814641/Figura-De-Acao---Peppa-Pig---Carro-Da-Familia-Pig---Hasbro-0.jpg?v=638918272279170000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-carro-da-familia-pig-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-carro-da-familia-pig-hasbro/p",
+  popularity: 672
  },
  {
   sku: "rihappy-1003046897",
@@ -6733,7 +7405,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8352600/Conjunto-De-Bonecos---Disney---Moana-2---Moana-E-Maui---Mattel-0.jpg?v=638848443674600000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecos-disney-moana-2-moana-e-maui-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-bonecos-disney-moana-2-moana-e-maui-mattel/p",
+  popularity: 673
  },
  {
   sku: "rihappy-1003046889",
@@ -6743,7 +7416,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8361461/Boneca-Articulada---Disney---Moana-2---Oficina-Moana-E-Loto---Mattel-0.jpg?v=638852680647100000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-moana-2-oficina-moana-e-loto-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-moana-2-oficina-moana-e-loto-mattel/p",
+  popularity: 674
  },
  {
   sku: "rihappy-1003046885",
@@ -6753,7 +7427,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9114166/Boneca---Baby-Alive---Bebe-Cresce---Sophia---Hasbro-0.jpg?v=638947665039000000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-bebe-cresce-sophia-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-bebe-cresce-sophia-hasbro/p",
+  popularity: 675
  },
  {
   sku: "rihappy-1003046396",
@@ -6763,7 +7438,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774876/Figura-De-Acao----Peppa-Pig---A-Familia-Pig-Com-Bebe-Evie---Hasbro-0.jpg?v=638914023049300000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-a-familia-pig-com-bebe-evie-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-peppa-pig-a-familia-pig-com-bebe-evie-hasbro/p",
+  popularity: 676
  },
  {
   sku: "rihappy-1003044300",
@@ -6773,7 +7449,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8342162/Projetor-De-Desenhos---Marvel---Avengers---Azul---Multikids-0.jpg?v=639192888374400000",
-  productUrl: "https://www.rihappy.com.br/projetor-de-desenhos-marvel-avengers-azul-multikids/p"
+  productUrl: "https://www.rihappy.com.br/projetor-de-desenhos-marvel-avengers-azul-multikids/p",
+  popularity: 677
  },
  {
   sku: "rihappy-1003044258",
@@ -6783,7 +7460,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "fantasias mascaras",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8342999/Mascara---Jurassic-World---Dinossauro---Mattel---Modelos-Unitarios-Sortidos-0.jpg?v=638846377394570000",
-  productUrl: "https://www.rihappy.com.br/mascara-jurassic-world-dinossauro-mattel-modelos-unitarios-sortidos/p"
+  productUrl: "https://www.rihappy.com.br/mascara-jurassic-world-dinossauro-mattel-modelos-unitarios-sortidos/p",
+  popularity: 678
  },
  {
   sku: "rihappy-1003044646",
@@ -6793,7 +7471,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9750542/Figura-Articulada---Jurrasic-World---Dinossauro-Rebirth---Com-Som---Sortido---Mattel-0.jpg?v=639075524927730000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-jurrasic-world-dinossauro-rebirth-com-som-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-jurrasic-world-dinossauro-rebirth-com-som-mattel/p",
+  popularity: 679
  },
  {
   sku: "rihappy-1003043589",
@@ -6803,7 +7482,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9286380/Carrinho---Hot-Wheels---Formula-1---Pacote-5-Carros---Racing---Sortidos---Mattel-0.jpg?v=638969335450500000",
-  productUrl: "https://www.rihappy.com.br/carrinho-hot-wheels-pacote-5-carros-racing-mattel/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-hot-wheels-pacote-5-carros-racing-mattel/p",
+  popularity: 680
  },
  {
   sku: "rihappy-1003041527",
@@ -6813,7 +7493,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9668758/Conjuntos-De-Micangas---Joias---Encantos-do-Unicornio---Fanfun-0.jpg?v=639053130033170000",
-  productUrl: "https://www.rihappy.com.br/conjuntos-de-micangas-joias-encantos-do-unicornio-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjuntos-de-micangas-joias-encantos-do-unicornio-fanfun/p",
+  popularity: 681
  },
  {
   sku: "rihappy-1003041522",
@@ -6823,7 +7504,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9618362/Conjunto-de-Micangas---DIY---Joias-Do-Alfabeto---Fanfun-0.jpg?v=639039075440730000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-diy-joias-do-alfabeto-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-diy-joias-do-alfabeto-fanfun/p",
+  popularity: 682
  },
  {
   sku: "rihappy-1003041518",
@@ -6833,7 +7515,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9668762/Conjunto-De-Micangas---Joias-Deluxe---Fanfun-0.jpg?v=639053131739900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-joias-deluxe-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-joias-deluxe-fanfun/p",
+  popularity: 683
  },
  {
   sku: "rihappy-1003041514",
@@ -6843,7 +7526,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9668784/Conjunto-De-Micangas---ABC-das-Micangas---Fanfun-0.jpg?v=639053138788300000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-abc-das-micangas-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-abc-das-micangas-fanfun/p",
+  popularity: 684
  },
  {
   sku: "rihappy-1003041499",
@@ -6853,7 +7537,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9668766/Conjunto-De-Micangas---Pulseiras-Pop-Style---Fanfun-0.jpg?v=639053133134770000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-pulseiras-pop-style-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-pulseiras-pop-style-fanfun/p",
+  popularity: 685
  },
  {
   sku: "rihappy-1003041497",
@@ -6863,7 +7548,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8317277/Figura-De-Acao---Imaginext---Jurassic-World---Rebirth---Spinosaurus-Corredor---Fisher-Price-0.jpg?v=638841329323530000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-imaginext-jurassic-world-rebirth-spinosaurus-corredor-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-imaginext-jurassic-world-rebirth-spinosaurus-corredor-fisherprice/p",
+  popularity: 686
  },
  {
   sku: "rihappy-1003026803",
@@ -6873,7 +7559,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-agua",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9650937/Lancador-De-Agua---Hydro-Force---Fanfun-0.jpg?v=639047061210100000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-agua-hydro-force-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-agua-hydro-force-fanfun/p",
+  popularity: 687
  },
  {
   sku: "rihappy-1003026406",
@@ -6883,7 +7570,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-agua",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9650975/Lancador-De-Agua---Turbo-Splash---Fanfun-0.jpg?v=639047065445870000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-agua-turbo-splash-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-agua-turbo-splash-fanfun/p",
+  popularity: 688
  },
  {
   sku: "rihappy-1003016075",
@@ -6893,7 +7581,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8245122/Boneca---Ladybug---Musical---Novabrink-0.jpg?v=638829978974470000",
-  productUrl: "https://www.rihappy.com.br/boneca-ladybug-musical-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-ladybug-musical-novabrink/p",
+  popularity: 689
  },
  {
   sku: "rihappy-1003015839",
@@ -6903,7 +7592,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8241959/Boneca-Articulada---Disney---Princesas---Mini-My-Size---Elsa---Novabrink-0.jpg?v=638829282808370000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-elsa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-elsa-novabrink/p",
+  popularity: 690
  },
  {
   sku: "rihappy-1003015699",
@@ -6913,7 +7603,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774757/Jogo-De-Tabuleiro---Connect-4-Grid---Hasbro-0.jpg?v=638914007079800000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-connect-4-grid-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-connect-4-grid-hasbro/p",
+  popularity: 691
  },
  {
   sku: "rihappy-1003015697",
@@ -6923,7 +7614,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9750519/Jogo-De-Tabuleiro---Fato-Ou-Fake----Friends---Nig-0.jpg?v=639075524439070000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-friends-nig/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-fato-ou-fake-friends-nig/p",
+  popularity: 692
  },
  {
   sku: "rihappy-1003009835",
@@ -6933,7 +7625,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8193858/Boneca-Articulada---Barbie---Wicked---Hero-School---Preto---Mattel-0.jpg?v=638814415701370000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-wicked-hero-school-preto-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-wicked-hero-school-preto-mattel/p",
+  popularity: 693
  },
  {
   sku: "rihappy-1003009815",
@@ -6943,7 +7636,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8193880/Jogo-de-Tabuleiro---Familia-Taco-Gato---Papergames-0.jpg?v=638814419496270000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-familia-taco-gato-papergames/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-familia-taco-gato-papergames/p",
+  popularity: 694
  },
  {
   sku: "rihappy-1003008787",
@@ -6953,7 +7647,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8181914/Jogo-de-Cartas---Dobble---Turma-da-Monica---Galapagos-0.jpg?v=638809435281930000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-turma-da-monica-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-turma-da-monica-galapagos/p",
+  popularity: 695
  },
  {
   sku: "rihappy-1003004533",
@@ -6963,7 +7658,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8456156/Pelucia---Com-Cheiro-E-Som---Stitch---Sunny--0.jpg?v=638872342300370000",
-  productUrl: "https://www.rihappy.com.br/pelucia-com-cheiro-e-som-stitch-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-com-cheiro-e-som-stitch-sunny/p",
+  popularity: 696
  },
  {
   sku: "rihappy-1003000591",
@@ -6973,7 +7669,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "beleza e perfumaria esmaltes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9345108/Brincando-de-Ser---Esmalteria-Duo---Barbie---Multikids-0.jpg?v=638980625521170000",
-  productUrl: "https://www.rihappy.com.br/brincando-de-ser-esmalteria-duo-barbie-multikids/p"
+  productUrl: "https://www.rihappy.com.br/brincando-de-ser-esmalteria-duo-barbie-multikids/p",
+  popularity: 697
  },
  {
   sku: "rihappy-1002999967",
@@ -6983,7 +7680,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8117222/Conjunto-de-Batalha-Beyblade-X-Ataque-Descendente---Hasbro-0.jpg?v=638792850248930000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-batalha-beyblade-x-ataque-descendente-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-batalha-beyblade-x-ataque-descendente-hasbro/p",
+  popularity: 698
  },
  {
   sku: "rihappy-1002996059",
@@ -6993,7 +7691,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8079368/Boneca-Com-Acessorios---Baby-Alive---Mermaid-Splash-Harper-Hugs---Hasbro-0.jpg?v=638787713990470000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-mermaid-splash-harper-hugs-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-mermaid-splash-harper-hugs-hasbro/p",
+  popularity: 699
  },
  {
   sku: "rihappy-1002994119",
@@ -7003,7 +7702,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra cabeca progressivo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7985469/Quebra-Cabeca-Progressivo---Bluey---Elka-0.jpg?v=638781565597600000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-progressivo-bluey-elka/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-progressivo-bluey-elka/p",
+  popularity: 700
  },
  {
   sku: "rihappy-1002993393",
@@ -7013,7 +7713,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais pandeiros de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7961623/Instrumento-Musical---Maraca-e-Pandeiro---Bluey---Elka-0.jpg?v=638780040735730000",
-  productUrl: "https://www.rihappy.com.br/instrumento-musical-maraca-e-pandeiro-bluey-elka/p"
+  productUrl: "https://www.rihappy.com.br/instrumento-musical-maraca-e-pandeiro-bluey-elka/p",
+  popularity: 701
  },
  {
   sku: "rihappy-1002993391",
@@ -7023,7 +7724,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7961489/Blocos-de-Montar---Disney-Pixar---Toy-Story---Buzz---Elka-0.jpg?v=638780036560570000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar--disney-pixar-toy-story-buzz-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar--disney-pixar-toy-story-buzz-elka/p",
+  popularity: 702
  },
  {
   sku: "rihappy-1002989798",
@@ -7033,7 +7735,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7816183/Boneca-Articulada---Barbie---Fadas-Magicas---Sortido---Mattel-0.jpg?v=638773014097500000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fadas-magicas-sortido-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fadas-magicas-sortido-mattel/p",
+  popularity: 703
  },
  {
   sku: "rihappy-1002985975",
@@ -7043,7 +7746,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8235896/Mini-figuras---Polly-Pocket---O-Mundo-Magico---Sortida---Mattel-0.jpg?v=638827805830630000",
-  productUrl: "https://www.rihappy.com.br/mini-figuras-polly-pocket-o-mundo-magico-dos-compactos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-figuras-polly-pocket-o-mundo-magico-dos-compactos-mattel/p",
+  popularity: 704
  },
  {
   sku: "rihappy-1002984838",
@@ -7053,7 +7757,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7785228/Jogo-de-Cartas-Ilustradas---Exploding-Kittens--Zombie-Kittens---De-2-a-5-Jogadores---Galapagos-0.jpg?v=638772324595400000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-ilustradas-exploding-kittens-zombie-kittens-de-2-a-5-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-ilustradas-exploding-kittens-zombie-kittens-de-2-a-5-jogadores-galapagos/p",
+  popularity: 705
  },
  {
   sku: "rihappy-1002975597",
@@ -7063,7 +7768,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774935/Figura-Interativa---Peppa-Pig---Peppa-Canta-e-Encanta---Com-Sons---Hasbro-0.jpg?v=638914030687100000",
-  productUrl: "https://www.rihappy.com.br/figura-interativa-peppa-pig-peppa-canta-e-encanta-com-sons-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-interativa-peppa-pig-peppa-canta-e-encanta-com-sons-hasbro/p",
+  popularity: 706
  },
  {
   sku: "rihappy-1002975096",
@@ -7073,7 +7779,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes patinetes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8708654/Skatenet---Led-Pro---Dobravel---Rosa---Bandeirante-0.jpg?v=638907160649570000",
-  productUrl: "https://www.rihappy.com.br/skatenet-led-pro-dobravel-rosa-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/skatenet-led-pro-dobravel-rosa-bandeirante/p",
+  popularity: 707
  },
  {
   sku: "rihappy-1002969463",
@@ -7083,7 +7790,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7472187/Jogo-da-Memoria---Turma-da-Monica---Dia-das-Compras---De-02-a-04-Jogadores---Nig-0.jpg?v=638754907326170000",
-  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-turma-da-monica-dia-das-compras-de-02-a-04-jogadores-nig/p"
+  productUrl: "https://www.rihappy.com.br/jogo-da-memoria-turma-da-monica-dia-das-compras-de-02-a-04-jogadores-nig/p",
+  popularity: 708
  },
  {
   sku: "rihappy-1002969448",
@@ -7093,7 +7801,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7473362/Jogo-De-Acao---Tapa-Na-Mesa---Turma-da-Monica----Nig-Brinquedos-0.jpg?v=638754997046230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-turma-da-monica-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-na-mesa-turma-da-monica-nig-brinquedos/p",
+  popularity: 709
  },
  {
   sku: "rihappy-1002969445",
@@ -7103,7 +7812,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7465061/Jogo---Roletrando---Perguntas-e-Respostas---Nig-Brinquedos-0.jpg?v=638754242607870000",
-  productUrl: "https://www.rihappy.com.br/jogo-roletrando-perguntas-e-respostas-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-roletrando-perguntas-e-respostas-nig-brinquedos/p",
+  popularity: 710
  },
  {
   sku: "rihappy-1002969299",
@@ -7113,7 +7823,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao cara a cara",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7465070/Jogo---Cara-a-Cara---Stitch---Jm-0.jpg?v=638754243584770000",
-  productUrl: "https://www.rihappy.com.br/jogo-cara-a-cara-stitch-jm/p"
+  productUrl: "https://www.rihappy.com.br/jogo-cara-a-cara-stitch-jm/p",
+  popularity: 711
  },
  {
   sku: "rihappy-1002969258",
@@ -7123,7 +7834,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9092869/LEGO---Speed-Champions---Carro-de-Corrida-Mercedes-AMG-F1-W15---77244-0.jpg?v=638945085641870000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-mercedesamg-f1-w15-77244/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-mercedesamg-f1-w15-77244/p",
+  popularity: 712
  },
  {
   sku: "rihappy-1002969257",
@@ -7133,7 +7845,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8716365/LEGO---Speed-Champions---Carro-de-Corrida-McLaren-F1-Team-MCL38---77251-0.jpg?v=638907933749700000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-mclaren-f1-team-mcl38-77251/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-carro-de-corrida-mclaren-f1-team-mcl38-77251/p",
+  popularity: 713
  },
  {
   sku: "rihappy-1002969130",
@@ -7143,7 +7856,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7465088/Conjunto-de-Figuras---Play-Doh---Criar-Animais-Divertidos---Hasbro-0.jpg?v=638754245018530000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-playdoh-criar-animais-divertidos-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-playdoh-criar-animais-divertidos-hasbro/p",
+  popularity: 714
  },
  {
   sku: "rihappy-1002966942",
@@ -7153,7 +7867,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7412667/Brinquedo-Educativo---Fisher-Price---Pug--Hora-de-Vestir-0.jpg?v=638748765392800000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-fisherprice-pug-hora-de-vestir/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-fisherprice-pug-hora-de-vestir/p",
+  popularity: 715
  },
  {
   sku: "rihappy-1002966590",
@@ -7163,7 +7878,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7376202/Boneca-Articulada-e-Acessorios---Barbie---Deluxe-Style---Rosa---Mattel-0.jpg?v=638744404398830000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-e-acessorios-barbie-deluxe-style-rosa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-e-acessorios-barbie-deluxe-style-rosa-mattel/p",
+  popularity: 716
  },
  {
   sku: "rihappy-1002966493",
@@ -7173,7 +7889,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7407267/Jogo---Pula-Stitch---Estrela-0.jpg?v=638748106163130000",
-  productUrl: "https://www.rihappy.com.br/jogo-pula-stitch-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-pula-stitch-estrela/p",
+  popularity: 717
  },
  {
   sku: "rihappy-1002963642",
@@ -7183,7 +7900,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis carrinhos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9057415/Carro-Colecionavel---Disney-e-Pixar---Cars---Veiculo-Auto-1-55---Modelos-Sortidos---Mattel-0.jpg?v=638942515178400000",
-  productUrl: "https://www.rihappy.com.br/carro-colecionavel-disney-e-pixar-cars-veiculo-auto-155-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/carro-colecionavel-disney-e-pixar-cars-veiculo-auto-155-modelos-sortidos-mattel/p",
+  popularity: 718
  },
  {
   sku: "rihappy-1002959877",
@@ -7193,7 +7911,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria souvenirs adesivos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8374660/Adesivos-Decorativos---Melissa---Doug---Natureza---Sunny-0.jpg?v=638857336258900000",
-  productUrl: "https://www.rihappy.com.br/adesivos-decorativos-melissa--doug-natureza-sunny/p"
+  productUrl: "https://www.rihappy.com.br/adesivos-decorativos-melissa--doug-natureza-sunny/p",
+  popularity: 719
  },
  {
   sku: "rihappy-1002959505",
@@ -7203,7 +7922,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7846075/Jogo-de-Cartas---Nem-a-Pato----De-02-a-10-Jogadores---Grok-Games-0.jpg?v=638773975140000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-nem-a-pato-de-02-a-10-jogadores-grok-games/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-nem-a-pato-de-02-a-10-jogadores-grok-games/p",
+  popularity: 720
  },
  {
   sku: "rihappy-1002952617",
@@ -7213,7 +7933,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7858636/Estojo-de-atividades---Disney---Stitch---Toyng-0.jpg?v=638774865506570000",
-  productUrl: "https://www.rihappy.com.br/estojo-de-atividades-disney-stitch-toyng/p"
+  productUrl: "https://www.rihappy.com.br/estojo-de-atividades-disney-stitch-toyng/p",
+  popularity: 721
  },
  {
   sku: "rihappy-1002952090",
@@ -7223,7 +7944,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7196144/Mini-Boneca---Mini-BarbieLand---Pop-Reveal---Minicopo---Surpresa---Mattel-0.jpg?v=638724559571730000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-mini-barbieland-pop-reveal-minicopo-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-mini-barbieland-pop-reveal-minicopo-surpresa-mattel/p",
+  popularity: 722
  },
  {
   sku: "rihappy-1002951148",
@@ -7233,7 +7955,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7426598/Mini-Boneca---Barbie---Pop-Reveal-Shakes---Chelsea---Surpresa---Mattel-0.jpg?v=638749860212770000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-pop-reveal-shakes-chelsea-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-pop-reveal-shakes-chelsea-surpresa-mattel/p",
+  popularity: 723
  },
  {
   sku: "rihappy-1002951125",
@@ -7243,7 +7966,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7415714/Boneca-Articulada---Barbie---Color-Reveal---Disco-Star---Surpresa---Mattel-0.jpg?v=638748965998470000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-color-reveal-disco-star-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-color-reveal-disco-star-surpresa-mattel/p",
+  popularity: 724
  },
  {
   sku: "rihappy-1002950741",
@@ -7253,7 +7977,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8112562/Mini-Boneca---Barbie-Land-Fashionista--Embalagem-Esmalte--Surpresa---Mattel-0.jpg?v=638791965499570000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-land-fashionista-embalagem-esmalte-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-land-fashionista-embalagem-esmalte-surpresa-mattel/p",
+  popularity: 725
  },
  {
   sku: "rihappy-1002950709",
@@ -7263,7 +7988,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9256093/Brinquedo-Musical-Para-Bebes---Microfone---Fisher-Price-0.jpg?v=638961460130630000",
-  productUrl: "https://www.rihappy.com.br/fisherprice-brinquedo-para-bebes-microfone-mattel-jfw55/p"
+  productUrl: "https://www.rihappy.com.br/fisherprice-brinquedo-para-bebes-microfone-mattel-jfw55/p",
+  popularity: 726
  },
  {
   sku: "rihappy-1002944817",
@@ -7273,7 +7999,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7154874/Boneca-Articulada---Barbie---Fada-Magica---Mattel-0.jpg?v=638717658337830000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fada-magica-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fada-magica-mattel/p",
+  popularity: 727
  },
  {
   sku: "rihappy-1002944816",
@@ -7283,7 +8010,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9178367/Pelucia---Aprender-e-Brincar---Cachorrinho---Aprende-Comigo---Fisher-Price-0.jpg?v=638951209642430000",
-  productUrl: "https://www.rihappy.com.br/fisherprice-brinquedo-para-bebes-cachorrinho-aprende-comigo-mattel-jfd19/p"
+  productUrl: "https://www.rihappy.com.br/fisherprice-brinquedo-para-bebes-cachorrinho-aprende-comigo-mattel-jfd19/p",
+  popularity: 728
  },
  {
   sku: "rihappy-1002944813",
@@ -7293,7 +8021,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7160864/Boneca-Articulada---Barbie---Mini-BarbieLand---Surpresa---Mattel-0.jpg?v=638717889156630000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-mini-barbieland-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-mini-barbieland-surpresa-mattel/p",
+  popularity: 729
  },
  {
   sku: "rihappy-1002942244",
@@ -7303,7 +8032,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7128052/LEGO---Ninjago---Pack-de-Combate-do-Spinjitzu-de-Dragao---71826-0.jpg?v=638703078428370000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-pack-de-combate-do-spinjitzu-de-dragao-71826/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-pack-de-combate-do-spinjitzu-de-dragao-71826/p",
+  popularity: 730
  },
  {
   sku: "rihappy-1002941201",
@@ -7313,7 +8043,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8716720/LEGO---Spidey---Perseguicao-com-Veiculos-de-Dinossauro-de-Spin-e-Electro---11198-0.jpg?v=638907951726070000",
-  productUrl: "https://www.rihappy.com.br/lego-spidey-perseguicao-com-veiculos-de-dinossauro-de-spin-e-electro-11198/p"
+  productUrl: "https://www.rihappy.com.br/lego-spidey-perseguicao-com-veiculos-de-dinossauro-de-spin-e-electro-11198/p",
+  popularity: 731
  },
  {
   sku: "rihappy-1002940912",
@@ -7323,7 +8054,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114413/LEGO---City-Great-Vehicles---Pack-de-Carros-de-Corrida-Pizza-vs-Caminhao-dos-Bombeiros---60458-0.jpg?v=638696999472630000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-pack-de-carros-de-corrida-pizza-vs-caminhao-dos-bombeiros-60458/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-pack-de-carros-de-corrida-pizza-vs-caminhao-dos-bombeiros-60458/p",
+  popularity: 732
  },
  {
   sku: "rihappy-1002940901",
@@ -7333,7 +8065,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9092547/LEGO---City-Formula-1---Carros-de-Corrida-de-F1-da-Williams-Racing-e-Haas-F1---60464-0.jpg?v=638945070711330000",
-  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-carros-de-corrida-de-f1-da-williams-racing-e-haas-f1-60464/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-carros-de-corrida-de-f1-da-williams-racing-e-haas-f1-60464/p",
+  popularity: 733
  },
  {
   sku: "rihappy-1002940900",
@@ -7343,7 +8076,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9087909/LEGO---City-Formula-1---Pit-Stop-e-Equipe-de-Box-de-F1-com-Carro-da-Ferrari---60443-0.jpg?v=638944299022200000",
-  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-pit-stop-e-equipe-de-box-de-f1-com-carro-da-ferrari-60443/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-formula-1-pit-stop-e-equipe-de-box-de-f1-com-carro-da-ferrari-60443/p",
+  popularity: 734
  },
  {
   sku: "rihappy-1002937369",
@@ -7353,7 +8087,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7079413/Boneco-Articulado---Marvel---Capitao-America---Titan-Hero---Hasbro-0.jpg?v=638687438843400000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-capitao-america-titan-hero-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-capitao-america-titan-hero-hasbro/p",
+  popularity: 735
  },
  {
   sku: "rihappy-1002929697",
@@ -7363,7 +8098,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8469488/Miniatura-Colecionavel---Moana---Maui---Disney-0.jpg?v=638875060982100000",
-  productUrl: "https://www.rihappy.com.br/slp-moana-maui-disney/p"
+  productUrl: "https://www.rihappy.com.br/slp-moana-maui-disney/p",
+  popularity: 736
  },
  {
   sku: "rihappy-1002904718",
@@ -7373,7 +8109,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8875436/Instrumento-Musical---Piano-Melodia---Bluey---Candide--0.jpg?v=638925262470830000",
-  productUrl: "https://www.rihappy.com.br/instrumento-musical-piano-melodia-bluey-candide/p"
+  productUrl: "https://www.rihappy.com.br/instrumento-musical-piano-melodia-bluey-candide/p",
+  popularity: 737
  },
  {
   sku: "rihappy-1002903254",
@@ -7383,7 +8120,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de anatomia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6872815/Jogo-Educativo---Jogo-Entendendo-O-Corpo-Humano---02--a-04-Jogadores---Toyster-0.jpg?v=638657176902070000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-entendendo-o-corpo-humano-02-a-04-jogadores-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-entendendo-o-corpo-humano-02-a-04-jogadores-toyster/p",
+  popularity: 738
  },
  {
   sku: "rihappy-1002900481",
@@ -7393,7 +8131,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais chocalhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8315024/Chocalho-Animal---Descobrindo-com-Diversao---Sortido---Minimi-0.jpg?v=638840661452130000",
-  productUrl: "https://www.rihappy.com.br/chocalho-animal-descobrindo-com-diversao-minimi/p"
+  productUrl: "https://www.rihappy.com.br/chocalho-animal-descobrindo-com-diversao-minimi/p",
+  popularity: 739
  },
  {
   sku: "rihappy-1002900367",
@@ -7403,7 +8142,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8274444/Cubo-de-Atividades---Descobrindo-com-Diversao---Minimi-0.jpg?v=638833520316100000",
-  productUrl: "https://www.rihappy.com.br/cubo-de-atividades-descobrindo-com-diversao-minimi/p"
+  productUrl: "https://www.rihappy.com.br/cubo-de-atividades-descobrindo-com-diversao-minimi/p",
+  popularity: 740
  },
  {
   sku: "rihappy-1002900260",
@@ -7413,7 +8153,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7972956/Chocalho---Descobrindo-com-Diversao---Carangueijo---Minimi-0.jpg?v=638780751394730000",
-  productUrl: "https://www.rihappy.com.br/carangueijo-chocalho-descobrindo-com-diversao-minimi/p"
+  productUrl: "https://www.rihappy.com.br/carangueijo-chocalho-descobrindo-com-diversao-minimi/p",
+  popularity: 741
  },
  {
   sku: "rihappy-1002900257",
@@ -7423,7 +8164,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7858658/Aviao-Musical---Descobrindo-com-Diversao---Minimi-0.jpg?v=638774867936630000",
-  productUrl: "https://www.rihappy.com.br/aviao-musical-descobrindo-com-diversao-minimi/p"
+  productUrl: "https://www.rihappy.com.br/aviao-musical-descobrindo-com-diversao-minimi/p",
+  popularity: 742
  },
  {
   sku: "rihappy-1002899732",
@@ -7433,7 +8175,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6819756/Pelucia---Disney---Divertida-Mente-2---Alegria---Fun-0.jpg?v=638647768148430000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-divertida-mente-2-alegria-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-divertida-mente-2-alegria-fun/p",
+  popularity: 743
  },
  {
   sku: "rihappy-1002898343",
@@ -7443,7 +8186,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6819652/Figura-de-Pelucia---Bob-Zoom--e-a-Pipoquinha---Com-Som---Fun-0.jpg?v=638647753124500000",
-  productUrl: "https://www.rihappy.com.br/figura-de-pelucia-bob-zoom-e-a-pipoquinha-com-som-fun/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-pelucia-bob-zoom-e-a-pipoquinha-com-som-fun/p",
+  popularity: 744
  },
  {
   sku: "rihappy-1002898340",
@@ -7453,7 +8197,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6825949/Boneca-de-Pelucia---Disney---Divertidamente-2---Inveja---Fun-0.jpg?v=638648531684570000",
-  productUrl: "https://www.rihappy.com.br/boneca-de-pelucia-disney-divertidamente-2-inveja-fun/p"
+  productUrl: "https://www.rihappy.com.br/boneca-de-pelucia-disney-divertidamente-2-inveja-fun/p",
+  popularity: 745
  },
  {
   sku: "rihappy-1002893288",
@@ -7463,7 +8208,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6776092/Brinquedo-Eletronico---Minigame-Laptop---Stitch---Candide-0.jpg?v=638641665070970000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-eletronico-minigame-laptop-stitch-candide/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-eletronico-minigame-laptop-stitch-candide/p",
+  popularity: 746
  },
  {
   sku: "rihappy-1002893084",
@@ -7473,7 +8219,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8326480/Jogo-de-Cartas---Pokemon---Deck---Batalha-de-Liga---Charizard---Copag-0.jpg?v=638841674985770000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-charizard-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-deck-batalha-de-liga-charizard-copag/p",
+  popularity: 747
  },
  {
   sku: "rihappy-1002852643",
@@ -7483,7 +8230,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas interativas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7296143/Boneca---Disney-Princesas---Filme-Moana-2---Com-Som---Mattel-0.jpg?v=638735946097500000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-moana-2-com-som-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-moana-2-com-som-mattel/p",
+  popularity: 748
  },
  {
   sku: "rihappy-1002851383",
@@ -7493,7 +8241,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6737531/Figura-Elastica---Goo-Jit-Zu---Mrbeast-Lab---Candide-0.jpg?v=638635007824830000",
-  productUrl: "https://www.rihappy.com.br/boneco-colecionavel-elastico-goo-jit-zu-mrbeast-lab-candide-4734/p"
+  productUrl: "https://www.rihappy.com.br/boneco-colecionavel-elastico-goo-jit-zu-mrbeast-lab-candide-4734/p",
+  popularity: 749
  },
  {
   sku: "rihappy-1002846136",
@@ -7503,7 +8252,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6404742/Boneca-Articulada---Disney---Frozen---Elsa-Patinacao-no-Gelo---Mattel-0.jpg?v=638605498346430000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-frozen-elsa-patinacao-no-gelo-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-frozen-elsa-patinacao-no-gelo-mattel/p",
+  popularity: 750
  },
  {
   sku: "rihappy-1002844749",
@@ -7513,7 +8263,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7196369/Jogo-De-Acao---Disney---Dobble---Galapagos-0.jpg?v=638724615104630000",
-  productUrl: "https://www.rihappy.com.br/galapagos-dobble-disney/p"
+  productUrl: "https://www.rihappy.com.br/galapagos-dobble-disney/p",
+  popularity: 751
  },
  {
   sku: "rihappy-1002844283",
@@ -7523,7 +8274,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6390389/Playset---Miniverse---Festa-De-Aniversario---Surpresa---Mga-0.jpg?v=638599368701600000",
-  productUrl: "https://www.rihappy.com.br/playset-miniverse-festa-de-aniversario-surpresa-mga/p"
+  productUrl: "https://www.rihappy.com.br/playset-miniverse-festa-de-aniversario-surpresa-mga/p",
+  popularity: 752
  },
  {
   sku: "rihappy-1002839372",
@@ -7533,7 +8285,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8727348/Brinquedo-Primeira-Infancia---Little-People---Caminhao-de-Bombeiros-Medio---Fisher-Price-0.jpg?v=638908883193070000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-primeira-infancia-little-people-caminhao-de-bombeiros-medio-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-primeira-infancia-little-people-caminhao-de-bombeiros-medio-fisherprice/p",
+  popularity: 753
  },
  {
   sku: "rihappy-1002838150",
@@ -7543,7 +8296,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo caminhao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9119640/Conjunto-Caminhao-E-Carrinho---New-Truck-Plataforma---Amarelo---BS-Toys-0.jpg?v=638948563721930000",
-  productUrl: "https://www.rihappy.com.br/conjunto-caminhao-e-carrinho-new-truck-plataforma-amarelo-bs-toys/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-caminhao-e-carrinho-new-truck-plataforma-amarelo-bs-toys/p",
+  popularity: 754
  },
  {
   sku: "rihappy-1002837612",
@@ -7553,7 +8307,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6355147/Guitarra-Infantil---3-Em-1---Patrulha-Canina----Yestoys-0.jpg?v=638568440098300000",
-  productUrl: "https://www.rihappy.com.br/guitarra-infantil-3-em-1-patrulha-canina-yestoys/p"
+  productUrl: "https://www.rihappy.com.br/guitarra-infantil-3-em-1-patrulha-canina-yestoys/p",
+  popularity: 755
  },
  {
   sku: "rihappy-1002836222",
@@ -7563,7 +8318,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos futebol de botao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6346489/Mesa-Para-Jogo-de-Botao---Sportv---Xalingo-0.jpg?v=639192900880470000",
-  productUrl: "https://www.rihappy.com.br/mesa-para-jogo-de-botao-sportv-xalingo/p"
+  productUrl: "https://www.rihappy.com.br/mesa-para-jogo-de-botao-sportv-xalingo/p",
+  popularity: 756
  },
  {
   sku: "rihappy-1002835922",
@@ -7573,7 +8329,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545509/Boneca-Bebe-Integrativa---Baby-Alive---Katie-Kat---Engatinha-e-Brinca---Hasbro-0.jpg?v=638623622271170000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-integrativa-baby-alive-katie-kat-engatinha-e-brinca-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-integrativa-baby-alive-katie-kat-engatinha-e-brinca-hasbro/p",
+  popularity: 757
  },
  {
   sku: "rihappy-1002835900",
@@ -7583,7 +8340,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6544302/Figura-De-Acao---Transformers-One---Optimus-Prime---Hasbro-0.jpg?v=638623543352730000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-transformers-one-optimus-prime-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-transformers-one-optimus-prime-hasbro/p",
+  popularity: 758
  },
  {
   sku: "rihappy-1002835852",
@@ -7593,7 +8351,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056777/Pelucia-Interativa---Marvel---Spidey-E-Seus-Amigos---Com-Sons---Hasbro-0.jpg?v=638942340483230000",
-  productUrl: "https://www.rihappy.com.br/pelucia-interativa-marvel-spidey-e-seus-amigos-com-sons-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-interativa-marvel-spidey-e-seus-amigos-com-sons-hasbro/p",
+  popularity: 759
  },
  {
   sku: "rihappy-1002835718",
@@ -7603,7 +8362,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6634812/Teclado-Musical---Disney-Baby---Minnie---Yes-Toys-0.jpg?v=638628949207270000",
-  productUrl: "https://www.rihappy.com.br/teclado-da-minnie-disney-baby-yestoys/p"
+  productUrl: "https://www.rihappy.com.br/teclado-da-minnie-disney-baby-yestoys/p",
+  popularity: 760
  },
  {
   sku: "rihappy-1002835549",
@@ -7613,7 +8373,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6342278/Lanca-Dardos---Nerf---N-Series---Pinpoint---18-Dardos---Hasbro-0.jpg?v=638555200100330000",
-  productUrl: "https://www.rihappy.com.br/lanca-dardos-nerf-n-series-pinpoint-18-dardos-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lanca-dardos-nerf-n-series-pinpoint-18-dardos-hasbro/p",
+  popularity: 761
  },
  {
   sku: "rihappy-1002835548",
@@ -7623,7 +8384,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6342334/Pelucia---Minnie---C-luz-e-Som---Vestido-Rosa---Multikids-0.jpg?v=638555205366170000",
-  productUrl: "https://www.rihappy.com.br/pelucia-minnie-c-luz-e-som-vestido-rosa-multikids/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-minnie-c-luz-e-som-vestido-rosa-multikids/p",
+  popularity: 762
  },
  {
   sku: "rihappy-1002835526",
@@ -7633,7 +8395,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6342225/Pelucia---Popo-Media---Galinha-Pintadinha---Mini---Yestoys-0.jpg?v=638555190072900000",
-  productUrl: "https://www.rihappy.com.br/pelucia-popo-media-galinha-pintadinha-mini-yestoys/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-popo-media-galinha-pintadinha-mini-yestoys/p",
+  popularity: 763
  },
  {
   sku: "rihappy-1002835485",
@@ -7643,7 +8406,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9344574/Carrinho---RB-Racing---1-24---Bburago-0.jpg?v=638980534527270000",
-  productUrl: "https://www.rihappy.com.br/carrinho-rb-racing-124-bburago/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-rb-racing-124-bburago/p",
+  popularity: 764
  },
  {
   sku: "rihappy-1002835453",
@@ -7653,7 +8417,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6854433/Boneca-Articulada---Barbie---Dream-Besties---Teresa---Mattel-0.jpg?v=638654652098900000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-dream-besties-teresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-dream-besties-teresa-mattel/p",
+  popularity: 765
  },
  {
   sku: "rihappy-1002835441",
@@ -7663,7 +8428,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545498/Boneca---Baby-Alive---Harper-Hugs---Engatinha-E-Brinca---Hasbro-0.jpg?v=638623621253430000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-harper-hugs-engatinha-e-brinca-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-harper-hugs-engatinha-e-brinca-hasbro/p",
+  popularity: 766
  },
  {
   sku: "rihappy-1002835434",
@@ -7673,7 +8439,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8875387/Figura-Articulada---Potato-Head---Mrs-Potato---12-Pecas---Hasbro-0.jpg?v=638925251351230000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-potato-head-mrs-potato-12-pecas-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-potato-head-mrs-potato-12-pecas-hasbro/p",
+  popularity: 767
  },
  {
   sku: "rihappy-1002835315",
@@ -7683,7 +8450,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6974576/Pelucia---A-Casa-Magica-da-Gabby---Cakey-Cat---Sunny-0.jpg?v=638677993501630000",
-  productUrl: "https://www.rihappy.com.br/pelucia-a-casa-magica-da-gabby-cakey-cat-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-a-casa-magica-da-gabby-cakey-cat-sunny/p",
+  popularity: 768
  },
  {
   sku: "rihappy-1002834888",
@@ -7693,7 +8461,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9114257/Boneca-Articulada---Aurora---Toddler---Princesas---Disney---Multikids-0.jpg?v=638947674760270000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-aurora-toddler-princesas-disney-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-aurora-toddler-princesas-disney-multikids/p",
+  popularity: 769
  },
  {
   sku: "rihappy-1002834358",
@@ -7703,7 +8472,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores nerf",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6489234/Lancador-de-Agua---Nerf---Super-Soaker---Flip-Fill---Hasbro-0.jpg?v=638621138339500000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-agua-nerf-super-soaker-flip-fill-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-agua-nerf-super-soaker-flip-fill-hasbro/p",
+  popularity: 770
  },
  {
   sku: "rihappy-1002833829",
@@ -7713,7 +8483,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545538/Boneca-Bebe---Baby-Alive---Festa-de-Aniversario---LaLa-GooGoo---Habro-0.jpg?v=638623625129800000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-festa-de-aniversario-lala-googoo-habro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-baby-alive-festa-de-aniversario-lala-googoo-habro/p",
+  popularity: 771
  },
  {
   sku: "rihappy-1002831449",
@@ -7723,7 +8494,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha utensilios de cozinha de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8242137/Conjunto-De-Cozinha---Acqua-Bubble---Lava-Louca---Rosa---Cardoso-0.jpg?v=638829311021000000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-cozinha-acqua-bubble-lava-louca-rosa-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-cozinha-acqua-bubble-lava-louca-rosa-cardoso/p",
+  popularity: 772
  },
  {
   sku: "rihappy-1002830784",
@@ -7733,7 +8505,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6328919/Jogo-De-Cartas---Exploding-Kittens--Para-a-Galera---De-2-a-10-Jogadores---Galapagos-0.jpg?v=638548397100470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-exploding-kittens-para-a-galera-de-2-a-10-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-exploding-kittens-para-a-galera-de-2-a-10-jogadores-galapagos/p",
+  popularity: 773
  },
  {
   sku: "rihappy-1002829909",
@@ -7743,7 +8516,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza unhas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6448143/Kit-Para-Unhas---Nail-Studio---Go-Glam---Sunny--0.jpg?v=638615058825570000",
-  productUrl: "https://www.rihappy.com.br/kit-para-unhas-nail-studio-go-glam-sunny/p"
+  productUrl: "https://www.rihappy.com.br/kit-para-unhas-nail-studio-go-glam-sunny/p",
+  popularity: 774
  },
  {
   sku: "rihappy-1002829269",
@@ -7753,7 +8527,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes patins",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9118228/Patins---Frozen---Patins-04-Rodas---Tamanho-33-34---Lilas---Fun-0.jpg?v=638948346283600000",
-  productUrl: "https://www.rihappy.com.br/patins-frozen-patins-04-rodas-tamanho-3334-lilas-fun/p"
+  productUrl: "https://www.rihappy.com.br/patins-frozen-patins-04-rodas-tamanho-3334-lilas-fun/p",
+  popularity: 775
  },
  {
   sku: "rihappy-1002829201",
@@ -7763,7 +8538,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais tambor de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6316183/Conjunto-Bumbo-Musical---Disney-Baby---Mickey-Mouse---Yes-Toys-0.jpg?v=638544170366600000",
-  productUrl: "https://www.rihappy.com.br/conjunto-bumbo-musical-disney-baby-mickey-mouse-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-bumbo-musical-disney-baby-mickey-mouse-yes-toys/p",
+  popularity: 776
  },
  {
   sku: "rihappy-1002828973",
@@ -7773,7 +8549,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545491/Boneca-Bebe-Com-Acessorios---Baby-Alive---Lala-Googoo---Hasbro-0.jpg?v=638623620752170000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-lala-googoo-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-com-acessorios-baby-alive-lala-googoo-hasbro/p",
+  popularity: 777
  },
  {
   sku: "rihappy-1002828866",
@@ -7783,7 +8560,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6310619/Brinquedo-Para-Bebe---Esquadrao-Musical---Tigre-Cante-Comigo---Fisher-price-0.jpg?v=638539675517170000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-para-bebe-esquadrao-musical-tigre-cante-comigo-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-para-bebe-esquadrao-musical-tigre-cante-comigo-fisherprice/p",
+  popularity: 778
  },
  {
   sku: "rihappy-1002828742",
@@ -7793,7 +8571,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6453489/Quebra-Cabeca---Gabby-s-Dollhouse---30-Pecas---Grow-0.jpg?v=638615957633730000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-gabbys-dollhouse-30-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-gabbys-dollhouse-30-pecas-grow/p",
+  popularity: 779
  },
  {
   sku: "rihappy-1002828665",
@@ -7803,7 +8582,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6319191/Quebra-Cabeca---Hello-Kitty---100-Pecas---Grow-0.jpg?v=638545717149470000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-hello-kitty-100-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-hello-kitty-100-pecas-grow/p",
+  popularity: 780
  },
  {
   sku: "rihappy-1002828660",
@@ -7813,7 +8593,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6319268/Quebra-Cabeca---Barbie---100-Pecas---Grow-0.jpg?v=638545720496270000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-barbie-100-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-barbie-100-pecas-grow/p",
+  popularity: 781
  },
  {
   sku: "rihappy-1002828438",
@@ -7823,7 +8604,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6307514/Pelucia---Steve-Minecraft---Azul---Estrela-0.jpg?v=638537080012530000",
-  productUrl: "https://www.rihappy.com.br/pelucia-steve-minecraft-azul-estrela/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-steve-minecraft-azul-estrela/p",
+  popularity: 782
  },
  {
   sku: "rihappy-1002828068",
@@ -7833,7 +8615,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9594631/Varinha-com-Luz---Disney---Frozen---Toyng-0.jpg?v=639032352905270000",
-  productUrl: "https://www.rihappy.com.br/varinha-com-luz-disney-frozen-toyng/p"
+  productUrl: "https://www.rihappy.com.br/varinha-com-luz-disney-frozen-toyng/p",
+  popularity: 783
  },
  {
   sku: "rihappy-1002827989",
@@ -7843,7 +8626,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6306276/Canetinhas---Disney---Assopra-Pens---Lider-0.jpg?v=638536326593230000",
-  productUrl: "https://www.rihappy.com.br/canetinhas-disney-assopra-pens-lider/p"
+  productUrl: "https://www.rihappy.com.br/canetinhas-disney-assopra-pens-lider/p",
+  popularity: 784
  },
  {
   sku: "rihappy-1002827777",
@@ -7853,7 +8637,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8145959/Brinquedo-Musical---Radio---Baby-FM---Estrela-0.jpg?v=638798222024370000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-musical-radio-baby-fm-estrela/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-musical-radio-baby-fm-estrela/p",
+  popularity: 785
  },
  {
   sku: "rihappy-1002826287",
@@ -7863,7 +8648,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6302548/Lancador---Xshot-Ranger---C-24-Dardos---Candide-0.jpg?v=638533807231800000",
-  productUrl: "https://www.rihappy.com.br/lancador-xshot-ranger-c24-dardos-candide/p"
+  productUrl: "https://www.rihappy.com.br/lancador-xshot-ranger-c24-dardos-candide/p",
+  popularity: 786
  },
  {
   sku: "rihappy-1002825590",
@@ -7873,7 +8659,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6290556/Boneca-Articulada---Milena---Vamos-Brincar---Novabrink-0.jpg?v=638531199308770000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-milena-vamos-brincar-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-milena-vamos-brincar-novabrink/p",
+  popularity: 787
  },
  {
   sku: "rihappy-1002824449",
@@ -7883,7 +8670,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores beyblade",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6284375/Jogo-De-Piao---Bayblade-X---Talon-Ptera-3-80B-P---Hasbro-0.jpg?v=638525810138470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-piao-bayblade-x-talon-ptera-380b-p-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-piao-bayblade-x-talon-ptera-380b-p-hasbro/p",
+  popularity: 788
  },
  {
   sku: "rihappy-1002824138",
@@ -7893,7 +8681,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545606/Jogo-De-Mesa---Hipopotamos-Comiloes---Hasbro-0.jpg?v=638623634444230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-mesa-hipopotamos-comiloes-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-mesa-hipopotamos-comiloes-hasbro/p",
+  popularity: 789
  },
  {
   sku: "rihappy-1002823590",
@@ -7903,7 +8692,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8875398/Boneca-em-Vinil---Rosinha-iti-Malia---Rosa---Novabrink-0.jpg?v=638925253121730000",
-  productUrl: "https://www.rihappy.com.br/boneca-em-vinil-rosinha-iti-malia-rosa-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-em-vinil-rosinha-iti-malia-rosa-novabrink/p",
+  popularity: 790
  },
  {
   sku: "rihappy-1002823574",
@@ -7913,7 +8703,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria materiais escolares canetas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9095575/Conjunto-De-Canetas-Customizadas---Fashion-Dreams---Faca-Voce-Mesmo---Fun-0.jpg?v=638945168537670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-canetas-customizadas-fashion-dreams-faca-voce-mesmo-fun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-canetas-customizadas-fashion-dreams-faca-voce-mesmo-fun/p",
+  popularity: 791
  },
  {
   sku: "rihappy-1002822530",
@@ -7923,7 +8714,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6281381/Quebra-Cabeca---2000-Pecas---Vilarejo-das-Fadas---Grow-0.jpg?v=638524085031270000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-2000-pecas-vilarejo-das-fadas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-2000-pecas-vilarejo-das-fadas-grow/p",
+  popularity: 792
  },
  {
   sku: "rihappy-1002822237",
@@ -7933,7 +8725,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo caminhao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7543826/Caminhao-do-Lixo---Limpando-a-Cidade---Fanfun--0.jpg?v=638762683033300000",
-  productUrl: "https://www.rihappy.com.br/carrinhos-caminhao-do-lixo-caminhao-limpando-a-cidade-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/carrinhos-caminhao-do-lixo-caminhao-limpando-a-cidade-fanfun/p",
+  popularity: 793
  },
  {
   sku: "rihappy-1002822096",
@@ -7943,7 +8736,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha utensilios de cozinha de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9721345/Conjunto-De-Cozinha---Hora-Do-Jantar---Mini-Chefe---FanFun-0.jpg?v=639064346648700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-cozinha-hora-do-jantar-mini-chefe-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-cozinha-hora-do-jantar-mini-chefe-fanfun/p",
+  popularity: 794
  },
  {
   sku: "rihappy-1002821942",
@@ -7953,7 +8747,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6271892/Promocao-Comprou-Ganhou-Estrela---Brinde-Mini-Cara-a-Cara-0.jpg?v=638519104951000000",
-  productUrl: "https://www.rihappy.com.br/promocao-comprou-ganhou-estrela-brinde-mini-cara-a-cara/p"
+  productUrl: "https://www.rihappy.com.br/promocao-comprou-ganhou-estrela-brinde-mini-cara-a-cara/p",
+  popularity: 795
  },
  {
   sku: "rihappy-1002821854",
@@ -7963,7 +8758,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7925968/Bloco-de-Montar---TUDO---Tubarao-Martelo-em-Movimento---374-Pecas-0.jpg?v=638778344818900000",
-  productUrl: "https://www.rihappy.com.br/bloco-de-montar-tudo-tubarao-martelo-em-movimento-3736-pecas/p"
+  productUrl: "https://www.rihappy.com.br/bloco-de-montar-tudo-tubarao-martelo-em-movimento-3736-pecas/p",
+  popularity: 796
  },
  {
   sku: "rihappy-1002821256",
@@ -7973,7 +8769,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes skates skatenet",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8708594/Skatenet---Led-Pro-Dobravel---Preto---Bandeirante-0.jpg?v=638907157029900000",
-  productUrl: "https://www.rihappy.com.br/skatenet-led-pro-dobravel-preto-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/skatenet-led-pro-dobravel-preto-bandeirante/p",
+  popularity: 797
  },
  {
   sku: "rihappy-1002820007",
@@ -7983,7 +8780,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9266140/Carrinho-De-Empurrar---Peppa-Pig---Vamos-Passear---Elka-0.jpg?v=638963245944200000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-empurrar-vamos-passear-peppa-peppa-pig-elka/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-empurrar-vamos-passear-peppa-peppa-pig-elka/p",
+  popularity: 798
  },
  {
   sku: "rihappy-1002819991",
@@ -7993,7 +8791,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais chocalhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7220144/Chocalho---Aconchego---Anel---Cachorro---Minimi-0.jpg?v=638726655814400000",
-  productUrl: "https://www.rihappy.com.br/chocalho-aconchego-anel-cachorro-minimi/p"
+  productUrl: "https://www.rihappy.com.br/chocalho-aconchego-anel-cachorro-minimi/p",
+  popularity: 799
  },
  {
   sku: "rihappy-1002819094",
@@ -8003,7 +8802,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria souvenirs lousa infantil",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8374290/Projetor---Dino---Minimi---New-Toys-0.jpg?v=638857254009030000",
-  productUrl: "https://www.rihappy.com.br/projetor-dino-minimi-new-toys/p"
+  productUrl: "https://www.rihappy.com.br/projetor-dino-minimi-new-toys/p",
+  popularity: 800
  },
  {
   sku: "rihappy-1002816509",
@@ -8013,7 +8813,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6242532/Jogo-Classico---Connect-4---Grab---Go---02-Jogadores---Hasbro-0.jpg?v=638490664443000000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-connect-4-grab--go-02-jogadores-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-connect-4-grab--go-02-jogadores-hasbro/p",
+  popularity: 801
  },
  {
   sku: "rihappy-1002815927",
@@ -8023,7 +8824,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545757/Conjunto-Massa-de-Modelar---Play-doh---Brincando-de-Cafeteria---Hasbro-0.jpg?v=638623666151030000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-playdoh-brincando-de-cafeteria-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-playdoh-brincando-de-cafeteria-hasbro/p",
+  popularity: 802
  },
  {
   sku: "rihappy-1002815823",
@@ -8033,7 +8835,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos xadrez",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6239918/Jogo-Classico---Xadrez-e-Dama---Elka-0.jpg?v=638489563477300000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-xadrez-e-dama-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-xadrez-e-dama-elka/p",
+  popularity: 803
  },
  {
   sku: "rihappy-1002815668",
@@ -8043,7 +8846,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6302610/Jogo-de-Acao---Torta-na-Cara---Hasbro-0.jpg?v=638533821534000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-torta-na-cara-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-torta-na-cara-hasbro/p",
+  popularity: 804
  },
  {
   sku: "rihappy-1002814408",
@@ -8053,7 +8857,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6231798/Quebra-Cabeca---Nano---500-Pecas---Grogu---Game-Office---Toyster-0.jpg?v=638477555638270000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-nano-500-pecas-grogu-game-office-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-nano-500-pecas-grogu-game-office-toyster/p",
+  popularity: 805
  },
  {
   sku: "rihappy-1002810491",
@@ -8063,7 +8868,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6216690/Sylvanian-Families---Conjunto-De-Toalete---Epoch-0.jpg?v=638465342867600000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-de-toalete-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conjunto-de-toalete-epoch/p",
+  popularity: 806
  },
  {
   sku: "rihappy-1002808718",
@@ -8073,7 +8879,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9261274/Sylvanian-Families---Onibus-Arco-iris-Jardim-da-Infancia---Epoch-0.jpg?v=638962351871900000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-onibus-arcoiris-jardim-da-infancia-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-onibus-arcoiris-jardim-da-infancia-epoch/p",
+  popularity: 807
  },
  {
   sku: "rihappy-1002804097",
@@ -8083,7 +8890,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6471044/Jogo-Classico---Cilada-Numeros---Estrela-0.jpg?v=638620965958500000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-cilada-numeros-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-cilada-numeros-estrela/p",
+  popularity: 808
  },
  {
   sku: "rihappy-1002800770",
@@ -8093,7 +8901,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6405037/Miniatura---Colecionavel---Princesas---Sortidas---Embalagem-Unitaria---Disney-0.jpg?v=638605529280870000",
-  productUrl: "https://www.rihappy.com.br/slp-princesas/p"
+  productUrl: "https://www.rihappy.com.br/slp-princesas/p",
+  popularity: 809
  },
  {
   sku: "rihappy-1002800766",
@@ -8103,7 +8912,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6405048/Miniatura---Colecionavel---Minnie---Sortidas---Embalagem-Unitaria---Disney-0.jpg?v=638605533209730000",
-  productUrl: "https://www.rihappy.com.br/slp-minnie/p"
+  productUrl: "https://www.rihappy.com.br/slp-minnie/p",
+  popularity: 810
  },
  {
   sku: "rihappy-1002800238",
@@ -8113,7 +8923,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152189/Jogo-de-Estrategia---Grab-and-Go---Battleship---Hasbro-0.jpg?v=638436025735730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-grab-and-go-battleship-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-grab-and-go-battleship-hasbro/p",
+  popularity: 811
  },
  {
   sku: "rihappy-1002800237",
@@ -8123,7 +8934,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6152224/Jogo-de-Acao---Grab-and-Go---Hipopotamos-Comiloes---Hasbro-0.jpg?v=638436027055130000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-grab-and-go-hipopotamos-comiloes-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-grab-and-go-hipopotamos-comiloes-hasbro/p",
+  popularity: 812
  },
  {
   sku: "rihappy-1002799414",
@@ -8133,7 +8945,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6545594/Jogo-de-Estrategia---Clue-Classico---Hasbro-0.jpg?v=638623633255000000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-clue-classico-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-estrategia-clue-classico-hasbro/p",
+  popularity: 813
  },
  {
   sku: "rihappy-1002794956",
@@ -8143,7 +8956,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria mochilas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8442190/Mochila-Pelucia---Hello-Kitty---Candide-0.jpg?v=638870018263030000",
-  productUrl: "https://www.rihappy.com.br/mochila-pelucia-hello-kitty-candide/p"
+  productUrl: "https://www.rihappy.com.br/mochila-pelucia-hello-kitty-candide/p",
+  popularity: 814
  },
  {
   sku: "rihappy-1002788387",
@@ -8153,7 +8967,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7109199/Carrinho---Hot-Wheels---Monster-Trucks---Caminhoes-Reboque---Modelos-Sortidos---Mattel-0.jpg?v=638695502788530000",
-  productUrl: "https://www.rihappy.com.br/carrinho-hot-wheels-monster-trucks-caminhoes-reboque-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-hot-wheels-monster-trucks-caminhoes-reboque-surpresa-mattel/p",
+  popularity: 815
  },
  {
   sku: "rihappy-1002788081",
@@ -8163,7 +8978,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha comidinhas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6355612/Conjunto-de-Acessorios---Miniverse---Make-It-Mini-Foods--Dinner-Series---Mga-0.jpg?v=638569275868970000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-miniverse-make-it-mini-foods-dinner-series-mga/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-miniverse-make-it-mini-foods-dinner-series-mga/p",
+  popularity: 816
  },
  {
   sku: "rihappy-1002787715",
@@ -8173,7 +8989,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6355657/Conjunto-De-Acessorios---Miniverse---Make-It-Mini-Foods---Cafe---Surpresa---Mcassab-0.jpg?v=638569309996170000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-miniverse-make-it-mini-foods-cafe-surpresa-mcassab/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-miniverse-make-it-mini-foods-cafe-surpresa-mcassab/p",
+  popularity: 817
  },
  {
   sku: "rihappy-1002785947",
@@ -8183,7 +9000,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6544342/Playset---Gabbys-Dollhouse---Festa-No-Onibus---Sunny-0.jpg?v=638623545726470000",
-  productUrl: "https://www.rihappy.com.br/playset-gabbys-dollhouse-festa-no-onibus-sunny/p"
+  productUrl: "https://www.rihappy.com.br/playset-gabbys-dollhouse-festa-no-onibus-sunny/p",
+  popularity: 818
  },
  {
   sku: "rihappy-1002784104",
@@ -8193,7 +9011,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6098162/LEGO---City-Police---Perseguicao-de-Carro-da-Policia-a-Muscle-Car---60415-0.jpg?v=638411894463970000",
-  productUrl: "https://www.rihappy.com.br/lego-city-police-perseguicao-de-carro-da-policia-a-muscle-car-60415/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-police-perseguicao-de-carro-da-policia-a-muscle-car-60415/p",
+  popularity: 819
  },
  {
   sku: "rihappy-1002784073",
@@ -8203,7 +9022,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8468392/Relogio-Digital-Infantil---Pokemon---Toyng---Vermelho-0.jpg?v=638874967026300000",
-  productUrl: "https://www.rihappy.com.br/relogio-digital-infantil-pokemon-toyng-vermelho/p"
+  productUrl: "https://www.rihappy.com.br/relogio-digital-infantil-pokemon-toyng-vermelho/p",
+  popularity: 820
  },
  {
   sku: "rihappy-1002783872",
@@ -8213,7 +9033,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7251268/Lego-City---Great-Vehicles---Carros-de-Karting-e-Pilotos---60400-0.jpg?v=638731640497670000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-carros-de-karting-e-pilotos-60400/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-carros-de-karting-e-pilotos-60400/p",
+  popularity: 821
  },
  {
   sku: "rihappy-1002783836",
@@ -8223,7 +9044,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6070745/LEGO---Technic---Buggy-de-Corrida-Todo-o-Terreno---42164-0.jpg?v=638388717999070000",
-  productUrl: "https://www.rihappy.com.br/lego-technic-buggy-de-corrida-todooterreno-42164/p"
+  productUrl: "https://www.rihappy.com.br/lego-technic-buggy-de-corrida-todooterreno-42164/p",
+  popularity: 822
  },
  {
   sku: "rihappy-1002783194",
@@ -8233,7 +9055,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8468400/Relogio-Infantil-com-Led---Marvel---Homem-Aranha---Toyng-0.jpg?v=638874968182170000",
-  productUrl: "https://www.rihappy.com.br/relogio-infantil-com-led-marvel-homemaranha-toyng/p"
+  productUrl: "https://www.rihappy.com.br/relogio-infantil-com-led-marvel-homemaranha-toyng/p",
+  popularity: 823
  },
  {
   sku: "rihappy-1002766540",
@@ -8243,7 +9066,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5989674/Figura-de-Acao---Bluey---Azul---Elka-0.jpg?v=638349629476130000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-bluey-azul-elka/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-bluey-azul-elka/p",
+  popularity: 824
  },
  {
   sku: "rihappy-1002760279",
@@ -8253,7 +9077,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5960536/Jogo-Educativo---Jogo-das-Letras-Hulk---Mimo-0.jpg?v=638344415841730000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-das-letras-hulk-mimo/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-das-letras-hulk-mimo/p",
+  popularity: 825
  },
  {
   sku: "rihappy-1002759360",
@@ -8263,7 +9088,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9795516/Quebra-Cabeca-Educativo---120-Pecas---Conhecendo-O-Mundo-Disney---Toyster-0.jpg?v=639089957840970000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-educativo-120-pecas-conhecendo-o-mundo-disney-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-educativo-120-pecas-conhecendo-o-mundo-disney-toyster/p",
+  popularity: 826
  },
  {
   sku: "rihappy-1002759096",
@@ -8273,7 +9099,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5954499/Jogo---Perfil-Express---Harry-Porter---Grow-0.jpg?v=638339195396170000",
-  productUrl: "https://www.rihappy.com.br/jogo-perfil-express-harry-porter-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-perfil-express-harry-porter-grow/p",
+  popularity: 827
  },
  {
   sku: "rihappy-1002759062",
@@ -8283,7 +9110,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5954478/Jogo-De-Memoria---Supermemoria-Hot-Wheels---54-Pares-Grow-0.jpg?v=638339191938500000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-supermemoria-hot-wheels-54-pares-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-supermemoria-hot-wheels-54-pares-grow/p",
+  popularity: 828
  },
  {
   sku: "rihappy-1002758397",
@@ -8293,7 +9121,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7295053/Jogo-de-Tabuleiro---Pensa-Rapido---Galapagos-0.jpg?v=638735841377630000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-pensa-rapido-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-pensa-rapido-galapagos/p",
+  popularity: 829
  },
  {
   sku: "rihappy-1002756630",
@@ -8303,7 +9132,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6751517/Balde-de-Soldadinhos-Plasticos---Verde---Toy-Story---Toyng---0.jpg?v=638636466694270000",
-  productUrl: "https://www.rihappy.com.br/balde-de-soldadinhos-plasticos-verde-toy-story-toyng/p"
+  productUrl: "https://www.rihappy.com.br/balde-de-soldadinhos-plasticos-verde-toy-story-toyng/p",
+  popularity: 830
  },
  {
   sku: "rihappy-1002749546",
@@ -8313,7 +9143,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6388501/-Livro-A-Casa-Magica-Da-Gabby-Com-Massa-Estrela-0.jpg?v=638598477145430000",
-  productUrl: "https://www.rihappy.com.br/livro-a-casa-magica-da-gabby-com-massa-estrela/p"
+  productUrl: "https://www.rihappy.com.br/livro-a-casa-magica-da-gabby-com-massa-estrela/p",
+  popularity: 831
  },
  {
   sku: "rihappy-1002738521",
@@ -8323,7 +9154,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5855249/Pelucia---Disney---Big-Feet-Remy---Ratatouille---Fun-0.jpg?v=638285001433130000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-big-feet-remy-ratatouille-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-big-feet-remy-ratatouille-fun/p",
+  popularity: 832
  },
  {
   sku: "rihappy-1002737630",
@@ -8333,7 +9165,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5849925/Jogo-Educativo---Alfabeto---Marvel---Spider-Man---Mimo-0.jpg?v=638279747649970000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-alfabeto-marvel-spiderman-mimo/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-alfabeto-marvel-spiderman-mimo/p",
+  popularity: 833
  },
  {
   sku: "rihappy-1002737340",
@@ -8343,7 +9176,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5849368/Conjunto-de-Artes---Luluca---Supermaquina-de-Tattoo---Estrela-0.jpg?v=638278817755370000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-luluca-supermaquina-de-tattoo-estrela/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-luluca-supermaquina-de-tattoo-estrela/p",
+  popularity: 834
  },
  {
   sku: "rihappy-1002733839",
@@ -8353,7 +9187,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7295048/Jogo-de-Tabuleiro---Dixit---Disney---De-3-a-6-Jogadores---Galapagos-0.jpg?v=638735839490930000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-disney-de-3-a-6-jogadores-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-disney-de-3-a-6-jogadores-galapagos/p",
+  popularity: 835
  },
  {
   sku: "rihappy-1002732795",
@@ -8363,7 +9198,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5825971/Conjunto-de-atividades---Super-Kit-Junior---Disney---Princesa---Toyster-0.jpg?v=638260003223400000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-super-kit-junior-disney-princesa-toyster/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-atividades-super-kit-junior-disney-princesa-toyster/p",
+  popularity: 836
  },
  {
   sku: "rihappy-1002732438",
@@ -8373,7 +9209,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5829100/Kit-Artesanato---Clic-Aplic---Luluca---Estrela-0.jpg?v=638265755475800000",
-  productUrl: "https://www.rihappy.com.br/kit-artesanato-clic-aplic-luluca-estrela/p"
+  productUrl: "https://www.rihappy.com.br/kit-artesanato-clic-aplic-luluca-estrela/p",
+  popularity: 837
  },
  {
   sku: "rihappy-1002732424",
@@ -8383,7 +9220,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5827737/Boneca---Barbie---Styling-Head---Sparkle---Pupee-0.jpg?v=638264172940930000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-styling-head-sparkle-pupee/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-styling-head-sparkle-pupee/p",
+  popularity: 838
  },
  {
   sku: "rihappy-1002731286",
@@ -8393,7 +9231,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5821126/Quebra-Cabeca---Snoopy---1000-pecas---Grow-0.jpg?v=638257962983600000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-snoopy-1000-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-snoopy-1000-pecas-grow/p",
+  popularity: 839
  },
  {
   sku: "rihappy-1002730705",
@@ -8403,7 +9242,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5813392/Carrinho-De-Controle-Remoto---Sonic---Sonic-O-Ourico---Candide---Azul-0.jpg?v=638252901079370000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-sonic-sonic-o-ourico-candide-azul/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-controle-remoto-sonic-sonic-o-ourico-candide-azul/p",
+  popularity: 840
  },
  {
   sku: "rihappy-1002730515",
@@ -8413,7 +9253,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7111485/Pelucia---Hamster-Mania---Modelos-Sortidos---Candide-0.jpg?v=638696163886000000",
-  productUrl: "https://www.rihappy.com.br/hamster-mania-laranja-candide/p"
+  productUrl: "https://www.rihappy.com.br/hamster-mania-laranja-candide/p",
+  popularity: 841
  },
  {
   sku: "rihappy-1002728628",
@@ -8423,7 +9264,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre brinquedos para o ar livre",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5793795/Jump-Ball---Colorido---Lider-0.jpg?v=639192900486070000",
-  productUrl: "https://www.rihappy.com.br/jump-ball-colorido-lider/p"
+  productUrl: "https://www.rihappy.com.br/jump-ball-colorido-lider/p",
+  popularity: 842
  },
  {
   sku: "rihappy-1002728498",
@@ -8433,7 +9275,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas carrinho de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5791411/Playset---Minha-Fazenda---41-Pecas---Nig-0.jpg?v=638235608313570000",
-  productUrl: "https://www.rihappy.com.br/playset-minha-fazenda-41-pecas-nig/p"
+  productUrl: "https://www.rihappy.com.br/playset-minha-fazenda-41-pecas-nig/p",
+  popularity: 843
  },
  {
   sku: "rihappy-1002728478",
@@ -8443,7 +9286,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9120308/Figuras-de-Acao---Tartarugas-Ninjas---Modelos-Sortidos---Sunny-0.jpg?v=638948593697770000",
-  productUrl: "https://www.rihappy.com.br/figuras-de-acao-tartarugas-ninjas-leonardo-com-sua-katana-sunny/p"
+  productUrl: "https://www.rihappy.com.br/figuras-de-acao-tartarugas-ninjas-leonardo-com-sua-katana-sunny/p",
+  popularity: 844
  },
  {
   sku: "rihappy-1002727994",
@@ -8453,7 +9297,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6421704/Brinquedo-Educativo---Foguete-Magnetico---Vermelho---Janod---Maped-0.jpg?v=638610710692500000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-foguete-magnetico-vermelho-janod-maped/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-educativo-foguete-magnetico-vermelho-janod-maped/p",
+  popularity: 845
  },
  {
   sku: "rihappy-1002726272",
@@ -8463,7 +9308,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos com acessorios",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6746273/Conjunto-de-Carrinho-e-Figura---Patrulha-Canina-O-Filme---Patrulhador-Pawket---Sunny-0.jpg?v=638635911271170000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-carrinho-e-figura-patrulha-canina-o-filme-patrulhador-pawket-sunny/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-carrinho-e-figura-patrulha-canina-o-filme-patrulhador-pawket-sunny/p",
+  popularity: 846
  },
  {
   sku: "rihappy-1002726059",
@@ -8473,7 +9319,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos de praia para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7110278/Conjunto-de-Balde-e-Acessorios---Baldico---Modelos-Sortidos---Cardoso-0.jpg?v=638696041098400000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-balde-e-acessorios-baldico-azul-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-balde-e-acessorios-baldico-azul-cardoso/p",
+  popularity: 847
  },
  {
   sku: "rihappy-1002725551",
@@ -8483,7 +9330,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6421492/Totokinha-com-4-Formas-Geometricas---Sport---Azul---Cardoso-0.jpg?v=638610699872270000",
-  productUrl: "https://www.rihappy.com.br/totokinha-com-4-formas-geometricas-sport-azul-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/totokinha-com-4-formas-geometricas-sport-azul-cardoso/p",
+  popularity: 848
  },
  {
   sku: "rihappy-1002725549",
@@ -8493,7 +9341,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6048727/Boneco-Articulado-com-Acessorio---Disney---Marvel-Mighty-Hero-Series---Capitao-America---Hasbro-0.jpg?v=638370530527800000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-com-acessorio-disney-marvel-mighty-hero-series-capitao-america-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-com-acessorio-disney-marvel-mighty-hero-series-capitao-america-hasbro/p",
+  popularity: 849
  },
  {
   sku: "rihappy-1002724055",
@@ -8503,7 +9352,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5763976/Jogo-de-Cartas---Trim-Trim---Princesas---52-Cartas---2-a-4-Jogadores---Elka-0.jpg?v=638211404926070000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-trim-trim-princesas-52-cartas-2-a-4-jogadores-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-trim-trim-princesas-52-cartas-2-a-4-jogadores-elka/p",
+  popularity: 850
  },
  {
   sku: "rihappy-1002723705",
@@ -8513,7 +9363,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5763501/Conjunto-de-Artes---Arts-Kit-Desenho---Harry-Potter---Cinza---Elka-0.jpg?v=638210565379830000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-arts-kit-desenho-harry-potter-cinza-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-arts-kit-desenho-harry-potter-cinza-elka/p",
+  popularity: 851
  },
  {
   sku: "rihappy-1002722597",
@@ -8523,7 +9374,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5756542/Jogo-Educativo---Colecao-Crescer---Jogo-do-Tato---Nig-Brinquedos-0.jpg?v=638204631201070000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-colecao-crescer-jogo-do-tato-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-colecao-crescer-jogo-do-tato-nig-brinquedos/p",
+  popularity: 852
  },
  {
   sku: "rihappy-1002721970",
@@ -8533,7 +9385,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais microfone de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5763500/Conjunto-Musical---Barbie---Meu-Primeiro-Karaoke---Fun-0.jpg?v=638210563452200000",
-  productUrl: "https://www.rihappy.com.br/conjunto-musical-barbie-meu-primeiro-karaoke-fun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-musical-barbie-meu-primeiro-karaoke-fun/p",
+  popularity: 853
  },
  {
   sku: "rihappy-1002720709",
@@ -8543,7 +9396,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de laboratorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5751227/Jogo-Educativo---Jogo-da-Mesada---2-a-6-Jogadores---Estrela-0.jpg?v=638200077353430000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-da-mesada-2-a-6-jogadores-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-jogo-da-mesada-2-a-6-jogadores-estrela/p",
+  popularity: 854
  },
  {
   sku: "rihappy-1002718472",
@@ -8553,7 +9407,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6109890/Quebra-Cabeca---2000-Pecas---A-Escola-de-Atenas---Grow-0.jpg?v=638415266789130000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-2000-pecas-a-escola-de-atenas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-2000-pecas-a-escola-de-atenas-grow/p",
+  popularity: 855
  },
  {
   sku: "rihappy-1002718414",
@@ -8563,7 +9418,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6109885/Quebra-Cabeca---1500-Pecas---Criacao-de-Adao---Grow-0.jpg?v=638415259502300000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-criacao-de-adao-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-criacao-de-adao-grow/p",
+  popularity: 856
  },
  {
   sku: "rihappy-1002718306",
@@ -8573,7 +9429,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5831720/Boneca---Disney---Princesas---Branca-de-Neve---Multikids-0.jpg?v=638272070873670000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-branca-de-neve-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-branca-de-neve-multikids/p",
+  popularity: 857
  },
  {
   sku: "rihappy-1002717793",
@@ -8583,7 +9440,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5830741/Boneca---Disney-Princesa---Rapunzel---Multikids-0.jpg?v=638270362461400000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-princesa-rapunzel-multikids/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-princesa-rapunzel-multikids/p",
+  popularity: 858
  },
  {
   sku: "rihappy-1002716971",
@@ -8593,7 +9451,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6386620/Jogo-de-Acao---Tapa-Certo---A-Casa-Magica-da-Gabby---Estrela-0.jpg?v=638597840584830000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-certo-a-casa-magica-da-gabby-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tapa-certo-a-casa-magica-da-gabby-estrela/p",
+  popularity: 859
  },
  {
   sku: "rihappy-1002703784",
@@ -8603,7 +9462,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5667677/Quebra-Cabeca---Metalizado---Colecao-Obras-de-Arte---1000-Pecas---Klimt---O-Beijo---Toyster-0.jpg?v=638170805441830000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-metalizado-colecao-obras-de-arte-1000-pecas-klimt-o-beijo-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-metalizado-colecao-obras-de-arte-1000-pecas-klimt-o-beijo-toyster/p",
+  popularity: 860
  },
  {
   sku: "rihappy-1002699796",
@@ -8613,7 +9473,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9500020/Slime-no-Pote---Ecao---Cores-Sortidas---Kidszone-0.jpg?v=639005396428270000",
-  productUrl: "https://www.rihappy.com.br/1074kids-zonekids-slime-ecao-cxc-24/p"
+  productUrl: "https://www.rihappy.com.br/1074kids-zonekids-slime-ecao-cxc-24/p",
+  popularity: 861
  },
  {
   sku: "rihappy-1002698898",
@@ -8623,7 +9484,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mini veiculos mini veiculos eletricos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9491865/Mini-Veiculo-Eletrico---Hello-Kitty---6V---Lambreta---Bandeirante---Rosa-0.jpg?v=639002951255730000",
-  productUrl: "https://www.rihappy.com.br/mini-veiculo-eletrico-hello-kitty-6v-lambreta-bandeirante-rosa/p"
+  productUrl: "https://www.rihappy.com.br/mini-veiculo-eletrico-hello-kitty-6v-lambreta-bandeirante-rosa/p",
+  popularity: 862
  },
  {
   sku: "rihappy-1002693870",
@@ -8633,7 +9495,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9741259/Telescopio--Descobrindo-Outros-Mundos---Fanfun-0.jpg?v=639072096884330000",
-  productUrl: "https://www.rihappy.com.br/telescopio-descobrindo-outros-mundos-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/telescopio-descobrindo-outros-mundos-fanfun/p",
+  popularity: 863
  },
  {
   sku: "rihappy-1002693687",
@@ -8643,7 +9506,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas de batalha",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5640319/Jogo-De-Cartas---Bluey---Bingo-Da-Bingo---Elka-0.jpg?v=638156311410730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-bluey-bingo-da-bingo-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-bluey-bingo-da-bingo-elka/p",
+  popularity: 864
  },
  {
   sku: "rihappy-1002693681",
@@ -8653,7 +9517,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5821164/Conjunto-Rampa-E-Bolinhas---Gira-Gira-Tubarao---Elka-0.jpg?v=638257979673070000",
-  productUrl: "https://www.rihappy.com.br/conjunto-rampa-e-bolinhas-gira-gira-tubarao-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-rampa-e-bolinhas-gira-gira-tubarao-elka/p",
+  popularity: 865
  },
  {
   sku: "rihappy-1002691259",
@@ -8663,7 +9528,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8190254/Jogo-Educativo---Bananagrams---Galapagos-0.jpg?v=638811902821430000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-bananagrams-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-bananagrams-galapagos/p",
+  popularity: 866
  },
  {
   sku: "rihappy-1002638557",
@@ -8673,7 +9539,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6786173/Conjunto-Boneca-Articulada-E-Acessorios---Barbie---Banho-De-Confete---Mattel-0.jpg?v=638641803862330000",
-  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-barbie-banho-de-confete-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-boneca-articulada-e-acessorios-barbie-banho-de-confete-mattel/p",
+  popularity: 867
  },
  {
   sku: "rihappy-1002634532",
@@ -8683,7 +9550,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6963139/Boneco-Articulado---Saf-Supersized-Hulk---Marvel---Hasbro--0.jpg?v=638675389993270000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-saf-supersized-hulk-marvel-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-saf-supersized-hulk-marvel-hasbro/p",
+  popularity: 868
  },
  {
   sku: "rihappy-1002617070",
@@ -8693,7 +9561,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5424549/Jogo-Educativo---Maleta-Educativa-4-em-1---Toyster-0.jpg?v=638107871391170000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-maleta-educativa-4-em-1-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-maleta-educativa-4-em-1-toyster/p",
+  popularity: 869
  },
  {
   sku: "rihappy-1002609812",
@@ -8703,7 +9572,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5258266/Conjunto-De-Acessorios---Play-Doh-Kitchen-Creations---Mixer-Magico---Batedeira--Hasbro-0.jpg?v=638070570793500000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-playdoh-kitchen-creations-mixer-magico-batedeira-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-playdoh-kitchen-creations-mixer-magico-batedeira-hasbro/p",
+  popularity: 870
  },
  {
   sku: "rihappy-1002476269",
@@ -8713,7 +9583,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9786611/Playset---Barbie---Armario-de-Luxo---Mattel-0.jpg?v=639087628934970000",
-  productUrl: "https://www.rihappy.com.br/playset-barbie-armario-de-luxo-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-barbie-armario-de-luxo-mattel/p",
+  popularity: 871
  },
  {
   sku: "rihappy-1002463871",
@@ -8723,7 +9594,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5378784/Veiculo-de-Controle-Remoto---DC-Comics---Batman---Dark-Running---Candide---Preto-0.jpg?v=638095814211200000",
-  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto-dc-comics-batman-dark-running-candide-preto/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto-dc-comics-batman-dark-running-candide-preto/p",
+  popularity: 872
  },
  {
   sku: "rihappy-1002455730",
@@ -8733,7 +9605,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby andadores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8658318/Andador-Eletronico-Infantil---Totoka-Plus---Cardoso---Azul-0.jpg?v=638901976280500000",
-  productUrl: "https://www.rihappy.com.br/andador-eletronico-infantil-totoka-plus-cardoso-azul/p"
+  productUrl: "https://www.rihappy.com.br/andador-eletronico-infantil-totoka-plus-cardoso-azul/p",
+  popularity: 873
  },
  {
   sku: "rihappy-1002436662",
@@ -8743,7 +9616,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5704553/Pista-de-Corrida---Racing-Deluxe---Mario-Kart---Mario-e-Luigi---Ate-02-Jogadores---Epoch-0.jpg?v=638180531066000000",
-  productUrl: "https://www.rihappy.com.br/pista-de-corrida-racing-deluxe-mario-kart-mario-e-luigi-ate-02-jogadores-epoch/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-corrida-racing-deluxe-mario-kart-mario-e-luigi-ate-02-jogadores-epoch/p",
+  popularity: 874
  },
  {
   sku: "rihappy-1002436659",
@@ -8753,7 +9627,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos jogos de mesa",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5701208/Jogo-de-Tabuleiro-Classico---Air-Hockey---Super-Mario---Mario---Ate-02-Jogadores---Epoch-0.jpg?v=638179635110230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-classico-air-hockey-super-mario-mario-ate-02-jogadores-epoch/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-classico-air-hockey-super-mario-mario-ate-02-jogadores-epoch/p",
+  popularity: 875
  },
  {
   sku: "rihappy-1002433091",
@@ -8763,7 +9638,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9666329/Boneco---Maria-Clara-E-Jp---Jp---Frases---Azul---32Cm---Novabrink-0.jpg?v=639052280955570000",
-  productUrl: "https://www.rihappy.com.br/boneco-maria-clara-e-jp-jp-frases-azul-32cm-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-maria-clara-e-jp-jp-frases-azul-32cm-novabrink/p",
+  popularity: 876
  },
  {
   sku: "rihappy-1002432960",
@@ -8773,7 +9649,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5704625/Figura-de-Acao---Robo-Alive---Dinossauro-Raptor---Dino---Candide-0.jpg?v=638180535069400000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-robo-alive-dinossauro-raptor-dino-candide/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-robo-alive-dinossauro-raptor-dino-candide/p",
+  popularity: 877
  },
  {
   sku: "rihappy-1002415221",
@@ -8783,7 +9660,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5714844/Conjunto-de-Figuras---Sylvanian-Families---Familia-dos-Coelhos-Chocolate---Epoch-0.jpg?v=638182239292700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-sylvanian-families-familia-dos-coelhos-chocolate-epoch/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-sylvanian-families-familia-dos-coelhos-chocolate-epoch/p",
+  popularity: 878
  },
  {
   sku: "rihappy-1002413331",
@@ -8793,7 +9671,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7110764/Pelucia---Cachorro-Snif-Snif-Retro---49-cm---Modelos-Sortidos---Estrela-0.jpg?v=638696097561170000",
-  productUrl: "https://www.rihappy.com.br/pelucia-cachorro-snif-snif-retro-15cm-estrela/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-cachorro-snif-snif-retro-15cm-estrela/p",
+  popularity: 879
  },
  {
   sku: "rihappy-1002397836",
@@ -8803,7 +9682,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4041154/Jogo-Classico---Bate-Marshmallow---2-ou-Mais-Jogadores---Grow-0.jpg?v=637908342101100000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-bate-marshmallow-2-ou-mais-jogadores-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-bate-marshmallow-2-ou-mais-jogadores-grow/p",
+  popularity: 880
  },
  {
   sku: "rihappy-1002393910",
@@ -8813,7 +9693,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6406494/Pelucia---Bolofofos---Polvinho-Pow-com-Musica---Fun-0.jpg?v=638608852951500000",
-  productUrl: "https://www.rihappy.com.br/pelucia-bolofofos-polvinho-pow-com-musica-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-bolofofos-polvinho-pow-com-musica-fun/p",
+  popularity: 881
  },
  {
   sku: "rihappy-1002385413",
@@ -8823,7 +9704,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas de pano",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3887524/Boneca-Bebe---Love-Born---New-Born-Nenem-Nanando---2588---Cotiplas-0.jpg?v=637896251684400000",
-  productUrl: "https://www.rihappy.com.br/boneca-bebe-love-born-new-born-nenem-nanando-2588-cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/boneca-bebe-love-born-new-born-nenem-nanando-2588-cotiplas/p",
+  popularity: 882
  },
  {
   sku: "rihappy-1002374821",
@@ -8833,7 +9715,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3579223/Jogo-Terremoto---Marvel---Spidey-And-His-Amazing-Friends---2-a-4-Jogadores---Elka-0.jpg?v=637890816579330000",
-  productUrl: "https://www.rihappy.com.br/jogo-terremoto-marvel-spidey-and-his-amazing-friends-2-a-4-jogadores-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-terremoto-marvel-spidey-and-his-amazing-friends-2-a-4-jogadores-elka/p",
+  popularity: 883
  },
  {
   sku: "rihappy-1002373751",
@@ -8843,7 +9726,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos robos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6399648/Conjunto-Milliepacco---Mundo-Bita---Bita---Tito---Robo-Tumtum----Jogo-das-Emocoes---Lider-0.jpg?v=638603640688700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-milliepacco-mundo-bita-bita-tito-robo-tumtum-jogo-das-emocoes-lider/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-milliepacco-mundo-bita-bita-tito-robo-tumtum-jogo-das-emocoes-lider/p",
+  popularity: 884
  },
  {
   sku: "rihappy-1002362683",
@@ -8853,7 +9737,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3376527/Blocos-de-Encaixar---Cardoso---Topi---Bombeirinho---7-Pecas-0.jpg?v=637880626794000000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-encaixar-cardoso-topi-bombeirinho-7-pecas/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-encaixar-cardoso-topi-bombeirinho-7-pecas/p",
+  popularity: 885
  },
  {
   sku: "rihappy-1002345013",
@@ -8863,7 +9748,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5829127/Brinquedo-Infantil---Galinha-Pintadinha---Pianinho---Bate-e-Toque---Yes-Toys-0.jpg?v=638265757042270000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-infantil-galinha-pintadinha-pianinho-bate-e-toque-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-infantil-galinha-pintadinha-pianinho-bate-e-toque-yes-toys/p",
+  popularity: 886
  },
  {
   sku: "rihappy-1002320918",
@@ -8873,7 +9759,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3053507/Quebra-Cabeca---Colecao-Obras-de-Arte---Sandro-Botticelli---O-Nascimento-de-Venus---Toyster-0.jpg?v=637860819059530000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-colecao-obras-de-arte-sandro-botticelli-o-nascimento-de-venus-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-colecao-obras-de-arte-sandro-botticelli-o-nascimento-de-venus-toyster/p",
+  popularity: 887
  },
  {
   sku: "rihappy-1002320842",
@@ -8883,7 +9770,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3053527/Quebra-Cabeca---1000-Pecas---Game-Office---Leonid-Afremov---Som-da-Chuva---Toyster-0.jpg?v=637860823260200000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-game-office-1000-pecas-leonid-afremov-som-da-chuva-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-game-office-1000-pecas-leonid-afremov-som-da-chuva-toyster/p",
+  popularity: 888
  },
  {
   sku: "rihappy-1002312605",
@@ -8893,7 +9781,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mini veiculos triciclo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6416733/Triciclo-Infantil---Europa---Bandeirante---Vermelho-0.jpg?v=638610519110970000",
-  productUrl: "https://www.rihappy.com.br/triciclo-infantil---europa---bandeirante---vermelho/p"
+  productUrl: "https://www.rihappy.com.br/triciclo-infantil---europa---bandeirante---vermelho/p",
+  popularity: 889
  },
  {
   sku: "rihappy-1002176451",
@@ -8903,7 +9792,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9618891/Caixa-Registradora---Blush---FanFun-0.jpg?v=639039191116030000",
-  productUrl: "https://www.rihappy.com.br/faf-caixa-registradora-blush/p"
+  productUrl: "https://www.rihappy.com.br/faf-caixa-registradora-blush/p",
+  popularity: 890
  },
  {
   sku: "rihappy-1002175784",
@@ -8913,7 +9803,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9478185/Conjunto-de-Pintura---Aquadrabra---Globo-de-Agua-Animais---New-Toys-0.jpg?v=638998580966300000",
-  productUrl: "https://www.rihappy.com.br/aquadabra-globo-de-agua-animais/p"
+  productUrl: "https://www.rihappy.com.br/aquadabra-globo-de-agua-animais/p",
+  popularity: 891
  },
  {
   sku: "rihappy-1002167600",
@@ -8923,7 +9814,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5485704/Caminhao---Truckssauro---Festa-dos-Dinossauros---New-Toys-0.jpg?v=638122605055630000",
-  productUrl: "https://www.rihappy.com.br/dns-caminhao-festa-dos-dinossauros/p"
+  productUrl: "https://www.rihappy.com.br/dns-caminhao-festa-dos-dinossauros/p",
+  popularity: 892
  },
  {
   sku: "rihappy-1002167596",
@@ -8933,7 +9825,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5666451/Jogo-de-Equilibrio---Blow-Up---Super-Mario---Torre-Tremula---2-ou-Mais-Jogadores---Epoch-0.jpg?v=638170179356030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-equilibrio-blow-up-super-mario-shaky-tower-2-ou-mais-jogadores-epoch/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-equilibrio-blow-up-super-mario-shaky-tower-2-ou-mais-jogadores-epoch/p",
+  popularity: 893
  },
  {
   sku: "rihappy-1002166447",
@@ -8943,7 +9836,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2594970/Pista-de-Percurso-e-Mini-Veiculo---Hot-Wheels---Corrida-Multiloop---Mattel-0.jpg?v=637820149734330000",
-  productUrl: "https://www.rihappy.com.br/pista-de-percurso-e-mini-veiculo-hot-wheels-corrida-multiloop-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-percurso-e-mini-veiculo-hot-wheels-corrida-multiloop-mattel/p",
+  popularity: 894
  },
  {
   sku: "rihappy-1002166339",
@@ -8953,7 +9847,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2593768/Playset-e-Mini-Veiculo---Hot-Wheels---City-Nemesis---Estacionamento---Mattel-0.jpg?v=637820144481900000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-veiculo-hot-wheels-city-nemesis-estacionamento-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-veiculo-hot-wheels-city-nemesis-estacionamento-mattel/p",
+  popularity: 895
  },
  {
   sku: "rihappy-1002165798",
@@ -8963,7 +9858,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5539488/Jogo-de-Cartas---Uno-All-Wild---Uno---112-cartas---02-a-10-Jogadores---Mattel-0.jpg?v=638133666996400000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-all-wild-uno-112-cartas-02-a-10-jogadores-mattel/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-all-wild-uno-112-cartas-02-a-10-jogadores-mattel/p",
+  popularity: 896
  },
  {
   sku: "rihappy-1002165793",
@@ -8973,7 +9869,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2589086/Casinha-Balao---Sylvanian-Families---Bebe-Gato-Malhado---Epoch-0.jpg?v=637819971220900000",
-  productUrl: "https://www.rihappy.com.br/casinha-balao---sylvanian-families---bebe-gato-malhado---epoch/p"
+  productUrl: "https://www.rihappy.com.br/casinha-balao---sylvanian-families---bebe-gato-malhado---epoch/p",
+  popularity: 897
  },
  {
   sku: "rihappy-1002165769",
@@ -8983,7 +9880,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2588922/Parque-Infantil---Sylvanian-Families---Bebe-Gato-Persa---Epoch-0.jpg?v=637819954574100000",
-  productUrl: "https://www.rihappy.com.br/parque-infantil---sylvanian-families---bebe-gato-persa---epoch/p"
+  productUrl: "https://www.rihappy.com.br/parque-infantil---sylvanian-families---bebe-gato-persa---epoch/p",
+  popularity: 898
  },
  {
   sku: "rihappy-1002162969",
@@ -8993,7 +9891,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9618387/Conjunto---Primeiros-Instrumentos-Musicais-do-Bebe---Minimi-0.jpg?v=639039089658400000",
-  productUrl: "https://www.rihappy.com.br/mnm-kit-primeiros-instrumentos-musicais-do-bebe/p"
+  productUrl: "https://www.rihappy.com.br/mnm-kit-primeiros-instrumentos-musicais-do-bebe/p",
+  popularity: 899
  },
  {
   sku: "rihappy-1002146599",
@@ -9003,7 +9902,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9651018/Jogo---Basquete-de-Mesa---Fanfun--0.jpg?v=639192900345970000",
-  productUrl: "https://www.rihappy.com.br/faf-jogo-de-basquete/p"
+  productUrl: "https://www.rihappy.com.br/faf-jogo-de-basquete/p",
+  popularity: 900
  },
  {
   sku: "rihappy-1002146559",
@@ -9013,7 +9913,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5940651/Conjunto-De-Bijuterias---Joias-Fantasia--Glamour-Unicornio---New-Toys-0.jpg?v=638330730711530000",
-  productUrl: "https://www.rihappy.com.br/faf-kit-de-micangas-mundo-dos-unicornios/p"
+  productUrl: "https://www.rihappy.com.br/faf-kit-de-micangas-mundo-dos-unicornios/p",
+  popularity: 901
  },
  {
   sku: "rihappy-1002146465",
@@ -9023,7 +9924,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5330921/Conjunto---Joias-de-Princesa---FanFun-0.jpg?v=638084364343030000",
-  productUrl: "https://www.rihappy.com.br/faf-joias-de-princesa/p"
+  productUrl: "https://www.rihappy.com.br/faf-joias-de-princesa/p",
+  popularity: 902
  },
  {
   sku: "rihappy-1002135805",
@@ -9033,7 +9935,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8830881/Boneco-Articulado---Disney---Marvel---Miles-Morales---22cm---Hasbro-0.jpg?v=638919863177970000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-disney-marvel-miles-morales-22cm-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-disney-marvel-miles-morales-22cm-hasbro/p",
+  popularity: 903
  },
  {
   sku: "rihappy-1002131797",
@@ -9043,7 +9946,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2442086/kids-zone-1030-Mascara-dino-0.jpg?v=637795102221730000",
-  productUrl: "https://www.rihappy.com.br/kids-zone-1030-mascara-dino/p"
+  productUrl: "https://www.rihappy.com.br/kids-zone-1030-mascara-dino/p",
+  popularity: 904
  },
  {
   sku: "rihappy-1002124160",
@@ -9053,7 +9957,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6048077/Figura-Articulada---Marvel---Homem-Aranha---Titan-Hero-Series---Venom---Hasbro-0.jpg?v=638370411723670000",
-  productUrl: "https://www.rihappy.com.br/spider-man-titan-hero-series-venom---marvel---preto---figura-com-30cm/p"
+  productUrl: "https://www.rihappy.com.br/spider-man-titan-hero-series-venom---marvel---preto---figura-com-30cm/p",
+  popularity: 905
  },
  {
   sku: "rihappy-1002111875",
@@ -9063,7 +9968,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9629706/Brinquedo---Tucano-Musical---Minimi-0.jpg?v=639040914834200000",
-  productUrl: "https://www.rihappy.com.br/mnm-papagaio-musical/p"
+  productUrl: "https://www.rihappy.com.br/mnm-papagaio-musical/p",
+  popularity: 906
  },
  {
   sku: "rihappy-1002111873",
@@ -9073,7 +9979,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6453955/Brinquedo---Primeiro-Controle-Analogico-do-Bebe---Minimi---Cores-Sortidas-0.jpg?v=638616619720900000",
-  productUrl: "https://www.rihappy.com.br/meu-primeiro-video-game-minimi/p"
+  productUrl: "https://www.rihappy.com.br/meu-primeiro-video-game-minimi/p",
+  popularity: 907
  },
  {
   sku: "rihappy-1002095915",
@@ -9083,7 +9990,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9880730/Reboque-e-Mini-Veiculo---Hot-Wheels---City---Reboque-de-Dragao---Mattel-0.jpg?v=639117935440730000",
-  productUrl: "https://www.rihappy.com.br/reboque-e-mini-veiculo-hot-wheels-city-reboque-de-dragao-mattel/p"
+  productUrl: "https://www.rihappy.com.br/reboque-e-mini-veiculo-hot-wheels-city-reboque-de-dragao-mattel/p",
+  popularity: 908
  },
  {
   sku: "rihappy-100556888",
@@ -9093,7 +10001,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas carrinho de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9119615/Carrinho-De-Boneca---Passeando-Com-Meu-Bebe---FanFun-0.jpg?v=638948561149600000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca-passeando-com-meu-bebe-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-boneca-passeando-com-meu-bebe-fanfun/p",
+  popularity: 909
  },
  {
   sku: "rihappy-100551244",
@@ -9103,7 +10012,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/2076261/Quebra-Cabeca---2000-Pecas---Titanic---71cm-x-98cm---Grow-0.jpg?v=637715671043670000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca---2000-pecas---titanic---71cm-x-98cm---grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca---2000-pecas---titanic---71cm-x-98cm---grow/p",
+  popularity: 910
  },
  {
   sku: "rihappy-100550698",
@@ -9113,7 +10023,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8446909/Quebra-Cabeca---2000-Pecas---A-Livraria---71cm-x-98cm---Grow-0.jpg?v=638870779007800000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-2000-pecas-a-livraria-71cm-x-98cm-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-2000-pecas-a-livraria-71cm-x-98cm-grow/p",
+  popularity: 911
  },
  {
   sku: "rihappy-100453310",
@@ -9123,7 +10034,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6120847/Jogo-de-Tabuleiro---Viagem-Espacial---2-a-4-Jogadores---Grow-0.jpg?v=638417233146300000",
-  productUrl: "https://www.rihappy.com.br/jogo---viagem-espacial---2-a-4-jogadores---grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo---viagem-espacial---2-a-4-jogadores---grow/p",
+  popularity: 912
  },
  {
   sku: "rihappy-100446152",
@@ -9133,7 +10045,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5907036/Jogo---Perguntados---Trapped---Escape-se-Puder---Numero-de-Jogadores-2-a-6---Copag-0.jpg?v=638309245811930000",
-  productUrl: "https://www.rihappy.com.br/jogo---perguntados---trapped---escape-se-puder---numero-de-jogadores-2-a-4---copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo---perguntados---trapped---escape-se-puder---numero-de-jogadores-2-a-4---copag/p",
+  popularity: 913
  },
  {
   sku: "rihappy-100439232",
@@ -9143,7 +10056,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5761585/Guitarra-Infantil---Barbie---Dreamtopia-com-MP3---Rosa---Fun-0.jpg?v=638207313649200000",
-  productUrl: "https://www.rihappy.com.br/guitarra-da-barbie-dreamtopia-com-mp3-fun/p"
+  productUrl: "https://www.rihappy.com.br/guitarra-da-barbie-dreamtopia-com-mp3-fun/p",
+  popularity: 914
  },
  {
   sku: "rihappy-100437508",
@@ -9153,7 +10067,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5929506/Kit-Medica---Barbie---Doutora--Medica---9-Pecas---Fun-0.jpg?v=638325569637970000",
-  productUrl: "https://www.rihappy.com.br/kit-medica---barbie---doutora--medica---9-pecas---fun/p"
+  productUrl: "https://www.rihappy.com.br/kit-medica---barbie---doutora--medica---9-pecas---fun/p",
+  popularity: 915
  },
  {
   sku: "rihappy-100426189",
@@ -9163,7 +10078,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos kit de jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5787789/Jogo-Divertirama---Estrela--0.jpg?v=638231432666300000",
-  productUrl: "https://www.rihappy.com.br/jogo-divertirama---estrela-/p"
+  productUrl: "https://www.rihappy.com.br/jogo-divertirama---estrela-/p",
+  popularity: 916
  },
  {
   sku: "rihappy-100425143",
@@ -9173,7 +10089,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1390551/Quebra-Cabeca---60-Pecas---Disney---Princesa---Ariel---Toyster-0.jpg?v=637570352697830000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-60-pecas-disney-princesa-ariel-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-60-pecas-disney-princesa-ariel-toyster/p",
+  popularity: 917
  },
  {
   sku: "rihappy-100424334",
@@ -9183,7 +10100,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedo de banho para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6409654/Hora-do-Banho---Fundo-do-Mar---16-Pecas---Toyster-0.jpg?v=638609809011130000",
-  productUrl: "https://www.rihappy.com.br/hora-do-banho-fundo-do-mar-16-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/hora-do-banho-fundo-do-mar-16-pecas-toyster/p",
+  popularity: 918
  },
  {
   sku: "rihappy-100423200",
@@ -9193,7 +10111,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1593630/Boneca-24-cm---Turma-da-Monica---Iti-Malia---Milena---Novabrink-0.jpg?v=639148958105700000",
-  productUrl: "https://www.rihappy.com.br/boneca-24-cm-turma-da-monica-iti-malia-milena-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-24-cm-turma-da-monica-iti-malia-milena-novabrink/p",
+  popularity: 919
  },
  {
   sku: "rihappy-100412539",
@@ -9203,7 +10122,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes bicicletas bicicleta aro 12",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1391383/Bicicleta-Aro-12----Arco-Iris-Branco-e-Pink---TK3-Track-0.jpg?v=637570599342300000",
-  productUrl: "https://www.rihappy.com.br/bicicleta-aro-12-arco-iris-branco-e-pink-tk3-track/p"
+  productUrl: "https://www.rihappy.com.br/bicicleta-aro-12-arco-iris-branco-e-pink-tk3-track/p",
+  popularity: 920
  },
  {
   sku: "rihappy-100411313",
@@ -9213,7 +10133,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais guitarras de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8805299/Guitarra---Paw-Patrol---Modelos-Sortidos---Candide-0.jpg?v=638917410548830000",
-  productUrl: "https://www.rihappy.com.br/guitarra-paw-patrol---candide/p"
+  productUrl: "https://www.rihappy.com.br/guitarra-paw-patrol---candide/p",
+  popularity: 921
  },
  {
   sku: "rihappy-100406282",
@@ -9223,7 +10144,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6544163/Boneca-Bebe---Baby-Alive---Hora-da-Papinha---Loira---Hasbro-0.jpg?v=638623499874930000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-hora-da-papinha-loira-20-cm-f2617-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-hora-da-papinha-loira-20-cm-f2617-hasbro/p",
+  popularity: 922
  },
  {
   sku: "rihappy-100404586",
@@ -9233,7 +10155,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5901446/1031-zoio-goma-bala-gelatina-limao-blueberry-morango-saborosas-kidszone-0.jpg?v=638307284798000000",
-  productUrl: "https://www.rihappy.com.br/1031-zoio-goma-bala-gelatina-limao-blueberry-morango-saborosas-kidszone/p"
+  productUrl: "https://www.rihappy.com.br/1031-zoio-goma-bala-gelatina-limao-blueberry-morango-saborosas-kidszone/p",
+  popularity: 923
  },
  {
   sku: "rihappy-100397359",
@@ -9243,7 +10166,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby carrinho de bebe carrinho de passeio com pedal",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6410284/SuperJipe-Reclinavel-Com-Capota-Passeio-e-Pedal---Preto---Bandeirante-0.jpg?v=638609899148030000",
-  productUrl: "https://www.rihappy.com.br/superjipe-reclinavel-com-capota-passeio-e-pedal-preto-bandeirante-1002014020/p"
+  productUrl: "https://www.rihappy.com.br/superjipe-reclinavel-com-capota-passeio-e-pedal-preto-bandeirante-1002014020/p",
+  popularity: 924
  },
  {
   sku: "rihappy-100376692",
@@ -9253,7 +10177,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre barracas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1226228/Barraca---Barbie---50-bolinhas---Fun-Brinquedos-0.jpg?v=637516714272170000",
-  productUrl: "https://www.rihappy.com.br/barraca-barbie-50-bolinhas-fun-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/barraca-barbie-50-bolinhas-fun-brinquedos/p",
+  popularity: 925
  },
  {
   sku: "rihappy-100322823",
@@ -9263,7 +10188,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/985348/Quebra-Cabeca---82-Pecas---Brasil-e-Seus-Estados---Toyster-0.jpg?v=637457248842730000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca---82-pecas---brasil-e-seus-estados---toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca---82-pecas---brasil-e-seus-estados---toyster/p",
+  popularity: 926
  },
  {
   sku: "rihappy-100291453",
@@ -9273,7 +10199,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas veiculos de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7097665/Veiculo-De-Controle-Remoto---Style-Machine---Barbie---Modelos-Sortidos---Candide-0.jpg?v=638691099842530000",
-  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---style-machine---barbie---candide/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---style-machine---barbie---candide/p",
+  popularity: 927
  },
  {
   sku: "rihappy-100291069",
@@ -9283,7 +10210,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3142148/100291069_1.jpg?v=637873134384400000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-panorama-harry-potter-brilha-no-escuro-500-pecas-grow/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-panorama-harry-potter-brilha-no-escuro-500-pecas-grow/p",
+  popularity: 928
  },
  {
   sku: "rihappy-100269739",
@@ -9293,7 +10221,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/785982/Sylvanian-Families---Bebe-Gato-Persa---Epoch-0.jpg?v=637364059043600000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families---bebe-gato-persa---epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families---bebe-gato-persa---epoch/p",
+  popularity: 929
  },
  {
   sku: "rihappy-100240652",
@@ -9303,7 +10232,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/662047/Sylvanian-Families---Conjunto-Primeiros-Moveis---Epoch-0.jpg?v=637322537854000000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families---conjunto-primeiros-moveis---epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families---conjunto-primeiros-moveis---epoch/p",
+  popularity: 930
  },
  {
   sku: "rihappy-100236693",
@@ -9313,7 +10243,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7324085/Veiculo-de-Controle-Remoto---Marvel---Spider-Man---Web-Storm-3-Fun-1---Serie-1---Candide-0.jpg?v=638738412670300000",
-  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---web-storm-3-fun-1---marvel---spider-man---serie-1---candide/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-de-controle-remoto---web-storm-3-fun-1---marvel---spider-man---serie-1---candide/p",
+  popularity: 931
  },
  {
   sku: "rihappy-100234746",
@@ -9323,7 +10254,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9489122/Pelucia---Angel-Big-Feet-30-cm---Disney---Fun-0.jpg?v=639002104315470000",
-  productUrl: "https://www.rihappy.com.br/pelucia---angel-big-feet-30-cm---disney---fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia---angel-big-feet-30-cm---disney---fun/p",
+  popularity: 932
  },
  {
   sku: "rihappy-100221918",
@@ -9333,7 +10265,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6490099/Sylvanian-Families---Aventura-Na-Casa-Da-Arvore---Epoch-0.jpg?v=638621168632300000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-aventura-na-casa-da-arvore-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-aventura-na-casa-da-arvore-epoch/p",
+  popularity: 933
  },
  {
   sku: "rihappy-100216774",
@@ -9343,7 +10276,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes artesanato",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4781118/Conjunto-De-Artesanato---Bijus-Criativas---Fanfun-0.jpg?v=637995662505700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artesanato---bijus-criativas---fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artesanato---bijus-criativas---fanfun/p",
+  popularity: 934
  },
  {
   sku: "rihappy-100183702",
@@ -9353,7 +10287,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/411208/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-iron-man-hasbro-E7873_Frente.jpg?v=637166780126870000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-iron-man-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-30-cm-titan-heroes-disney-marvel-avengers-iron-man-hasbro/p",
+  popularity: 935
  },
  {
   sku: "rihappy-100181010",
@@ -9363,7 +10298,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1161632/Pelucia-Disney---25-Cm---Lilo-e-Stitch---Stitch---Big-Feet---Fun.jpg?v=637508300877330000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-25-cm-lilo-e-stitch-stitch-big-feet-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-25-cm-lilo-e-stitch-stitch-big-feet-fun/p",
+  popularity: 936
  },
  {
   sku: "rihappy-100180052",
@@ -9373,7 +10309,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/405091/jogoperfil-atualidades-grow-3836_Frente.jpg?v=637100200616300000",
-  productUrl: "https://www.rihappy.com.br/jogo-perfil-junior-atualidades-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-perfil-junior-atualidades-grow/p",
+  popularity: 937
  },
  {
   sku: "rihappy-100177801",
@@ -9383,7 +10320,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4876529/Figura-de-PVC---Mundo-Animal---Animais-da-Fazenda---Porco---FanFun-0.jpg?v=638012905581400000",
-  productUrl: "https://www.rihappy.com.br/figura-de-pvc-mundo-animal-animais-da-fazenda-porco-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-pvc-mundo-animal-animais-da-fazenda-porco-fanfun/p",
+  popularity: 938
  },
  {
   sku: "rihappy-100177799",
@@ -9393,7 +10331,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/4876525/Figura-de-PVC---Mundo-Animal---Animais-da-Fazenda---Vaca---FanFun-0.jpg?v=638012904824330000",
-  productUrl: "https://www.rihappy.com.br/figura-de-pvc-mundo-animal-animais-da-fazenda-vaca-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-pvc-mundo-animal-animais-da-fazenda-vaca-fanfun/p",
+  popularity: 939
  },
  {
   sku: "rihappy-100174211",
@@ -9403,7 +10342,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas bonecas bebes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6435315/boneca-baby-alive-hora-do-banho-banhos-carinhosos-modelos-sortidos-e8721-hasbro_frente.jpg?v=638611453567470000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-hora-do-banho-banhos-carinhosos-morena-e8721-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-hora-do-banho-banhos-carinhosos-morena-e8721-hasbro/p",
+  popularity: 940
  },
  {
   sku: "rihappy-100171837",
@@ -9413,7 +10353,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes slimes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/389429/conjunto-de-artes-super-kit-slime-estrela-1001902200023_frente.jpg?v=636979505019930000",
-  productUrl: "https://www.rihappy.com.br/super-kit-slime-estrela-100171151/p"
+  productUrl: "https://www.rihappy.com.br/super-kit-slime-estrela-100171151/p",
+  popularity: 941
  },
  {
   sku: "rihappy-100171463",
@@ -9423,7 +10364,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5997123/Conjunto-de-Veiculos-Hot-Wheels---Monster-Trucks---Mattel---Sortido-0.jpg?v=638351379323030000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-monster-trucks-police-e-hooligan-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-veiculos-hot-wheels-monster-trucks-police-e-hooligan-mattel/p",
+  popularity: 942
  },
  {
   sku: "rihappy-100168636",
@@ -9433,7 +10375,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha utensilios de cozinha de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/390854/Cozinha-Portatil-e-Acessorios---Fan-Fun.jpg?v=636995936086670000",
-  productUrl: "https://www.rihappy.com.br/cozinha-portatil-e-acessorios-fan-fun-cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/cozinha-portatil-e-acessorios-fan-fun-cotiplas/p",
+  popularity: 943
  },
  {
   sku: "rihappy-100167563",
@@ -9443,7 +10386,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/394221/baby-land-dino-bombeirinho-3027_frente.jpg?v=637020097901270000",
-  productUrl: "https://www.rihappy.com.br/carrinho-de-bombeiro-baby-land-dino-bombeirinho-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-de-bombeiro-baby-land-dino-bombeirinho-cardoso/p",
+  popularity: 944
  },
  {
   sku: "rihappy-100167562",
@@ -9453,7 +10397,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre brinquedos para o ar livre",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/382215/jogo-de-boliche-com-6-pinos-e-2-bolas-cardoso-7001_frente.jpg?v=636930014899770000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-boliche-com-6-pinos-e-2-bolas-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-boliche-com-6-pinos-e-2-bolas-cardoso/p",
+  popularity: 945
  },
  {
   sku: "rihappy-100166935",
@@ -9463,7 +10408,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/383151/boneco-23-cm-turma-da-monica-iti-malia-magali-novabrink-1022_Frente.jpg?v=636935183503230000",
-  productUrl: "https://www.rihappy.com.br/boneco-23-cm-turma-da-monica-iti-malia-magali-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-23-cm-turma-da-monica-iti-malia-magali-novabrink/p",
+  popularity: 946
  },
  {
   sku: "rihappy-100166933",
@@ -9473,7 +10419,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/383152/boneco-23-cm-turma-da-monica-iti-malia-monica-novabrink-1020_Frente.jpg?v=636935183514000000",
-  productUrl: "https://www.rihappy.com.br/boneco-23-cm-turma-da-monica-iti-malia-monica-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneco-23-cm-turma-da-monica-iti-malia-monica-novabrink/p",
+  popularity: 947
  },
  {
   sku: "rihappy-100163922",
@@ -9483,7 +10430,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3138607/100163922_1.jpg?v=637872907613400000",
-  productUrl: "https://www.rihappy.com.br/pelucia-de-algodao-turma-da-monica-dalila-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-de-algodao-turma-da-monica-dalila-novabrink/p",
+  popularity: 948
  },
  {
   sku: "rihappy-100161641",
@@ -9493,7 +10441,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais pianos de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3436015/100161641_1.jpg?v=637886342955570000",
-  productUrl: "https://www.rihappy.com.br/piano-do-cachorrinho-laugh-e-learn-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/piano-do-cachorrinho-laugh-e-learn-fisher-price/p",
+  popularity: 949
  },
  {
   sku: "rihappy-100155593",
@@ -9503,7 +10452,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes brincadeiras ao ar livre baldes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3141887/100155593_1.jpg?v=637873113884370000",
-  productUrl: "https://www.rihappy.com.br/acessorios-de-praia-e-piscina-baldinho-e-acessorios-disney-princesas-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/acessorios-de-praia-e-piscina-baldinho-e-acessorios-disney-princesas-novabrink/p",
+  popularity: 950
  },
  {
   sku: "rihappy-100154988",
@@ -9513,7 +10463,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5861678/Boneco-Gigante---Marvel---Homem-Aranha---20-frases---Mimo-0.jpg?v=638289395466770000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-spiderman-mimo/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-spiderman-mimo/p",
+  popularity: 951
  },
  {
   sku: "rihappy-100153663",
@@ -9523,7 +10474,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/5860104/Conjunto-de-Acessorios---Joias-Preciosas---FanFun-0.jpg?v=638289116009230000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-joias-preciosas-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-joias-preciosas-fanfun/p",
+  popularity: 952
  },
  {
   sku: "rihappy-100152194",
@@ -9533,7 +10485,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro war",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/350665/Jogo-War---Edicao-Especial---2018---Grow---Frente.jpg?v=636597334574830000",
-  productUrl: "https://www.rihappy.com.br/jogo-war-edicao-espeical-nova-embalagemgrow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-war-edicao-espeical-nova-embalagemgrow/p",
+  popularity: 953
  },
  {
   sku: "rihappy-100152174",
@@ -9543,7 +10496,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/355768/sylvanian-families-trenzinho-do-bebe-epoch-5320_Frente.jpg?v=636671018960530000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-trenzinho-do-bebe-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-trenzinho-do-bebe-epoch/p",
+  popularity: 954
  },
  {
   sku: "rihappy-100151148",
@@ -9553,7 +10507,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/352140/quebra-cabeca-metalizado-disney-princesas-100-pecas-toyster-2225_Embalagem.jpg?v=636620871776930000",
-  productUrl: "https://www.rihappy.com.br/quebra-cabeca-metalizado-disney-princesas-100-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebra-cabeca-metalizado-disney-princesas-100-pecas-toyster/p",
+  popularity: 955
  },
  {
   sku: "rihappy-100150893",
@@ -9563,7 +10518,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6375236/jogo-palavra-secreta-2018-grow-1800_frente.jpg?v=638585689180800000",
-  productUrl: "https://www.rihappy.com.br/jogo-palavra-secreta-2018-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-palavra-secreta-2018-grow/p",
+  popularity: 956
  },
  {
   sku: "rihappy-100149837",
@@ -9573,7 +10529,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de perguntas e respostas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/3548178/100149837_1.jpg?v=637890202203500000",
-  productUrl: "https://www.rihappy.com.br/jogo-e-proibido-falar-grow5070396/p"
+  productUrl: "https://www.rihappy.com.br/jogo-e-proibido-falar-grow5070396/p",
+  popularity: 957
  },
  {
   sku: "rihappy-100142875",
@@ -9583,7 +10540,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias pelucias para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/341334/Pelucia-de-Atividades---Safari---Leaozinho---Buba.jpg?v=636447094076430000",
-  productUrl: "https://www.rihappy.com.br/pelucia-de-atividades-safari-leaozinho-buba/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-de-atividades-safari-leaozinho-buba/p",
+  popularity: 958
  },
  {
   sku: "rihappy-100138908",
@@ -9593,7 +10551,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes areia de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6314664/areia-para-modelar-massa-areia-kinetic-sand-cores-neon-embalagem-unitaria-sunny_frente.jpg?v=638543533972030000",
-  productUrl: "https://www.rihappy.com.br/areia-para-modelar-massa-areia-kinetic-sand-cores-neon-azul-sunny/p"
+  productUrl: "https://www.rihappy.com.br/areia-para-modelar-massa-areia-kinetic-sand-cores-neon-azul-sunny/p",
+  popularity: 959
  },
  {
   sku: "rihappy-100135844",
@@ -9603,7 +10562,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby utensilios para alimentacao do bebe talheres para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7158413/Colher-Dosadora---Azul---Buba-0.jpg?v=638717857705330000",
-  productUrl: "https://www.rihappy.com.br/colher-dosadora-azul-buba/p"
+  productUrl: "https://www.rihappy.com.br/colher-dosadora-azul-buba/p",
+  popularity: 960
  },
  {
   sku: "rihappy-100134016",
@@ -9613,7 +10573,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/325395/pelucia-12-cm-patrulha-canina-zuma-sunny-1343_Frente.jpg?v=636240545166030000",
-  productUrl: "https://www.rihappy.com.br/pelucia-12-cm-patrulha-canina-zuma-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-12-cm-patrulha-canina-zuma-sunny/p",
+  popularity: 961
  },
  {
   sku: "rihappy-100128305",
@@ -9623,7 +10584,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6453797/Conjunto-de-Micangas-4-em-1---Totally-Me---Fanfun-0.jpg?v=638615991971500000",
-  productUrl: "https://www.rihappy.com.br/kit-de-artes-conjunto-de-micangas-4-em-1-totally-me-new-toys/p"
+  productUrl: "https://www.rihappy.com.br/kit-de-artes-conjunto-de-micangas-4-em-1-totally-me-new-toys/p",
+  popularity: 962
  },
  {
   sku: "rihappy-100122582",
@@ -9633,7 +10595,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/306949/100122582-B5521-massa-de-modelar-play-doh-festa-do-hamburger-hasbro-5048126_1.jpg?v=636001303764930000",
-  productUrl: "https://www.rihappy.com.br/massa-de-modelar-play-doh-festa-do-hamburger-hasbro-5048126/p"
+  productUrl: "https://www.rihappy.com.br/massa-de-modelar-play-doh-festa-do-hamburger-hasbro-5048126/p",
+  popularity: 963
  },
  {
   sku: "rihappy-100121975",
@@ -9643,7 +10606,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas baralho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6914605/jogo-de-cartas-baralho-profissional-139-modelos-sortidos-copag_Frente.jpg?v=638666027446330000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-baralho-profissional-139-azul-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-baralho-profissional-139-azul-copag/p",
+  popularity: 964
  },
  {
   sku: "rihappy-100120517",
@@ -9653,7 +10617,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar mega bloks",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/304345/100120517-DCH55-mega-bloks-first-bloks-sacola-com-60-pecas-numeros-mattel-5046057_1.jpg?v=635950309731800000",
-  productUrl: "https://www.rihappy.com.br/mega-bloks-first-builders-sacola-com-60-pecas-numeros-mattel-5046057/p"
+  productUrl: "https://www.rihappy.com.br/mega-bloks-first-builders-sacola-com-60-pecas-numeros-mattel-5046057/p",
+  popularity: 965
  },
  {
   sku: "rihappy-100101459",
@@ -9663,7 +10628,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/6213996/Martelo-De-Batalha---Marvel-Avengers---Thor---Hasbro-0.jpg?v=638463805591070000",
-  productUrl: "https://www.rihappy.com.br/martelo-de-batalha-do-thor-avengers-marvel-hasbro-5030133/p"
+  productUrl: "https://www.rihappy.com.br/martelo-de-batalha-do-thor-avengers-marvel-hasbro-5030133/p",
+  popularity: 966
  },
  {
   sku: "rihappy-100009553",
@@ -9673,7 +10639,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jenga",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/245739/Caixa-Jogo-Jenga-Hasbro.jpg?v=635076849742070000",
-  productUrl: "https://www.rihappy.com.br/jogo-jenga-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-jenga-hasbro/p",
+  popularity: 967
  },
  {
   sku: "rihappy-100003825",
@@ -9683,7 +10650,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/214273/3430138.jpg?v=634804711282300000",
-  productUrl: "https://www.rihappy.com.br/jogo-do-mico-copag-100003825/p"
+  productUrl: "https://www.rihappy.com.br/jogo-do-mico-copag-100003825/p",
+  popularity: 968
  },
  {
   sku: "rihappy-100001048",
@@ -9693,7 +10661,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/280582/463---291056---Jogo-Arco-e-Dardos---Elka--2-.jpg?v=635509539645030000",
-  productUrl: "https://www.rihappy.com.br/arco-e-dardos-elka-100001048/p"
+  productUrl: "https://www.rihappy.com.br/arco-e-dardos-elka-100001048/p",
+  popularity: 969
  },
  {
   sku: "rihappy-100000181",
@@ -9703,7 +10672,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao imagem e acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/1398289/Jogo-Imagem---Acao-1---Grow_Frente.jpg?v=637576334243370000",
-  productUrl: "https://www.rihappy.com.br/grow-jogo-imagem-e-acao-1-100000181/p"
+  productUrl: "https://www.rihappy.com.br/grow-jogo-imagem-e-acao-1-100000181/p",
+  popularity: 970
  },
  {
   sku: "rihappy-100000062",
@@ -9713,7 +10683,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/219914/13765_1.jpg?v=634804787678700000",
-  productUrl: "https://www.rihappy.com.br/jogo-pinote-100000062/p"
+  productUrl: "https://www.rihappy.com.br/jogo-pinote-100000062/p",
+  popularity: 971
  },
  {
   sku: "rihappy-100000050",
@@ -9723,7 +10694,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de estrategia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/306011/Jogo-Lig4---Nova-Edicao---Estrela.jpg?v=635986410285500000",
-  productUrl: "https://www.rihappy.com.br/jogo-lig4-nova-edicao-100000050/p"
+  productUrl: "https://www.rihappy.com.br/jogo-lig4-nova-edicao-100000050/p",
+  popularity: 972
  },
  {
   sku: "rihappy-100000027",
@@ -9733,7 +10705,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/313397/Brinquedo-de-Montar-Star-Plic-Estrela.jpg?v=636064175584600000",
-  productUrl: "https://www.rihappy.com.br/pim-pam-pum-star-plic-100000027/p"
+  productUrl: "https://www.rihappy.com.br/pim-pam-pum-star-plic-100000027/p",
+  popularity: 973
  },
  {
   sku: "rihappy-1003175530",
@@ -9743,7 +10716,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas diversas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10014760/Jogo-De-Cartas---Eu-Vi---Disney---Pixar---Toy-Story----Copag-0.jpg?v=639162774621230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-eu-vi-disney-pixar-toy-story-copag/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-eu-vi-disney-pixar-toy-story-copag/p",
+  popularity: 974
  },
  {
   sku: "rihappy-1003172491",
@@ -9753,7 +10727,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis montagem e modelismo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9983820/Mini-Brands---My-Mini---Sweethearts---Candide-0.jpg?v=639147301922130000",
-  productUrl: "https://www.rihappy.com.br/mini-brands-my-mini-sweethearts-candide/p"
+  productUrl: "https://www.rihappy.com.br/mini-brands-my-mini-sweethearts-candide/p",
+  popularity: 975
  },
  {
   sku: "rihappy-1003164321",
@@ -9763,7 +10738,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais bateria de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9969298/Bateria-Infantil---Sonic---Candide-0.jpg?v=639140985550930000",
-  productUrl: "https://www.rihappy.com.br/bateria-infantil---sonic---candide/p"
+  productUrl: "https://www.rihappy.com.br/bateria-infantil---sonic---candide/p",
+  popularity: 976
  },
  {
   sku: "rihappy-1003162633",
@@ -9773,7 +10749,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de filmes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9944861/Boneco---Funko-Pop---Star-Wars---Mandaloriano-E-Grogu---Candide-0.jpg?v=639137637467400000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-star-wars-mandaloriano-e-grogu-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-star-wars-mandaloriano-e-grogu-candide/p",
+  popularity: 977
  },
  {
   sku: "rihappy-1003161872",
@@ -9783,7 +10760,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de animes e mangas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9944847/Boneco---Funko-Pop---One-Piece---Live-Action---Monkey-D-Luffy---Candide-0.jpg?v=639137617680200000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-one-piece-live-action-monkey-d-luffy-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-one-piece-live-action-monkey-d-luffy-candide/p",
+  popularity: 978
  },
  {
   sku: "rihappy-1003160581",
@@ -9793,7 +10771,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9923589/LEGO---Editions-Sports---Kylian-Mbappe---Destaques-Do-Futebol---43013-0.jpg?v=639135839125030000",
-  productUrl: "https://www.rihappy.com.br/lego-editions-sports-kylian-mbappe-destaques-do-futebol-43013/p"
+  productUrl: "https://www.rihappy.com.br/lego-editions-sports-kylian-mbappe-destaques-do-futebol-43013/p",
+  popularity: 979
  },
  {
   sku: "rihappy-1003159979",
@@ -9803,7 +10782,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-objetos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9924792/Lanca-E-Pega---Disney---Pixar---Toy-Story---Buzz-Lightyear---Toyng-0.jpg?v=639135969955300000",
-  productUrl: "https://www.rihappy.com.br/lanca-e-pega-disney-pixar-toy-story-buzz-lightyear-toyng/p"
+  productUrl: "https://www.rihappy.com.br/lanca-e-pega-disney-pixar-toy-story-buzz-lightyear-toyng/p",
+  popularity: 980
  },
  {
   sku: "rihappy-1003159948",
@@ -9813,7 +10793,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9925092/Boneca-Articulada---20-Cm---Creativeblox---Amy-Scarlet---Algazarra-0.jpg?v=639136032425900000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-20-cm-creativeblox-amy-scarlet-algazarra/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-20-cm-creativeblox-amy-scarlet-algazarra/p",
+  popularity: 981
  },
  {
   sku: "rihappy-1003159820",
@@ -9823,7 +10804,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao pega vareta",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9922095/Jogo-De-Acao---Tira-Varetas---Disney---Pixar---Toy-Story-5---Elka-0.jpg?v=639148112414630000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-disney-pixar-toy-story-5-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-tira-varetas-disney-pixar-toy-story-5-elka/p",
+  popularity: 982
  },
  {
   sku: "rihappy-1003159205",
@@ -9833,7 +10815,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas dobble",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9909593/Jogo-De-Cartas---Dobble---One-Piece---Galapagos-0.jpg?v=639129953618230000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-one-piece-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-one-piece-galapagos/p",
+  popularity: 983
  },
  {
   sku: "rihappy-1003159197",
@@ -9843,7 +10826,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10036755/Figura---Disney---Pixar---Toy-Story---Woody---Alto-Falante---Mattel-0.jpg?v=639174958034300000",
-  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-woody-alto-falante-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-woody-alto-falante-mattel/p",
+  popularity: 984
  },
  {
   sku: "rihappy-1003159002",
@@ -9853,7 +10837,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10036743/Figura---Disney---Pixar---Toy-Story---Buzz-Lightyear---Alto-Falante---Mattel-0.jpg?v=639174958407330000",
-  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-buzz-lightyear-altofalante-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-buzz-lightyear-altofalante-mattel/p",
+  popularity: 985
  },
  {
   sku: "rihappy-1003159001",
@@ -9863,7 +10848,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10036748/Figura---Disney---Pixar---Toy-Story---Jessie---Alto-Falante---Mattel-0.jpg?v=639174958712700000",
-  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-jessie-alto-falante-mattel/p"
+  productUrl: "https://www.rihappy.com.br/figura-disney-pixar-toy-story-jessie-alto-falante-mattel/p",
+  popularity: 986
  },
  {
   sku: "rihappy-1003158374",
@@ -9873,7 +10859,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "fantasias fantasia infantil fantasias de personagens",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9887365/Fantasia---Disney---Pixar---Toy-Story---Buzz-Lightyear---Classica---Tamanho-P---Novabrink-0.jpg?v=639120322829500000",
-  productUrl: "https://www.rihappy.com.br/fantasia-disney-pixar-toy-story-buzz-lightyear-classica-tamanho-p-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/fantasia-disney-pixar-toy-story-buzz-lightyear-classica-tamanho-p-novabrink/p",
+  popularity: 987
  },
  {
   sku: "rihappy-1003156666",
@@ -9883,7 +10870,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9865549/Mini-Boneco---Little-People---Super-Mario---Modelos-Unitarios-Sortidos---Fisher-Price-0.jpg?v=639112695710300000",
-  productUrl: "https://www.rihappy.com.br/mini-boneco-little-people-super-mario-modelos-unitarios-sortidos-fisherprice/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneco-little-people-super-mario-modelos-unitarios-sortidos-fisherprice/p",
+  popularity: 988
  },
  {
   sku: "rihappy-1003155777",
@@ -9893,7 +10881,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9989009/Kit-de-Pintura---Com-Estojo---Disney---Pixar---Toy-Story-5---Toyng-0.jpg?v=639148983185170000",
-  productUrl: "https://www.rihappy.com.br/kit-de-pintura-com-estojo-disney-pixar-toy-story-5-toyng/p"
+  productUrl: "https://www.rihappy.com.br/kit-de-pintura-com-estojo-disney-pixar-toy-story-5-toyng/p",
+  popularity: 989
  },
  {
   sku: "rihappy-1003154975",
@@ -9903,7 +10892,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria livros livros infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9847290/Livro-Magnetico-Infantil---Historias-Magneticas---Pets---Janod-0.jpg?v=639106576435000000",
-  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-pets-janod/p"
+  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-pets-janod/p",
+  popularity: 990
  },
  {
   sku: "rihappy-1003154948",
@@ -9913,7 +10903,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria livros livros infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9847285/Livro-Magnetico-Infantil---Historias-Magneticas---Bombeiros---Janod-0.jpg?v=639106576065670000",
-  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-bombeiros-janod/p"
+  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-bombeiros-janod/p",
+  popularity: 991
  },
  {
   sku: "rihappy-1003154938",
@@ -9923,7 +10914,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria livros livros infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9846338/Livro-Magnetico-Infantil---Historias-Magneticas---Unicornios---Janod-0.jpg?v=639106482700100000",
-  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-unicornios-janod/p"
+  productUrl: "https://www.rihappy.com.br/livro-magnetico-infantil-historias-magneticas-unicornios-janod/p",
+  popularity: 992
  },
  {
   sku: "rihappy-1003154421",
@@ -9933,7 +10925,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9841430/Molde-E-Pinte-O-Gesso---Disney---Toy-Story---Buzz---Toyng-0.jpg?v=639105595110570000",
-  productUrl: "https://www.rihappy.com.br/molde-e-pinte-o-gesso-disney-toy-story-buzz-toyng/p"
+  productUrl: "https://www.rihappy.com.br/molde-e-pinte-o-gesso-disney-toy-story-buzz-toyng/p",
+  popularity: 993
  },
  {
   sku: "rihappy-1003154181",
@@ -9943,7 +10936,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9839403/Pelucia---Disney---Pixar---Toy-Story---Woody---Fun-0.jpg?v=639105053903300000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-woody-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-pixar-toy-story-woody-fun/p",
+  popularity: 994
  },
  {
   sku: "rihappy-1003152950",
@@ -9953,7 +10947,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9824119/Maleta-Com-Acessorios---Bluey----Dr-a--Dodoi---Elka-0.jpg?v=639100445676500000",
-  productUrl: "https://www.rihappy.com.br/maleta-com-acessorios-bluey-dra-dodoi-elka/p"
+  productUrl: "https://www.rihappy.com.br/maleta-com-acessorios-bluey-dra-dodoi-elka/p",
+  popularity: 995
  },
  {
   sku: "rihappy-1003152889",
@@ -9963,7 +10958,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9820652/Conjunto-De-Pintura---Disney---Pixar---Carros---Relampago-Mcqueen---Elka-0.jpg?v=639153993537830000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-disney-pixar-carros-relampago-mcqueen-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pintura-disney-pixar-carros-relampago-mcqueen-elka/p",
+  popularity: 996
  },
  {
   sku: "rihappy-1003152563",
@@ -9973,7 +10969,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9819993/Jogo-De-Memoria---Marvel---Homem-Aranha---Toyster-0.jpg?v=639098792119730000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-marvel-homemaranha-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-marvel-homemaranha-toyster/p",
+  popularity: 997
  },
  {
   sku: "rihappy-1003152428",
@@ -9983,7 +10980,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos de memoria",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9819394/Jogo-De-Memoria---Memo-Play---Marvel---Homem-Aranha---Elka-0.jpg?v=639098674297970000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-memo-play-marvel-homemaranha-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-memoria-memo-play-marvel-homemaranha-elka/p",
+  popularity: 998
  },
  {
   sku: "rihappy-1003152387",
@@ -9993,7 +10991,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brincadeira de casinha replicas de casinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9820045/Sylvanian-Families---Irma---Irmao-Urso-Biscoito---Epoch-0.jpg?v=639098795804000000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-irma--irmao-urso-biscoito-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-irma--irmao-urso-biscoito-epoch/p",
+  popularity: 999
  },
  {
   sku: "rihappy-1003151976",
@@ -10003,7 +11002,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mini veiculos mini veiculos eletricos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9808917/Mini-Veiculo---Moto---Street-Eletrica---6V---Bandeirante-0.jpg?v=639148115468300000",
-  productUrl: "https://www.rihappy.com.br/mini-veiculo-moto-street-eletrica-6v-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/mini-veiculo-moto-street-eletrica-6v-bandeirante/p",
+  popularity: 1000
  },
  {
   sku: "rihappy-1003151956",
@@ -10013,7 +11013,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mini veiculos bicicleta de equilibrio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9808913/Mini-Veiculos---Baby-Bike-Equilibrio---Motinha---Rosa---Bandeirante-0.jpg?v=639148977121930000",
-  productUrl: "https://www.rihappy.com.br/mini-veiculos-baby-bike-equilibrio-motinha-rosa-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/mini-veiculos-baby-bike-equilibrio-motinha-rosa-bandeirante/p",
+  popularity: 1001
  },
  {
   sku: "rihappy-1003151638",
@@ -10023,7 +11024,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9972340/Pista-De-Percursos---Hot-Wheels---City---Oficina-Gorila---Mattel-0.jpg?v=639142062839070000",
-  productUrl: "https://www.rihappy.com.br/kit-pista-hot-wheels-city-oficina-gorila-mattel/p"
+  productUrl: "https://www.rihappy.com.br/kit-pista-hot-wheels-city-oficina-gorila-mattel/p",
+  popularity: 1002
  },
  {
   sku: "rihappy-1003151025",
@@ -10033,7 +11035,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9795815/Boneca---Polly-Pocket----Sortida---Estilo-Em-75-Cm---Mattel-0.jpg?v=639144662710600000",
-  productUrl: "https://www.rihappy.com.br/boneca-polly-pocket-sortida-estilo-em-75-cm-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-polly-pocket-sortida-estilo-em-75-cm-mattel/p",
+  popularity: 1003
  },
  {
   sku: "rihappy-1003150764",
@@ -10043,7 +11046,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9792321/Jogo-De-Acao---Challenge-Roulette---Super-Mario-Galaxy--O-Filme---Epoch-0.jpg?v=639149006026630000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-challenge-roulette-super-mario-galaxy-o-filme-epoch/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-challenge-roulette-super-mario-galaxy-o-filme-epoch/p",
+  popularity: 1004
  },
  {
   sku: "rihappy-1003150466",
@@ -10053,7 +11057,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9924060/Conjunto-De-Pinturas---Marvel---Spidey---Nig-Brinquedos-0.jpg?v=639153992479500000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-marvel-spidey-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-marvel-spidey-nig-brinquedos/p",
+  popularity: 1005
  },
  {
   sku: "rihappy-1003150464",
@@ -10063,7 +11068,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9786499/Jogo-De-Acao---Troca-Ou-Nao-Troca---Nig-Brinquedos-0.jpg?v=639087509630600000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-troca-ou-nao-troca-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-troca-ou-nao-troca-nig-brinquedos/p",
+  popularity: 1006
  },
  {
   sku: "rihappy-1003149998",
@@ -10073,7 +11079,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9772361/Kit-Jessie-E-Bala-No-Alvo---Disney---Pixar---Toy-Story-5---Imaginext---Mattel-0.jpg?v=639083204458270000",
-  productUrl: "https://www.rihappy.com.br/kit-jessie-e-balanoalvo-disney-pixar-toy-story-5-imaginext-mattel/p"
+  productUrl: "https://www.rihappy.com.br/kit-jessie-e-balanoalvo-disney-pixar-toy-story-5-imaginext-mattel/p",
+  popularity: 1007
  },
  {
   sku: "rihappy-1003148508",
@@ -10083,7 +11090,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9924031/Kit-Pintura---Marvel---Homem-Aranha---Nig-Brinquedos-0.jpg?v=639135851566270000",
-  productUrl: "https://www.rihappy.com.br/kit-pintura-marvel-homem-aranha-nig-brinquedos/p"
+  productUrl: "https://www.rihappy.com.br/kit-pintura-marvel-homem-aranha-nig-brinquedos/p",
+  popularity: 1008
  },
  {
   sku: "rihappy-1003148471",
@@ -10093,7 +11101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9745937/Pista---Hot-Wheels---City---Tubarao---Mattel-0.jpg?v=639074496295800000",
-  productUrl: "https://www.rihappy.com.br/pista-hot-wheels-city-tubarao-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-hot-wheels-city-tubarao-mattel/p",
+  popularity: 1009
  },
  {
   sku: "rihappy-1003148257",
@@ -10103,7 +11112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9745979/Jogo-De-Tabuleiro---Dixit-Kids---Asmodee-0.jpg?v=639074511611130000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-kids-asmodee/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-dixit-kids-asmodee/p",
+  popularity: 1010
  },
  {
   sku: "rihappy-1003146232",
@@ -10113,7 +11123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes futebol bola de futebol",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9709419/Bola-De-Futebol---Fifa---Mundial---Copa-2026---Numero-5---Branco-Azul-E-Verde---Sportcom-0.jpg?v=639062473390000000",
-  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-mundial-copa-2026-numero-5-branco-azul-e-verde-sportcom/p"
+  productUrl: "https://www.rihappy.com.br/bola-de-futebol-fifa-mundial-copa-2026-numero-5-branco-azul-e-verde-sportcom/p",
+  popularity: 1011
  },
  {
   sku: "rihappy-1003146099",
@@ -10123,7 +11134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9729570/LEGO---Technic---Moto-Amarela---42225-0.jpg?v=639067040625530000",
-  productUrl: "https://www.rihappy.com.br/lego-technic-moto-amarela-42225/p"
+  productUrl: "https://www.rihappy.com.br/lego-technic-moto-amarela-42225/p",
+  popularity: 1012
  },
  {
   sku: "rihappy-1003144689",
@@ -10133,7 +11145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos com acessorios",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9685785/Conjunto-De-Figuras-E-Mega-Lancador---Goo-Jit-Zu---Meteor-Madness---Sunny--0.jpg?v=639056379366100000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-e-mega-lancador-goo-jit-zu-meteor-madness-sunny/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-e-mega-lancador-goo-jit-zu-meteor-madness-sunny/p",
+  popularity: 1013
  },
  {
   sku: "rihappy-1003144587",
@@ -10143,7 +11156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9776460/Mini-Playset---Super-Mario-Filme---Castelo-Do-Bowser---Sunny-0.jpg?v=639084283802130000",
-  productUrl: "https://www.rihappy.com.br/mini-playset-super-mario-filme-castelo-do-bowser-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-playset-super-mario-filme-castelo-do-bowser-sunny/p",
+  popularity: 1014
  },
  {
   sku: "rihappy-1003144585",
@@ -10153,7 +11167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca quarto de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749907/Mini-Playset---Peppa-Pig---Quarto-Da-Evie---Hasbro-0.jpg?v=639075481287270000",
-  productUrl: "https://www.rihappy.com.br/mini-playset-peppa-pig-quarto-da-evie-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/mini-playset-peppa-pig-quarto-da-evie-hasbro/p",
+  popularity: 1015
  },
  {
   sku: "rihappy-1003144541",
@@ -10163,7 +11178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9686063/Mini-Figura---Sonic---Knuckles---Classico---Sunny-0.jpg?v=639056389509870000",
-  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-knuckles-classico-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-knuckles-classico-sunny/p",
+  popularity: 1016
  },
  {
   sku: "rihappy-1003144451",
@@ -10173,7 +11189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9685795/Mini-Figura---Sonic---Moderno---Sunny-0.jpg?v=639056379816230000",
-  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-moderno-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-moderno-sunny/p",
+  popularity: 1017
  },
  {
   sku: "rihappy-1003144450",
@@ -10183,7 +11200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9686005/Mini-Figura---Sonic---Shadow---Moderno---Sunny-0.jpg?v=639056387290070000",
-  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-shadow-moderno-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-figura-sonic-shadow-moderno-sunny/p",
+  popularity: 1018
  },
  {
   sku: "rihappy-1003143761",
@@ -10193,7 +11211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9661428/Jogo-De-Acao---Telestrations---Galapagos-0.jpg?v=639050424321770000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-telestrations-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-telestrations-galapagos/p",
+  popularity: 1019
  },
  {
   sku: "rihappy-1003143750",
@@ -10203,7 +11222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9863125/Pilhas-Alcalinas---AA4---4-Unidades---Elgin-0.jpg?v=639111621280470000",
-  productUrl: "https://www.rihappy.com.br/pilhas-alcalinas-aa4-4-unidades-elgin/p"
+  productUrl: "https://www.rihappy.com.br/pilhas-alcalinas-aa4-4-unidades-elgin/p",
+  popularity: 1020
  },
  {
   sku: "rihappy-1003143747",
@@ -10213,7 +11233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9663625/Boneca---Barbie---Deluxe-Style---Jaqueta-Rosa-E-Jeans---Mattel-0.jpg?v=639051185146230000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-deluxe-style-jaqueta-rosa-e-jeans-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-deluxe-style-jaqueta-rosa-e-jeans-mattel/p",
+  popularity: 1021
  },
  {
   sku: "rihappy-1003142872",
@@ -10223,7 +11244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9640745/Jogo-De-Cartas---Pokemon-TCG---Mega-Venusaur-Ex----Premium-Collection---Ingles---Galapagos-0.jpg?v=639045158138300000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-mega-venusaur-ex-premium-collection-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-pokemon-tcg-mega-venusaur-ex-premium-collection-ingles-galapagos/p",
+  popularity: 1022
  },
  {
   sku: "rihappy-1003141207",
@@ -10233,7 +11255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9626352/Conjunto-De-Cartas---Pokemon-TCG---Charizard-Ex-Special-Collection---Ingles---Galapagos--0.jpg?v=639040083895100000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-cartas-pokemon-tcg-charizard-ex-special-collection-ingles-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-cartas-pokemon-tcg-charizard-ex-special-collection-ingles-galapagos/p",
+  popularity: 1023
  },
  {
   sku: "rihappy-1003141053",
@@ -10243,7 +11266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9629406/Boneca-Articulada---Barbie---Fashionista-Deluxe-Style---Com-Vestido-Rosa-Com-Estrelas---Mattel-0.jpg?v=639040825609070000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fashionista-deluxe-style-com-vestido-rosa-com-estrelas-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-fashionista-deluxe-style-com-vestido-rosa-com-estrelas-mattel/p",
+  popularity: 1024
  },
  {
   sku: "rihappy-1003140948",
@@ -10253,7 +11277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10023226/Baralho-Infantil---Festa-Em-Familia---MOL-Impacto---Editora-MOL-0.jpg?v=639168870960400000",
-  productUrl: "https://www.rihappy.com.br/baralho-infantil-festa-em-familia-mol-impacto-editora-mol/p"
+  productUrl: "https://www.rihappy.com.br/baralho-infantil-festa-em-familia-mol-impacto-editora-mol/p",
+  popularity: 1025
  },
  {
   sku: "rihappy-1003140947",
@@ -10263,7 +11288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/10023218/Baralho-Infantil---Desafio-Das-Geracoes---MOL-Impacto---Editora-MOL-0.jpg?v=639168870538570000",
-  productUrl: "https://www.rihappy.com.br/baralho-infantil-desafio-das-geracoes-mol-impacto-editora-mol/p"
+  productUrl: "https://www.rihappy.com.br/baralho-infantil-desafio-das-geracoes-mol-impacto-editora-mol/p",
+  popularity: 1026
  },
  {
   sku: "rihappy-1003138446",
@@ -10273,7 +11299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9564913/5-Surprise---A-Lot-A-Axolotls---Candide-0.jpg?v=639021735879100000",
-  productUrl: "https://www.rihappy.com.br/5-surprise-a-lot-a-axolotls-candide/p"
+  productUrl: "https://www.rihappy.com.br/5-surprise-a-lot-a-axolotls-candide/p",
+  popularity: 1027
  },
  {
   sku: "rihappy-1003137967",
@@ -10283,7 +11310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9542604/Figura-De-Acao---Jurassic-World---Dinossauro---Triceratops---30-Cm---Mimo-0.jpg?v=639015779189300000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-jurassic-world-dinossauro-triceratops-30-cm-mimo/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-jurassic-world-dinossauro-triceratops-30-cm-mimo/p",
+  popularity: 1028
  },
  {
   sku: "rihappy-1003137837",
@@ -10293,7 +11321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9535103/LEGO---City-Great-Vehicles---Caminhao-de-Reciclagem---60495-0.jpg?v=639014070268300000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-caminhao-de-reciclagem-60495/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-caminhao-de-reciclagem-60495/p",
+  popularity: 1029
  },
  {
   sku: "rihappy-1003137828",
@@ -10303,7 +11332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9535538/LEGO---City-Great-Vehicles---Taxi-Amarelo---60487-0.jpg?v=639014086736900000",
-  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-taxi-amarelo-60487/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-great-vehicles-taxi-amarelo-60487/p",
+  popularity: 1030
  },
  {
   sku: "rihappy-1003137556",
@@ -10313,7 +11343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9534850/LEGO---Ninjago---Lloyd-vs-Girador-de-Monstro-da-Terra---71850-0.jpg?v=639014065980870000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-lloyd-vs-girador-de-monstro-da-terra-71850/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-lloyd-vs-girador-de-monstro-da-terra-71850/p",
+  popularity: 1031
  },
  {
   sku: "rihappy-1003137255",
@@ -10323,7 +11354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520416/LEGO---Speed-Champions---Hipercarro-Esportivo-Bugatti-Vision-GT---77253-0.jpg?v=639010520162830000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-hipercarro-esportivo-bugatti-vision-gt-77253/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-hipercarro-esportivo-bugatti-vision-gt-77253/p",
+  popularity: 1032
  },
  {
   sku: "rihappy-1003137236",
@@ -10333,7 +11365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520354/LEGO---City-Police---Van-de-Transporte-de-Prisioneiros-da-Policia---60479-0.jpg?v=639010519979000000",
-  productUrl: "https://www.rihappy.com.br/lego-city-police-van-de-transporte-de-prisioneiros-da-policia-60479/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-police-van-de-transporte-de-prisioneiros-da-policia-60479/p",
+  popularity: 1033
  },
  {
   sku: "rihappy-1003137230",
@@ -10343,7 +11376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520337/LEGO---City-Brick-Rides---Veiculos--Caminhao-da-Policia---60481-0.jpg?v=639010519754200000",
-  productUrl: "https://www.rihappy.com.br/lego-city-brick-rides-veiculos-caminhao-da-policia-60481/p"
+  productUrl: "https://www.rihappy.com.br/lego-city-brick-rides-veiculos-caminhao-da-policia-60481/p",
+  popularity: 1034
  },
  {
   sku: "rihappy-1003137216",
@@ -10353,7 +11387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9520250/LEGO---Ninjago---Batalha-Do-Dragao-Ninja-Riyu---71855-0.jpg?v=639010518846300000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-batalha-do-dragao-ninja-riyu-71855/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-batalha-do-dragao-ninja-riyu-71855/p",
+  popularity: 1035
  },
  {
   sku: "rihappy-1003136785",
@@ -10363,7 +11398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9521937/Figura-De-Acao---Marvel---Avengers---Capitao-America---Hasbro-0.jpg?v=639162744404970000",
-  productUrl: "https://www.rihappy.com.br/figura-de-acao-marvel-avengers-capitao-america-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/figura-de-acao-marvel-avengers-capitao-america-hasbro/p",
+  popularity: 1036
  },
  {
   sku: "rihappy-1003135983",
@@ -10373,7 +11409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas roupinhas para bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9496312/Refil-De-Fralda----Baby-Alive---Hasbro-0.jpg?v=639004506260800000",
-  productUrl: "https://www.rihappy.com.br/refil-de-fralda-baby-alive-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/refil-de-fralda-baby-alive-hasbro/p",
+  popularity: 1037
  },
  {
   sku: "rihappy-1003135270",
@@ -10383,7 +11420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9478555/Veiculo---Garagem-Sa---Prime-Racer---R-C-7-Funcoes---Bateria-Recarregavel---Candide-0.jpg?v=639162756286630000",
-  productUrl: "https://www.rihappy.com.br/veiculo-garagem-sa-prime-racer-rc-7-funcoes-bateria-recarregavel-candide/p"
+  productUrl: "https://www.rihappy.com.br/veiculo-garagem-sa-prime-racer-rc-7-funcoes-bateria-recarregavel-candide/p",
+  popularity: 1038
  },
  {
   sku: "rihappy-1003135253",
@@ -10393,7 +11431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9516306/Playset---Disney---Pixar---Carros---Garagem---Mcqueen-E-Cruz---Toyng-0.jpg?v=639009923494700000",
-  productUrl: "https://www.rihappy.com.br/playset-disney-pixar-carros-garagem-mcqueen-e-cruz-toyng/p"
+  productUrl: "https://www.rihappy.com.br/playset-disney-pixar-carros-garagem-mcqueen-e-cruz-toyng/p",
+  popularity: 1039
  },
  {
   sku: "rihappy-1003135210",
@@ -10403,7 +11442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-agua",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9944005/Mochila-Lanca-Agua---Disney---Pixar---Toy-Stoy---Buzz-Lightyear---Toyng-0.jpg?v=639137601757800000",
-  productUrl: "https://www.rihappy.com.br/mochila-lanca-agua-disney-pixar-toy-stoy-buzz-lightyear-toyng/p"
+  productUrl: "https://www.rihappy.com.br/mochila-lanca-agua-disney-pixar-toy-stoy-buzz-lightyear-toyng/p",
+  popularity: 1040
  },
  {
   sku: "rihappy-1003135209",
@@ -10413,7 +11453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes artesanato",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9749725/Conjunto---Disney---Pixar---Toy-Story---Monte-Seu-Garfinho---Toyng-0.jpg?v=639075382921570000",
-  productUrl: "https://www.rihappy.com.br/conjunto-disney-pixar-toy-story-monte-seu-garfinho-toyng/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-disney-pixar-toy-story-monte-seu-garfinho-toyng/p",
+  popularity: 1041
  },
  {
   sku: "rihappy-1003135152",
@@ -10423,7 +11464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9671331/Boneco-Articulado---Marvel---Hulk---Universe---Com-Sons---Mimo-0.jpg?v=639053978662830000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-hulk-universe-com-sons-mimo/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-marvel-hulk-universe-com-sons-mimo/p",
+  popularity: 1042
  },
  {
   sku: "rihappy-1003133640",
@@ -10433,7 +11475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis funko pop funko de series",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9619008/PRE-VENDA-Boneco---Funko-Pop---Guerreiras-Do-K-Pop---Jinu-Com-Chase---Modelos-Sortidos---Candide-0.jpg?v=639040202091830000",
-  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-jinu-com-chase-modelos-sortidos-candide/p"
+  productUrl: "https://www.rihappy.com.br/boneco-funko-pop-guerreiras-do-kpop-jinu-com-chase-modelos-sortidos-candide/p",
+  popularity: 1043
  },
  {
   sku: "rihappy-1003113264",
@@ -10443,7 +11486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9334442/Quebra-Cabeca---Disney---Zootopia-2---200-Pecas---Toyster-0.jpg?v=638978603638530000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-zootopia-2-200-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-disney-zootopia-2-200-pecas-toyster/p",
+  popularity: 1044
  },
  {
   sku: "rihappy-1003113262",
@@ -10453,7 +11497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 300 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9334435/Quebra-Cabeca---Grandao---Disney---Zootopoia-2---120-Pecas---Toyster-0.jpg?v=638978601773600000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-grandao-disney-zootopoia-2-120-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-grandao-disney-zootopoia-2-120-pecas-toyster/p",
+  popularity: 1045
  },
  {
   sku: "rihappy-1003110813",
@@ -10463,7 +11508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9291761/Blocos-Infantis---Disney---Frozen---Blocos-Magicos---Elka-0.jpg?v=638971635572600000",
-  productUrl: "https://www.rihappy.com.br/blocos-infantis-disney-frozen-blocos-magicos-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-infantis-disney-frozen-blocos-magicos-elka/p",
+  popularity: 1046
  },
  {
   sku: "rihappy-1003110640",
@@ -10473,7 +11519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9285805/Blocos-Infantis---Toy-Story---Blocos-Magicos---Elka-0.jpg?v=638969133867670000",
-  productUrl: "https://www.rihappy.com.br/blocos-infantis-toy-story-blocos-magicos-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-infantis-toy-story-blocos-magicos-elka/p",
+  popularity: 1047
  },
  {
   sku: "rihappy-1003083464",
@@ -10483,7 +11530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9040334/Boneco-Articulado---Sonic---Super-Sonic-Classico---Sunny-0.jpg?v=638939004370970000",
-  productUrl: "https://www.rihappy.com.br/boneco-articulado-sonic-super-sonic-classico-sunny/p"
+  productUrl: "https://www.rihappy.com.br/boneco-articulado-sonic-super-sonic-classico-sunny/p",
+  popularity: 1048
  },
  {
   sku: "rihappy-1003081694",
@@ -10493,7 +11541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby cadeiras para bebes booster",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8964199/Booster---Andiamo---Infanti---Cinza---Dorel-0.jpg?v=638932152473070000",
-  productUrl: "https://www.rihappy.com.br/booster-andiamo-infanti-cinza-dorel/p"
+  productUrl: "https://www.rihappy.com.br/booster-andiamo-infanti-cinza-dorel/p",
+  popularity: 1049
  },
  {
   sku: "rihappy-1003067242",
@@ -10503,7 +11552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis action figure mini action figure",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113125/EXCLUSIVO--Chaveiro-Miniatura-Colecionavel---Bone-Shaker---Hot-Wheels-0.jpg?v=638947522068030000",
-  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-bone-shaker-hot-wheels/p"
+  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-bone-shaker-hot-wheels/p",
+  popularity: 1050
  },
  {
   sku: "rihappy-1003065469",
@@ -10513,7 +11563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria artigos para festa decoracao de natal",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112132/Miniatura---Bola-de-Natal---Mickey---Disney-0.jpg?v=638947448841730000",
-  productUrl: "https://www.rihappy.com.br/miniatura-bola-de-natal-mickey-disney/p"
+  productUrl: "https://www.rihappy.com.br/miniatura-bola-de-natal-mickey-disney/p",
+  popularity: 1051
  },
  {
   sku: "rihappy-1003065110",
@@ -10523,7 +11574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis action figure mini action figure",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113115/EXCLUSIVO--Chaveiro-Miniatura-Colecionavel---Telephone---Fisher-Price-0.jpg?v=638947518485470000",
-  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-telephone-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-telephone-fisher-price/p",
+  popularity: 1052
  },
  {
   sku: "rihappy-1003065107",
@@ -10533,7 +11585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis action figure mini action figure",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112717/EXCLUSIVO--Chaveiro-Miniatura-Colecionavel---Cutie---Twist---Barbie-0.jpg?v=638947489537670000",
-  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-cutie-twist-barbie/p"
+  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-cutie-twist-barbie/p",
+  popularity: 1053
  },
  {
   sku: "rihappy-1003065106",
@@ -10543,7 +11596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis action figure mini action figure",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112721/EXCLUSIVO--Chaveiro-Miniatura-Colecionavel---Cutie---Fire-Fighter---Barbie-0.jpg?v=638947490337970000",
-  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-cutie-fire-fighter-barbie/p"
+  productUrl: "https://www.rihappy.com.br/chaveiro-miniatura-colecionavel-cutie-fire-fighter-barbie/p",
+  popularity: 1054
  },
  {
   sku: "rihappy-1003061087",
@@ -10553,7 +11607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes skates skatenet",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8600231/Meu-Primeiro-Skatenet---Rosa---Bandeirante-0.jpg?v=638896527890700000",
-  productUrl: "https://www.rihappy.com.br/meu-primeiro-skatenet-rosa-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/meu-primeiro-skatenet-rosa-bandeirante/p",
+  popularity: 1055
  },
  {
   sku: "rihappy-1003057846",
@@ -10563,7 +11618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9626607/Pelucia---Dino-Amiguinho---Rosa---Minimi-0.jpg?v=639040098043530000",
-  productUrl: "https://www.rihappy.com.br/pelucia-dino-amiguinho-rosa-minimi/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-dino-amiguinho-rosa-minimi/p",
+  popularity: 1056
  },
  {
   sku: "rihappy-1003057433",
@@ -10573,7 +11629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9204645/Sylvanian-Families---Colecao-Bebe-Surpresa---Construtores----Epoch-0.jpg?v=638953808904730000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-colecao-bebe-surpresa-construtores-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-colecao-bebe-surpresa-construtores-epoch/p",
+  popularity: 1057
  },
  {
   sku: "rihappy-1003056732",
@@ -10583,7 +11640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos playset de bonecos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8509091/Conjunto---Disney---Princesas---Carrinho-De-Animais---Modelos-Sortidos---Mattel-0.jpg?v=638882869356700000",
-  productUrl: "https://www.rihappy.com.br/conjunto-disney-princesas-carrinho-de-animais-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-disney-princesas-carrinho-de-animais-modelos-sortidos-mattel/p",
+  popularity: 1058
  },
  {
   sku: "rihappy-1003055485",
@@ -10593,7 +11651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos educativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8452435/Brinquedo-Interativoo---Fisher-Price---Telefone-Falante-Vermelho--Unissex-0.jpg?v=638871603138130000",
-  productUrl: "https://www.rihappy.com.br/brinquedo-interativoo-fisherprice-telefone-falante-vermelho-unissex/p"
+  productUrl: "https://www.rihappy.com.br/brinquedo-interativoo-fisherprice-telefone-falante-vermelho-unissex/p",
+  popularity: 1059
  },
  {
   sku: "rihappy-1003055468",
@@ -10603,7 +11662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas dobble",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9527788/Jogo-De-Cartas---Dobble---Dinossauros---Galapagos-0.jpg?v=639011704819430000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-dinossauros-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-dobble-dinossauros-galapagos/p",
+  popularity: 1060
  },
  {
   sku: "rihappy-1003055464",
@@ -10613,7 +11673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8831379/Jogo-De-Tabuleiro---Brick-Like-This---Galapagos--0.jpg?v=638919995318200000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-brick-like-this-galapagos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-brick-like-this-galapagos/p",
+  popularity: 1061
  },
  {
   sku: "rihappy-1003054664",
@@ -10623,7 +11684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta profissoes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8998678/Fashion-Designer-Kit---Modelos-Sortidos---Fun-0.jpg?v=638936500131370000",
-  productUrl: "https://www.rihappy.com.br/fashion-designer-kit/p"
+  productUrl: "https://www.rihappy.com.br/fashion-designer-kit/p",
+  popularity: 1062
  },
  {
   sku: "rihappy-1003055432",
@@ -10633,7 +11695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos mini game",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8709059/Minigame-Portatil---Disney---Princesas---Candide-0.jpg?v=638907210195030000",
-  productUrl: "https://www.rihappy.com.br/minigame-portatil-disney-princesas-candide/p"
+  productUrl: "https://www.rihappy.com.br/minigame-portatil-disney-princesas-candide/p",
+  popularity: 1063
  },
  {
   sku: "rihappy-1003055290",
@@ -10643,7 +11706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby mordedores",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8445703/Mordedor---Disney-Baby---Chaveiro-Fusca-Musical---Yes-Toys-0.jpg?v=638870673693100000",
-  productUrl: "https://www.rihappy.com.br/mordedor-disney-baby-chaveiro-fusca-musical-yes-toys/p"
+  productUrl: "https://www.rihappy.com.br/mordedor-disney-baby-chaveiro-fusca-musical-yes-toys/p",
+  popularity: 1064
  },
  {
   sku: "rihappy-1003055271",
@@ -10653,7 +11717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes skates skatenet",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252172/Skatenet---Princesas---Bandeirante-0.jpg?v=638960405315670000",
-  productUrl: "https://www.rihappy.com.br/skatenet-princesas-bandeirante/p"
+  productUrl: "https://www.rihappy.com.br/skatenet-princesas-bandeirante/p",
+  popularity: 1065
  },
  {
   sku: "rihappy-1003055244",
@@ -10663,7 +11728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9527634/Jogo-De-Cartas---Tcg-Cards-Game----Formula-1-2025---Turbo-Attax---Mega-Multipack---Topps-0.jpg?v=639011678084330000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-tcg-cards-game-formula-1-2025-turbo-attax-mega-multipack-topps/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-tcg-cards-game-formula-1-2025-turbo-attax-mega-multipack-topps/p",
+  popularity: 1066
  },
  {
   sku: "rihappy-1003055195",
@@ -10673,7 +11739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9094667/Quebra-Cabeca---Monet--Mulher-Com-Sombrinha---1000-Pecas---Toyster-0.jpg?v=638945134276470000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-monet-mulher-com-sombrinha-1000-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-monet-mulher-com-sombrinha-1000-pecas-toyster/p",
+  popularity: 1067
  },
  {
   sku: "rihappy-1003055125",
@@ -10683,7 +11750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 100 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9365493/Quebra-Cabeca---Metalizado---Capivara---100-Pecas---Toyster-0.jpg?v=638985451118230000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-metalizado-capivara-100-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-metalizado-capivara-100-pecas-toyster/p",
+  popularity: 1068
  },
  {
   sku: "rihappy-1003055115",
@@ -10693,7 +11761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9050399/Quebra-Cabeca---IA---As-7-Maravilhas-Do-Mundo-Antigo---1000-Pecas---Toyster-0.jpg?v=638941539376630000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-ia-as-7-maravilhas-do-mundo-antigo-1000-pecas-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-ia-as-7-maravilhas-do-mundo-antigo-1000-pecas-toyster/p",
+  popularity: 1069
  },
  {
   sku: "rihappy-1003054887",
@@ -10703,7 +11772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria album de figurinhas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8438761/Conjunto-Album-E-Figurinhas---Formula-1---2024---Topps-0.jpg?v=638869024146300000",
-  productUrl: "https://www.rihappy.com.br/conjunto-album-e-figurinhas-formula-1-2024-topps/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-album-e-figurinhas-formula-1-2024-topps/p",
+  popularity: 1070
  },
  {
   sku: "rihappy-1003054451",
@@ -10713,7 +11783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9041766/Pelucia---Rainbocorns-Puppycorn---Sparkle-Surprise---Modelos-Sortidos---Fun--0.jpg?v=638939159595070000",
-  productUrl: "https://www.rihappy.com.br/rainbocorns-puppycorn-sparkle-surprise-mostarda/p"
+  productUrl: "https://www.rihappy.com.br/rainbocorns-puppycorn-sparkle-surprise-mostarda/p",
+  popularity: 1071
  },
  {
   sku: "rihappy-1003052392",
@@ -10723,7 +11794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9569685/Pista-De-Brinquedo---Hot-Whells---City---Mega-Garagem---Mattel-0.jpg?v=639023753155070000",
-  productUrl: "https://www.rihappy.com.br/pista-de-brinquedo-hot-whells-city-mega-garagem-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pista-de-brinquedo-hot-whells-city-mega-garagem-mattel/p",
+  popularity: 1072
  },
  {
   sku: "rihappy-1003051473",
@@ -10733,7 +11805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8709051/Pelucia---Harry-Potter---Hermione---33-Cm---Candide-0.jpg?v=638907205358330000",
-  productUrl: "https://www.rihappy.com.br/pelucia-harry-potter-hermione-33-cm-candide/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-harry-potter-hermione-33-cm-candide/p",
+  popularity: 1073
  },
  {
   sku: "rihappy-1003051454",
@@ -10743,7 +11816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes bicicletas bicicleta aro 14",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9252175/EXCLUSIVO---Bicicleta---Disney---Marvel----Hulk---Aro-14---Bandeirante-0.jpg?v=638960405673900000",
-  productUrl: "https://www.rihappy.com.br/bicicleta-aro-14-bandeirante-hulk/p"
+  productUrl: "https://www.rihappy.com.br/bicicleta-aro-14-bandeirante-hulk/p",
+  popularity: 1074
  },
  {
   sku: "rihappy-1003051280",
@@ -10753,7 +11827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8391219/Pelucia---Garfield---Classsica---Multikids-0.jpg?v=638864584914430000",
-  productUrl: "https://www.rihappy.com.br/pelucia-garfield-classsica-multikids/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-garfield-classsica-multikids/p",
+  popularity: 1075
  },
  {
   sku: "rihappy-1003051274",
@@ -10763,7 +11838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos de acao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8391116/Boneco-De-Acao---Smashers---Casa-Do-Horror-Mao---Modelos-Sortidos---Fun-0.jpg?v=638864577112930000",
-  productUrl: "https://www.rihappy.com.br/boneco-de-acao-smashers-casa-do-horror-mao-modelos-sortidos-fun/p"
+  productUrl: "https://www.rihappy.com.br/boneco-de-acao-smashers-casa-do-horror-mao-modelos-sortidos-fun/p",
+  popularity: 1076
  },
  {
   sku: "rihappy-1003051083",
@@ -10773,7 +11849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113814/LEGO---Super-Mario---72045-Mario-Kart---Shy-Guy-e-Asa-P-0.jpg?v=638947656627730000",
-  productUrl: "https://www.rihappy.com.br/lego-super-mario-72045/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-mario-72045/p",
+  popularity: 1077
  },
  {
   sku: "rihappy-1003051070",
@@ -10783,7 +11860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8390991/Conjunto-De-Acessorios---Fabrica-De-Pulseiras-Da-Amizade---Estrela-0.jpg?v=638864558666900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-fabrica-de-pulseiras-da-amizade-estrela/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-fabrica-de-pulseiras-da-amizade-estrela/p",
+  popularity: 1078
  },
  {
   sku: "rihappy-1003050995",
@@ -10793,7 +11871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8389112/Carro-De-Corrida---Hot-Whells---Stunt---4-Canais---Luz-E-Som---Azul-0.jpg?v=638863723178970000",
-  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-stunt-4-canais-luz-e-som-azul/p"
+  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-stunt-4-canais-luz-e-som-azul/p",
+  popularity: 1079
  },
  {
   sku: "rihappy-1003050994",
@@ -10803,7 +11882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo veiculos de controle remoto",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8389081/Carro-De-Corrida---Hot-Whells---Red-Storm---1-24-Rc---4-Canais---Vermelho-0.jpg?v=638863719379100000",
-  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-red-storm-124-rc-4-canais-vermelho/p"
+  productUrl: "https://www.rihappy.com.br/carro-de-corrida-hot-whells-red-storm-124-rc-4-canais-vermelho/p",
+  popularity: 1080
  },
  {
   sku: "rihappy-1003050990",
@@ -10813,7 +11893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo pistas de percursos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8389073/Lancador---Beast-Machines---Destruidor-De-Dinossauro---Fun-0.jpg?v=638863717695200000",
-  productUrl: "https://www.rihappy.com.br/lancador-beast-machines-destruidor-de-dinossauro-fun/p"
+  productUrl: "https://www.rihappy.com.br/lancador-beast-machines-destruidor-de-dinossauro-fun/p",
+  popularity: 1081
  },
  {
   sku: "rihappy-1003050939",
@@ -10823,7 +11904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8386961/Carrinho-Radio-Controle-Com-Pista---Formula-1---Ferrari-SF-24---Maisto--0.jpg?v=638862855265930000",
-  productUrl: "https://www.rihappy.com.br/carrinho-radio-controle-com-pista-formula-1-ferrari-sf24-maisto/p"
+  productUrl: "https://www.rihappy.com.br/carrinho-radio-controle-com-pista-formula-1-ferrari-sf24-maisto/p",
+  popularity: 1082
  },
  {
   sku: "rihappy-1003050534",
@@ -10833,7 +11915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais microfone de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8708962/Microfone-Musical---Patrulha-Canina---Com-Bluetooth---Candide-0.jpg?v=638907191103400000",
-  productUrl: "https://www.rihappy.com.br/microfone-musical-patrulha-canina-com-bluetooth-candide/p"
+  productUrl: "https://www.rihappy.com.br/microfone-musical-patrulha-canina-com-bluetooth-candide/p",
+  popularity: 1083
  },
  {
   sku: "rihappy-1003050523",
@@ -10843,7 +11926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8391293/Robo---Alive---King-Cobra---Candide-0.jpg?v=638864594465930000",
-  productUrl: "https://www.rihappy.com.br/robo-alive-king-cobra-candide/p"
+  productUrl: "https://www.rihappy.com.br/robo-alive-king-cobra-candide/p",
+  popularity: 1084
  },
  {
   sku: "rihappy-1003050521",
@@ -10853,7 +11937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas baralho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113843/Jogo-De-Cartas---Combine-Logo---Grow-0.jpg?v=638947657252700000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-combine-logo-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-combine-logo-grow/p",
+  popularity: 1085
  },
  {
   sku: "rihappy-1003050520",
@@ -10863,7 +11948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas baralho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8920761/Jogo-De-Cartas---Palavras-Rapidas---Grow-0.jpg?v=638930192919300000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-palavras-rapidas-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-palavras-rapidas-grow/p",
+  popularity: 1086
  },
  {
   sku: "rihappy-1003050460",
@@ -10873,7 +11959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta walkie talkie",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8697696/Conjunto---Patrulha-Canina---Walkie-Talkie---Candide-0.jpg?v=638906263032100000",
-  productUrl: "https://www.rihappy.com.br/conjunto-patrulha-canina-walkie-talkie-candide/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-patrulha-canina-walkie-talkie-candide/p",
+  popularity: 1087
  },
  {
   sku: "rihappy-1003050167",
@@ -10883,7 +11970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "moda acessorios de moda relogios",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9202362/Relogio-Digital---Barbie---Shine---Fun-0.jpg?v=638953771512900000",
-  productUrl: "https://www.rihappy.com.br/relogio-digital-barbie-shine-fun/p"
+  productUrl: "https://www.rihappy.com.br/relogio-digital-barbie-shine-fun/p",
+  popularity: 1088
  },
  {
   sku: "rihappy-1003050115",
@@ -10893,7 +11981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo carrinhos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8391002/Pacote-De-Carros---Hot-Whells---Monster-Trucks---Tubaroes-Vs-Dinossauros---Mattel-0.jpg?v=638864564965770000",
-  productUrl: "https://www.rihappy.com.br/pacote-de-carros-hot-whells-monster-trucks-tubaroes-vs-dinossauros-mattel/p"
+  productUrl: "https://www.rihappy.com.br/pacote-de-carros-hot-whells-monster-trucks-tubaroes-vs-dinossauros-mattel/p",
+  popularity: 1089
  },
  {
   sku: "rihappy-1003050062",
@@ -10903,7 +11992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes patinetes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8379724/Patinete---Decorado---Cardoso---Rosa-0.jpg?v=638858655225030000",
-  productUrl: "https://www.rihappy.com.br/patinete-decorado-cardoso-rosa/p"
+  productUrl: "https://www.rihappy.com.br/patinete-decorado-cardoso-rosa/p",
+  popularity: 1090
  },
  {
   sku: "rihappy-1003049947",
@@ -10913,7 +12003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais tambor de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8379487/Meu-Primeiro-Radinho---Mundo-Bita---Fun--0.jpg?v=638858548084230000",
-  productUrl: "https://www.rihappy.com.br/meu-primeiro-radinho-mundo-bita-fun/p"
+  productUrl: "https://www.rihappy.com.br/meu-primeiro-radinho-mundo-bita-fun/p",
+  popularity: 1091
  },
  {
   sku: "rihappy-1003049914",
@@ -10923,7 +12014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes desenho",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9051859/Conjunto-De-Artes---Barbie---Kit-De-Desenho---Elka-0.jpg?v=638941615792200000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-barbie-kit-de-desenho-elka/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-artes-barbie-kit-de-desenho-elka/p",
+  popularity: 1092
  },
  {
   sku: "rihappy-1003049599",
@@ -10933,7 +12025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8379767/Notebook-Infantil---Marvel---Homem-Aranha---Candide-0.jpg?v=638858665584070000",
-  productUrl: "https://www.rihappy.com.br/notebook-infantil-marvel-homemaranha-candide/p"
+  productUrl: "https://www.rihappy.com.br/notebook-infantil-marvel-homemaranha-candide/p",
+  popularity: 1093
  },
  {
   sku: "rihappy-1003049551",
@@ -10943,7 +12036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos eletronicos laptop de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8709058/Notebook-Infantil---Disney---Frozen---Candide-0.jpg?v=638907209617300000",
-  productUrl: "https://www.rihappy.com.br/notebook-infantil-disney-frozen-candide/p"
+  productUrl: "https://www.rihappy.com.br/notebook-infantil-disney-frozen-candide/p",
+  popularity: 1094
  },
  {
   sku: "rihappy-1003049547",
@@ -10953,7 +12047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria bolsas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8450689/Bolsinha---Stitch---Glam-Buddies---Fun-0.jpg?v=638871414338100000",
-  productUrl: "https://www.rihappy.com.br/bolsinha-stitch-glam-buddies-fun/p"
+  productUrl: "https://www.rihappy.com.br/bolsinha-stitch-glam-buddies-fun/p",
+  popularity: 1095
  },
  {
   sku: "rihappy-1003049482",
@@ -10963,7 +12058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8814677/Jogo-de-Acao---Bop-It---Hasbro-0.jpg?v=638918280643870000",
-  productUrl: "https://www.rihappy.com.br/jogo-bop-it-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/jogo-bop-it-hasbro/p",
+  popularity: 1096
  },
  {
   sku: "rihappy-1003049167",
@@ -10973,7 +12069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao jenga",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372812/Jogo-De-Acao---Terremoto---Hot-Wheels---Elka-0.jpg?v=638856938042470000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-acao-terremoto-hot-wheels-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-acao-terremoto-hot-wheels-elka/p",
+  popularity: 1097
  },
  {
   sku: "rihappy-1003049033",
@@ -10983,7 +12080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8600984/Jogo-De-Tabuleiro---Master-Junior---Grow-0.jpg?v=638896589842370000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-master-junior-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-tabuleiro-master-junior-grow/p",
+  popularity: 1098
  },
  {
   sku: "rihappy-1003048931",
@@ -10993,7 +12091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8372806/LEGO---Speed-Champions---Hipercarro-Esportivo-Bugatti-Centodieci---77240-0.jpg?v=638856937612270000",
-  productUrl: "https://www.rihappy.com.br/lego-speed-champions-hipercarro-esportivo-bugatti-centodieci-77240/p"
+  productUrl: "https://www.rihappy.com.br/lego-speed-champions-hipercarro-esportivo-bugatti-centodieci-77240/p",
+  popularity: 1099
  },
  {
   sku: "rihappy-1003048924",
@@ -11003,7 +12102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9052078/LEGO---Super-Heroes-Marvel---Homem-De-Ferro-E-Maquina-De-Guerra-Vs-Drones-Hammer---76320-0.jpg?v=638941638866300000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homem-de-ferro-e-maquina-de-guerra-vs-drones-hammer-76320/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-marvel-homem-de-ferro-e-maquina-de-guerra-vs-drones-hammer-76320/p",
+  popularity: 1100
  },
  {
   sku: "rihappy-1003048551",
@@ -11013,7 +12113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8367367/LEGO---Technic---SUV-Ford-Bronco---42213-0.jpg?v=638854380497300000",
-  productUrl: "https://www.rihappy.com.br/lego-technic-suv-ford-bronco-42213/p"
+  productUrl: "https://www.rihappy.com.br/lego-technic-suv-ford-bronco-42213/p",
+  popularity: 1101
  },
  {
   sku: "rihappy-1003048540",
@@ -11023,7 +12124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8367256/LEGO---Creator---Animais-Selvagens--Tucano-Tropical---31173-0.jpg?v=638854379851430000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-animais-selvagens-tucano-tropical-31173/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-animais-selvagens-tucano-tropical-31173/p",
+  popularity: 1102
  },
  {
   sku: "rihappy-1003048519",
@@ -11033,7 +12135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8774887/Conjunto-De-Acessorios---Peppa-Pig---Escolinha-Abre-Fecha-Da-Peppa---Hasbro-0.jpg?v=638914026407100000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-peppa-pig-escolinha-abrefecha-da-peppa-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-peppa-pig-escolinha-abrefecha-da-peppa-hasbro/p",
+  popularity: 1103
  },
  {
   sku: "rihappy-1003047734",
@@ -11043,7 +12146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas pokemon",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9323699/Jogo-de-Cartas---Lata---Pokemon---Calendario-de-Festas-2025-0.jpg?v=638975324159130000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-lata-pokemon-calendario-de-festas-2025/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-lata-pokemon-calendario-de-festas-2025/p",
+  popularity: 1104
  },
  {
   sku: "rihappy-1003047682",
@@ -11053,7 +12157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais bateria de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8775295/Bateria-Infantil---Baby-Land---Show-Musical-Azul---Cardoso-0.jpg?v=638914107666970000",
-  productUrl: "https://www.rihappy.com.br/bateria-infantil-baby-land-show-musical-azul-cardoso/p"
+  productUrl: "https://www.rihappy.com.br/bateria-infantil-baby-land-show-musical-azul-cardoso/p",
+  popularity: 1105
  },
  {
   sku: "rihappy-1003047644",
@@ -11063,7 +12168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8357920/Conjunto-Massa-De-Modelar---Barbie---Play-Dooh---Fashion-Show----Hasbro-0.jpg?v=638851685342400000",
-  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-barbie-play-dooh-fashion-show-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-massa-de-modelar-barbie-play-dooh-fashion-show-hasbro/p",
+  popularity: 1106
  },
  {
   sku: "rihappy-1003047312",
@@ -11073,7 +12179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8361446/Boneca---Disney---Princesas---Cinderela---Vestido-Com-Luzes---Mattel-0.jpg?v=639117007801900000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-cinderela-vestido-com-luzes-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-princesas-cinderela-vestido-com-luzes-mattel/p",
+  popularity: 1107
  },
  {
   sku: "rihappy-1003047103",
@@ -11083,7 +12190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8429154/Mini-Boneca---Barbie---Mini-Fashionistas-Surpresa---Mattel-0.jpg?v=638866602734900000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-mini-fashionistas-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-barbie-mini-fashionistas-surpresa-mattel/p",
+  popularity: 1108
  },
  {
   sku: "rihappy-1003046397",
@@ -11093,7 +12201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9883750/Boneca---Baby-Alive---Pequenos-Goles---Lala---Hasbro-0.jpg?v=639118775846830000",
-  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-pequenos-goles-lala-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-baby-alive-pequenos-goles-lala-hasbro/p",
+  popularity: 1109
  },
  {
   sku: "rihappy-1003046395",
@@ -11103,7 +12212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9178380/-Caminhao-De-Comida--Little-People---Fisher-Price--0.jpg?v=638951215335570000",
-  productUrl: "https://www.rihappy.com.br/caminhao-de-comida-little-people-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/caminhao-de-comida-little-people-fisher-price/p",
+  popularity: 1110
  },
  {
   sku: "rihappy-1003046394",
@@ -11113,7 +12223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby brinquedos para bebes brinquedos interativos para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9178371/Trator-Medio---Little-People---Fisher-Price--0.jpg?v=638951210965900000",
-  productUrl: "https://www.rihappy.com.br/trator-medio-little-people-fisher-price/p"
+  productUrl: "https://www.rihappy.com.br/trator-medio-little-people-fisher-price/p",
+  popularity: 1111
  },
  {
   sku: "rihappy-1003045920",
@@ -11123,7 +12234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas roupinhas para bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9091540/Playset-E-Mini-Bonecas---Polly-Pocket---Estojo-Pinhata-Gatinho---Mattel-0.jpg?v=638944930688330000",
-  productUrl: "https://www.rihappy.com.br/playset-e-mini-bonecas-polly-pocket-estojo-pinhata-gatinho-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-e-mini-bonecas-polly-pocket-estojo-pinhata-gatinho-mattel/p",
+  popularity: 1112
  },
  {
   sku: "rihappy-1003045916",
@@ -11133,7 +12245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis carrinhos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9859814/Blocos-De-Montar---Mattel---90-Acura-NSX-0.jpg?v=639110836087130000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar-mattel-90-acura-nsx/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar-mattel-90-acura-nsx/p",
+  popularity: 1113
  },
  {
   sku: "rihappy-1003045868",
@@ -11143,7 +12256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas cartas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8346646/Jogo-De-Cartas---Cards-Colecionaveis-UCC-Superstars-2024-25---Value-Box---56-Cartas---Topps-0.jpg?v=638846677925570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-cards-colecionaveis-ucc-superstars-202425-value-box-56-cartas-topps/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-cards-colecionaveis-ucc-superstars-202425-value-box-56-cartas-topps/p",
+  popularity: 1114
  },
  {
   sku: "rihappy-1003044845",
@@ -11153,7 +12267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8341949/LEGO---Minecraft---A-Casa-de-Dinamite-na-Selva---21275-0.jpg?v=638845766780730000",
-  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-casa-de-dinamite-na-selva-21275/p"
+  productUrl: "https://www.rihappy.com.br/lego-minecraft-a-casa-de-dinamite-na-selva-21275/p",
+  popularity: 1115
  },
  {
   sku: "rihappy-1003043743",
@@ -11163,7 +12278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8715950/LEGO---Fortnite---Acampamento-de-Embananado-e-Faisca---77075-0.jpg?v=638907914196530000",
-  productUrl: "https://www.rihappy.com.br/lego-fortnite-acampamento-de-embananado-e-faisca-77075/p"
+  productUrl: "https://www.rihappy.com.br/lego-fortnite-acampamento-de-embananado-e-faisca-77075/p",
+  popularity: 1116
  },
  {
   sku: "rihappy-1003041521",
@@ -11173,7 +12289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza unhas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9650505/Conjunto-De-Acessorios---Unhas-Dos-Sonhos---Fanfun-0.jpg?v=639046891972600000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-unhas-dos-sonhos-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-unhas-dos-sonhos-fanfun/p",
+  popularity: 1117
  },
  {
   sku: "rihappy-1003041520",
@@ -11183,7 +12300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9615684/Conjunto-de-Acessorios---Braceletes-Glamour---Fanfun-0.jpg?v=639038414710900000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-braceletes-glamour-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-acessorios-braceletes-glamour-fanfun/p",
+  popularity: 1118
  },
  {
   sku: "rihappy-1003041504",
@@ -11193,7 +12311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8342146/LEGO---Botanicals---Plantas-Felizes---10349-0.jpg?v=638845774139170000",
-  productUrl: "https://www.rihappy.com.br/lego-botanicals-plantas-felizes-10349/p"
+  productUrl: "https://www.rihappy.com.br/lego-botanicals-plantas-felizes-10349/p",
+  popularity: 1119
  },
  {
   sku: "rihappy-1003040940",
@@ -11203,7 +12322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza bijuterias de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9650818/Conjunto-De-Micangas---Pulseiras-Brilhantes---Modelos-Sortidos---Fanfun-0.jpg?v=639047013048000000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-pulseiras-brilhantes-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-pulseiras-brilhantes-fanfun/p",
+  popularity: 1120
  },
  {
   sku: "rihappy-1003040939",
@@ -11213,7 +12333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos brinquedos de beleza micangas de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9668771/Conjunto-De-Micangas---Joias-Charms---Fanfun-0.jpg?v=639053134450570000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-joias-charms-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-micangas-joias-charms-fanfun/p",
+  popularity: 1121
  },
  {
   sku: "rihappy-1003036953",
@@ -11223,7 +12344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecas colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9619210/Boneca---Disney---Ily---Fashion-Doll---Stitch---Rosa-e-Azul-0.jpg?v=639039287281530000",
-  productUrl: "https://www.rihappy.com.br/boneca-disney-ily-fashion-doll-stitch-rosa-e-azul/p"
+  productUrl: "https://www.rihappy.com.br/boneca-disney-ily-fashion-doll-stitch-rosa-e-azul/p",
+  popularity: 1122
  },
  {
   sku: "rihappy-1003033679",
@@ -11233,7 +12355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias pelucias para bebe",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9721152/Pelucia---Dragao---Encantado---Minimi-0.jpg?v=639064331979170000",
-  productUrl: "https://www.rihappy.com.br/pelucia-dragao-encantado-minimi/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-dragao-encantado-minimi/p",
+  popularity: 1123
  },
  {
   sku: "rihappy-1003026805",
@@ -11243,7 +12366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-agua",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9650889/Lancador-De-Agua---Splash-Storm---Fanfun-0.jpg?v=639047049924500000",
-  productUrl: "https://www.rihappy.com.br/lancador-de-agua-splash-storm-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/lancador-de-agua-splash-storm-fanfun/p",
+  popularity: 1124
  },
  {
   sku: "rihappy-1003026804",
@@ -11253,7 +12377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722772/Pista---Fossil---T-Rex---Fanfun-0.jpg?v=639065263605670000",
-  productUrl: "https://www.rihappy.com.br/pista-fossil-trex-fanfun/p"
+  productUrl: "https://www.rihappy.com.br/pista-fossil-trex-fanfun/p",
+  popularity: 1125
  },
  {
   sku: "rihappy-1003026405",
@@ -11263,7 +12388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8814859/Mini-Boneca---Lol-Surprise---Loves-Hello-Kitty---Friends---Modelos-Sortidos---Mcassab-Toys-0.jpg?v=638918357750000000",
-  productUrl: "https://www.rihappy.com.br/mini-boneca-colecionavel-lol-surprise-loves-hello-kitty--friends-mcassab-toys/p"
+  productUrl: "https://www.rihappy.com.br/mini-boneca-colecionavel-lol-surprise-loves-hello-kitty--friends-mcassab-toys/p",
+  popularity: 1126
  },
  {
   sku: "rihappy-1003026400",
@@ -11273,7 +12399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9722770/Figura-de-Acao---Dinossauro---Dinomax---Max---New-Toys-0.jpg?v=639065248705170000",
-  productUrl: "https://www.rihappy.com.br/dinossauro-dinomax-max-new-toys/p"
+  productUrl: "https://www.rihappy.com.br/dinossauro-dinomax-max-new-toys/p",
+  popularity: 1127
  },
  {
   sku: "rihappy-1003026394",
@@ -11283,7 +12410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de cartas uno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8283875/Jogo-De-Cartas---Uno-Pacotes-Complementares---16-Cartas---Mattel---Modelos-Unitarios-Sortidos-0.jpg?v=638835363690030000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-pacotes-complementares-16-cartas-mattel-modelos-unitarios-sortidos/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-uno-pacotes-complementares-16-cartas-mattel-modelos-unitarios-sortidos/p",
+  popularity: 1128
  },
  {
   sku: "rihappy-1003025503",
@@ -11293,7 +12421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8280558/Boneca---Barbie---Os-Misterios-Da-Barbie---Estacao-De-Algodao---Mattel-0.jpg?v=638835154491100000",
-  productUrl: "https://www.rihappy.com.br/boneca-barbie-os-misterios-da-barbie-estacao-de-algodao-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-barbie-os-misterios-da-barbie-estacao-de-algodao-mattel/p",
+  popularity: 1129
  },
  {
   sku: "rihappy-1003017146",
@@ -11303,7 +12432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas casa de boneca playset de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8268683/Playset---Barbie---Casa-De-Bonecas-Transformavel-Da-Chelsea---Mattel-0.jpg?v=638832635951470000",
-  productUrl: "https://www.rihappy.com.br/playset-barbie-casa-de-bonecas-transformavel-da-chelsea-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-barbie-casa-de-bonecas-transformavel-da-chelsea-mattel/p",
+  popularity: 1130
  },
  {
   sku: "rihappy-1003015845",
@@ -11313,7 +12443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8241973/Boneca-Articulada---Disney---Princesas---Mini-My-Size---Ariel---Novabrink-0.jpg?v=638829283888530000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-ariel-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-ariel-novabrink/p",
+  popularity: 1131
  },
  {
   sku: "rihappy-1003015843",
@@ -11323,7 +12454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8241963/Boneca-Articulada---Disney---Princesas---Mini-My-Size---Branca-De-Neve---Novabrink-0.jpg?v=638829283230900000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-branca-de-neve-novabrink/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-disney-princesas-mini-my-size-branca-de-neve-novabrink/p",
+  popularity: 1132
  },
  {
   sku: "rihappy-1003015534",
@@ -11333,7 +12465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8268450/Conjunto-De-Pinturas---Disney---Stitch---Nig-0.jpg?v=638832556357500000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-disney-stitch-nig/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-pinturas-disney-stitch-nig/p",
+  popularity: 1133
  },
  {
   sku: "rihappy-1003010377",
@@ -11343,7 +12476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8205306/Jogo-de-Cartas---Entre-Linhas-Superintressante---De-02-a-06-Jogadores---Papergames-0.jpg?v=638817914998570000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-entre-linhas-superintressante-de-02-a-06-jogadores-papergames/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-entre-linhas-superintressante-de-02-a-06-jogadores-papergames/p",
+  popularity: 1134
  },
  {
   sku: "rihappy-1003010375",
@@ -11353,7 +12487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de tabuleiro moderno",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8205292/Jogo-de-Cartas---Trio---De-03-a-06-Jogadores---Papergames-0.jpg?v=638817914241170000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-trio-de-03-a-06-jogadores-papergames/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-trio-de-03-a-06-jogadores-papergames/p",
+  popularity: 1135
  },
  {
   sku: "rihappy-1003010362",
@@ -11363,7 +12498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8205329/Jogo-de-Cartas---Saboteur---De-03-a-10-Jogadores---Papergames-0.jpg?v=638817915532900000",
-  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-saboteur-de-03-a-10-jogadores-papergames/p"
+  productUrl: "https://www.rihappy.com.br/jogo-de-cartas-saboteur-de-03-a-10-jogadores-papergames/p",
+  popularity: 1136
  },
  {
   sku: "rihappy-1003009832",
@@ -11373,7 +12509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8193850/Boneca-Articulada---Barbie---Wicked---Hero-School---Mattel-0.jpg?v=638814415275800000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-wicked-hero-school-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-wicked-hero-school-mattel/p",
+  popularity: 1137
  },
  {
   sku: "rihappy-1003008502",
@@ -11383,7 +12520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8517027/Conjunto-de-Figuras---Disney---Toy-Story-30-Aniversario---Storytellers---Mattel-0.jpg?v=638884435595200000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-disney-toy-story-30-aniversario-storytellers-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-figuras-disney-toy-story-30-aniversario-storytellers-mattel/p",
+  popularity: 1138
  },
  {
   sku: "rihappy-1003007243",
@@ -11393,7 +12531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas acima de 1000 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9115660/Quebra-cabeca---1500-pecas---Walt-Disney---Animation-Studios---Toyster-0.jpg?v=638947826419830000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-walt-disney-animation-studios-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-1500-pecas-walt-disney-animation-studios-toyster/p",
+  popularity: 1139
  },
  {
   sku: "rihappy-1003007225",
@@ -11403,7 +12542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores nerf",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8184726/Lancador---Double-Impact---Nerf-N-Series---12-Dardos---N1-Oficiais---Hasbro-0.jpg?v=638810093109970000",
-  productUrl: "https://www.rihappy.com.br/lancador-double-impact-nerf-n-series-12-dardos-n1-oficiais-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancador-double-impact-nerf-n-series-12-dardos-n1-oficiais-hasbro/p",
+  popularity: 1140
  },
  {
   sku: "rihappy-1003006406",
@@ -11413,7 +12553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas ate 500 pecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9750100/Quebra-cabeca-500-pecas-nano---Floricultura---Toyster-0.jpg?v=639075515860430000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-500-pecas-nano-floricultura-toyster/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-500-pecas-nano-floricultura-toyster/p",
+  popularity: 1141
  },
  {
   sku: "rihappy-1003005310",
@@ -11423,7 +12564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de tabuleiro jogos de percurso",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8782389/Jogo---Disney---Lilo---Stitch---Em-Fuga---Toyster-0.jpg?v=638914858511770000",
-  productUrl: "https://www.rihappy.com.br/jogo-lilostitch-em-fuga-toyster/p"
+  productUrl: "https://www.rihappy.com.br/jogo-lilostitch-em-fuga-toyster/p",
+  popularity: 1142
  },
  {
   sku: "rihappy-1003005226",
@@ -11433,7 +12575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9454792/Pelucia---Gabby-S-Dollhouse---Filme---Pandy-Paws-Falante---Sunny-0.jpg?v=638991991542330000",
-  productUrl: "https://www.rihappy.com.br/pelucia-pandy-paws-falante-gabby-s-dollhouse-filme-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-pandy-paws-falante-gabby-s-dollhouse-filme-sunny/p",
+  popularity: 1143
  },
  {
   sku: "rihappy-1003002554",
@@ -11443,7 +12586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "beleza e perfumaria maquiagem kits de maquiagem",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8145716/Maquiagem-Infantil---Paleta-Love---Barbie---Multikids-0.jpg?v=638798200015330000",
-  productUrl: "https://www.rihappy.com.br/maquiagem-infantil-paleta-love-barbie-multikids/p"
+  productUrl: "https://www.rihappy.com.br/maquiagem-infantil-paleta-love-barbie-multikids/p",
+  popularity: 1144
  },
  {
   sku: "rihappy-1003000592",
@@ -11453,7 +12597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "beleza e perfumaria maquiagem kits de maquiagem",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8136582/Conjunto-de-Maquiagem---Bolsa---Barbie---Rosa---Multikids-0.jpg?v=638796453704630000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-maquiagem-bolsa-barbie-rosa-multikids/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-maquiagem-bolsa-barbie-rosa-multikids/p",
+  popularity: 1145
  },
  {
   sku: "rihappy-1002997934",
@@ -11463,7 +12608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8108049/Baby-Alive-Sweet-Snacks-Harper-Hugs---Hasbro-0.jpg?v=638791077410830000",
-  productUrl: "https://www.rihappy.com.br/baby-alive-sweet-snacks-harper-hugs-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/baby-alive-sweet-snacks-harper-hugs-hasbro/p",
+  popularity: 1146
  },
  {
   sku: "rihappy-1002997925",
@@ -11473,7 +12619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas mini bonecas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9115402/Mini-Bonecos-Colecionaveis---Camera-Surpresa---Doorables---Sunny--0.jpg?v=638947818010430000",
-  productUrl: "https://www.rihappy.com.br/mini-bonecos-colecionaveis-camera-surpresa-doorables-sunny/p"
+  productUrl: "https://www.rihappy.com.br/mini-bonecos-colecionaveis-camera-surpresa-doorables-sunny/p",
+  popularity: 1147
  },
  {
   sku: "rihappy-1002996214",
@@ -11483,7 +12630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca com acessorio",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8078675/Boneca-Com-Acessorios---Baby-Alive---Sweet-Snacks-Katie-Kat---Hasbro-0.jpg?v=638787638621030000",
-  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-sweet-snacks-katie-kat-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/boneca-com-acessorios-baby-alive-sweet-snacks-katie-kat-hasbro/p",
+  popularity: 1148
  },
  {
   sku: "rihappy-1002995810",
@@ -11493,7 +12641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos dinossauros",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8078533/Figura-Articulada---Jurassic-World---T-Rex---Mimo-0.jpg?v=638787621401330000",
-  productUrl: "https://www.rihappy.com.br/figura-articulada-jurassic-world-trex-mimo/p"
+  productUrl: "https://www.rihappy.com.br/figura-articulada-jurassic-world-trex-mimo/p",
+  popularity: 1149
  },
  {
   sku: "rihappy-1002995065",
@@ -11503,7 +12652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9052736/Pelucia---Disney---Stitch---Attacks-Snacks---Pipoca---Fun-0.jpg?v=638941675865000000",
-  productUrl: "https://www.rihappy.com.br/pelucia-disney-stitch-attacks-snacks-pipoca-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-disney-stitch-attacks-snacks-pipoca-fun/p",
+  popularity: 1150
  },
  {
   sku: "rihappy-1002995059",
@@ -11513,7 +12663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8049678/Pelucia---Rainbocorns-Eggzania---Series-1---Pequeno---Fun-0.jpg?v=638785288073900000",
-  productUrl: "https://www.rihappy.com.br/pelucia-rainbocorns-eggzania-series-1-pequeno-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-rainbocorns-eggzania-series-1-pequeno-fun/p",
+  popularity: 1151
  },
  {
   sku: "rihappy-1002995006",
@@ -11523,7 +12674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8365930/Mini-Pelucia---Surpresa---Para-Pintar---Airbrush---Modelos-Sortidos---Fun-0.jpg?v=638854219124770000",
-  productUrl: "https://www.rihappy.com.br/mini-pelucia-surpresa-para-pintar-airbrush-lilas-fun/p"
+  productUrl: "https://www.rihappy.com.br/mini-pelucia-surpresa-para-pintar-airbrush-lilas-fun/p",
+  popularity: 1152
  },
  {
   sku: "rihappy-1002994989",
@@ -11533,7 +12685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos articulados",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8049669/Figura-Interativa---Little-Live-Pets---Porquinho---Rosa---Fun-0.jpg?v=638785287464500000",
-  productUrl: "https://www.rihappy.com.br/figura-interativa-little-live-pets-porquinho-rosa-fun/p"
+  productUrl: "https://www.rihappy.com.br/figura-interativa-little-live-pets-porquinho-rosa-fun/p",
+  popularity: 1153
  },
  {
   sku: "rihappy-1002994883",
@@ -11543,7 +12696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias animais de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9112711/Pelucia---Little-Live-Pets-Cozy-Dozy---Marrom---Fun-0.jpg?v=638947489055730000",
-  productUrl: "https://www.rihappy.com.br/pelucia-little-live-pets-cozy-dozy-marrom-fun/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-little-live-pets-cozy-dozy-marrom-fun/p",
+  popularity: 1154
  },
  {
   sku: "rihappy-1002994202",
@@ -11553,7 +12707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas acessorios para bonecas carrinho de boneca",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7971666/Acessorio-para-Boneca---Baby-Alive---Bebe-Conforto---Elka-0.jpg?v=638780695507200000",
-  productUrl: "https://www.rihappy.com.br/acessorio-para-boneca-baby-alive-bebe-conforto-elka/p"
+  productUrl: "https://www.rihappy.com.br/acessorio-para-boneca-baby-alive-bebe-conforto-elka/p",
+  popularity: 1155
  },
  {
   sku: "rihappy-1002993390",
@@ -11563,7 +12718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar blocos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7961639/Blocos-de-Montar---Disney---Van-do-Mickey---Elka-0.jpg?v=638780041621170000",
-  productUrl: "https://www.rihappy.com.br/blocos-de-montar-disney-van-do-mickey-elka/p"
+  productUrl: "https://www.rihappy.com.br/blocos-de-montar-disney-van-do-mickey-elka/p",
+  popularity: 1156
  },
  {
   sku: "rihappy-1002992957",
@@ -11573,7 +12729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos instrumentos musicais teclados de brinquedo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7985600/Teclado-Musical---Disney-Princesas---Rosa---Toyng-0.jpg?v=638781572096170000",
-  productUrl: "https://www.rihappy.com.br/teclado-musical-disney-princesas-rosa-toyng/p"
+  productUrl: "https://www.rihappy.com.br/teclado-musical-disney-princesas-rosa-toyng/p",
+  popularity: 1157
  },
  {
   sku: "rihappy-1002992145",
@@ -11583,7 +12740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos quebra-cabecas quebra-cabecas infantis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7872668/Quebra-Cabeca-Gigante---Bluey---48-Pecas---Elka-0.jpg?v=638775629396530000",
-  productUrl: "https://www.rihappy.com.br/quebracabeca-gigante-bluey-48-pecas-elka/p"
+  productUrl: "https://www.rihappy.com.br/quebracabeca-gigante-bluey-48-pecas-elka/p",
+  popularity: 1158
  },
  {
   sku: "rihappy-1002991550",
@@ -11593,7 +12751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos educativos jogos para alfabetizacao",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056719/Jogo-Educativo---Pensando-em-Ingles---Grow-0.jpg?v=638942334797030000",
-  productUrl: "https://www.rihappy.com.br/jogo-educativo-pensando-em-ingles-grow/p"
+  productUrl: "https://www.rihappy.com.br/jogo-educativo-pensando-em-ingles-grow/p",
+  popularity: 1159
  },
  {
   sku: "rihappy-1002985917",
@@ -11603,7 +12762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos classicos bingo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7841061/Jogo-Classico---Bingo---Plastico---Preto---Elka-0.jpg?v=638773870822730000",
-  productUrl: "https://www.rihappy.com.br/jogo-classico-bingo-plastico-preto-elka/p"
+  productUrl: "https://www.rihappy.com.br/jogo-classico-bingo-plastico-preto-elka/p",
+  popularity: 1160
  },
  {
   sku: "rihappy-1002985916",
@@ -11613,7 +12773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes massa de modelar",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7841043/Conjunto-De-Massa-De-Modelar-E-Acessorios---Disney---Minnie---Doceria---Cotiplas-0.jpg?v=638773870034530000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-e-acessorios-disney-minnie-doceria-cotiplas/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-massa-de-modelar-e-acessorios-disney-minnie-doceria-cotiplas/p",
+  popularity: 1161
  },
  {
   sku: "rihappy-1002984299",
@@ -11623,7 +12784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis montagem e modelismo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7702292/Mini-Figura-Surpresa---Mini-Brands---Comida-Retro---Candide-0.jpg?v=638768614562500000",
-  productUrl: "https://www.rihappy.com.br/mini-figura-surpresa-mini-brands-comida-retro-candide/p"
+  productUrl: "https://www.rihappy.com.br/mini-figura-surpresa-mini-brands-comida-retro-candide/p",
+  popularity: 1162
  },
  {
   sku: "rihappy-1002984298",
@@ -11633,7 +12795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis montagem e modelismo",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7702289/Mini-Figura-Surpresa---Mini-Brands---Kawaii---Candide-0.jpg?v=638768614478170000",
-  productUrl: "https://www.rihappy.com.br/mini-figura-surpresa-mini-brands-kawaii-candide/p"
+  productUrl: "https://www.rihappy.com.br/mini-figura-surpresa-mini-brands-kawaii-candide/p",
+  popularity: 1163
  },
  {
   sku: "rihappy-1002975808",
@@ -11643,7 +12806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby cadeiras para bebes booster",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7534464/Assento-Booster-Stage---Infanti---Preto-CX-4---De-15-kg-a-36-kg---Dorel-0.jpg?v=638761081991170000",
-  productUrl: "https://www.rihappy.com.br/assento-booster-stage-infanti-preto-cx-4-de-15-kg-a-36-kg-dorel/p"
+  productUrl: "https://www.rihappy.com.br/assento-booster-stage-infanti-preto-cx-4-de-15-kg-a-36-kg-dorel/p",
+  popularity: 1164
  },
  {
   sku: "rihappy-1002975807",
@@ -11653,7 +12817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "baby cadeiras para bebes booster",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7534459/Assento-Booster-Stage---Infanti---Cinza-Eclipse-CX-4---De-15-kg-a-36-kg---Dorel-0.jpg?v=638761081665970000",
-  productUrl: "https://www.rihappy.com.br/assento-booster-stage-infanti-cinza-eclipse-cx-4-de-15-kg-a-36-kg-dorel/p"
+  productUrl: "https://www.rihappy.com.br/assento-booster-stage-infanti-cinza-eclipse-cx-4-de-15-kg-a-36-kg-dorel/p",
+  popularity: 1165
  },
  {
   sku: "rihappy-1002974657",
@@ -11663,7 +12828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7530982/Sylvanian-Families---Conj-Amigos-Contos-Fadas-Fantasticos---Epoch-0.jpg?v=638760826568400000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-conj-amigos-contos-fadas-fantasticos-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-conj-amigos-contos-fadas-fantasticos-epoch/p",
+  popularity: 1166
  },
  {
   sku: "rihappy-1002974640",
@@ -11673,7 +12839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7523659/Sylvanian-Families---Navio-Flutuante---Fantasia-das-Flores---Epoch-0.jpg?v=638759960401830000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-navio-flutuante-fantasia-das-flores-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-navio-flutuante-fantasia-das-flores-epoch/p",
+  popularity: 1167
  },
  {
   sku: "rihappy-1002973210",
@@ -11683,7 +12850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7531193/Sylvanian-Families---Hora-do-Banho-Dos-Irmaos-Ensaboados---Epoch-0.jpg?v=638760828855070000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-hora-do-banho-dos-irmaos-ensaboados-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-hora-do-banho-dos-irmaos-ensaboados-epoch/p",
+  popularity: 1168
  },
  {
   sku: "rihappy-1002973209",
@@ -11693,7 +12861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "colecionaveis bonecos colecionaveis",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7531175/Sylvanian-Families---Irmas-Lontras-Marinhas---Conj-Snorkel-Splash---Epoch-0.jpg?v=638760828665200000",
-  productUrl: "https://www.rihappy.com.br/sylvanian-families-irmas-lontras-marinhas-conj-snorkel-splash-epoch/p"
+  productUrl: "https://www.rihappy.com.br/sylvanian-families-irmas-lontras-marinhas-conj-snorkel-splash-epoch/p",
+  popularity: 1169
  },
  {
   sku: "rihappy-1002973003",
@@ -11703,7 +12872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias personagens de pelucia",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8162625/Pelucia-Interativa---Disney---Stitch-Wow---Com-Sons---Sunny-0.jpg?v=638803200830800000",
-  productUrl: "https://www.rihappy.com.br/pelucia-interativa-disney-stitch-wow-com-sons-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-interativa-disney-stitch-wow-com-sons-sunny/p",
+  popularity: 1170
  },
  {
   sku: "rihappy-1002969459",
@@ -11713,7 +12883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos pelucias squishmallows",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8351052/Pelucia---Stitch---Squishmallows---Disney---Sortida---Sunny-0.jpg?v=638848145139000000",
-  productUrl: "https://www.rihappy.com.br/pelucia-stitch-squishmallows-disney-stitch-ferias-sunny/p"
+  productUrl: "https://www.rihappy.com.br/pelucia-stitch-squishmallows-disney-stitch-ferias-sunny/p",
+  popularity: 1171
  },
  {
   sku: "rihappy-1002969236",
@@ -11723,7 +12894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos lancadores lanca-dardos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7442829/Lancamento-de-Dardos---Nerf-N-Series-Topbreaker-4-Dardos-Oficiais-Nerf-N1---Hasbro-0.jpg?v=638751434673300000",
-  productUrl: "https://www.rihappy.com.br/lancamento-de-dardos-nerf-n-series-topbreaker-4-dardos-oficiais-nerf-n1-hasbro/p"
+  productUrl: "https://www.rihappy.com.br/lancamento-de-dardos-nerf-n-series-topbreaker-4-dardos-oficiais-nerf-n1-hasbro/p",
+  popularity: 1172
  },
  {
   sku: "rihappy-1002966630",
@@ -11733,7 +12905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "esportes equipamentos de esportes",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7408010/Bola---Vinil---Barbie---Toyng-0.jpg?v=638748166694600000",
-  productUrl: "https://www.rihappy.com.br/bola-vinil-barbie-toyng/p"
+  productUrl: "https://www.rihappy.com.br/bola-vinil-barbie-toyng/p",
+  popularity: 1173
  },
  {
   sku: "rihappy-1002966492",
@@ -11743,7 +12916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "jogos jogos de acao outros jogos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7407273/-Jogo---Cai-Nao-Cai---Stitch---2-a-4-Jogadores---Estrela-0.jpg?v=638748106536870000",
-  productUrl: "https://www.rihappy.com.br/jogo-cai-nao-cai-stitch-2-a-4-jogadores-estrela/p"
+  productUrl: "https://www.rihappy.com.br/jogo-cai-nao-cai-stitch-2-a-4-jogadores-estrela/p",
+  popularity: 1174
  },
  {
   sku: "rihappy-1002964990",
@@ -11753,7 +12927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecos bonecos miniaturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9056848/Conjunto-de-Mini-Bonecos---Little-People---Harry-Potter--Enigma-do-Principe---Mattel-0.jpg?v=638942355040670000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-mini-bonecos-little-people-harry-potter-enigma-do-principe-mattel/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-mini-bonecos-little-people-harry-potter-enigma-do-principe-mattel/p",
+  popularity: 1175
  },
  {
   sku: "rihappy-1002964800",
@@ -11763,7 +12938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9113276/Kit---Oculos-com-bone---Barbie---Toyng-0.jpg?v=638947533159270000",
-  productUrl: "https://www.rihappy.com.br/kit-oculos-com-bone-barbie-toyng/p"
+  productUrl: "https://www.rihappy.com.br/kit-oculos-com-bone-barbie-toyng/p",
+  popularity: 1176
  },
  {
   sku: "rihappy-1002962764",
@@ -11773,7 +12949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8469518/Bola-de-Vinil---Hot-Wheels---Toyng-0.jpg?v=638875067210930000",
-  productUrl: "https://www.rihappy.com.br/bola-de-vinil-hot-wheels-toyng/p"
+  productUrl: "https://www.rihappy.com.br/bola-de-vinil-hot-wheels-toyng/p",
+  popularity: 1177
  },
  {
   sku: "rihappy-1002962091",
@@ -11783,7 +12960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "livros e papelaria livros livros de atividades",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8374716/Conjunto-de-Carimbo-e-Caderno---Melissa---Doug---Cachorro---Sunny-0.jpg?v=638857337462600000",
-  productUrl: "https://www.rihappy.com.br/conjunto-de-carimbo-e-caderno-melissa--doug-cachorro-sunny/p"
+  productUrl: "https://www.rihappy.com.br/conjunto-de-carimbo-e-caderno-melissa--doug-cachorro-sunny/p",
+  popularity: 1178
  },
  {
   sku: "rihappy-1002950556",
@@ -11793,7 +12971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7188467/Boneca-Articulada---Barbie---Festa-de-Pets---Modelos-Sortidos---Mattel-0.jpg?v=638723636841400000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-festa-de-pets-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-festa-de-pets-modelos-sortidos-mattel/p",
+  popularity: 1179
  },
  {
   sku: "rihappy-1002948244",
@@ -11803,7 +12982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7181965/Boneca-Articulada---Barbie---Pop-Reveal-Shake---Serie-Animaizinhos-Surpresa---Mattel-0.jpg?v=638748793180770000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-pop-reveal-shake-serie-animaizinhos-surpresa-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-barbie-pop-reveal-shake-serie-animaizinhos-surpresa-mattel/p",
+  popularity: 1180
  },
  {
   sku: "rihappy-1002947090",
@@ -11813,7 +12993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos faz de conta brinquedos magicos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9599906/Varinha---Barbie---Toyng-0.jpg?v=639033832548130000",
-  productUrl: "https://www.rihappy.com.br/varinha-barbie-toyng/p"
+  productUrl: "https://www.rihappy.com.br/varinha-barbie-toyng/p",
+  popularity: 1181
  },
  {
   sku: "rihappy-1002946485",
@@ -11823,7 +13004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos artes pinturas",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7181718/Balde-de-Atividades-5-em-1---Disney---Stitch---Toyng-0.jpg?v=638721147775930000",
-  productUrl: "https://www.rihappy.com.br/balde-de-atividades-5-em-1-disney-stitch-toyng/p"
+  productUrl: "https://www.rihappy.com.br/balde-de-atividades-5-em-1-disney-stitch-toyng/p",
+  popularity: 1182
  },
  {
   sku: "rihappy-1002944823",
@@ -11833,7 +13015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bonecos e bonecas bonecas boneca articulada",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7160715/Boneca---Monster-High---Novo-Visual---Modelos-Sortidos---Mattel-0.jpg?v=638717880496500000",
-  productUrl: "https://www.rihappy.com.br/boneca-articulada-monster-high-novo-visual-modelos-sortidos-mattel/p"
+  productUrl: "https://www.rihappy.com.br/boneca-articulada-monster-high-novo-visual-modelos-sortidos-mattel/p",
+  popularity: 1183
  },
  {
   sku: "rihappy-1002944807",
@@ -11843,7 +13026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos veiculos de brinquedo playset de veiculos",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9036438/Playset---Disney-Pixar---Carros---Pista-de-Salto---Lanca-e-Ganha---Mattel-0.jpg?v=638938129378570000",
-  productUrl: "https://www.rihappy.com.br/playset-disney-pixar-carros-pista-de-salto-lanca-e-ganha-mattel/p"
+  productUrl: "https://www.rihappy.com.br/playset-disney-pixar-carros-pista-de-salto-lanca-e-ganha-mattel/p",
+  popularity: 1184
  },
  {
   sku: "rihappy-1002941203",
@@ -11853,7 +13037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114844/LEGO---Super-Heroes-DC---Batman-e-Batmovel-vs-Sr-Frio---76301-0.jpg?v=638697006990570000",
-  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batman-e-batmovel-vs-sr-frio-76301/p"
+  productUrl: "https://www.rihappy.com.br/lego-super-heroes-dc-batman-e-batmovel-vs-sr-frio-76301/p",
+  popularity: 1185
  },
  {
   sku: "rihappy-1002941196",
@@ -11863,7 +13048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114460/LEGO---Ninjago---Girador-Spinjitzu-de-Dragao-da-Sora---71824-0.jpg?v=638696999988830000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-girador-spinjitzu-de-dragao-da-sora-71824/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-girador-spinjitzu-de-dragao-da-sora-71824/p",
+  popularity: 1186
  },
  {
   sku: "rihappy-1002941195",
@@ -11873,7 +13059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114634/LEGO---Ninjago---Dragao-Verde-Florestal-do-Lloyd---71829-0.jpg?v=638697002909530000",
-  productUrl: "https://www.rihappy.com.br/lego-ninjago-dragao-verde-florestal-do-lloyd-71829/p"
+  productUrl: "https://www.rihappy.com.br/lego-ninjago-dragao-verde-florestal-do-lloyd-71829/p",
+  popularity: 1187
  },
  {
   sku: "rihappy-1002941183",
@@ -11883,7 +13070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7113876/LEGO---Disney-Princess---Diversao-na-Ilha-da-Moana---43260-0.jpg?v=638696983027530000",
-  productUrl: "https://www.rihappy.com.br/lego-disney-princess-diversao-na-ilha-da-moana-43260/p"
+  productUrl: "https://www.rihappy.com.br/lego-disney-princess-diversao-na-ilha-da-moana-43260/p",
+  popularity: 1188
  },
  {
   sku: "rihappy-1002941140",
@@ -11893,7 +13081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114567/LEGO---Creator---Coelho-Adoravel---31162-0.jpg?v=638697001973370000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-coelho-adoravel-31162/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-coelho-adoravel-31162/p",
+  popularity: 1189
  },
  {
   sku: "rihappy-1002941139",
@@ -11903,7 +13092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114182/LEGO---Creator---Animais-Selvagens--Familia-de-Pandas---31165-0.jpg?v=638696993225900000",
-  productUrl: "https://www.rihappy.com.br/lego-creator-animais-selvagens-familia-de-pandas-31165/p"
+  productUrl: "https://www.rihappy.com.br/lego-creator-animais-selvagens-familia-de-pandas-31165/p",
+  popularity: 1190
  },
  {
   sku: "rihappy-1002940903",
@@ -11913,7 +13103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/7114364/LEGO---Technic---Bush-Plane---42198-0.jpg?v=638696998951970000",
-  productUrl: "https://www.rihappy.com.br/lego-technic-bush-plane-42198/p"
+  productUrl: "https://www.rihappy.com.br/lego-technic-bush-plane-42198/p",
+  popularity: 1191
  },
  {
   sku: "rihappy-1002940892",
@@ -11923,7 +13114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brinquedos blocos de montar lego",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9049988/LEGO---Botanicals---Mini-Orquidea---10343-0.jpg?v=638941441718000000",
-  productUrl: "https://www.rihappy.com.br/lego-botanicals-mini-orquidea-10343/p"
+  productUrl: "https://www.rihappy.com.br/lego-botanicals-mini-orquidea-10343/p",
+  popularity: 1192
  },
  {
   sku: "rihappy-1002935362",
@@ -11933,7 +13125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/9977173/Pirulito-que-Acende---Flash-POP-Mini---Kidszone-0.jpg?v=639143747677130000",
-  productUrl: "https://www.rihappy.com.br/pirulito-que-acende-flash-pop-mini-kidszone/p"
+  productUrl: "https://www.rihappy.com.br/pirulito-que-acende-flash-pop-mini-kidszone/p",
+  popularity: 1193
  },
  {
   sku: "rihappy-1002931250",
@@ -11943,7 +13136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8469514/Mini-Carrinho-Colecionavel---Pixar---Relampago-McQueen---Azul---Disney-0.jpg?v=638875064954530000",
-  productUrl: "https://www.rihappy.com.br/mini-carrinho-colecionavel-disney-pixar-relampago-mcqueen-azul-new-toys/p"
+  productUrl: "https://www.rihappy.com.br/mini-carrinho-colecionavel-disney-pixar-relampago-mcqueen-azul-new-toys/p",
+  popularity: 1194
  },
  {
   sku: "rihappy-1002930514",
@@ -11953,7 +13147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8070993/Miniatura-Colecionavel---Disney---Divertidamente---Ansiedade-0.jpg?v=638786200904470000",
-  productUrl: "https://www.rihappy.com.br/slp-divertidamente-ansiedade-disney/p"
+  productUrl: "https://www.rihappy.com.br/slp-divertidamente-ansiedade-disney/p",
+  popularity: 1195
  },
  {
   sku: "rihappy-1002930511",
@@ -11963,6 +13158,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "brindes e promocionais check out check out",
   imageUrl: "https://rihappy.vteximg.com.br/arquivos/ids/8469476/Miniatura-Colecionavel---Disney---Divertidamente---Nojinho-0.jpg?v=638875056005370000",
-  productUrl: "https://www.rihappy.com.br/slp-divertidamente-nojinho-disney/p"
+  productUrl: "https://www.rihappy.com.br/slp-divertidamente-nojinho-disney/p",
+  popularity: 1196
  }
 ];

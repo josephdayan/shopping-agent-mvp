@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160226/Vinho-Tinto-Frances-French-Roots-Bordeaux-AOP.png?v=638638972789400000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-french-roots-bordeaux-tinto-aop-garrafa-750ml-5233604/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-french-roots-bordeaux-tinto-aop-garrafa-750ml-5233604/p",
+  popularity: 1
  },
  {
   sku: "divvino-3146",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160297/Vinho-Tinto-Argentino-Benjamin-Cabernet-Sauvignon.png?v=638651386204230000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-benjamin-nieto-cabernet-sauvignon-garrafa-750ml-1864653/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-benjamin-nieto-cabernet-sauvignon-garrafa-750ml-1864653/p",
+  popularity: 2
  },
  {
   sku: "divvino-2269",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166770/Vinho-Branco-Portugues-J-M-F-Primum.png?v=639207500017300000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-j-m-f-primum-4896489/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-j-m-f-primum-4896489/p",
+  popularity: 3
  },
  {
   sku: "divvino-105",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159429/Vinho-Casal-Mendes-Vinho-Verde-D.O.C..png?v=638482794465770000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-casal-mendes-vinho-verde-doc-404993/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-casal-mendes-vinho-verde-doc-404993/p",
+  popularity: 4
  },
  {
   sku: "divvino-3229",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160063/Kit-12-Vinhos-Casal-Mendes.png?v=638594077606100000",
-  productUrl: "https://www.divvino.com.br/kit-12-vinhos-casal-mendes-sku4010253/p"
+  productUrl: "https://www.divvino.com.br/kit-12-vinhos-casal-mendes-sku4010253/p",
+  popularity: 5
  },
  {
   sku: "divvino-3817",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166551/Postales-Malbec.png?v=639155912232500000",
-  productUrl: "https://www.divvino.com.br/vinho-postales-malbec-750ml-5481836/p"
+  productUrl: "https://www.divvino.com.br/vinho-postales-malbec-750ml-5481836/p",
+  popularity: 6
  },
  {
   sku: "divvino-3022",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160210/Vinho-Tinto-Portugues-Monte-Das-Anforas.png?v=638635727839300000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-monte-das-anforas-tinto-garrafa-750ml-5250580/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-monte-das-anforas-tinto-garrafa-750ml-5250580/p",
+  popularity: 7
  },
  {
   sku: "divvino-3002",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166688/Kit-10-Vinhos-Tintos-Best-Sellers.png?v=639173875291200000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-tintos-best-sellers-sku4010184/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-tintos-best-sellers-sku4010184/p",
+  popularity: 8
  },
  {
   sku: "divvino-2082",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158576/sku2240023.png?v=638350660268270000",
-  productUrl: "https://www.divvino.com.br/kit-vinho-casal-mendes-com-6-garrafas-prod2520017/p"
+  productUrl: "https://www.divvino.com.br/kit-vinho-casal-mendes-com-6-garrafas-prod2520017/p",
+  popularity: 9
  },
  {
   sku: "divvino-780",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166769/Espumante-Italiano-Tavino-Brut.png?v=639207499913100000",
-  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-brut-4373404/p"
+  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-brut-4373404/p",
+  popularity: 10
  },
  {
   sku: "divvino-102",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159427/Vinho-Casal-Mendes-Rose.png?v=638482788844700000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-casal-mendes-rose-403733/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-casal-mendes-rose-403733/p",
+  popularity: 11
  },
  {
   sku: "divvino-4259",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166768/Le-Prince-Red-Chilean.jpg?v=639178179146530000",
-  productUrl: "https://www.divvino.com.br/vinho-chile-le-prince-tinto-750ml-5568197/p"
+  productUrl: "https://www.divvino.com.br/vinho-chile-le-prince-tinto-750ml-5568197/p",
+  popularity: 12
  },
  {
   sku: "divvino-3821",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166552/Postales-Cabernet-Sauvignon.png?v=639155912545230000",
-  productUrl: "https://www.divvino.com.br/vinho-postales-cabernet-sauvignon-750ml-5481863/p"
+  productUrl: "https://www.divvino.com.br/vinho-postales-cabernet-sauvignon-750ml-5481863/p",
+  popularity: 13
  },
  {
   sku: "divvino-3602",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161171/Kit-12-Vinhos-Casal-Mendes-Rose.png.png?v=638811876541270000",
-  productUrl: "https://www.divvino.com.br/kit-12-vinhos-casal-mendes-rose-sku4010333/p"
+  productUrl: "https://www.divvino.com.br/kit-12-vinhos-casal-mendes-rose-sku4010333/p",
+  popularity: 14
  },
  {
   sku: "divvino-3553",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165126/Terra-de-Selmes-Xisto.png?v=638963258321830000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-xisto-garrafa-750ml-5391425/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-xisto-garrafa-750ml-5391425/p",
+  popularity: 15
  },
  {
   sku: "divvino-3186",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160214/Vinho-Tinto-Estadunidense-Delicato-1924-Double-Black-Cabernet-Sauvignon.png?v=638635812580530000",
-  productUrl: "https://www.divvino.com.br/vinho-estadunidense-delicato-1924-double-black-cabernet-sauvignon-750ml-4931550/p"
+  productUrl: "https://www.divvino.com.br/vinho-estadunidense-delicato-1924-double-black-cabernet-sauvignon-750ml-4931550/p",
+  popularity: 16
  },
  {
   sku: "divvino-3154",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165242/Vinho-Espanhol-Las-Camelias-Rose.png?v=639192192548600000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-rose-750ml-5178450/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-rose-750ml-5178450/p",
+  popularity: 17
  },
  {
   sku: "divvino-3153",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165243/Vinho-Branco-Espanhol-Las-Camelias.png?v=639192195367200000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-branco-garrafa-750ml-5178431/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-branco-garrafa-750ml-5178431/p",
+  popularity: 18
  },
  {
   sku: "divvino-3152",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165241/Vinho-Tinto-Espanhol-Las-Camelias.png?v=639192195174930000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-tinto-garrafa-750ml-5178370/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-las-camelias-tinto-garrafa-750ml-5178370/p",
+  popularity: 19
  },
  {
   sku: "divvino-2302",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158750/kit6cordero-malbec.png?v=638382391308170000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-con-piel-de-lobo-malbec-sku4010012/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-con-piel-de-lobo-malbec-sku4010012/p",
+  popularity: 20
  },
  {
   sku: "divvino-2080",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159441/Kit-06-Garrafas-Casal-Mendes-Rose.png?v=638482921446170000",
-  productUrl: "https://www.divvino.com.br/kit-06-garrafas-casal-mendes-rose-prod2680001/p"
+  productUrl: "https://www.divvino.com.br/kit-06-garrafas-casal-mendes-rose-prod2680001/p",
+  popularity: 21
  },
  {
   sku: "divvino-1806",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166723/Kit-10-Vinhos.png?v=639179168904800000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-sku3920002/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-sku3920002/p",
+  popularity: 22
  },
  {
   sku: "divvino-3788",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166550/Vinho Tinto Chileno Terraza Fluvial Pinot Noir.png?v=639125698935970000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-pinot-noir-750ml-5476827/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-pinot-noir-750ml-5476827/p",
+  popularity: 23
  },
  {
   sku: "divvino-3731",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161604/Kit-6-Vinhos-Tintos-Bacalhoa-JP-Azeitao-.png?v=638912979293030000",
-  productUrl: "https://www.divvino.com.br/kit-6-vinhos-tintos-bacalhoa-jp-azeitao-sku4010347/p"
+  productUrl: "https://www.divvino.com.br/kit-6-vinhos-tintos-bacalhoa-jp-azeitao-sku4010347/p",
+  popularity: 24
  },
  {
   sku: "divvino-3566",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165558/Vinediem-Tinto.png?v=639071063053370000",
-  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-tinto-750ml-5393359/p"
+  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-tinto-750ml-5393359/p",
+  popularity: 25
  },
  {
   sku: "divvino-3552",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165127/Terra-de-Selmes-Argila-Alentejo.png?v=638963258505500000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-argila-tinto-garrafa-750ml-5391416/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-argila-tinto-garrafa-750ml-5391416/p",
+  popularity: 26
  },
  {
   sku: "divvino-3434",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164911/And3s-Monte-Chardonnay.png?v=639077122922700000",
-  productUrl: "https://www.divvino.com.br/vinho-and3s-mont-chardonnay-750ml-5365917/p"
+  productUrl: "https://www.divvino.com.br/vinho-and3s-mont-chardonnay-750ml-5365917/p",
+  popularity: 27
  },
  {
   sku: "divvino-3433",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165252/Los-Picos-Andeanos-Merlot.png?v=639063493992830000",
-  productUrl: "https://www.divvino.com.br/vinho-los-picos-andeano-merlot-750ml-5365908/p"
+  productUrl: "https://www.divvino.com.br/vinho-los-picos-andeano-merlot-750ml-5365908/p",
+  popularity: 28
  },
  {
   sku: "divvino-3356",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165201/Fiuza-Canto-do-Pedro-Reserva-Sousao.png?v=639063495194470000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-canto-da-pedra-reserva-sousao-garrafa-750ml-5351340/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-canto-da-pedra-reserva-sousao-garrafa-750ml-5351340/p",
+  popularity: 29
  },
  {
   sku: "divvino-3301",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160740/Kit-3-Vinhos-Casal-Mendes-Branco---3-Vinhos-Faisao-Vinho-Verde.png?v=638696860286130000",
-  productUrl: "https://www.divvino.com.br/kit-3-vinhos-casal-mendes-branco---3-vinhos-faisao-vinho-verde/p"
+  productUrl: "https://www.divvino.com.br/kit-3-vinhos-casal-mendes-branco---3-vinhos-faisao-vinho-verde/p",
+  popularity: 30
  },
  {
   sku: "divvino-3148",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160298/Vinho-Tinto-Argentino-Benjamin-Malbec.png?v=638651386814100000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-benjamin-nieto-malbec-garrafa-750ml-1864637/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-benjamin-nieto-malbec-garrafa-750ml-1864637/p",
+  popularity: 31
  },
  {
   sku: "divvino-2514",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165226/Kit 6 Garrafas Carta Vieja Cabernet Sauvignon.png?v=638972576894300000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-carta-vieja-cabernet-sauvignon-sku4010047/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-carta-vieja-cabernet-sauvignon-sku4010047/p",
+  popularity: 32
  },
  {
   sku: "divvino-2501",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165653/Kit 3 Garrafas Petit-Chablis.png?v=639100390551800000",
-  productUrl: "https://www.divvino.com.br/kit-3-garrafas-petit-chablis-sku4010043/p"
+  productUrl: "https://www.divvino.com.br/kit-3-garrafas-petit-chablis-sku4010043/p",
+  popularity: 33
  },
  {
   sku: "divvino-2463",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166802/Kit 6 Vinhos Tintos Essenciais.png?v=639207774066100000",
-  productUrl: "https://www.divvino.com.br/kit-6-vinho-tintos-grandes-regioes-sku4010024/p"
+  productUrl: "https://www.divvino.com.br/kit-6-vinho-tintos-grandes-regioes-sku4010024/p",
+  popularity: 34
  },
  {
   sku: "divvino-2305",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160736/Vinho-Branco-portugues-Faisao-Vinho-Verde-D.O.C..png?v=638696343709400000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-faisao-branco-verde-750ml-5121798/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-faisao-branco-verde-750ml-5121798/p",
+  popularity: 35
  },
  {
   sku: "divvino-2282",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159467/Vinho-Tinto-Argentino-Mosquita-Muerta-Cordero-con-Piel-de-Lobo-Malbec.png?v=638488082470800000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-cordeiro-em-pele-de-lobo-malbec-4954081/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-cordeiro-em-pele-de-lobo-malbec-4954081/p",
+  popularity: 36
  },
  {
   sku: "divvino-2207",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165223/Kit 6 Garrafas Carta Vieja Carmenere.png?v=638972575957400000",
-  productUrl: "https://www.divvino.com.br/kit-6-vinhos-carta-vieja-carmenere-4010003/p"
+  productUrl: "https://www.divvino.com.br/kit-6-vinhos-carta-vieja-carmenere-4010003/p",
+  popularity: 37
  },
  {
   sku: "divvino-2196",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158638/montgras-pn.png?v=638364446451200000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-pinot-noir-750ml-5087293/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-pinot-noir-750ml-5087293/p",
+  popularity: 38
  },
  {
   sku: "divvino-2123",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165245/Kit-10-Vinhos-Tintos-Premium.png?v=639192791639330000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-tintos-premium/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-tintos-premium/p",
+  popularity: 39
  },
  {
   sku: "divvino-1810",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158578/sku4680009.png?v=638350663624870000",
-  productUrl: "https://www.divvino.com.br/kit-com-6-casal-mendes-branco-e-rose-prod5150004/p"
+  productUrl: "https://www.divvino.com.br/kit-com-6-casal-mendes-branco-e-rose-prod5150004/p",
+  popularity: 40
  },
  {
   sku: "divvino-1681",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159762/Vinho-Tinto-Italiano-Vitis-Nostra-Nero-D-Avola.png?v=638538789369970000",
-  productUrl: "https://www.divvino.com.br/vinho-nostra-nero-d-avola-sicilia-750ml-4886240/p"
+  productUrl: "https://www.divvino.com.br/vinho-nostra-nero-d-avola-sicilia-750ml-4886240/p",
+  popularity: 41
  },
  {
   sku: "divvino-1672",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159032/Vinho-Tinto-Espanhol-Marques-de-Longares-Garnacha.png?v=638442072197070000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-longares-garnacha-tinto-750ml-4885663/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-longares-garnacha-tinto-750ml-4885663/p",
+  popularity: 42
  },
  {
   sku: "divvino-1454",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159296/Vinho-Tinto-Uruguaio-Invitacion-Gran-Reserva-Tannat.png?v=638469839732370000",
-  productUrl: "https://www.divvino.com.br/vinho-uruguaio-aurora-invitacion-gran-reserva-tannat-4625870/p"
+  productUrl: "https://www.divvino.com.br/vinho-uruguaio-aurora-invitacion-gran-reserva-tannat-4625870/p",
+  popularity: 43
  },
  {
   sku: "divvino-1389",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163012/Vinho-Argentino-Sacha-Bonarda.jpg?v=638929632032230000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-vinecol-sacha-bonarda-4482472/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-vinecol-sacha-bonarda-4482472/p",
+  popularity: 44
  },
  {
   sku: "divvino-982",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162671/Vinho-Tinto-Chileno-Vina-Toldos-CarmenEre.jpg?v=639166128085670000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-vina-toldos-carmenere-4584060/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-vina-toldos-carmenere-4584060/p",
+  popularity: 45
  },
  {
   sku: "divvino-334",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158600/kitchandonbrutveraoganhe1.5l.png?v=638360795965200000",
-  productUrl: "https://www.divvino.com.br/kit-espumante-chandon-brut-com-6-unidades-magnum-de-brinde-3151985/p"
+  productUrl: "https://www.divvino.com.br/kit-espumante-chandon-brut-com-6-unidades-magnum-de-brinde-3151985/p",
+  popularity: 46
  },
  {
   sku: "divvino-4116",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166801/Kit Super Combo Tinto 4 Garrafas.png?v=639207773189870000",
-  productUrl: "https://www.divvino.com.br/kit-super-combo-tinto-4-garrafas-sku4010415/p"
+  productUrl: "https://www.divvino.com.br/kit-super-combo-tinto-4-garrafas-sku4010415/p",
+  popularity: 47
  },
  {
   sku: "divvino-4010",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165633/vinho-tinto-frances-jolie-pinot-noir.png?v=639083954802170000",
-  productUrl: "https://www.divvino.com.br/vinho-jolie-terre-de-provence-pinot-noir-750ml-5423458/p"
+  productUrl: "https://www.divvino.com.br/vinho-jolie-terre-de-provence-pinot-noir-750ml-5423458/p",
+  popularity: 48
  },
  {
   sku: "divvino-3822",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166554/Postales-Sauvignon-Blanc---Semillon.png?v=639126515733670000",
-  productUrl: "https://www.divvino.com.br/vinho-postales-sauvignon-b-semillon-750ml-5481872/p"
+  productUrl: "https://www.divvino.com.br/vinho-postales-sauvignon-b-semillon-750ml-5481872/p",
+  popularity: 49
  },
  {
   sku: "divvino-3818",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166555/Newen-Pinot-Noir.png?v=639155913137570000",
-  productUrl: "https://www.divvino.com.br/vinho-newen-pinot-noir-750ml-5481890/p"
+  productUrl: "https://www.divvino.com.br/vinho-newen-pinot-noir-750ml-5481890/p",
+  popularity: 50
  },
  {
   sku: "divvino-3810",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165658/Colina-de-Suenos-Tannat.png?v=639192240133730000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-tannat-tinto-750ml-5481676/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-tannat-tinto-750ml-5481676/p",
+  popularity: 51
  },
  {
   sku: "divvino-3776",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165119/Farinha de Trigo Venturelli Purissima 1kg.png?v=638962357942000000",
-  productUrl: "https://www.divvino.com.br/farinha-de-trigo-venturelli-purissima-1kg-4241380/p"
+  productUrl: "https://www.divvino.com.br/farinha-de-trigo-venturelli-purissima-1kg-4241380/p",
+  popularity: 52
  },
  {
   sku: "divvino-3570",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165569/Saveurs-du-Temps-Costieres-du-Nimes.png?v=639071068109000000",
-  productUrl: "https://www.divvino.com.br/vinho-costieres-de-nimes-sauveurs-du-temps-aop-750ml-5393395/p"
+  productUrl: "https://www.divvino.com.br/vinho-costieres-de-nimes-sauveurs-du-temps-aop-750ml-5393395/p",
+  popularity: 53
  },
  {
   sku: "divvino-3569",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165566/Chevalier-des-Arenes.png?v=639071067568870000",
-  productUrl: "https://www.divvino.com.br/vinho-sans-ig-chevalier-des-arenes-750ml-5393386/p"
+  productUrl: "https://www.divvino.com.br/vinho-sans-ig-chevalier-des-arenes-750ml-5393386/p",
+  popularity: 54
  },
  {
   sku: "divvino-3548",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165131/Terra-de-Selmes-Premium-Alentejo.png?v=638963257917230000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-premium-tinto-garrafa-750ml-5391363/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-premium-tinto-garrafa-750ml-5391363/p",
+  popularity: 55
  },
  {
   sku: "divvino-3505",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164985/Vinho-Tinto-Monte-Romano-Sangiovese.png?v=638954644675630000",
-  productUrl: "https://www.divvino.com.br/vinho-monte-romano-sangiovese-750ml-5340829/p"
+  productUrl: "https://www.divvino.com.br/vinho-monte-romano-sangiovese-750ml-5340829/p",
+  popularity: 56
  },
  {
   sku: "divvino-3500",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164979/monte-romano-rosso-vinho-tinto.png?v=638954645443300000",
-  productUrl: "https://www.divvino.com.br/vinho-monte-romano-rosso-750ml-5340749/p"
+  productUrl: "https://www.divvino.com.br/vinho-monte-romano-rosso-750ml-5340749/p",
+  popularity: 57
  },
  {
   sku: "divvino-3498",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165262/Molho Pesto Monte Romano 190g.png?v=638974454289630000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-monte-romano-190g-5316378/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-monte-romano-190g-5316378/p",
+  popularity: 58
  },
  {
   sku: "divvino-3486",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165442/Passata Monte Romano 680g.png?v=639014152405800000",
-  productUrl: "https://www.divvino.com.br/passata-monte-romano-680g-5085673/p"
+  productUrl: "https://www.divvino.com.br/passata-monte-romano-680g-5085673/p",
+  popularity: 59
  },
  {
   sku: "divvino-3476",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160936/Vinho-Branco-Chileno-Etnico-Gewurztraminer.png.png?v=638756740731800000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-etnico-gewurztraminer-750ml-4684692/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-etnico-gewurztraminer-750ml-4684692/p",
+  popularity: 60
  },
  {
   sku: "divvino-3439",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160828/Vinho-Tinto-Chileno-Carta-Vieja-Cabernet-Sauvignon-Reservado.png?v=638732622270600000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-cabernet-sauvignon-reservado-750ml-1019310/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-cabernet-sauvignon-reservado-750ml-1019310/p",
+  popularity: 61
  },
  {
   sku: "divvino-3360",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161226/Vinho-Uma-Wine-Bar-Cabernet-Sauvignon.png.png?v=638869063299100000",
-  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-winebar-cabernet-sauvignon-garrafa-750ml-5351555/p"
+  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-winebar-cabernet-sauvignon-garrafa-750ml-5351555/p",
+  popularity: 62
  },
  {
   sku: "divvino-3355",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165199/Fiuza-Escriba-Reserva-Touriga-Nacional-Sousao.png?v=639141221063830000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-escriba-reserva-2020-garrafa-750ml-5351312/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-escriba-reserva-2020-garrafa-750ml-5351312/p",
+  popularity: 63
  },
  {
   sku: "divvino-3341",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161004/Vinho--Mr.-Deer-Gran-Reserva-Syrah.png.png?v=638814635955300000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-mr-deer-tinto-syrah-gran-reserva-garrafa-750ml-5348148/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-mr-deer-tinto-syrah-gran-reserva-garrafa-750ml-5348148/p",
+  popularity: 64
  },
  {
   sku: "divvino-3340",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161003/Vinho-Mr.-Deer-Gra-Reserva-Pinot-Noir-.png.png?v=638814635707000000",
-  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-pin-noir-gran-reserva-garrafa-750ml-5348120/p"
+  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-pin-noir-gran-reserva-garrafa-750ml-5348120/p",
+  popularity: 65
  },
  {
   sku: "divvino-3080",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159638/Vinho-Tinto-Argentino-Viejo-Viñedo-Malbec.png?v=638513752203430000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-viejo-vinedo-malbec-garrafa-750ml-2346749/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-viejo-vinedo-malbec-garrafa-750ml-2346749/p",
+  popularity: 66
  },
  {
   sku: "divvino-3033",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161152/Vinho-Culemborg-Pinotage-.png.png?v=638839514466670000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-tinto-garrafa-750ml-5251756/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-tinto-garrafa-750ml-5251756/p",
+  popularity: 67
  },
  {
   sku: "divvino-3020",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160659/Vinho-Tinto-Italiano-Cecchi-Brunello-di-Montalcino-D.O.C.G..png?v=638684192660100000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-tinto-brunello-di-montalcino-docg-garrafa-750ml-5250051/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-tinto-brunello-di-montalcino-docg-garrafa-750ml-5250051/p",
+  popularity: 68
  },
  {
   sku: "divvino-2945",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160110/Vinho-Tinto-Portugues-Hat-Trick.png?v=638615651719900000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-hat-trick-garrafa-750ml-5234316/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-hat-trick-garrafa-750ml-5234316/p",
+  popularity: 69
  },
  {
   sku: "divvino-2903",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160737/Kit-Caixa-Fechada-6-Garrafas-Vinho-Verde-Faisao-D.O.C..png?v=638696855764600000",
-  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-vinho-verde-faisao-d-o-c--sku4010166/p"
+  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-vinho-verde-faisao-d-o-c--sku4010166/p",
+  popularity: 70
  },
  {
   sku: "divvino-2768",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165024/Vinho Tinto Chileno Tolva Cabernet Sauvignon.png?v=638955269090670000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-cabernet-sauvignon-5156710/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-cabernet-sauvignon-5156710/p",
+  popularity: 71
  },
  {
   sku: "divvino-2762",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160124/Vinho-Branco-Argentino-Mal-Arreado-Blend-.png?v=638616552125670000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mal-arreado-branco-blend-750ml-5207730/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mal-arreado-branco-blend-750ml-5207730/p",
+  popularity: 72
  },
  {
   sku: "divvino-2761",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160606/Vinho-Tinto-Argentino-Mal-Areado-Blend-.png?v=638679060738470000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mal-arreado-tinto-blend-garrafa-750ml-5207702/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mal-arreado-tinto-blend-garrafa-750ml-5207702/p",
+  popularity: 73
  },
  {
   sku: "divvino-2715",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166708/Kit 10 Vinhos Brancos Mais Vendidos.png?v=639162759163230000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-brancos-best-sellers-de-verao-sku4010118/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-brancos-best-sellers-de-verao-sku4010118/p",
+  popularity: 74
  },
  {
   sku: "divvino-2660",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160233/Vinho-Tinto-Frances-Chavalier-De-Caylus-Pinot-Noir.png?v=638640073525770000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chavalier-de-caylus-pinot-noir-garrafa-750ml-5188090/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chavalier-de-caylus-pinot-noir-garrafa-750ml-5188090/p",
+  popularity: 75
  },
  {
   sku: "divvino-2642",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160523/Espumante-Argentino-Concerto-Brut-Rose.png?v=638670076515000000",
-  productUrl: "https://www.divvino.com.br/espumante-argentino-concerto-brut-rose-4866274/p"
+  productUrl: "https://www.divvino.com.br/espumante-argentino-concerto-brut-rose-4866274/p",
+  popularity: 76
  },
  {
   sku: "divvino-2634",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166559/Vinho Tinto Frances La Misaine Dry Red Wine.png?v=639126551850230000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-la-misaine-tinto-garrafa-750ml-5184448/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-la-misaine-tinto-garrafa-750ml-5184448/p",
+  popularity: 77
  },
  {
   sku: "divvino-2600",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159940/Vinho-Tinto-Espanhol-Marques-De-Ardoza.png?v=638575076689500000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-galecu-tinto-garrafa-750ml-5178360/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-galecu-tinto-garrafa-750ml-5178360/p",
+  popularity: 78
  },
  {
   sku: "divvino-2563",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159320/Vinho-Tinto-Portugues-Parcelas-Dao-D.O.C..png?v=638471584193770000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-parcelas-dao-tinto-750ml-5167607/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-parcelas-dao-tinto-750ml-5167607/p",
+  popularity: 79
  },
  {
   sku: "divvino-2508",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160782/Vinho-Tinto-Chileno-Tolva-Reserva-Cabernet-Sauvignon.png?v=638720393616200000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-reserva-cabernet-sauvignon-garrafa-750ml-5156766/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-reserva-cabernet-sauvignon-garrafa-750ml-5156766/p",
+  popularity: 80
  },
  {
   sku: "divvino-2507",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165026/Vinho Chileno Tolva Merlot Rose.png?v=638955308870930000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-rose-750ml-5156748/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-rose-750ml-5156748/p",
+  popularity: 81
  },
  {
   sku: "divvino-2309",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160263/Vinho-Branco-Frances-Chateau-Auzias--Cite-de-Carcassonne.png?v=638642633785930000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-branco-chard-viognier-750ml-5121869/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-branco-chard-viognier-750ml-5121869/p",
+  popularity: 82
  },
  {
   sku: "divvino-2301",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158752/kitcorderoCS.png?v=638382393451200000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-con-piel-de-lobo-cabernet-sauvignon-sku4010011/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-con-piel-de-lobo-cabernet-sauvignon-sku4010011/p",
+  popularity: 83
  },
  {
   sku: "divvino-2283",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158082/4954143.png?v=638247605497230000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-mosquita-muerta-cordero-con-piel-de-lobo-cabernet-sauvignon-4954143/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-mosquita-muerta-cordero-con-piel-de-lobo-cabernet-sauvignon-4954143/p",
+  popularity: 84
  },
  {
   sku: "divvino-2268",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158041/4896470.png?v=638240960335130000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-j-m-f-primum-4896470/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-j-m-f-primum-4896470/p",
+  popularity: 85
  },
  {
   sku: "divvino-2258",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160898/Vinho-Tinto-Chileno-Santa-Rita-Coleccion-Privada-Cabernet-Sauvignon.png.png?v=639077076606030000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-santa-rita-coleccion-privada-cabernet-sauvignon/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-santa-rita-coleccion-privada-cabernet-sauvignon/p",
+  popularity: 86
  },
  {
   sku: "divvino-2199",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159107/FIUZA_RESERVA_3CASTAS.png?v=638447504919870000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-reserva-tinto-750ml-4896925/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-reserva-tinto-750ml-4896925/p",
+  popularity: 87
  },
  {
   sku: "divvino-2147",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160390/Vinho-Tinto-Portugues-Ourico.png?v=638664267550530000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-ourico-tinto-5059397/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-ourico-tinto-5059397/p",
+  popularity: 88
  },
  {
   sku: "divvino-2141",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160447/Vinho-Espanhol-Bodegas-Paniza-Jabali-Garnacha---Syrah.png?v=638665116973330000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-jabali-garnacha-e-syrah--5054640/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-jabali-garnacha-e-syrah--5054640/p",
+  popularity: 89
  },
  {
   sku: "divvino-2099",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166726/Kit-10-Vinhos-Refrescantes.png?v=639199148255730000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-refrescantes-prod5400005/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-refrescantes-prod5400005/p",
+  popularity: 90
  },
  {
   sku: "divvino-2065",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166724/Kit-Adega-Cheia-20-Vinhos.png?v=639173049623270000",
-  productUrl: "https://www.divvino.com.br/kit-20-vinhos-por-2499-cada-garrafa-prod5390007/p"
+  productUrl: "https://www.divvino.com.br/kit-20-vinhos-por-2499-cada-garrafa-prod5390007/p",
+  popularity: 91
  },
  {
   sku: "divvino-1773",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157680/3931494.jpg?v=638113080139100000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-la-molisana-gnocchi-di-patate-500g-3931494/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-la-molisana-gnocchi-di-patate-500g-3931494/p",
+  popularity: 92
  },
  {
   sku: "divvino-1680",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160446/Vinho-Tinto-Italiano-Nostra-Negroamaro-Salento--I.G.P..png?v=638665116039030000",
-  productUrl: "https://www.divvino.com.br/vinho-nostra-negroamaro-salento-750ml-4886221/p"
+  productUrl: "https://www.divvino.com.br/vinho-nostra-negroamaro-salento-750ml-4886221/p",
+  popularity: 93
  },
  {
   sku: "divvino-1568",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160728/Vinho-Tinto-Santa-Rita-Don-Silvestre-Cabernet-Sauvignon.png?v=638696320027670000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-don-silvestre-cabernet-sauvignon-4757903/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-don-silvestre-cabernet-sauvignon-4757903/p",
+  popularity: 94
  },
  {
   sku: "divvino-1499",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164939/Espumante Chileno Don Silvestre Brut.png?v=638937240401270000",
-  productUrl: "https://www.divvino.com.br/espumante-chileno-don-silvestre-brut-4679271/p"
+  productUrl: "https://www.divvino.com.br/espumante-chileno-don-silvestre-brut-4679271/p",
+  popularity: 95
  },
  {
   sku: "divvino-1484",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165142/Vinho Branco Argentino Mora Vista Chardonnay.png?v=638966483490370000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-chardonnay-4652661/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-chardonnay-4652661/p",
+  popularity: 96
  },
  {
   sku: "divvino-1421",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160045/Vinho-Frances-Jolie-Rose.png?v=638592377527570000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jolie-rose-4576541/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jolie-rose-4576541/p",
+  popularity: 97
  },
  {
   sku: "divvino-1273",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159726/Whisky-Jack-Daniel-S-Honey-1L.png?v=638533683966700000",
-  productUrl: "https://www.divvino.com.br/whisky-jack-daniels-honey-1l-3730997/p"
+  productUrl: "https://www.divvino.com.br/whisky-jack-daniels-honey-1l-3730997/p",
+  popularity: 98
  },
  {
   sku: "divvino-1244",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161068/Massa-Italiana-Grano-Duro-La-Molisana-Penne-Ziti-Rigate-500g.png.png?v=638785912778070000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-penne-ziti-rigate-500g-3352974/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-penne-ziti-rigate-500g-3352974/p",
+  popularity: 99
  },
  {
   sku: "divvino-1195",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159785/Tomate-Sem-Pele-Argentino-La-Campagnola-240G.png?v=638538993184000000",
-  productUrl: "https://www.divvino.com.br/tomate-sem-pele-argentino-la-campagnola-240g-1834134/p"
+  productUrl: "https://www.divvino.com.br/tomate-sem-pele-argentino-la-campagnola-240g-1834134/p",
+  popularity: 100
  },
  {
   sku: "divvino-1044",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165652/Vinho-Branco-Frances-Jean-Bouchard-Chardonnay-Petit-Chablis.png?v=639201766031070000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-frances-jean-bouchard-petit-chablis-aoc-4679763/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-frances-jean-bouchard-petit-chablis-aoc-4679763/p",
+  popularity: 101
  },
  {
   sku: "divvino-975",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165217/Vinho Uruguaio Traversa Cabernet Franc.png?v=638971823060070000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-traversa-cabernet-franc-4571797/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-traversa-cabernet-franc-4571797/p",
+  popularity: 102
  },
  {
   sku: "divvino-905",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157075/4492147.jpg?v=638059498953230000",
-  productUrl: "https://www.divvino.com.br/vinho-vina-toldos-reserva-cabernet-sauvignon-4492147/p"
+  productUrl: "https://www.divvino.com.br/vinho-vina-toldos-reserva-cabernet-sauvignon-4492147/p",
+  popularity: 103
  },
  {
   sku: "divvino-876",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165448/Vinho Tinto Chileno Etnico Pinot Noir Bio-Bio Organico.png?v=639015013745870000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-pinot-noir-4468802/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-pinot-noir-4468802/p",
+  popularity: 104
  },
  {
   sku: "divvino-844",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162533/Vinho-Tinto-Espanhol-Abanico.jpg?v=639142770797900000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-tinto-4415264/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-tinto-4415264/p",
+  popularity: 105
  },
  {
   sku: "divvino-808",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165623/Vinho Tinto Italiano Apassimento Passo Salento.png?v=639077926545700000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-mediterranea-passo-appassimento-salento-igp-4380632/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-mediterranea-passo-appassimento-salento-igp-4380632/p",
+  popularity: 106
  },
  {
   sku: "divvino-798",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160267/Vinho-Tinto-Chileno-Ravanal-Gran-Reserva-Carmenere.png?v=638645270053600000",
-  productUrl: "https://www.divvino.com.br/vinho-ravanal-gran-reserva-carmenere-4376077/p"
+  productUrl: "https://www.divvino.com.br/vinho-ravanal-gran-reserva-carmenere-4376077/p",
+  popularity: 107
  },
  {
   sku: "divvino-751",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162440/Vinho-Argentino-Quinde-Malbec-Organico.jpg?v=638929628389200000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-quinde-malbec-4355335/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-quinde-malbec-4355335/p",
+  popularity: 108
  },
  {
   sku: "divvino-656",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160942/Vinho-Tinto-Argentino-Go-Malbec.png.png?v=638787597989530000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-vinorum-go-malbec-4256391/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-vinorum-go-malbec-4256391/p",
+  popularity: 109
  },
  {
   sku: "divvino-644",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162334/Vinho-Tinto-Uruguaio-Invitacion-Reserva-Cabernet-Sauvignon.jpg?v=638972560253800000",
-  productUrl: "https://www.divvino.com.br/vinho-invitacion-reserva-cabernet-sauvignon-4246840/p"
+  productUrl: "https://www.divvino.com.br/vinho-invitacion-reserva-cabernet-sauvignon-4246840/p",
+  popularity: 110
  },
  {
   sku: "divvino-608",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162298/Vinho-Tinto-Italiano-la-Rosa-Dei-Vini-Rosso-Ditalia.jpg?v=638929627577230000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-la-rosa-dei-vini-rosso-ditalia-4203469/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-la-rosa-dei-vini-rosso-ditalia-4203469/p",
+  popularity: 111
  },
  {
   sku: "divvino-385",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158334/3511865.png?v=638289951947470000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-frances-jean-bouchard-chardonnay-chablis-aoc-3511865/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-frances-jean-bouchard-chardonnay-chablis-aoc-3511865/p",
+  popularity: 112
  },
  {
   sku: "divvino-263",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160821/Vinho-Uruguaio-Traversa-Tannat-Merlot.png?v=638730034338100000",
-  productUrl: "https://www.divvino.com.br/vinho-traversa-tannat-merlot-2400324/p"
+  productUrl: "https://www.divvino.com.br/vinho-traversa-tannat-merlot-2400324/p",
+  popularity: 113
  },
  {
   sku: "divvino-157",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165104/Vinho Do Porto Quinta Santa Eufemia Tawny.png?v=638962131942170000",
-  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-porto-tawny-1533273/p"
+  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-porto-tawny-1533273/p",
+  popularity: 114
  },
  {
   sku: "divvino-145",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156300/1088309_1_zoom.jpg?v=638046554116300000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-bacalhoa-jp-azeitao-tinto-1088309/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-bacalhoa-jp-azeitao-tinto-1088309/p",
+  popularity: 115
  },
  {
   sku: "divvino-137",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165220/Vinho-Tinto-Carta-Vieja-Cabernet-Sauvignon.png?v=639136729626700000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-cabernet-sauvignon-1019286/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-cabernet-sauvignon-1019286/p",
+  popularity: 116
  },
  {
   sku: "divvino-134",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165221/Vinho-Chileno-Carta-Vieja-Merlot-Rose.png?v=638972504410270000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-merlot-rose-1019230/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-merlot-rose-1019230/p",
+  popularity: 117
  },
  {
   sku: "divvino-4286",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166736/Massa Italiana Gragnano Mezzi Paccheri Rigato 500g.png?v=639167997976070000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-mezzi-paccheri-rigato-500g-4781293/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-mezzi-paccheri-rigato-500g-4781293/p",
+  popularity: 118
  },
  {
   sku: "divvino-4257",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166709/Batata-Alfredo-s-Truffle-sem-Gluten-100g.png?v=639165259054830000",
-  productUrl: "https://www.divvino.com.br/batata-alfredo-s-truffle-sem-gluten-100g-5185946/p"
+  productUrl: "https://www.divvino.com.br/batata-alfredo-s-truffle-sem-gluten-100g-5185946/p",
+  popularity: 119
  },
  {
   sku: "divvino-4157",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166657/Cerveja Handwerk IPA Puro Malte 355ml.png?v=639150554409730000",
-  productUrl: "https://www.divvino.com.br/cerveja-handwerk-ipa-puro-malte-355ml-5480777/p"
+  productUrl: "https://www.divvino.com.br/cerveja-handwerk-ipa-puro-malte-355ml-5480777/p",
+  popularity: 120
  },
  {
   sku: "divvino-4147",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas lager",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166647/Cerveja Alles Blau Vienna Lager 355ml.png?v=639148943123800000",
-  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-vienna-lager-355ml-5462821/p"
+  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-vienna-lager-355ml-5462821/p",
+  popularity: 121
  },
  {
   sku: "divvino-4146",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166646/Cerveja-Alles-Blau-Session-Ipa-355ml.png?v=639148843110730000",
-  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-session-ipa-355ml-5462803/p"
+  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-session-ipa-355ml-5462803/p",
+  popularity: 122
  },
  {
   sku: "divvino-4021",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165639/vinho-branco-aurora-sem-alcool-riesling.png?v=639084013537970000",
-  productUrl: "https://www.divvino.com.br/vinho-aurora-riesling-sem-alcool-750ml-5341782/p"
+  productUrl: "https://www.divvino.com.br/vinho-aurora-riesling-sem-alcool-750ml-5341782/p",
+  popularity: 123
  },
  {
   sku: "divvino-3969",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165541/Azeite de Oliva Ibero Extra Virgem 500ml.png?v=639044474544930000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-500ml-2013720/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-500ml-2013720/p",
+  popularity: 124
  },
  {
   sku: "divvino-3901",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165379/Chocolate E.Wedel Amargo 64- 90g.png?v=639008836990030000",
-  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-amargo-64--90g-4713328/p"
+  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-amargo-64--90g-4713328/p",
+  popularity: 125
  },
  {
   sku: "divvino-3879",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cha",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165503/Cha Kruger Matcha Latte Classic 250g.png?v=639020239151800000",
-  productUrl: "https://www.divvino.com.br/cha-kruger-matcha-latte-classic-250g-5356702/p"
+  productUrl: "https://www.divvino.com.br/cha-kruger-matcha-latte-classic-250g-5356702/p",
+  popularity: 126
  },
  {
   sku: "divvino-3858",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165324/Espumante Salton Poetica Blanc.png?v=639003849910730000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-poetica-blanc-750ml-5327406/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-poetica-blanc-750ml-5327406/p",
+  popularity: 127
  },
  {
   sku: "divvino-3855",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165296/Vinho-Tinto-Quinde-Criolla-Organico.png?v=638991802456900000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-criolla-organico-750ml-5145566/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-criolla-organico-750ml-5145566/p",
+  popularity: 128
  },
  {
   sku: "divvino-3829",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165147/Kit-6-Garrafas-Invitacion-Gran-Reserva-Tannat.png?v=638966510162730000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-invitacion-gran-reserva-tannat-sku4010373/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-invitacion-gran-reserva-tannat-sku4010373/p",
+  popularity: 129
  },
  {
   sku: "divvino-3823",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166557/FIN-Single-Vineyard-Malbec.png?v=639155913462730000",
-  productUrl: "https://www.divvino.com.br/vinho-find-del-mundo-svs-malbec-750ml-5481916/p"
+  productUrl: "https://www.divvino.com.br/vinho-find-del-mundo-svs-malbec-750ml-5481916/p",
+  popularity: 130
  },
  {
   sku: "divvino-3820",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166553/Postales-Chardonnay.png?v=639192247439770000",
-  productUrl: "https://www.divvino.com.br/vinho-postales-chardonnay-750ml-5481854/p"
+  productUrl: "https://www.divvino.com.br/vinho-postales-chardonnay-750ml-5481854/p",
+  popularity: 131
  },
  {
   sku: "divvino-3813",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165655/Colina-de-Suenos-Gran-Reserva-Tannat.png?v=639192242059200000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-g-res-tannat-tinto-750ml-5481710/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-g-res-tannat-tinto-750ml-5481710/p",
+  popularity: 132
  },
  {
   sku: "divvino-3809",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165659/Colina-de-Suenos-Merlot.png?v=639178406311100000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-merlot-tinto-750ml-5481667/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-merlot-tinto-750ml-5481667/p",
+  popularity: 133
  },
  {
   sku: "divvino-3739",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161649/Vinho-Branco-Concha-Y-Toro-Reservado-Chardonnay.png?v=638968205662930000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-chardonnay-750ml-5407570/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-chardonnay-750ml-5407570/p",
+  popularity: 134
  },
  {
   sku: "divvino-3729",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161612/Kit 12 Vinhos Brancos Faisao Vinho Verde -1-.png?v=638913939334430000",
-  productUrl: "https://www.divvino.com.br/kit-12-vinhos-faisao-branco-vinho-verde-sku4010345/p"
+  productUrl: "https://www.divvino.com.br/kit-12-vinhos-faisao-branco-vinho-verde-sku4010345/p",
+  popularity: 135
  },
  {
   sku: "divvino-3699",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165150/Vinho-Concha-Y-Toro-Reservado-Spritzer-Rose.png?v=638967519628670000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-spritzer-rose-750ml-5290727/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-spritzer-rose-750ml-5290727/p",
+  popularity: 136
  },
  {
   sku: "divvino-3663",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161413/Vinho-Branco-Frances-Art-de-Vivre-Clairette-du--Languedoc-Adissan.png?v=638888708116700000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-art-de-vivre-branco-750ml-5318283/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-art-de-vivre-branco-750ml-5318283/p",
+  popularity: 137
  },
  {
   sku: "divvino-3579",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161130/Vinho-Branco-Frances-Chateau-De-Maligny-Chablis-Premier-Cru.png.png?v=638798175918430000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-maligny-chablis-premier-cru-branco-garrafa-750ml-5242096/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-maligny-chablis-premier-cru-branco-garrafa-750ml-5242096/p",
+  popularity: 138
  },
  {
   sku: "divvino-3568",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165567/Vinediem-Branco.png?v=639071067747800000",
-  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-branco-750ml-5393377/p"
+  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-branco-750ml-5393377/p",
+  popularity: 139
  },
  {
   sku: "divvino-3551",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165128/Terra-de-Selmes-Branco-Alentejo-.png?v=638963258043400000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-branco-garrafa-750ml-5391407/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-branco-garrafa-750ml-5391407/p",
+  popularity: 140
  },
  {
   sku: "divvino-3549",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165130/Terra-de-Selmes-Selecao-do-Enologo-Alentejo.png?v=638963257810800000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-selecao-do-enologo-tinto-garrafa-750ml-5391372/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-selecao-do-enologo-tinto-garrafa-750ml-5391372/p",
+  popularity: 141
  },
  {
   sku: "divvino-3542",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164930/Vinya-Del-Pla-Catalunha-.png?v=638937992655870000",
-  productUrl: "https://www.divvino.com.br/vinho-vinya-del-pla-tinto-750ml-5389839/p"
+  productUrl: "https://www.divvino.com.br/vinho-vinya-del-pla-tinto-750ml-5389839/p",
+  popularity: 142
  },
  {
   sku: "divvino-3541",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164927/Terra-Nostra-Blend-.png?v=638937993365800000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-nostra-tinto-750ml-5389801/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-nostra-tinto-750ml-5389801/p",
+  popularity: 143
  },
  {
   sku: "divvino-3538",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164926/Rocamar-Rosso-.png?v=638937993843670000",
-  productUrl: "https://www.divvino.com.br/vinho-rocamar-tinto-750ml-5389740/p"
+  productUrl: "https://www.divvino.com.br/vinho-rocamar-tinto-750ml-5389740/p",
+  popularity: 144
  },
  {
   sku: "divvino-3491",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161019/Arroz-Monte-Romano-Arborio-500g.png.png?v=638780865225430000",
-  productUrl: "https://www.divvino.com.br/arroz-monte-romano-arborio-500g-5208700/p"
+  productUrl: "https://www.divvino.com.br/arroz-monte-romano-arborio-500g-5208700/p",
+  popularity: 145
  },
  {
   sku: "divvino-3485",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165269/Azeite-De-Oliva-Monte-Romano-500ml.png?v=638990914997700000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monte-romano-500ml-5085664/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monte-romano-500ml-5085664/p",
+  popularity: 146
  },
  {
   sku: "divvino-3478",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160945/Macarrao-Monte-Romano-Spaghetti-500g.png.png?v=638760242169130000",
-  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-spaghetti-500g-5205593/p"
+  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-spaghetti-500g-5205593/p",
+  popularity: 147
  },
  {
   sku: "divvino-3432",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165102/Los-Picos-Andeanos-Cabernet-Sauvignon-.png?v=639063494344500000",
-  productUrl: "https://www.divvino.com.br/vinho-los-picos-andeanos-cabernet-sauvignon-750ml-5365891/p"
+  productUrl: "https://www.divvino.com.br/vinho-los-picos-andeanos-cabernet-sauvignon-750ml-5365891/p",
+  popularity: 148
  },
  {
   sku: "divvino-3424",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165152/Vinho Tinto Portugues Flor De Lisboa.png?v=638966527235970000",
-  productUrl: "https://www.divvino.com.br/vinho-flor-de-lisboa-tinto-750ml-5363841/p"
+  productUrl: "https://www.divvino.com.br/vinho-flor-de-lisboa-tinto-750ml-5363841/p",
+  popularity: 149
  },
  {
   sku: "divvino-3423",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160830/Vinho-Branco-Chileno-Carta-Vieja-Reservado-Sauvignon-Blanc-.png?v=638732627000370000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-reservado-sauvignon-blanc-750ml-5316510/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-reservado-sauvignon-blanc-750ml-5316510/p",
+  popularity: 150
  },
  {
   sku: "divvino-3417",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160797/Vinho-Tinto-Argentino-Quinde-Cabernet-Franc-Organico.png?v=638726486460500000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-cabernet-franc-organico-750ml-5145548/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-cabernet-franc-organico-750ml-5145548/p",
+  popularity: 151
  },
  {
   sku: "divvino-3414",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160800/Macarrao-Italiana-Grano-Duro-La-Molisana-Pappardelle-com-Ovos-200g.png?v=638726522193030000",
-  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-la-molisana-pappardelle-com-ovos-200g-3565561/p"
+  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-la-molisana-pappardelle-com-ovos-200g-3565561/p",
+  popularity: 152
  },
  {
   sku: "divvino-3379",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161330/Vinho-Tinto-Uruguaio--Josefa-Cabernet-Franc.png?v=638894063014570000",
-  productUrl: "https://www.divvino.com.br/vinho-josefa-cabernet-franc-garrafa-750ml-5355367/p"
+  productUrl: "https://www.divvino.com.br/vinho-josefa-cabernet-franc-garrafa-750ml-5355367/p",
+  popularity: 153
  },
  {
   sku: "divvino-3361",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161227/Vinho-Uma-Wine-Bar-Chardonnay.png.png?v=638869062924330000",
-  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-winebar-chardonnay-garrafa-750ml-5351564/p"
+  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-winebar-chardonnay-garrafa-750ml-5351564/p",
+  popularity: 154
  },
  {
   sku: "divvino-3350",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160654/Kit-Caixa-Fechada-6-Vinhos-Branco-Mal-Arreado-Blend.png?v=638684012485500000",
-  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-vinhos-branco-mal-arreado-blend-sku4010288/p"
+  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-vinhos-branco-mal-arreado-blend-sku4010288/p",
+  popularity: 155
  },
  {
   sku: "divvino-3344",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161606/Palacio-del-Camino-Real-Rioja-Reserva-.png?v=638913975066770000",
-  productUrl: "https://www.divvino.com.br/vinho-palacio-d-camino-real-tinto-750ml-5349566/p"
+  productUrl: "https://www.divvino.com.br/vinho-palacio-d-camino-real-tinto-750ml-5349566/p",
+  popularity: 156
  },
  {
   sku: "divvino-3338",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160999/Vinho-Mr-Deer-Cabernet-Sauvignon.png.png?v=638814633812330000",
-  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-cabernet-sauvignon-garrafa-750ml-5347848/p"
+  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-cabernet-sauvignon-garrafa-750ml-5347848/p",
+  popularity: 157
  },
  {
   sku: "divvino-3310",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160724/Molho-Pesto-Italiano-La-Molisana-190g.png?v=638695396555130000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-italiano-la-molisana-190g-4725525/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-italiano-la-molisana-190g-4725525/p",
+  popularity: 158
  },
  {
   sku: "divvino-3261",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160528/Vinho-Brasileiro-Thera-Rose.png?v=638670154705770000",
-  productUrl: "https://www.divvino.com.br/vinho-thera-rose-750ml-5208263/p"
+  productUrl: "https://www.divvino.com.br/vinho-thera-rose-750ml-5208263/p",
+  popularity: 159
  },
  {
   sku: "divvino-3215",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161136/Vinho-Tinto-Portugues-Poento.png.png?v=638983902144100000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-tinto-750ml-5294593/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-tinto-750ml-5294593/p",
+  popularity: 160
  },
  {
   sku: "divvino-3121",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159732/Vinho-Frances-DOMAINE--MAIRE---FILS-Arbois-Trousseau-Vignes-Aux-Anes-Rouge.png?v=638536363159370000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine--maire---fils-arbois-trousseau-vignes-aux-anes-rouge-750ml-5086643/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine--maire---fils-arbois-trousseau-vignes-aux-anes-rouge-750ml-5086643/p",
+  popularity: 161
  },
  {
   sku: "divvino-3078",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159636/Vinho-Branco-Argentino-Viejo-Viñedo-Sauvignon-Blanc.png?v=638513729006030000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-argentino-viejo-vinedo-sauvignon-blanc-garrafa-750ml-2346702/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-argentino-viejo-vinedo-sauvignon-blanc-garrafa-750ml-2346702/p",
+  popularity: 162
  },
  {
   sku: "divvino-3070",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159609/Vinho-Tinto-Austriaco-Lenz-Moser-Special-Selection-Blauer-Zweigelt-.png?v=638508846068170000",
-  productUrl: "https://www.divvino.com.br/vinho-austriaco-lenz-moser-special-selection-blauer-zweigelt-750ml-5105014/p"
+  productUrl: "https://www.divvino.com.br/vinho-austriaco-lenz-moser-special-selection-blauer-zweigelt-750ml-5105014/p",
+  popularity: 163
  },
  {
   sku: "divvino-3066",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159605/Massa-Italiana-Spagheti-LA-MOLISANA-Nero-Di-Seppia-500g.png?v=638507930622900000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-spagheti-la-molisana-nero-di-seppia-500g-4725570/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-spagheti-la-molisana-nero-di-seppia-500g-4725570/p",
+  popularity: 164
  },
  {
   sku: "divvino-3036",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161151/Vinho-Culemborg-Cape-White-.png.png?v=638809397282970000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-branco-cape-white-garrafa-750ml-5251792/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-branco-cape-white-garrafa-750ml-5251792/p",
+  popularity: 165
  },
  {
   sku: "divvino-3034",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161153/Vinho-Culemborg-Cape-Red-.png.png?v=638809400915970000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-tinto-garrafa-750ml-5251774/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-culemborg-tinto-garrafa-750ml-5251774/p",
+  popularity: 166
  },
  {
   sku: "divvino-3014",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159510/Vinho-Chileno-Cepas-Nobles-Rose.png?v=638494910004270000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-cepas-nobles-rose-750ml-5057178/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-cepas-nobles-rose-750ml-5057178/p",
+  popularity: 167
  },
  {
   sku: "divvino-3012",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159509/Vinho-Chileno-Cepas-Nobles-Reservado-Rose.png?v=638494908356000000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-cepas-nobles-reservado-rose-750ml-5057113/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-cepas-nobles-reservado-rose-750ml-5057113/p",
+  popularity: 168
  },
  {
   sku: "divvino-2931",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160869/Vinho-Tinto-Italiano-Pietraforte-Cabernet-Sauvignon.png.png?v=638737802844970000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-cabernet-sauvignon-garrafa-750ml-5228589/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-cabernet-sauvignon-garrafa-750ml-5228589/p",
+  popularity: 169
  },
  {
   sku: "divvino-2930",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160868/Vinho-Tinto-Italiano-Pietraforte-Merlot.png.png?v=638737799450670000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-merlot-garrafa-750ml-5228570/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-merlot-garrafa-750ml-5228570/p",
+  popularity: 170
  },
  {
   sku: "divvino-2928",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160866/Vinho-Branco-Italiano-Pietraforte-Frascati.png.png?v=638737788986970000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-frascati-garrafa-750ml-5228551/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-frascati-garrafa-750ml-5228551/p",
+  popularity: 171
  },
  {
   sku: "divvino-2927",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160795/Vinho-Italiano-Pietraforte-Pinot-Grigio-Rose.png?v=638726452977000000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-pinot-grigio-rose-750ml-5228542/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-pinot-grigio-rose-750ml-5228542/p",
+  popularity: 172
  },
  {
   sku: "divvino-2894",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159179/Fiuza-3-CASTAS_-Tinto.png?v=638455140387600000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-tinto-750ml-4896934/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-tinto-750ml-4896934/p",
+  popularity: 173
  },
  {
   sku: "divvino-2876",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160338/Kit-Caixa-Fechada-6-Garrafas-Vinho-Ravanal-Gran-Reserva-Carmenere.png?v=638657131163400000",
-  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-vinho-ravanal-gran-reserva-carmenere-sku4010162/p"
+  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-vinho-ravanal-gran-reserva-carmenere-sku4010162/p",
+  popularity: 174
  },
  {
   sku: "divvino-2841",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159741/Espumante-Argentino-Inacayal-Moscatel.png?v=638536460309200000",
-  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-rose-garrafa-750ml-5218466/p"
+  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-rose-garrafa-750ml-5218466/p",
+  popularity: 175
  },
  {
   sku: "divvino-2833",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160076/Espumante-Frances-Monteparnasse-Demi-Sec.png?v=638600203158170000",
-  productUrl: "https://www.divvino.com.br/espumante-frances-monteparnasse-demi-sec-750ml-5218199/p"
+  productUrl: "https://www.divvino.com.br/espumante-frances-monteparnasse-demi-sec-750ml-5218199/p",
+  popularity: 176
  },
  {
   sku: "divvino-2794",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158901/Caixa-Fechada-Mora-Vista-Torrontes.png?v=638423001806930000",
-  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-mora-vista-torrentes-sku4010147/p"
+  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-garrafas-mora-vista-torrentes-sku4010147/p",
+  popularity: 177
  },
  {
   sku: "divvino-2787",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159704/Azeite-de-Oliva-Las-Doscientas-Extra-Virgem-Picual-500ML--1-.png?v=638531027355830000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-las-doscientas-extra-virgem-picual-500ml/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-las-doscientas-extra-virgem-picual-500ml/p",
+  popularity: 178
  },
  {
   sku: "divvino-2770",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165029/Kit 6 Garrafas Vinho Tolva Merlot Rose.png?v=638955314255970000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-vinho-tolva-merlot-rose-sku4010134/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-vinho-tolva-merlot-rose-sku4010134/p",
+  popularity: 179
  },
  {
   sku: "divvino-2760",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158820/Vinho-Amigo-Perro-Reserva-Syrah-e-Carmenere.png?v=638406885261200000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-amigo-perro-reserva-syrah-carmenere-750ml-5168453/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-amigo-perro-reserva-syrah-carmenere-750ml-5168453/p",
+  popularity: 180
  },
  {
   sku: "divvino-2757",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158819/Vinho-Amigo-Perro-Reserva-Cabernet-Sauvignon.png?v=638406884593800000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-amigo-perro-reserva-cabernet-sauvignon-750ml-5168435/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-amigo-perro-reserva-cabernet-sauvignon-750ml-5168435/p",
+  popularity: 181
  },
  {
   sku: "divvino-2665",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158676/kit6cavalieribrut.png?v=638370359779900000",
-  productUrl: "https://www.divvino.com.br/kit-6-espumantes-cavalieri-reali-brut-sku4010095/p"
+  productUrl: "https://www.divvino.com.br/kit-6-espumantes-cavalieri-reali-brut-sku4010095/p",
+  popularity: 182
  },
  {
   sku: "divvino-2664",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158675/kitespumantescavalierimisto.png?v=638370303193830000",
-  productUrl: "https://www.divvino.com.br/kit-6-espumantes-italiano-cavalieri-reali-brut---branco-e-rose-sku4010094/p"
+  productUrl: "https://www.divvino.com.br/kit-6-espumantes-italiano-cavalieri-reali-brut---branco-e-rose-sku4010094/p",
+  popularity: 183
  },
  {
   sku: "divvino-2658",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159455/Vinho-Tinto-Frances-La-Ferrieere--de-Giraud-Blend-.png?v=638484344588800000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-la-ferriere-de-giraud-ventoux-aoc-garrafa-750ml-5187092/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-la-ferriere-de-giraud-ventoux-aoc-garrafa-750ml-5187092/p",
+  popularity: 184
  },
  {
   sku: "divvino-2610",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159454/Vinho-Tinto-Argentino-Bianchi-Oasis-Sur-Malbec-.png?v=638484343644330000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-oasis-sur-malbec-garrafa-750ml-5180190/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-oasis-sur-malbec-garrafa-750ml-5180190/p",
+  popularity: 185
  },
  {
   sku: "divvino-2596",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159893/Vinho-Espanhol-Sueño-De-España-Rose.png?v=638569037067970000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-sue%C3%B1o-de-espa%C3%B1a-rose-750ml-5178306/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-sue%C3%B1o-de-espa%C3%B1a-rose-750ml-5178306/p",
+  popularity: 186
  },
  {
   sku: "divvino-2573",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160625/Vinho-Branco-Villa-Pozzi-Grillo-Sicilia.png?v=638682185636700000",
-  productUrl: "https://www.divvino.com.br/vinho-villa-pozzi-grillo-sicilia-dop-4865508/p"
+  productUrl: "https://www.divvino.com.br/vinho-villa-pozzi-grillo-sicilia-dop-4865508/p",
+  popularity: 187
  },
  {
   sku: "divvino-2462",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159028/Viña-Toldos-Reserva-Merlot.jpg?v=638442032018670000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-ravanal-vina-toldos-reserva-merlot-750ml-5145118/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-ravanal-vina-toldos-reserva-merlot-750ml-5145118/p",
+  popularity: 188
  },
  {
   sku: "divvino-2456",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158321/4898877.png?v=638285621092030000",
-  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-aco-carbono-12cm-ref-743-4898877/p"
+  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-aco-carbono-12cm-ref-743-4898877/p",
+  popularity: 189
  },
  {
   sku: "divvino-2450",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158304/kitlambrusco6.png?v=638284206062200000",
-  productUrl: "https://www.divvino.com.br/kit-6-lambruscos-sku4010022/p"
+  productUrl: "https://www.divvino.com.br/kit-6-lambruscos-sku4010022/p",
+  popularity: 190
  },
  {
   sku: "divvino-2435",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158269/3549370.png?v=638278094294500000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-spaghetto-quad-500g-3549370/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-spaghetto-quad-500g-3549370/p",
+  popularity: 191
  },
  {
   sku: "divvino-2434",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158268/4258663.png?v=638278081096830000",
-  productUrl: "https://www.divvino.com.br/molho-kuhne-made-for-meat-black-garlic-235ml-4258663/p"
+  productUrl: "https://www.divvino.com.br/molho-kuhne-made-for-meat-black-garlic-235ml-4258663/p",
+  popularity: 192
  },
  {
   sku: "divvino-2396",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165292/Vinho Tinto Villa Pozzi Nero D' Avola Sicilia.png?v=638985645884170000",
-  productUrl: "https://www.divvino.com.br/vinho-villa-pozzi-nero-d--avola-sicilia-d-o-p--750ml-4865473/p"
+  productUrl: "https://www.divvino.com.br/vinho-villa-pozzi-nero-d--avola-sicilia-d-o-p--750ml-4865473/p",
+  popularity: 193
  },
  {
   sku: "divvino-2377",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet doce de leite",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158200/4267107.png?v=638271103401800000",
-  productUrl: "https://www.divvino.com.br/doce-de-leite-uruguaio-los-nietitos-receita-tradicional-400g-4267107/p"
+  productUrl: "https://www.divvino.com.br/doce-de-leite-uruguaio-los-nietitos-receita-tradicional-400g-4267107/p",
+  popularity: 194
  },
  {
   sku: "divvino-2310",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160279/Vinho-Tinto-Frances-Chateau-Auzias-Montagne-Noire.png?v=638647603720200000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-montagne-noire-750ml-5121887/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-montagne-noire-750ml-5121887/p",
+  popularity: 195
  },
  {
   sku: "divvino-2306",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160735/Vinho-Rose-Portugues-Faisao.png?v=638696343022400000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-faisao/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-faisao/p",
+  popularity: 196
  },
  {
   sku: "divvino-1832",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158166/4938257.png?v=638264230162430000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-rose-garrafa-750ml-4938257/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-rose-garrafa-750ml-4938257/p",
+  popularity: 197
  },
  {
   sku: "divvino-1830",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158168/4938239--2-.png?v=638264241875500000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-tinto-garrafa-750ml-4938239/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-tinto-garrafa-750ml-4938239/p",
+  popularity: 198
  },
  {
   sku: "divvino-1814",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165678/Kit 6 Espumante Tavino Brut.png?v=639106727594600000",
-  productUrl: "https://www.divvino.com.br/kit-espumante-tavino-emilia-romagna-igt-brut-compre-6-e-ganhe-2-prod2790056/p"
+  productUrl: "https://www.divvino.com.br/kit-espumante-tavino-emilia-romagna-igt-brut-compre-6-e-ganhe-2-prod2790056/p",
+  popularity: 199
  },
  {
   sku: "divvino-1748",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158239/645079.png?v=638276085444730000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-filippo-berio-extra-virgem-500ml-645079/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-filippo-berio-extra-virgem-500ml-645079/p",
+  popularity: 200
  },
  {
   sku: "divvino-1721",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160407/Espumante-Argentino-Concerto-Brut.png?v=638664334261300000",
-  productUrl: "https://www.divvino.com.br/espumante-concerto-brut-grf750ml-4866265/p"
+  productUrl: "https://www.divvino.com.br/espumante-concerto-brut-grf750ml-4866265/p",
+  popularity: 201
  },
  {
   sku: "divvino-1606",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161143/casa-ermelinda-freitas-moscatel-setubal.png.png?v=638804883143730000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-flor-de-la-mar-licoroso-moscatel-de-setubal-garrafa-500ml-4781570/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-flor-de-la-mar-licoroso-moscatel-de-setubal-garrafa-500ml-4781570/p",
+  popularity: 202
  },
  {
   sku: "divvino-1586",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159276/Vinho-Tinto-Italiano-Cantina-Di-Negrar-Bardolino--D.O.C..png?v=638466494864130000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-bardolino-classico-doc-4775536/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-bardolino-classico-doc-4775536/p",
+  popularity: 203
  },
  {
   sku: "divvino-1554",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158886/Vinho-Sao-Goncalo-Rose.png?v=638421250873200000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-sao-goncalo-rose-doc-vinho-verde-4728830/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-sao-goncalo-rose-doc-vinho-verde-4728830/p",
+  popularity: 204
  },
  {
   sku: "divvino-1523",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163139/Vinho-Tinto-Frisante-Costa-Furra-lambrusco-DellEmilia-Amabile.jpg?v=638929632819370000",
-  productUrl: "https://www.divvino.com.br/costa-furra-tinto-dolce-lambrusco-dellemilia-4698188/p"
+  productUrl: "https://www.divvino.com.br/costa-furra-tinto-dolce-lambrusco-dellemilia-4698188/p",
+  popularity: 205
  },
  {
   sku: "divvino-1519",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158964/Espumante-Branco-Italiano-Borghesia-Brut.png?v=638435314915500000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-borghesia-brut-4698212/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-borghesia-brut-4698212/p",
+  popularity: 206
  },
  {
   sku: "divvino-1516",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163132/Vinho-Tinto-Frisante-Vele-Al-Vento-lambrusco-DellEmilia-Amabile-.jpg?v=638929632783730000",
-  productUrl: "https://www.divvino.com.br/vele-al-vento-tinto-dolce-lambrusco-delleemilia-amabile-4698150/p"
+  productUrl: "https://www.divvino.com.br/vele-al-vento-tinto-dolce-lambrusco-delleemilia-amabile-4698150/p",
+  popularity: 207
  },
  {
   sku: "divvino-1515",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163131/Vinho-Rose-Frisante-Vele-Al-Vento-lambrusco-DellEmilia-Amabile-.jpg?v=638929632780470000",
-  productUrl: "https://www.divvino.com.br/vele-al-vento-rose-lambrusco-dellemilia-amabile-4698141/p"
+  productUrl: "https://www.divvino.com.br/vele-al-vento-rose-lambrusco-dellemilia-amabile-4698141/p",
+  popularity: 208
  },
  {
   sku: "divvino-1514",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163130/Vinho-Branco-Frisante-Vele-Al-Vento-lambrusco-DellEmilia-Amabile.jpg?v=638929632776770000",
-  productUrl: "https://www.divvino.com.br/vele-al-vento-branco-dolce-lambrusco-dellemilia-4698132/p"
+  productUrl: "https://www.divvino.com.br/vele-al-vento-branco-dolce-lambrusco-dellemilia-4698132/p",
+  popularity: 209
  },
  {
   sku: "divvino-1508",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163124/Vinho-Branco-Argentino-Mora-Vista-Torrontes.jpg?v=638929632739400000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-torrontes-4679450/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-torrontes-4679450/p",
+  popularity: 210
  },
  {
   sku: "divvino-1470",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156826/4643608.jpg?v=638055993655400000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-argentino-elsa-bianchi-torrontes-4643608/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-argentino-elsa-bianchi-torrontes-4643608/p",
+  popularity: 211
  },
  {
   sku: "divvino-1456",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159717/Espumante-Italiano-Mille-Bolle-Brut-Rose.png?v=638532787378270000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-sacchetto-mille-bolle-brut-rose-4635043/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-sacchetto-mille-bolle-brut-rose-4635043/p",
+  popularity: 212
  },
  {
   sku: "divvino-1455",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159719/Espumante-Branco-Italiano-Mille-Bolle-Millesimato.png?v=638532788716230000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-sacchetto-mille-bolle-extra-dry-4635034/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-sacchetto-mille-bolle-extra-dry-4635034/p",
+  popularity: 213
  },
  {
   sku: "divvino-1434",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159396/Espumante-Italiano-Costa-Furra-Brut.png?v=638481797227930000",
-  productUrl: "https://www.divvino.com.br/espumante-costa-furra-cuvee-brut-4589817/p"
+  productUrl: "https://www.divvino.com.br/espumante-costa-furra-cuvee-brut-4589817/p",
+  popularity: 214
  },
  {
   sku: "divvino-1432",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165139/Espumante Italiano Valle Calda Brut.png?v=638966435556370000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-valle-calda-brut-4589791/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-valle-calda-brut-4589791/p",
+  popularity: 215
  },
  {
   sku: "divvino-1419",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163036/Vinho-Tinto-Argentino-Pristino-Malbec.jpg?v=638929632153870000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-pristino-malbec-4568998/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-pristino-malbec-4568998/p",
+  popularity: 216
  },
  {
   sku: "divvino-1413",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159379/Vinho-Tinto-Argentino-Pristino-Bonarda.png?v=638478481260670000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-vinecol-pristino-bonarda-4568989/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-vinecol-pristino-bonarda-4568989/p",
+  popularity: 217
  },
  {
   sku: "divvino-1329",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios adega",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157524/4123976.jpg?v=638070512466530000",
-  productUrl: "https://www.divvino.com.br/adega-para-vinho-brastemp-33-garrafas-220v-ref---zb33be-4123976/p"
+  productUrl: "https://www.divvino.com.br/adega-para-vinho-brastemp-33-garrafas-220v-ref---zb33be-4123976/p",
+  popularity: 218
  },
  {
   sku: "divvino-1293",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161078/Macarrao-Italiana-Grano-Duro-La-Molisana-Abissine-Rigate-500g.png.png?v=638785934014270000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-conchigli-rigate-500g-3931556/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-conchigli-rigate-500g-3931556/p",
+  popularity: 219
  },
  {
   sku: "divvino-1243",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161067/Massa-Italiana-Grano-Duro-La-Molisana-Farfalle-500g.png.png?v=638785908038500000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-farfalle-500g-3352894/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-farfalle-500g-3352894/p",
+  popularity: 220
  },
  {
   sku: "divvino-1189",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162861/Whisky-Johnnie-Walker-Black-label.jpg?v=638929631137830000",
-  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-black-label-750ml-1220789/p"
+  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-black-label-750ml-1220789/p",
+  popularity: 221
  },
  {
   sku: "divvino-1169",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados gin",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159594/Gin-Tanqueray.png?v=638507659931170000",
-  productUrl: "https://www.divvino.com.br/gin-tanqueray-london-dry-750ml-172014/p"
+  productUrl: "https://www.divvino.com.br/gin-tanqueray-london-dry-750ml-172014/p",
+  popularity: 222
  },
  {
   sku: "divvino-1164",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159722/Whisky-Jack-Daniel-S-1L.png?v=638533602177130000",
-  productUrl: "https://www.divvino.com.br/whisky-jack-daniels-1l-123684/p"
+  productUrl: "https://www.divvino.com.br/whisky-jack-daniels-1l-123684/p",
+  popularity: 223
  },
  {
   sku: "divvino-958",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162647/Vinho-Tinto-Espanhol-Gran-Oristan-Gran-Reserva.jpg?v=638929629573830000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-lozano-gran-oristan-gran-reserva-4560013/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-lozano-gran-oristan-gran-reserva-4560013/p",
+  popularity: 224
  },
  {
   sku: "divvino-899",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162588/Espumante-Italiano-Tavino-Brut-Rose.jpg?v=638972532472330000",
-  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-rose-brut-4484403/p"
+  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-rose-brut-4484403/p",
+  popularity: 225
  },
  {
   sku: "divvino-897",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162586/Vinho-Argentino-Quinde-Bonarda-Organico.jpg?v=638929629272970000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-quinde-bonarda-4482463/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-quinde-bonarda-4482463/p",
+  popularity: 226
  },
  {
   sku: "divvino-890",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158570/4477347.png?v=638349847900900000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-principe-de-viana-edicion-limitada-4477347/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-principe-de-viana-edicion-limitada-4477347/p",
+  popularity: 227
  },
  {
   sku: "divvino-885",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162574/Vinho-Argentino-Postales-Roble-Malbec.jpg?v=639016648561570000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-roble-malbec-4474022/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-roble-malbec-4474022/p",
+  popularity: 228
  },
  {
   sku: "divvino-859",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162548/Vinho-Uruguaio-Traversa-Rose.jpg?v=638929629066000000",
-  productUrl: "https://www.divvino.com.br/vinho-traversa-rose-4446000/p"
+  productUrl: "https://www.divvino.com.br/vinho-traversa-rose-4446000/p",
+  popularity: 229
  },
  {
   sku: "divvino-781",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162470/Espumante-Italiano-Tavino-Dolce.jpg?v=638929628610630000",
-  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-dolce-4373413/p"
+  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-dolce-4373413/p",
+  popularity: 230
  },
  {
   sku: "divvino-596",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162286/Vinho-Chileno-la-Junta-Gran-Reserva-Cabernet-Franc.jpg?v=638929627483930000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-gran-reserva-cabernet-franc-4178750/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-gran-reserva-cabernet-franc-4178750/p",
+  popularity: 231
  },
  {
   sku: "divvino-590",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162280/Vinho-Tinto-Chileno-la-Junta-Reserva-Cabernet-Sauvignon.jpg?v=638929627457730000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-la-junta-reserva-cabernet-sauvignon-4178642/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-la-junta-reserva-cabernet-sauvignon-4178642/p",
+  popularity: 232
  },
  {
   sku: "divvino-510",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162201/Vinho-Tinto-Espanhol-Condado-De-Eguren-Tempranillo.jpg?v=638929627048070000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-condado-de-eguren-tempranillo-3983258/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-condado-de-eguren-tempranillo-3983258/p",
+  popularity: 233
  },
  {
   sku: "divvino-449",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161517/Vinho-Chileno-Concha-Y-Toro-Reservado-Malbec.png?v=638930407362530000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-malbec-3803117/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-malbec-3803117/p",
+  popularity: 234
  },
  {
   sku: "divvino-404",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162095/Vinho-Tinto-Argentino-la-Espera-Reserva-Cabernet-Sauvignon.jpg?v=638929626499770000",
-  productUrl: "https://www.divvino.com.br/la-espera-reserva-cabernet-sauvignon-3587237/p"
+  productUrl: "https://www.divvino.com.br/la-espera-reserva-cabernet-sauvignon-3587237/p",
+  popularity: 235
  },
  {
   sku: "divvino-403",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162094/Vinho-Tinto-Argentino-la-Espera-Reserva-Malbec.jpg?v=638929626496500000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-la-espera-reserva-malbec-3587193/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-la-espera-reserva-malbec-3587193/p",
+  popularity: 236
  },
  {
   sku: "divvino-402",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162093/Vinho-Argentino-la-Espera-Malbec-Syrah.jpg?v=638929626493000000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-la-espera-malbec-syrah-3587139/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-la-espera-malbec-syrah-3587139/p",
+  popularity: 237
  },
  {
   sku: "divvino-331",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162022/Vinho-Argentino-Vinorum-Premium.jpg?v=638929626128730000",
-  productUrl: "https://www.divvino.com.br/vinorum-premium-cabernet-sauvignon-3126202/p"
+  productUrl: "https://www.divvino.com.br/vinorum-premium-cabernet-sauvignon-3126202/p",
+  popularity: 238
  },
  {
   sku: "divvino-291",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161982/Vinho-Tinto-Chileno-Estampa-Fina-Gran-CarmenEre-Cabernet-Sauvignon.jpg?v=638929625967270000",
-  productUrl: "https://www.divvino.com.br/estampa-gran-reserva-carmenere-syrah-cabernet-sauvignon-2702488/p"
+  productUrl: "https://www.divvino.com.br/estampa-gran-reserva-carmenere-syrah-cabernet-sauvignon-2702488/p",
+  popularity: 239
  },
  {
   sku: "divvino-264",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160819/Vinho-Uruguaio-Traversa-Tannat.png?v=638730032925200000",
-  productUrl: "https://www.divvino.com.br/vinho-uruguaio-traversa-tannat-2400333/p"
+  productUrl: "https://www.divvino.com.br/vinho-uruguaio-traversa-tannat-2400333/p",
+  popularity: 240
  },
  {
   sku: "divvino-261",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160820/Vinho-Tinto-Uruguaio-Traversa-Cabernet-Sauvignon.png?v=638730033538230000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-traversa-cabernet-sauvignon-750ml-2400306/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-traversa-cabernet-sauvignon-750ml-2400306/p",
+  popularity: 241
  },
  {
   sku: "divvino-225",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161917/Vinho-Tinto-Portugues-Alianca-Bairrada-Reserva.jpg?v=638929625658830000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-alianca-bairrada-reserva-2129795/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-alianca-bairrada-reserva-2129795/p",
+  popularity: 242
  },
  {
   sku: "divvino-219",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161911/Vinho-Tinto-Gran-Via-Marques-del-Turia-Monastrell-shiraz.jpg?v=638929625622300000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-vicente-gandia-marques-del-turia-2116898/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-vicente-gandia-marques-del-turia-2116898/p",
+  popularity: 243
  },
  {
   sku: "divvino-212",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161904/Espumante-Garibaldi-Vero-Brut.jpg?v=638929625598170000",
-  productUrl: "https://www.divvino.com.br/espumante-garibaldi-brut-vero-garrafa-750ml-2068990/p"
+  productUrl: "https://www.divvino.com.br/espumante-garibaldi-brut-vero-garrafa-750ml-2068990/p",
+  popularity: 244
  },
  {
   sku: "divvino-183",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161873/Vinho-Tinto-Uruguaio-la-Hacienda-Merlot.jpg?v=638929625464370000",
-  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-merlot-1838199/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-merlot-1838199/p",
+  popularity: 245
  },
  {
   sku: "divvino-181",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161871/Vinho-Tinto-Salton-Classic-Tannat-.jpg?v=638929625451900000",
-  productUrl: "https://www.divvino.com.br/salton-classic-tannat-1834320/p"
+  productUrl: "https://www.divvino.com.br/salton-classic-tannat-1834320/p",
+  popularity: 246
  },
  {
   sku: "divvino-180",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161870/Vinho-Tinto-Concha-y-Toro-Reservado-Merlot.jpg?v=638967525175030000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-merlot-1824856/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-merlot-1824856/p",
+  popularity: 247
  },
  {
   sku: "divvino-148",
@@ -2483,7 +2730,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161838/Vinho-Tinto-luigi-Bosca-Finca-la-linda-Malbec.jpg?v=638929625279830000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-luigi-bosca-la-linda-malbec-1116154/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-luigi-bosca-la-linda-malbec-1116154/p",
+  popularity: 248
  },
  {
   sku: "divvino-127",
@@ -2493,7 +2741,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161817/Vinho-Tinto-Salton-Classic-Cabernet-sauvignon.jpg?v=638929625179730000",
-  productUrl: "https://www.divvino.com.br/salton-classic-cabernet-sauvignon-725218/p"
+  productUrl: "https://www.divvino.com.br/salton-classic-cabernet-sauvignon-725218/p",
+  popularity: 249
  },
  {
   sku: "divvino-96",
@@ -2503,7 +2752,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161501/Vinho-Tinto-Concha-Y-Toro-Casillero-Del-Diablo-Cabernet-Sauvignon-.png?v=638930363136930000",
-  productUrl: "https://www.divvino.com.br/casillero-del-diablo-reserva-cabernet-sauvignon-239011/p"
+  productUrl: "https://www.divvino.com.br/casillero-del-diablo-reserva-cabernet-sauvignon-239011/p",
+  popularity: 250
  },
  {
   sku: "divvino-95",
@@ -2513,7 +2763,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161785/Espumante-Chandon-Riche-Demi-Sec.jpg?v=638929625003200000",
-  productUrl: "https://www.divvino.com.br/espumante-chandon-demi-sec-750ml-227161/p"
+  productUrl: "https://www.divvino.com.br/espumante-chandon-demi-sec-750ml-227161/p",
+  popularity: 251
  },
  {
   sku: "divvino-84",
@@ -2523,7 +2774,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161511/Vinho-Tinto-Concha-y--Toro-Reservado-Cabernet-Sauvignon.png?v=638930406194970000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-cabernet-sauvignon-41769/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-cabernet-sauvignon-41769/p",
+  popularity: 252
  },
  {
   sku: "divvino-4274",
@@ -2533,7 +2785,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166748/Massa Italiana Gragnano Pettegole com Trufa 250g.png?v=639168070675270000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-pettegole-trufa-250g-5421435/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-pettegole-trufa-250g-5421435/p",
+  popularity: 253
  },
  {
   sku: "divvino-4273",
@@ -2543,7 +2796,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166747/Massa Italiana Penne Gragnano ao Espinafre 500g.png?v=639168068325970000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-penne-gragnano-espinafre-500g-5421417/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-penne-gragnano-espinafre-500g-5421417/p",
+  popularity: 254
  },
  {
   sku: "divvino-4265",
@@ -2553,7 +2807,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet biscoito",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166746/Biscoito Gullon Butterfly 165g.png?v=639168050683130000",
-  productUrl: "https://www.divvino.com.br/biscoito-gullon-butterfly-165g-5191415/p"
+  productUrl: "https://www.divvino.com.br/biscoito-gullon-butterfly-165g-5191415/p",
+  popularity: 255
  },
  {
   sku: "divvino-4164",
@@ -2563,7 +2818,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ale",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166654/Cerveja Handwerk Belgian Blond Ale 500ml.png?v=639149820722200000",
-  productUrl: "https://www.divvino.com.br/cerveja-handwerk-blond-500ml-5480884/p"
+  productUrl: "https://www.divvino.com.br/cerveja-handwerk-blond-500ml-5480884/p",
+  popularity: 256
  },
  {
   sku: "divvino-4158",
@@ -2573,7 +2829,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas lager",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166655/Cerveja Handwerk Cordeiro Helles Rock 355ml.png?v=639150534734570000",
-  productUrl: "https://www.divvino.com.br/cerveja-handwerk-cordeiro-helles-rock-355ml-5480786/p"
+  productUrl: "https://www.divvino.com.br/cerveja-handwerk-cordeiro-helles-rock-355ml-5480786/p",
+  popularity: 257
  },
  {
   sku: "divvino-4141",
@@ -2583,7 +2840,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166599/Azeite de Oliva Extra Virgem Andorinha 500ml.png?v=639142124138300000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-andorinha-500ml-738441/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-andorinha-500ml-738441/p",
+  popularity: 258
  },
  {
   sku: "divvino-4104",
@@ -2593,7 +2851,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166573/Massa Italiano Monte Romano Fusilli 500g.png?v=639136703823370000",
-  productUrl: "https://www.divvino.com.br/macarrao-italiano-monte-romano-fusilli-500g-5205566/p"
+  productUrl: "https://www.divvino.com.br/macarrao-italiano-monte-romano-fusilli-500g-5205566/p",
+  popularity: 259
  },
  {
   sku: "divvino-3992",
@@ -2603,7 +2862,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165589/Oleo-Composto-Monini-com-Aroma-de-Trufa-Branca-Extra-Virgem-250ml.png?v=639058992533900000",
-  productUrl: "https://www.divvino.com.br/oleo-composto-monini-com-aroma-de-trufa-branca-extra-virgem-250ml-4932020/p"
+  productUrl: "https://www.divvino.com.br/oleo-composto-monini-com-aroma-de-trufa-branca-extra-virgem-250ml-4932020/p",
+  popularity: 260
  },
  {
   sku: "divvino-3968",
@@ -2613,7 +2873,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165555/Mostarda Amarela Kunhe na Caneca de Cerveja 255g.png?v=639045082331570000",
-  productUrl: "https://www.divvino.com.br/mostarda-amarela-kuhne-na-caneca-de-cerveja-255g-4292333/p"
+  productUrl: "https://www.divvino.com.br/mostarda-amarela-kuhne-na-caneca-de-cerveja-255g-4292333/p",
+  popularity: 261
  },
  {
   sku: "divvino-3960",
@@ -2623,7 +2884,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165542/Azeite-de-Oliva-Pons-Janroc-Arbequina-Organico-500ml.-Espanhol-extra-virgem-e-prensado-a-frio-ideal-para-pratos-leves-e-gourmet..png?v=639052226950030000",
-  productUrl: "https://www.divvino.com.br/azeite-oliva-pons-janroc-arbequina-500ml-5205501/p"
+  productUrl: "https://www.divvino.com.br/azeite-oliva-pons-janroc-arbequina-500ml-5205501/p",
+  popularity: 262
  },
  {
   sku: "divvino-3958",
@@ -2633,7 +2895,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet biscoito",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165548/Biscoito-Vicenzi-Grisbi-Pistacchio-135g.png?v=639046007846100000",
-  productUrl: "https://www.divvino.com.br/biscoito-vicenzi-grisbi-pistacchio-135g-5237873/p"
+  productUrl: "https://www.divvino.com.br/biscoito-vicenzi-grisbi-pistacchio-135g-5237873/p",
+  popularity: 263
  },
  {
   sku: "divvino-3873",
@@ -2643,7 +2906,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165389/Molho Tomate Cirio Azeitona 420g.png?v=639008985408770000",
-  productUrl: "https://www.divvino.com.br/molho-tomate-cirio-azeitona-420g-5209654/p"
+  productUrl: "https://www.divvino.com.br/molho-tomate-cirio-azeitona-420g-5209654/p",
+  popularity: 264
  },
  {
   sku: "divvino-3824",
@@ -2653,7 +2917,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166558/FIN-Single-Vineyard-Semillon.png?v=639155913993700000",
-  productUrl: "https://www.divvino.com.br/vinho-fin-del-mundo-svs-semillon-750ml-5481952/p"
+  productUrl: "https://www.divvino.com.br/vinho-fin-del-mundo-svs-semillon-750ml-5481952/p",
+  popularity: 265
  },
  {
   sku: "divvino-3786",
@@ -2663,7 +2928,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165315/TF-GRVA-PV.png?v=639044502840670000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-petit-verdot-750ml-5476765/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-petit-verdot-750ml-5476765/p",
+  popularity: 266
  },
  {
   sku: "divvino-3775",
@@ -2673,7 +2939,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165020/Kit-6-Garrafas-Cordero-com-Piel-de-Lobo-Malbec-Rose.png?v=638954614651530000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-com-piel-de-lobo-malbec-rose-sku4010368/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafas-cordero-com-piel-de-lobo-malbec-rose-sku4010368/p",
+  popularity: 267
  },
  {
   sku: "divvino-3766",
@@ -2683,7 +2950,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164920/Vinho-Branco-Chileno-Casillero-del-Diablo-Blanc-Cabernet.png?v=638936453205130000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-casillero-del-diablo-blanc-cabernet-750ml-5365416/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-casillero-del-diablo-blanc-cabernet-750ml-5365416/p",
+  popularity: 268
  },
  {
   sku: "divvino-3738",
@@ -2693,7 +2961,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161653/Vinho-Tinto-Argentino-Felino-Cabernet-Sauvignon.png?v=638968196052700000",
-  productUrl: "https://www.divvino.com.br/vinho-felino-cabernet-sauvignon-garrafa-750ml-5240055/p"
+  productUrl: "https://www.divvino.com.br/vinho-felino-cabernet-sauvignon-garrafa-750ml-5240055/p",
+  popularity: 269
  },
  {
   sku: "divvino-3728",
@@ -2703,7 +2972,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161622/Decanter ACasa Circle Cristal 1L.png?v=638917270866000000",
-  productUrl: "https://www.divvino.com.br/decanter-acasa-circle-cristal-1l-ref---2302-5096040/p"
+  productUrl: "https://www.divvino.com.br/decanter-acasa-circle-cristal-1l-ref---2302-5096040/p",
+  popularity: 270
  },
  {
   sku: "divvino-3724",
@@ -2713,7 +2983,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161582/Saca-Rolha-ACasa-Metal-Wing-16.5Cm.png?v=638911444877730000",
-  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-metal-wing-16-5cm-ref---151-4898868/p"
+  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-metal-wing-16-5cm-ref---151-4898868/p",
+  popularity: 271
  },
  {
   sku: "divvino-3671",
@@ -2723,7 +2994,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161405/Vinho-Tinto-Frances-Cote-des-Roses-Pinot-Noir-Pays-d-Oc.png?v=638875958781500000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cote-des-roses-pinot-tinto-750ml-5318390/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cote-des-roses-pinot-tinto-750ml-5318390/p",
+  popularity: 272
  },
  {
   sku: "divvino-3670",
@@ -2733,7 +3005,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165136/Vinho Branco Cote des Roses Chardonnay.png?v=638965669134200000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cote-des-roses-chardonnay-branco-750ml-5318381/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cote-des-roses-chardonnay-branco-750ml-5318381/p",
+  popularity: 273
  },
  {
   sku: "divvino-3571",
@@ -2743,7 +3016,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165570/Petite-Pepite.png?v=639071068294170000",
-  productUrl: "https://www.divvino.com.br/vinho-petite-rouge-igp-750ml-5393401/p"
+  productUrl: "https://www.divvino.com.br/vinho-petite-rouge-igp-750ml-5393401/p",
+  popularity: 274
  },
  {
   sku: "divvino-3533",
@@ -2753,7 +3027,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161053/Vinho-Montgras-Early-Harvest-Rose.png.png?v=638797208836630000",
-  productUrl: "https://www.divvino.com.br/vinho-vinho-montgras-early-harvest-rose-750ml-5316627/p"
+  productUrl: "https://www.divvino.com.br/vinho-vinho-montgras-early-harvest-rose-750ml-5316627/p",
+  popularity: 275
  },
  {
   sku: "divvino-3531",
@@ -2763,7 +3038,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161022/Macarrao-Monte-Romano-Farfalle-500g.png.png?v=639041701770970000",
-  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-farfalle-500g-5205557/p"
+  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-farfalle-500g-5205557/p",
+  popularity: 276
  },
  {
   sku: "divvino-3497",
@@ -2773,7 +3049,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166730/Aceto Balsamico Monte Romano 250ml.png?v=639167970791770000",
-  productUrl: "https://www.divvino.com.br/aceto-balsamico-monte-romano-250ml-5212201/p"
+  productUrl: "https://www.divvino.com.br/aceto-balsamico-monte-romano-250ml-5212201/p",
+  popularity: 277
  },
  {
   sku: "divvino-3493",
@@ -2783,7 +3060,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165263/Geleia Italiana Monte Romano Morango 340g.png?v=638974454583430000",
-  productUrl: "https://www.divvino.com.br/geleia-monte-romano-morango-340g-5209467/p"
+  productUrl: "https://www.divvino.com.br/geleia-monte-romano-morango-340g-5209467/p",
+  popularity: 278
  },
  {
   sku: "divvino-3490",
@@ -2793,7 +3071,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161016/Macarrao-Monte-Romano-Penne-500g.png.png?v=639041702078270000",
-  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-penne-500g-5205575/p"
+  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-penne-500g-5205575/p",
+  popularity: 279
  },
  {
   sku: "divvino-3477",
@@ -2803,7 +3082,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161017/Macarrao-Monte-Romano-Linguine-500g.png.png?v=639041702714870000",
-  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-linguine-500g-5205584/p"
+  productUrl: "https://www.divvino.com.br/macarrao-monte-romano-linguine-500g-5205584/p",
+  popularity: 280
  },
  {
   sku: "divvino-3440",
@@ -2813,7 +3093,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160829/Vinho-Tinto-Chileno-Carta-Vieja-Carmenere-Reservado.png?v=638732625156630000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-carmenere-reservado-garrafa-750ml-1853872/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carta-vieja-carmenere-reservado-garrafa-750ml-1853872/p",
+  popularity: 281
  },
  {
   sku: "divvino-3436",
@@ -2823,7 +3104,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161333/Vinho-Tinto-Argentino-La-Espera-Equilibrium-Malbec.png?v=638913967104830000",
-  productUrl: "https://www.divvino.com.br/vinho-la-espera-equilibrium-malbec-750ml-5365935/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-espera-equilibrium-malbec-750ml-5365935/p",
+  popularity: 282
  },
  {
   sku: "divvino-3435",
@@ -2833,7 +3115,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164910/And3s-Monte-Merlot-Rose-.png?v=639077123096070000",
-  productUrl: "https://www.divvino.com.br/vinho-and3s-mont-merlot-rose-750ml-5365926/p"
+  productUrl: "https://www.divvino.com.br/vinho-and3s-mont-merlot-rose-750ml-5365926/p",
+  popularity: 283
  },
  {
   sku: "divvino-3418",
@@ -2843,7 +3126,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160796/Vinho-Laranja-Argentino-Quinde-Organico-.png?v=638726480685870000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-laranja-organico-750ml-5145600/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-quinde-laranja-organico-750ml-5145600/p",
+  popularity: 284
  },
  {
   sku: "divvino-3416",
@@ -2853,7 +3137,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165606/Massa Italiana Grano Duro Garofalo Casarecce 500g.png?v=639062614377630000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-garofalo-casarecce-500g-4544913/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-garofalo-casarecce-500g-4544913/p",
+  popularity: 285
  },
  {
   sku: "divvino-3397",
@@ -2863,7 +3148,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160788/Vinho-Tinto-Portugues-Ravasqueira-Touriga-Franca.png?v=638721043459200000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-ravasqueira-touriga-franca-tinto-750ml-5107743/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-ravasqueira-touriga-franca-tinto-750ml-5107743/p",
+  popularity: 286
  },
  {
   sku: "divvino-3381",
@@ -2873,7 +3159,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161331/Vinho-Uruguaio-Josefa-Rose.png?v=638913966542430000",
-  productUrl: "https://www.divvino.com.br/vinho-vinho-uruguaio-josefa-rose-750ml-5355920/p"
+  productUrl: "https://www.divvino.com.br/vinho-vinho-uruguaio-josefa-rose-750ml-5355920/p",
+  popularity: 287
  },
  {
   sku: "divvino-3378",
@@ -2883,7 +3170,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161329/Vinho-Tinto-Uruguaio-La-Virazon-Tannat.png?v=638913965997100000",
-  productUrl: "https://www.divvino.com.br/vinho-uruguaio-la-virazon-tannat-garrafa-750ml-5355349/p"
+  productUrl: "https://www.divvino.com.br/vinho-uruguaio-la-virazon-tannat-garrafa-750ml-5355349/p",
+  popularity: 288
  },
  {
   sku: "divvino-3368",
@@ -2893,7 +3181,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160711/Kit-12-Garrafas-Espumante-Costa-Furra-Brut.png?v=638693491101770000",
-  productUrl: "https://www.divvino.com.br/kit-12-garrafas-espumante-costa-furra-brut-sku4010291/p"
+  productUrl: "https://www.divvino.com.br/kit-12-garrafas-espumante-costa-furra-brut-sku4010291/p",
+  popularity: 289
  },
  {
   sku: "divvino-3353",
@@ -2903,7 +3192,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165077/Vinho-Tinto-Espanhol-Avaniel-Ribeira-de-Duero-D.O..png?v=638960646611400000",
-  productUrl: "https://www.divvino.com.br/vinho-avaniel-tinto-garrafa-750ml-5347525/p"
+  productUrl: "https://www.divvino.com.br/vinho-avaniel-tinto-garrafa-750ml-5347525/p",
+  popularity: 290
  },
  {
   sku: "divvino-3352",
@@ -2913,7 +3203,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160684/Tomate-sem-Pele-Cirio-240g.png?v=638687421279330000",
-  productUrl: "https://www.divvino.com.br/tomate-sem-pele-cirio-240g-3433769/p"
+  productUrl: "https://www.divvino.com.br/tomate-sem-pele-cirio-240g-3433769/p",
+  popularity: 291
  },
  {
   sku: "divvino-3345",
@@ -2923,7 +3214,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161600/Pioners-Ribera-del-Duero-Cosecha-.png?v=638912908533930000",
-  productUrl: "https://www.divvino.com.br/vinho-pioners-roble-tinto-750ml-5349584/p"
+  productUrl: "https://www.divvino.com.br/vinho-pioners-roble-tinto-750ml-5349584/p",
+  popularity: 292
  },
  {
   sku: "divvino-3343",
@@ -2933,7 +3225,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161001/Vinho-Mr-Deer-Sauvignon-Blanc.png.png?v=638814634780270000",
-  productUrl: "https://www.divvino.com.br/vinho-mr-deer-branco-sauvignon-blanc-garrafa-750ml-5348095/p"
+  productUrl: "https://www.divvino.com.br/vinho-mr-deer-branco-sauvignon-blanc-garrafa-750ml-5348095/p",
+  popularity: 293
  },
  {
   sku: "divvino-3339",
@@ -2943,7 +3236,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161002/Vinho-Mr-Deer-Chardonnay.png.png?v=638814635092070000",
-  productUrl: "https://www.divvino.com.br/vinho-mr-deer-branco-chardonnay-garrafa-750ml-5348101/p"
+  productUrl: "https://www.divvino.com.br/vinho-mr-deer-branco-chardonnay-garrafa-750ml-5348101/p",
+  popularity: 294
  },
  {
   sku: "divvino-3182",
@@ -2953,7 +3247,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159925/Vinho-Branco-Italiano-Marotti-Campi-Albiano-D.O.C.png?v=638573615833070000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-albiano-d-o-c-750ml-5127488/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-albiano-d-o-c-750ml-5127488/p",
+  popularity: 295
  },
  {
   sku: "divvino-3142",
@@ -2963,7 +3258,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159912/Vinho-Tinto-Argentino-Benjamin-Blend.png?v=638573387655670000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-benjamin-malbec--cabernet-sauvignon-garrafa-750ml-5186694/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-benjamin-malbec--cabernet-sauvignon-garrafa-750ml-5186694/p",
+  popularity: 296
  },
  {
   sku: "divvino-3100",
@@ -2973,7 +3269,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161296/Vinho-Tinto-Sul-Africano-Tall-Horse-Pinotage.png?v=639077120095230000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-pinotage-750ml-5263031/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-pinotage-750ml-5263031/p",
+  popularity: 297
  },
  {
   sku: "divvino-3082",
@@ -2983,7 +3280,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159641/Vinho-Tinto-Argentino-Torreon-Cabernet-Sauvignon.png?v=638513808753100000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-cabernet-sauvignon-750ml-5133108/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-cabernet-sauvignon-750ml-5133108/p",
+  popularity: 298
  },
  {
   sku: "divvino-3068",
@@ -2993,7 +3291,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160349/Vinho-Tinto-Espanhol-Bardos-Viñedos-de-Altura.png?v=638658233616700000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bardos-vi%C3%B1edos-de-altura-tinto-garrafa-750ml-5255423/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bardos-vi%C3%B1edos-de-altura-tinto-garrafa-750ml-5255423/p",
+  popularity: 299
  },
  {
   sku: "divvino-3038",
@@ -3003,7 +3302,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161155/Vinho-St.-Augustine-Cape-Red-Blend.png.png?v=638839515650470000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-saint-augustine-tinto-garrafa-750ml-5251818/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-saint-augustine-tinto-garrafa-750ml-5251818/p",
+  popularity: 300
  },
  {
   sku: "divvino-3019",
@@ -3013,7 +3313,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160658/Vinho-Tinto-Italiano-Cecchi-Riserva-di-Famiglia-Chianti-Classico-D.O.C.G.-.png?v=638684184015430000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-riserva-di-famiglia-chianti-classico-docg-garrafa-750ml-5250033/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-riserva-di-famiglia-chianti-classico-docg-garrafa-750ml-5250033/p",
+  popularity: 301
  },
  {
   sku: "divvino-3015",
@@ -3023,7 +3324,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159519/Espumante-Argentino-Concerto-Demi-Sec.png?v=638496687700100000",
-  productUrl: "https://www.divvino.com.br/espumante-concerto-demi-sec-750ml-4866292/p"
+  productUrl: "https://www.divvino.com.br/espumante-concerto-demi-sec-750ml-4866292/p",
+  popularity: 302
  },
  {
   sku: "divvino-2990",
@@ -3033,7 +3335,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160261/Vinho-Tinto-Italiano-Tosca-Chianti-DOCG.png?v=638642450173600000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-tosca-chianti-docg-tinto-garrafa-750ml-5237935/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-tosca-chianti-docg-tinto-garrafa-750ml-5237935/p",
+  popularity: 303
  },
  {
   sku: "divvino-2977",
@@ -3043,7 +3346,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165018/Vinho Tinto Frances Chateau Clou Du Pin Bordeau Superior.png?v=638954584648930000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-clou-du-pin-bordeau-superior-tinto-garrafa-750ml-5236769/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-clou-du-pin-bordeau-superior-tinto-garrafa-750ml-5236769/p",
+  popularity: 304
  },
  {
   sku: "divvino-2938",
@@ -3053,7 +3357,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160225/Vinho-Tinto-Frances-French-Roots-Pinot-Noir.png?v=638638972429570000",
-  productUrl: "https://www.divvino.com.br/vinho-feances-french-roots-pinot-noir-tinto-garrafa-750ml-5233542/p"
+  productUrl: "https://www.divvino.com.br/vinho-feances-french-roots-pinot-noir-tinto-garrafa-750ml-5233542/p",
+  popularity: 305
  },
  {
   sku: "divvino-2926",
@@ -3063,7 +3368,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160794/Vinho-Branco-Italiano-Pietraforte-Pecorino.png?v=638726446267700000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-pecorino-garrafa-750ml-5228533/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-pecorino-garrafa-750ml-5228533/p",
+  popularity: 306
  },
  {
   sku: "divvino-2571",
@@ -3073,7 +3379,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158500/4898910.png?v=638327962763430000",
-  productUrl: "https://www.divvino.com.br/tampa-para-garrafa-inox-7-6-cm-a-casa-4898910/p"
+  productUrl: "https://www.divvino.com.br/tampa-para-garrafa-inox-7-6-cm-a-casa-4898910/p",
+  popularity: 307
  },
  {
   sku: "divvino-2509",
@@ -3083,7 +3390,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158801/MicrosoftTeams-image--3-.png?v=638404816931800000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-reserva-carmenere-garrafa-750ml-5156784/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-tolva-reserva-carmenere-garrafa-750ml-5156784/p",
+  popularity: 308
  },
  {
   sku: "divvino-2467",
@@ -3093,7 +3401,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165519/Kit-10-Vinhos-Brancos-e-Roses-Especial.png?v=639059101651270000",
-  productUrl: "https://www.divvino.com.br/kit-10-vinhos-brancos-e-roses-especial-sku4010027/p"
+  productUrl: "https://www.divvino.com.br/kit-10-vinhos-brancos-e-roses-especial-sku4010027/p",
+  popularity: 309
  },
  {
   sku: "divvino-2426",
@@ -3103,7 +3412,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158265/4766250.png?v=638277274400200000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-filippo-berio-trufa-190g-4766250/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-filippo-berio-trufa-190g-4766250/p",
+  popularity: 310
  },
  {
   sku: "divvino-2423",
@@ -3113,7 +3423,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158258/4938023.png?v=638277081227970000",
-  productUrl: "https://www.divvino.com.br/arroz-arborio-scotti-1kg-4938023/p"
+  productUrl: "https://www.divvino.com.br/arroz-arborio-scotti-1kg-4938023/p",
+  popularity: 311
  },
  {
   sku: "divvino-2273",
@@ -3123,7 +3434,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158051/4852985.png?v=638241770264630000",
-  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-branco-sem-alcool-4852985/p"
+  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-branco-sem-alcool-4852985/p",
+  popularity: 312
  },
  {
   sku: "divvino-2246",
@@ -3133,7 +3445,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165680/Massa Italiana Grano Duro La Molisana Linguine 500g.png?v=639110728829570000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-linguine/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-linguine/p",
+  popularity: 313
  },
  {
   sku: "divvino-2236",
@@ -3143,7 +3456,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160935/Vinho-Branco-Chileno-Etnico-Riesling.png.png?v=638757356421070000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-etnico-riesling-750ml-5093844/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-etnico-riesling-750ml-5093844/p",
+  popularity: 314
  },
  {
   sku: "divvino-2221",
@@ -3153,7 +3467,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159063/Vinho-Branco-Santa-Florentina-Torrontes-Riojano.png?v=638445484129600000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-santa-florentina-torrontes-750ml-5092669/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-santa-florentina-torrontes-750ml-5092669/p",
+  popularity: 315
  },
  {
   sku: "divvino-2153",
@@ -3163,7 +3478,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165560/Vinho Branco Carmen Discovery Chardonnay.png?v=639045367695570000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-chardonnay-750ml-4879479/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-chardonnay-750ml-4879479/p",
+  popularity: 316
  },
  {
   sku: "divvino-1831",
@@ -3173,7 +3489,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158164/4938248.png?v=638264219546830000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-branco-garrafa-750ml-4938248/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-fuori-porta-sangiovese-branco-garrafa-750ml-4938248/p",
+  popularity: 317
  },
  {
   sku: "divvino-1759",
@@ -3183,7 +3500,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161079/Massa-Italiana-Grano-Duro-La-Molisana--Spaghetti-500g.png.png?v=638785939029630000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-spaghetti-500g-3353031/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-la-molisana-spaghetti-500g-3353031/p",
+  popularity: 318
  },
  {
   sku: "divvino-1753",
@@ -3193,7 +3511,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159781/Molho-Pesto-FILIPPO-BERIO-190g.png?v=638538969666900000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-filippo-berio-190g-2189534/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-filippo-berio-190g-2189534/p",
+  popularity: 319
  },
  {
   sku: "divvino-1653",
@@ -3203,7 +3522,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159866/Vinho-Tinto-Espanhol-Marisol-Tempranillo-Rioja-D.O.Ca.png?v=638562367163700000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-espanhol-marisol-tempranillo-4819354/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-espanhol-marisol-tempranillo-4819354/p",
+  popularity: 320
  },
  {
   sku: "divvino-1518",
@@ -3213,7 +3533,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159034/Vinho-Frisante-Rose-Costa-Furra--Lambrusco-Dell-Emilia-Amabile.png?v=638442090096630000",
-  productUrl: "https://www.divvino.com.br/costa-furra-rose-dolce-lambrusco-dellemilia-amabile-4698179/p"
+  productUrl: "https://www.divvino.com.br/costa-furra-rose-dolce-lambrusco-dellemilia-amabile-4698179/p",
+  popularity: 321
  },
  {
   sku: "divvino-1433",
@@ -3223,7 +3544,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159554/Espumante-Italiano-Valle-Calda-Rose.png?v=638502762589500000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-valle-calda-rose-750ml-4589808/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-valle-calda-rose-750ml-4589808/p",
+  popularity: 322
  },
  {
   sku: "divvino-1262",
@@ -3233,7 +3555,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161076/Massa Italiana Grano Duro La Molisana Tagliatelle Com Ovos 200G.png.png?v=638785925930730000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-tagliatelle-com-ovos-200g-3565552/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-tagliatelle-com-ovos-200g-3565552/p",
+  popularity: 323
  },
  {
   sku: "divvino-1256",
@@ -3243,7 +3566,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162912/Whisky-Johnnie-Walker-Double-Black-label-1l.jpg?v=638929631506600000",
-  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-double-black-1l-3435861/p"
+  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-double-black-1l-3435861/p",
+  popularity: 324
  },
  {
   sku: "divvino-1157",
@@ -3253,7 +3577,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157220/48550.jpg?v=638060272490100000",
-  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-red-label-1l-48550/p"
+  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-red-label-1l-48550/p",
+  popularity: 325
  },
  {
   sku: "divvino-1023",
@@ -3263,7 +3588,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166766/Vinho Tinto Uruguaio Viva El Esencial Reserva Tannat.png?v=639174849745270000",
-  productUrl: "https://www.divvino.com.br/vinho-viva-el-esencial-reserva-tannat-4648749/p"
+  productUrl: "https://www.divvino.com.br/vinho-viva-el-esencial-reserva-tannat-4648749/p",
+  popularity: 326
  },
  {
   sku: "divvino-1018",
@@ -3273,7 +3599,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166764/Vinho Branco Uruguaio Viva El Esencial Sauvignon Blanc.png?v=639174849314000000",
-  productUrl: "https://www.divvino.com.br/vinho-aurora-viva-el-esencial-sauvignon-blanc-4648678/p"
+  productUrl: "https://www.divvino.com.br/vinho-aurora-viva-el-esencial-sauvignon-blanc-4648678/p",
+  popularity: 327
  },
  {
   sku: "divvino-866",
@@ -3283,7 +3610,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162555/Vinho-Argentino-la-Espera-Reserva-Carpe-Diem-Pinot-Noir.jpg?v=638929629103700000",
-  productUrl: "https://www.divvino.com.br/vinho-la-espera-reserva-carpe-diem-pinot-noir-4451082/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-espera-reserva-carpe-diem-pinot-noir-4451082/p",
+  popularity: 328
  },
  {
   sku: "divvino-811",
@@ -3293,7 +3621,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162500/Espumante-Frances-Blanc-De-Blancs-Demi-Sec.jpg?v=639016002870400000",
-  productUrl: "https://www.divvino.com.br/espumante-blanc-de-blancs-demi-sec-4383231/p"
+  productUrl: "https://www.divvino.com.br/espumante-blanc-de-blancs-demi-sec-4383231/p",
+  popularity: 329
  },
  {
   sku: "divvino-782",
@@ -3303,7 +3632,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162471/Espumante-Italiano-Tavino-Demi-Sec.jpg?v=639016874344530000",
-  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-demi-sec-4373422/p"
+  productUrl: "https://www.divvino.com.br/espumante-tavino-emilia-romagna-igt-demi-sec-4373422/p",
+  popularity: 330
  },
  {
   sku: "divvino-733",
@@ -3313,7 +3643,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162422/Vinho-Sul-Africano-Elli-Cabernet-Sauvignon.jpg?v=638929628293370000",
-  productUrl: "https://www.divvino.com.br/vinho-elli-cabernet-sauvignon-4346621/p"
+  productUrl: "https://www.divvino.com.br/vinho-elli-cabernet-sauvignon-4346621/p",
+  popularity: 331
  },
  {
   sku: "divvino-719",
@@ -3323,7 +3654,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162408/Elsa-Bianchi-Malbec-.jpg?v=639141219922800000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-elsa-bianchi-malbec-4344396/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-elsa-bianchi-malbec-4344396/p",
+  popularity: 332
  },
  {
   sku: "divvino-710",
@@ -3333,7 +3665,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162400/Vinho-Branco-Misiones-De-Rengo-Sauvignon-Blanc.jpg?v=639142771024070000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-misiones-de-rengo-sauvignon-blanc-4337168/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-misiones-de-rengo-sauvignon-blanc-4337168/p",
+  popularity: 333
  },
  {
   sku: "divvino-695",
@@ -3343,7 +3676,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160777/Vinho-Argentino-La-Espera-Chardonnay.png?v=638717715221670000",
-  productUrl: "https://www.divvino.com.br/la-espera-chardonnay-4329380/p"
+  productUrl: "https://www.divvino.com.br/la-espera-chardonnay-4329380/p",
+  popularity: 334
  },
  {
   sku: "divvino-618",
@@ -3353,7 +3687,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165039/Vinho Tinto Uruguaio La Hacienda Reserva Cabernet Sauvignon.png?v=638956145359370000",
-  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-reserva-cabernet-sauvignon-4226759/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-reserva-cabernet-sauvignon-4226759/p",
+  popularity: 335
  },
  {
   sku: "divvino-605",
@@ -3363,7 +3698,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165219/Vinho-Tinto-Chileno-Carta-Vieja-Carmenere.png?v=638972502269230000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carta-vieja-carmenere-4196749/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carta-vieja-carmenere-4196749/p",
+  popularity: 336
  },
  {
   sku: "divvino-604",
@@ -3373,7 +3709,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162294/Vinho-Chileno-Concha-Y-Toro-Reservado-Rose.jpg?v=638929627551800000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-rose-4195939/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-rose-4195939/p",
+  popularity: 337
  },
  {
   sku: "divvino-595",
@@ -3383,7 +3720,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162285/Vinho-Tinto-la-Junta-Gran-Reserva-CarmenEre.jpg?v=638929627480570000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-gran-reserva-carmenere-4178731/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-gran-reserva-carmenere-4178731/p",
+  popularity: 338
  },
  {
   sku: "divvino-592",
@@ -3393,7 +3731,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162282/Vinho-Tinto-Chileno-la-Junta-Reserva-Pinot-Noir.jpg?v=638929627466100000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-la-junta-reserva-pinot-noir-4178660/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-la-junta-reserva-pinot-noir-4178660/p",
+  popularity: 339
  },
  {
   sku: "divvino-587",
@@ -3403,7 +3742,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158296/4178615.png?v=638283061474200000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-carmenere-4178615/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-carmenere-4178615/p",
+  popularity: 340
  },
  {
   sku: "divvino-586",
@@ -3413,7 +3753,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165009/Vinho Tinto Chileno La Junta Cabernet Sauvignon.png?v=638953805804870000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-cabernet-sauvignon-4178606/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-cabernet-sauvignon-4178606/p",
+  popularity: 341
  },
  {
   sku: "divvino-556",
@@ -3423,7 +3764,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166669/Vinho-Espanhol-Septimo-Sentido-Septimo-Sentido-Tempranillo.png?v=639192205092230000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-vintae-septimo-sentido-tempranillo-4095343/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-vintae-septimo-sentido-tempranillo-4095343/p",
+  popularity: 342
  },
  {
   sku: "divvino-490",
@@ -3433,7 +3775,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162181/Espumante-Salton-Series-Brut-Rose.jpg?v=638929626938800000",
-  productUrl: "https://www.divvino.com.br/espumante-brasileiro-salton-series-rose-brut-3962982/p"
+  productUrl: "https://www.divvino.com.br/espumante-brasileiro-salton-series-rose-brut-3962982/p",
+  popularity: 343
  },
  {
   sku: "divvino-476",
@@ -3443,7 +3786,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165038/Monte da ravasqueira branco.png?v=638956128887700000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-monte-da-ravasqueira-branco-3866814/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-monte-da-ravasqueira-branco-3866814/p",
+  popularity: 344
  },
  {
   sku: "divvino-474",
@@ -3453,7 +3797,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162165/Vinho-Branco-Portugues-Fonte-Da-Serrana.jpg?v=638929626866570000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-monte-da-ravasqueira-fonte-da-serrana-3866743/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-monte-da-ravasqueira-fonte-da-serrana-3866743/p",
+  popularity: 345
  },
  {
   sku: "divvino-414",
@@ -3463,7 +3808,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162105/Vinho-Tinto-Australiano-De-Bortoli-Family-Selection-Syrah.jpg?v=638929626528430000",
-  productUrl: "https://www.divvino.com.br/de-bortoli-family-selection-syrah-3613669/p"
+  productUrl: "https://www.divvino.com.br/de-bortoli-family-selection-syrah-3613669/p",
+  popularity: 346
  },
  {
   sku: "divvino-401",
@@ -3473,7 +3819,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160842/Funckenhausen-La-Espera-Malbec.png?v=638735781768570000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-la-espera-malbec-3587110/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-la-espera-malbec-3587110/p",
+  popularity: 347
  },
  {
   sku: "divvino-387",
@@ -3483,7 +3830,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162078/Vinho-Tinto-Frances-Vieilles-Vignes-Chateauneau-Du-Pape.jpg?v=638929626424730000",
-  productUrl: "https://www.divvino.com.br/vinho-vieilles-vignes-chateauneuf-du-pape-aoc-3511954/p"
+  productUrl: "https://www.divvino.com.br/vinho-vieilles-vignes-chateauneuf-du-pape-aoc-3511954/p",
+  popularity: 348
  },
  {
   sku: "divvino-383",
@@ -3493,7 +3841,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162074/Vinho-Branco-Frances-Jean-Bouchard-Bourgogne-Chardonnay.jpg?v=638929626405300000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-chardonnay-bourgogne-aoc-branco-3511631/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-chardonnay-bourgogne-aoc-branco-3511631/p",
+  popularity: 349
  },
  {
   sku: "divvino-367",
@@ -3503,7 +3852,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162058/Vinho-Brasileiro-Salton-Intenso-Cabernet-Sauvginon.jpg?v=638929626341330000",
-  productUrl: "https://www.divvino.com.br/salton-intenso-cabernet-sauvignon-3410156/p"
+  productUrl: "https://www.divvino.com.br/salton-intenso-cabernet-sauvignon-3410156/p",
+  popularity: 350
  },
  {
   sku: "divvino-306",
@@ -3513,7 +3863,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161997/Vinho-Brasileiro-Almaden-Cabernet-Sauvignon-.jpg?v=638929626027500000",
-  productUrl: "https://www.divvino.com.br/almaden-cabernet-sauvignon-2790720/p"
+  productUrl: "https://www.divvino.com.br/almaden-cabernet-sauvignon-2790720/p",
+  popularity: 351
  },
  {
   sku: "divvino-302",
@@ -3523,7 +3874,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161993/Champanhe-Moutard-Grande-Cuvee-Brut.jpg?v=638929626014100000",
-  productUrl: "https://www.divvino.com.br/champagne-moutard-grand-cuvee-brut-2790613/p"
+  productUrl: "https://www.divvino.com.br/champagne-moutard-grand-cuvee-brut-2790613/p",
+  popularity: 352
  },
  {
   sku: "divvino-296",
@@ -3533,7 +3885,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156365/2782710.jpg?v=638048271127270000",
-  productUrl: "https://www.divvino.com.br/cava-el-miracle-brut-2782710/p"
+  productUrl: "https://www.divvino.com.br/cava-el-miracle-brut-2782710/p",
+  popularity: 353
  },
  {
   sku: "divvino-168",
@@ -3543,7 +3896,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161513/Vinho-Chileno-Concha-y-Toro-Reservado-Carmenere.png?v=638930405930230000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-carmenere-1599856/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-carmenere-1599856/p",
+  popularity: 354
  },
  {
   sku: "divvino-161",
@@ -3553,7 +3907,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158071/1533317.png?v=638246113006500000",
-  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-porto-finest-reserva-1533317/p"
+  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-porto-finest-reserva-1533317/p",
+  popularity: 355
  },
  {
   sku: "divvino-154",
@@ -3563,7 +3918,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165449/Espumante Aurora Prosecco.png?v=639015016069630000",
-  productUrl: "https://www.divvino.com.br/espumante-brasileiro-aurora-prosecco-1477871/p"
+  productUrl: "https://www.divvino.com.br/espumante-brasileiro-aurora-prosecco-1477871/p",
+  popularity: 356
  },
  {
   sku: "divvino-123",
@@ -3573,7 +3929,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157021/681725.jpg?v=638058597092130000",
-  productUrl: "https://www.divvino.com.br/periquita-375ml-681725/p"
+  productUrl: "https://www.divvino.com.br/periquita-375ml-681725/p",
+  popularity: 357
  },
  {
   sku: "divvino-115",
@@ -3583,7 +3940,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161805/Vinho-Tinto-Chileno-Marques-De-Casa-Concha-Cabernet-Sauvignon.jpg?v=638929625106200000",
-  productUrl: "https://www.divvino.com.br/marques-de-casa-concha-cabernet-sauvignon-496049/p"
+  productUrl: "https://www.divvino.com.br/marques-de-casa-concha-cabernet-sauvignon-496049/p",
+  popularity: 358
  },
  {
   sku: "divvino-113",
@@ -3593,7 +3951,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157126/495611.jpg?v=638059554209700000",
-  productUrl: "https://www.divvino.com.br/miolo-reserva-cabernet-sauvignon-495611/p"
+  productUrl: "https://www.divvino.com.br/miolo-reserva-cabernet-sauvignon-495611/p",
+  popularity: 359
  },
  {
   sku: "divvino-89",
@@ -3603,7 +3962,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165428/Espumante Salton Prosecco.png?v=639011674790070000",
-  productUrl: "https://www.divvino.com.br/espumante-brasileiro-salton-prosecco-garrafa-750ml-92894/p"
+  productUrl: "https://www.divvino.com.br/espumante-brasileiro-salton-prosecco-garrafa-750ml-92894/p",
+  popularity: 360
  },
  {
   sku: "divvino-85",
@@ -3613,7 +3973,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161775/Vinho-Branco-Concha-Y-Toro-Sauvignon-Blanc-.jpg?v=638929624928830000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-sauvignon-blanc-41777/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-reservado-sauvignon-blanc-41777/p",
+  popularity: 361
  },
  {
   sku: "divvino-82",
@@ -3623,7 +3984,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157509/1.jpg?v=638061004213930000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-carvalhais-grao-vasco-douro-doc-18783/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-carvalhais-grao-vasco-douro-doc-18783/p",
+  popularity: 362
  },
  {
   sku: "divvino-67",
@@ -3633,7 +3995,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161757/Cafe-Colombiano-Matiz-Expresso-Novo-Torrado-E-Moido-250g.jpg?v=638929624807900000",
-  productUrl: "https://www.divvino.com.br/cafe-colombiano-matiz-expresso-novo-torrado-e-moido-250g-4183455/p"
+  productUrl: "https://www.divvino.com.br/cafe-colombiano-matiz-expresso-novo-torrado-e-moido-250g-4183455/p",
+  popularity: 363
  },
  {
   sku: "divvino-66",
@@ -3643,7 +4006,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161756/Cafe-Colombiano-Matiz-Intenso-Novo-Torrado-E-Moido-250g.jpg?v=638929624803970000",
-  productUrl: "https://www.divvino.com.br/cafe-colombiano-matiz-intenso-novo-torrado-e-moido-250g-4183393/p"
+  productUrl: "https://www.divvino.com.br/cafe-colombiano-matiz-intenso-novo-torrado-e-moido-250g-4183393/p",
+  popularity: 364
  },
  {
   sku: "divvino-57",
@@ -3653,7 +4017,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe capsula de cafe",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161747/Cafe-Baggio-Chocolate-Trufado-Com-10-Unidades-50g.jpg?v=638929624778270000",
-  productUrl: "https://www.divvino.com.br/cafe-baggio-aromas-chocolate-trufado-10-capsulas-4019815/p"
+  productUrl: "https://www.divvino.com.br/cafe-baggio-aromas-chocolate-trufado-10-capsulas-4019815/p",
+  popularity: 365
  },
  {
   sku: "divvino-4317",
@@ -3663,7 +4028,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166788/503371.png?v=639199118812370000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-chalise-garrafa-503371/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-chalise-garrafa-503371/p",
+  popularity: 366
  },
  {
   sku: "divvino-4315",
@@ -3673,7 +4039,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166793/Barolo-Luigi-Arnulfo.jpg?v=639201755286370000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-luigi-arnulfo-barolo-annate-2017-750ml-4909335/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-luigi-arnulfo-barolo-annate-2017-750ml-4909335/p",
+  popularity: 367
  },
  {
   sku: "divvino-4314",
@@ -3683,7 +4050,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166779/4783770.png?v=639196523777200000",
-  productUrl: "https://www.divvino.com.br/espumante-casa-valduga-130-brut-blanc-de-noir-garrafa-750ml-4783770/p"
+  productUrl: "https://www.divvino.com.br/espumante-casa-valduga-130-brut-blanc-de-noir-garrafa-750ml-4783770/p",
+  popularity: 368
  },
  {
   sku: "divvino-4313",
@@ -3693,7 +4061,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166777/4783752.png?v=639196504745300000",
-  productUrl: "https://www.divvino.com.br/espumamte-casa-valduga-brut-rose-130-garrafa-750ml-4783752/p"
+  productUrl: "https://www.divvino.com.br/espumamte-casa-valduga-brut-rose-130-garrafa-750ml-4783752/p",
+  popularity: 369
  },
  {
   sku: "divvino-4309",
@@ -3703,7 +4072,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166783/4275243.png?v=639199078321970000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-esporao-branco-garrafa-750ml-4275243/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-esporao-branco-garrafa-750ml-4275243/p",
+  popularity: 370
  },
  {
   sku: "divvino-4308",
@@ -3713,7 +4083,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166776/4275047.png?v=639196492851330000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-crasto-douro-d-o-c-branco-garrafa-750ml-4275047/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-crasto-douro-d-o-c-branco-garrafa-750ml-4275047/p",
+  popularity: 371
  },
  {
   sku: "divvino-4288",
@@ -3723,7 +4094,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166737/Massa Italiana Gragnano Trecce Tricolore 500g.png?v=639168000584370000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-trecce-tricolore-500g-4781355/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-trecce-tricolore-500g-4781355/p",
+  popularity: 372
  },
  {
   sku: "divvino-4287",
@@ -3733,7 +4105,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166739/Massa Italiana Gragnano Fusilloni Tricolore 500g.png?v=639168009027400000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-fusilloni-tricolore-500g-4781337/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-fusilloni-tricolore-500g-4781337/p",
+  popularity: 373
  },
  {
   sku: "divvino-4285",
@@ -3743,7 +4116,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166743/Massa Italiana Gragnano Mafaldine 500g.png?v=639168024388600000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-mafaldine-500g-4781097/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-mafaldine-500g-4781097/p",
+  popularity: 374
  },
  {
   sku: "divvino-4284",
@@ -3753,7 +4127,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166740/Massa Italiana Gragnano Spaghetti 500g.png?v=639168014154570000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-spaghetti-500g-4781079/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-spaghetti-500g-4781079/p",
+  popularity: 375
  },
  {
   sku: "divvino-4283",
@@ -3763,7 +4138,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166731/Mostarda Francesa Cavalier com Graos 200g.png?v=639167980241000000",
-  productUrl: "https://www.divvino.com.br/mostarda-francesa-cavalier-com-graos-200g-4469514/p"
+  productUrl: "https://www.divvino.com.br/mostarda-francesa-cavalier-com-graos-200g-4469514/p",
+  popularity: 376
  },
  {
   sku: "divvino-4280",
@@ -3773,7 +4149,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166727/Passata Rustica Cirio 680g.png?v=639167945438570000",
-  productUrl: "https://www.divvino.com.br/passata-rustica-cirio-680g-3433796/p"
+  productUrl: "https://www.divvino.com.br/passata-rustica-cirio-680g-3433796/p",
+  popularity: 377
  },
  {
   sku: "divvino-4275",
@@ -3783,7 +4160,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166749/Massa Italiana Gragnano Matasse Tricolore 500g.png?v=639168076124600000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-matasse-tricolor-500g-5421444/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-matasse-tricolor-500g-5421444/p",
+  popularity: 378
  },
  {
   sku: "divvino-4270",
@@ -3793,7 +4171,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166742/Massa Gragnano Spaghetti Tricolore 750g.png?v=639168021302600000",
-  productUrl: "https://www.divvino.com.br/massa-gragnano-spaghetti-tricolor-750g-5261860/p"
+  productUrl: "https://www.divvino.com.br/massa-gragnano-spaghetti-tricolor-750g-5261860/p",
+  popularity: 379
  },
  {
   sku: "divvino-4269",
@@ -3803,7 +4182,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166744/Massa Gragnano Fusilloni Tricolore 750g.png?v=639168038186700000",
-  productUrl: "https://www.divvino.com.br/massa-gragnano-fusilloni-tricolar-750g-5261823/p"
+  productUrl: "https://www.divvino.com.br/massa-gragnano-fusilloni-tricolar-750g-5261823/p",
+  popularity: 380
  },
  {
   sku: "divvino-4268",
@@ -3813,7 +4193,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166728/Polpa de Tomate Cirio Passata Tetra 500g.png?v=639167953342930000",
-  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-passata-tetra-500g-5205753/p"
+  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-passata-tetra-500g-5205753/p",
+  popularity: 381
  },
  {
   sku: "divvino-4267",
@@ -3823,7 +4204,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166729/Polpa de Tomate Cirio Classico 390g.png?v=639167955361730000",
-  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-classico-390g-5205735/p"
+  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-classico-390g-5205735/p",
+  popularity: 382
  },
  {
   sku: "divvino-4266",
@@ -3833,7 +4215,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166733/Ketchup Mutti Classico 300g.png?v=639167985921900000",
-  productUrl: "https://www.divvino.com.br/ketchup-mutti-classico-300g-5100484/p"
+  productUrl: "https://www.divvino.com.br/ketchup-mutti-classico-300g-5100484/p",
+  popularity: 383
  },
  {
   sku: "divvino-4264",
@@ -3843,7 +4226,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet biscoito",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166757/Biscoito-Gullon-Mini-Bites-Cheddar-250g.png?v=639168815610930000",
-  productUrl: "https://www.divvino.com.br/biscoito-gullon-mini-bites-cheddar-250g-5191317/p"
+  productUrl: "https://www.divvino.com.br/biscoito-gullon-mini-bites-cheddar-250g-5191317/p",
+  popularity: 384
  },
  {
   sku: "divvino-4261",
@@ -3853,7 +4237,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166711/Biscoito Viera Princesa 400g.png?v=639165264488670000",
-  productUrl: "https://www.divvino.com.br/biscoito-vieira-princesa-400g-3075702/p"
+  productUrl: "https://www.divvino.com.br/biscoito-vieira-princesa-400g-3075702/p",
+  popularity: 385
  },
  {
   sku: "divvino-4255",
@@ -3863,7 +4248,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166706/Vinho Rose Argentino Latitud 33 Malbec.png?v=639161138541300000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-latitud-33-rose-malbec-750ml-5106174/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-latitud-33-rose-malbec-750ml-5106174/p",
+  popularity: 386
  },
  {
   sku: "divvino-4208",
@@ -3873,7 +4259,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166636/Chocolate E.Wedel Bajeczny 290g.png?v=639147277330600000",
-  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-bajeczny-290g-4713589/p"
+  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-bajeczny-290g-4713589/p",
+  popularity: 387
  },
  {
   sku: "divvino-4205",
@@ -3883,7 +4270,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas pilsen",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166648/Cerveja Brasileira Baden Baden Pilsen Cristal 350ml.png?v=639148953291570000",
-  productUrl: "https://www.divvino.com.br/cerveja-brasileira-baden-baden-pilsen-cristal-350ml-4536911/p"
+  productUrl: "https://www.divvino.com.br/cerveja-brasileira-baden-baden-pilsen-cristal-350ml-4536911/p",
+  popularity: 388
  },
  {
   sku: "divvino-4200",
@@ -3893,7 +4281,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet biscoito",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166622/Biscoito Merba Cookie Recheado Avela 200g.png?v=639147223634670000",
-  productUrl: "https://www.divvino.com.br/biscoito-merba-cookie-recheado-merba-avela-200g-4196730/p"
+  productUrl: "https://www.divvino.com.br/biscoito-merba-cookie-recheado-merba-avela-200g-4196730/p",
+  popularity: 389
  },
  {
   sku: "divvino-4191",
@@ -3903,7 +4292,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe capsula de cafe",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166630/Capsula TRES Cafe Espresso Vibrante 3 Coracoes 10 unidades.png?v=639147249811330000",
-  productUrl: "https://www.divvino.com.br/cafe-tres-espresso-vibrante-com-10-capsulas-80g-3526993/p"
+  productUrl: "https://www.divvino.com.br/cafe-tres-espresso-vibrante-com-10-capsulas-80g-3526993/p",
+  popularity: 390
  },
  {
   sku: "divvino-4190",
@@ -3913,7 +4303,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166639/Massa Italiana Grano Duro Garofalo Spaghetti 500g.png?v=639147932176230000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-garofalo-spaghetti-500g-2433218/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-garofalo-spaghetti-500g-2433218/p",
+  popularity: 391
  },
  {
   sku: "divvino-4189",
@@ -3923,7 +4314,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166615/Vinho Tinto Brasileiro Miolo Reserva Cabernet Sauvignon.png?v=639147073851270000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-miolo-reserva-garrafa-2194880/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-miolo-reserva-garrafa-2194880/p",
+  popularity: 392
  },
  {
   sku: "divvino-4188",
@@ -3933,7 +4325,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166617/Vinho Tinto Brasileiro Miolo Reserva Merlot.png?v=639147087518700000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-miolo-reserva-garrafa-2194864/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-miolo-reserva-garrafa-2194864/p",
+  popularity: 393
  },
  {
   sku: "divvino-4163",
@@ -3943,7 +4336,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166656/Cerveja Handwerk Imperial Stout 355ml.png?v=639150540517030000",
-  productUrl: "https://www.divvino.com.br/cerveja-handwerk-imperial-stout-355ml-5480795/p"
+  productUrl: "https://www.divvino.com.br/cerveja-handwerk-imperial-stout-355ml-5480795/p",
+  popularity: 394
  },
  {
   sku: "divvino-4156",
@@ -3953,7 +4347,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas malzbier",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166659/Cerveja Handwerk Malzbier 355ml.png?v=639150565110600000",
-  productUrl: "https://www.divvino.com.br/cerveja-handwerk-malzbier-355ml-5480759/p"
+  productUrl: "https://www.divvino.com.br/cerveja-handwerk-malzbier-355ml-5480759/p",
+  popularity: 395
  },
  {
   sku: "divvino-4153",
@@ -3963,7 +4358,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas zero alcool",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166645/Cerveja Alles Blau Sem Alcool Hop Lager 355ml.png?v=639148836952000000",
-  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-sem-alcool-355ml-5462886/p"
+  productUrl: "https://www.divvino.com.br/cerveja-alles-blau-sem-alcool-355ml-5462886/p",
+  popularity: 396
  },
  {
   sku: "divvino-4150",
@@ -3973,7 +4369,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas pilsen",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166644/Cerveja Allex Blau Catharina Sour 355ml.png?v=639148829245700000",
-  productUrl: "https://www.divvino.com.br/cerveja-allex-blau-catharina-sour-355ml-5462984/p"
+  productUrl: "https://www.divvino.com.br/cerveja-allex-blau-catharina-sour-355ml-5462984/p",
+  popularity: 397
  },
  {
   sku: "divvino-4142",
@@ -3983,7 +4380,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166600/Azeite de Oliva Extra Virgem Gallo Classico 500ml.png?v=639142127927330000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-gallo-extra-virgem-500ml-308641/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-gallo-extra-virgem-500ml-308641/p",
+  popularity: 398
  },
  {
   sku: "divvino-4140",
@@ -3993,7 +4391,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166592/Vinho Branco Brasileiro Miolo Cuvee Giuseppe Chardonnay.png?v=639141928779070000",
-  productUrl: "https://www.divvino.com.br/vinho-miolo-cuvee-giuseppe-chardonnay-garrafa-750ml-4396516/p"
+  productUrl: "https://www.divvino.com.br/vinho-miolo-cuvee-giuseppe-chardonnay-garrafa-750ml-4396516/p",
+  popularity: 399
  },
  {
   sku: "divvino-4138",
@@ -4003,7 +4402,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166596/Vinho Tinto Argentino Angelica Zapata Malbec Alta.png?v=639142077628700000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-angelica-zapata-malbec-garrafa-750ml-2650739/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-angelica-zapata-malbec-garrafa-750ml-2650739/p",
+  popularity: 400
  },
  {
   sku: "divvino-4137",
@@ -4013,7 +4413,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166597/Vinho Tinto Argentino Angelica Zapata Cabernet Sauvignon.png?v=639142081370300000",
-  productUrl: "https://www.divvino.com.br/vinho-angelica-zapata-cabernet-sauvignon-garrafa-750ml-2650720/p"
+  productUrl: "https://www.divvino.com.br/vinho-angelica-zapata-cabernet-sauvignon-garrafa-750ml-2650720/p",
+  popularity: 401
  },
  {
   sku: "divvino-4136",
@@ -4023,7 +4424,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166594/Vinho Tinto Brasileiro Fausto Cabernet Sauvignon.png?v=639142057405600000",
-  productUrl: "https://www.divvino.com.br/vinho-fausto-cabernet-sauvignon-750ml-2014084/p"
+  productUrl: "https://www.divvino.com.br/vinho-fausto-cabernet-sauvignon-750ml-2014084/p",
+  popularity: 402
  },
  {
   sku: "divvino-4112",
@@ -4033,7 +4435,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166794/chardonnay_viognier_terroir_xxvii_2025_13_1_a12ccdd6392efa00df4cc650d3fff673.png?v=639201767322830000",
-  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-chardonnay-viognier-branco-fino-seco-750ml-5554772/p"
+  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-chardonnay-viognier-branco-fino-seco-750ml-5554772/p",
+  popularity: 403
  },
  {
   sku: "divvino-4110",
@@ -4043,7 +4446,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166791/5554718.png?v=639199150599370000",
-  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-carbenet-sauvignon-fino-tinto-seco-750ml-5554718/p"
+  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-carbenet-sauvignon-fino-tinto-seco-750ml-5554718/p",
+  popularity: 404
  },
  {
   sku: "divvino-4109",
@@ -4053,7 +4457,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos sem alcool",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166792/shiraz_desalcoolizado_la_zero_2025_2_20260119170833_5890014eff2e.jpg?v=639201741879700000",
-  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-la-shiraz-zero-alcool-750ml-5554683/p"
+  productUrl: "https://www.divvino.com.br/vinho-luiz-argenta-la-shiraz-zero-alcool-750ml-5554683/p",
+  popularity: 405
  },
  {
   sku: "divvino-4108",
@@ -4063,7 +4468,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos sem alcool",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166790/5554610.png?v=639199140352330000",
-  productUrl: "https://www.divvino.com.br/vinho-la-sauvignon-blanc-luiz-argenta-zero-alcool-750ml-5554610/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-sauvignon-blanc-luiz-argenta-zero-alcool-750ml-5554610/p",
+  popularity: 406
  },
  {
   sku: "divvino-4105",
@@ -4073,7 +4479,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166572/Azeite de Oliva Gallo Extra Virgem Reserva 500ml.png?v=639136696796700000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-gallo-extra-virgem-reserva-500ml-2785570/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-gallo-extra-virgem-reserva-500ml-2785570/p",
+  popularity: 407
  },
  {
   sku: "divvino-4085",
@@ -4083,7 +4490,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados gin",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166564/Gin Tanqueray London Dry 375ml.png?v=639131570384530000",
-  productUrl: "https://www.divvino.com.br/gin-tanqueray-375ml-5457250/p"
+  productUrl: "https://www.divvino.com.br/gin-tanqueray-375ml-5457250/p",
+  popularity: 408
  },
  {
   sku: "divvino-4075",
@@ -4093,7 +4501,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166547/Vinho Branco Portugues Crasto Douro D.O.C.png?v=639120421446330000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-crasto-douro-d-o-c-branco-garrafa-750ml-4275092/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-crasto-douro-d-o-c-branco-garrafa-750ml-4275092/p",
+  popularity: 409
  },
  {
   sku: "divvino-4073",
@@ -4103,7 +4512,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166545/Vinho Tinto Italiano Villa Antinori Chianti Reserva.png?v=639120316933630000",
-  productUrl: "https://www.divvino.com.br/vinho-villa-antinori-750ml-4811516/p"
+  productUrl: "https://www.divvino.com.br/vinho-villa-antinori-750ml-4811516/p",
+  popularity: 410
  },
  {
   sku: "divvino-4056",
@@ -4113,7 +4523,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166537/Vinho Branco Luigi Bosca La Linda Chardonnay.png?v=639110947651130000",
-  productUrl: "https://www.divvino.com.br/vinho-la-linda-chardonnay-750ml-1116145/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-linda-chardonnay-750ml-1116145/p",
+  popularity: 411
  },
  {
   sku: "divvino-4023",
@@ -4123,7 +4534,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios cervejeira e frigobar",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166601/Cervejeira Consul Titanium 82L 220v.png?v=639142801772630000",
-  productUrl: "https://www.divvino.com.br/cervejeira-consul-czd12mt-82l-220v-5526473/p"
+  productUrl: "https://www.divvino.com.br/cervejeira-consul-czd12mt-82l-220v-5526473/p",
+  popularity: 412
  },
  {
   sku: "divvino-4020",
@@ -4133,7 +4545,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165637/vihno-branc-almadem-gewurztraminer.png?v=639083997039500000",
-  productUrl: "https://www.divvino.com.br/vinho-almaden-gewurztraminer-750ml-5338080/p"
+  productUrl: "https://www.divvino.com.br/vinho-almaden-gewurztraminer-750ml-5338080/p",
+  popularity: 413
  },
  {
   sku: "divvino-4019",
@@ -4143,7 +4556,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166598/Vinho Branco Brasileiro Casa Geraldo 3 Tons White.png?v=639142086936030000",
-  productUrl: "https://www.divvino.com.br/vinho-casa-geraldo-3-tons-white-garrafa-750ml-5244027/p"
+  productUrl: "https://www.divvino.com.br/vinho-casa-geraldo-3-tons-white-garrafa-750ml-5244027/p",
+  popularity: 414
  },
  {
   sku: "divvino-4018",
@@ -4153,7 +4567,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166590/Vinho Argentino Nieto Senetiner Rose.png?v=639141911876370000",
-  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-rose-750ml-5241929/p"
+  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-rose-750ml-5241929/p",
+  popularity: 415
  },
  {
   sku: "divvino-4017",
@@ -4163,7 +4578,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165642/nieto-senetiner-cabernet-sauvignon-vinho-tinto.png?v=639084035897800000",
-  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-cabernet-sauvignon-garrafa-750ml-5241867/p"
+  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-cabernet-sauvignon-garrafa-750ml-5241867/p",
+  popularity: 416
  },
  {
   sku: "divvino-4016",
@@ -4173,7 +4589,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166591/Vinho-Tinto-Argentino-Nieto-Senetiner-Malbec.png?v=639149620881700000",
-  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-malbec-garrafa-750ml-5241740/p"
+  productUrl: "https://www.divvino.com.br/vinho-nieto-senetiner-malbec-garrafa-750ml-5241740/p",
+  popularity: 417
  },
  {
   sku: "divvino-4015",
@@ -4183,7 +4600,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166589/Vinho-THERA-Merlot-Garrafa-750ml.png?v=639141902716030000",
-  productUrl: "https://www.divvino.com.br/vinho-thera-merlot-garrafa-750ml-5208281/p"
+  productUrl: "https://www.divvino.com.br/vinho-thera-merlot-garrafa-750ml-5208281/p",
+  popularity: 418
  },
  {
   sku: "divvino-4014",
@@ -4193,7 +4611,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166533/Vinho Rose Luigi Bosca La Linda Malbec.png?v=639110903909870000",
-  productUrl: "https://www.divvino.com.br/vinho-la-linda-rose-750ml-5208503/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-linda-rose-750ml-5208503/p",
+  popularity: 419
  },
  {
   sku: "divvino-4013",
@@ -4203,7 +4622,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166593/Vinho-Branco-Brasileiro-Fausto-Chardonnay.png?v=639142034753770000",
-  productUrl: "https://www.divvino.com.br/vinho-fausto-chardonnay-garrafa-750ml-5207945/p"
+  productUrl: "https://www.divvino.com.br/vinho-fausto-chardonnay-garrafa-750ml-5207945/p",
+  popularity: 420
  },
  {
   sku: "divvino-4012",
@@ -4213,7 +4633,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165638/angelica-zapata-chardonnay-com-selo-autenticidade.png?v=639084006417870000",
-  productUrl: "https://www.divvino.com.br/vinho-angelica-zapata-chardonnay-garrafa-750ml-5162790/p"
+  productUrl: "https://www.divvino.com.br/vinho-angelica-zapata-chardonnay-garrafa-750ml-5162790/p",
+  popularity: 421
  },
  {
   sku: "divvino-4011",
@@ -4223,7 +4644,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165640/Vinho-tinto-brasileiro-pizzato-nervi-tannat.jpg?v=639084018984400000",
-  productUrl: "https://www.divvino.com.br/vinho-pizzatto-reserva-tannat-750ml-2014114/p"
+  productUrl: "https://www.divvino.com.br/vinho-pizzatto-reserva-tannat-750ml-2014114/p",
+  popularity: 422
  },
  {
   sku: "divvino-3998",
@@ -4233,7 +4655,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios cervejeira e frigobar",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165594/Cervejeira-Fischer-Infinity-Multi-92L-220V.png?v=639062563722230000",
-  productUrl: "https://www.divvino.com.br/cervejeira-fischer-infinity-92l-220v-ref---37200-5376732/p"
+  productUrl: "https://www.divvino.com.br/cervejeira-fischer-infinity-92l-220v-ref---37200-5376732/p",
+  popularity: 423
  },
  {
   sku: "divvino-3997",
@@ -4243,7 +4666,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165586/3777803.png?v=639058239061730000",
-  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-garofalo-penne-sem-gluten-400g-3777803/p"
+  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-garofalo-penne-sem-gluten-400g-3777803/p",
+  popularity: 424
  },
  {
   sku: "divvino-3996",
@@ -4253,7 +4677,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165590/Azeite de Oliva Monini Extra Virgem 250ml.png?v=639058248428900000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monini-extra-virgem-250ml-2004186/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monini-extra-virgem-250ml-2004186/p",
+  popularity: 425
  },
  {
   sku: "divvino-3995",
@@ -4263,7 +4688,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165585/Macarrao-Italiana-Grano-Duro-Garofalo-Spaghetti-sem-Gluten-400g.png?v=639058241519900000",
-  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-garofalo-spaghetti-sem-gluten-400g-3777797/p"
+  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-garofalo-spaghetti-sem-gluten-400g-3777797/p",
+  popularity: 426
  },
  {
   sku: "divvino-3994",
@@ -4273,7 +4699,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165587/Massa-Garofalo-Fusilli-Sem-Gluten-400g.png?v=639065868368900000",
-  productUrl: "https://www.divvino.com.br/macarrao-garofalo-fusilli-sem-gluten-400g-5500833/p"
+  productUrl: "https://www.divvino.com.br/macarrao-garofalo-fusilli-sem-gluten-400g-5500833/p",
+  popularity: 427
  },
  {
   sku: "divvino-3993",
@@ -4283,7 +4710,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165588/Oleo-Composto-Monini-Trufa-Negra-Extra-Virgem-250ml.png?v=639058992031100000",
-  productUrl: "https://www.divvino.com.br/oleo-composto-monini-trufa-negra-extra-virgem-250ml-5471203/p"
+  productUrl: "https://www.divvino.com.br/oleo-composto-monini-trufa-negra-extra-virgem-250ml-5471203/p",
+  popularity: 428
  },
  {
   sku: "divvino-3971",
@@ -4293,7 +4721,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165545/Azeite de Oliva Pons Tradicional Extra Virgem 500ml.png?v=639044492994800000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-espanhol-pons-tradicional-extra-virgem-500ml-3700577/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-espanhol-pons-tradicional-extra-virgem-500ml-3700577/p",
+  popularity: 429
  },
  {
   sku: "divvino-3970",
@@ -4303,7 +4732,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165540/Azeite de Oliva Ibero Extra Virgem 1L.png?v=639044473192300000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-1l-2013762/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-1l-2013762/p",
+  popularity: 430
  },
  {
   sku: "divvino-3967",
@@ -4313,7 +4743,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165553/Molho de Pimenta Tabasco Vermelha Original.png?v=639045080944100000",
-  productUrl: "https://www.divvino.com.br/molho-de-pimenta-tabasco-vermelha-original-60ml-340251/p"
+  productUrl: "https://www.divvino.com.br/molho-de-pimenta-tabasco-vermelha-original-60ml-340251/p",
+  popularity: 431
  },
  {
   sku: "divvino-3964",
@@ -4323,7 +4754,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165544/Azeite-de-Oliva-Pons-Janroc-Lecciana-Extra-Virgem-500ml.png?v=639044491808430000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-pons-janroc-lecciana-extra-virgem-500ml-5471240/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-pons-janroc-lecciana-extra-virgem-500ml-5471240/p",
+  popularity: 432
  },
  {
   sku: "divvino-3963",
@@ -4333,7 +4765,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165543/Azeite-de-Oliva-Pons-Janroc-Koroneiki-Extra-Virgem-500ml.png?v=639135866505370000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-pons-janroc-koroneiki-extra-virgem-500ml-5471230/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-pons-janroc-koroneiki-extra-virgem-500ml-5471230/p",
+  popularity: 433
  },
  {
   sku: "divvino-3962",
@@ -4343,7 +4776,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165549/Chocolate Milka Alpine Milk 90g.png?v=639045067291330000",
-  productUrl: "https://www.divvino.com.br/chocolate-milka-alpine-milk-90g-5394122/p"
+  productUrl: "https://www.divvino.com.br/chocolate-milka-alpine-milk-90g-5394122/p",
+  popularity: 434
  },
  {
   sku: "divvino-3959",
@@ -4353,7 +4787,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165539/Azeite de Oliva Ibero Extra Virgem 250ml.png?v=639044471910670000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-250ml-5471212/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-ibero-extra-virgem-250ml-5471212/p",
+  popularity: 435
  },
  {
   sku: "divvino-3942",
@@ -4363,7 +4798,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cha",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165506/Cha-Kruger-Frutas-Silvestres-Instantaneo-400g.png?v=639020251652930000",
-  productUrl: "https://www.divvino.com.br/cha-kruger-frutas-silvestres-instantaneo-400g-4905505/p"
+  productUrl: "https://www.divvino.com.br/cha-kruger-frutas-silvestres-instantaneo-400g-4905505/p",
+  popularity: 436
  },
  {
   sku: "divvino-3941",
@@ -4373,7 +4809,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cha",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165507/Cha Kruger Limao Instantaneo 400g.png?v=639020252963400000",
-  productUrl: "https://www.divvino.com.br/cha-kruger-limao-instantaneo-400g-4905480/p"
+  productUrl: "https://www.divvino.com.br/cha-kruger-limao-instantaneo-400g-4905480/p",
+  popularity: 437
  },
  {
   sku: "divvino-3940",
@@ -4383,7 +4820,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cha",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165508/Cha Kruger Pessego Instantaneo 400g.png?v=639020254112970000",
-  productUrl: "https://www.divvino.com.br/cha-kruger-pessego-instantaneo-400g-4904633/p"
+  productUrl: "https://www.divvino.com.br/cha-kruger-pessego-instantaneo-400g-4904633/p",
+  popularity: 438
  },
  {
   sku: "divvino-3925",
@@ -4393,7 +4831,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165413/Tomate-em-Cubos-Cirio-260g.png?v=639192251972330000",
-  productUrl: "https://www.divvino.com.br/tomate-em-cubos-cirio-260g-3963291/p"
+  productUrl: "https://www.divvino.com.br/tomate-em-cubos-cirio-260g-3963291/p",
+  popularity: 439
  },
  {
   sku: "divvino-3922",
@@ -4403,7 +4842,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165350/Sacola para Vinho ACasa Esmerald Papel 36x12cm.png?v=639008182457300000",
-  productUrl: "https://www.divvino.com.br/sacola-para-vinho-acasa-esmerald-papel-36x12cm-5401890/p"
+  productUrl: "https://www.divvino.com.br/sacola-para-vinho-acasa-esmerald-papel-36x12cm-5401890/p",
+  popularity: 440
  },
  {
   sku: "divvino-3920",
@@ -4413,7 +4853,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165355/Bolsa Termica ACasa Poliester Azul para 1 Garrafa.png?v=639008193938230000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-azul-para-1-garrafa-ref---2501-5334429/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-azul-para-1-garrafa-ref---2501-5334429/p",
+  popularity: 441
  },
  {
   sku: "divvino-3919",
@@ -4423,7 +4864,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165360/Bolsa Termica ACasa Poliester Bordo para 1 Garrafa.png?v=639008199255100000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-bordo-para-1-garrafa-ref---2501-5334400/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-bordo-para-1-garrafa-ref---2501-5334400/p",
+  popularity: 442
  },
  {
   sku: "divvino-3918",
@@ -4433,7 +4875,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165352/Bolsa Termica ACasa Poliester 12L Verde para 12 Garrafas.png?v=639008191126900000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-12l-verde-para-12-garrafas-ref---2501-5334394/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-12l-verde-para-12-garrafas-ref---2501-5334394/p",
+  popularity: 443
  },
  {
   sku: "divvino-3917",
@@ -4443,7 +4886,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165357/Bolsa Termica ACASA Poliester 12L Preto para 4 Garrafas.png?v=639008196894100000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-12l-preto-para-4-garrafas-ref---2501-5334376/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-12l-preto-para-4-garrafas-ref---2501-5334376/p",
+  popularity: 444
  },
  {
   sku: "divvino-3914",
@@ -4453,7 +4897,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165339/Bolsa Termica ACasa Poliester 5L Preto.png?v=639008098261200000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliestr-5l-preto-5252225/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliestr-5l-preto-5252225/p",
+  popularity: 445
  },
  {
   sku: "divvino-3913",
@@ -4463,7 +4908,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165335/Bolsa Termica ACasa Poliester Azul para 1 Garrafa.png?v=639008023392630000",
-  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-azul-e-branci-para-1-garrafa-ref---001-5252181/p"
+  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-azul-e-branci-para-1-garrafa-ref---001-5252181/p",
+  popularity: 446
  },
  {
   sku: "divvino-3912",
@@ -4473,7 +4919,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165337/Bolsa Termica ACasa Poliester 26L Vermelho e Rosa.png?v=639008091501530000",
-  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-termica-26l-vermelho-e-rosa-5252145/p"
+  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-termica-26l-vermelho-e-rosa-5252145/p",
+  popularity: 447
  },
  {
   sku: "divvino-3910",
@@ -4483,7 +4930,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165376/Bombom-Belga-Hamlet-Praline-Collection-Sortidos-100g.png?v=639008829602070000",
-  productUrl: "https://www.divvino.com.br/bombom-belga-hamlet-praline-collection-sortidos-100g-4895884/p"
+  productUrl: "https://www.divvino.com.br/bombom-belga-hamlet-praline-collection-sortidos-100g-4895884/p",
+  popularity: 448
  },
  {
   sku: "divvino-3906",
@@ -4493,7 +4941,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165401/Creme-de-Avela-Milka-Hazelnuss-Creme-350-g.png?v=639032139801000000",
-  productUrl: "https://www.divvino.com.br/creme-de-avela-milka-hazelnuss-creme-350-g-4755829/p"
+  productUrl: "https://www.divvino.com.br/creme-de-avela-milka-hazelnuss-creme-350-g-4755829/p",
+  popularity: 449
  },
  {
   sku: "divvino-3903",
@@ -4503,7 +4952,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165410/Chocolate E.Wedel ao Leite com Recheio de Caramelo 100g.png?v=639009062149570000",
-  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-ao-leite-com-recheio-de-caramelo-100g-4713382/p"
+  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-ao-leite-com-recheio-de-caramelo-100g-4713382/p",
+  popularity: 450
  },
  {
   sku: "divvino-3898",
@@ -4513,7 +4963,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165405/Chocolate Milka Oreo 37g.png?v=639009048302300000",
-  productUrl: "https://www.divvino.com.br/chocolate-milka-oreo-37g-4146700/p"
+  productUrl: "https://www.divvino.com.br/chocolate-milka-oreo-37g-4146700/p",
+  popularity: 451
  },
  {
   sku: "divvino-3897",
@@ -4523,7 +4974,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165385/Mostarda Francesa Cavalier Tradicional 200g.png?v=639008970971800000",
-  productUrl: "https://www.divvino.com.br/mostarda-francesa-cavalier-tradicional-200g-4469523/p"
+  productUrl: "https://www.divvino.com.br/mostarda-francesa-cavalier-tradicional-200g-4469523/p",
+  popularity: 452
  },
  {
   sku: "divvino-3896",
@@ -4533,7 +4985,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165386/Mostarda Dijon Francesa Cavalier Extra Forte 200g.png?v=639008977447730000",
-  productUrl: "https://www.divvino.com.br/mostarda-dijon-francesa-cavalier-extra-forte-200g-4469505/p"
+  productUrl: "https://www.divvino.com.br/mostarda-dijon-francesa-cavalier-extra-forte-200g-4469505/p",
+  popularity: 453
  },
  {
   sku: "divvino-3893",
@@ -4543,7 +4996,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165381/Tomate Cereja Cirio 250g.png?v=639008960394900000",
-  productUrl: "https://www.divvino.com.br/tomate-cereja-cirio-250g-3963317/p"
+  productUrl: "https://www.divvino.com.br/tomate-cereja-cirio-250g-3963317/p",
+  popularity: 454
  },
  {
   sku: "divvino-3892",
@@ -4553,7 +5007,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165387/Molho-de-Tomate-Cirio-Napoletana-420g.png?v=639008980840700000",
-  productUrl: "https://www.divvino.com.br/molho-de-tomate-cirio-napoletana-420g-3963264/p"
+  productUrl: "https://www.divvino.com.br/molho-de-tomate-cirio-napoletana-420g-3963264/p",
+  popularity: 455
  },
  {
   sku: "divvino-3891",
@@ -4563,7 +5018,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165383/Passata Tomate Mutti Basilico 400g.png?v=639008965950530000",
-  productUrl: "https://www.divvino.com.br/passata-tomate-mutti-basilico-400g-3775756/p"
+  productUrl: "https://www.divvino.com.br/passata-tomate-mutti-basilico-400g-3775756/p",
+  popularity: 456
  },
  {
   sku: "divvino-3890",
@@ -4573,7 +5029,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165409/Chocolate Belga Hamlet Concha Marinha Recheados 125g.png?v=639009058409400000",
-  productUrl: "https://www.divvino.com.br/chocolate-belga-hamlet-concha-marinha-recheados-125g-4093080/p"
+  productUrl: "https://www.divvino.com.br/chocolate-belga-hamlet-concha-marinha-recheados-125g-4093080/p",
+  popularity: 457
  },
  {
   sku: "divvino-3887",
@@ -4583,7 +5040,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165392/Amendoas Vieira Sweet Emotion Cobertas com Chocolate 200g.png?v=639008992535770000",
-  productUrl: "https://www.divvino.com.br/amendoas-vieira-sweet-emotion-cobertas-com-chocolate-200g-2663657/p"
+  productUrl: "https://www.divvino.com.br/amendoas-vieira-sweet-emotion-cobertas-com-chocolate-200g-2663657/p",
+  popularity: 458
  },
  {
   sku: "divvino-3886",
@@ -4593,7 +5051,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165407/Chocolate Suico Lindt Excellence ao Leite Extra Creamy 100g.png?v=639009056152400000",
-  productUrl: "https://www.divvino.com.br/chocolate-suico-lindt-excellence-ao-leite-extra-creamy-100g-1861395/p"
+  productUrl: "https://www.divvino.com.br/chocolate-suico-lindt-excellence-ao-leite-extra-creamy-100g-1861395/p",
+  popularity: 459
  },
  {
   sku: "divvino-3885",
@@ -4603,7 +5062,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165403/Chocolate-Toblerone-leite-100g.png?v=639160197656800000",
-  productUrl: "https://www.divvino.com.br/chocolate-toblerone-leite-100g-246590/p"
+  productUrl: "https://www.divvino.com.br/chocolate-toblerone-leite-100g-246590/p",
+  popularity: 460
  },
  {
   sku: "divvino-3883",
@@ -4613,7 +5073,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165384/Passata Italiana Cirio 1.02Kg.png?v=639008968496870000",
-  productUrl: "https://www.divvino.com.br/passata-italiana-cirio-1-02kg-5421640/p"
+  productUrl: "https://www.divvino.com.br/passata-italiana-cirio-1-02kg-5421640/p",
+  popularity: 461
  },
  {
   sku: "divvino-3877",
@@ -4623,7 +5084,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165394/Molho-El-Sabor-Cheddar-300g.png?v=639040069843900000",
-  productUrl: "https://www.divvino.com.br/salgadinho-el-sabor-cheddar-300g-5322544/p"
+  productUrl: "https://www.divvino.com.br/salgadinho-el-sabor-cheddar-300g-5322544/p",
+  popularity: 462
  },
  {
   sku: "divvino-3875",
@@ -4633,7 +5095,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cha",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165505/Cha Kruger Chai Latte Chocolate 250g.png?v=639020249891000000",
-  productUrl: "https://www.divvino.com.br/cha-kruger-chai-latte-chocolate-250g-5222370/p"
+  productUrl: "https://www.divvino.com.br/cha-kruger-chai-latte-chocolate-250g-5222370/p",
+  popularity: 463
  },
  {
   sku: "divvino-3874",
@@ -4643,7 +5106,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165388/Molho Tomate Cirio Cogumelo 420g.png?v=639008983720230000",
-  productUrl: "https://www.divvino.com.br/molho-tomate-cirio-cogumelo-420g-5209672/p"
+  productUrl: "https://www.divvino.com.br/molho-tomate-cirio-cogumelo-420g-5209672/p",
+  popularity: 464
  },
  {
   sku: "divvino-3872",
@@ -4653,7 +5117,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165382/Polpa Tomate Cirio Manjericao 390g.png?v=639008963660000000",
-  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-manjericao-390g-5205744/p"
+  productUrl: "https://www.divvino.com.br/polpa-tomate-cirio-manjericao-390g-5205744/p",
+  popularity: 465
  },
  {
   sku: "divvino-3869",
@@ -4663,7 +5128,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165406/Chocolate Milka Mini Wafers 110g.png?v=639009051503070000",
-  productUrl: "https://www.divvino.com.br/chocolate-milka-mini-wafers-110g-5356696/p"
+  productUrl: "https://www.divvino.com.br/chocolate-milka-mini-wafers-110g-5356696/p",
+  popularity: 466
  },
  {
   sku: "divvino-3868",
@@ -4673,7 +5139,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165374/Biscoito Milka Cookies Sensations Sortido 156g.png?v=639008820149500000",
-  productUrl: "https://www.divvino.com.br/biscoito-milka-cookies-sensations-sortido-156g-5343428/p"
+  productUrl: "https://www.divvino.com.br/biscoito-milka-cookies-sensations-sortido-156g-5343428/p",
+  popularity: 467
  },
  {
   sku: "divvino-3865",
@@ -4683,7 +5150,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165373/Biscoito Milka Choco Wafer 150g.png?v=639008817084230000",
-  productUrl: "https://www.divvino.com.br/biscoito-milka-choco-wafer-150g-5284120/p"
+  productUrl: "https://www.divvino.com.br/biscoito-milka-choco-wafer-150g-5284120/p",
+  popularity: 468
  },
  {
   sku: "divvino-3861",
@@ -4693,7 +5161,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet chocolate",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165378/Chocolate-E.Wendel-Barril-Whiskey-200g.png?v=639045250141330000",
-  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-barril-whiskey-200g-4938847/p"
+  productUrl: "https://www.divvino.com.br/chocolate-e-wedel-barril-whiskey-200g-4938847/p",
+  popularity: 469
  },
  {
   sku: "divvino-3860",
@@ -4703,7 +5172,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166750/Frisante Monte Paschoal Moscato Rose.png?v=639168670587430000",
-  productUrl: "https://www.divvino.com.br/frisante-monte-paschoal-moscato-rose-750ml-5338778/p"
+  productUrl: "https://www.divvino.com.br/frisante-monte-paschoal-moscato-rose-750ml-5338778/p",
+  popularity: 470
  },
  {
   sku: "divvino-3859",
@@ -4713,7 +5183,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165326/Espumante Salton Poetica Rose.png?v=639003865639600000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-poetica-rose-750ml-5327424/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-poetica-rose-750ml-5327424/p",
+  popularity: 471
  },
  {
   sku: "divvino-3841",
@@ -4723,7 +5194,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165280/Chandon-Garden-Spritz-.png?v=638978836615330000",
-  productUrl: "https://www.divvino.com.br/bebida-mista-brasileiro-chandon-garden-spritz-garrafa-750ml-5344407/p"
+  productUrl: "https://www.divvino.com.br/bebida-mista-brasileiro-chandon-garden-spritz-garrafa-750ml-5344407/p",
+  popularity: 472
  },
  {
   sku: "divvino-3819",
@@ -4733,7 +5205,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166556/Newen-Merlot.png?v=639155913288200000",
-  productUrl: "https://www.divvino.com.br/vinho-newen-merlot-750ml-5481907/p"
+  productUrl: "https://www.divvino.com.br/vinho-newen-merlot-750ml-5481907/p",
+  popularity: 473
  },
  {
   sku: "divvino-3814",
@@ -4743,7 +5216,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165654/Colina-de-Suenos-Gran-Reserva-Cabernet-Sauvignon.png?v=639192247258030000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-gran-r-cs-tinto-750ml-5481738/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-gran-r-cs-tinto-750ml-5481738/p",
+  popularity: 474
  },
  {
   sku: "divvino-3812",
@@ -4753,7 +5227,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165657/Colina-de-Suenos-Rose.png?v=639192240714200000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-rose-750ml-5481700/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-rose-750ml-5481700/p",
+  popularity: 475
  },
  {
   sku: "divvino-3811",
@@ -4763,7 +5238,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165656/Colina-de-Suenos-Chardonnay.png?v=639128974720230000",
-  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-chardonnay-750ml-5481694/p"
+  productUrl: "https://www.divvino.com.br/vinho-colina-de-suenos-chardonnay-750ml-5481694/p",
+  popularity: 476
  },
  {
   sku: "divvino-3794",
@@ -4773,7 +5249,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165313/TF-RVA-MB.png?v=639044502333470000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-malbec-750ml-5476863/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-malbec-750ml-5476863/p",
+  popularity: 477
  },
  {
   sku: "divvino-3792",
@@ -4783,7 +5260,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165311/TF-VAR-SB.png?v=639044502636300000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-sauvignon-blanc-750ml-5476845/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-sauvignon-blanc-750ml-5476845/p",
+  popularity: 478
  },
  {
   sku: "divvino-3791",
@@ -4793,7 +5271,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166549/Vinho Tinto Chileno Terraza Fluvial Carmenere.png?v=639125692162230000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-carmenere-750ml-5476836/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-carmenere-750ml-5476836/p",
+  popularity: 479
  },
  {
   sku: "divvino-3787",
@@ -4803,7 +5282,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165316/TF-GRVA-CF.png?v=639002161671670000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-cabernet-750ml-5476792/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-cabernet-750ml-5476792/p",
+  popularity: 480
  },
  {
   sku: "divvino-3785",
@@ -4813,7 +5293,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165314/TF-RVA-SY.png?v=639044502943800000",
-  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-etiqueta-preta-syrah-750ml-5476747/p"
+  productUrl: "https://www.divvino.com.br/vinho-terraza-fluvial-etiqueta-preta-syrah-750ml-5476747/p",
+  popularity: 481
  },
  {
   sku: "divvino-3765",
@@ -4823,7 +5304,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164921/Bolsa Termica ACasa Poliester 26L Verde e Creme.png?v=638936420329470000",
-  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-26l-verde-e-creme-ref---7664-5252252/p"
+  productUrl: "https://www.divvino.com.br/bolsa-termica-acasa-poliester-26l-verde-e-creme-ref---7664-5252252/p",
+  popularity: 482
  },
  {
   sku: "divvino-3745",
@@ -4833,7 +5315,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161658/Vinho-Tinto-Chileno-Concha-Y-Toro-Velvet-Merlot.png?v=638967364664870000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-velvet-merlot-750ml-5407641/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-velvet-merlot-750ml-5407641/p",
+  popularity: 483
  },
  {
   sku: "divvino-3744",
@@ -4843,7 +5326,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161657/Vinho-Casillero-del-Diablo-Devil-s-Carnaval-Fabulous-Red.png?v=638967358364270000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-devil-s-carnaval-fabulous-red-garrafa-750ml-5207687/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-devil-s-carnaval-fabulous-red-garrafa-750ml-5207687/p",
+  popularity: 484
  },
  {
   sku: "divvino-3743",
@@ -4853,7 +5337,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161656/Vinho-Casillero-del-Diablo-Devil-s-Carnaval-Sauvignon.png?v=638967353409630000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-branco-sauvignon-devil-s-carnaval-garrafa-750ml-5207640/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-branco-sauvignon-devil-s-carnaval-garrafa-750ml-5207640/p",
+  popularity: 485
  },
  {
   sku: "divvino-3742",
@@ -4863,7 +5348,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161655/Vinho-Casillero-del-Diablo-Devil-s-Carnaval-Fantastic-Sweet.png?v=638967348286600000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-devil-s-carnaval-fantastic-sweet-garrafa-750ml-5207604/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-devil-s-carnaval-fantastic-sweet-garrafa-750ml-5207604/p",
+  popularity: 486
  },
  {
   sku: "divvino-3741",
@@ -4873,7 +5359,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161654/Vinho-Casillero-del-Diablo-Devil-s-Carnaval-Spectular-Cabernet.png?v=638920085966530000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-cabernet-spectular-carnaval-garrafa-750ml-5207560/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-cabernet-spectular-carnaval-garrafa-750ml-5207560/p",
+  popularity: 487
  },
  {
   sku: "divvino-3737",
@@ -4883,7 +5370,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161652/Vinho-Branco-Argentino-Felino-Chardonnay.png?v=638968172737930000",
-  productUrl: "https://www.divvino.com.br/vinho-felino-chardonnay-garrafa-750ml-5239920/p"
+  productUrl: "https://www.divvino.com.br/vinho-felino-chardonnay-garrafa-750ml-5239920/p",
+  popularity: 488
  },
  {
   sku: "divvino-3735",
@@ -4893,7 +5381,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165172/Vinho Branco Italiano I Feudi Di Romans Pinot Grigio.png?v=638967494274000000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-pinot-grigio-750ml-5104886/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-pinot-grigio-750ml-5104886/p",
+  popularity: 489
  },
  {
   sku: "divvino-3727",
@@ -4903,7 +5392,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161589/Champanheira-ACasa-Acrilico-4L.png?v=638911458640830000",
-  productUrl: "https://www.divvino.com.br/champanheira-acasa-acrilico-4l-5159481/p"
+  productUrl: "https://www.divvino.com.br/champanheira-acasa-acrilico-4l-5159481/p",
+  popularity: 490
  },
  {
   sku: "divvino-3726",
@@ -4913,7 +5403,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161620/Decanter ACasa Opera Cristal 1.2L.png?v=638917270341530000",
-  productUrl: "https://www.divvino.com.br/decanter-acasa-opera-cristal-1-2l-ref---2302-5096050/p"
+  productUrl: "https://www.divvino.com.br/decanter-acasa-opera-cristal-1-2l-ref---2302-5096050/p",
+  popularity: 491
  },
  {
   sku: "divvino-3725",
@@ -4923,7 +5414,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161584/Tampa-para-Garrafa-ACasa-Inox-9cm.png?v=638911447066800000",
-  productUrl: "https://www.divvino.com.br/tampa-para-garrafa-acasa-inox-9cm-ref---176-4898920/p"
+  productUrl: "https://www.divvino.com.br/tampa-para-garrafa-acasa-inox-9cm-ref---176-4898920/p",
+  popularity: 492
  },
  {
   sku: "divvino-3723",
@@ -4933,7 +5425,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161580/Saca-Rolha-ACasa-Metal-15.5Cm.png?v=638911441556630000",
-  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-metal-15-5cm-ref---216-4898859/p"
+  productUrl: "https://www.divvino.com.br/saca-rolha-acasa-metal-15-5cm-ref---216-4898859/p",
+  popularity: 493
  },
  {
   sku: "divvino-3722",
@@ -4943,7 +5436,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161591/Tabua para Queijo ACasa Bambu 28CM.png?v=638911458455500000",
-  productUrl: "https://www.divvino.com.br/tabua-para-queijo-acasa-bambu-28cm-ref---98s-4895777/p"
+  productUrl: "https://www.divvino.com.br/tabua-para-queijo-acasa-bambu-28cm-ref---98s-4895777/p",
+  popularity: 494
  },
  {
   sku: "divvino-3721",
@@ -4953,7 +5447,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161599/Vinho-Tinto-Concha-y-Toro-Deep-Carmenere.png?v=638967325623600000",
-  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-deep-carmenere-750ml-5290718/p"
+  productUrl: "https://www.divvino.com.br/vinho-concha-y-toro-deep-carmenere-750ml-5290718/p",
+  popularity: 495
  },
  {
   sku: "divvino-3686",
@@ -4963,7 +5458,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161420/Champagne-Frances-Moutard-Cuvee-6-Cepages-Rose.png?v=639065848010270000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-rose-2010-garrafa-750ml-4191018/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-rose-2010-garrafa-750ml-4191018/p",
+  popularity: 496
  },
  {
   sku: "divvino-3681",
@@ -4973,7 +5469,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161449/Gulfi_Vini-Nerojbleo_high.jpg?v=638895825530500000",
-  productUrl: "https://www.divvino.com.br/vinho-gulfi-nerojbelo-igt-terre-siciliane-750ml-5367214/p"
+  productUrl: "https://www.divvino.com.br/vinho-gulfi-nerojbelo-igt-terre-siciliane-750ml-5367214/p",
+  popularity: 497
  },
  {
   sku: "divvino-3678",
@@ -4983,7 +5480,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166614/Vinho Branco Italiano I Feudi di Romans Friulano.png?v=639147066643030000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-friulano-750ml-5104868/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-friulano-750ml-5104868/p",
+  popularity: 498
  },
  {
   sku: "divvino-3677",
@@ -4993,7 +5491,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165185/Vinho Tinto Frances Moulin Rouge Chateau 1.5L.png?v=638967590923900000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-moulin-rouge-chateau-tinto-1-5l-5074491/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-moulin-rouge-chateau-tinto-1-5l-5074491/p",
+  popularity: 499
  },
  {
   sku: "divvino-3675",
@@ -5003,7 +5502,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161409/Vinho-Branco-Frances-Gerard-Bertrand-Extra-Blanc.png?v=638875950473000000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-extra-blanc-750ml-5318274/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-extra-blanc-750ml-5318274/p",
+  popularity: 500
  },
  {
   sku: "divvino-3674",
@@ -5013,7 +5513,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161443/brumont made in rang rouge.jpg?v=638894935553400000",
-  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-made-in-rang-madiran-750ml-5322339/p"
+  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-made-in-rang-madiran-750ml-5322339/p",
+  popularity: 501
  },
  {
   sku: "divvino-3673",
@@ -5023,7 +5524,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161445/alain-brumont-le-blanc-blend.png?v=638894946599230000",
-  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-le-blanc-750ml-5322320/p"
+  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-le-blanc-750ml-5322320/p",
+  popularity: 502
  },
  {
   sku: "divvino-3672",
@@ -5033,7 +5535,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161446/le rouge bramont.jpg?v=638895003407000000",
-  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-le-rouge-750ml-5322301/p"
+  productUrl: "https://www.divvino.com.br/vinho-alain-brumont-le-rouge-750ml-5322301/p",
+  popularity: 503
  },
  {
   sku: "divvino-3669",
@@ -5043,7 +5546,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161406/Vinho-Branco-Frances-Cotes-des-Roses-Sauvignon-Blanc.png?v=638875904551230000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cotes-des-roses-sauvignon-branco-750ml-5318372/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-cotes-des-roses-sauvignon-branco-750ml-5318372/p",
+  popularity: 504
  },
  {
   sku: "divvino-3667",
@@ -5053,7 +5557,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165579/Vinho-Tinto-Gerard-Bertrand-Gio-Rouge-Grenache.png?v=639047738917930000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-grenache-tinto-750ml-5318345/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-grenache-tinto-750ml-5318345/p",
+  popularity: 505
  },
  {
   sku: "divvino-3666",
@@ -5063,7 +5568,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161411/Vinho-Branco-Frances-Gerard-Bertrand-Gio-Blanc-Grenache-Pays-d-Oc.png?v=638888774268000000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-grenache-branco-750ml-5318327/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-grenache-branco-750ml-5318327/p",
+  popularity: 506
  },
  {
   sku: "divvino-3665",
@@ -5073,7 +5579,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161414/Vinho-Frances-Art-de-Vivre-vin-Rose-AOP-Languedoc.png?v=638888713689830000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-art-de-vivre-rose-750ml-5318318/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-art-de-vivre-rose-750ml-5318318/p",
+  popularity: 507
  },
  {
   sku: "divvino-3662",
@@ -5083,7 +5590,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161412/Vinho-Frances-Gerard-Bertrand-Gris-Blanc-Rose-Pays-d-Oc.png?v=638888948415030000",
-  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-gris-blanc-rose-750ml-5318265/p"
+  productUrl: "https://www.divvino.com.br/vinho-gerard-bertrand-gris-blanc-rose-750ml-5318265/p",
+  popularity: 508
  },
  {
   sku: "divvino-3631",
@@ -5093,7 +5601,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161382/Vinho-Branco-Italiano-Falanghina-Del-Sannio-D.O.C.png?v=638872347004630000",
-  productUrl: "https://www.divvino.com.br/vinho-falanghina-del-sannio-feudi-di-san-gregorio-750ml-5293738/p"
+  productUrl: "https://www.divvino.com.br/vinho-falanghina-del-sannio-feudi-di-san-gregorio-750ml-5293738/p",
+  popularity: 509
  },
  {
   sku: "divvino-3629",
@@ -5103,7 +5612,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161385/Vinho-Tinto-Italiano-Taurasi-D.O.C.G.png?v=638872366329130000",
-  productUrl: "https://www.divvino.com.br/vinho-taurasi-feudi-di-san-gregorio-750ml-5293765/p"
+  productUrl: "https://www.divvino.com.br/vinho-taurasi-feudi-di-san-gregorio-750ml-5293765/p",
+  popularity: 510
  },
  {
   sku: "divvino-3624",
@@ -5113,7 +5623,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161290/Biscoito Mulino Bianco Baiocchi Pistache 28g.png?v=638857017394630000",
-  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-baiocchi-pistache-28g-5316298/p"
+  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-baiocchi-pistache-28g-5316298/p",
+  popularity: 511
  },
  {
   sku: "divvino-3623",
@@ -5123,7 +5634,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161289/Biscoito Mulino Bianco Tarallucci 350g.png?v=638857010965200000",
-  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-tarallucci-350g-5316242/p"
+  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-tarallucci-350g-5316242/p",
+  popularity: 512
  },
  {
   sku: "divvino-3618",
@@ -5133,7 +5645,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166725/Kits-10-Tintos-Mais-Vendidos.png?v=639195590153300000",
-  productUrl: "https://www.divvino.com.br/kit-10-tintos-mais-vendidos-sku4010335/p"
+  productUrl: "https://www.divvino.com.br/kit-10-tintos-mais-vendidos-sku4010335/p",
+  popularity: 513
  },
  {
   sku: "divvino-3617",
@@ -5143,7 +5656,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165205/Vinho Tinto Italiano San Silvestro Riserva Costa Di Bussi.png?v=638968426786130000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-san-silvestro-riserva-costa-di-bussi-750ml-5164015/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-san-silvestro-riserva-costa-di-bussi-750ml-5164015/p",
+  popularity: 514
  },
  {
   sku: "divvino-3616",
@@ -5153,7 +5667,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161233/Vinho-Tinto-Chileno-Montgras-Antu-Cabernet-Sauvignon-1.5L.png?v=638955222672100000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-antu-cabernet-sauvignon-1-5l-5154592/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-antu-cabernet-sauvignon-1-5l-5154592/p",
+  popularity: 515
  },
  {
   sku: "divvino-3600",
@@ -5163,7 +5678,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161358/Vinho-Tinto-Quinta-Da-Neve-Vinhas-Velhas-Cabernet-Sauvignon.png?v=638894747435730000",
-  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-cabernet-sauvignon-750ml-5396940/p"
+  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-cabernet-sauvignon-750ml-5396940/p",
+  popularity: 516
  },
  {
   sku: "divvino-3599",
@@ -5173,7 +5689,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161357/Vinho-Tinto-Quinta-Da-Neve-Sangioves.png?v=638895020110000000",
-  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-sangioves-750ml-5396931/p"
+  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-sangioves-750ml-5396931/p",
+  popularity: 517
  },
  {
   sku: "divvino-3598",
@@ -5183,7 +5700,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165618/Vinho-Rose-Quinta-Da-Neve-Rosa-da-Neve.png?v=639082319892100000",
-  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-rosa-da-neve-750ml-5396922/p"
+  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-rosa-da-neve-750ml-5396922/p",
+  popularity: 518
  },
  {
   sku: "divvino-3597",
@@ -5193,7 +5711,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161337/Vinho Branco Quinta Da Neve Alvarinho.png?v=638864770570900000",
-  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-alvarinho-750ml-5396904/p"
+  productUrl: "https://www.divvino.com.br/vinho-quinta-da-neve-alvarinho-750ml-5396904/p",
+  popularity: 519
  },
  {
   sku: "divvino-3593",
@@ -5203,7 +5722,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165184/Espumante-Pronol-Moscato.png?v=638971725099930000",
-  productUrl: "https://www.divvino.com.br/espumante-pronol-moscato-750ml-5293620/p"
+  productUrl: "https://www.divvino.com.br/espumante-pronol-moscato-750ml-5293620/p",
+  popularity: 520
  },
  {
   sku: "divvino-3582",
@@ -5213,7 +5733,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161206/Vinho-Tinto-Frances-Vin-De-Lune-Malbec.png.png?v=638977729345430000",
-  productUrl: "https://www.divvino.com.br/vinho-vin-de-lune-rouge-pop-750ml-5293809/p"
+  productUrl: "https://www.divvino.com.br/vinho-vin-de-lune-rouge-pop-750ml-5293809/p",
+  popularity: 521
  },
  {
   sku: "divvino-3580",
@@ -5223,7 +5744,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161204/Vinho-Branco-Frances-Vin-De-Lune-Viognier-Chardonnay.png.png?v=638822231394530000",
-  productUrl: "https://www.divvino.com.br/vinho-vin-de-lune-blanc-sec-750ml-5293774/p"
+  productUrl: "https://www.divvino.com.br/vinho-vin-de-lune-blanc-sec-750ml-5293774/p",
+  popularity: 522
  },
  {
   sku: "divvino-3577",
@@ -5233,7 +5755,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161132/Vinho-Branco-Frances-Chateau-De-Maligny-Petit-Chablis.png.png?v=638936399154900000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-maligny-petit-chablis-branco-garrafa-750ml-5242040/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-maligny-petit-chablis-branco-garrafa-750ml-5242040/p",
+  popularity: 523
  },
  {
   sku: "divvino-3573",
@@ -5243,7 +5766,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165572/Haut-de-Raffin-Cotes-du-Rhone.png?v=639071068766170000",
-  productUrl: "https://www.divvino.com.br/vinho-cotes-du-rhone-haut-de-raffin-blanc-aop-750ml-5393420/p"
+  productUrl: "https://www.divvino.com.br/vinho-cotes-du-rhone-haut-de-raffin-blanc-aop-750ml-5393420/p",
+  popularity: 524
  },
  {
   sku: "divvino-3567",
@@ -5253,7 +5777,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165568/Vinediem-Rose.png?v=639071067949300000",
-  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-rose-750ml-5393368/p"
+  productUrl: "https://www.divvino.com.br/vinho-sans-ig-vinediem-rose-750ml-5393368/p",
+  popularity: 525
  },
  {
   sku: "divvino-3561",
@@ -5263,7 +5788,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161109/Bombom Witors Golden Pistacchio 200g.png.png?v=638793038240100000",
-  productUrl: "https://www.divvino.com.br/bombom-witors-golden-pistacchio-200g-4950627/p"
+  productUrl: "https://www.divvino.com.br/bombom-witors-golden-pistacchio-200g-4950627/p",
+  popularity: 526
  },
  {
   sku: "divvino-3550",
@@ -5273,7 +5799,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165129/Terra-de-Selmes-Rose.png?v=638963258155630000",
-  productUrl: "https://www.divvino.com.br/vinho-vinho-terra-de-selmes-rose-750ml-5391381/p"
+  productUrl: "https://www.divvino.com.br/vinho-vinho-terra-de-selmes-rose-750ml-5391381/p",
+  popularity: 527
  },
  {
   sku: "divvino-3547",
@@ -5283,7 +5810,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165132/Terra-de-Selmes-Reserva-Alentejo.png?v=638963257311000000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-reserva-tinto-garrafa-250ml-5391354/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-reserva-tinto-garrafa-250ml-5391354/p",
+  popularity: 528
  },
  {
   sku: "divvino-3546",
@@ -5293,7 +5821,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165133/Terra-de-Selmes-Grande-Escolha-Alentejo.png?v=638963257493630000",
-  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-tinto-grande-escolha-garrafa-750ml-5391345/p"
+  productUrl: "https://www.divvino.com.br/vinho-terra-de-selmes-tinto-grande-escolha-garrafa-750ml-5391345/p",
+  popularity: 529
  },
  {
   sku: "divvino-3545",
@@ -5303,7 +5832,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164932/Massaluca-Garnache-e-Samso.png?v=638937991764470000",
-  productUrl: "https://www.divvino.com.br/vinho-massaluca-tinto-750ml-5389875/p"
+  productUrl: "https://www.divvino.com.br/vinho-massaluca-tinto-750ml-5389875/p",
+  popularity: 530
  },
  {
   sku: "divvino-3544",
@@ -5313,7 +5843,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164933/Massaluca-Garnacha-branca-e-Macabeo-.png?v=638937091864330000",
-  productUrl: "https://www.divvino.com.br/vinho-massaluca-branco-750ml-5389866/p"
+  productUrl: "https://www.divvino.com.br/vinho-massaluca-branco-750ml-5389866/p",
+  popularity: 531
  },
  {
   sku: "divvino-3543",
@@ -5323,7 +5854,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164931/Estaciones-Tempranillo-.png?v=638937993075830000",
-  productUrl: "https://www.divvino.com.br/vinho-estaciones-tempranillo-750ml-5389857/p"
+  productUrl: "https://www.divvino.com.br/vinho-estaciones-tempranillo-750ml-5389857/p",
+  popularity: 532
  },
  {
   sku: "divvino-3540",
@@ -5333,7 +5865,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164929/Rocamar-Rose-.png?v=638937994328600000",
-  productUrl: "https://www.divvino.com.br/vinho-rocamar-rose-750ml-5389786/p"
+  productUrl: "https://www.divvino.com.br/vinho-rocamar-rose-750ml-5389786/p",
+  popularity: 533
  },
  {
   sku: "divvino-3539",
@@ -5343,7 +5876,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164928/Rocamar-Branco-.png?v=638937994655470000",
-  productUrl: "https://www.divvino.com.br/vinho-rocamar-branco-750ml-5389768/p"
+  productUrl: "https://www.divvino.com.br/vinho-rocamar-branco-750ml-5389768/p",
+  popularity: 534
  },
  {
   sku: "divvino-3534",
@@ -5353,7 +5887,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161041/Macarrao-Italiana-Grano-Duro-Delverde-Tagliatelle-200g.png.png?v=639041701396630000",
-  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-delverde-200g-454745/p"
+  productUrl: "https://www.divvino.com.br/macarrao-italiana-grano-duro-delverde-200g-454745/p",
+  popularity: 535
  },
  {
   sku: "divvino-3532",
@@ -5363,7 +5898,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161052/Vinho-Branco-Montgras-Early-Harvest-Sauvignon-Blanc.png.png?v=638797200872070000",
-  productUrl: "https://www.divvino.com.br/vinho-montgras-montgras-early-harvest-sauvignon-blanc-750ml-5316592/p"
+  productUrl: "https://www.divvino.com.br/vinho-montgras-montgras-early-harvest-sauvignon-blanc-750ml-5316592/p",
+  popularity: 536
  },
  {
   sku: "divvino-3514",
@@ -5373,7 +5909,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet outras bebidas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161010/Preparado-para-Drink-Easy-Drinks-Moscow-Mule-Limao-e-Gengibre-270g.jpg.jpg?v=638778392715400000",
-  productUrl: "https://www.divvino.com.br/preparado-para-drink-easy-drinks-moscow-mule-limao-e-gengibre-270g-4548627/p"
+  productUrl: "https://www.divvino.com.br/preparado-para-drink-easy-drinks-moscow-mule-limao-e-gengibre-270g-4548627/p",
+  popularity: 537
  },
  {
   sku: "divvino-3504",
@@ -5383,7 +5920,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164973/monte-romano-cabernet-sauvignon.png?v=638947499917270000",
-  productUrl: "https://www.divvino.com.br/vinho-monte-romano-cabernet-sauvignon-750ml-5340810/p"
+  productUrl: "https://www.divvino.com.br/vinho-monte-romano-cabernet-sauvignon-750ml-5340810/p",
+  popularity: 538
  },
  {
   sku: "divvino-3501",
@@ -5393,7 +5931,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164975/Monte-romano-bianco-blend.png?v=638947676904970000",
-  productUrl: "https://www.divvino.com.br/vinho-monte-romano-bianco-750ml-5340758/p"
+  productUrl: "https://www.divvino.com.br/vinho-monte-romano-bianco-750ml-5340758/p",
+  popularity: 539
  },
  {
   sku: "divvino-3499",
@@ -5403,7 +5942,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165261/Molho Pesto Monte Romano Rosso 190g.png?v=638974454032870000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-monte-romano-rosso-190g-5316396/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-monte-romano-rosso-190g-5316396/p",
+  popularity: 540
  },
  {
   sku: "divvino-3496",
@@ -5413,7 +5953,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161026/Aceto-Balsamico-Monte-Romano-Di-Modena-IGP-500ml.png.png?v=638780938040530000",
-  productUrl: "https://www.divvino.com.br/aceto-balsamico-monte-romano-di-modena-igp-500ml-5212195/p"
+  productUrl: "https://www.divvino.com.br/aceto-balsamico-monte-romano-di-modena-igp-500ml-5212195/p",
+  popularity: 541
  },
  {
   sku: "divvino-3492",
@@ -5423,7 +5964,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161018/Arroz Monte Romano Arborio 1kg.png.png?v=638779151607900000",
-  productUrl: "https://www.divvino.com.br/arroz-monte-romano-arborio-1kg-5208719/p"
+  productUrl: "https://www.divvino.com.br/arroz-monte-romano-arborio-1kg-5208719/p",
+  popularity: 542
  },
  {
   sku: "divvino-3484",
@@ -5433,7 +5975,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160968/Vinho-Branco-Chileno-Montgras-Quatro.png.png?v=638797192125000000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-quatro-branco-750ml-4931640/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-quatro-branco-750ml-4931640/p",
+  popularity: 543
  },
  {
   sku: "divvino-3483",
@@ -5443,7 +5986,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet outras bebidas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161013/Preparado Easy Drinks Lichia 100g.png.png?v=638778398061630000",
-  productUrl: "https://www.divvino.com.br/preparado-easy-drinks-lichia-100g-5315989/p"
+  productUrl: "https://www.divvino.com.br/preparado-easy-drinks-lichia-100g-5315989/p",
+  popularity: 544
  },
  {
   sku: "divvino-3438",
@@ -5453,7 +5997,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161335/Vinho-Branco-Argentino-La-Espera-Carpe-Diem-Orange.png?v=638913967585930000",
-  productUrl: "https://www.divvino.com.br/vinho-la-espera-carpe-diem-orange-750ml-5365953/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-espera-carpe-diem-orange-750ml-5365953/p",
+  popularity: 545
  },
  {
   sku: "divvino-3437",
@@ -5463,7 +6008,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161334/Vinho-Tinto-Argentino-La-Espera-Equilibrium-Red-Blend.png?v=638913967311230000",
-  productUrl: "https://www.divvino.com.br/vinho-la-espera-equilibrium-red-blend-750ml-5365944/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-espera-equilibrium-red-blend-750ml-5365944/p",
+  popularity: 546
  },
  {
   sku: "divvino-3429",
@@ -5473,7 +6019,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164924/Vinho-Tinto-Chileno-Carmen-Discovery-Gran-Reserva-Cabernet-Sauvignon.png?v=639078091685200000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-gran-reserva-carmenere-750ml-5147990/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-gran-reserva-carmenere-750ml-5147990/p",
+  popularity: 547
  },
  {
   sku: "divvino-3410",
@@ -5483,7 +6030,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160798/Vinho-Branco-Espanhol-Bardos-Verdejo.png?v=638726494053500000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bardos-verdejo-750ml-5086984/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bardos-verdejo-750ml-5086984/p",
+  popularity: 548
  },
  {
   sku: "divvino-3385",
@@ -5493,7 +6041,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160780/Vinho-Brasileiro-Fausto-Merlot.png?v=638719542361170000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-fausto-merlot-gfa-750ml-2014050/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-fausto-merlot-gfa-750ml-2014050/p",
+  popularity: 549
  },
  {
   sku: "divvino-3384",
@@ -5503,7 +6052,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160986/Vinho-Tinto-Italiano-Castello-Romitorio-Brunello-Di-Montalcino-D.O.C.G.png.png?v=638772064778730000",
-  productUrl: "https://www.divvino.com.br/vinho-brunello-di-mont-docg-750ml-5203113/p"
+  productUrl: "https://www.divvino.com.br/vinho-brunello-di-mont-docg-750ml-5203113/p",
+  popularity: 550
  },
  {
   sku: "divvino-3380",
@@ -5513,7 +6063,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161332/Vinho-Branco-Uruguaio-La-Virazon-Sauvignon-Blanc.png?v=638913966330970000",
-  productUrl: "https://www.divvino.com.br/vinho-uruguaio-la-virazon-sauvignon-blanc-garrafa-750ml-5355385/p"
+  productUrl: "https://www.divvino.com.br/vinho-uruguaio-la-virazon-sauvignon-blanc-garrafa-750ml-5355385/p",
+  popularity: 551
  },
  {
   sku: "divvino-3366",
@@ -5523,7 +6074,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161232/Vinho-Uma-Winemaker-Blend.png.png?v=638869062483070000",
-  productUrl: "https://www.divvino.com.br/vinho-finca-agostino-uma-winemaker-blend-de-tintas-garrafa-750ml-5352730/p"
+  productUrl: "https://www.divvino.com.br/vinho-finca-agostino-uma-winemaker-blend-de-tintas-garrafa-750ml-5352730/p",
+  popularity: 552
  },
  {
   sku: "divvino-3365",
@@ -5533,7 +6085,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161231/Vinho-Uma-Winemaker-Chardonnay-Viognier.png.png?v=638869062345730000",
-  productUrl: "https://www.divvino.com.br/vinho-finca-agostino-uma-winermaker-chardonnay-e-viognier-garrafa-750ml-5352721/p"
+  productUrl: "https://www.divvino.com.br/vinho-finca-agostino-uma-winermaker-chardonnay-e-viognier-garrafa-750ml-5352721/p",
+  popularity: 553
  },
  {
   sku: "divvino-3364",
@@ -5543,7 +6096,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161230/Vinho-Uma-Parcels-Malbec.png.png?v=638869062790600000",
-  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-parcels-malbec-garrafa-750ml-5351608/p"
+  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-parcels-malbec-garrafa-750ml-5351608/p",
+  popularity: 554
  },
  {
   sku: "divvino-3363",
@@ -5553,7 +6107,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161229/Vinho-Uma-Parcels-Cabernet-Franc.png.png?v=638869062669800000",
-  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-parcels-cabernet-franc-garrafa-750ml-5351591/p"
+  productUrl: "https://www.divvino.com.br/vinho-agostino-uma-parcels-cabernet-franc-garrafa-750ml-5351591/p",
+  popularity: 555
  },
  {
   sku: "divvino-3358",
@@ -5563,7 +6118,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165078/Vinho-Tinto-Espanhol-Monteabellon-Tempranillo-Crianza-Ribera-del-Duero-.png?v=638968242996400000",
-  productUrl: "https://www.divvino.com.br/vinho-monteabellon-tinto-14-meses-garrafa-750ml-5347614/p"
+  productUrl: "https://www.divvino.com.br/vinho-monteabellon-tinto-14-meses-garrafa-750ml-5347614/p",
+  popularity: 556
  },
  {
   sku: "divvino-3357",
@@ -5573,7 +6129,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165079/Vinho-Tinto-Espanhol-Monteabellon-Ribera-del-Duero-D.O.png?v=638966540102830000",
-  productUrl: "https://www.divvino.com.br/vinho-monteabellon-tinto-5-meses-garrafa-750ml-5347599/p"
+  productUrl: "https://www.divvino.com.br/vinho-monteabellon-tinto-5-meses-garrafa-750ml-5347599/p",
+  popularity: 557
  },
  {
   sku: "divvino-3354",
@@ -5583,7 +6140,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165080/Vinho-Branco-Espanhol-Monteabellon-Verdejo-Rueda-D.O.png?v=638968380539430000",
-  productUrl: "https://www.divvino.com.br/vinho-monteabellon-branco-verdejo-garrafa-750ml-5347580/p"
+  productUrl: "https://www.divvino.com.br/vinho-monteabellon-branco-verdejo-garrafa-750ml-5347580/p",
+  popularity: 558
  },
  {
   sku: "divvino-3342",
@@ -5593,7 +6151,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161000/Vinho-Mr-Deer-Carmenere.png.png?v=638814634155270000",
-  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-carmenere-garrafa-750ml-5347857/p"
+  productUrl: "https://www.divvino.com.br/vinho-mr-deer-tinto-carmenere-garrafa-750ml-5347857/p",
+  popularity: 559
  },
  {
   sku: "divvino-3336",
@@ -5603,7 +6162,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160592/Vinho-Italiano-Bric-Cenciurio-Coste-Di-Rose-Barolo-D.O.C.G..png?v=638678190342970000",
-  productUrl: "https://www.divvino.com.br/vinho-bric-barolo-750ml-5215553/p"
+  productUrl: "https://www.divvino.com.br/vinho-bric-barolo-750ml-5215553/p",
+  popularity: 560
  },
  {
   sku: "divvino-3335",
@@ -5613,7 +6173,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160589/Espumante-Freixenet-Rose-Royal-.png?v=638678119937870000",
-  productUrl: "https://www.divvino.com.br/espumante-freixenet-rose-royal-750ml-5327952/p"
+  productUrl: "https://www.divvino.com.br/espumante-freixenet-rose-royal-750ml-5327952/p",
+  popularity: 561
  },
  {
   sku: "divvino-3334",
@@ -5623,7 +6184,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160588/Espumante-Freixenet-Brut-Royal-.png?v=638678109694800000",
-  productUrl: "https://www.divvino.com.br/espumante-freixenet-brut-royal-750ml-5327890/p"
+  productUrl: "https://www.divvino.com.br/espumante-freixenet-brut-royal-750ml-5327890/p",
+  popularity: 562
  },
  {
   sku: "divvino-3332",
@@ -5633,7 +6195,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160578/Vinho-Tinto-Chileno-La-Junta-Carignan.png?v=638676411875870000",
-  productUrl: "https://www.divvino.com.br/vinho-la-junta-carignan-750ml-5177739/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-junta-carignan-750ml-5177739/p",
+  popularity: 563
  },
  {
   sku: "divvino-3329",
@@ -5643,7 +6206,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160543/Vinho-Branco-Chileno-La-Junta-Aroma-Moscatel-.png?v=638671801189230000",
-  productUrl: "https://www.divvino.com.br/vinhi-la-junta-aroma-moscatel-750ml-5299517/p"
+  productUrl: "https://www.divvino.com.br/vinhi-la-junta-aroma-moscatel-750ml-5299517/p",
+  popularity: 564
  },
  {
   sku: "divvino-3323",
@@ -5653,7 +6217,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160474/Bolsa-Termica-Verde-ACasa-Poliester-para-Bebida.png?v=638665229940900000",
-  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-para-bebida-verde-termica-ref---1gf-001-5252172/p"
+  productUrl: "https://www.divvino.com.br/bolsa-acasa-poliester-para-bebida-verde-termica-ref---1gf-001-5252172/p",
+  popularity: 565
  },
  {
   sku: "divvino-3311",
@@ -5663,7 +6228,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160361/imagem--12-.png?v=638660697831370000",
-  productUrl: "https://www.divvino.com.br/cerveja-heineken-puro-malte-zero-alcool-330ml-4455949/p"
+  productUrl: "https://www.divvino.com.br/cerveja-heineken-puro-malte-zero-alcool-330ml-4455949/p",
+  popularity: 566
  },
  {
   sku: "divvino-3308",
@@ -5673,7 +6239,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet doce de leite",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160366/Doce-de-Leite-Uruguaio-Conaprole-440g.png?v=638663273069200000",
-  productUrl: "https://www.divvino.com.br/doce-de-leite-uruguaio-conaprole-440g-80543/p"
+  productUrl: "https://www.divvino.com.br/doce-de-leite-uruguaio-conaprole-440g-80543/p",
+  popularity: 567
  },
  {
   sku: "divvino-3307",
@@ -5683,7 +6250,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160351/Vinho-Branco-Portugues-Alianca-Bairrada-Reserva.png?v=638658306613170000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-alianca-branco-bairrada-reserva-garrafa-750ml-5250104/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-alianca-branco-bairrada-reserva-garrafa-750ml-5250104/p",
+  popularity: 568
  },
  {
   sku: "divvino-3296",
@@ -5693,7 +6261,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160302/Sacola-para-Vinho-Tim-Tim-Papel---ACasa-368cm.png?v=638652792954900000",
-  productUrl: "https://www.divvino.com.br/sacola-para-vinho-acasa-tim-tim-papel-36x8cm-5236811/p"
+  productUrl: "https://www.divvino.com.br/sacola-para-vinho-acasa-tim-tim-papel-36x8cm-5236811/p",
+  popularity: 569
  },
  {
   sku: "divvino-3288",
@@ -5703,7 +6272,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160291/Vinho-Branco-Australiano-Windy-Peak-Sauvignon-Blanc.png?v=638648762401200000",
-  productUrl: "https://www.divvino.com.br/vinho-australiano-windy-peak-sauvignon-blanc-750ml-5093791/p"
+  productUrl: "https://www.divvino.com.br/vinho-australiano-windy-peak-sauvignon-blanc-750ml-5093791/p",
+  popularity: 570
  },
  {
   sku: "divvino-3287",
@@ -5713,7 +6283,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160277/Vinho-Branco-Eguren-Sauvignon-Blanc.png?v=638647059301430000",
-  productUrl: "https://www.divvino.com.br/vinho-eguren-sauvignon-blanc-garrafa-750ml-5218340/p"
+  productUrl: "https://www.divvino.com.br/vinho-eguren-sauvignon-blanc-garrafa-750ml-5218340/p",
+  popularity: 571
  },
  {
   sku: "divvino-3286",
@@ -5723,7 +6294,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160278/Vinho-Tinto-Espanhol-Eguren-Cabernet-Sauvignon.png?v=638647075473970000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-eguren-cabernet-sauvignon-garrafa-750ml-5218359/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-eguren-cabernet-sauvignon-garrafa-750ml-5218359/p",
+  popularity: 572
  },
  {
   sku: "divvino-3285",
@@ -5733,7 +6305,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160276/Vinho-Branco-Espanhol-Eguren-Verdejo.png?v=638647014043200000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-eguren-verdejo-garrafa-750ml-5218321/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-eguren-verdejo-garrafa-750ml-5218321/p",
+  popularity: 573
  },
  {
   sku: "divvino-3268",
@@ -5743,7 +6316,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160295/Vinho-Tinto-Frances-Les-Vins-De-Vienne-Crozes-Hermitage.png?v=638651306038300000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-l-v-v-tinto-crozes-hermitage-750ml-5122543/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-l-v-v-tinto-crozes-hermitage-750ml-5122543/p",
+  popularity: 574
  },
  {
   sku: "divvino-3267",
@@ -5753,7 +6327,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160289/Vinho-Tinto-Frances-Leoville-Poyferre-Saint-Julien.png?v=638648719485000000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-leoville-poyferre-2017-750ml-4788641/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-leoville-poyferre-2017-750ml-4788641/p",
+  popularity: 575
  },
  {
   sku: "divvino-3262",
@@ -5763,7 +6338,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160527/Vinho-Branco-Brasileiro-Thera-Sauvignon-Blanc.png?v=638670151240800000",
-  productUrl: "https://www.divvino.com.br/vinho-thera-sauvignon-blanc-2022-garrafa-750ml-5208272/p"
+  productUrl: "https://www.divvino.com.br/vinho-thera-sauvignon-blanc-2022-garrafa-750ml-5208272/p",
+  popularity: 576
  },
  {
   sku: "divvino-3260",
@@ -5773,7 +6349,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160526/Vinho-Tinto-Brasileiro-Thera-Madai.png?v=638670147615670000",
-  productUrl: "https://www.divvino.com.br/vinho-thera-madai-2021-garrafa-750ml-5208254/p"
+  productUrl: "https://www.divvino.com.br/vinho-thera-madai-2021-garrafa-750ml-5208254/p",
+  popularity: 577
  },
  {
   sku: "divvino-3259",
@@ -5783,7 +6360,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160529/Vinho-Brasileiro-Pizzato-Fausto-Melot-Rose.png?v=638670157906270000",
-  productUrl: "https://www.divvino.com.br/vinho-fausto-merlot-rose-garrafa-750ml-5207954/p"
+  productUrl: "https://www.divvino.com.br/vinho-fausto-merlot-rose-garrafa-750ml-5207954/p",
+  popularity: 578
  },
  {
   sku: "divvino-3248",
@@ -5793,7 +6371,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165224/Kit Caixa Fechada 6 Vinhos Branco Carta Vieja Sauvignon Blanc.png?v=638972576231500000",
-  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-vinhos-branco-carta-vieja-sauvignon-blanc-sku4010261/p"
+  productUrl: "https://www.divvino.com.br/kit-caixa-fechada-6-vinhos-branco-carta-vieja-sauvignon-blanc-sku4010261/p",
+  popularity: 579
  },
  {
   sku: "divvino-3218",
@@ -5803,7 +6382,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161137/Vinho-Tinto-Portugues-Poento-Reserva.png.png?v=639081633556500000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-tt-reserva-750ml-5294664/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-tt-reserva-750ml-5294664/p",
+  popularity: 580
  },
  {
   sku: "divvino-3217",
@@ -5813,7 +6393,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161133/Vinho-Tinto-Portugues-Poento-Alicante-Bouschet.png.png?v=639081583221770000",
-  productUrl: "https://www.divvino.com.br/vinho-poento-alicante-bouschet-750ml-5294646/p"
+  productUrl: "https://www.divvino.com.br/vinho-poento-alicante-bouschet-750ml-5294646/p",
+  popularity: 581
  },
  {
   sku: "divvino-3216",
@@ -5823,7 +6404,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161135/Vinho-Portugues-Poento-Rose.png.png?v=638799057954000000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-rose-750ml-5294628/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-rose-750ml-5294628/p",
+  popularity: 582
  },
  {
   sku: "divvino-3214",
@@ -5833,7 +6415,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161134/Vinho-Branco-Portugues-Poento.png.png?v=638798267804800000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-branco-750ml--5294584/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-poento-branco-750ml--5294584/p",
+  popularity: 583
  },
  {
   sku: "divvino-3202",
@@ -5843,7 +6426,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161208/Vinho-Frances-Comtesse-Saint-Hilaire-Rose.png.png?v=639081432031300000",
-  productUrl: "https://www.divvino.com.br/vinho-comtesse-st-hilaire-rose-750ml-5293685/p"
+  productUrl: "https://www.divvino.com.br/vinho-comtesse-st-hilaire-rose-750ml-5293685/p",
+  popularity: 584
  },
  {
   sku: "divvino-3201",
@@ -5853,7 +6437,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161207/Vinho-Branco-Frances-Comtesse-Saint-Hilaire-.png.png?v=638822353017300000",
-  productUrl: "https://www.divvino.com.br/vinho-comtesse-st-hilaire-branco-750ml-5293667/p"
+  productUrl: "https://www.divvino.com.br/vinho-comtesse-st-hilaire-branco-750ml-5293667/p",
+  popularity: 585
  },
  {
   sku: "divvino-3193",
@@ -5863,7 +6448,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159976/Vinho-Marques-De-Ardoza-Rose.png?v=638580460180070000",
-  productUrl: "https://www.divvino.com.br/vinho-marques-de-ardoza-rose-750ml-5178342/p"
+  productUrl: "https://www.divvino.com.br/vinho-marques-de-ardoza-rose-750ml-5178342/p",
+  popularity: 586
  },
  {
   sku: "divvino-3191",
@@ -5873,7 +6459,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159922/Vinho-Tinto-Australiano-De-Bortoli-Estate-Vineyard-Shiraz.png?v=638573569790370000",
-  productUrl: "https://www.divvino.com.br/vinho-australiano-de-bortoli-estate-vineyard-shiraz-750ml-4337050/p"
+  productUrl: "https://www.divvino.com.br/vinho-australiano-de-bortoli-estate-vineyard-shiraz-750ml-4337050/p",
+  popularity: 587
  },
  {
   sku: "divvino-3188",
@@ -5883,7 +6470,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165502/Espumante Ingles Gusbourne Exclusive Release Rose.png?v=639020208843130000",
-  productUrl: "https://www.divvino.com.br/espumante-ingles-gusbourne-rose-exclusive-release-750ml-5104438/p"
+  productUrl: "https://www.divvino.com.br/espumante-ingles-gusbourne-rose-exclusive-release-750ml-5104438/p",
+  popularity: 588
  },
  {
   sku: "divvino-3181",
@@ -5893,7 +6481,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159924/Vinho-Branco-Italiano-Marotti-Campi-Salmariano-Riserva-D.O.C.G-.png?v=638573614114530000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-salmariano-d-o-c-g-riserva-750ml-5127479/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-salmariano-d-o-c-g-riserva-750ml-5127479/p",
+  popularity: 589
  },
  {
   sku: "divvino-3180",
@@ -5903,7 +6492,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159923/Vinho-Tinto-Italiano-Marotti-Campi-Orgiolo-D.O.C.png?v=638573613089230000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-orgiolo-d-o-c-750ml-5127460/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-marotti-campi-orgiolo-d-o-c-750ml-5127460/p",
+  popularity: 590
  },
  {
   sku: "divvino-3179",
@@ -5913,7 +6503,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159949/Vinho-Tinto-Alemao-Hubertushof-Prestige-.png?v=638578712807530000",
-  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-tinto-750ml-5104492/p"
+  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-tinto-750ml-5104492/p",
+  popularity: 591
  },
  {
   sku: "divvino-3178",
@@ -5923,7 +6514,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159948/Vinho-Branco-Alemao-Hubertushof-Weissherbst.png?v=638578692749070000",
-  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-branco-weissherbst-750ml-5104483/p"
+  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-branco-weissherbst-750ml-5104483/p",
+  popularity: 592
  },
  {
   sku: "divvino-3177",
@@ -5933,7 +6525,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159947/Vinho-Branco-Alemao-Hubertushof-Xtreme.png?v=638578687865300000",
-  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-branco-xtreme-750ml-5104456/p"
+  productUrl: "https://www.divvino.com.br/vinho-alemao-hubertushof-branco-xtreme-750ml-5104456/p",
+  popularity: 593
  },
  {
   sku: "divvino-3176",
@@ -5943,7 +6536,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159909/Vinho-Tinto-Montgras-Intriga-2021-.png?v=638572769936770000",
-  productUrl: "https://www.divvino.com.br/vinho-montgras-intriga-2021-750ml-5083220/p"
+  productUrl: "https://www.divvino.com.br/vinho-montgras-intriga-2021-750ml-5083220/p",
+  popularity: 594
  },
  {
   sku: "divvino-3167",
@@ -5953,7 +6547,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159849/Biscoito-MULINO-BIANCO-Chicche-Crema-al-Cacao-200g.png?v=638561281860670000",
-  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-chicche-crema-al-cacao-200g-5209690/p"
+  productUrl: "https://www.divvino.com.br/biscoito-mulino-bianco-chicche-crema-al-cacao-200g-5209690/p",
+  popularity: 595
  },
  {
   sku: "divvino-3139",
@@ -5963,7 +6558,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160093/Vinho-Branco-Portugues-Mariposa-Dao-D.O.C.-Encruzado.png?v=638604615506500000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-encruzado-branco-750ml-5059495/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-encruzado-branco-750ml-5059495/p",
+  popularity: 596
  },
  {
   sku: "divvino-3138",
@@ -5973,7 +6569,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165182/Vinho-Mariposa-Dao-Doc-Rose.png?v=638967538204800000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-rose-750ml-5059459/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-rose-750ml-5059459/p",
+  popularity: 597
  },
  {
   sku: "divvino-3137",
@@ -5983,7 +6580,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165183/Vinho-Quinta-da-Mariposa-Dao-Doc.png?v=638971713922170000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-branco-750ml-5059430/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-branco-750ml-5059430/p",
+  popularity: 598
  },
  {
   sku: "divvino-3125",
@@ -5993,7 +6591,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159731/Vinho-Frances-DOMAINE-MAIRE---FILS-Arbois-Poulsard-En-Geillon-Rouge-750ml.png?v=638536361754600000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-poulsard-en-geillon-rouge-750ml-5086607/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-poulsard-en-geillon-rouge-750ml-5086607/p",
+  popularity: 599
  },
  {
   sku: "divvino-3124",
@@ -6003,7 +6602,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159733/Vinho-Frances-DOMAINE-MAIRE---FILS-Arbois-Savagnin-Vignes-de-Sorbief-Blanc.png?v=638536365744400000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-savagnin-vignes-de-sorbief-blanc-750ml-5086670/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-savagnin-vignes-de-sorbief-blanc-750ml-5086670/p",
+  popularity: 600
  },
  {
   sku: "divvino-3123",
@@ -6013,7 +6613,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159735/Vinho-Frances-DOMAINE-MAIRE---FILS-Cotes-Du-Jura-Grand-Mineral-Pinot-Noir.png?v=638536368564100000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-cotes-du-jura-grand-mineral-pinot-noir-750ml-5086705/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-cotes-du-jura-grand-mineral-pinot-noir-750ml-5086705/p",
+  popularity: 601
  },
  {
   sku: "divvino-3122",
@@ -6023,7 +6624,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159734/Vinho-Frances-DOMAINE-MAIRE---FILS-Arbois-Chardonnay-Vignes-de-Sorbief-Blanc.png?v=638536366652070000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-chardonnay-vignes-de-sorbief-blanc-750ml-5086680/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-maire---fils-arbois-chardonnay-vignes-de-sorbief-blanc-750ml-5086680/p",
+  popularity: 602
  },
  {
   sku: "divvino-3106",
@@ -6033,7 +6635,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159710/Tomate-Cereja-MUTTI-240g.png?v=638531227535300000",
-  productUrl: "https://www.divvino.com.br/tomate-cereja-mutti-240g-3447432/p"
+  productUrl: "https://www.divvino.com.br/tomate-cereja-mutti-240g-3447432/p",
+  popularity: 603
  },
  {
   sku: "divvino-3103",
@@ -6043,7 +6646,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161295/Vinho-Branco-Sul-Africano-Tall-Horse-Pinot-Grigio.png?v=638863691173800000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-branco-pinot-grigio-750ml-5263200/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-branco-pinot-grigio-750ml-5263200/p",
+  popularity: 604
  },
  {
   sku: "divvino-3102",
@@ -6053,7 +6657,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161297/Vinho-Sul-Africano-Tall-Horse-Pinotage-Rose.png?v=639077120857730000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-rose-pinotage-750ml-5263194/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-rose-pinotage-750ml-5263194/p",
+  popularity: 605
  },
  {
   sku: "divvino-3101",
@@ -6063,7 +6668,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161294/Vinho-Tinto-Sul-Africano-Tall-Horse-Cabernet-Sauvignon.png?v=638857814096530000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-cabernet-sauvignon-garrafa-750ml-5263158/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-tall-horse-cabernet-sauvignon-garrafa-750ml-5263158/p",
+  popularity: 606
  },
  {
   sku: "divvino-3097",
@@ -6073,7 +6679,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161509/Champagne Jean Pernet Rose Brut.png?v=638902777370170000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-rose-aoc-garrafa-750ml-5261494/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-rose-aoc-garrafa-750ml-5261494/p",
+  popularity: 607
  },
  {
   sku: "divvino-3096",
@@ -6083,7 +6690,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161521/Champanhe Jean Pernet Reserve Grand Cru Brut.png?v=638902811595000000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-reserve-brut-grand-cru-garrafa-750ml-5261467/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-reserve-brut-grand-cru-garrafa-750ml-5261467/p",
+  popularity: 608
  },
  {
   sku: "divvino-3095",
@@ -6093,7 +6701,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161510/Champagne Jean Pernet Tradition Brut.png?v=638902777618900000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-tradition-brut-aoc-garrafa-750ml-5261458/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-jean-pernet-tradition-brut-aoc-garrafa-750ml-5261458/p",
+  popularity: 609
  },
  {
   sku: "divvino-3092",
@@ -6103,7 +6712,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161381/Vinho-Tinto-Sul-Africano-McGregor-Terroir-Selection-Pinot-Noir.png?v=638878386361770000",
-  productUrl: "https://www.divvino.com.br/vinho-mcgregor-winer-terroir-selection-pinot-noir-garrafa-750ml-5260826/p"
+  productUrl: "https://www.divvino.com.br/vinho-mcgregor-winer-terroir-selection-pinot-noir-garrafa-750ml-5260826/p",
+  popularity: 610
  },
  {
   sku: "divvino-3091",
@@ -6113,7 +6723,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161380/Vinho-Branco-Sul-Africano-McGregor-Terroir-Selection-Chardonnay.png?v=638871647239170000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-mcgregor-winer-terroir-selection-chardonnay-garrafa-750-5260808/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-mcgregor-winer-terroir-selection-chardonnay-garrafa-750-5260808/p",
+  popularity: 611
  },
  {
   sku: "divvino-3083",
@@ -6123,7 +6734,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159642/Vinho-Branco-Argentino-Torreon-Sauvignon-Blanc.png?v=638513809580530000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-sauvignon-blanc-750ml-5133126/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-sauvignon-blanc-750ml-5133126/p",
+  popularity: 612
  },
  {
   sku: "divvino-3073",
@@ -6133,7 +6745,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161553/Vinho-Tinto-Frances-Plaisir-de-Siaurac.png?v=638907965545200000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-plaisir-de-siaurac-tinto-garrafa-750ml-5256322/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-plaisir-de-siaurac-tinto-garrafa-750ml-5256322/p",
+  popularity: 613
  },
  {
   sku: "divvino-3048",
@@ -6143,7 +6756,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159565/Kit-Acessorios-para-Vinho-ACASA-Couro-com-4-Pecas.png?v=638503614869900000",
-  productUrl: "https://www.divvino.com.br/kit-acessorios-para-vinho-acasa-couro-com-4-pecas-ref---236-4898901/p"
+  productUrl: "https://www.divvino.com.br/kit-acessorios-para-vinho-acasa-couro-com-4-pecas-ref---236-4898901/p",
+  popularity: 614
  },
  {
   sku: "divvino-3047",
@@ -6153,7 +6767,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159566/Adega-ACASA-Bambu-20CM.png?v=638503628155400000",
-  productUrl: "https://www.divvino.com.br/adega-acasa-bambu-20cm-ref---20b-4896273/p"
+  productUrl: "https://www.divvino.com.br/adega-acasa-bambu-20cm-ref---20b-4896273/p",
+  popularity: 615
  },
  {
   sku: "divvino-3044",
@@ -6163,7 +6778,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160585/Vinho-Branco-Frances-Andre-Lurton-Chateau-Coucheroy--Pessac-Leognan-A.O.C..png?v=638678080382270000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-andre-lurton-chateau-coucheroy-branco-pessac-leognan-aoc-garrafa-750ml-5252987/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-andre-lurton-chateau-coucheroy-branco-pessac-leognan-aoc-garrafa-750ml-5252987/p",
+  popularity: 616
  },
  {
   sku: "divvino-3043",
@@ -6173,7 +6789,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160584/Vinho-Tinto-Frances-Andre-Lurton-Chateau-Coucheroy-Pessac-Leognan-A.O.C..png?v=638678069624570000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-andre-lurton-chateau-coucheroy-pessac-leognan-aoc-garrafa-750ml-5252940/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-andre-lurton-chateau-coucheroy-pessac-leognan-aoc-garrafa-750ml-5252940/p",
+  popularity: 617
  },
  {
   sku: "divvino-3039",
@@ -6183,7 +6800,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165284/Brampton-Shiraz.png?v=638984620223170000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-brampton-tinto-shiraz-750ml-5251827/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-brampton-tinto-shiraz-750ml-5251827/p",
+  popularity: 618
  },
  {
   sku: "divvino-3027",
@@ -6193,7 +6811,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160315/Vinho-Branco-Portugues-Dom-Martinho-Quinta-do-Carmo.png?v=638653897512570000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-dom-martinho-by-quinta-do-carmo-garrafa-750ml-5250712/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-dom-martinho-by-quinta-do-carmo-garrafa-750ml-5250712/p",
+  popularity: 619
  },
  {
   sku: "divvino-3025",
@@ -6203,7 +6822,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160318/Vinho-Tinto-Portugues-Dom-Martinho-Quinta-do-Carmo.png?v=638653955540670000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-dom-martinho-by-quinta-do-carmo-tinto-garrafa-750ml-5250688/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-dom-martinho-by-quinta-do-carmo-tinto-garrafa-750ml-5250688/p",
+  popularity: 620
  },
  {
   sku: "divvino-3024",
@@ -6213,7 +6833,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160319/Vinho-Branco-Portugues-Quinta-Do-Carmo.png?v=638653970102130000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-do-carmo-branco-garrafa-750ml-5250632/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-do-carmo-branco-garrafa-750ml-5250632/p",
+  popularity: 621
  },
  {
   sku: "divvino-3023",
@@ -6223,7 +6844,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160320/Vinho-Tinto-Portugues-Quinta-Do-Carmo.png?v=638653984958700000",
-  productUrl: "https://www.divvino.com.br/vinho-portug-quinta-do-carmo-tinto-garrafa-750ml-5250605/p"
+  productUrl: "https://www.divvino.com.br/vinho-portug-quinta-do-carmo-tinto-garrafa-750ml-5250605/p",
+  popularity: 622
  },
  {
   sku: "divvino-3021",
@@ -6233,7 +6855,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160660/Vinho-Italiano-Cecchi-Treno-del-Mare-Vermentino-Maremma-D.O.C..png?v=638684197644930000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-branco-treno-del-mare-vermentino-maremma-garrafa-750ml-5250060/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-cecchi-branco-treno-del-mare-vermentino-maremma-garrafa-750ml-5250060/p",
+  popularity: 623
  },
  {
   sku: "divvino-3007",
@@ -6243,7 +6866,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159493/Tomate-Sem-Pele-CIRIO-800g.png?v=638491478415970000",
-  productUrl: "https://www.divvino.com.br/tomate-sem-pele-cirio-800g-5095400/p"
+  productUrl: "https://www.divvino.com.br/tomate-sem-pele-cirio-800g-5095400/p",
+  popularity: 624
  },
  {
   sku: "divvino-2998",
@@ -6253,7 +6877,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161379/Vinho Tinto Espanhol Angelita Del Challao Rioja.png?v=638871600524900000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-angelita-del-challao-rioja-garrafa-750ml-5239107/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-angelita-del-challao-rioja-garrafa-750ml-5239107/p",
+  popularity: 625
  },
  {
   sku: "divvino-2991",
@@ -6263,7 +6888,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160260/Vinho-Branco-Italiano-Famiglia-Ricciadoro-Pinot-Grigio.png?v=638642448612230000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-pinot-grigio-garrafa-750ml-5237926/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-pinot-grigio-garrafa-750ml-5237926/p",
+  popularity: 626
  },
  {
   sku: "divvino-2989",
@@ -6273,7 +6899,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160259/Vinho-Tinto-Italiano-Famiglia-Ricciadoro-Sangiovese.png?v=638642446016700000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-sangiovese-tinto-garrafa-750ml-5237917/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-sangiovese-tinto-garrafa-750ml-5237917/p",
+  popularity: 627
  },
  {
   sku: "divvino-2988",
@@ -6283,7 +6910,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160258/Vinho-Tinto-Italiano-Famiglia-Ricciadoro-Primitivo.png?v=638642437449770000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-primitivo-tinto-garrafa-750ml-5237908/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-famiglia-ricciadoro-primitivo-tinto-garrafa-750ml-5237908/p",
+  popularity: 628
  },
  {
   sku: "divvino-2987",
@@ -6293,7 +6921,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161594/Vinho-Tinto-Frances-Chateau-Calvimont-Graves-Rouge-.png?v=639074460778000000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chateau-calvimont-graves-tinto-garrafa-750ml-5237416/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chateau-calvimont-graves-tinto-garrafa-750ml-5237416/p",
+  popularity: 629
  },
  {
   sku: "divvino-2986",
@@ -6303,7 +6932,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161595/Vinho Tinto Frances Chateau de Come Saint-Estephe.png?v=638912271038400000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-come-saint-estephe-tinto-garrafa-750ml-5237407/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-come-saint-estephe-tinto-garrafa-750ml-5237407/p",
+  popularity: 630
  },
  {
   sku: "divvino-2984",
@@ -6313,7 +6943,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165012/Vinho-Tinto-Frances-Chateau-Soliel-Puisseguin-Saint-Emilion.png?v=638954362326200000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-soleil-puisseguin-saint-emilion-tinto-garrafa-750ml-5237372/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-soleil-puisseguin-saint-emilion-tinto-garrafa-750ml-5237372/p",
+  popularity: 631
  },
  {
   sku: "divvino-2982",
@@ -6323,7 +6954,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165013/Vinho Tinto Frances Chateau De La Riviere Fonsac AOC.png?v=638954397548130000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-la-riviere-fonsac-aoc-tinto-garrafa-750ml-5237345/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-la-riviere-fonsac-aoc-tinto-garrafa-750ml-5237345/p",
+  popularity: 632
  },
  {
   sku: "divvino-2979",
@@ -6333,7 +6965,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165015/Vinho-Tinto-Frances-Chateau-Peyraud-Blaye-Cotes-de-Bourdeaux-AOC.png?v=639077117700130000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-peyraud-blaye-cotes-de-bourdeaux-aoc-tinto-garrafa-750ml-5236778/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-peyraud-blaye-cotes-de-bourdeaux-aoc-tinto-garrafa-750ml-5236778/p",
+  popularity: 633
  },
  {
   sku: "divvino-2978",
@@ -6343,7 +6976,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165014/Vinho Tinto Frances Gaia De Chateau Puybarbe.png?v=638954407437700000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-gaia-de-chateau-puybarbe-tinto-garrafa-750ml-5236787/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-gaia-de-chateau-puybarbe-tinto-garrafa-750ml-5236787/p",
+  popularity: 634
  },
  {
   sku: "divvino-2972",
@@ -6353,7 +6987,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet outras bebidas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159330/Agua-Mineral-SAN-PELLEGRINO-com-Gas-250ml.png?v=638472296812900000",
-  productUrl: "https://www.divvino.com.br/agua-mineral-san-pellegrino-com-gas-250ml-1201999/p"
+  productUrl: "https://www.divvino.com.br/agua-mineral-san-pellegrino-com-gas-250ml-1201999/p",
+  popularity: 635
  },
  {
   sku: "divvino-2968",
@@ -6363,7 +6998,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160877/Vinho-Tinto-Italiano-Pietraforte-Montepulciano-D-Abruzzo.png.png?v=638738557655200000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-montepulciano-d-abruzzo-garrafa-750ml-5236277/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-pietraforte-montepulciano-d-abruzzo-garrafa-750ml-5236277/p",
+  popularity: 636
  },
  {
   sku: "divvino-2956",
@@ -6373,7 +7009,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159305/Cafe-Coffee---Classico-Torrado-E-Moido-250g-.png?v=638470571735500000",
-  productUrl: "https://www.divvino.com.br/cafe-coffee---classico-torrado-e-moido-250g-4695981/p"
+  productUrl: "https://www.divvino.com.br/cafe-coffee---classico-torrado-e-moido-250g-4695981/p",
+  popularity: 637
  },
  {
   sku: "divvino-2955",
@@ -6383,7 +7020,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159304/Cafe-Coffee---Torrado-E-Moido-Cerrado-Mineiro-Fazenda-Bom-Jardim-250g.png?v=638470570613470000",
-  productUrl: "https://www.divvino.com.br/cafe-coffee---torrado-e-moido-cerrado-mineiro-fazenda-bom-jardim-250g-4695936/p"
+  productUrl: "https://www.divvino.com.br/cafe-coffee---torrado-e-moido-cerrado-mineiro-fazenda-bom-jardim-250g-4695936/p",
+  popularity: 638
  },
  {
   sku: "divvino-2954",
@@ -6393,7 +7031,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166745/Batata-Chips-Eldorada-Alecrim-130g.png?v=639168703476870000",
-  productUrl: "https://www.divvino.com.br/batata-chips-eldorada-alecrim-130g-5103762/p"
+  productUrl: "https://www.divvino.com.br/batata-chips-eldorada-alecrim-130g-5103762/p",
+  popularity: 639
  },
  {
   sku: "divvino-2951",
@@ -6403,7 +7042,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160941/Vinho-Tinto-Espanhol-Castillo-La-Rodetta-Rioja-Joven.png.png?v=638787597347570000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-castillo-la-rodetta-rioja-joven-garrafa-750ml-5234639/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-castillo-la-rodetta-rioja-joven-garrafa-750ml-5234639/p",
+  popularity: 640
  },
  {
   sku: "divvino-2950",
@@ -6413,7 +7053,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160907/Vinho-Tinto-Espanhol-Castillo-La-Rodetta-Rioja-Crianza.png.png?v=638977727311100000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-castillo-la-rodetta-rioja-crianza-garrafa-750ml-5234620/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-castillo-la-rodetta-rioja-crianza-garrafa-750ml-5234620/p",
+  popularity: 641
  },
  {
   sku: "divvino-2949",
@@ -6423,7 +7064,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159303/Cafe-COFFEE---Caparao-Torrado-e-Moido-250g.png?v=638470539340800000",
-  productUrl: "https://www.divvino.com.br/cafe-coffee---caparao-torrado-e-moido-250g-5193410/p"
+  productUrl: "https://www.divvino.com.br/cafe-coffee---caparao-torrado-e-moido-250g-5193410/p",
+  popularity: 642
  },
  {
   sku: "divvino-2944",
@@ -6433,7 +7075,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160113/Vinho-Portugues-Adega-De-Lisboa-Rose.png?v=638615743274800000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-rose-750ml-5234343/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-rose-750ml-5234343/p",
+  popularity: 643
  },
  {
   sku: "divvino-2943",
@@ -6443,7 +7086,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160112/Vinho-Branco-Portugues-Adega-De-Lisboa.png?v=638615722963370000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-branco-garrafa-750ml-5234334/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-branco-garrafa-750ml-5234334/p",
+  popularity: 644
  },
  {
   sku: "divvino-2942",
@@ -6453,7 +7097,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160111/Vinho-Tinto-Portugues-Adega-De-Lisboa.png?v=638615693552400000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-tinto-garrafa-750ml-5234325/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-adega-de-lisboa-tinto-garrafa-750ml-5234325/p",
+  popularity: 645
  },
  {
   sku: "divvino-2941",
@@ -6463,7 +7108,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159285/Champagne-Moutard-Brut-Nature.png?v=638467288323470000",
-  productUrl: "https://www.divvino.com.br/champagne-moutard-brut-nature-750ml-5127577/p"
+  productUrl: "https://www.divvino.com.br/champagne-moutard-brut-nature-750ml-5127577/p",
+  popularity: 646
  },
  {
   sku: "divvino-2940",
@@ -6473,7 +7119,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159286/Vinho-Branco-Italiano-Cantina-De-Negrar-Pinot-Grigio.png?v=638467304331930000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-italiano-cantina-de-negrar-pinot-grigio-750ml-4775518/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-italiano-cantina-de-negrar-pinot-grigio-750ml-4775518/p",
+  popularity: 647
  },
  {
   sku: "divvino-2917",
@@ -6483,7 +7130,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159206/Vinho-Italiano-Marchesi-Migliorati-Cerasuolo-d-Abruzzo.png?v=638458663360100000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-marchesi-migliorati-cerasuilo-d-abruzzo-750ml-5228435/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-marchesi-migliorati-cerasuilo-d-abruzzo-750ml-5228435/p",
+  popularity: 648
  },
  {
   sku: "divvino-2916",
@@ -6493,7 +7141,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159208/Vinho-Branco-Italiano-Marchesi-Migliorati-Trebbiano-D-Abruzzo.png?v=638458717281530000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-marchesi-migliorati-trebbiano-d-abruzzo-garrafa-750ml-5228426/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-marchesi-migliorati-trebbiano-d-abruzzo-garrafa-750ml-5228426/p",
+  popularity: 649
  },
  {
   sku: "divvino-2915",
@@ -6503,7 +7152,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159196/Vinho-Italiano-Carranco-Etna-Bianco-Villa-Dei-Baroni-D.O.C.-.png?v=638457788523030000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-carranco-etna-bianco-villa-dei-baroni-doc-garrafa-750ml-5228364/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-carranco-etna-bianco-villa-dei-baroni-doc-garrafa-750ml-5228364/p",
+  popularity: 650
  },
  {
   sku: "divvino-2910",
@@ -6513,7 +7163,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159193/Vinho-Italiano-Carranco-Etna-Rosso-Villa-Dei-Baroni-D.O.C..png?v=638457757388270000",
-  productUrl: "https://www.divvino.com.br/vinho-oni-doc-garrafa-7italiano-carranco-etna-rosso-villa-dei-bar50ml-5228293/p"
+  productUrl: "https://www.divvino.com.br/vinho-oni-doc-garrafa-7italiano-carranco-etna-rosso-villa-dei-bar50ml-5228293/p",
+  popularity: 651
  },
  {
   sku: "divvino-2888",
@@ -6523,7 +7174,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159163/Espumante-Italiano-Corteaura-Franciacorta-Rose.png?v=638453272711270000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-rose-750ml-5104957/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-rose-750ml-5104957/p",
+  popularity: 652
  },
  {
   sku: "divvino-2887",
@@ -6533,7 +7185,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159162/Espumante-Italiano-Corteaura-Franciacorta-Inse-Pas-Dose.png?v=638453268758300000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-inse-pas-dose-750ml-5104948/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-inse-pas-dose-750ml-5104948/p",
+  popularity: 653
  },
  {
   sku: "divvino-2886",
@@ -6543,7 +7196,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159161/Espumante-Italiano-Corteaura-Franciacorta-Saten.png?v=638453262109800000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-saten-750ml-5104910/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-corteaura-franciacorta-saten-750ml-5104910/p",
+  popularity: 654
  },
  {
   sku: "divvino-2885",
@@ -6553,7 +7207,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159147/Vinho-Yellow-Tail-Chardonnay.png?v=638451615846770000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-australiano-yellow-tail-chardonnay-garrafa-750ml-3086528/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-australiano-yellow-tail-chardonnay-garrafa-750ml-3086528/p",
+  popularity: 655
  },
  {
   sku: "divvino-2882",
@@ -6563,7 +7218,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159132/Vinho-Yellow-Tail-Pink-Moscato-750ml.png?v=638449198659700000",
-  productUrl: "https://www.divvino.com.br/vinho-yeallow-tail-pink-moscato-750ml-5167204/p"
+  productUrl: "https://www.divvino.com.br/vinho-yeallow-tail-pink-moscato-750ml-5167204/p",
+  popularity: 656
  },
  {
   sku: "divvino-2881",
@@ -6573,7 +7229,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159225/Vinho-Branco-Yellow-Tail-Moscato.png?v=638461058535400000",
-  productUrl: "https://www.divvino.com.br/vinho-yeallow-tail-moscato-750ml-5167198/p"
+  productUrl: "https://www.divvino.com.br/vinho-yeallow-tail-moscato-750ml-5167198/p",
+  popularity: 657
  },
  {
   sku: "divvino-2872",
@@ -6583,7 +7240,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160143/Vinho-Tinto-Portugues-Incrivel.png?v=638620938431600000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-incrivel-tinto-750ml-5223368/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-incrivel-tinto-750ml-5223368/p",
+  popularity: 658
  },
  {
   sku: "divvino-2863",
@@ -6593,7 +7251,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159012/Vinho-Italiano-Peter-Zemmer-Tinto-Pinot-Noir.png?v=638440485187800000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-tinto-pinot-noir-750ml-5104859/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-tinto-pinot-noir-750ml-5104859/p",
+  popularity: 659
  },
  {
   sku: "divvino-2862",
@@ -6603,7 +7262,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159013/Vinho-Tinto-Italiano-Peter-Zemmer-Lagrein.png?v=638440499115030000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-tinto-lagrein-750ml-5104840/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-tinto-lagrein-750ml-5104840/p",
+  popularity: 660
  },
  {
   sku: "divvino-2861",
@@ -6613,7 +7273,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159010/Vinho-Italiano-Peter-Zemmer-Branco-Gewurztraminer.png?v=638440386070170000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-gewurztraminer-750ml-5104830/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-gewurztraminer-750ml-5104830/p",
+  popularity: 661
  },
  {
   sku: "divvino-2860",
@@ -6623,7 +7284,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159009/Vinho-Italiano-Peter-Zemmer-Branco-Riesling.png?v=638440347513700000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-riesling-750ml-5104821/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-riesling-750ml-5104821/p",
+  popularity: 662
  },
  {
   sku: "divvino-2859",
@@ -6633,7 +7295,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159011/Vinho-Italiano-Peter-Zemmer-Branco-Muller-Thurgau.png?v=638440478783100000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-muller-thurgau-750ml-5104812/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-peter-zemmer-branco-muller-thurgau-750ml-5104812/p",
+  popularity: 663
  },
  {
   sku: "divvino-2858",
@@ -6643,7 +7306,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159318/Vinho-Rose-Portugues-Pitch-Algarve.png?v=638471581729430000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-rose-750ml-5167634/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-rose-750ml-5167634/p",
+  popularity: 664
  },
  {
   sku: "divvino-2857",
@@ -6653,7 +7317,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159319/Vinho-Tinto-Portugues-Pitch-Algarve.png?v=638471582902800000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-tinto-750ml-5167625/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-tinto-750ml-5167625/p",
+  popularity: 665
  },
  {
   sku: "divvino-2856",
@@ -6663,7 +7328,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159317/Vinho-Branco-Portugues-Pitch-Algarve.png?v=638471580634370000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-branco-750ml-5167616/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-pitch-branco-750ml-5167616/p",
+  popularity: 666
  },
  {
   sku: "divvino-2855",
@@ -6673,7 +7339,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159321/Vinho-Tinto-I-Feudi-di-Romans-Refoso-Dal-Penduculo-Rosso.png?v=638471587744030000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-refosco-dal-peduncolo-rosso-750ml-5104895/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-refosco-dal-peduncolo-rosso-750ml-5104895/p",
+  popularity: 667
  },
  {
   sku: "divvino-2854",
@@ -6683,7 +7350,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159322/Vinho-Branco-I-Feudi-di-Romans-Ribolla-Gialla.png?v=638471588219270000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-ribolla-gialla-750ml-5104877/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-i-feudi-di-romans-ribolla-gialla-750ml-5104877/p",
+  popularity: 668
  },
  {
   sku: "divvino-2840",
@@ -6693,7 +7361,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159870/Espumante-Argentino-Inacayal-Brut-Rose.png?v=638563048585730000",
-  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-rose-garrafa-750ml-5218410/p"
+  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-rose-garrafa-750ml-5218410/p",
+  popularity: 669
  },
  {
   sku: "divvino-2839",
@@ -6703,7 +7372,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165496/Vinho-Branco-Frances-Domaine-De-Beaurenard-Chateauneuf-du-Pape.png?v=639077110488170000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-de-beaurenard-chateauneuf-du-pape-branco-garrafa-750ml-5218484/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-domaine-de-beaurenard-chateauneuf-du-pape-branco-garrafa-750ml-5218484/p",
+  popularity: 670
  },
  {
   sku: "divvino-2837",
@@ -6713,7 +7383,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159739/Espumante-Argentino-Inacayal-Brut.png?v=638536409297700000",
-  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-garrafa-750ml-5218401/p"
+  productUrl: "https://www.divvino.com.br/espumante-argentino-inacayal-brut-garrafa-750ml-5218401/p",
+  popularity: 671
  },
  {
   sku: "divvino-2835",
@@ -6723,7 +7394,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160003/Vinho-Tinto-Espanhol-Cedula-Real-Gran-Reserva.png?v=638587408555330000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-cedula-real-gran-reserva-garrafa-750ml-5218232/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-cedula-real-gran-reserva-garrafa-750ml-5218232/p",
+  popularity: 672
  },
  {
   sku: "divvino-2832",
@@ -6733,7 +7405,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160075/Espumante-Frances-Montparnasse-Brut.png?v=638600192726030000",
-  productUrl: "https://www.divvino.com.br/espumante-montparnasse-brut-750ml-5218180/p"
+  productUrl: "https://www.divvino.com.br/espumante-montparnasse-brut-750ml-5218180/p",
+  popularity: 673
  },
  {
   sku: "divvino-2830",
@@ -6743,7 +7416,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160904/Vinho-Tinto-Portugues-Ramilo-Nativas.png.png?v=638793944073170000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-ramilo-nativas-tinto-garrafa-750ml-5218152/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-ramilo-nativas-tinto-garrafa-750ml-5218152/p",
+  popularity: 674
  },
  {
   sku: "divvino-2829",
@@ -6753,7 +7427,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160903/Vinho-Branco-Portugues-Ramilo-Nativas.png.png?v=638793943863000000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-ramilo-nativas-branco-garrafa-750ml-5218143/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-ramilo-nativas-branco-garrafa-750ml-5218143/p",
+  popularity: 675
  },
  {
   sku: "divvino-2827",
@@ -6763,7 +7438,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160965/Vinho-Tinto-Portugues-Quinta-Das-Carvalhas-Reserva.png.png?v=638977726685000000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-das-carvalhas-tinto-reserva-garrafa-750ml-5218107/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-das-carvalhas-tinto-reserva-garrafa-750ml-5218107/p",
+  popularity: 676
  },
  {
   sku: "divvino-2826",
@@ -6773,7 +7449,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160967/Vinho-Tinto-Portugues-Quinta-Das-Carvalhas-Douro.png.png?v=638773878523000000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-das-carvalhas-tinto-garrafa-750ml-5218090/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-das-carvalhas-tinto-garrafa-750ml-5218090/p",
+  popularity: 677
  },
  {
   sku: "divvino-2825",
@@ -6783,7 +7460,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160966/Vinho-Tinto-Portugues-Quinta-Das-Carvalhas-Red-Blend.png.png?v=638977725301370000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-carvalhas-blend-tinto-garrafa-750ml-5218081/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-carvalhas-blend-tinto-garrafa-750ml-5218081/p",
+  popularity: 678
  },
  {
   sku: "divvino-2824",
@@ -6793,7 +7471,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160963/Vinho-Branco-Portugues-Quinta-Carvalhos-Blend.png.png?v=638977723781200000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-carvalhas-branco-blend-garrafa-750ml-5218072/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-quinta-carvalhas-branco-blend-garrafa-750ml-5218072/p",
+  popularity: 679
  },
  {
   sku: "divvino-2823",
@@ -6803,7 +7482,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160090/Vinho-Tinto-Italiano-Greppicaia-Bolgheri-DOC-Superiore.png?v=638604410005370000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-greppicaia-bolgheri-doc-superiore-garrafa-750ml-5218054/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-greppicaia-bolgheri-doc-superiore-garrafa-750ml-5218054/p",
+  popularity: 680
  },
  {
   sku: "divvino-2818",
@@ -6813,7 +7493,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164923/Vinho-Tinto-Frances-Signe-Bourgoge-Pinot-Noir.png?v=639080534453970000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-signe-bourgoge-pinot-noir-garrafa-750ml-5217594/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-signe-bourgoge-pinot-noir-garrafa-750ml-5217594/p",
+  popularity: 681
  },
  {
   sku: "divvino-2817",
@@ -6823,7 +7504,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/164922/Vinho-Branco-Frances-Signe-Bourgogne-Chardonnay.png?v=638945132696100000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-signe-bourgogne-chardonnay-garrafa-750ml-5217511/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-signe-bourgogne-chardonnay-garrafa-750ml-5217511/p",
+  popularity: 682
  },
  {
   sku: "divvino-2814",
@@ -6833,7 +7515,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159931/Vinho-Tinto-Italiano-Brio-Toscana--Rosso-IGT.png?v=638574469564800000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-brio-toscana-igt-rosso-750ml-5215544/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-brio-toscana-igt-rosso-750ml-5215544/p",
+  popularity: 683
  },
  {
   sku: "divvino-2812",
@@ -6843,7 +7526,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160166/Vinho-Tinto-Frances-Jean-Bouchard-Mercurey.png?v=638621967365370000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-mercurey-750ml-5215491/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-mercurey-750ml-5215491/p",
+  popularity: 684
  },
  {
   sku: "divvino-2810",
@@ -6853,7 +7537,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160167/Vinho-Tinto-Frances-Jean-Bouchard-Cote-de-Nuits-Villages.png?v=638621973322370000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-cote-de-nuits-villages-750ml-5215473/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-cote-de-nuits-villages-750ml-5215473/p",
+  popularity: 685
  },
  {
   sku: "divvino-2808",
@@ -6863,7 +7548,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160168/Vinho-Tinto-Frances-Jean-Bouchard-Nuits-Saint-Georges.png?v=638621974599070000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-nuits-saint-georges-750ml-5215464/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-nuits-saint-georges-750ml-5215464/p",
+  popularity: 686
  },
  {
   sku: "divvino-2806",
@@ -6873,7 +7559,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160177/Vinho-Branco-Frances-Jean-Bouchard-Bourgogne-Hautes-Cotes-De-Nuits.png?v=638622682942330000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-bourgogne-hautes-cotes-de-nuits-branco-750ml-5215437/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-bourgogne-hautes-cotes-de-nuits-branco-750ml-5215437/p",
+  popularity: 687
  },
  {
   sku: "divvino-2805",
@@ -6883,7 +7570,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160158/Vinho-Branco-Frances-Jean-Bouchard-Mercurey.png?v=638621743566370000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-mercurey-branco-750ml-5215428/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-mercurey-branco-750ml-5215428/p",
+  popularity: 688
  },
  {
   sku: "divvino-2804",
@@ -6893,7 +7581,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160147/vinho-Branco-Frances-Jean-Bouchard-Santenay.png?v=638621042908400000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-santenay-branco-750ml-5215419/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-santenay-branco-750ml-5215419/p",
+  popularity: 689
  },
  {
   sku: "divvino-2788",
@@ -6903,7 +7592,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160141/Azeite-de-Oliva-Las-Doscientas-Extra-Virgem-Blend-500ML.png?v=638620829647670000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-las-doscientas-extra-virgem-blend-500ml/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-las-doscientas-extra-virgem-blend-500ml/p",
+  popularity: 690
  },
  {
   sku: "divvino-2785",
@@ -6913,7 +7603,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158866/ESPUMANTE-CHANDON-BLANC-NOIR--GFA-750ML.png?v=638417124349500000",
-  productUrl: "https://www.divvino.com.br/espumante-chandon-blanc-de-noir-750ml-4865160/p"
+  productUrl: "https://www.divvino.com.br/espumante-chandon-blanc-de-noir-750ml-4865160/p",
+  popularity: 691
  },
  {
   sku: "divvino-2774",
@@ -6923,7 +7614,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158875/Vinho-Branco-Sombrio.png?v=638418053960530000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-sombrio-dao-doc-branco-750ml-5059539/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-sombrio-dao-doc-branco-750ml-5059539/p",
+  popularity: 692
  },
  {
   sku: "divvino-2753",
@@ -6933,7 +7625,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165233/avignonesi-desiderio-2019.jpg?v=638972720579430000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-avignonesi-desiderio-2019-750ml-5101150/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-avignonesi-desiderio-2019-750ml-5101150/p",
+  popularity: 693
  },
  {
   sku: "divvino-2734",
@@ -6943,7 +7636,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160209/Vinho-Tinto-Espanhol-Mas-Oliveiras-Tempranillo.png?v=638635638084800000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-mas-oliveiras-tempranillo-750ml-5200597/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-mas-oliveiras-tempranillo-750ml-5200597/p",
+  popularity: 694
  },
  {
   sku: "divvino-2733",
@@ -6953,7 +7647,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160208/Vinho-Espanhol-Mas-Oliveiras-Rose.png?v=638635622389270000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-mas-oliveiras-rose-750ml-5200588/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-mas-oliveiras-rose-750ml-5200588/p",
+  popularity: 695
  },
  {
   sku: "divvino-2702",
@@ -6963,7 +7658,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160084/Vinho-Tinto-Frances-Le-Vins-De-Vienne-Syrah.png?v=638603837786700000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-le-vins-de-vienne-syrah-garrafa-750ml-5196108/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-le-vins-de-vienne-syrah-garrafa-750ml-5196108/p",
+  popularity: 696
  },
  {
   sku: "divvino-2693",
@@ -6973,7 +7669,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165435/Espumante Salton Ouro Brut Rose.png?v=639011685989730000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-ouro-brut-rose-4652429/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-ouro-brut-rose-4652429/p",
+  popularity: 697
  },
  {
   sku: "divvino-2691",
@@ -6983,7 +7680,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158717/3805004.png?v=638375555335930000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-series-demi-sec-3805004/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-series-demi-sec-3805004/p",
+  popularity: 698
  },
  {
   sku: "divvino-2686",
@@ -6993,7 +7691,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158708/5059477.png?v=638374785402570000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-mariposa-dao-doc-5059477/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-mariposa-dao-doc-5059477/p",
+  popularity: 699
  },
  {
   sku: "divvino-2635",
@@ -7003,7 +7702,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160234/Vinho-Tinto-Frances-Chateau-De-Vien.png?v=638640165977030000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-vien-garrafa-750ml-5184500/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-de-vien-garrafa-750ml-5184500/p",
+  popularity: 700
  },
  {
   sku: "divvino-2612",
@@ -7013,7 +7713,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159453/Vinho-Rose-Argentino-Bianchi-Soñador-Blend-.png?v=638484334732200000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-malbec-rose-750ml-5180180/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-malbec-rose-750ml-5180180/p",
+  popularity: 701
  },
  {
   sku: "divvino-2611",
@@ -7023,7 +7724,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159352/Vinho-Tinto-Argentino-Benvenuto-De-La-Serna-Malbec.png?v=638476620387870000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-benvenuto-de-la-serna-malbec-garrafa-750ml-5180206/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-benvenuto-de-la-serna-malbec-garrafa-750ml-5180206/p",
+  popularity: 702
  },
  {
   sku: "divvino-2609",
@@ -7033,7 +7735,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160840/Vinho-Tinto-Chileno-Montgras-Organic-Red-Blend.png?v=638735778794030000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-organic-red-blend-garrafa-750ml-5180135/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-organic-red-blend-garrafa-750ml-5180135/p",
+  popularity: 703
  },
  {
   sku: "divvino-2608",
@@ -7043,7 +7746,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159908/Vinho-Tinto-Chileno-Montgras-Organic-Pinot-Noir.png?v=638572766626730000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-organic-pinot-noir-garrafa-750ml-5180126/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-organic-pinot-noir-garrafa-750ml-5180126/p",
+  popularity: 704
  },
  {
   sku: "divvino-2606",
@@ -7053,7 +7757,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159452/Vinho-Tinto-Argentino-Bianchi-Soñador-Syrah-.png?v=638484328155900000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-syrah-garrafa-750ml-5180171/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-syrah-garrafa-750ml-5180171/p",
+  popularity: 705
  },
  {
   sku: "divvino-2605",
@@ -7063,7 +7768,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159451/Vinho-Tinto-Argentino-Bianchi-Soñador-Malbec-.png?v=638484326053200000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-malbec-garrafa-750ml-5180144/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-so%C3%B1ador-malbec-garrafa-750ml-5180144/p",
+  popularity: 706
  },
  {
   sku: "divvino-2601",
@@ -7073,7 +7779,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160473/Vinho-Tinto-Portugues-Mariposa-Dao-Reserva-D.O.C.png?v=638665163354800000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-reserva-tinto-750ml-5059520/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-mariposa-dao-doc-reserva-tinto-750ml-5059520/p",
+  popularity: 707
  },
  {
   sku: "divvino-2599",
@@ -7083,7 +7790,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159941/Vinho-Branco-Espanhol-Marques-de-Ardoza-.png?v=638575093507700000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-galecu-tinto-garrafa-750ml-5178351/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-galecu-tinto-garrafa-750ml-5178351/p",
+  popularity: 708
  },
  {
   sku: "divvino-2575",
@@ -7093,7 +7801,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159575/Vinho-Italiano-Branco-Stranamente-Blend-.png?v=638506175522970000",
-  productUrl: "https://www.divvino.com.br/vinho-stranamente-branco-garrafa-750ml-5171403/p"
+  productUrl: "https://www.divvino.com.br/vinho-stranamente-branco-garrafa-750ml-5171403/p",
+  popularity: 709
  },
  {
   sku: "divvino-2570",
@@ -7103,7 +7812,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158499/4898939.png?v=638327951796930000",
-  productUrl: "https://www.divvino.com.br/maleta-para-vinho-com-5-pecas-a-casa-4898939/p"
+  productUrl: "https://www.divvino.com.br/maleta-para-vinho-com-5-pecas-a-casa-4898939/p",
+  popularity: 710
  },
  {
   sku: "divvino-2569",
@@ -7113,7 +7823,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158498/4898948.png?v=638327945348530000",
-  productUrl: "https://www.divvino.com.br/porta-vinho-preto-acasa-4898948/p"
+  productUrl: "https://www.divvino.com.br/porta-vinho-preto-acasa-4898948/p",
+  popularity: 711
  },
  {
   sku: "divvino-2568",
@@ -7123,7 +7834,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158497/4910470.png?v=638327939981970000",
-  productUrl: "https://www.divvino.com.br/porta-vinho-marrom-acasa-4910470/p"
+  productUrl: "https://www.divvino.com.br/porta-vinho-marrom-acasa-4910470/p",
+  popularity: 712
  },
  {
   sku: "divvino-2531",
@@ -7133,7 +7845,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166649/Cerveja Baden Baden IPA 350ml.png?v=639148956130430000",
-  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-ipa-4536902/p"
+  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-ipa-4536902/p",
+  popularity: 713
  },
  {
   sku: "divvino-2530",
@@ -7143,7 +7856,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158455/4814877.png?v=638315221989330000",
-  productUrl: "https://www.divvino.com.br/cerveja-lagunitas-ipa-4814877/p"
+  productUrl: "https://www.divvino.com.br/cerveja-lagunitas-ipa-4814877/p",
+  popularity: 714
  },
  {
   sku: "divvino-2525",
@@ -7153,7 +7867,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160871/Cerveja-Lagunitas-India-Pale-Ale-355ml.png.png?v=639150584144900000",
-  productUrl: "https://www.divvino.com.br/cerveja-lagunitas-ipa-india-pale-ale-355ml-4370411/p"
+  productUrl: "https://www.divvino.com.br/cerveja-lagunitas-ipa-india-pale-ale-355ml-4370411/p",
+  popularity: 715
  },
  {
   sku: "divvino-2503",
@@ -7163,7 +7878,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "kits kits de vinhos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158415/kit-6-lambrusco-branco.png?v=638308153189470000",
-  productUrl: "https://www.divvino.com.br/kit-6-garrafafas-lambrusco-branco-sku4010044/p"
+  productUrl: "https://www.divvino.com.br/kit-6-garrafafas-lambrusco-branco-sku4010044/p",
+  popularity: 716
  },
  {
   sku: "divvino-2491",
@@ -7173,7 +7889,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165501/Vinho-Espanhol-Mustiguillo-la-Garnacha.jpg?v=639041877206100000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-mustiguillo-la-garnacha-4885396/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-mustiguillo-la-garnacha-4885396/p",
+  popularity: 717
  },
  {
   sku: "divvino-2457",
@@ -7183,7 +7900,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159464/Saca-Rolhas-Auto-Acasa-Inox-3-PCS.png?v=638487899316230000",
-  productUrl: "https://www.divvino.com.br/saca-rolhas-auto-acasa-inox--3-pcs-4898788/p"
+  productUrl: "https://www.divvino.com.br/saca-rolhas-auto-acasa-inox--3-pcs-4898788/p",
+  popularity: 718
  },
  {
   sku: "divvino-2453",
@@ -7193,7 +7911,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159377/Vinho-Tinto-Casa-Valduga-Origem-Merlot.png?v=638478351672030000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-casa-valduga-origem-merlot-4950583/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-casa-valduga-origem-merlot-4950583/p",
+  popularity: 719
  },
  {
   sku: "divvino-2445",
@@ -7203,7 +7922,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159900/Vinho-Branco-Australiano-The-Accomplice-Semillon-Sauvignon-Blanc.png?v=638569324377070000",
-  productUrl: "https://www.divvino.com.br/vinho-australiano-the-accomplice-semillon-sauvignon-blanc-750ml-5133082/p"
+  productUrl: "https://www.divvino.com.br/vinho-australiano-the-accomplice-semillon-sauvignon-blanc-750ml-5133082/p",
+  popularity: 720
  },
  {
   sku: "divvino-2444",
@@ -7213,7 +7933,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159899/Vinho-Tinto-Australiano-The-Accomplice-Shiraz.png?v=638569321165330000",
-  productUrl: "https://www.divvino.com.br/vinho-australiano-the-accomplice-shiraz-750ml-5133073/p"
+  productUrl: "https://www.divvino.com.br/vinho-australiano-the-accomplice-shiraz-750ml-5133073/p",
+  popularity: 721
  },
  {
   sku: "divvino-2441",
@@ -7223,7 +7944,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158764/5132343.png?v=638386043405430000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-club-de-playa-rose-750ml-5132343/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-club-de-playa-rose-750ml-5132343/p",
+  popularity: 722
  },
  {
   sku: "divvino-2440",
@@ -7233,7 +7955,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158763/5132325.png?v=638386037376270000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-club-de-playa-branco-750ml-5132325/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-club-de-playa-branco-750ml-5132325/p",
+  popularity: 723
  },
  {
   sku: "divvino-2437",
@@ -7243,7 +7966,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159652/Vinho-Tinto-Argentino-Masi-Passo-Doble.png?v=638515421843400000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-masi-passo-doble-750ml-5127586/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-masi-passo-doble-750ml-5127586/p",
+  popularity: 724
  },
  {
   sku: "divvino-2430",
@@ -7253,7 +7977,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166603/Taca para Agua Brinox Haus Pleasure 560ml.png?v=639142883311000000",
-  productUrl: "https://www.divvino.com.br/taca-para-agua-brinox-haus-pleasure-560ml-4913202/p"
+  productUrl: "https://www.divvino.com.br/taca-para-agua-brinox-haus-pleasure-560ml-4913202/p",
+  popularity: 725
  },
  {
   sku: "divvino-2429",
@@ -7263,7 +7988,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158280/4913187.png?v=638279547896900000",
-  productUrl: "https://www.divvino.com.br/taca-para-vinho-brinox-haus-pleasure-460ml-4913187/p"
+  productUrl: "https://www.divvino.com.br/taca-para-vinho-brinox-haus-pleasure-460ml-4913187/p",
+  popularity: 726
  },
  {
   sku: "divvino-2428",
@@ -7273,7 +7999,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158279/4913060.png?v=638279546040700000",
-  productUrl: "https://www.divvino.com.br/taca-para-espumante-brinox-haus-pleasure-210ml-4913060/p"
+  productUrl: "https://www.divvino.com.br/taca-para-espumante-brinox-haus-pleasure-210ml-4913060/p",
+  popularity: 727
  },
  {
   sku: "divvino-2422",
@@ -7283,7 +8010,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158257/4938014.png?v=638277075210830000",
-  productUrl: "https://www.divvino.com.br/arroz-para-sushi-scotti-hakumaki-500g-4938014/p"
+  productUrl: "https://www.divvino.com.br/arroz-para-sushi-scotti-hakumaki-500g-4938014/p",
+  popularity: 728
  },
  {
   sku: "divvino-2420",
@@ -7293,7 +8021,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158255/4937993.png?v=638277063856170000",
-  productUrl: "https://www.divvino.com.br/arroz-carnaroli-scotti-500g-4937993/p"
+  productUrl: "https://www.divvino.com.br/arroz-carnaroli-scotti-500g-4937993/p",
+  popularity: 729
  },
  {
   sku: "divvino-2419",
@@ -7303,7 +8032,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158254/4937984.png?v=638277059713370000",
-  productUrl: "https://www.divvino.com.br/arroz-para-risoto-scotti-eccellente-500g-4937984/p"
+  productUrl: "https://www.divvino.com.br/arroz-para-risoto-scotti-eccellente-500g-4937984/p",
+  popularity: 730
  },
  {
   sku: "divvino-2418",
@@ -7313,7 +8043,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet risoto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158253/4937975.png?v=638277050647700000",
-  productUrl: "https://www.divvino.com.br/arroz-arborio-scotti-500g-4937975/p"
+  productUrl: "https://www.divvino.com.br/arroz-arborio-scotti-500g-4937975/p",
+  popularity: 731
  },
  {
   sku: "divvino-2409",
@@ -7323,7 +8054,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158227/4728616.png?v=638272983138500000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-catena-malbec-malbec-4728616/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-catena-malbec-malbec-4728616/p",
+  popularity: 732
  },
  {
   sku: "divvino-2407",
@@ -7333,7 +8065,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158225/4728625.png?v=638272966306030000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-catena-alma-negra-blanco-blend-4728625/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-catena-alma-negra-blanco-blend-4728625/p",
+  popularity: 733
  },
  {
   sku: "divvino-2406",
@@ -7343,7 +8076,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158224/4888576.png?v=638272956609830000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-catena-nicola-bonarda-4888576/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-catena-nicola-bonarda-4888576/p",
+  popularity: 734
  },
  {
   sku: "divvino-2405",
@@ -7353,7 +8087,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158223/4714316.png?v=638272930624530000",
-  productUrl: "https://www.divvino.com.br/vinto-tinto-argentino-el-enemigo-malbec-4714316/p"
+  productUrl: "https://www.divvino.com.br/vinto-tinto-argentino-el-enemigo-malbec-4714316/p",
+  popularity: 735
  },
  {
   sku: "divvino-2404",
@@ -7363,7 +8098,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158219/4418480.png?v=638272862222300000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-extra-virgem-nettare-monini-500ml-4418480/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-extra-virgem-nettare-monini-500ml-4418480/p",
+  popularity: 736
  },
  {
   sku: "divvino-2402",
@@ -7373,7 +8109,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160470/Vinho-Tinto-Italiano-Casale-Del-Giglio-Cesanese.png?v=638665158275500000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-casale-del-giglio-cesanese-4898590/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-casale-del-giglio-cesanese-4898590/p",
+  popularity: 737
  },
  {
   sku: "divvino-2382",
@@ -7383,7 +8120,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158221/4956504.png?v=638272871484400000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-monini-rosso-190g-4956504/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-monini-rosso-190g-4956504/p",
+  popularity: 738
  },
  {
   sku: "divvino-2381",
@@ -7393,7 +8131,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158220/4956498.png?v=638272867309470000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-monini-alla-genovese-190g-4956498/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-monini-alla-genovese-190g-4956498/p",
+  popularity: 739
  },
  {
   sku: "divvino-2380",
@@ -7403,7 +8142,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158222/4956470.png?v=638272879866930000",
-  productUrl: "https://www.divvino.com.br/molho-pesto-monini-alla-rucola-190g-4956470/p"
+  productUrl: "https://www.divvino.com.br/molho-pesto-monini-alla-rucola-190g-4956470/p",
+  popularity: 740
  },
  {
   sku: "divvino-2372",
@@ -7413,7 +8153,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165493/4954018.png?v=639041877471030000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-rosso-di-montalcino-l-america-4954018/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-rosso-di-montalcino-l-america-4954018/p",
+  popularity: 741
  },
  {
   sku: "divvino-2355",
@@ -7423,7 +8164,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158172/4917079.png?v=638264305798200000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-pronol-millesimato-brut-4917079-p/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-pronol-millesimato-brut-4917079-p/p",
+  popularity: 742
  },
  {
   sku: "divvino-2346",
@@ -7433,7 +8175,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159313/Vinho-Tinto-Chileno-Caballo-Loco-Grand-Cru-Sagrada-Familia.png?v=638470820509530000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-caballo-loco-grand-cru-sagrada-familia-750ml-5123596/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-caballo-loco-grand-cru-sagrada-familia-750ml-5123596/p",
+  popularity: 743
  },
  {
   sku: "divvino-2340",
@@ -7443,7 +8186,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165491/Vinho-Tinto-Chileno-Caballo-loco-Grand-Cru-Maipo.jpg?v=639038348796930000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-caballo-loco--grand-cru-maipo-750ml-5123587/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-caballo-loco--grand-cru-maipo-750ml-5123587/p",
+  popularity: 744
  },
  {
   sku: "divvino-2339",
@@ -7453,7 +8197,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159311/Vinho-Tinto-Chile-Caballo-Loco-Grand-Cru-Apalta.png?v=638470817384070000",
-  productUrl: "https://www.divvino.com.br/vinho-chile-caballo-loco--grand-cru-apalta-750ml-5123569/p"
+  productUrl: "https://www.divvino.com.br/vinho-chile-caballo-loco--grand-cru-apalta-750ml-5123569/p",
+  popularity: 745
  },
  {
   sku: "divvino-2337",
@@ -7463,7 +8208,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160944/Vinho-Tinto-Frances--Chateau-Auzias-Instinct-Marin.png.png?v=638787601124300000",
-  productUrl: "https://www.divvino.com.br/vinho-frances--chateau-auzias-tinto-instinct-marin-750ml-5123470/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances--chateau-auzias-tinto-instinct-marin-750ml-5123470/p",
+  popularity: 746
  },
  {
   sku: "divvino-2327",
@@ -7473,7 +8219,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160465/Vinho-Tinto--Casale-Del-Giglio-Merlot.png?v=638665152846200000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-casale-del-giglio-merlot/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-casale-del-giglio-merlot/p",
+  popularity: 747
  },
  {
   sku: "divvino-2326",
@@ -7483,7 +8230,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166713/Vinho Tinto Brasileiro Casa Perini Arbo Marselan.png?v=639166231610930000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-casa-perini-arbo-marselan/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-casa-perini-arbo-marselan/p",
+  popularity: 748
  },
  {
   sku: "divvino-2321",
@@ -7493,7 +8241,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160083/Vinho-Tinto-Frances-Les-Vins-De-Vienne-Saint-Joseph-.png?v=638603825997470000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-les-vins-de-vienne-tinto-saint-joseph-750ml-5122552/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-les-vins-de-vienne-tinto-saint-joseph-750ml-5122552/p",
+  popularity: 749
  },
  {
   sku: "divvino-2320",
@@ -7503,7 +8252,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160082/Vinho-Branco-Frances-Les-Vins-De-Vienne-Crozes-Hermitage-Blanc.png?v=638603787284130000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-les-vins-de-vienne-crozes-hermitage-blanc-750ml-5122525/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-les-vins-de-vienne-crozes-hermitage-blanc-750ml-5122525/p",
+  popularity: 750
  },
  {
   sku: "divvino-2319",
@@ -7513,7 +8263,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159110/Vinho-Portugues-Fiuza-3-Castas-Branco.png?v=638448030241930000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-branco-750-5122060/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-3-castas-branco-750-5122060/p",
+  popularity: 751
  },
  {
   sku: "divvino-2318",
@@ -7523,7 +8274,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160943/Vinho-Tinto-Frances-Chateau-Auzias-Gran-Vin-Languedoc.png.png?v=638787599848930000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-gran-vin-languedoc-750ml-5122033/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-gran-vin-languedoc-750ml-5122033/p",
+  popularity: 752
  },
  {
   sku: "divvino-2317",
@@ -7533,7 +8285,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160282/Vinho-Tinto-Frances-Chateau-Auzias-Gran-Vin-Minervois.png?v=638647704864870000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-gran-vin-minervois-750ml-5122015/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-gran-vin-minervois-750ml-5122015/p",
+  popularity: 753
  },
  {
   sku: "divvino-2316",
@@ -7543,7 +8296,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160727/Vinho-TInto-frances-Chateau-Auzias-Malbec-.png?v=638696305153700000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-malbec-750ml-5121994/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-tinto-malbec-750ml-5121994/p",
+  popularity: 754
  },
  {
   sku: "divvino-2311",
@@ -7553,7 +8307,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160969/Vinho Tinto Frances Chateau Auzias La Cite des Vents Languedoc.png.png?v=638763585504900000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-la-cite-des-vents-languedoc-750ml-5121902/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-auzias-la-cite-des-vents-languedoc-750ml-5121902/p",
+  popularity: 755
  },
  {
   sku: "divvino-2304",
@@ -7563,7 +8318,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158129/4573334.png?v=638254711342200000",
-  productUrl: "https://www.divvino.com.br/espumante-aurora-branco-zero-alcool/p"
+  productUrl: "https://www.divvino.com.br/espumante-aurora-branco-zero-alcool/p",
+  popularity: 756
  },
  {
   sku: "divvino-2287",
@@ -7573,7 +8329,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158992/Vinho-Tinto-Argentino-Mosquita-Muerta-Malbec.png?v=638437126597300000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mosquita-muerta-malbec-750ml-4954288/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mosquita-muerta-malbec-750ml-4954288/p",
+  popularity: 757
  },
  {
   sku: "divvino-2286",
@@ -7583,7 +8340,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160108/Vinho-Tinto-Argentino-Mosquita-Muerta-Sapo-de-Otro-Pozo.png?v=638614830730500000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-mosquita-muerta-sapo-de-otro-pozo-4954260/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-mosquita-muerta-sapo-de-otro-pozo-4954260/p",
+  popularity: 758
  },
  {
   sku: "divvino-2284",
@@ -7593,7 +8351,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158083/4954170.png?v=638247606157330000",
-  productUrl: "https://www.divvino.com.br/vinho-mosquita-muerta-cordero-com-piel-de-lobo-malbec-rose-4954170/p"
+  productUrl: "https://www.divvino.com.br/vinho-mosquita-muerta-cordero-com-piel-de-lobo-malbec-rose-4954170/p",
+  popularity: 759
  },
  {
   sku: "divvino-2280",
@@ -7603,7 +8362,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158067/4012574.png?v=638242705180530000",
-  productUrl: "https://www.divvino.com.br/copo-de-cristal-whisky-410ml-4012574/p"
+  productUrl: "https://www.divvino.com.br/copo-de-cristal-whisky-410ml-4012574/p",
+  popularity: 760
  },
  {
   sku: "divvino-2265",
@@ -7613,7 +8373,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158038/4575393.png?v=638240919465730000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-italiano-freixenet-4575393/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-italiano-freixenet-4575393/p",
+  popularity: 761
  },
  {
   sku: "divvino-2261",
@@ -7623,7 +8384,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158009/1021687.png?v=638230408314000000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-tarapaca-chardonnay-gran-reserva-1021687/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-tarapaca-chardonnay-gran-reserva-1021687/p",
+  popularity: 762
  },
  {
   sku: "divvino-2254",
@@ -7633,7 +8395,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160452/Vinho-Tinto-Jose-Maria-da-Fonseca-Primum-Reserva.png?v=638665123182100000",
-  productUrl: "https://www.divvino.com.br/vinho-primum-reserva-4896774/p"
+  productUrl: "https://www.divvino.com.br/vinho-primum-reserva-4896774/p",
+  popularity: 763
  },
  {
   sku: "divvino-2241",
@@ -7643,7 +8406,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158216/4744360.png?v=638272837863200000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monini-extra-virgem-decantato-nao-filtrado-500ml-4744360/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-monini-extra-virgem-decantato-nao-filtrado-500ml-4744360/p",
+  popularity: 764
  },
  {
   sku: "divvino-2235",
@@ -7653,7 +8417,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159346/Vinho-Tinto-Argentino-Famiglia-Bianchi-Cabernet-Franc.png?v=638475906387200000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-famiglia-bianchi-cabernet-franc-750ml-5093835/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-famiglia-bianchi-cabernet-franc-750ml-5093835/p",
+  popularity: 765
  },
  {
   sku: "divvino-2234",
@@ -7663,7 +8428,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159345/Vinho-Branco-Argentino-Famiglia-Bianchi-Viognier.png?v=638475806562130000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-famiglia-bianchi-viognier-750ml-5093826/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-famiglia-bianchi-viognier-750ml-5093826/p",
+  popularity: 766
  },
  {
   sku: "divvino-2222",
@@ -7673,7 +8439,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159062/Vinho-Branco-Santa-Florentina-Torrontes-Riojano-Chardonnay.png?v=638445480714000000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-santa-florentina-torrontes-chardonnay-750ml-5092678/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-santa-florentina-torrontes-chardonnay-750ml-5092678/p",
+  popularity: 767
  },
  {
   sku: "divvino-2203",
@@ -7683,7 +8450,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161105/Vinho Branco Chileno Carmen Discovery Estate Seleccion Chardonnay.png.png?v=638791248064030000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-chardonnay-750ml-4931505/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-chardonnay-750ml-4931505/p",
+  popularity: 768
  },
  {
   sku: "divvino-2201",
@@ -7693,7 +8461,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158008/4931470.png?v=638230396939970000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-carmenere-750ml-4931470/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-carmenere-750ml-4931470/p",
+  popularity: 769
  },
  {
   sku: "divvino-2200",
@@ -7703,7 +8472,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160036/Vinho-Tinto-Chileno-Carmen-Discovery-Estate-Seleccion-Cabernet-Sauvignon.png?v=638591689719500000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-cabernet-sauvignon-750ml-4931461/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-carmen-discovery-estate-seleccion-cabernet-sauvignon-750ml-4931461/p",
+  popularity: 770
  },
  {
   sku: "divvino-2198",
@@ -7713,7 +8483,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158643/5087346.png?v=638364455369000000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-sauvignon-blanc-750ml-5087346/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-sauvignon-blanc-750ml-5087346/p",
+  popularity: 771
  },
  {
   sku: "divvino-2197",
@@ -7723,7 +8494,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158645/montgras-estate.png?v=638364457706600000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-rose-750ml-5087328/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-rose-750ml-5087328/p",
+  popularity: 772
  },
  {
   sku: "divvino-2195",
@@ -7733,7 +8505,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158639/5087248.png?v=638364448509470000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-carmenere-750ml-5087248/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-estate-carmenere-750ml-5087248/p",
+  popularity: 773
  },
  {
   sku: "divvino-2192",
@@ -7743,7 +8516,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165494/Vinho Tinto Espanhol Proyecto Garnachas Garnacha Fosca Priotato.png?v=639020206353400000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-fosca-del-priorat-garnacha-750ml-5087079/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-fosca-del-priorat-garnacha-750ml-5087079/p",
+  popularity: 774
  },
  {
   sku: "divvino-2187",
@@ -7753,7 +8527,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160055/Vinho-Tinto-Espanhol-Marques-De-Ramos-Tempranillo.png?v=638593218565230000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-ramos-tempranillo-tinto-750ml-5086483/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-ramos-tempranillo-tinto-750ml-5086483/p",
+  popularity: 775
  },
  {
   sku: "divvino-2186",
@@ -7763,7 +8538,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160413/Vinho-Branco-Espanhol-Marques-de-Ramos-Macabeo.png?v=638664340026270000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-ramos-macabeo-branco-750ml-5086429/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-marques-de-ramos-macabeo-branco-750ml-5086429/p",
+  popularity: 776
  },
  {
   sku: "divvino-2174",
@@ -7773,7 +8549,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159116/Vinho-Rose-Portugues-Fiuza-Cabernet-Sauvignon-Touriga-Nacional.png?v=638448095545330000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-cabernet-sauvignon-touriga-nacional-rose-750ml-4897047/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-cabernet-sauvignon-touriga-nacional-rose-750ml-4897047/p",
+  popularity: 777
  },
  {
   sku: "divvino-1719",
@@ -7783,7 +8560,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160011/Vinho-Tinto-Chileno-Carmen-Discovery-Carmenere.png?v=638590789672300000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carmen-discovery-carmenere-750ml-4879450/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carmen-discovery-carmenere-750ml-4879450/p",
+  popularity: 778
  },
  {
   sku: "divvino-1720",
@@ -7793,7 +8571,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160012/Vinho-Tinto-Chileno-Carmen-Discovery-Cabernet-Sauvignon.png?v=638590790460270000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carmen-discovery-cabernet-sauvignon-750ml-4879432/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-carmen-discovery-cabernet-sauvignon-750ml-4879432/p",
+  popularity: 779
  },
  {
   sku: "divvino-2169",
@@ -7803,7 +8582,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159115/Vinho-Branco-Portugues-Fiuza-Chardonnay.png?v=638448092321000000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-fiuza-chardonnay-750ml-1254796/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-fiuza-chardonnay-750ml-1254796/p",
+  popularity: 780
  },
  {
   sku: "divvino-2168",
@@ -7813,7 +8593,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159114/Vinho-Branco-Portugues-Fiuza-Ikon-Alvarinho.png?v=638448080579900000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-ikon-alvarinho-branco-750ml-4896872/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-ikon-alvarinho-branco-750ml-4896872/p",
+  popularity: 781
  },
  {
   sku: "divvino-2155",
@@ -7823,7 +8604,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160013/Vinho-Rose-Chileno-Carmen-Discovery.png?v=638590790855970000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-chileno-carmen-discovery-4879497/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-chileno-carmen-discovery-4879497/p",
+  popularity: 782
  },
  {
   sku: "divvino-2151",
@@ -7833,7 +8615,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157828/4971814.jpg?v=638169050922500000",
-  productUrl: "https://www.divvino.com.br/-vinho-italiano-brio-metafisica-igt-toscana-bianco-4971814/p"
+  productUrl: "https://www.divvino.com.br/-vinho-italiano-brio-metafisica-igt-toscana-bianco-4971814/p",
+  popularity: 783
  },
  {
   sku: "divvino-2148",
@@ -7843,7 +8626,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157824/5059412.jpg?v=638167457823730000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-ourico-branco---5059412/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-ourico-branco---5059412/p",
+  popularity: 784
  },
  {
   sku: "divvino-2142",
@@ -7853,7 +8637,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160448/Vinho-Espanhol-Bodegas-Paniza-Jabali-Tempranillo---Cabernet-Sauvignon.png?v=638665118244700000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-jabali-tempranillo-e-cabernet--5054659/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-jabali-tempranillo-e-cabernet--5054659/p",
+  popularity: 785
  },
  {
   sku: "divvino-2140",
@@ -7863,7 +8648,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160410/Vinho-Branco-Bodegas-Paniza-Fabula-Garnacha-Blanca.png?v=638664337527070000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-fabula-garnacha-blanca--5054621/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-paniza-fabula-garnacha-blanca--5054621/p",
+  popularity: 786
  },
  {
   sku: "divvino-2136",
@@ -7873,7 +8659,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157800/4744469.jpg?v=638157088941970000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-elegant-malbec-4744469/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-elegant-malbec-4744469/p",
+  popularity: 787
  },
  {
   sku: "divvino-2135",
@@ -7883,7 +8670,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165484/Vinho Tinto Portugues Fiuza Ikon Touriga Nacional.png?v=639020205056430000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-ikon-touriga-nacional-tinto-750ml-4896845/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-fiuza-ikon-touriga-nacional-tinto-750ml-4896845/p",
+  popularity: 788
  },
  {
   sku: "divvino-2122",
@@ -7893,7 +8681,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157741/4968102_1.jpg?v=638127787437500000",
-  productUrl: "https://www.divvino.com.br/concha-y-toro-diablo-golden-chardonnay-4968102/p"
+  productUrl: "https://www.divvino.com.br/concha-y-toro-diablo-golden-chardonnay-4968102/p",
+  popularity: 789
  },
  {
   sku: "divvino-2113",
@@ -7903,7 +8692,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157695/4694222_1.jpg?v=638114765040730000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-flor-de-lisboa-750ml-4694222/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-flor-de-lisboa-750ml-4694222/p",
+  popularity: 790
  },
  {
   sku: "divvino-2066",
@@ -7913,7 +8703,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157571/4776560.jpg?v=638089793194500000",
-  productUrl: "https://www.divvino.com.br/taca-bohemia-gastro-borbe-650ml/p"
+  productUrl: "https://www.divvino.com.br/taca-bohemia-gastro-borbe-650ml/p",
+  popularity: 791
  },
  {
   sku: "divvino-2062",
@@ -7923,7 +8714,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166738/Massa Italiana Gragnano Gnocco Napoletano 500g.png?v=639168005207600000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-gnocco-napoletano-500g-4781121/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-gnocco-napoletano-500g-4781121/p",
+  popularity: 792
  },
  {
   sku: "divvino-2020",
@@ -7933,7 +8725,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157952/CB_Branco.jpg?v=638216591696800000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-cavalo-bravo-750ml-4357536/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-cavalo-bravo-750ml-4357536/p",
+  popularity: 793
  },
  {
   sku: "divvino-1921",
@@ -7943,7 +8736,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157723/3713341.jpg?v=638120023147700000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz---gasser-100-da-frutta-pessego-e-maracuja-240g-3713341/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz---gasser-100-da-frutta-pessego-e-maracuja-240g-3713341/p",
+  popularity: 794
  },
  {
   sku: "divvino-1920",
@@ -7953,7 +8747,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163431/Geleia-Italiana-MENZ-e-GASSER-100-da-Frutta-Frutas-Vermelhas-240g.jpg?v=639147336389670000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-100-da-frutta-frutas-vermelhas-240g-3713314/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-100-da-frutta-frutas-vermelhas-240g-3713314/p",
+  popularity: 795
  },
  {
   sku: "divvino-1839",
@@ -7963,7 +8758,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166634/Cafe Native Organico Torrado e Moido 250g.png?v=639147263855500000",
-  productUrl: "https://www.divvino.com.br/cafe-native-organico--torrado-e-moido-250g-784559/p"
+  productUrl: "https://www.divvino.com.br/cafe-native-organico--torrado-e-moido-250g-784559/p",
+  popularity: 796
  },
  {
   sku: "divvino-1827",
@@ -7973,7 +8769,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158699/moscho.png?v=638374000832930000",
-  productUrl: "https://www.divvino.com.br/vinho-grego-cavino-moschofilero-750ml-4932647/p"
+  productUrl: "https://www.divvino.com.br/vinho-grego-cavino-moschofilero-750ml-4932647/p",
+  popularity: 797
  },
  {
   sku: "divvino-1824",
@@ -7983,7 +8780,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158714/4932600.png?v=638374913621700000",
-  productUrl: "https://www.divvino.com.br/vinho-grego-cavino-nemea-agiorgitiko-750ml-4932600/p"
+  productUrl: "https://www.divvino.com.br/vinho-grego-cavino-nemea-agiorgitiko-750ml-4932600/p",
+  popularity: 798
  },
  {
   sku: "divvino-1799",
@@ -7993,7 +8791,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165608/Massa-Italiana-Garofalo-Capellini-Spezzati-500g.png?v=639077058415830000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-garofalo-capellini-spezzati-500g-4544931/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-garofalo-capellini-spezzati-500g-4544931/p",
+  popularity: 799
  },
  {
   sku: "divvino-1782",
@@ -8003,7 +8802,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet cafe cafe moido",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159630/Cafe-Orfeu-Organico-250g.png?v=638512885211200000",
-  productUrl: "https://www.divvino.com.br/cafe-orfeu-organico-250g-4025080/p"
+  productUrl: "https://www.divvino.com.br/cafe-orfeu-organico-250g-4025080/p",
+  popularity: 800
  },
  {
   sku: "divvino-1775",
@@ -8013,7 +8813,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet outras bebidas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166620/Agua Mineral Platina com Gas 300ml.png?v=639147216930400000",
-  productUrl: "https://www.divvino.com.br/agua-mineral-com-gas-platina-4023371/p"
+  productUrl: "https://www.divvino.com.br/agua-mineral-com-gas-platina-4023371/p",
+  popularity: 801
  },
  {
   sku: "divvino-1774",
@@ -8023,7 +8824,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166574/Massa-Italiana-Grano-Duro-La-Molisana-Fettuccine-500g.png?v=639136743419330000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-fettuccine-nido-500g-3931547/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-fettuccine-nido-500g-3931547/p",
+  popularity: 802
  },
  {
   sku: "divvino-1770",
@@ -8033,7 +8835,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157682/3713332.jpg?v=638113124393930000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-framboesa-3713332/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-framboesa-3713332/p",
+  popularity: 803
  },
  {
   sku: "divvino-1769",
@@ -8043,7 +8846,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166637/Geleia Italiana Menz - Gasser 100- da Frutta Damasco 240g.png?v=639147291744870000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-damasco-3713305/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-damasco-3713305/p",
+  popularity: 804
  },
  {
   sku: "divvino-1768",
@@ -8053,7 +8857,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157722/3713299.jpg?v=638120021791000000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-morango-3713299/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-morango-3713299/p",
+  popularity: 805
  },
  {
   sku: "divvino-1762",
@@ -8063,7 +8868,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157651/3506266_1_large.jpg?v=638103591011670000",
-  productUrl: "https://www.divvino.com.br/la-molisana-couscous-500g-3506266/p"
+  productUrl: "https://www.divvino.com.br/la-molisana-couscous-500g-3506266/p",
+  popularity: 806
  },
  {
   sku: "divvino-1749",
@@ -8073,7 +8879,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159706/Polpa--de-tomate-Italiano-MUTTI-Passata-400g.png?v=638531098795930000",
-  productUrl: "https://www.divvino.com.br/polpa-de-tomate-italiano-mutti-passata-400g-1525119/p"
+  productUrl: "https://www.divvino.com.br/polpa-de-tomate-italiano-mutti-passata-400g-1525119/p",
+  popularity: 807
  },
  {
   sku: "divvino-1743",
@@ -8083,7 +8890,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157517/075.jpg?v=638066496326800000",
-  productUrl: "https://www.divvino.com.br/taca-bohemia-gastro-bordeaux-590ml-4012340/p"
+  productUrl: "https://www.divvino.com.br/taca-bohemia-gastro-bordeaux-590ml-4012340/p",
+  popularity: 808
  },
  {
   sku: "divvino-1715",
@@ -8093,7 +8901,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156960/4885799.png?v=638057571541330000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-torrelongares-rosado-750ml-4885799/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-torrelongares-rosado-750ml-4885799/p",
+  popularity: 809
  },
  {
   sku: "divvino-1701",
@@ -8103,7 +8912,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156909/4788605.png?v=638057554263730000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-cuvelier-e-fils-bordeaux-4788605/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-cuvelier-e-fils-bordeaux-4788605/p",
+  popularity: 810
  },
  {
   sku: "divvino-1690",
@@ -8113,7 +8923,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158688/4661212.png?v=638373166527530000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-branco-4661212/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-branco-4661212/p",
+  popularity: 811
  },
  {
   sku: "divvino-1689",
@@ -8123,7 +8934,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161049/Vinho Rose Frances Villebois Vale do Loire.png.png?v=638780956173600000",
-  productUrl: "https://www.divvino.com.br/villebois-pinot-noir-rose-4628942/p"
+  productUrl: "https://www.divvino.com.br/villebois-pinot-noir-rose-4628942/p",
+  popularity: 812
  },
  {
   sku: "divvino-1684",
@@ -8133,7 +8945,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas weiss",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160874/Cerveja Alema Erdinger Weissbier 500ml.png.png?v=638738538711570000",
-  productUrl: "https://www.divvino.com.br/cerveja-erdinger-weissbier-3111059/p"
+  productUrl: "https://www.divvino.com.br/cerveja-erdinger-weissbier-3111059/p",
+  popularity: 813
  },
  {
   sku: "divvino-1669",
@@ -8143,7 +8956,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161626/Equinoccio-Merlot-Rose-.png?v=638918123529170000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-equinoccio-superior-rose-merlot-4848463/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-equinoccio-superior-rose-merlot-4848463/p",
+  popularity: 814
  },
  {
   sku: "divvino-1662",
@@ -8153,7 +8967,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159041/Vinho-Tinto-Chileno-Equinoccio-Carmenere.png?v=638442202702000000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-equinoccio-superior-carmenere-4848427/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-equinoccio-superior-carmenere-4848427/p",
+  popularity: 815
  },
  {
   sku: "divvino-1657",
@@ -8163,7 +8978,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159165/4819837---Cru-du-Roi.png?v=638453405804870000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-cru-du-roi-750ml-4819837/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-cru-du-roi-750ml-4819837/p",
+  popularity: 816
  },
  {
   sku: "divvino-1656",
@@ -8173,7 +8989,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159697/Vinho-Quinta-Sao-Joao-Batista-Blend-Tejo.png?v=638525210345870000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-quinta-sao-joao-batista-reserva-750ml-4819800/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-quinta-sao-joao-batista-reserva-750ml-4819800/p",
+  popularity: 817
  },
  {
   sku: "divvino-1651",
@@ -8183,7 +9000,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165561/Espumante Chileno Don Silvestre Branco Demi Sec.png?v=639045370569870000",
-  productUrl: "https://www.divvino.com.br/espumante-chileno-don-silvestre-branco-demi-sec-750ml-4811356/p"
+  productUrl: "https://www.divvino.com.br/espumante-chileno-don-silvestre-branco-demi-sec-750ml-4811356/p",
+  popularity: 818
  },
  {
   sku: "divvino-1635",
@@ -8193,7 +9011,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166587/Vinho Tinto Chileno Santa Rita 120 Rose.png?v=639137755655330000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-santa-rita-120-rose-4791950/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-santa-rita-120-rose-4791950/p",
+  popularity: 819
  },
  {
   sku: "divvino-1634",
@@ -8203,7 +9022,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166586/Vinho Tinto Chileno Santa Rita 120 Pinot Noir.png?v=639137755462300000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-santa-rita-120-pinot-noir-4791941/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-santa-rita-120-pinot-noir-4791941/p",
+  popularity: 820
  },
  {
   sku: "divvino-1633",
@@ -8213,7 +9033,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156922/4791585.jpg?v=638057558854570000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-montirius-la-tour-750ml-4791585/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-montirius-la-tour-750ml-4791585/p",
+  popularity: 821
  },
  {
   sku: "divvino-1632",
@@ -8223,7 +9044,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161093/Vinho Tinto Frances Montirius Garrigues  .png.png?v=638786846289600000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-montirius-garrigues-750ml-4791558/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-frances-montirius-garrigues-750ml-4791558/p",
+  popularity: 822
  },
  {
   sku: "divvino-1631",
@@ -8233,7 +9055,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156920/4791549.jpg?v=638057558215070000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-frances-montirius-mineral-750ml-4791549/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-frances-montirius-mineral-750ml-4791549/p",
+  popularity: 823
  },
  {
   sku: "divvino-1629",
@@ -8243,7 +9066,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159413/Vinho-Branco-Chileno-Amigo-Perro-Sauvignon-Blanc.png?v=638482054543130000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-amigo-perro-sauvignon-blanc-4789630/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-amigo-perro-sauvignon-blanc-4789630/p",
+  popularity: 824
  },
  {
   sku: "divvino-1628",
@@ -8253,7 +9077,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159297/Vinho-Tinto-Chileno-Amigo-Perro-Rose.png?v=638469850623000000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-amigo-perro-rose-4789620/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-la-junta-amigo-perro-rose-4789620/p",
+  popularity: 825
  },
  {
   sku: "divvino-1626",
@@ -8263,7 +9088,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159794/Vinho-Tinto-Chileno-Amigo-Perro-Cabernet-Sauvignon.png?v=638539066072700000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-la-junta-amigo-perro-cabernet-sauvignon-4789602/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-la-junta-amigo-perro-cabernet-sauvignon-4789602/p",
+  popularity: 826
  },
  {
   sku: "divvino-1605",
@@ -8273,7 +9099,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160376/Vinho-Portugues-Terras-Do-Po-Rose.png?v=638664097007500000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-terras-do-po-rose-garrafa-750ml-4781560/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-terras-do-po-rose-garrafa-750ml-4781560/p",
+  popularity: 827
  },
  {
   sku: "divvino-1604",
@@ -8283,7 +9110,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160403/Vinho-Portugues-Terras-Do-Po-Branco.png?v=638664329650330000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-terras-do-po-branco-garrafa-750ml-4781551/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-terras-do-po-branco-garrafa-750ml-4781551/p",
+  popularity: 828
  },
  {
   sku: "divvino-1601",
@@ -8293,7 +9121,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156894/4781088.jpg?v=638057548814900000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-tagliatelle-500g-4781088/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-gragnano-tagliatelle-500g-4781088/p",
+  popularity: 829
  },
  {
   sku: "divvino-1594",
@@ -8303,7 +9132,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160456/Vinho-Frances-Delphis-De-La-Dauphin-De-La-Dauphine.png?v=638665131984430000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-delphis-de-la-dauphin-de-la-dauphine-2019-4776856/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-delphis-de-la-dauphin-de-la-dauphine-2019-4776856/p",
+  popularity: 830
  },
  {
   sku: "divvino-1592",
@@ -8313,7 +9143,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159281/Vinho-Tinto-Italiano-Cantina-Di-Negrar-Amarone-Della-Valpolicella-Classico.png?v=638466508461570000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-amarone-della-valpolicella-doc-classico-4775563/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-amarone-della-valpolicella-doc-classico-4775563/p",
+  popularity: 831
  },
  {
   sku: "divvino-1584",
@@ -8323,7 +9154,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159277/Vinho-Tinto-Italiano-Cantina-Di-Negrar-Ii-Cedrone-Rosso-Veronese.png?v=638466496225000000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-il-cedrone-rosso-veronese-igt-4775509/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-cantina-di-negrar-il-cedrone-rosso-veronese-igt-4775509/p",
+  popularity: 832
  },
  {
   sku: "divvino-1574",
@@ -8333,7 +9165,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163187/Vinho-Branco-Chileno-Don-Silvestre-Sauvignon-Blanc.jpg?v=638929633166770000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-don-silvestre-sauvignon-blanc-4757959/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-don-silvestre-sauvignon-blanc-4757959/p",
+  popularity: 833
  },
  {
   sku: "divvino-1566",
@@ -8343,7 +9176,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158027/4753440.png?v=638236661702230000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-frances-ultimate-provence-1-5l-4753440/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-frances-ultimate-provence-1-5l-4753440/p",
+  popularity: 834
  },
  {
   sku: "divvino-1549",
@@ -8353,7 +9187,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160690/Vinho-Tinto-Argentino-Judas-Malbec.png?v=638689140318700000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-judas-malbec-4725650/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-judas-malbec-4725650/p",
+  popularity: 835
  },
  {
   sku: "divvino-1548",
@@ -8363,7 +9198,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160689/Vinho-Tinto-Argentino-Barrabas-Cabernet-Franc.png?v=638689086480130000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-barrabas-cabernet-franc-750ml-4725632/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-barrabas-cabernet-franc-750ml-4725632/p",
+  popularity: 836
  },
  {
   sku: "divvino-1545",
@@ -8373,7 +9209,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161618/frisante-del-grano-branco-suave.jpg?v=638917243052330000",
-  productUrl: "https://www.divvino.com.br/frisante-del-grano-branco-suave-4713749/p"
+  productUrl: "https://www.divvino.com.br/frisante-del-grano-branco-suave-4713749/p",
+  popularity: 837
  },
  {
   sku: "divvino-1544",
@@ -8383,7 +9220,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161619/frisante-del-grano-rose-suave.jpg?v=638917243529000000",
-  productUrl: "https://www.divvino.com.br/vinho-frisante-del-grano-rose-suave-4713730/p"
+  productUrl: "https://www.divvino.com.br/vinho-frisante-del-grano-rose-suave-4713730/p",
+  popularity: 838
  },
  {
   sku: "divvino-1539",
@@ -8393,7 +9231,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163153/Vinho-Chileno-Vina-Vik-Milla-Cala.jpg?v=638938041381470000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-vina-vik-milla-cala-4707634/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-vina-vik-milla-cala-4707634/p",
+  popularity: 839
  },
  {
   sku: "divvino-1525",
@@ -8403,7 +9242,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163141/Vinho-Rose-Chileno-Casa-Silva-Cinco-Manos-Classic-Cabernet-Sauvignon.jpg?v=638929632825800000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-casa-silva-cinco-manos-classic-cabernet-sauvignon-rose-4704150/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-casa-silva-cinco-manos-classic-cabernet-sauvignon-rose-4704150/p",
+  popularity: 840
  },
  {
   sku: "divvino-1524",
@@ -8413,7 +9253,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163140/Vinho-Tinto-Chileno-Casa-Silva-Cinco-Manos-Classic-CarmenEre.jpg?v=638929632822670000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-casa-silva-cinco-manos-classic-carmenere-4704140/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-casa-silva-cinco-manos-classic-carmenere-4704140/p",
+  popularity: 841
  },
  {
   sku: "divvino-1520",
@@ -8423,7 +9264,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158969/Espumante-Rose-Italiano-Borghesia-Brut.png?v=638435385161030000",
-  productUrl: "https://www.divvino.com.br/espumante-italiano-borghesia-brut-rose-4698221/p"
+  productUrl: "https://www.divvino.com.br/espumante-italiano-borghesia-brut-rose-4698221/p",
+  popularity: 842
  },
  {
   sku: "divvino-1517",
@@ -8433,7 +9275,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163133/Costa-Furra-lambrusco-Dellemilia-Amabile-branco.jpg?v=638929632787500000",
-  productUrl: "https://www.divvino.com.br/costa-furra-dolce-lambrusco-dellemilia-amabile-4698160/p"
+  productUrl: "https://www.divvino.com.br/costa-furra-dolce-lambrusco-dellemilia-amabile-4698160/p",
+  popularity: 843
  },
  {
   sku: "divvino-1510",
@@ -8443,7 +9286,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158299/4694213.png?v=638283201638870000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-flor-de-lisboa-rose-4694213/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-flor-de-lisboa-rose-4694213/p",
+  popularity: 844
  },
  {
   sku: "divvino-1504",
@@ -8453,7 +9297,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160062/Vinho-Tinto-Aromatik-Pinot-Noir.png?v=638594039564900000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-aromatik-pinot-noir-4680352/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-aromatik-pinot-noir-4680352/p",
+  popularity: 845
  },
  {
   sku: "divvino-1503",
@@ -8463,7 +9308,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156837/4679370.png?v=638055996879570000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-de-vine-carmenere-4679370/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-de-vine-carmenere-4679370/p",
+  popularity: 846
  },
  {
   sku: "divvino-1502",
@@ -8473,7 +9319,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156836/4679351.png?v=638055996338800000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-de-vine-cabernet-sauvignon-4679351/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-montgras-de-vine-cabernet-sauvignon-4679351/p",
+  popularity: 847
  },
  {
   sku: "divvino-1497",
@@ -8483,7 +9330,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158024/4666040.png?v=638236639328670000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-seco-abreu-garcia-sauvignon-blanc-750ml-4666040/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-seco-abreu-garcia-sauvignon-blanc-750ml-4666040/p",
+  popularity: 848
  },
  {
   sku: "divvino-1496",
@@ -8493,7 +9341,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158030/4666030.png?v=638236698300100000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-seco-abreu-garcia-cabernet-sauvignon-merlot-750ml-4666030/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-seco-abreu-garcia-cabernet-sauvignon-merlot-750ml-4666030/p",
+  popularity: 849
  },
  {
   sku: "divvino-1488",
@@ -8503,7 +9352,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165141/Vinho Rose Mora Vista Argentino.png?v=638966482516670000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-rose-4652714/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-rose-4652714/p",
+  popularity: 850
  },
  {
   sku: "divvino-1483",
@@ -8513,7 +9363,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158458/4652652_6.png?v=638318733313370000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-malbec-4652652/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-mora-vista-malbec-4652652/p",
+  popularity: 851
  },
  {
   sku: "divvino-1453",
@@ -8523,7 +9374,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156823/4624489.jpg?v=638055990168170000",
-  productUrl: "https://www.divvino.com.br/vinho-organico-chileno-etnico-rose-750ml-4624489/p"
+  productUrl: "https://www.divvino.com.br/vinho-organico-chileno-etnico-rose-750ml-4624489/p",
+  popularity: 852
  },
  {
   sku: "divvino-1445",
@@ -8533,7 +9385,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159612/Decanter-Bohemia-1.400ml.png?v=638509587521370000",
-  productUrl: "https://www.divvino.com.br/decanter-bohemia-1-400ml-4610133/p"
+  productUrl: "https://www.divvino.com.br/decanter-bohemia-1-400ml-4610133/p",
+  popularity: 853
  },
  {
   sku: "divvino-1441",
@@ -8543,7 +9396,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158187/4616389.png?v=638266809102030000",
-  productUrl: "https://www.divvino.com.br/vinho-hungria-tokaj-patricius-sweet-leonis-500ml-4616389/p"
+  productUrl: "https://www.divvino.com.br/vinho-hungria-tokaj-patricius-sweet-leonis-500ml-4616389/p",
+  popularity: 854
  },
  {
   sku: "divvino-1435",
@@ -8553,7 +9407,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163052/Vinho-Branco-Argentino-Torreon-Blend.jpg?v=638929632232800000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-blend-branco-4580965/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-torreon-blend-branco-4580965/p",
+  popularity: 855
  },
  {
   sku: "divvino-1417",
@@ -8563,7 +9418,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160629/Vinho-Frances-Mado-Provence-Rose.png?v=638682241799730000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-frances-mado-en-provence-4576514/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-frances-mado-en-provence-4576514/p",
+  popularity: 856
  },
  {
   sku: "divvino-1407",
@@ -8573,7 +9429,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163026/Cerveja-Baden-Baden-Witbier-lata-350ml.jpg?v=638929632094070000",
-  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-witbier-lata-350ml-4536896/p"
+  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-witbier-lata-350ml-4536896/p",
+  popularity: 857
  },
  {
   sku: "divvino-1399",
@@ -8583,7 +9440,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163019/Vinho-Rose-Espanhol-luciente-Tempranillo.jpg?v=638929632076030000",
-  productUrl: "https://www.divvino.com.br/vinho-bodegas-faustino-luciente-tempranillo-rose-4529194/p"
+  productUrl: "https://www.divvino.com.br/vinho-bodegas-faustino-luciente-tempranillo-rose-4529194/p",
+  popularity: 858
  },
  {
   sku: "divvino-1388",
@@ -8593,7 +9451,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159707/Vinho-Argentino-Gran-Reserva-Del-Fin-Del-Mundo.png?v=638531168626470000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-bodega-del-fin-del-mundo-gran-reserva-4474087/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-bodega-del-fin-del-mundo-gran-reserva-4474087/p",
+  popularity: 859
  },
  {
   sku: "divvino-1386",
@@ -8603,7 +9462,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159417/Vinho-Tinto-Argentino-Reserva-Del-Fin-Del-Mundo-Malbec.png?v=638482630055030000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-del-fin-del-mundo-reserva-malbec-4474069/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-argentino-del-fin-del-mundo-reserva-malbec-4474069/p",
+  popularity: 860
  },
  {
   sku: "divvino-1385",
@@ -8613,7 +9473,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159418/Vinho-Tinto-Argentino-Reserva-Del-Fin-Del-Mundo-Merlot.png?v=638482634135730000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-del-fin-del-mundo-reserva-merlot-4474050/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-del-fin-del-mundo-reserva-merlot-4474050/p",
+  popularity: 861
  },
  {
   sku: "divvino-1384",
@@ -8623,7 +9484,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160984/Vinho Argentino Reserva Del Fin Del Mundo Chardonnay.png.png?v=638769474431930000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-del-fin-del-mundo-reserva-chardonnay-4474040/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-del-fin-del-mundo-reserva-chardonnay-4474040/p",
+  popularity: 862
  },
  {
   sku: "divvino-1382",
@@ -8633,7 +9495,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163005/Vinho-Argentino-Postales-Sauvignon-Blanc-Semillon.jpg?v=639020082859070000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-sauvignon-blanc-semillon-4474004/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-sauvignon-blanc-semillon-4474004/p",
+  popularity: 863
  },
  {
   sku: "divvino-1377",
@@ -8643,7 +9506,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/163002/Espumante-Terranova-Brut-187ml.jpg?v=638929631983270000",
-  productUrl: "https://www.divvino.com.br/espumante-terranova-brut-garrafa-187ml-4447517/p"
+  productUrl: "https://www.divvino.com.br/espumante-terranova-brut-garrafa-187ml-4447517/p",
+  popularity: 864
  },
  {
   sku: "divvino-1348",
@@ -8653,7 +9517,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet molhos e temperos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157717/4258672.jpg?v=638119970904770000",
-  productUrl: "https://www.divvino.com.br/molho-kuhne-made-for-meat-smoked-pepper-235ml-4258672/p"
+  productUrl: "https://www.divvino.com.br/molho-kuhne-made-for-meat-smoked-pepper-235ml-4258672/p",
+  popularity: 865
  },
  {
   sku: "divvino-1346",
@@ -8663,7 +9528,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162979/Kit-12-Tacas-de-Cristal-Bohemia-para-Vinho-e-Espumante.jpg?v=638929631890300000",
-  productUrl: "https://www.divvino.com.br/kit-de-tacas-com-12-pecas-bohemia-4213170/p"
+  productUrl: "https://www.divvino.com.br/kit-de-tacas-com-12-pecas-bohemia-4213170/p",
+  popularity: 866
  },
  {
   sku: "divvino-1342",
@@ -8673,7 +9539,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159725/Whisky-Jack-Daniel-S-Tennessee-Fire-1L.png?v=638533683491700000",
-  productUrl: "https://www.divvino.com.br/whiskey-jack-daniels-tennessee-fire-1l-4185253/p"
+  productUrl: "https://www.divvino.com.br/whiskey-jack-daniels-tennessee-fire-1l-4185253/p",
+  popularity: 867
  },
  {
   sku: "divvino-1333",
@@ -8683,7 +9550,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166680/Cerveja Roleta Russa Ipa 500ml.png?v=639154158124270000",
-  productUrl: "https://www.divvino.com.br/cerveja-roleta-russa-ipa-500ml-4130335/p"
+  productUrl: "https://www.divvino.com.br/cerveja-roleta-russa-ipa-500ml-4130335/p",
+  popularity: 868
  },
  {
   sku: "divvino-1331",
@@ -8693,7 +9561,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados vodka",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162964/Vodka-Smirnoff-1.75l.jpg?v=638929631818100000",
-  productUrl: "https://www.divvino.com.br/vodka-smirnoff-1750ml-4124490/p"
+  productUrl: "https://www.divvino.com.br/vodka-smirnoff-1750ml-4124490/p",
+  popularity: 869
  },
  {
   sku: "divvino-1324",
@@ -8703,7 +9572,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados cachaca",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166700/Kit-Cachaca-Santo-Grau-com-3-Garrafas---3-Copos-375ml.png?v=639160901679400000",
-  productUrl: "https://www.divvino.com.br/kit-cachaca-santo-grau-com-3-garrafas---3-copos-375ml-4060544/p"
+  productUrl: "https://www.divvino.com.br/kit-cachaca-santo-grau-com-3-garrafas---3-copos-375ml-4060544/p",
+  popularity: 870
  },
  {
   sku: "divvino-1323",
@@ -8713,7 +9583,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162960/Whiskey-Jameson.jpg?v=639010547731300000",
-  productUrl: "https://www.divvino.com.br/jameson-whiskey-irlandes-750ml-4084869/p"
+  productUrl: "https://www.divvino.com.br/jameson-whiskey-irlandes-750ml-4084869/p",
+  popularity: 871
  },
  {
   sku: "divvino-1315",
@@ -8723,7 +9594,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados rum",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166702/Rum Bacardi Big Apple 980ml.png?v=639161029638600000",
-  productUrl: "https://www.divvino.com.br/rum-bacardi-big-apple-980ml-4023578/p"
+  productUrl: "https://www.divvino.com.br/rum-bacardi-big-apple-980ml-4023578/p",
+  popularity: 872
  },
  {
   sku: "divvino-1313",
@@ -8733,7 +9605,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159728/Taca-Bohemia-Margarita-350Ml.png?v=638533849790900000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-cocktail-350ml-bohemia-4012458/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-cocktail-350ml-bohemia-4012458/p",
+  popularity: 873
  },
  {
   sku: "divvino-1312",
@@ -8743,7 +9616,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162955/Taca-Para-Vinho-Tinto-Bohemia-Gastro-480Ml.jpg?v=638929631775370000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-tinto-bohemia-480ml-4012331/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-tinto-bohemia-480ml-4012331/p",
+  popularity: 874
  },
  {
   sku: "divvino-1311",
@@ -8753,7 +9627,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156804/4012135.jpg?v=638055897052800000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-branco-390ml-bohemia-4012135/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-branco-390ml-bohemia-4012135/p",
+  popularity: 875
  },
  {
   sku: "divvino-1309",
@@ -8763,7 +9638,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162952/Taca-Para-Espumante-Bohemia-Gastro-230ml.jpg?v=638929631765430000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-espumante-230ml-bohemia-4012117/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-espumante-230ml-bohemia-4012117/p",
+  popularity: 876
  },
  {
   sku: "divvino-1308",
@@ -8773,7 +9649,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162951/Taca-Para-Vinho-Tinto-Bohemia-Cristallin-450Ml.jpg?v=638929631761630000",
-  productUrl: "https://www.divvino.com.br/taca-de-vinho-cristal-bohemia-4011970/p"
+  productUrl: "https://www.divvino.com.br/taca-de-vinho-cristal-bohemia-4011970/p",
+  popularity: 877
  },
  {
   sku: "divvino-1307",
@@ -8783,7 +9660,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162950/Taca-Bohemia-Cristallin-Bordeaux-590Ml.jpg?v=638929631758330000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-bordeaux-590ml-bohemia-4011960/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-bordeaux-590ml-bohemia-4011960/p",
+  popularity: 878
  },
  {
   sku: "divvino-1306",
@@ -8793,7 +9671,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162949/Taca-Para-Vinho-Branco-Bohemia-Cristallin-350Ml.jpg?v=638929631755370000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-branco-350ml-bohemia-4011951/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-vinho-branco-350ml-bohemia-4011951/p",
+  popularity: 879
  },
  {
   sku: "divvino-1305",
@@ -8803,7 +9682,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios tacas e copos",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162948/Taca-Para-Espumante-Bohemia-Cristallin-220Ml.jpg?v=638957199331000000",
-  productUrl: "https://www.divvino.com.br/taca-de-cristal-espumante-220ml-bohemia-4011915/p"
+  productUrl: "https://www.divvino.com.br/taca-de-cristal-espumante-220ml-bohemia-4011915/p",
+  popularity: 880
  },
  {
   sku: "divvino-1299",
@@ -8813,7 +9693,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162945/Tabua-para-Queijo-de-Bambu-Retangular-A-casa.jpg?v=638929631732770000",
-  productUrl: "https://www.divvino.com.br/tabua-para-queijo-de-bambu-retangular-acasa-3978392/p"
+  productUrl: "https://www.divvino.com.br/tabua-para-queijo-de-bambu-retangular-acasa-3978392/p",
+  popularity: 881
  },
  {
   sku: "divvino-1298",
@@ -8823,7 +9704,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios acessorios para vinho",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162944/Adega-Acasa-De-Bambu-08-Garrafas.jpg?v=638929631729000000",
-  productUrl: "https://www.divvino.com.br/porta-vinho-de-bambu-para-8-garrafas-acasa-3978365/p"
+  productUrl: "https://www.divvino.com.br/porta-vinho-de-bambu-para-8-garrafas-acasa-3978365/p",
+  popularity: 882
  },
  {
   sku: "divvino-1279",
@@ -8833,7 +9715,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161077/Massa Italiana Grano Duro La Molisana Taglierini Com Ovos 200G.png.png?v=638785926625870000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-taglierini-com-ovos-200g-3742316/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-taglierini-com-ovos-200g-3742316/p",
+  popularity: 883
  },
  {
   sku: "divvino-1278",
@@ -8843,7 +9726,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cervejas ipa",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162931/Cerveja-Baden-Baden-American-Ipa-600ml.jpg?v=638929631634030000",
-  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-american-ipa-puro-malte-maracuja-600ml-3736711/p"
+  productUrl: "https://www.divvino.com.br/cerveja-baden-baden-american-ipa-puro-malte-maracuja-600ml-3736711/p",
+  popularity: 884
  },
  {
   sku: "divvino-1277",
@@ -8853,7 +9737,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados rum",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166704/Tequila Jose Cuervo Especial 375ml.png?v=639161043267100000",
-  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-especial-375ml-3735821/p"
+  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-especial-375ml-3735821/p",
+  popularity: 885
  },
  {
   sku: "divvino-1272",
@@ -8863,7 +9748,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet geleias",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162926/Geleia-Italiana-Menz-e-Gasser-100-Da-Frutta-Cereja-240G.jpg?v=639192041506200000",
-  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-cereja-3713280/p"
+  productUrl: "https://www.divvino.com.br/geleia-italiana-menz-gasser-cereja-3713280/p",
+  popularity: 886
  },
  {
   sku: "divvino-1259",
@@ -8873,7 +9759,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados cachaca",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157048/Cachaca-YPIoCA-Brasilizar-Ouro-Empalhada-965ml.jpg?v=638059475507330000",
-  productUrl: "https://www.divvino.com.br/cachaca-ypioca-ouro-empalhada-3550237/p"
+  productUrl: "https://www.divvino.com.br/cachaca-ypioca-ouro-empalhada-3550237/p",
+  popularity: 887
  },
  {
   sku: "divvino-1250",
@@ -8883,7 +9770,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161075/Massa Italiana Grano Duro La Molisana Fusilli Integral 500g.png.png?v=638785924632430000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-fusilli-integrali-500g-3353247/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-fusilli-integrali-500g-3353247/p",
+  popularity: 888
  },
  {
   sku: "divvino-1245",
@@ -8893,7 +9781,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161070/Massa-Italiana-Grano-Duro-La-Molisana-Fusilli-500g.png.png?v=638785914794000000",
-  productUrl: "https://www.divvino.com.br/massa-la-molisana-fusilli-500g-3353013/p"
+  productUrl: "https://www.divvino.com.br/massa-la-molisana-fusilli-500g-3353013/p",
+  popularity: 889
  },
  {
   sku: "divvino-1238",
@@ -8903,7 +9792,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados gin",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156788/3054337.jpg?v=638055887619330000",
-  productUrl: "https://www.divvino.com.br/gin-tanqueray-ten-london-dry-750ml-3054337/p"
+  productUrl: "https://www.divvino.com.br/gin-tanqueray-ten-london-dry-750ml-3054337/p",
+  popularity: 890
  },
  {
   sku: "divvino-1231",
@@ -8913,7 +9803,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157216/2831476_1_large.jpg?v=638060170033100000",
-  productUrl: "https://www.divvino.com.br/espumante-terranova-brut-rose-750ml-2831476/p"
+  productUrl: "https://www.divvino.com.br/espumante-terranova-brut-rose-750ml-2831476/p",
+  popularity: 891
  },
  {
   sku: "divvino-1227",
@@ -8923,7 +9814,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios adega",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162888/Adega-Brastemp-12-Garrafas-Ilum.-led-com-Painel-Eletronico-Preto.jpg?v=638929631299770000",
-  productUrl: "https://www.divvino.com.br/adega-climatizada-brastemp-12-garrafas-all-black-preto-bzc12b-2774727/p"
+  productUrl: "https://www.divvino.com.br/adega-climatizada-brastemp-12-garrafas-all-black-preto-bzc12b-2774727/p",
+  popularity: 892
  },
  {
   sku: "divvino-1226",
@@ -8933,7 +9825,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados tequila",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166705/Tequila Jose Cuervo Especial Silver 750ml.png?v=639161063013300000",
-  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-silver-especial-750ml-2662266/p"
+  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-silver-especial-750ml-2662266/p",
+  popularity: 893
  },
  {
   sku: "divvino-1219",
@@ -8943,7 +9836,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet azeites e vinagres",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158516/2635222.png?v=638336839173870000",
-  productUrl: "https://www.divvino.com.br/azeite-de-oliva-daguirre-extra-virgem-500ml-2635222/p"
+  productUrl: "https://www.divvino.com.br/azeite-de-oliva-daguirre-extra-virgem-500ml-2635222/p",
+  popularity: 894
  },
  {
   sku: "divvino-1212",
@@ -8953,7 +9847,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165607/Massa-Italiana-Grano-Duro-Garofalo-Penne-Ziti-Regate-500g.png?v=639062615093530000",
-  productUrl: "https://www.divvino.com.br/massa-garofalo-penne-ziti-rigattone-500g-2433156/p"
+  productUrl: "https://www.divvino.com.br/massa-garofalo-penne-ziti-rigattone-500g-2433156/p",
+  popularity: 895
  },
  {
   sku: "divvino-1207",
@@ -8963,7 +9858,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158963/Espumante-Brasileiro-Terranova-Demi-Sec.png?v=638435183072600000",
-  productUrl: "https://www.divvino.com.br/espumante-brasileiro-terranova-demi-sec-garrafa-750ml-2294150/p"
+  productUrl: "https://www.divvino.com.br/espumante-brasileiro-terranova-demi-sec-garrafa-750ml-2294150/p",
+  popularity: 896
  },
  {
   sku: "divvino-1204",
@@ -8973,7 +9869,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados vodka",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162871/Vodka-Absolut-1l.jpg?v=638929631198170000",
-  productUrl: "https://www.divvino.com.br/absolut-vodka-original-sueca-1l-2018110/p"
+  productUrl: "https://www.divvino.com.br/absolut-vodka-original-sueca-1l-2018110/p",
+  popularity: 897
  },
  {
   sku: "divvino-1193",
@@ -8983,7 +9880,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162863/Whisky-Chivas-Regal-18-Anos-.jpg?v=638929631145330000",
-  productUrl: "https://www.divvino.com.br/chivas-regal-whisky-18-anos-escoces-750ml-1237955/p"
+  productUrl: "https://www.divvino.com.br/chivas-regal-whisky-18-anos-escoces-750ml-1237955/p",
+  popularity: 898
  },
  {
   sku: "divvino-1181",
@@ -8993,7 +9891,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159307/Espumante-Brasileiro-Terranova-Moscatel.png?v=638470743572730000",
-  productUrl: "https://www.divvino.com.br/espumante-miolo-terranova-moscatel-981630/p"
+  productUrl: "https://www.divvino.com.br/espumante-miolo-terranova-moscatel-981630/p",
+  popularity: 899
  },
  {
   sku: "divvino-1180",
@@ -9003,7 +9902,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados licor",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159324/Licor-Cuarenta-Y-Tres-700Ml.png?v=638471590123800000",
-  productUrl: "https://www.divvino.com.br/licor-43-original-952656/p"
+  productUrl: "https://www.divvino.com.br/licor-43-original-952656/p",
+  popularity: 900
  },
  {
   sku: "divvino-1179",
@@ -9013,7 +9913,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157583/454672_2.jpg?v=638094926095730000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-delverde-200g-454672/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-delverde-200g-454672/p",
+  popularity: 901
  },
  {
   sku: "divvino-1178",
@@ -9023,7 +9924,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "gourmet massas",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159763/Massa-Italiana-Grano-Duro-DELVERDE-Tagliatelle-A-Nido-CEspinafre-200g.png?v=638538797799230000",
-  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-delverde-200g-454605/p"
+  productUrl: "https://www.divvino.com.br/massa-italiana-grano-duro-delverde-200g-454605/p",
+  popularity: 902
  },
  {
   sku: "divvino-1171",
@@ -9033,7 +9935,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162848/Whisky-Chivas-Regal-12-Anos-1l.jpg?v=638929631044070000",
-  productUrl: "https://www.divvino.com.br/chivas-regal-whisky-12-anos-escoces-1l-192350/p"
+  productUrl: "https://www.divvino.com.br/chivas-regal-whisky-12-anos-escoces-1l-192350/p",
+  popularity: 903
  },
  {
   sku: "divvino-1168",
@@ -9043,7 +9946,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados tequila",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166703/Tequila Jose Cuervo Especial Gold 750ml.png?v=639161037171830000",
-  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-especial-750ml-136883/p"
+  productUrl: "https://www.divvino.com.br/tequila-jose-cuervo-especial-750ml-136883/p",
+  popularity: 904
  },
  {
   sku: "divvino-1161",
@@ -9053,7 +9957,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162840/Rum-Bacardi-Gold-980ml.jpg?v=638929630997800000",
-  productUrl: "https://www.divvino.com.br/rum-bacardi-gold-51411/p"
+  productUrl: "https://www.divvino.com.br/rum-bacardi-gold-51411/p",
+  popularity: 905
  },
  {
   sku: "divvino-1158",
@@ -9063,7 +9968,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados whisky",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162837/Whisky-Johnnie-Walker-Black-label-1l.jpg?v=639010555776000000",
-  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-black-label-1l-53260/p"
+  productUrl: "https://www.divvino.com.br/whisky-johnnie-walker-black-label-1l-53260/p",
+  popularity: 906
  },
  {
   sku: "divvino-1154",
@@ -9073,7 +9979,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados licor",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159215/Licor-Cointreau-700-ml.png?v=638459370478400000",
-  productUrl: "https://www.divvino.com.br/licor-cointreau-700ml-32719/p"
+  productUrl: "https://www.divvino.com.br/licor-cointreau-700ml-32719/p",
+  popularity: 907
  },
  {
   sku: "divvino-1149",
@@ -9083,7 +9990,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159579/Rum-Bacardi-Carta-Blanca-980ml.png?v=638506206894570000",
-  productUrl: "https://www.divvino.com.br/rum-bacardi-carta-blanca-garrafa-980ml-10758/p"
+  productUrl: "https://www.divvino.com.br/rum-bacardi-carta-blanca-garrafa-980ml-10758/p",
+  popularity: 908
  },
  {
   sku: "divvino-1148",
@@ -9093,7 +10001,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "destilados vodka",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157715/orloff.jpg?v=638119939872630000",
-  productUrl: "https://www.divvino.com.br/vodka-orloff-multidestilada-1l-7668/p"
+  productUrl: "https://www.divvino.com.br/vodka-orloff-multidestilada-1l-7668/p",
+  popularity: 909
  },
  {
   sku: "divvino-1142",
@@ -9103,7 +10012,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165255/Vinho Rose Trivento Malbec.png?v=638973570413930000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-trivento-reserve-rose-malbec-4818974/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-trivento-reserve-rose-malbec-4818974/p",
+  popularity: 910
  },
  {
   sku: "divvino-1140",
@@ -9113,7 +10023,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159340/Vinho-Tinto-Chileno-Estampa-La-Cruz-Syrah-Petit-Verdot.png?v=638475737269230000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-estampa-la-cruz-2013-750ml-4811383/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-estampa-la-cruz-2013-750ml-4811383/p",
+  popularity: 911
  },
  {
   sku: "divvino-1139",
@@ -9123,7 +10034,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/160784/Espumante-Portugues-Mateus-Brut-Rose.png?v=638720402230430000",
-  productUrl: "https://www.divvino.com.br/espumante-portugues-mateus-brut-rose-4803560/p"
+  productUrl: "https://www.divvino.com.br/espumante-portugues-mateus-brut-rose-4803560/p",
+  popularity: 912
  },
  {
   sku: "divvino-1133",
@@ -9133,7 +10045,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165527/Vinho Branco Sul-Africano Hill-Dale Chenin Blanc.png?v=639034116156900000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-hilldale-chenin-blanc-4774628/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-hilldale-chenin-blanc-4774628/p",
+  popularity: 913
  },
  {
   sku: "divvino-1132",
@@ -9143,7 +10056,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166618/Vinho Portugues Periquita Rose.png?v=639147100290300000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-periquita-750ml-4774495/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-periquita-750ml-4774495/p",
+  popularity: 914
  },
  {
   sku: "divvino-1121",
@@ -9153,7 +10067,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159442/Champagne-Moutard-6-Cepages-Gold.png?v=638483575604200000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-6-cepages-gold-2011-garrafa-750ml-4766617/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-6-cepages-gold-2011-garrafa-750ml-4766617/p",
+  popularity: 915
  },
  {
   sku: "divvino-1120",
@@ -9163,7 +10078,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159674/Champagne-Moutard-Cuvee-6-Cepages-Brut.png?v=638519925396800000",
-  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-cuvee-6-cepages-2011-garrafa-750ml-4766573/p"
+  productUrl: "https://www.divvino.com.br/champagne-frances-moutard-cuvee-6-cepages-2011-garrafa-750ml-4766573/p",
+  popularity: 916
  },
  {
   sku: "divvino-1108",
@@ -9173,7 +10089,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158977/Vinho-Tinto-Uruguaio-Marichal-Grand-Reserve-A-Tannat.png?v=638435980706270000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-marichal-grand-reserve-a-tannat-4744208/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-marichal-grand-reserve-a-tannat-4744208/p",
+  popularity: 917
  },
  {
   sku: "divvino-1104",
@@ -9183,7 +10100,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159439/Vinho-Rose-Portugues-Monte-Da-Ravasqueira-Selecao-Do-Enologo.png?v=638482897711770000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-monte-da-ravasqueira-selecao-do-enologo-750ml-4733779/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-monte-da-ravasqueira-selecao-do-enologo-750ml-4733779/p",
+  popularity: 918
  },
  {
   sku: "divvino-1098",
@@ -9193,7 +10111,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161028/Vinho-Frances-Jean-Bouchard-Corton-Charlemagne-Grand-Cru-.png.png?v=638969268940500000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-corton-charlemagne-grand-cru-2019-750ml-4728910/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-jean-bouchard-corton-charlemagne-grand-cru-2019-750ml-4728910/p",
+  popularity: 919
  },
  {
   sku: "divvino-1097",
@@ -9203,7 +10122,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165487/Vinho-Branco-Italiano-Bric-Cenciurio-Sito-Dei-Fossili-Roero-D.O.C.g.png?v=639041876883400000",
-  productUrl: "https://www.divvino.com.br/vinho-bric-cenciurio-sito-dei-fossili-roero-docg-arneis-4725599/p"
+  productUrl: "https://www.divvino.com.br/vinho-bric-cenciurio-sito-dei-fossili-roero-docg-arneis-4725599/p",
+  popularity: 920
  },
  {
   sku: "divvino-1093",
@@ -9213,7 +10133,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166570/Espumante Rose Luiz Argenta Brut.png?v=639135868391000000",
-  productUrl: "https://www.divvino.com.br/espumante-rose-luiz-argenta-brut-750ml-4714399/p"
+  productUrl: "https://www.divvino.com.br/espumante-rose-luiz-argenta-brut-750ml-4714399/p",
+  popularity: 921
  },
  {
   sku: "divvino-1092",
@@ -9223,7 +10144,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162778/Vinho-Tinto-luiz-Argenta-Classico-Cabernet-Franc-.jpg?v=638929630403500000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-cabernet-franc-classico-tinto-4714380/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-cabernet-franc-classico-tinto-4714380/p",
+  popularity: 922
  },
  {
   sku: "divvino-1091",
@@ -9233,7 +10155,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162777/Vinto-Tinto-luiz-Argenta-Corte-Classico.jpg?v=638929630399870000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-corte-classico-4714370/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-corte-classico-4714370/p",
+  popularity: 923
  },
  {
   sku: "divvino-1090",
@@ -9243,7 +10166,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162776/Vinto-Tinto-luiz-Argenta-Classico-Merlot.jpg?v=639192172160370000",
-  productUrl: "https://www.divvino.com.br/luiz-argenta-classico-merlot-4714361/p"
+  productUrl: "https://www.divvino.com.br/luiz-argenta-classico-merlot-4714361/p",
+  popularity: 924
  },
  {
   sku: "divvino-1089",
@@ -9253,7 +10177,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162775/Espumante-luiz-Argenta-Brut-Jovem.jpg?v=638929630386900000",
-  productUrl: "https://www.divvino.com.br/espumante-luiz-argenta-brut-jovem-750ml-4714352/p"
+  productUrl: "https://www.divvino.com.br/espumante-luiz-argenta-brut-jovem-750ml-4714352/p",
+  popularity: 925
  },
  {
   sku: "divvino-1071",
@@ -9263,7 +10188,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159499/Vinho-Rose-Sul-Africano-The-Wedge.png?v=638494082541230000",
-  productUrl: "https://www.divvino.com.br/vinho-sul-africano-the-wedge-rose-4707358/p"
+  productUrl: "https://www.divvino.com.br/vinho-sul-africano-the-wedge-rose-4707358/p",
+  popularity: 926
  },
  {
   sku: "divvino-1065",
@@ -9273,7 +10199,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158916/Vinho-Rose-Portugues-Salino.png?v=638424773410400000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-adegamae-salino-4703967/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-portugues-adegamae-salino-4703967/p",
+  popularity: 927
  },
  {
   sku: "divvino-1062",
@@ -9283,7 +10210,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157816/4703930.jpg?v=638161418026670000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-adegamae-lisboa-valley-sellection-4703930/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-adegamae-lisboa-valley-sellection-4703930/p",
+  popularity: 928
  },
  {
   sku: "divvino-1058",
@@ -9293,7 +10221,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162744/Vinho-Tinto-Portugues-Salino-Winemakers-Selection.jpg?v=638929630200700000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-salino-colheita-4703822/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-salino-colheita-4703822/p",
+  popularity: 929
  },
  {
   sku: "divvino-1057",
@@ -9303,7 +10232,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162743/Vinho-Branco-Portugues-Salino.jpg?v=638929630195230000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-adegamae-salino-4703770/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-portugues-adegamae-salino-4703770/p",
+  popularity: 930
  },
  {
   sku: "divvino-1055",
@@ -9313,7 +10243,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162741/Vinho-Branco-Espanhol-Matsu-la-Jefa-Malvasia.jpg?v=638929630187500000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-espanhol-matsu-la-jefa-4701309/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-espanhol-matsu-la-jefa-4701309/p",
+  popularity: 931
  },
  {
   sku: "divvino-1052",
@@ -9323,7 +10254,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157525/4698642.jpg?v=638070516586230000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-monte-da-ravasqueira-vinhas-das-romas-15l-4698642/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-monte-da-ravasqueira-vinhas-das-romas-15l-4698642/p",
+  popularity: 932
  },
  {
   sku: "divvino-1043",
@@ -9333,7 +10265,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156383/4679422.jpg?v=638048488777400000",
-  productUrl: "https://www.divvino.com.br/vinho-montgras-de-vine-sauvignon-blanc-4679422/p"
+  productUrl: "https://www.divvino.com.br/vinho-montgras-de-vine-sauvignon-blanc-4679422/p",
+  popularity: 933
  },
  {
   sku: "divvino-1041",
@@ -9343,7 +10276,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165431/Espumante Salton Moscato Rose.png?v=639011678432470000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-moscato-rose-750ml-4679235/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-moscato-rose-750ml-4679235/p",
+  popularity: 934
  },
  {
   sku: "divvino-1040",
@@ -9353,7 +10287,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165434/Espumante Salton Prosecco Brut Rose.png?v=639011682042730000",
-  productUrl: "https://www.divvino.com.br/espumante-salton-prosecco-brut-rose-4679226/p"
+  productUrl: "https://www.divvino.com.br/espumante-salton-prosecco-brut-rose-4679226/p",
+  popularity: 935
  },
  {
   sku: "divvino-1035",
@@ -9363,7 +10298,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165489/Vinho-Rose-luiz-Argenta-Jovem.jpg?v=639056485502470000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-rose-4665875/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-rose-4665875/p",
+  popularity: 936
  },
  {
   sku: "divvino-1034",
@@ -9373,7 +10309,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162722/Vinho-Branco-luiz-Argenta-Jovem-Gewurztraminer.jpg?v=638929630094800000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-gewurztraminer-4665866/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-gewurztraminer-4665866/p",
+  popularity: 937
  },
  {
   sku: "divvino-1033",
@@ -9383,7 +10320,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158975/Vinho-Branco-Luiz-Argenta-Jovem-Riesling.png?v=638435957781100000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-riesling-4665857/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-riesling-4665857/p",
+  popularity: 938
  },
  {
   sku: "divvino-1032",
@@ -9393,7 +10331,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158960/Vinho-Luiz-Argenta-Jovem-Sauvignon-Blanc.png?v=638435097970470000",
-  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-sauvignon-blanc-4665848/p"
+  productUrl: "https://www.divvino.com.br/vinho-brasileiro-luiz-argenta-jovem-sauvignon-blanc-4665848/p",
+  popularity: 939
  },
  {
   sku: "divvino-1031",
@@ -9403,7 +10342,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162719/Vinho-luiz-Argenta-Shiraz-Jovem.jpg?v=638929630074970000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-luiz-argenta-jovem-shiraz-4665820/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-luiz-argenta-jovem-shiraz-4665820/p",
+  popularity: 940
  },
  {
   sku: "divvino-1030",
@@ -9413,7 +10353,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161490/Vinho Tinto Concha Y Toro Casillero Del Diablo Red Blend.png?v=638901743794630000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-casillero-del-diablo-reserva-red-blend-4665801/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-concha-y-toro-casillero-del-diablo-reserva-red-blend-4665801/p",
+  popularity: 941
  },
  {
   sku: "divvino-1029",
@@ -9423,7 +10364,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161497/Vinho Tinto Chileno Diablo Black Cabernet Sauvignon.png?v=638902585254630000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-diablo-black-cabernet-sauvignon-4665777/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-diablo-black-cabernet-sauvignon-4665777/p",
+  popularity: 942
  },
  {
   sku: "divvino-1027",
@@ -9433,7 +10375,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158687/4661240.png?v=638373164791900000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-rose-4661240/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-abanico-rose-4661240/p",
+  popularity: 943
  },
  {
   sku: "divvino-1021",
@@ -9443,7 +10386,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166763/Vinho Tinto Uruguaio Viva El Esencial Tannat.png?v=639174849105700000",
-  productUrl: "https://www.divvino.com.br/vinho-viva-el-esencial-tannat-4648720/p"
+  productUrl: "https://www.divvino.com.br/vinho-viva-el-esencial-tannat-4648720/p",
+  popularity: 944
  },
  {
   sku: "divvino-1019",
@@ -9453,7 +10397,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166762/Vinho Rose Uruguaio Viva El Esencial.png?v=639174848885100000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-aurora-viva-el-esencial-4648696/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-aurora-viva-el-esencial-4648696/p",
+  popularity: 945
  },
  {
   sku: "divvino-1016",
@@ -9463,7 +10408,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/166765/Vinho Tinto Uruguaio Viva El Esencial Cabernet Sauvignon.png?v=639174849518570000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-viva-el-esencial-cabernet-sauvignon-750ml-4648650/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-uruguaio-viva-el-esencial-cabernet-sauvignon-750ml-4648650/p",
+  popularity: 946
  },
  {
   sku: "divvino-1002",
@@ -9473,7 +10419,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos frisante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/158282/garibaldi-relax-frisante.png?v=638282147137100000",
-  productUrl: "https://www.divvino.com.br/vinho-frisante-garibaldi-relax-branco-demi-seco-750ml-4610250/p"
+  productUrl: "https://www.divvino.com.br/vinho-frisante-garibaldi-relax-branco-demi-seco-750ml-4610250/p",
+  popularity: 947
  },
  {
   sku: "divvino-988",
@@ -9483,7 +10430,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162677/Espumante-Monte-Paschoal-Moscatel-Rose-Baby.jpg?v=638929629785170000",
-  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-moscatel-rose-187ml-4587124/p"
+  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-moscatel-rose-187ml-4587124/p",
+  popularity: 948
  },
  {
   sku: "divvino-987",
@@ -9493,7 +10441,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162676/Espumante-Monte-Paschoal-Brut-Rose-Baby.jpg?v=638929629776730000",
-  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-brut-rose-187ml-4587115/p"
+  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-brut-rose-187ml-4587115/p",
+  popularity: 949
  },
  {
   sku: "divvino-986",
@@ -9503,7 +10452,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162675/Espumante-Monte-Paschoal-Moscatel-baby.jpg?v=638929629762200000",
-  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-moscatel-187ml-4587106/p"
+  productUrl: "https://www.divvino.com.br/espumante-monte-paschoal-moscatel-187ml-4587106/p",
+  popularity: 950
  },
  {
   sku: "divvino-984",
@@ -9513,7 +10463,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/161625/Vina-Toldos-Sauvignon-Blanc-.png?v=638918122815200000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-vina-toldos-sauvignon-blanc-4584131/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-vina-toldos-sauvignon-blanc-4584131/p",
+  popularity: 951
  },
  {
   sku: "divvino-970",
@@ -9523,7 +10474,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162659/Vinho-Do-Porto-Quinta-Santa-Eufemia-White-Dry.jpg?v=638929629653200000",
-  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-branco-vinho-do-porto-doc-4566741/p"
+  productUrl: "https://www.divvino.com.br/quinta-santa-eufemia-branco-vinho-do-porto-doc-4566741/p",
+  popularity: 952
  },
  {
   sku: "divvino-969",
@@ -9533,7 +10485,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162658/Vinho-Rose-Espanhol-Vicente-Gandia-El-Miracle-n5.jpg?v=638929629648370000",
-  productUrl: "https://www.divvino.com.br/vinho-vicente-gandia-el-miracle-rose-n5-bobal-rose-4566723/p"
+  productUrl: "https://www.divvino.com.br/vinho-vicente-gandia-el-miracle-rose-n5-bobal-rose-4566723/p",
+  popularity: 953
  },
  {
   sku: "divvino-968",
@@ -9543,7 +10496,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162657/Vinho-Branco-Espanhol-El-Miracle-n3.jpg?v=638929629644770000",
-  productUrl: "https://www.divvino.com.br/el-miracle-branco-n3-4566714/p"
+  productUrl: "https://www.divvino.com.br/el-miracle-branco-n3-4566714/p",
+  popularity: 954
  },
  {
   sku: "divvino-967",
@@ -9553,7 +10507,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162656/Vinho-Tinto-Espanhol-El-Miracle-N-1.jpg?v=639045286783630000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-vicente-gandia-el-miracle-n1-4566680/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-vicente-gandia-el-miracle-n1-4566680/p",
+  popularity: 955
  },
  {
   sku: "divvino-966",
@@ -9563,7 +10518,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162655/Vinho-Frances-Fugue-De-Nenin-Pomerol-.jpg?v=638929629637170000",
-  productUrl: "https://www.divvino.com.br/fugue-de-nenin-pomerol-2017-4564504/p"
+  productUrl: "https://www.divvino.com.br/fugue-de-nenin-pomerol-2017-4564504/p",
+  popularity: 956
  },
  {
   sku: "divvino-965",
@@ -9573,7 +10529,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162654/la-Dame-De-Montrose-Saint-EstEphe-Aoc.jpg?v=638978719546300000",
-  productUrl: "https://www.divvino.com.br/la-dame-de-montrose-saint-estephe-aoc-2017-4564095/p"
+  productUrl: "https://www.divvino.com.br/la-dame-de-montrose-saint-estephe-aoc-2017-4564095/p",
+  popularity: 957
  },
  {
   sku: "divvino-960",
@@ -9583,7 +10540,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156379/4560040.png?v=638048486487170000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-san-silvestro-rosso-ensema-langhe-doc-4560040/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-san-silvestro-rosso-ensema-langhe-doc-4560040/p",
+  popularity: 958
  },
  {
   sku: "divvino-940",
@@ -9593,7 +10551,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162629/Vinho-Chileno-Concha-Y-Toro-Del-Diablo-Branco-Pedro-Jimenez.jpg?v=638929629478600000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-concha-y-toro-casillero-del-diablo-pedro-jimenez-4553977/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-concha-y-toro-casillero-del-diablo-pedro-jimenez-4553977/p",
+  popularity: 959
  },
  {
   sku: "divvino-935",
@@ -9603,7 +10562,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162624/Vinho-Italiano-Avignonesi-Dadi.jpg?v=639077032241370000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-avignonesi-da-di-toscana-igt-4537839/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-italiano-avignonesi-da-di-toscana-igt-4537839/p",
+  popularity: 960
  },
  {
   sku: "divvino-891",
@@ -9613,7 +10573,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162580/Vinho-Frances-Chateau-Dorsan-Cotes-Du-Rhone-aoc.jpg?v=638929629241600000",
-  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-dorsan-cotes-du-rhone-aoc-4480496/p"
+  productUrl: "https://www.divvino.com.br/vinho-frances-chateau-dorsan-cotes-du-rhone-aoc-4480496/p",
+  popularity: 961
  },
  {
   sku: "divvino-887",
@@ -9623,7 +10584,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/157812/4475923.jpg?v=638221777108300000",
-  productUrl: "https://www.divvino.com.br/quinta-dos-quatro-ventos-grande-reserva-doc-4475923/p"
+  productUrl: "https://www.divvino.com.br/quinta-dos-quatro-ventos-grande-reserva-doc-4475923/p",
+  popularity: 962
  },
  {
   sku: "divvino-884",
@@ -9633,7 +10595,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162573/Vinho-Argentino-Postales-Roble-Chardonnay.jpg?v=639016646772100000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-roble-chardonnay-4474013/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-postales-roble-chardonnay-4474013/p",
+  popularity: 963
  },
  {
   sku: "divvino-875",
@@ -9643,7 +10606,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156410/4468796.jpg?v=638048909819870000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-emiliana-etnico-sauvignon-blanc-4468796/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-chileno-emiliana-etnico-sauvignon-blanc-4468796/p",
+  popularity: 964
  },
  {
   sku: "divvino-874",
@@ -9653,7 +10617,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162563/Vinho-Tinto-Chileno-etnico-Malbec-Organico.jpg?v=638929629142470000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-malbec-4468787/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-malbec-4468787/p",
+  popularity: 965
  },
  {
   sku: "divvino-873",
@@ -9663,7 +10628,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156408/4468769.jpg?v=638048909366370000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-carmenere-4468769/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-carmenere-4468769/p",
+  popularity: 966
  },
  {
   sku: "divvino-872",
@@ -9673,7 +10639,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156407/4468750.jpg?v=638048909161930000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-cabernet-sauvignon-4468750/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-chileno-emiliana-etnico-cabernet-sauvignon-4468750/p",
+  popularity: 967
  },
  {
   sku: "divvino-855",
@@ -9683,7 +10650,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162544/Espumante-Garibaldi-Prosecco-Rose.jpg?v=638929629041630000",
-  productUrl: "https://www.divvino.com.br/espumante-garibaldi-prosecco-brut-rose-4433487/p"
+  productUrl: "https://www.divvino.com.br/espumante-garibaldi-prosecco-brut-rose-4433487/p",
+  popularity: 968
  },
  {
   sku: "divvino-840",
@@ -9693,7 +10661,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162529/Vinho-Uruguaio-Marichal-Reserve-Rose.jpg?v=638929628963600000",
-  productUrl: "https://www.divvino.com.br/vinho-marichal-reserve-collection-pinot-noir-4403942/p"
+  productUrl: "https://www.divvino.com.br/vinho-marichal-reserve-collection-pinot-noir-4403942/p",
+  popularity: 969
  },
  {
   sku: "divvino-834",
@@ -9703,7 +10672,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162523/Vinho-Argentino-Cameleon-Rose-Organico.jpg?v=638929628935300000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-domaine-bousquet-cameleon-rose-4396801/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-domaine-bousquet-cameleon-rose-4396801/p",
+  popularity: 970
  },
  {
   sku: "divvino-831",
@@ -9713,7 +10683,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156375/4396490.png?v=638048463599200000",
-  productUrl: "https://www.divvino.com.br/vinho-miolo-cuvee-giuseppe-merlot-cabernet-sauvignon-4396490/p"
+  productUrl: "https://www.divvino.com.br/vinho-miolo-cuvee-giuseppe-merlot-cabernet-sauvignon-4396490/p",
+  popularity: 971
  },
  {
   sku: "divvino-828",
@@ -9723,7 +10694,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162517/Vinho-Branco-Argentino-Bianchi-Chardonnay.jpg?v=638929628904200000",
-  productUrl: "https://www.divvino.com.br/maria-carmen-chardonnay-4394342/p"
+  productUrl: "https://www.divvino.com.br/maria-carmen-chardonnay-4394342/p",
+  popularity: 972
  },
  {
   sku: "divvino-825",
@@ -9733,7 +10705,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159475/Vinho-Rose-Argentino-Bianchi-Malbec.png?v=638489561014100000",
-  productUrl: "https://www.divvino.com.br/vinho-rose-argentino-elsa-bianchi-blend-4394306/p"
+  productUrl: "https://www.divvino.com.br/vinho-rose-argentino-elsa-bianchi-blend-4394306/p",
+  popularity: 973
  },
  {
   sku: "divvino-817",
@@ -9743,7 +10716,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165174/Vinho-Tinto-Thunevin-Calvet-Cuvee-Constance-Cotes-Du-Roussillon-A.O.C..png?v=638971653453330000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-thunevin-calvet-cuvee-constance-cotes-du-roussillon-aoc-4390129/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-thunevin-calvet-cuvee-constance-cotes-du-roussillon-aoc-4390129/p",
+  popularity: 974
  },
  {
   sku: "divvino-810",
@@ -9753,7 +10727,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159400/Espumante-Frances-Blanc-De-Blancs-Brut.png?v=638481926546970000",
-  productUrl: "https://www.divvino.com.br/espumante-francesa-blanc-de-blancs-brut-4383222/p"
+  productUrl: "https://www.divvino.com.br/espumante-francesa-blanc-de-blancs-brut-4383222/p",
+  popularity: 975
  },
  {
   sku: "divvino-809",
@@ -9763,7 +10738,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162498/Vinho-Salton-Intenso-Malbec.jpg?v=639077028776070000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-salton-intenso-malbec-4382771/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-salton-intenso-malbec-4382771/p",
+  popularity: 976
  },
  {
   sku: "divvino-807",
@@ -9773,7 +10749,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162496/Vinho-Italiano-letorri-Tinto-Primitivo-Di-Puglia-Igp.jpg?v=638929628798200000",
-  productUrl: "https://www.divvino.com.br/vinho-italiano-mediterranea-letorri-primitivo-puglia-igp-4380623/p"
+  productUrl: "https://www.divvino.com.br/vinho-italiano-mediterranea-letorri-primitivo-puglia-igp-4380623/p",
+  popularity: 977
  },
  {
   sku: "divvino-799",
@@ -9783,7 +10760,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162488/Vinho-Tinto-Espanhol-le-Naturel.jpg?v=638929628737430000",
-  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-aroa-le-naturel-do-navarra-4376200/p"
+  productUrl: "https://www.divvino.com.br/vinho-espanhol-bodegas-aroa-le-naturel-do-navarra-4376200/p",
+  popularity: 978
  },
  {
   sku: "divvino-779",
@@ -9793,7 +10771,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/159440/Vinho-Tinto-Portugues-Cabeca-De-Toiro-Reserva-Tejo-D.O.C.png?v=638482901192870000",
-  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-cabeca-de-toiro-reserva-tejo-doc-4373360/p"
+  productUrl: "https://www.divvino.com.br/vinho-tinto-portugues-cabeca-de-toiro-reserva-tejo-doc-4373360/p",
+  popularity: 979
  },
  {
   sku: "divvino-766",
@@ -9803,7 +10782,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162455/Vinho-Rose-Uruguaio-la-Hacienda-Sauvignon-Blanc-Merlot.jpg?v=638929628495800000",
-  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-rose-4362296/p"
+  productUrl: "https://www.divvino.com.br/vinho-la-hacienda-rose-4362296/p",
+  popularity: 980
  },
  {
   sku: "divvino-760",
@@ -9813,7 +10793,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162449/Vinho-Bodega-Yuste-Aurora-Jerez-Manzanilla-do.jpg?v=639045241599100000",
-  productUrl: "https://www.divvino.com.br/vinho-aurora-jerez-manzanilla-do-4358266/p"
+  productUrl: "https://www.divvino.com.br/vinho-aurora-jerez-manzanilla-do-4358266/p",
+  popularity: 981
  },
  {
   sku: "divvino-739",
@@ -9823,7 +10804,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162428/Vinho-Espanhol-Eguren-Ugarte-Maturana.jpg?v=638929628333300000",
-  productUrl: "https://www.divvino.com.br/eguren-ugarte-maturana-4348303/p"
+  productUrl: "https://www.divvino.com.br/eguren-ugarte-maturana-4348303/p",
+  popularity: 982
  },
  {
   sku: "divvino-731",
@@ -9833,7 +10815,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165071/Vinho Sul-Africano Elli Chenin Blanc.png?v=638959753872270000",
-  productUrl: "https://www.divvino.com.br/vinho-elli-chenin-blanc-4346588/p"
+  productUrl: "https://www.divvino.com.br/vinho-elli-chenin-blanc-4346588/p",
+  popularity: 983
  },
  {
   sku: "divvino-729",
@@ -9843,7 +10826,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162418/Vinho-Branco-The-Wedge-Chenin-Blanc.jpg?v=638929628280100000",
-  productUrl: "https://www.divvino.com.br/vinho-branco-the-wedge-chenin-blanc-4346560/p"
+  productUrl: "https://www.divvino.com.br/vinho-branco-the-wedge-chenin-blanc-4346560/p",
+  popularity: 984
  },
  {
   sku: "divvino-725",
@@ -9853,7 +10837,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162414/Bianchi-Particular-Cabernet-Franc-.jpg?v=638929628266400000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-bianchi-particular-cabernet-franc-4344654/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-bianchi-particular-cabernet-franc-4344654/p",
+  popularity: 985
  },
  {
   sku: "divvino-720",
@@ -9863,7 +10848,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162409/Vinho-Argentino-Elsa-Bianchi-Cabernet-Sauvignon.jpg?v=638929628238130000",
-  productUrl: "https://www.divvino.com.br/vinho-argentino-elsa-bianchi-cabernet-sauvignon-4344547/p"
+  productUrl: "https://www.divvino.com.br/vinho-argentino-elsa-bianchi-cabernet-sauvignon-4344547/p",
+  popularity: 986
  },
  {
   sku: "divvino-712",
@@ -9873,7 +10859,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162402/Vinho-Branco-Chileno-Misiones-De-Rengo-Reserva-Chardonnay.jpg?v=638929628213730000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-misiones-de-rengo-reserva-chardonnay-4337248/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-misiones-de-rengo-reserva-chardonnay-4337248/p",
+  popularity: 987
  },
  {
   sku: "divvino-706",
@@ -9883,7 +10870,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165033/Vinho Australiano De Bortoli Estate Vineyard Pinot Noir.png?v=638956075138500000",
-  productUrl: "https://www.divvino.com.br/de-bortoli-estate-vineyard-pinot-noir-4337041/p"
+  productUrl: "https://www.divvino.com.br/de-bortoli-estate-vineyard-pinot-noir-4337041/p",
+  popularity: 988
  },
  {
   sku: "divvino-705",
@@ -9893,7 +10881,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162395/Vinho-Australiano-De-Bortoli-Estate-Vineyard-Chardonnay.jpg?v=638929628135770000",
-  productUrl: "https://www.divvino.com.br/de-bortoli-estate-vineyard-chardonnay-4337014/p"
+  productUrl: "https://www.divvino.com.br/de-bortoli-estate-vineyard-chardonnay-4337014/p",
+  popularity: 989
  },
  {
   sku: "divvino-704",
@@ -9903,7 +10892,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162394/Vinho-Chileno-Estampa-Reserva-Private-Selection.jpg?v=638929628133870000",
-  productUrl: "https://www.divvino.com.br/estampa-reserva-private-selection-4335280/p"
+  productUrl: "https://www.divvino.com.br/estampa-reserva-private-selection-4335280/p",
+  popularity: 990
  },
  {
   sku: "divvino-703",
@@ -9913,7 +10903,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162393/Vinho-Almaden-Cabernet-Rose-Suave.jpg?v=638929628127300000",
-  productUrl: "https://www.divvino.com.br/almaden-cabernet-rose-suave-4334101/p"
+  productUrl: "https://www.divvino.com.br/almaden-cabernet-rose-suave-4334101/p",
+  popularity: 991
  },
  {
   sku: "divvino-702",
@@ -9923,7 +10914,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162392/Vinho-Concha-Y-Toro-Marques-De-Casa-Concha-Pinot-Noir.jpg?v=638929628123300000",
-  productUrl: "https://www.divvino.com.br/marques-de-casa-concha-pinot-noir-4333991/p"
+  productUrl: "https://www.divvino.com.br/marques-de-casa-concha-pinot-noir-4333991/p",
+  popularity: 992
  },
  {
   sku: "divvino-701",
@@ -9933,7 +10925,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho rose",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162391/Vinho-Chileno-Marques-De-Casa-Concha-Rose.jpg?v=638929628115400000",
-  productUrl: "https://www.divvino.com.br/vinho-chileno-marques-de-casa-concha-rose-4333946/p"
+  productUrl: "https://www.divvino.com.br/vinho-chileno-marques-de-casa-concha-rose-4333946/p",
+  popularity: 993
  },
  {
   sku: "divvino-666",
@@ -9943,7 +10936,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho tinto",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162356/Vinho-Portugues-Esporao-Tinto-.jpg?v=638929627919130000",
-  productUrl: "https://www.divvino.com.br/vinho-portugues-esporao-colheita-blend-tinto-4274587/p"
+  productUrl: "https://www.divvino.com.br/vinho-portugues-esporao-colheita-blend-tinto-4274587/p",
+  popularity: 994
  },
  {
   sku: "divvino-663",
@@ -9953,7 +10947,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos vinho branco",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/165213/Vinho Branco Alemao Hubertushof Weissburgunder Trocken.png?v=638969344194670000",
-  productUrl: "https://www.divvino.com.br/hubertushof-weissburgunder-trocken-4274344/p"
+  productUrl: "https://www.divvino.com.br/hubertushof-weissburgunder-trocken-4274344/p",
+  popularity: 995
  },
  {
   sku: "divvino-661",
@@ -9963,7 +10958,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/156976/4274077.jpg?v=638057580601900000",
-  productUrl: "https://www.divvino.com.br/espumante-freixenet-prosecco-garrafa-750ml-4274077/p"
+  productUrl: "https://www.divvino.com.br/espumante-freixenet-prosecco-garrafa-750ml-4274077/p",
+  popularity: 996
  },
  {
   sku: "divvino-655",
@@ -9973,7 +10969,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162345/Espumante-Garibaldi-Moscatel-Rose.jpg?v=638929627840830000",
-  productUrl: "https://www.divvino.com.br/espumante-garibaldi-moscatel-rose-garrafa-750ml-4256195/p"
+  productUrl: "https://www.divvino.com.br/espumante-garibaldi-moscatel-rose-garrafa-750ml-4256195/p",
+  popularity: 997
  },
  {
   sku: "divvino-654",
@@ -9983,6 +10980,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "vinhos espumante",
   imageUrl: "https://divvino.vteximg.com.br/arquivos/ids/162344/Espumante-Garibaldi-Pinot-Noir.jpg?v=638929627837400000",
-  productUrl: "https://www.divvino.com.br/espumante-garibaldi-pinot-noir-garrafa-750ml-4256140/p"
+  productUrl: "https://www.divvino.com.br/espumante-garibaldi-pinot-noir-garrafa-750ml-4256140/p",
+  popularity: 998
  }
 ];

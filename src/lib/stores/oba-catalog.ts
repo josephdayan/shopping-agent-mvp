@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes batata",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480785/Batata-Inglesa.png?v=639074748367730000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-inglesa/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-inglesa/p",
+  popularity: 1
  },
  {
   sku: "oba-9701",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes cebola",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4906020/Cebola.png?v=638265729894630000",
-  productUrl: "https://secure.obahortifruti.com.br/cebola-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/cebola-kg/p",
+  popularity: 2
  },
  {
   sku: "oba-11047",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas banana",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523349/Banana-Prata.jpg?v=639186792389530000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-prata/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-prata/p",
+  popularity: 3
  },
  {
   sku: "oba-1295",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes cenoura",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474681/Cenoura-Extra.jpg?v=638884403485600000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-extra/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-extra/p",
+  popularity: 4
  },
  {
   sku: "oba-100010343",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477012/Tomate-Grape-Oba-Bem-Querer-300-G.jpg?v=638987275944400000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-grape-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-grape-oba-bem-querer-300-g/p",
+  popularity: 5
  },
  {
   sku: "oba-100007669",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos patinho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9144285/Carne-Moida-Patinho-Bovino-Selecao-Dia-A-Dia-500-G.png?v=638598381124000000",
-  productUrl: "https://secure.obahortifruti.com.br/carne-moida-patinho-bovino-selecao-dia-a-dia-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/carne-moida-patinho-bovino-selecao-dia-a-dia-500-g/p",
+  popularity: 6
  },
  {
   sku: "oba-7262",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobrinha",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8670998/Abobrinha-Italiana-Kg.png?v=638529474482570000",
-  productUrl: "https://secure.obahortifruti.com.br/abobrinha-italiana-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobrinha-italiana-kg/p",
+  popularity: 7
  },
  {
   sku: "oba-11144",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas limao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524934/Limao-Tahiti.jpg?v=639199140608000000",
-  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti/p"
+  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti/p",
+  popularity: 8
  },
  {
   sku: "oba-7155",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas pera",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8876984/Pera-Williams.png?v=638575391028070000",
-  productUrl: "https://secure.obahortifruti.com.br/pera-williams/p"
+  productUrl: "https://secure.obahortifruti.com.br/pera-williams/p",
+  popularity: 9
  },
  {
   sku: "oba-7204",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8610297/Tomate-Italiano.png?v=638517379543630000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano/p",
+  popularity: 10
  },
  {
   sku: "oba-9817",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes pepino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250602/Pepino-Japones-Extra.jpg?v=638144112557070000",
-  productUrl: "https://secure.obahortifruti.com.br/pepino-japones-extra/p"
+  productUrl: "https://secure.obahortifruti.com.br/pepino-japones-extra/p",
+  popularity: 11
  },
  {
   sku: "oba-11588",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11516834/Mamao-Papaia-Oba-Bem-Querer.jpg?v=639142132911100000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-oba-bem-querer/p",
+  popularity: 12
  },
  {
   sku: "oba-8826",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras brocolis",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4923147/Brocolis-Ninja-250g.jpg?v=638268609795830000",
-  productUrl: "https://secure.obahortifruti.com.br/brocolis-ninja-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/brocolis-ninja-250g/p",
+  popularity: 13
  },
  {
   sku: "oba-9104",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas manga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477725/Manga-Palmer.jpg?v=639017466384270000",
-  productUrl: "https://secure.obahortifruti.com.br/manga-palmer/p"
+  productUrl: "https://secure.obahortifruti.com.br/manga-palmer/p",
+  popularity: 14
  },
  {
   sku: "oba-2008",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas banana",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481638/Banana-Nanica.jpg?v=639080776899830000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-nanica/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-nanica/p",
+  popularity: 15
  },
  {
   sku: "oba-12799",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas morango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4855512/Morango-200-G.png?v=638257053976100000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-200-g/p",
+  popularity: 16
  },
  {
   sku: "oba-100002820",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo branco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520303/Ovo-Branco-Jumbo-Katayama-Polpa-Com-10-Unidades.jpg?v=639168678486830000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-branco-jumbo-katayama-polpa-com-10-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-branco-jumbo-katayama-polpa-com-10-unidades/p",
+  popularity: 17
  },
  {
   sku: "oba-6845",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes vagem",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4342806/Vagem-Oba-Bem-Querer-300g.jpg?v=638158682169330000",
-  productUrl: "https://secure.obahortifruti.com.br/vagem-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/vagem-oba-bem-querer-300g/p",
+  popularity: 18
  },
  {
   sku: "oba-11371",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes batata doce",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8671004/Batata-Doce-Rosada-Kg.png?v=638529474556630000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-doce-rosada-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-doce-rosada-kg/p",
+  popularity: 19
  },
  {
   sku: "oba-4275",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes alho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488985/Alho-Roxo.jpg?v=639120264378500000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-roxo/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-roxo/p",
+  popularity: 20
  },
  {
   sku: "oba-10465",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacaxi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10598392/Abacaxi-Perola-St-Un.png?v=638781114469930000",
-  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-unidade/p",
+  popularity: 21
  },
  {
   sku: "oba-5399",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes chuchu",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477500/Chuchu.jpg?v=639014034399670000",
-  productUrl: "https://secure.obahortifruti.com.br/chuchu/p"
+  productUrl: "https://secure.obahortifruti.com.br/chuchu/p",
+  popularity: 22
  },
  {
   sku: "oba-12829",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mandioquinha",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481829/Mandioquinha.png?v=639082523496970000",
-  productUrl: "https://secure.obahortifruti.com.br/mandioquinha/p"
+  productUrl: "https://secure.obahortifruti.com.br/mandioquinha/p",
+  popularity: 23
  },
  {
   sku: "oba-11163",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10395789/Melao-Amarelo-Rei-Kg.png?v=638765346489370000",
-  productUrl: "https://secure.obahortifruti.com.br/melao-amarelo-rei-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melao-amarelo-rei-kg/p",
+  popularity: 24
  },
  {
   sku: "oba-11397",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mexerica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522930/Mini-Tangerina-Importada-Oba-Bem-Querer.png?v=639183318440200000",
-  productUrl: "https://secure.obahortifruti.com.br/mini-tangerina-importada-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/mini-tangerina-importada-oba-bem-querer/p",
+  popularity: 25
  },
  {
   sku: "oba-5410",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4923145/Alface-Americana-Oba-200g.jpg?v=638268609763370000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-americana-oba-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-americana-oba-200g/p",
+  popularity: 26
  },
  {
   sku: "oba-12748",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482236/Laranja-Pera-Rio.jpg?v=639086824342370000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-rio/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-rio/p",
+  popularity: 27
  },
  {
   sku: "oba-8597",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras couve-flor",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8587177/Couve-Flor-250-G.png?v=638513815231570000",
-  productUrl: "https://secure.obahortifruti.com.br/couve-flor-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/couve-flor-250-g/p",
+  popularity: 28
  },
  {
   sku: "oba-9600",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas limao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4961346/Limao-Tahiti-Oba-Bem-Querer-1kg.png?v=638275595069170000",
-  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti-oba-bem-querer-1kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti-oba-bem-querer-1kg/p",
+  popularity: 29
  },
  {
   sku: "oba-7159",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas goiaba",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522711/Goiaba-Vermelha.jpg?v=639180780387170000",
-  productUrl: "https://secure.obahortifruti.com.br/goiaba-vermelha/p"
+  productUrl: "https://secure.obahortifruti.com.br/goiaba-vermelha/p",
+  popularity: 30
  },
  {
   sku: "oba-10816",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477087/Maca-Fuji.jpg?v=638991764280230000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-fuji/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-fuji/p",
+  popularity: 31
  },
  {
   sku: "oba-8173",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes beterraba",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5122516/Beterraba.jpg?v=638304897862270000",
-  productUrl: "https://secure.obahortifruti.com.br/beterraba/p"
+  productUrl: "https://secure.obahortifruti.com.br/beterraba/p",
+  popularity: 32
  },
  {
   sku: "oba-12633",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas kiwi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482200/Kiwi-Green-Importado-Italia.jpg?v=639086715737470000",
-  productUrl: "https://secure.obahortifruti.com.br/kiwi-green-importado-italia/p"
+  productUrl: "https://secure.obahortifruti.com.br/kiwi-green-importado-italia/p",
+  popularity: 33
  },
  {
   sku: "oba-4770",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492378/Maca-Gala.jpg?v=639134964376070000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-gala/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-gala/p",
+  popularity: 34
  },
  {
   sku: "oba-4749",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes berinjela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9949183/Berinjela-Kg.png?v=638677218468530000",
-  productUrl: "https://secure.obahortifruti.com.br/berinjela-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/berinjela-kg/p",
+  popularity: 35
  },
  {
   sku: "oba-2221",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes cebola",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477503/Cebola-Roxa-Importada.jpg?v=639014034440100000",
-  productUrl: "https://secure.obahortifruti.com.br/cebola-roxa-importada/p"
+  productUrl: "https://secure.obahortifruti.com.br/cebola-roxa-importada/p",
+  popularity: 36
  },
  {
   sku: "oba-9258",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas cereja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482146/Cereja-Importada-Oba-Bem-Querer---100g.jpg?v=639084110502300000",
-  productUrl: "https://secure.obahortifruti.com.br/cereja-importada-oba-bem-querer---100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cereja-importada-oba-bem-querer---100g/p",
+  popularity: 37
  },
  {
   sku: "oba-2983",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4961290/Mamao-Papaia-Oba-Bem-Querer-Caixa-Com-15-Kg.png?v=638275594286200000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-oba-bem-querer-caixa-com-1-5-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-oba-bem-querer-caixa-com-1-5-kg/p",
+  popularity: 38
  },
  {
   sku: "oba-12535",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8910740/Abacate-Kg.png?v=638580275529400000",
-  productUrl: "https://secure.obahortifruti.com.br/abacate-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacate-kg/p",
+  popularity: 39
  },
  {
   sku: "oba-11894",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481893/Laranja-Bahia-Importada.png?v=639083100091670000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-bahia-importada/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-bahia-importada/p",
+  popularity: 40
  },
  {
   sku: "oba-11847",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5904586/Queijo-Mucarela-Oba-Bem-Querer-Fatiado-500g.png?v=638412764962100000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-oba-bem-querer-fatiado-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-oba-bem-querer-fatiado-500g/p",
+  popularity: 41
  },
  {
   sku: "oba-450",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo caipira",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4923229/Ovo-Vermelho-Caipira-Oba-Bem-Querer-Com-20-Unidades.jpg?v=638268611005300000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-caipira-oba-bem-querer-com-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-caipira-oba-bem-querer-com-20-unidades/p",
+  popularity: 42
  },
  {
   sku: "oba-97",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11486893/Uva-Verde-Sem-Semente-500-G.jpg?v=639102162405300000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-verde-sem-semente-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-verde-sem-semente-500-g/p",
+  popularity: 43
  },
  {
   sku: "oba-64",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477483/Uva-Verde-Sem-Semente-Kg.jpg?v=639014028448370000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-verde-sem-semente-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-verde-sem-semente-kg/p",
+  popularity: 44
  },
  {
   sku: "oba-100013248",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras brocolis",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524432/Brocolis-Ramoso-Honest-200-G.jpg?v=639195450466670000",
-  productUrl: "https://secure.obahortifruti.com.br/brocolis-ramoso-honest-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/brocolis-ramoso-honest-200-g/p",
+  popularity: 45
  },
  {
   sku: "oba-100010068",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491282/File-Mignon-Bovino-Com-Cordao-Peca-A-Vacuo-Kg.png?v=639128994397930000",
-  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-peca-a-vacuo-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-peca-a-vacuo-kg/p",
+  popularity: 46
  },
  {
   sku: "oba-100009271",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobora",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473761/Abobora-Cabotia-Em-Cubos-Oba-Bem-Querer-500g.jpg?v=638835320894930000",
-  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-em-cubos-oba-bem-querer-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-em-cubos-oba-bem-querer-500g/p",
+  popularity: 47
  },
  {
   sku: "oba-100008542",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9279887/Laranja-Pera-Pacote-3kg.png?v=638607271438630000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-pacote-3kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-pacote-3kg/p",
+  popularity: 48
  },
  {
   sku: "oba-100007092",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474064/Maca-Pink-Lady-Kg.png?v=638847474435670000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-pink-lady-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-pink-lady-kg/p",
+  popularity: 49
  },
  {
   sku: "oba-225068",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475999/Azeite-Extravirgem-Portugues-Cobrancosa-Oba-Bem-Querer-500ml.jpg?v=638944279268400000",
-  productUrl: "https://secure.obahortifruti.com.br/azeite-extravirgem-portugues-cobrancosa-oba-bem-querer-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/azeite-extravirgem-portugues-cobrancosa-oba-bem-querer-500ml/p",
+  popularity: 50
  },
  {
   sku: "oba-100001638",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10025327/Melao-Amarelo-Rei-Descascado.png?v=638689963160430000",
-  productUrl: "https://secure.obahortifruti.com.br/melao-amarelo-rei-descascado/p"
+  productUrl: "https://secure.obahortifruti.com.br/melao-amarelo-rei-descascado/p",
+  popularity: 51
  },
  {
   sku: "oba-11081",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue peixes salmao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491288/File-Salmao-Com-Pele.png?v=639129000366130000",
-  productUrl: "https://secure.obahortifruti.com.br/file-salmao-com-pele/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-salmao-com-pele/p",
+  popularity: 52
  },
  {
   sku: "oba-10806",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras rucula",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10089534/Rucula-Baby-Higienizada-Oba-Bem-Querer-160-G.jpg?v=638701231270700000",
-  productUrl: "https://secure.obahortifruti.com.br/rucula-baby-higienizada-oba-bem-querer-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/rucula-baby-higienizada-oba-bem-querer-160-g/p",
+  popularity: 53
  },
  {
   sku: "oba-11592",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melancia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5191636/Melancia-Kg.jpg?v=638331429801830000",
-  productUrl: "https://secure.obahortifruti.com.br/melancia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melancia-kg/p",
+  popularity: 54
  },
  {
   sku: "oba-11776",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mexerica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8519702/Mexerica-Carioca.jpg?v=638502500951330000",
-  productUrl: "https://secure.obahortifruti.com.br/mexerica-carioca/p"
+  productUrl: "https://secure.obahortifruti.com.br/mexerica-carioca/p",
+  popularity: 55
  },
  {
   sku: "oba-7152",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473637/Couve-Manteiga-Organica-250g.jpg?v=638835320838870000",
-  productUrl: "https://secure.obahortifruti.com.br/couve-manteiga-organica-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/couve-manteiga-organica-250g/p",
+  popularity: 56
  },
  {
   sku: "oba-6540",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173519/Mamao-Formosa-Oba-Bem-Querer.jpg?v=638716926479800000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-oba-bem-querer/p",
+  popularity: 57
  },
  {
   sku: "oba-6846",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10860939/Alface-Americana.png?v=638811805369930000",
-  productUrl: "https://secure.obahortifruti.com.br/cortes-de-alface-americana/p"
+  productUrl: "https://secure.obahortifruti.com.br/cortes-de-alface-americana/p",
+  popularity: 58
  },
  {
   sku: "oba-8587",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes alho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476883/Alho-Roxo-Na-Bandeja.png?v=638986307422000000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-na-bandeja/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-na-bandeja/p",
+  popularity: 59
  },
  {
   sku: "oba-10547",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas kiwi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9342548/Kiwi-Sungold-Zespri.png?v=638612238645200000",
-  productUrl: "https://secure.obahortifruti.com.br/kiwi-sungold-zespri/p"
+  productUrl: "https://secure.obahortifruti.com.br/kiwi-sungold-zespri/p",
+  popularity: 60
  },
  {
   sku: "oba-8171",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9025938/Uva-Algodao-Doce-500-Gr.png?v=638589919497600000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-algodao-doce-500-gr/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-algodao-doce-500-gr/p",
+  popularity: 61
  },
  {
   sku: "oba-8224",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mexerica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9594352/Tangerina-Importada-Kg.png?v=638631426988670000",
-  productUrl: "https://secure.obahortifruti.com.br/tangerina-importada-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/tangerina-importada-kg/p",
+  popularity: 62
  },
  {
   sku: "oba-8174",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobora",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5147632/Abobora-Cabotia-Fatiada-Kg.png?v=638311810390400000",
-  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-fatiada-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-fatiada-kg/p",
+  popularity: 63
  },
  {
   sku: "oba-12651",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478151/Tomate-Italiano-Oba-Bem-Querer-600-G.jpg?v=639041682416330000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano-oba-bem-querer-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano-oba-bem-querer-600-g/p",
+  popularity: 64
  },
  {
   sku: "oba-6317",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria salames",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5904574/Salame-Italiano-Finissimo-Oba-Bem-Querer-Kg.jpg?v=638412764776330000",
-  productUrl: "https://secure.obahortifruti.com.br/salame-italiano-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/salame-italiano-finissimo-oba-bem-querer-kg/p",
+  popularity: 65
  },
  {
   sku: "oba-3740",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas ameixa",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10728886/Ameixa-Importada-Obq-Pr-Kg.jpg?v=638792274865770000",
-  productUrl: "https://secure.obahortifruti.com.br/ameixa-black-importada-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/ameixa-black-importada-kg/p",
+  popularity: 66
  },
  {
   sku: "oba-12252",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522449/Cheiro-Verde-Hidroponico-Unidade.png?v=639179220373930000",
-  productUrl: "https://secure.obahortifruti.com.br/cheiro-verde-hidroponico-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/cheiro-verde-hidroponico-unidade/p",
+  popularity: 67
  },
  {
   sku: "oba-4764",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes pimentao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8656746/Pimentao-Vermelho-Extra.png?v=638525982839700000",
-  productUrl: "https://secure.obahortifruti.com.br/pimentao-vermelho-extra/p"
+  productUrl: "https://secure.obahortifruti.com.br/pimentao-vermelho-extra/p",
+  popularity: 68
  },
  {
   sku: "oba-11425",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476233/Nhoque-Italiano-De-Batata-Oba-Bem-Querer-500-G.png?v=638955264360830000",
-  productUrl: "https://secure.obahortifruti.com.br/nhoque-italiano-de-batata-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/nhoque-italiano-de-batata-oba-bem-querer-500-g/p",
+  popularity: 69
  },
  {
   sku: "oba-4773",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477291/Uva-Vermelha-Sem-Semente.jpg?v=639008123325700000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-vermelha-sem-semente/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-vermelha-sem-semente/p",
+  popularity: 70
  },
  {
   sku: "oba-3721",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473999/Uva-Vitoria-500-G.png?v=638842070732400000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-vitoria-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-vitoria-500-g/p",
+  popularity: 71
  },
  {
   sku: "oba-11373",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9848998/Tomate-Carmem-Extra-Kg.jpg?v=638661702453000000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-carmem-extra-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-carmem-extra-kg/p",
+  popularity: 72
  },
  {
   sku: "oba-12754",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mexerica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473677/Tangerina-Murcott.jpg?v=638835320857030000",
-  productUrl: "https://secure.obahortifruti.com.br/tangerina-murcott/p"
+  productUrl: "https://secure.obahortifruti.com.br/tangerina-murcott/p",
+  popularity: 73
  },
  {
   sku: "oba-6135",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas morango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475438/Morango-Premium-250-G.jpg?v=638926722379900000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-premium-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-premium-250-g/p",
+  popularity: 74
  },
  {
   sku: "oba-2774",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523828/File-De-Frango-Kg.png?v=639189486583800000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-frango-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-frango-kg/p",
+  popularity: 75
  },
  {
   sku: "oba-12510",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo caipira",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518684/Ovo-Vermelho-Caipira-Oba-Bem-Querer-Com-10-Unidades.png?v=639155910846130000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-caipira-oba-bem-querer-com-10-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-caipira-oba-bem-querer-com-10-unidades/p",
+  popularity: 76
  },
  {
   sku: "oba-10694",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco natural",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6148743/Suco-De-Laranja-Oba-Bem-Querer-Sem-Casca-17l.png?v=638456683194170000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-laranja-oba-bem-querer-sem-casca-1-7l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-laranja-oba-bem-querer-sem-casca-1-7l/p",
+  popularity: 77
  },
  {
   sku: "oba-11124",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519785/Maca-Oba-Bem-Querer-Vitaminics-1-Kg.jpg?v=639162192562430000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-oba-bem-querer-vitaminics-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-oba-bem-querer-vitaminics-1-kg/p",
+  popularity: 78
  },
  {
   sku: "oba-6867",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes milho verde",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6041757/Milho-Verde-700-G.png?v=638435083408130000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-verde-700-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-verde-700-g/p",
+  popularity: 79
  },
  {
   sku: "oba-6097",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes quiabo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5029957/Quiabo-Oba-Bem-Querer-300-G.jpg?v=638287510471200000",
-  productUrl: "https://secure.obahortifruti.com.br/quiabo-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/quiabo-oba-bem-querer-300-g/p",
+  popularity: 80
  },
  {
   sku: "oba-12253",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492361/Abacate-Avocado.jpg?v=639134958371900000",
-  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado/p",
+  popularity: 81
  },
  {
   sku: "oba-8175",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melancia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476363/Melancia-Descascada-E-Fatiada.png?v=638960479633270000",
-  productUrl: "https://secure.obahortifruti.com.br/melancia-descascada-e-fatiada/p"
+  productUrl: "https://secure.obahortifruti.com.br/melancia-descascada-e-fatiada/p",
+  popularity: 82
  },
  {
   sku: "oba-7730",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10105189/Pao-De-Queijo-Gourmet-Oba-Bem-Querer-400g.png?v=638703822972400000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-gourmet-oba-bem-querer-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-gourmet-oba-bem-querer-400g/p",
+  popularity: 83
  },
  {
   sku: "oba-10823",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5692012/Morango-Organico-250g.png?v=638390190734770000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-organico-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-organico-250g/p",
+  popularity: 84
  },
  {
   sku: "oba-1077",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas atemoia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473537/Atemoia-Kg.jpg?v=638835320793800000",
-  productUrl: "https://secure.obahortifruti.com.br/atemoia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/atemoia-kg/p",
+  popularity: 85
  },
  {
   sku: "oba-8178",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras rucula",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446396/Rucula-Hidroponica-Unidade.jpg?v=638498190652270000",
-  productUrl: "https://secure.obahortifruti.com.br/rucula-hidroponica-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/rucula-hidroponica-unidade/p",
+  popularity: 86
  },
  {
   sku: "oba-1122",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5094930/Gengibre.png?v=638298813925730000",
-  productUrl: "https://secure.obahortifruti.com.br/gengibre/p"
+  productUrl: "https://secure.obahortifruti.com.br/gengibre/p",
+  popularity: 87
  },
  {
   sku: "oba-7876",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas limao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523372/Limao-Siciliano-Kg.jpg?v=639186798380730000",
-  productUrl: "https://secure.obahortifruti.com.br/limao-siciliano/p"
+  productUrl: "https://secure.obahortifruti.com.br/limao-siciliano/p",
+  popularity: 88
  },
  {
   sku: "oba-759",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10208083/Alho-Poro-Unidade.png?v=638724688862100000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-poro-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-poro-unidade/p",
+  popularity: 89
  },
  {
   sku: "oba-8594",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes pimentao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6092633/Pimentao-Amarelo-Extra.png?v=638444658811430000",
-  productUrl: "https://secure.obahortifruti.com.br/pimentao-amarelo-extra/p"
+  productUrl: "https://secure.obahortifruti.com.br/pimentao-amarelo-extra/p",
+  popularity: 90
  },
  {
   sku: "oba-6504",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue peixes tilapia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477964/File-De-Tilapia-Congelado-Oba-Bem-Querer-400g.png?v=639039058461100000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-tilapia-congelado-oba-bem-querer-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-tilapia-congelado-oba-bem-querer-400g/p",
+  popularity: 91
  },
  {
   sku: "oba-1137",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477038/Queijo-Mussarela-Oba-Bem-Querer-Fatiado-250g.jpg?v=638991574792000000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-oba-bem-querer-fatiado-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-oba-bem-querer-fatiado-250g/p",
+  popularity: 92
  },
  {
   sku: "oba-7",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518681/Tomate-Pelado-Oba-Bem-Querer-400-G.jpg?v=639155910810700000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-pelado-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-pelado-oba-bem-querer-400-g/p",
+  popularity: 93
  },
  {
   sku: "oba-100011440",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518197/Salada-Fresquissima-Higienizada-Oba-Bem-Querer-140-G.jpg?v=639155706626770000",
-  productUrl: "https://secure.obahortifruti.com.br/salada-fresquissima-higienizada-oba-bem-querer-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/salada-fresquissima-higienizada-oba-bem-querer-140-g/p",
+  popularity: 94
  },
  {
   sku: "oba-100011181",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518783/Queijo-Minas-Frescal-Feito-Com-Leite-A2-Oba-Bem-Querer.jpg?v=639155911625930000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-feito-com-leite-a2-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-feito-com-leite-a2-oba-bem-querer/p",
+  popularity: 95
  },
  {
   sku: "oba-100011180",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518780/Queijo-Minas-Frescal-Feito-Com-Leite-A-Oba-Bem-Querer.jpg?v=639155911603770000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-feito-com-leite-a-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-feito-com-leite-a-oba-bem-querer/p",
+  popularity: 96
  },
  {
   sku: "oba-100010987",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478213/Suco-De-Laranja-Integral-Sem-Casca-Oba-Bem-Querer-900ml.jpg?v=639045336673770000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-laranja-integral-sem-casca-oba-bem-querer-900ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-laranja-integral-sem-casca-oba-bem-querer-900ml/p",
+  popularity: 97
  },
  {
   sku: "oba-100010923",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492383/Pao-Mini-Brioche-Casa-Do-Pao-220-G.jpg?v=639134964444700000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-mini-brioche-casa-do-pao-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-mini-brioche-casa-do-pao-220-g/p",
+  popularity: 98
  },
  {
   sku: "oba-100010613",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478388/Biscoito-Importado-Recheado-Com-Ferrero-Nutella-Biscuits-304-G.jpg?v=639047100854000000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-importado-recheado-com-ferrero-nutella-biscuits-304-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-importado-recheado-com-ferrero-nutella-biscuits-304-g/p",
+  popularity: 99
  },
  {
   sku: "oba-100009658",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10735606/Alho-Poro-Picado-Oba-Bem-Querer-200g.png?v=638793027636230000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-poro-picado-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-poro-picado-oba-bem-querer-200g/p",
+  popularity: 100
  },
  {
   sku: "oba-100009212",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520844/Pao-Mini-Batata-Mercado-Casa-Do-Pao-280-G.jpg?v=639174733232730000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-mini-batata-mercado-casa-do-pao-280-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-mini-batata-mercado-casa-do-pao-280-g/p",
+  popularity: 101
  },
  {
   sku: "oba-100008849",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9002107/Strogonoff-De-Frango-Kg.png?v=638588226947430000",
-  productUrl: "https://secure.obahortifruti.com.br/strogonoff-de-frango-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/strogonoff-de-frango-kg/p",
+  popularity: 102
  },
  {
   sku: "oba-100008438",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475507/Azeite-Italiano-Antico-Frantoio-Extra-Virgem-500-Ml.jpg?v=638932746392270000",
-  productUrl: "https://secure.obahortifruti.com.br/azeite-italiano-antico-frantoio-extra-virgem-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/azeite-italiano-antico-frantoio-extra-virgem-500-ml/p",
+  popularity: 103
  },
  {
   sku: "oba-100008275",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9849155/Pao-De-Forma-Integral-Fermentacao-Natural-Oba-Bem-Querer-500-G.jpg?v=638661704187700000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-integral-fermentacao-natural-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-integral-fermentacao-natural-oba-bem-querer-500-g/p",
+  popularity: 104
  },
  {
   sku: "oba-100007362",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia utilidades",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5088935/Papel-Toalha-2un-Branco-Com-120-Folhas-Snob.png?v=638297628026500000",
-  productUrl: "https://secure.obahortifruti.com.br/papel-toalha-2un-branco-com-120-folhas-snob/p"
+  productUrl: "https://secure.obahortifruti.com.br/papel-toalha-2un-branco-com-120-folhas-snob/p",
+  popularity: 105
  },
  {
   sku: "oba-100000802",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes cenoura",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477484/Cenoura-Baby-Importada-250-G.jpg?v=639014028458070000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-baby-importada-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-baby-importada-250-g/p",
+  popularity: 106
  },
  {
   sku: "oba-100001582",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523830/Filezinho-De-Frango-Sassami-Kg.png?v=639189486602900000",
-  productUrl: "https://secure.obahortifruti.com.br/filezinho-de-frango-sassami-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/filezinho-de-frango-sassami-kg/p",
+  popularity: 107
  },
  {
   sku: "oba-100002044",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos lagarto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6092687/Lagarto-Bovino-Kg.png?v=638444659472470000",
-  productUrl: "https://secure.obahortifruti.com.br/lagarto-bovino-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/lagarto-bovino-kg/p",
+  popularity: 108
  },
  {
   sku: "oba-100001147",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos patinho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10302570/Patinho-Bovino-Moido-Oba.png?v=638749866573330000",
-  productUrl: "https://secure.obahortifruti.com.br/patinho-bovino-moido-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/patinho-bovino-moido-oba/p",
+  popularity: 109
  },
  {
   sku: "oba-13078",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5506877/File-Mignon-Bovino-Especial-Oba-Selecao-Dia-A-Dia-As.png?v=638377483919900000",
-  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-especial-oba-selecao-dia-a-dia-as/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-especial-oba-selecao-dia-a-dia-as/p",
+  popularity: 110
  },
  {
   sku: "oba-100000910",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491151/Manteiga-Pote-Com-Sal-Aviacao-200g.jpg?v=639128910388900000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-pote-com-sal-aviacao-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-pote-com-sal-aviacao-200g/p",
+  popularity: 111
  },
  {
   sku: "oba-13188",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia conservas & enlatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473681/Palmito-Pupunha-Oba-Bem-Querer-Tolete-Em-Conserva-300g.jpg?v=638835320857800000",
-  productUrl: "https://secure.obahortifruti.com.br/palmito-pupunha-oba-bem-querer-tolete-em-conserva-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palmito-pupunha-oba-bem-querer-tolete-em-conserva-300g/p",
+  popularity: 112
  },
  {
   sku: "oba-7580",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10729185/Melao-Dino-Obq-Pr-Kg.png?v=638792310533030000",
-  productUrl: "https://secure.obahortifruti.com.br/melao-dino/p"
+  productUrl: "https://secure.obahortifruti.com.br/melao-dino/p",
+  popularity: 113
  },
  {
   sku: "oba-5093",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti cogumelos e brotos shimeji",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517530/Cogumelo-Shimeji-Preto-Hochibra-200-G.jpg?v=639149640454300000",
-  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shimeji-preto-hochibra-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shimeji-preto-hochibra-200-g/p",
+  popularity: 114
  },
  {
   sku: "oba-4426",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mandioca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473615/Mandioca-Descascada-E-Embalada-A-Vacuo-1-Kg.png?v=638835320829470000",
-  productUrl: "https://secure.obahortifruti.com.br/mandioca-descascada-e-embalada-a-vacuo-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/mandioca-descascada-e-embalada-a-vacuo-1-kg/p",
+  popularity: 115
  },
  {
   sku: "oba-8327",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522734/Banana-Prata-Organica-600-G.jpg?v=639180786374000000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-prata-organica-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-prata-organica-600-g/p",
+  popularity: 116
  },
  {
   sku: "oba-8601",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5146824/Tomate-Holandes-Rama.png?v=638311557953770000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-holandes-rama/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-holandes-rama/p",
+  popularity: 117
  },
  {
   sku: "oba-10533",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maracuja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476325/Maracuja-Azedo.jpg?v=638960403268400000",
-  productUrl: "https://secure.obahortifruti.com.br/maracuja-azedo/p"
+  productUrl: "https://secure.obahortifruti.com.br/maracuja-azedo/p",
+  popularity: 118
  },
  {
   sku: "oba-12257",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti cogumelos e brotos shitake",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517525/Cogumelo-Shitake-Fatiado-Cogus-200-G.jpg?v=639149640388170000",
-  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shitake-fatiado-cogus-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shitake-fatiado-cogus-200-g/p",
+  popularity: 119
  },
  {
   sku: "oba-6827",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melancia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10090836/Melancia-Pingo-Doce-Vermelha-Com-Casca-Fatiada-Kg.png?v=638701447247130000",
-  productUrl: "https://secure.obahortifruti.com.br/melancia-pingo-doce-vermelha-com-casca-fatiada-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melancia-pingo-doce-vermelha-com-casca-fatiada-kg/p",
+  popularity: 120
  },
  {
   sku: "oba-6843",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas banana",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481641/Banana-Maca-Kg.jpg?v=639080788900000000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-maca-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-maca-kg/p",
+  popularity: 121
  },
  {
   sku: "oba-10815",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes pimentao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477427/Pimentao-Verde.jpg?v=639014010400500000",
-  productUrl: "https://secure.obahortifruti.com.br/pimentao-verde/p"
+  productUrl: "https://secure.obahortifruti.com.br/pimentao-verde/p",
+  popularity: 122
  },
  {
   sku: "oba-5903",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446531/Presunto-Sadia-Fatiado-Kg.png?v=638498190775430000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-sadia-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-sadia-fatiado-kg/p",
+  popularity: 123
  },
  {
   sku: "oba-8347",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9964639/Morango-Premium-Organico-250-G.jpg?v=638679775559270000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-premium-organico-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-premium-organico-250-g/p",
+  popularity: 124
  },
  {
   sku: "oba-8169",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5692016/Tomate-Italiano-Organico-500-G.png?v=638390190788400000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano-organico-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-italiano-organico-500-g/p",
+  popularity: 125
  },
  {
   sku: "oba-7242",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5692004/Batata-Inglesa-Organica-600-G.png?v=638390190611600000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-inglesa-organica-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-inglesa-organica-600-g/p",
+  popularity: 126
  },
  {
   sku: "oba-6865",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacaxi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475212/Abacaxi-Perola-Descascado-Oba.jpg?v=638908548879970000",
-  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-descascado-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-descascado-oba/p",
+  popularity: 127
  },
  {
   sku: "oba-12740",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4253255/Mini-Pao-Frances-Oba.jpg?v=638144114407730000",
-  productUrl: "https://secure.obahortifruti.com.br/mini-pao-frances-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/mini-pao-frances-oba/p",
+  popularity: 128
  },
  {
   sku: "oba-12639",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva com semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477501/Uva-Niagara.jpg?v=639014034415500000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-niagara/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-niagara/p",
+  popularity: 129
  },
  {
   sku: "oba-10628",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523832/File-Mignon-Suino-Especial-Kg.png?v=639189486623400000",
-  productUrl: "https://secure.obahortifruti.com.br/file-mignon-suino-especial-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-mignon-suino-especial-kg/p",
+  popularity: 130
  },
  {
   sku: "oba-3507",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas morango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522933/Morango-Bandeja-800g.jpg?v=639183318486830000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-bandeja-800g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-bandeja-800g/p",
+  popularity: 131
  },
  {
   sku: "oba-8944",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523816/Peito-Frango-Sem-Osso-Kg.png?v=639189486447300000",
-  productUrl: "https://secure.obahortifruti.com.br/peito-frango-sem-osso-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/peito-frango-sem-osso-kg/p",
+  popularity: 132
  },
  {
   sku: "oba-11600",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas banana",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10918623/Banana-Da-Terra.jpg?v=638824962926000000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-da-terra/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-da-terra/p",
+  popularity: 133
  },
  {
   sku: "oba-12634",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8519708/Maca-Granny-Smith.jpg?v=638502501017300000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-granny-smith/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-granny-smith/p",
+  popularity: 134
  },
  {
   sku: "oba-9213",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9521326/Requeijao-Cremoso-Light-Catupiry-200-G.png?v=638625452670270000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-catupiry-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-catupiry-200-g/p",
+  popularity: 135
  },
  {
   sku: "oba-3764",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6061521/Alface-Lisa-Hidroponica.png?v=638438754590430000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-lisa-hidroponica/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-lisa-hidroponica/p",
+  popularity: 136
  },
  {
   sku: "oba-5823",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva sem semente",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475946/Uva-Vermelha-Sem-Semente-500-G.png?v=638942335730070000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-vermelha-sem-semente-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-vermelha-sem-semente-500-g/p",
+  popularity: 137
  },
  {
   sku: "oba-4607",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10089782/Queijo-Mozzarella-Oba-Bem-Querer-Bufala-160g.jpg?v=638701267501970000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mozzarella-oba-bem-querer-bufala-160g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mozzarella-oba-bem-querer-bufala-160g/p",
+  popularity: 138
  },
  {
   sku: "oba-6469",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos contrafile",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6061612/Contra-File-Bovino-Bife-Selecao-Dia-A-Dia-Kg.png?v=638438755750800000",
-  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-bife-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-bife-selecao-dia-a-dia-kg/p",
+  popularity: 139
  },
  {
   sku: "oba-10403",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobora",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8519694/Abobora-Cabotia-Kg.jpg?v=638502500873670000",
-  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-kg/p",
+  popularity: 140
  },
  {
   sku: "oba-7578",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6157809/Laranja-Lima-Kg.png?v=638461110560830000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-lima-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-lima-kg/p",
+  popularity: 141
  },
  {
   sku: "oba-8577",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras espinafre",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5430866/Espinafre-Hidroponico-Higienizado-Oba-Bem-Querer-140-G.png?v=638371979020930000",
-  productUrl: "https://secure.obahortifruti.com.br/espinafre-hidroponico-higienizado-oba-bem-querer-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/espinafre-hidroponico-higienizado-oba-bem-querer-140-g/p",
+  popularity: 142
  },
  {
   sku: "oba-11044",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5176937/Batata-Doce-Rosada-Organica-600-G.png?v=638323617961300000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-doce-rosada-organica-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-doce-rosada-organica-600-g/p",
+  popularity: 143
  },
  {
   sku: "oba-11046",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5506772/Coentro-Hidroponico.png?v=638377482623730000",
-  productUrl: "https://secure.obahortifruti.com.br/coentro-hidroponico/p"
+  productUrl: "https://secure.obahortifruti.com.br/coentro-hidroponico/p",
+  popularity: 144
  },
  {
   sku: "oba-6107",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518687/Pao-Croissant-Oba-Bem-Querer-300g.png?v=639155910869800000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-croissant-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-croissant-oba-bem-querer-300g/p",
+  popularity: 145
  },
  {
   sku: "oba-11698",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5904572/Presunto-Finissimo-Oba-Bem-Querer-Kg.jpg?v=638412764748330000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-finissimo-oba-bem-querer-kg/p",
+  popularity: 146
  },
  {
   sku: "oba-1953",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522793/Abacate-Avocado-Green-Kg.png?v=639180915123770000",
-  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado-green-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado-green-kg/p",
+  popularity: 147
  },
  {
   sku: "oba-8904",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes vagem",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474809/Vagem-Americana-Oba-Bem-Querer-300g.png?v=638895598060630000",
-  productUrl: "https://secure.obahortifruti.com.br/vagem-americana-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/vagem-americana-oba-bem-querer-300g/p",
+  popularity: 148
  },
  {
   sku: "oba-5401",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes batata",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250074/Batata-Asterix.jpg?v=638144112145800000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-asterix/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-asterix/p",
+  popularity: 149
  },
  {
   sku: "oba-2806",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258823/Banana-Prata-Do-Sul-De-Minas-Oba-Bem-Querer.jpg?v=638912913275070000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-prata-do-sul-de-minas-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-prata-do-sul-de-minas-oba-bem-querer/p",
+  popularity: 150
  },
  {
   sku: "oba-5104",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras rucula",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481988/Rucula-Higienizada-Pronto--160-G.jpg?v=639083118449400000",
-  productUrl: "https://secure.obahortifruti.com.br/rucula-higienizada-pronto--160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/rucula-higienizada-pronto--160-g/p",
+  popularity: 151
  },
  {
   sku: "oba-11712",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas frutas congeladas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8657177/Polpa-De-Maracuja-Oba-Bem-Querer-500-Ml.png?v=638526055547300000",
-  productUrl: "https://secure.obahortifruti.com.br/polpa-de-maracuja-oba-bem-querer-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/polpa-de-maracuja-oba-bem-querer-500-ml/p",
+  popularity: 152
  },
  {
   sku: "oba-4539",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos patinho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523840/Almondega-De-Carne-Bovina-E-Suina-Resfriada-Selecao-Dia-A-Dia-480-G.png?v=639189486732430000",
-  productUrl: "https://secure.obahortifruti.com.br/almondega-de-carne-bovina-e-suina-resfriada-selecao-dia-a-dia-480-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/almondega-de-carne-bovina-e-suina-resfriada-selecao-dia-a-dia-480-g/p",
+  popularity: 153
  },
  {
   sku: "oba-7884",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480255/Mamao-Papaia-Sem-Semente-Oba-Bem-Querer-Kg.jpg?v=639065829121700000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-sem-semente-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-papaia-sem-semente-oba-bem-querer-kg/p",
+  popularity: 154
  },
  {
   sku: "oba-2209",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481998/Alface-Mimosa-Hidroponica-Unidade.jpg?v=639083124402900000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-mimosa-hidroponica-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-mimosa-hidroponica-unidade/p",
+  popularity: 155
  },
  {
   sku: "oba-7477",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobrinha",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8610432/Abobrinha-Italiana-Espaguete-300g.png?v=638517380975030000",
-  productUrl: "https://secure.obahortifruti.com.br/abobrinha-italiana-espaguete-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobrinha-italiana-espaguete-300g/p",
+  popularity: 156
  },
  {
   sku: "oba-1558",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446355/Alface-Crespa-Hidroponica.jpg?v=638498190612100000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-hidroponica/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-hidroponica/p",
+  popularity: 157
  },
  {
   sku: "oba-6848",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras brocolis",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251634/Brocolis-Ninja-Floretes-Oba.jpg?v=638144113294500000",
-  productUrl: "https://secure.obahortifruti.com.br/brocolis-ninja-floretes-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/brocolis-ninja-floretes-oba/p",
+  popularity: 158
  },
  {
   sku: "oba-10409",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas manga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522735/Manga-Palmer-Cortada.jpg?v=639180786388500000",
-  productUrl: "https://secure.obahortifruti.com.br/manga-palmer-cortada/p"
+  productUrl: "https://secure.obahortifruti.com.br/manga-palmer-cortada/p",
+  popularity: 159
  },
  {
   sku: "oba-9261",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras repolho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520842/Repolho-Verde-Liso.jpg?v=639174733205630000",
-  productUrl: "https://secure.obahortifruti.com.br/repolho-verde-liso/p"
+  productUrl: "https://secure.obahortifruti.com.br/repolho-verde-liso/p",
+  popularity: 160
  },
  {
   sku: "oba-1316",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes inhame",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250190/Inhame.jpg?v=638144112236400000",
-  productUrl: "https://secure.obahortifruti.com.br/inhame/p"
+  productUrl: "https://secure.obahortifruti.com.br/inhame/p",
+  popularity: 161
  },
  {
   sku: "oba-1250",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6421389/Presunto-Serrano-Espanhol-Fatiado-Oba-Bem-Querer-100-G.png?v=638474947121600000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-serrano-espanhol-fatiado-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-serrano-espanhol-fatiado-oba-bem-querer-100-g/p",
+  popularity: 162
  },
  {
   sku: "oba-1537",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria peito de peru & frango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6148741/Peito-De-Peru-Cozido-E-Defumado-Finissimo-Oba-Bem-Querer-Kg.png?v=638456683171770000",
-  productUrl: "https://secure.obahortifruti.com.br/peito-de-peru-cozzido-e-defumado-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/peito-de-peru-cozzido-e-defumado-finissimo-oba-bem-querer-kg/p",
+  popularity: 163
  },
  {
   sku: "oba-10990",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525270/Queijo-Mucarela-Scala-Fatiado.png?v=639205151508500000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-scala-fatiado/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-scala-fatiado/p",
+  popularity: 164
  },
  {
   sku: "oba-1834",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue peixes tilapia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8703436/File-De-Tilapia-Oba.png?v=638537971123530000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-tilapia-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-tilapia-oba/p",
+  popularity: 165
  },
  {
   sku: "oba-378",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas pera",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477010/Pera-Rocha-Portuguesa.jpg?v=638987275826830000",
-  productUrl: "https://secure.obahortifruti.com.br/pera-rocha-portuguesa/p"
+  productUrl: "https://secure.obahortifruti.com.br/pera-rocha-portuguesa/p",
+  popularity: 166
  },
  {
   sku: "oba-453",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522714/Tomate-Sweet-Grape-Organico-180-G.jpg?v=639180780424970000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-sweet-grape-organico-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-sweet-grape-organico-180-g/p",
+  popularity: 167
  },
  {
   sku: "oba-81",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8519707/Maca-Red-Delicious-Kg.jpg?v=638502501008070000",
-  productUrl: "https://secure.obahortifruti.com.br/maca-red-delicious-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/maca-red-delicious-kg/p",
+  popularity: 168
  },
  {
   sku: "oba-100012356",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519826/Batata-Chips-Rustica-Oba-Bem-Querer-125-G.png?v=639165176536670000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-chips-rustica-oba-bem-querer-125-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-chips-rustica-oba-bem-querer-125-g/p",
+  popularity: 169
  },
  {
   sku: "oba-100011949",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518792/Chips-Morango-Oba-Bem-Querer-160-G.jpg?v=639155911688170000",
-  productUrl: "https://secure.obahortifruti.com.br/chips-morango-oba-bem-querer-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chips-morango-oba-bem-querer-160-g/p",
+  popularity: 170
  },
  {
   sku: "oba-100011740",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas coco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478529/Agua-De-Coco-Integral-Oba-Bem-Querer-1l.png?v=639051405764300000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-de-coco-integral-oba-bem-querer-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-de-coco-integral-oba-bem-querer-1l/p",
+  popularity: 171
  },
  {
   sku: "oba-100011572",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11479700/Barra-De-Chocolate-Milka-Biscoff-90-G.png?v=639059827154800000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-milka-biscoff-90-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-milka-biscoff-90-g/p",
+  popularity: 172
  },
  {
   sku: "oba-100011066",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478384/Biscoito-Polones-Wafer-Tago-Creme-Caramelo-Salgado-150-G.jpg?v=639047100804000000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-polones-wafer-tago-creme-caramelo-salgado-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-polones-wafer-tago-creme-caramelo-salgado-150-g/p",
+  popularity: 173
  },
  {
   sku: "oba-100010970",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais isotonicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483385/Hydro-Protein-Moving-Frutas-Vermelhas-500ml.jpg?v=639098688587230000",
-  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-frutas-vermelhas-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-frutas-vermelhas-500ml/p",
+  popularity: 174
  },
  {
   sku: "oba-100010778",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas frutas congeladas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475771/Morango-Newberry-102kg.png?v=638938020369700000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-newberry-1-02kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-newberry-1-02kg/p",
+  popularity: 175
  },
  {
   sku: "oba-100010722",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475629/Barra-De-Chocolate-Importado-Com-Creme-De-Cacau-Milka-100-G.png?v=638936298382200000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-importado-com-creme-de-cacau-milka-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-importado-com-creme-de-cacau-milka-100-g/p",
+  popularity: 176
  },
  {
   sku: "oba-100010671",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476773/Queijo-Minas-Padrao-Dor-Selecao-400-G.png?v=638983721157830000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padrao-dor-selecao-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padrao-dor-selecao-400-g/p",
+  popularity: 177
  },
  {
   sku: "oba-100010609",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475406/Biscoito-De-Chocolate-Kinder-Cards-128g.jpg?v=638923248364270000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-importado-de-chocolate-kinder-cards-128g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-importado-de-chocolate-kinder-cards-128g/p",
+  popularity: 178
  },
  {
   sku: "oba-100010370",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo vermelho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474797/Ovos-Grandes-E-Branco-Cage-Free-Acrilico-20-Unidades.png?v=638894796767270000",
-  productUrl: "https://secure.obahortifruti.com.br/ovos-grandes-e-branco-cage-free-acrilico-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovos-grandes-e-branco-cage-free-acrilico-20-unidades/p",
+  popularity: 179
  },
  {
   sku: "oba-100010312",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478385/Queijo-De-Coalho-Tradicional-Oba-Bem-Querer-300-G.jpg?v=639047100816670000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-de-coalho-tradicional-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-de-coalho-tradicional-oba-bem-querer-300-g/p",
+  popularity: 180
  },
  {
   sku: "oba-100010156",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua de coco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474374/Agua-De-Coco-Oba-Bem-Querer-500-Ml.jpg?v=638866256731200000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-coco-oba-bem-querer-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-coco-oba-bem-querer-500ml/p",
+  popularity: 181
  },
  {
   sku: "oba-100010010",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais isotonicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483384/Hydro-Protein-Moving-Uva-500ml.jpg?v=639098688573870000",
-  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-uva-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-uva-500ml/p",
+  popularity: 182
  },
  {
   sku: "oba-100010009",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais bebida proteica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483383/Hydro-Protein-Tangerina-Moving-500ml.jpg?v=639098688558700000",
-  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-tangerina-moving-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-tangerina-moving-500ml/p",
+  popularity: 183
  },
  {
   sku: "oba-100010008",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais bebida proteica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483382/Hydro-Protein-Moving-Limao-500ml.jpg?v=639098688549970000",
-  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-limao-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/hydro-protein-moving-limao-500ml/p",
+  popularity: 184
  },
  {
   sku: "oba-100009907",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477092/Queijo-Cottage-Tradicional-400g.jpg?v=638991764608730000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-tradicional-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-tradicional-400g/p",
+  popularity: 185
  },
  {
   sku: "oba-100009711",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474108/Pao-De-Forma-Tradicional-Sem-Casca-Oba-Bem-Querer-400g.jpg?v=638848278394100000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-tradicional-sem-casca-oba-bem-querer-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-tradicional-sem-casca-oba-bem-querer-400g/p",
+  popularity: 186
  },
  {
   sku: "oba-100009661",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10394558/Alho-Roxo-Triturado-Oba-Bem-Querer-180g.png?v=638765206001100000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-triturado-oba-bem-querer-180g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-triturado-oba-bem-querer-180g/p",
+  popularity: 187
  },
  {
   sku: "oba-100009313",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524805/Coxa-Com-Sobrecoxa-De-Frango-Sem-Osso-Temperada-Selecao-Dia-A-Dia-750g.jpg?v=639197214455270000",
-  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-sem-osso-frango-temperado-selecao-dia-a-dia-atm-750-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-sem-osso-frango-temperado-selecao-dia-a-dia-atm-750-g/p",
+  popularity: 188
  },
  {
   sku: "oba-100009295",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10394562/Vinagrete-Sem-Pimentao-Oba-Bem-Querer-300-G.png?v=638765206048330000",
-  productUrl: "https://secure.obahortifruti.com.br/vinagrete-sem-pimentao-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/vinagrete-sem-pimentao-oba-bem-querer-300-g/p",
+  popularity: 189
  },
  {
   sku: "oba-100009242",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10135892/Pao-De-Cenoura-Casa-Do-Pao-270-G.png?v=638709872549270000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-cenoura-casa-do-pao-270-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-cenoura-casa-do-pao-270-g/p",
+  popularity: 190
  },
  {
   sku: "oba-100009214",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520845/Pao-Do-Padre-Oba-240-G.jpg?v=639174733248130000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-do-padre-casa-do-pao-240-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-do-padre-casa-do-pao-240-g/p",
+  popularity: 191
  },
  {
   sku: "oba-100009084",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475633/Barra-De-Chocolate-Gianduia-Com-Avelas-Italiano-Novi-130-G.jpg?v=638936378295600000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-gianduia-com-avelas-italiano-novi-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-gianduia-com-avelas-italiano-novi-130-g/p",
+  popularity: 192
  },
  {
   sku: "oba-100008892",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488007/Leite-Integral-A2-Oba-Bem-Querer-1-L.jpg?v=639111819111430000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-integral-a2-oba-bem-querer-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-integral-a2-oba-bem-querer-1-l/p",
+  popularity: 193
  },
  {
   sku: "oba-100008605",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo branco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8731541/Ovo-Happy-Eggs-Branco-Mantiqueira-Com-20-Unidades.png?v=638545135597700000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-happy-eggs-branco-mantiqueira-com-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-happy-eggs-branco-mantiqueira-com-20-unidades/p",
+  popularity: 194
  },
  {
   sku: "oba-100008512",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos ovos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10314648/Ovos-Caipiras-Organicos-Oba-Bem-Querer-20-Unidades.jpg?v=638752460211500000",
-  productUrl: "https://secure.obahortifruti.com.br/ovos-caipiras-organicos-oba-bem-querer-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovos-caipiras-organicos-oba-bem-querer-20-unidades/p",
+  popularity: 195
  },
  {
   sku: "oba-100008274",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9849154/Pao-De-Forma-Fermentacao-Natural-Oba-Bem-Querer-500-G.jpg?v=638661704177600000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-fermentacao-natural-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-fermentacao-natural-oba-bem-querer-500-g/p",
+  popularity: 196
  },
  {
   sku: "oba-100007984",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos castanhas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518708/Castanha-De-Caju-Oba-Bem-Querer-Torrada-Salgada-500gg.jpg?v=639155911036870000",
-  productUrl: "https://secure.obahortifruti.com.br/castanha-de-caju-oba-bem-querer-torrada-salgada-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/castanha-de-caju-oba-bem-querer-torrada-salgada-500g/p",
+  popularity: 197
  },
  {
   sku: "oba-100007660",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518705/Waffle-Belga-Tipo-Liege-Congelado-Oba-Bem-Querer-200-G.jpg?v=639155911014800000",
-  productUrl: "https://secure.obahortifruti.com.br/waffle-belga-tipo-liege-congelado-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/waffle-belga-tipo-liege-congelado-oba-bem-querer-200-g/p",
+  popularity: 198
  },
  {
   sku: "oba-100007436",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes milho verde",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11479228/Milho-Doce-Pre-Cozido-Oba-Bem-Querer-450g.jpg?v=639059184504030000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-doce-pre-cozido-oba-bem-querer-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-doce-pre-cozido-oba-bem-querer-450g/p",
+  popularity: 199
  },
  {
   sku: "oba-100007413",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mexerica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474495/Tangerina-Ole-Kg.png?v=638875146378630000",
-  productUrl: "https://secure.obahortifruti.com.br/tangerina-ole-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/tangerina-ole-kg/p",
+  popularity: 200
  },
  {
   sku: "oba-100007364",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518162/Molho-Pesto-Genoves-Oba-Bem-Querer-190-G.png?v=639155694658130000",
-  productUrl: "https://secure.obahortifruti.com.br/molho-pesto-genoves-oba-bem-querer-190-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/molho-pesto-genoves-oba-bem-querer-190-g/p",
+  popularity: 201
  },
  {
   sku: "oba-100007020",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "higiene e limpeza cuidados pessoais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4722117/Papel-Higienico-Folha-Dupla-Neve-Com-12-Unidades.jpg?v=638237330549070000",
-  productUrl: "https://secure.obahortifruti.com.br/papel-higienico-folha-dupla-neve-com-12-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/papel-higienico-folha-dupla-neve-com-12-unidades/p",
+  popularity: 202
  },
  {
   sku: "oba-100006405",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480790/Mamao-Formosa-Sem-Semente-Oba.png?v=639074754366200000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-sem-semente-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-sem-semente-oba/p",
+  popularity: 203
  },
  {
   sku: "oba-100005938",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos ovos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477418/Ovo-Vermelho-Grande-Organico-Raiar-Com-10-Unidades.jpg?v=639014004473970000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-grande-organico-raiar-com-10-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-grande-organico-raiar-com-10-unidades/p",
+  popularity: 204
  },
  {
   sku: "oba-100005329",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522754/Geleia-Israelense-De-Frutas-Vermelhas-Oba-Bem-Querer-284-G.jpg?v=639180792551530000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-de-frutas-vermelhas-oba-bem-querer-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-de-frutas-vermelhas-oba-bem-querer-284-g/p",
+  popularity: 205
  },
  {
   sku: "oba-100004935",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras couve",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6168088/Couve-Fatiada-Oba.jpg?v=638465394849270000",
-  productUrl: "https://secure.obahortifruti.com.br/couve-fatiada-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/couve-fatiada-oba/p",
+  popularity: 206
  },
  {
   sku: "oba-100004713",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras verduras congelada",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481983/Brocolis-Florete-Congelado-Daucy-300-G.jpg?v=639083118390530000",
-  productUrl: "https://secure.obahortifruti.com.br/brocolis-florete-congelado-daucy-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/brocolis-florete-congelado-daucy-300-g/p",
+  popularity: 207
  },
  {
   sku: "oba-100000843",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6421343/Queijo-Parmesao-Cilindro-Faixa-Azul-195-G.png?v=638474946653530000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-cilindro-faixa-azul-195-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-cilindro-faixa-azul-195-g/p",
+  popularity: 208
  },
  {
   sku: "oba-100003210",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mamao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522736/Mamao-Formosa-Em-Pedacos-Oba-Bem-Querer.jpg?v=639180786403330000",
-  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-em-pedacos-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/mamao-formosa-em-pedacos-oba-bem-querer/p",
+  popularity: 209
  },
  {
   sku: "oba-100002350",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas secas fruta seca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258564/Uva-Passa-Preta-Sem-Semente-Oba-Bem-Querer-250-G.jpg?v=638144117871100000",
-  productUrl: "https://secure.obahortifruti.com.br/uva-passa-preta-sem-semente-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/uva-passa-preta-sem-semente-oba-bem-querer-250-g/p",
+  popularity: 210
  },
  {
   sku: "oba-100001429",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4255935/Iogurte-Natural-Desnatado-Nestle-160g.jpg?v=638144116153970000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-desnatado-nestle-160g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-desnatado-nestle-160g/p",
+  popularity: 211
  },
  {
   sku: "oba-100001795",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas coco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482000/Coco-Verde-Descascado.jpg?v=639083124433930000",
-  productUrl: "https://secure.obahortifruti.com.br/coco-verde-descascado/p"
+  productUrl: "https://secure.obahortifruti.com.br/coco-verde-descascado/p",
+  popularity: 212
  },
  {
   sku: "oba-13185",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas secas fruta seca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11487410/Mix-De-Castanha-Uva-Passa-Amendoas-E-Nozes-200-G.jpg?v=639108216362630000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-de-castanha--uva-passa--amendoas-e-nozes-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-de-castanha--uva-passa--amendoas-e-nozes-200-g/p",
+  popularity: 213
  },
  {
   sku: "oba-13135",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/7178178/File-Mignon-Bovino-Medalhao-Oba-Selecao-Dia-A-Dia-Kg.png?v=638483506061030000",
-  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-medalhao-oba-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-mignon-bovino-medalhao-oba-selecao-dia-a-dia-kg/p",
+  popularity: 214
  },
  {
   sku: "oba-13165",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6061550/Strogonoff-De-File-Mignon-Bovino-Selecao-Dia-A-Dia-Kg.png?v=638438755001630000",
-  productUrl: "https://secure.obahortifruti.com.br/strogonoff-de-file-mignon-bovino-selecao-dia-a-dia/p"
+  productUrl: "https://secure.obahortifruti.com.br/strogonoff-de-file-mignon-bovino-selecao-dia-a-dia/p",
+  popularity: 215
  },
  {
   sku: "oba-100002499",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes legumes congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480702/Ervilha-Finas-Daucy-300g.jpg?v=639074514396630000",
-  productUrl: "https://secure.obahortifruti.com.br/ervilha-finas-daucy-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ervilha-finas-daucy-300g/p",
+  popularity: 216
  },
  {
   sku: "oba-100001016",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10038455/Salsao-Embalado-Oba-Kg.png?v=638692014633300000",
-  productUrl: "https://secure.obahortifruti.com.br/bandeja-de-salsao-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/bandeja-de-salsao-oba/p",
+  popularity: 217
  },
  {
   sku: "oba-13085",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos file mignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/7181008/Bife-De-File-Mignon-Bovino-Oba-Selecao-Dia-A-Dia-Kg.jpg?v=638483537323930000",
-  productUrl: "https://secure.obahortifruti.com.br/bife-de-file-mignon-bovino-oba-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/bife-de-file-mignon-bovino-oba-selecao-dia-a-dia-kg/p",
+  popularity: 218
  },
  {
   sku: "oba-100003139",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475506/Tomate-Pelado-Italiano-La-Molisana-400-G.jpg?v=638932746384070000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-pelado-italiano-la-molisana-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-pelado-italiano-la-molisana-400-g/p",
+  popularity: 219
  },
  {
   sku: "oba-100000676",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517320/Milho-Torrado-Sabor-Mostarda-E-Mel-Oba-Bem-Querer-200-G.jpg?v=639144696411100000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-torrado-sabor-mostarda-e-mel-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-torrado-sabor-mostarda-e-mel-oba-bem-querer-200-g/p",
+  popularity: 220
  },
  {
   sku: "oba-13189",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518675/Goma-Pronta-Para-Tapioca-Oba-Bem-Querer-Na-Medida-Certa-560g.png?v=639155910763070000",
-  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-oba-bem-querer-na-medida-certa-560g/p"
+  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-oba-bem-querer-na-medida-certa-560g/p",
+  popularity: 221
  },
  {
   sku: "oba-12838",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10280330/Passata-De-Tomate-Italiana-Tradicional-La-Molisana-690-G.png?v=638744484876970000",
-  productUrl: "https://secure.obahortifruti.com.br/passata-de-tomate-italiana-tradicional-la-molisana-690-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/passata-de-tomate-italiana-tradicional-la-molisana-690-g/p",
+  popularity: 222
  },
  {
   sku: "oba-11076",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10253548/Refrigerante-Coca-Cola-Zero-600-Ml.png?v=638737770733430000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-600-ml-21907-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-600-ml-21907-1/p",
+  popularity: 223
  },
  {
   sku: "oba-11092",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446865/Refrigerante-Coca-Cola-Zero-350-Ml.jpg?v=638498191080800000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-350-ml-21896-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-350-ml-21896-1/p",
+  popularity: 224
  },
  {
   sku: "oba-10621",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos linguica suina",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5176894/Linguica-Calabresa-Cozida-E-Defumada-Selecao-Dia-A-Dia-Kg.png?v=638323617843230000",
-  productUrl: "https://secure.obahortifruti.com.br/linguica-calabresa-cozida-e-defumada-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/linguica-calabresa-cozida-e-defumada-selecao-dia-a-dia-kg/p",
+  popularity: 225
  },
  {
   sku: "oba-6461",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras couve",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481999/Couve-Maco-Unidade.jpg?v=639083124418500000",
-  productUrl: "https://secure.obahortifruti.com.br/couve-maco-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/couve-maco-unidade/p",
+  popularity: 226
  },
  {
   sku: "oba-9735",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517419/Presunto-Levissimo-Finissimo-Oba-Bem-Querer-Kg.png?v=639148765337400000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-levissimo-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-levissimo-finissimo-oba-bem-querer-kg/p",
+  popularity: 227
  },
  {
   sku: "oba-11428",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446469/Lata-De-Leite-Condensado-Moca-395-G.jpg?v=638498190719730000",
-  productUrl: "https://secure.obahortifruti.com.br/lata-de-leite-condensado-moca-395-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/lata-de-leite-condensado-moca-395-g/p",
+  popularity: 228
  },
  {
   sku: "oba-5101",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras chicoria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9528731/Escarola-Higienizada-Pronto--160-G.png?v=638626028851700000",
-  productUrl: "https://secure.obahortifruti.com.br/escarola-higienizada-pronto--160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/escarola-higienizada-pronto--160-g/p",
+  popularity: 229
  },
  {
   sku: "oba-11512",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476620/Refrigerante-Coca-Cola-Zero-2-Litros.png?v=638974260402670000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-2-litros/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-2-litros/p",
+  popularity: 230
  },
  {
   sku: "oba-6229",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5067451/Mussarela-Finissimo-Oba-Bem-Querer-Kg.png?v=638293415232300000",
-  productUrl: "https://secure.obahortifruti.com.br/mussarela-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/mussarela-finissimo-oba-bem-querer-kg/p",
+  popularity: 231
  },
  {
   sku: "oba-10338",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6136453/Goma-Pronta-Para-Tapioca-Oba-Bem-Querer-500-G.png?v=638453227191300000",
-  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-oba-bem-querer-500-g/p",
+  popularity: 232
  },
  {
   sku: "oba-4246",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8318655/Suco-De-Uva-Oba-Bem-Querer-Tinto-Integral-1l.png?v=638496607378400000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-oba-bem-querer-tinto-integral-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-oba-bem-querer-tinto-integral-1l/p",
+  popularity: 233
  },
  {
   sku: "oba-7680",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477331/Pao-Bisnaguinha-Panco-Original-300-G.png?v=639011610362970000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-bisnaguinha-panco-original-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-bisnaguinha-panco-original-300-g/p",
+  popularity: 234
  },
  {
   sku: "oba-4243",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10252331/Cenoura-Organica-600g.png?v=638737478210800000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-organica-600g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-organica-600g/p",
+  popularity: 235
  },
  {
   sku: "oba-8502",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti ovos ovo codorna",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5195496/Ovo-De-Codorna-Oba-Bem-Querer-Com-30-Unidades.png?v=638332545959600000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-de-codorna-oba-bem-querer-com-30-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-de-codorna-oba-bem-querer-com-30-unidades/p",
+  popularity: 236
  },
  {
   sku: "oba-9563",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9521327/Requeijao-Cremoso-Tradicional-Catupiry-200-G.png?v=638625452681870000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-catupiry-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-catupiry-200-g/p",
+  popularity: 237
  },
  {
   sku: "oba-6711",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4926508/Queijo-Prato-Fatiado-Oba-Bem-Querer-250-G.jpg?v=638269186677500000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-fatiado-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-fatiado-oba-bem-querer-250-g/p",
+  popularity: 238
  },
  {
   sku: "oba-5190",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446479/Pao-De-Forma-Premium-Panco-500-G.jpg?v=638498190729430000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-premium-panco-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-premium-panco-500-g/p",
+  popularity: 239
  },
  {
   sku: "oba-6851",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10227200/Hortela-Maco-Unidade.png?v=638730666737200000",
-  productUrl: "https://secure.obahortifruti.com.br/hortela-maco-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/hortela-maco-unidade/p",
+  popularity: 240
  },
  {
   sku: "oba-7200",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas manga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250242/Manga-Tommy.jpg?v=638811002827770000",
-  productUrl: "https://secure.obahortifruti.com.br/manga-tommy/p"
+  productUrl: "https://secure.obahortifruti.com.br/manga-tommy/p",
+  popularity: 241
  },
  {
   sku: "oba-9506",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos linguica & processados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9928660/Hamburguer-Tradicional-Oba-Bem-Querer-120-G.jpg?v=638673800196770000",
-  productUrl: "https://secure.obahortifruti.com.br/hamburguer-tradicional-oba-bem-querer-120-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/hamburguer-tradicional-oba-bem-querer-120-g/p",
+  popularity: 242
  },
  {
   sku: "oba-11593",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras agriao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5334335/Agriao-Hidroponico.jpg?v=638360094870530000",
-  productUrl: "https://secure.obahortifruti.com.br/agriao-hidroponico/p"
+  productUrl: "https://secure.obahortifruti.com.br/agriao-hidroponico/p",
+  popularity: 243
  },
  {
   sku: "oba-9824",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes pepino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8610296/Pepino-Comum-Kg.png?v=638517379534570000",
-  productUrl: "https://secure.obahortifruti.com.br/pepino-comum/p"
+  productUrl: "https://secure.obahortifruti.com.br/pepino-comum/p",
+  popularity: 244
  },
  {
   sku: "oba-11391",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes aspargo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10754982/Aspargo-Verde-Importado-Pr-450g.png?v=638795695272000000",
-  productUrl: "https://secure.obahortifruti.com.br/aspargo-verde-importado-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aspargo-verde-importado-450g/p",
+  popularity: 245
  },
  {
   sku: "oba-4200",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "higiene e limpeza cuidados pessoais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4256265/Papel-Higienico-Supreme-Folha-Tripla-Neve-4-Unidades.jpg?v=638144116367830000",
-  productUrl: "https://secure.obahortifruti.com.br/papel-higienico-supreme-folha-tripla-neve-4-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/papel-higienico-supreme-folha-tripla-neve-4-unidades/p",
+  popularity: 246
  },
  {
   sku: "oba-10939",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6148736/Presunto-Cru-Oba-Bem-Querer-Italiano-Fatiado-100g.png?v=638456683111970000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-cru-oba-bem-querer-italiano-fatiado-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-cru-oba-bem-querer-italiano-fatiado-100g/p",
+  popularity: 247
  },
  {
   sku: "oba-3722",
@@ -2483,7 +2730,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483380/Goma-Pronta-Para-Tapioca-Da-Terrinha-500-G.jpg?v=639098688525330000",
-  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-da-terrinha-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/goma-pronta-para-tapioca-da-terrinha-500-g/p",
+  popularity: 248
  },
  {
   sku: "oba-3612",
@@ -2493,7 +2741,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4256815/Leite-Zero-Lactose-Zero-Piracanjuba-1-L.jpg?v=638144116728300000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-zero-piracanjuba-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-zero-piracanjuba-1-l/p",
+  popularity: 249
  },
  {
   sku: "oba-6316",
@@ -2503,7 +2752,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173564/Biscoito-De-Polvilho-Tradicional-Oba-Bem-Querer-150-G.jpg?v=638716927019100000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-tradicional-oba-bem-querer-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-tradicional-oba-bem-querer-150-g/p",
+  popularity: 250
  },
  {
   sku: "oba-10588",
@@ -2513,7 +2763,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia feijao & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250495/Feijao-Carioca-Camil-1kg.jpg?v=638144112468500000",
-  productUrl: "https://secure.obahortifruti.com.br/feijao-carioca-camil-1kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/feijao-carioca-camil-1kg/p",
+  popularity: 251
  },
  {
   sku: "oba-4763",
@@ -2523,7 +2774,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos castanhas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258546/Castanha-De-Caju-Torrada-Oba-Bem-Querer-250-G.jpg?v=638895637925500000",
-  productUrl: "https://secure.obahortifruti.com.br/castanha-de-caju-torrada-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/castanha-de-caju-torrada-oba-bem-querer-250-g/p",
+  popularity: 252
  },
  {
   sku: "oba-7160",
@@ -2533,7 +2785,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas maracuja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10089474/Maracuja-Doce.jpg?v=638701230562170000",
-  productUrl: "https://secure.obahortifruti.com.br/maracuja-doce/p"
+  productUrl: "https://secure.obahortifruti.com.br/maracuja-doce/p",
+  popularity: 253
  },
  {
   sku: "oba-6704",
@@ -2543,7 +2796,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477434/Iogurte-Grego-Integral-4--Yorgus-500-G.jpg?v=639014010493000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-integral-4--yorgus-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-integral-4--yorgus-500-g/p",
+  popularity: 254
  },
  {
   sku: "oba-7877",
@@ -2553,7 +2807,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes batata",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250080/Batata-Pirulito-Kg.jpg?v=638144112149530000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-pirulito-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-pirulito-kg/p",
+  popularity: 255
  },
  {
   sku: "oba-11645",
@@ -2563,7 +2818,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia conservas & enlatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9942977/Palmito-Acai-Em-Conserva-Tolete-Oba-Bem-Querer-300-G.png?v=638676213370800000",
-  productUrl: "https://secure.obahortifruti.com.br/palmito-acai-em-conserva-tolete-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palmito-acai-em-conserva-tolete-oba-bem-querer-300-g/p",
+  popularity: 256
  },
  {
   sku: "oba-7129",
@@ -2573,7 +2829,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras repolho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10211314/Repolho-Verde-Picado-Oba-300g.png?v=638725387743830000",
-  productUrl: "https://secure.obahortifruti.com.br/repolho-verde-picado-oba-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/repolho-verde-picado-oba-300g/p",
+  popularity: 257
  },
  {
   sku: "oba-12309",
@@ -2583,7 +2840,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos coxao mole",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4961300/Miolo-Do-Coxao-Mole-Bovino-Oba-Kg.png?v=638275594431200000",
-  productUrl: "https://secure.obahortifruti.com.br/miolo-de-coxao-mole-bovino-em-bife-oba-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/miolo-de-coxao-mole-bovino-em-bife-oba-kg/p",
+  popularity: 258
  },
  {
   sku: "oba-8346",
@@ -2593,7 +2851,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas secas fruta seca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4835627/Ameixa-Sem-Caroco-Oba-Bem-Querer-300-G.png?v=638253850505500000",
-  productUrl: "https://secure.obahortifruti.com.br/ameixa-sem-caroco-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ameixa-sem-caroco-oba-bem-querer-300-g/p",
+  popularity: 259
  },
  {
   sku: "oba-3551",
@@ -2603,7 +2862,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520843/Abacate-Avocado-550g.jpg?v=639174733222300000",
-  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado-550g/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacate-avocado-550g/p",
+  popularity: 260
  },
  {
   sku: "oba-3744",
@@ -2613,7 +2873,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia refeicoes & pratos pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10089721/Salada-De-Frutas-Grande-Oba-Bem-Querer-Kg.png?v=638701266788270000",
-  productUrl: "https://secure.obahortifruti.com.br/salada-de-frutas-grande-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/salada-de-frutas-grande-oba-bem-querer-kg/p",
+  popularity: 261
  },
  {
   sku: "oba-9336",
@@ -2623,7 +2884,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9002230/File-Frango-Empanado-Chicken-Oba-Kg.png?v=638588229201500000",
-  productUrl: "https://secure.obahortifruti.com.br/file-frango-empanado-chicken-oba-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-frango-empanado-chicken-oba-kg/p",
+  popularity: 262
  },
  {
   sku: "oba-10636",
@@ -2633,7 +2895,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria salames",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5089027/Salame-Hamburgue-Finissimo-Oba-Bem-Querer-Kg.jpg?v=638297662923070000",
-  productUrl: "https://secure.obahortifruti.com.br/salame-hamburgue-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/salame-hamburgue-finissimo-oba-bem-querer-kg/p",
+  popularity: 263
  },
  {
   sku: "oba-6221",
@@ -2643,7 +2906,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos preparados oba pizza",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8449048/Pizza-De-Marguerita-Oba-Bem-Querer-440-G.jpg?v=638498193383100000",
-  productUrl: "https://secure.obahortifruti.com.br/pizza-de-marguerita-oba-bem-querer-440-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pizza-de-marguerita-oba-bem-querer-440-g/p",
+  popularity: 264
  },
  {
   sku: "oba-6382",
@@ -2653,7 +2917,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4906061/Coxa-Com-Sobrecoxa-Kg.jpg?v=638265730469800000",
-  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-kg/p",
+  popularity: 265
  },
  {
   sku: "oba-5496",
@@ -2663,7 +2928,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4260897/File-De-Peito-De-Frango-Sem-Transgenico-Congelado-Korin-600-G.jpg?v=638792196805670000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-peito-de-frango-sem-transgenico-congelado-korin-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-peito-de-frango-sem-transgenico-congelado-korin-600-g/p",
+  popularity: 266
  },
  {
   sku: "oba-11074",
@@ -2673,7 +2939,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos linguica & processados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523836/Hamburguer-De-Picanha-Oba-Bem-Querer-210-G.jpg?v=639189486696830000",
-  productUrl: "https://secure.obahortifruti.com.br/hamburguer-de-picanha-oba-bem-querer-210-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/hamburguer-de-picanha-oba-bem-querer-210-g/p",
+  popularity: 267
  },
  {
   sku: "oba-10598",
@@ -2683,7 +2950,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9649066/Acucar-Refinado-Especial-Uniao-1kg.png?v=638636647127030000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-refinado-especial-uniao-1kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-refinado-especial-uniao-1kg/p",
+  popularity: 268
  },
  {
   sku: "oba-3284",
@@ -2693,7 +2961,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446781/Leite-Uht-Integral-Ninho-Nestle-1-L.jpg?v=638498191003300000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-uht-integral-ninho-nestle-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-uht-integral-ninho-nestle-1-l/p",
+  popularity: 269
  },
  {
   sku: "oba-9512",
@@ -2703,7 +2972,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos musculo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480234/Musculo-Bovino-Kg.jpg?v=639065346377700000",
-  productUrl: "https://secure.obahortifruti.com.br/musculo-bovino-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/musculo-bovino-kg/p",
+  popularity: 270
  },
  {
   sku: "oba-9492",
@@ -2713,7 +2983,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250991/Pao-Panco-Egg-Sponge-Pao-De-Ovos-250-G.jpg?v=638144112833070000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-panco-egg-sponge-pao-de-ovos-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-panco-egg-sponge-pao-de-ovos-250-g/p",
+  popularity: 271
  },
  {
   sku: "oba-12744",
@@ -2723,7 +2994,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobrinha",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4249861/Abobrinha-Brasileira.jpg?v=638144111865070000",
-  productUrl: "https://secure.obahortifruti.com.br/abobrinha-brasileira/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobrinha-brasileira/p",
+  popularity: 272
  },
  {
   sku: "oba-2372",
@@ -2733,7 +3005,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos costela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477957/Costela-Suina.png?v=639038172372300000",
-  productUrl: "https://secure.obahortifruti.com.br/costela-suina-kg-167656-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/costela-suina-kg-167656-1/p",
+  popularity: 273
  },
  {
   sku: "oba-3195",
@@ -2743,7 +3016,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447095/Alface-Americana-Organica-250-G.jpg?v=638498191294470000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-americana-organica-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-americana-organica-250-g/p",
+  popularity: 274
  },
  {
   sku: "oba-2606",
@@ -2753,7 +3027,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447157/Leite-Piracanjuba-1-L-Integral.jpg?v=638498191351470000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-piracanjuba-1-l-integral/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-piracanjuba-1-l-integral/p",
+  popularity: 275
  },
  {
   sku: "oba-7832",
@@ -2763,7 +3038,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474186/Queijo-Parmesao-Ralado-Vigor-100-G.jpg?v=638854152363700000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-ralado-vigor-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-ralado-vigor-100-g/p",
+  popularity: 276
  },
  {
   sku: "oba-6071",
@@ -2773,7 +3049,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475196/Queijo-Mucarela-Em-Palito-Infantil-Atilatte-304g.jpg?v=638908002398700000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-em-palito-infantil-atilatte-304g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-em-palito-infantil-atilatte-304g/p",
+  popularity: 277
  },
  {
   sku: "oba-7430",
@@ -2783,7 +3060,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520323/Iogurte-Natural-Integral-Leitissimo-170-G.jpg?v=639168684469800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-leitissimo-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-leitissimo-170-g/p",
+  popularity: 278
  },
  {
   sku: "oba-9502",
@@ -2793,7 +3071,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/7180175/File-De-Peito-De-Frango-Congelado-Sem-Transgenico-Oba-Bem-Querer-600-G.png?v=638483528336470000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-peito-de-frango-congelado-sem-transgenico-oba-bem-querer-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-peito-de-frango-congelado-sem-transgenico-oba-bem-querer-600-g/p",
+  popularity: 279
  },
  {
   sku: "oba-1915",
@@ -2803,7 +3082,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9509276/Creme-De-Leite-Piracanjuba-200g.png?v=638624588682500000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-piracanjuba-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-piracanjuba-200g/p",
+  popularity: 280
  },
  {
   sku: "oba-10835",
@@ -2813,7 +3093,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas morango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4928089/Morango-350-G.jpg?v=638269474096400000",
-  productUrl: "https://secure.obahortifruti.com.br/morango-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morango-350-g/p",
+  popularity: 281
  },
  {
   sku: "oba-11149",
@@ -2823,7 +3104,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas ameixa",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477487/Ameixa-Rubimel-Nacional-500-G.jpg?v=639014028494700000",
-  productUrl: "https://secure.obahortifruti.com.br/ameixa-rubimel-nacional-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ameixa-rubimel-nacional-500-g/p",
+  popularity: 282
  },
  {
   sku: "oba-9435",
@@ -2833,7 +3115,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas caju",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474226/Bandeja-De-Caju-300-G.jpg?v=638857782405070000",
-  productUrl: "https://secure.obahortifruti.com.br/bandeja-de-caju-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bandeja-de-caju-300-g/p",
+  popularity: 283
  },
  {
   sku: "oba-2041",
@@ -2843,7 +3126,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios creme de leite, nata & chantilly creme de leite",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477432/Creme-De-Leite-Tradicional-Verde-Campo-500-G.jpg?v=639014010472230000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-tradicional-verde-campo-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-tradicional-verde-campo-500-g/p",
+  popularity: 284
  },
  {
   sku: "oba-10680",
@@ -2853,7 +3137,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517204/Iogurte-Grego-Sem-Lactose-Yorgus-500-G.jpg?v=639143594493000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-sem-lactose-yorgus-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-sem-lactose-yorgus-500-g/p",
+  popularity: 285
  },
  {
   sku: "oba-7586",
@@ -2863,7 +3148,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacaxi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475213/Abacaxi-Perola-Descascado-Com-Raspas-De-Limao-Oba.jpg?v=638908548935130000",
-  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-descascado-com-raspas-de-limao-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-descascado-com-raspas-de-limao-oba/p",
+  popularity: 286
  },
  {
   sku: "oba-9703",
@@ -2873,7 +3159,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446550/Cenoura-E-Mandioquinha-Oba.jpg?v=638498190790870000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-e-mandioquinha-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-e-mandioquinha-oba/p",
+  popularity: 287
  },
  {
   sku: "oba-11676",
@@ -2883,7 +3170,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes outros legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4254275/Ervilha-Torta-Oba-Bem-Querer-300-G.jpg?v=638144115082500000",
-  productUrl: "https://secure.obahortifruti.com.br/ervilha-torta-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ervilha-torta-oba-bem-querer-300-g/p",
+  popularity: 288
  },
  {
   sku: "oba-12751",
@@ -2893,7 +3181,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477431/Alface-Romana-In-Natura-La-Vita-150-G.jpg?v=639014010458670000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-romana-in-natura-la-vita-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-romana-in-natura-la-vita-150-g/p",
+  popularity: 289
  },
  {
   sku: "oba-1898",
@@ -2903,7 +3192,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446730/Yakissoba-Sem-Pimentao-Oba.jpg?v=638498190958500000",
-  productUrl: "https://secure.obahortifruti.com.br/yakissoba-sem-pimentao-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/yakissoba-sem-pimentao-oba/p",
+  popularity: 290
  },
  {
   sku: "oba-7880",
@@ -2913,7 +3203,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melancia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474098/Melancia-Baby-Magali-Kg.png?v=638848164371900000",
-  productUrl: "https://secure.obahortifruti.com.br/melancia-baby-magali-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melancia-baby-magali-kg/p",
+  popularity: 291
  },
  {
   sku: "oba-12009",
@@ -2923,7 +3214,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10314589/Mix-Seis-Folhas-Baby-Oba-Bem-Querer-190-G.jpg?v=638752459534730000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-seis-folhas-baby-oba-bem-querer-190-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-seis-folhas-baby-oba-bem-querer-190-g/p",
+  popularity: 292
  },
  {
   sku: "oba-4625",
@@ -2933,7 +3225,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477485/Queijo-Minas-Frescal-Fazenda-Bela-Vista-Peca-Kg.jpg?v=639014028473100000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-fazenda-bela-vista-peca-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-fazenda-bela-vista-peca-kg/p",
+  popularity: 293
  },
  {
   sku: "oba-3305",
@@ -2943,7 +3236,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473766/Queijo-Mucarela-De-Bufala-Cerejinha-Bom-Destino-160-G.jpg?v=638835320897430000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-de-bufala-cerejinha-bom-destino-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-de-bufala-cerejinha-bom-destino-160-g/p",
+  popularity: 294
  },
  {
   sku: "oba-7015",
@@ -2953,7 +3247,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5067433/Queijo-Prato-Finissimo-Oba-Bem-Querer-Kg.png?v=638293414955130000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-finissimo-oba-bem-querer-kg/p",
+  popularity: 295
  },
  {
   sku: "oba-6493",
@@ -2963,7 +3258,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251884/Sobrecoxa-De-Frango-Sem-Osso-E-Sem-Pele-Kg.jpg?v=638144113474070000",
-  productUrl: "https://secure.obahortifruti.com.br/sobrecoxa-de-frango-sem-osso-e-sem-pele-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/sobrecoxa-de-frango-sem-osso-e-sem-pele-kg/p",
+  popularity: 296
  },
  {
   sku: "oba-9439",
@@ -2973,7 +3269,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes chuchu",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4634567/Chuchu-Picado-Bandeja-Oba.jpg?v=638219198428970000",
-  productUrl: "https://secure.obahortifruti.com.br/chuchu-picado-bandeja-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/chuchu-picado-bandeja-oba/p",
+  popularity: 297
  },
  {
   sku: "oba-1227",
@@ -2983,7 +3280,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes jilo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11479218/Jilo-Oba-Bem-Querer-300-G.jpg?v=639059184377870000",
-  productUrl: "https://secure.obahortifruti.com.br/jilo-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/jilo-oba-bem-querer-300-g/p",
+  popularity: 298
  },
  {
   sku: "oba-10182",
@@ -2993,7 +3291,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras rucula",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6042006/Rucula-Hidroponica-Higienizada-Oba-Bem-Querer-140-G.png?v=638435120279100000",
-  productUrl: "https://secure.obahortifruti.com.br/rucula-hidroponica-higienizada-oba-bem-querer-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/rucula-hidroponica-higienizada-oba-bem-querer-140-g/p",
+  popularity: 299
  },
  {
   sku: "oba-7590",
@@ -3003,7 +3302,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas jabuticaba",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475623/Jabuticaba-850-G.png?v=638936274374530000",
-  productUrl: "https://secure.obahortifruti.com.br/jabuticaba-850-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/jabuticaba-850-g/p",
+  popularity: 300
  },
  {
   sku: "oba-8023",
@@ -3013,7 +3313,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas abacaxi",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477502/Abacaxi-Perola-Com-Melancia-Oba.jpg?v=639014034430900000",
-  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-com-melancia-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacaxi-perola-com-melancia-oba/p",
+  popularity: 301
  },
  {
   sku: "oba-715",
@@ -3023,7 +3324,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475644/Barra-De-Chocolate-Alpine-Milk-Milka-90g.png?v=638936425255230000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-alpine-milk-milka-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-alpine-milk-milka-90g/p",
+  popularity: 302
  },
  {
   sku: "oba-714",
@@ -3033,7 +3335,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia conservas & enlatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477741/Palmito-Palmeira-Premium-Tolete-Oba-Bem-Querer-300g.jpg?v=639017472391800000",
-  productUrl: "https://secure.obahortifruti.com.br/palmito-palmeira-premium-tolete-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palmito-palmeira-premium-tolete-oba-bem-querer-300g/p",
+  popularity: 303
  },
  {
   sku: "oba-6155",
@@ -3043,7 +3346,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9964719/Batata-Palha-Extrafina-Oba-Bem-Querer-100-G.jpg?v=638679776584330000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-palha-extrafina-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-palha-extrafina-oba-bem-querer-100-g/p",
+  popularity: 304
  },
  {
   sku: "oba-1734",
@@ -3053,7 +3357,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447088/Laranja-Pera-Pacote-5-Kg.jpg?v=638498191289670000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-pacote-5-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-pera-pacote-5-kg/p",
+  popularity: 305
  },
  {
   sku: "oba-6035",
@@ -3063,7 +3368,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos semente e grao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446403/Pinhao-Oba-Bem-Querer-Kg.jpg?v=638498190660230000",
-  productUrl: "https://secure.obahortifruti.com.br/pinhao-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/pinhao-oba-bem-querer-kg/p",
+  popularity: 306
  },
  {
   sku: "oba-5102",
@@ -3073,7 +3379,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482895/Melao-Orange-Oba-Bem-Querer-Kg.png?v=639093792165230000",
-  productUrl: "https://secure.obahortifruti.com.br/melao-orange-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melao-orange-oba-bem-querer-kg/p",
+  popularity: 307
  },
  {
   sku: "oba-9888",
@@ -3083,7 +3390,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10812202/Queijo-Burrata-De-Bufala-Creme-Imersa-Bom-Destino-200-G.jpg?v=638803975424800000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-burrata-de-bufala-creme-imersa-bom-destino-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-burrata-de-bufala-creme-imersa-bom-destino-200-g/p",
+  popularity: 308
  },
  {
   sku: "oba-720",
@@ -3093,7 +3401,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos contrafile",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8760325/Contra-File-Bovino-Peca-Oba-Selecao-Dia-A-Dia-Kg.png?v=638551975009100000",
-  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-peca-oba-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-peca-oba-selecao-dia-a-dia-kg/p",
+  popularity: 309
  },
  {
   sku: "oba-459",
@@ -3103,7 +3412,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474373/Tomate-Cocktail---Ramo-Com-Aproximadamente-8-Frutos.jpg?v=638866256678170000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-cocktail---ramo-com-aproximadamente-8-frutos/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-cocktail---ramo-com-aproximadamente-8-frutos/p",
+  popularity: 310
  },
  {
   sku: "oba-398",
@@ -3113,7 +3423,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos panceta",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524016/Panceta-Suina-Temperada-Oba-Reserve-Kg.png?v=639190266563600000",
-  productUrl: "https://secure.obahortifruti.com.br/panceta-suina-temperada-oba-reserve-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/panceta-suina-temperada-oba-reserve-kg/p",
+  popularity: 311
  },
  {
   sku: "oba-873",
@@ -3123,7 +3434,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473667/Iogurte-Vigor-Grego-Zero-Tradicional-90g.jpg?v=638835320852070000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-tradicional-zero-grego-vigor-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-tradicional-zero-grego-vigor-100g/p",
+  popularity: 312
  },
  {
   sku: "oba-394",
@@ -3133,7 +3445,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520301/Requeijao-Pocos-De-Caldas-Tradicional-200g.jpg?v=639168678464770000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-pocos-de-caldas-tradicional-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-pocos-de-caldas-tradicional-200g/p",
+  popularity: 313
  },
  {
   sku: "oba-996",
@@ -3143,7 +3456,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4255917/Iogurte-Natural-Integral-Nestle-170g.jpg?v=638144116143400000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-nestle-170g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-nestle-170g/p",
+  popularity: 314
  },
  {
   sku: "oba-262",
@@ -3153,7 +3467,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos preparados oba pizza",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8740646/Pizza-Calabresa-Oba-Bem-Querer-600-G.png?v=638547511387030000",
-  productUrl: "https://secure.obahortifruti.com.br/pizza-calabresa-oba-bem-querer-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pizza-calabresa-oba-bem-querer-600-g/p",
+  popularity: 315
  },
  {
   sku: "oba-426",
@@ -3163,7 +3478,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492843/Sobrecoxa-De-Frango-Kg.jpg?v=639138672365700000",
-  productUrl: "https://secure.obahortifruti.com.br/sobrecoxa-de-frango-kg-167631-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/sobrecoxa-de-frango-kg-167631-1/p",
+  popularity: 316
  },
  {
   sku: "oba-299",
@@ -3173,7 +3489,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos bacon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10131198/Bacon-Defumado-Selecao-Dia-A-Dia-Kg.png?v=638709034933230000",
-  productUrl: "https://secure.obahortifruti.com.br/bacon-defumado-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/bacon-defumado-selecao-dia-a-dia-kg/p",
+  popularity: 317
  },
  {
   sku: "oba-63",
@@ -3183,7 +3500,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia conservas & enlatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9593783/Milho-Verde-Em-Conserva--Quero-170-G.png?v=638631357960770000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-verde-em-conserva--quero-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-verde-em-conserva--quero-170-g/p",
+  popularity: 318
  },
  {
   sku: "oba-100013398",
@@ -3193,7 +3511,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524433/Doce-De-Leite-Tradicional-Oba-Bem-Querer-400-G.jpg?v=639195450479970000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-de-leite-tradicional-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-de-leite-tradicional-oba-bem-querer-400-g/p",
+  popularity: 319
  },
  {
   sku: "oba-100011945",
@@ -3203,7 +3522,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518789/Chips-Mix-Frutas-Tropicais-Oba-Bem-Querer-170-G.jpg?v=639155911667200000",
-  productUrl: "https://secure.obahortifruti.com.br/chips-mix-frutas-tropicais-oba-bem-querer-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chips-mix-frutas-tropicais-oba-bem-querer-170-g/p",
+  popularity: 320
  },
  {
   sku: "oba-100011855",
@@ -3213,7 +3533,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519191/Tortilla-Chips-Oba-Bem-Querer---Garytos-150-G.jpg?v=639156552835800000",
-  productUrl: "https://secure.obahortifruti.com.br/tortilla-chips-oba-bem-querer---garytos-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tortilla-chips-oba-bem-querer---garytos-150-g/p",
+  popularity: 321
  },
  {
   sku: "oba-100011652",
@@ -3223,7 +3544,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488222/Queijo-Gouda-Jersey-Holandes-Landana-200-G.jpg?v=639114251544070000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-gouda-jersey-holandes-landana-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-gouda-jersey-holandes-landana-200-g/p",
+  popularity: 322
  },
  {
   sku: "oba-100011638",
@@ -3233,7 +3555,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480700/Waffle-Belga-Coracao-Congelado-Oba-Bem-Querer-240-G.jpg?v=639074508584230000",
-  productUrl: "https://secure.obahortifruti.com.br/waffle-belga-coracao-congelado-oba-bem-querer-240-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/waffle-belga-coracao-congelado-oba-bem-querer-240-g/p",
+  popularity: 323
  },
  {
   sku: "oba-100011631",
@@ -3243,7 +3566,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti cogumelos e brotos champignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517533/Cogumelo-Champignon-Paris-Organico-200-G.jpg?v=639149646404070000",
-  productUrl: "https://secure.obahortifruti.com.br/cogumelo-champignon-paris-organico-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cogumelo-champignon-paris-organico-200-g/p",
+  popularity: 324
  },
  {
   sku: "oba-100011627",
@@ -3253,7 +3577,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11479769/Salada-Primavera-Vero-Verde-200-G.jpg?v=639059827274900000",
-  productUrl: "https://secure.obahortifruti.com.br/salada-primavera-vero-verde-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/salada-primavera-vero-verde-200-g/p",
+  popularity: 325
  },
  {
   sku: "oba-100011604",
@@ -3263,7 +3588,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478631/Sorvete-De-Pistache-Oba-Bem-Querer-15-L.jpg?v=639052056002900000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pistache-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pistache-oba-bem-querer-1-5-l/p",
+  popularity: 326
  },
  {
   sku: "oba-100011495",
@@ -3273,7 +3599,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes legumes congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478980/Batata-Frita-Congelada-Belga-Lutosa-Steak-House-1-Kg.jpg?v=639053772873600000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-frita-congelada-belga-lutosa-steak-house-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-frita-congelada-belga-lutosa-steak-house-1-kg/p",
+  popularity: 327
  },
  {
   sku: "oba-100011477",
@@ -3283,7 +3610,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477723/Abacaxi-Rodela-Em-Calda-Oba-Bem-Querer-400-G.jpg?v=639017460608300000",
-  productUrl: "https://secure.obahortifruti.com.br/abacaxi-rodela-em-calda-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/abacaxi-rodela-em-calda-oba-bem-querer-400-g/p",
+  popularity: 328
  },
  {
   sku: "oba-100011442",
@@ -3293,7 +3621,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478391/Trio-Salada-Higienizada-Oba-Bem-Querer-160-G.jpg?v=639047100891070000",
-  productUrl: "https://secure.obahortifruti.com.br/trio-salada-higienizada-oba-bem-querer-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/trio-salada-higienizada-oba-bem-querer-160-g/p",
+  popularity: 329
  },
  {
   sku: "oba-100011334",
@@ -3303,7 +3632,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes tomate",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476698/Tomate-Cocktel-400-G.jpg?v=638979445138900000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-cocktel-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-cocktel-400-g/p",
+  popularity: 330
  },
  {
   sku: "oba-100011315",
@@ -3313,7 +3643,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477081/Molho-De-Tomate-Com-Manjericao-Oba-Bem-Querer-330-G.jpg?v=638991763349870000",
-  productUrl: "https://secure.obahortifruti.com.br/molho-de-tomate-com-manjericao-oba-bem-querer-330-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/molho-de-tomate-com-manjericao-oba-bem-querer-330-g/p",
+  popularity: 331
  },
  {
   sku: "oba-100011278",
@@ -3323,7 +3654,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478400/Manteiga-Extra-Sem-Sal-Tablete-Oba-Bem-Querer-200g.jpg?v=639047106665030000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-sem-sal-tablete-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-sem-sal-tablete-oba-bem-querer-200g/p",
+  popularity: 332
  },
  {
   sku: "oba-100011276",
@@ -3333,7 +3665,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491180/Manteiga-Extra-Sem-Sal-Oba-Bem-Querer-500g.jpg?v=639128916509270000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-sem-sal-oba-bem-querer-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-sem-sal-oba-bem-querer-500g/p",
+  popularity: 333
  },
  {
   sku: "oba-100011273",
@@ -3343,7 +3676,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491179/Manteiga-Extra-Com-Sal-Oba-Bem-Querer-500g.jpg?v=639128916501130000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-com-sal-oba-bem-querer-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-com-sal-oba-bem-querer-500g/p",
+  popularity: 334
  },
  {
   sku: "oba-100011275",
@@ -3353,7 +3687,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518786/Manteiga-Extra-Com-Sal-Tablete-Oba-Bem-Querer-200g.jpg?v=639155911647070000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-com-sal-tablete-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-extra-com-sal-tablete-oba-bem-querer-200g/p",
+  popularity: 335
  },
  {
   sku: "oba-100011194",
@@ -3363,7 +3698,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524436/Pao-De-Queijo-Pipoquinha-Casa-Mineira-300-G.jpg?v=639195456449100000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-pipoquinha-casa-mineira-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-pipoquinha-casa-mineira-300-g/p",
+  popularity: 336
  },
  {
   sku: "oba-100011136",
@@ -3373,7 +3709,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478255/Bombom-Recheado-Com-Mix-De-Chocolate-E-Avela-Gianduia-Italiano-Novi-150-G.png?v=639046110593770000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-recheado-com-mix-de-chocolate-e-avela-gianduia-italiano-novi-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-recheado-com-mix-de-chocolate-e-avela-gianduia-italiano-novi-150-g/p",
+  popularity: 337
  },
  {
   sku: "oba-100010916",
@@ -3383,7 +3720,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia feijao & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517455/Lentilha-Terrinha-350g.png?v=639149022438670000",
-  productUrl: "https://secure.obahortifruti.com.br/lentilha-terrinha-350g/p"
+  productUrl: "https://secure.obahortifruti.com.br/lentilha-terrinha-350g/p",
+  popularity: 338
  },
  {
   sku: "oba-100010547",
@@ -3393,7 +3731,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477013/Macarrao-Spaghetti-Grano-Duro-Oba-Bem-Querer-500-G.jpg?v=638987276005600000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-spaghetti-grano-duro-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-spaghetti-grano-duro-oba-bem-querer-500-g/p",
+  popularity: 339
  },
  {
   sku: "oba-100010546",
@@ -3403,7 +3742,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477014/Macarrao-Pene-Grano-Duro-Oba-Bem-Querer-500-G.jpg?v=638987276331370000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-pene-grano-duro-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-pene-grano-duro-oba-bem-querer-500-g/p",
+  popularity: 340
  },
  {
   sku: "oba-100010545",
@@ -3413,7 +3753,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477015/Macarrao-Linguine-Grano-Duro-Oba-Bem-Querer-500-G.jpg?v=638987276384070000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-linguine-grano-duro-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-linguine-grano-duro-oba-bem-querer-500-g/p",
+  popularity: 341
  },
  {
   sku: "oba-100010544",
@@ -3423,7 +3764,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477016/Macarrao-Fusilli-Grano-Duro-Oba-Bem-Querer-500-G.jpg?v=638987276448530000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-grano-duro-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-grano-duro-oba-bem-querer-500-g/p",
+  popularity: 342
  },
  {
   sku: "oba-100010543",
@@ -3433,7 +3775,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477017/Macarrao-Farfalle-Grano-Duro-Oba-Bem-Querer-500-G.jpg?v=638987276502000000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-farfalle-grano-duro-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-farfalle-grano-duro-oba-bem-querer-500-g/p",
+  popularity: 343
  },
  {
   sku: "oba-100010535",
@@ -3443,7 +3786,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518772/Suco-De-Tangerina-E-Maca-Oba-Bem-Querer-1l.jpg?v=639155911535400000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-tangerina-e-maca-oba-bem-querer-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-tangerina-e-maca-oba-bem-querer-1l/p",
+  popularity: 344
  },
  {
   sku: "oba-100010419",
@@ -3453,7 +3797,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas frutas congeladas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476050/Frutas-Vermelhas-Pratico-Inteiras-Congelados-400-G.png?v=638949324882830000",
-  productUrl: "https://secure.obahortifruti.com.br/frutas-vermelhas-pratico-inteiras-congelados-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/frutas-vermelhas-pratico-inteiras-congelados-400-g/p",
+  popularity: 345
  },
  {
   sku: "oba-100010388",
@@ -3463,7 +3808,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478386/Biscoito-Polones-Wafer-Creme-Pistache-Tago-150-G.jpg?v=639047100829600000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-polones-wafer-creme-pistache-tago-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-polones-wafer-creme-pistache-tago-150-g/p",
+  popularity: 346
  },
  {
   sku: "oba-100010282",
@@ -3473,7 +3819,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518768/Pudim-De-Leite-Condensado-Oba-Bem-Querer-120g.jpg?v=639155911504600000",
-  productUrl: "https://secure.obahortifruti.com.br/pudim-de-leite-condensado-oba-bem-querer-120g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pudim-de-leite-condensado-oba-bem-querer-120g/p",
+  popularity: 347
  },
  {
   sku: "oba-100010081",
@@ -3483,7 +3830,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520847/Pao-Mini-Hot-Dog-Casa-Do-Pao-300-G.jpg?v=639174733276970000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-mini-hot-dog-casa-do-pao-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-mini-hot-dog-casa-do-pao-300-g/p",
+  popularity: 348
  },
  {
   sku: "oba-100010072",
@@ -3493,7 +3841,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524814/Meio-Da-Asa-De-Frango-Temperada-Selecao-Dia-A-Dia-750g.jpg?v=639197220484470000",
-  productUrl: "https://secure.obahortifruti.com.br/meio-da-asa-frango-temperada-selec-dia-a-dia-750-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/meio-da-asa-frango-temperada-selec-dia-a-dia-750-g/p",
+  popularity: 349
  },
  {
   sku: "oba-100010056",
@@ -3503,7 +3852,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10987896/Milho-De-Pipoca-Premium-Yoki-400g.png?v=638828282792530000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-de-pipoca-premium-yoki-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-de-pipoca-premium-yoki-400g/p",
+  popularity: 350
  },
  {
   sku: "oba-100009970",
@@ -3513,7 +3863,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475448/Nhoque-De-Mandioquinha-Sem-Molho-Chef-Pilli-500g.jpg?v=638926728427470000",
-  productUrl: "https://secure.obahortifruti.com.br/nhoque-de-mandioquinha-sem-molho-chef-pilli-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/nhoque-de-mandioquinha-sem-molho-chef-pilli-500g/p",
+  popularity: 351
  },
  {
   sku: "oba-100009871",
@@ -3523,7 +3874,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522552/Queijo-Tipo-Grana-Gran-Formaggio-Rar-200-G.jpg?v=639179881289530000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-tipo-grana-gran-formaggio-rar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-tipo-grana-gran-formaggio-rar-200-g/p",
+  popularity: 352
  },
  {
   sku: "oba-100009807",
@@ -3533,7 +3885,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475628/Barra-De-Chocolate-Com-Avela-Milka-90g.png?v=638936298372470000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-com-avela-milka-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-com-avela-milka-90g/p",
+  popularity: 353
  },
  {
   sku: "oba-100009749",
@@ -3543,7 +3896,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518757/Azeite-100--Italiano-Extra-Virgem-Oba-Bem-Querer-500ml.jpg?v=639155911420000000",
-  productUrl: "https://secure.obahortifruti.com.br/azeite-100--italiano-extra-virgem-oba-bem-querer-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/azeite-100--italiano-extra-virgem-oba-bem-querer-500ml/p",
+  popularity: 354
  },
  {
   sku: "oba-100009660",
@@ -3553,7 +3907,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes alho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473876/Alho-Roxo-Descascado-Oba-Bem-Querer-350g.png?v=638835972779470000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-descascado-oba-bem-querer-350g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-roxo-descascado-oba-bem-querer-350g/p",
+  popularity: 355
  },
  {
   sku: "oba-100009637",
@@ -3563,7 +3918,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518754/Biscoito-De-Polvilho-Bolinha-Com-Queijo-Parmesao-Oba-Bem-Querer-100g.jpg?v=639155911393770000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-bolinha-com-queijo-parmesao-oba-bem-querer-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-bolinha-com-queijo-parmesao-oba-bem-querer-100g/p",
+  popularity: 356
  },
  {
   sku: "oba-100009600",
@@ -3573,7 +3929,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473736/Tomate-Cereja-Pomodorini-Oba-Bem-Querer-400g.jpg?v=638835320883270000",
-  productUrl: "https://secure.obahortifruti.com.br/tomate-cereja-pomodorini-oba-bem-querer-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomate-cereja-pomodorini-oba-bem-querer-400g/p",
+  popularity: 357
  },
  {
   sku: "oba-100009574",
@@ -3583,7 +3940,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476282/Biscoito-Infantil-Biscotti-Banana-E-Cacau-Papapa-60-G.jpg?v=638956253697900000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-banana-e-cacau-papapa-60-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-banana-e-cacau-papapa-60-g/p",
+  popularity: 358
  },
  {
   sku: "oba-100009524",
@@ -3593,7 +3951,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473819/Chia-Graos-Oba-Bem-Querer-120-G.jpg?v=638835320929900000",
-  productUrl: "https://secure.obahortifruti.com.br/chia-graos-oba-bem-querer-120-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chia-graos-oba-bem-querer-120-g/p",
+  popularity: 359
  },
  {
   sku: "oba-100009515",
@@ -3603,7 +3962,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518750/Pao-De-Forma-Integral-382---Sem-Casca-Oba-Bem-Querer-400g.jpg?v=639155911354500000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-integral-38-2---sem-casca-oba-bem-querer-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-integral-38-2---sem-casca-oba-bem-querer-400g/p",
+  popularity: 360
  },
  {
   sku: "oba-100009513",
@@ -3613,7 +3973,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518747/Requeijao-Cremoso-Tradicional-Oba-Bem-Querer-200g.jpg?v=639155911333100000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-oba-bem-querer-200g/p",
+  popularity: 361
  },
  {
   sku: "oba-100009512",
@@ -3623,7 +3984,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518744/Requeijao-Cremoso-Light-Oba-Bem-Querer-200g.jpg?v=639155911313170000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-oba-bem-querer-200g/p",
+  popularity: 362
  },
  {
   sku: "oba-100009416",
@@ -3633,7 +3995,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477391/Tostata-Tradicional-Oba-Bem-Querer-180-G.jpg?v=639014002411270000",
-  productUrl: "https://secure.obahortifruti.com.br/tostata-tradicional-oba-bem-querer-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tostata-tradicional-oba-bem-querer-180-g/p",
+  popularity: 363
  },
  {
   sku: "oba-100009415",
@@ -3643,7 +4006,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477735/Tostata-Parm-Oba-Bem-Querer-180g.jpg?v=639017466521600000",
-  productUrl: "https://secure.obahortifruti.com.br/tostata-parm-oba-bem-querer-180g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tostata-parm-oba-bem-querer-180g/p",
+  popularity: 364
  },
  {
   sku: "oba-100009413",
@@ -3653,7 +4017,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522954/Tostata-Alecrim-Oba-Bem-Querer-180g.jpg?v=639183318691670000",
-  productUrl: "https://secure.obahortifruti.com.br/tostata-alecrim-oba-bem-querer-180g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tostata-alecrim-oba-bem-querer-180g/p",
+  popularity: 365
  },
  {
   sku: "oba-100009352",
@@ -3663,7 +4028,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173683/Iogurte-Zero-Lactose-Frutas-Vermelha-Oba-Bem-Querer-250g.jpg?v=638716928460000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-zero-lactose-frutas-vermelha-oba-bem-querer-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-zero-lactose-frutas-vermelha-oba-bem-querer-250g/p",
+  popularity: 366
  },
  {
   sku: "oba-100009319",
@@ -3673,7 +4039,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos castanhas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10314700/Mix-Nuts-Berries-Oba-Bem-Querer-300g.jpg?v=638752460810100000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-nuts-berries-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-nuts-berries-oba-bem-querer-300g/p",
+  popularity: 367
  },
  {
   sku: "oba-100009314",
@@ -3683,7 +4050,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524813/Coxinha-Da-Asa-De-Frango-Temperada-Selecao-Dia-A-Dia-750g.png?v=639197220471670000",
-  productUrl: "https://secure.obahortifruti.com.br/coxinha-da-asa-frango-temperado-selecao-dia-a-dia-750-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/coxinha-da-asa-frango-temperado-selecao-dia-a-dia-750-g/p",
+  popularity: 368
  },
  {
   sku: "oba-100009296",
@@ -3693,7 +4061,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10394561/Vinagrete-Com-Pimentao-Oba-Bem-Querer-300-G.png?v=638765206036330000",
-  productUrl: "https://secure.obahortifruti.com.br/vinagrete-com-pimentao-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/vinagrete-com-pimentao-oba-bem-querer-300-g/p",
+  popularity: 369
  },
  {
   sku: "oba-100009213",
@@ -3703,7 +4072,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492382/Pao-Brioche-Gourmet-Casa-Do-Pao-220-G.jpg?v=639134964429670000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-brioche-gourmet-casa-do-pao-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-brioche-gourmet-casa-do-pao-220-g/p",
+  popularity: 370
  },
  {
   sku: "oba-100009204",
@@ -3713,7 +4083,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520325/Yorgus-Cottagy-400-G.jpg?v=639168684491970000",
-  productUrl: "https://secure.obahortifruti.com.br/yorgus-cottagy-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/yorgus-cottagy-400-g/p",
+  popularity: 371
  },
  {
   sku: "oba-100009203",
@@ -3723,7 +4094,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520324/Yorgus-Cottagy-200g.jpg?v=639168684482270000",
-  productUrl: "https://secure.obahortifruti.com.br/yorgus-cottagy-200-gr/p"
+  productUrl: "https://secure.obahortifruti.com.br/yorgus-cottagy-200-gr/p",
+  popularity: 372
  },
  {
   sku: "oba-100009189",
@@ -3733,7 +4105,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475795/Pao-Frances-Rustico-Fermentacao-Natural-310-G.jpg?v=638938816330070000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-frances-rustico-fermentacao-natural-310-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-frances-rustico-fermentacao-natural-310-g/p",
+  popularity: 373
  },
  {
   sku: "oba-100009155",
@@ -3743,7 +4116,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474763/Ciabatta-Francesa-Fermentacao-Natural-130-G.png?v=638893017710100000",
-  productUrl: "https://secure.obahortifruti.com.br/ciabatta-francesa-fermentacao-natural-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ciabatta-francesa-fermentacao-natural-130-g/p",
+  popularity: 374
  },
  {
   sku: "oba-100009096",
@@ -3753,7 +4127,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475643/Barra-De-Chocolate-Cacau-Extra-Milka-100g.png?v=638936425211930000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-cacau-extra-milka-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-cacau-extra-milka-100g/p",
+  popularity: 375
  },
  {
   sku: "oba-100008978",
@@ -3763,7 +4138,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia feijao & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9849190/Feijao-Preto-Oba-Bem-Querer-1-Kg.jpg?v=638661704597900000",
-  productUrl: "https://secure.obahortifruti.com.br/feijao-preto-oba-bem-querer-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/feijao-preto-oba-bem-querer-1-kg/p",
+  popularity: 376
  },
  {
   sku: "oba-100008940",
@@ -3773,7 +4149,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477419/Queijo-Mussarela-Ralado-Oba-Bem-Querer-200-G.jpg?v=639014004485970000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-ralado-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-ralado-oba-bem-querer-200-g/p",
+  popularity: 377
  },
  {
   sku: "oba-100008911",
@@ -3783,7 +4160,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos costela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524221/Costela-Suina-Em-Tiras-Moura-Oba-Reserve-500-G.png?v=639190386515770000",
-  productUrl: "https://secure.obahortifruti.com.br/costela-suina-em-tiras-moura-oba-reserve-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/costela-suina-em-tiras-moura-oba-reserve-500-g/p",
+  popularity: 378
  },
  {
   sku: "oba-100008910",
@@ -3793,7 +4171,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos lombo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524218/Bife-Chorizo-Suino-Moura-Oba-Reserve-500-G.png?v=639190386470730000",
-  productUrl: "https://secure.obahortifruti.com.br/bife-chorizo-suino-moura-oba-reserve-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bife-chorizo-suino-moura-oba-reserve-500-g/p",
+  popularity: 379
  },
  {
   sku: "oba-100008908",
@@ -3803,7 +4182,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "oba",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10211640/Alcatra-Suina-Moura-Oba-Reserve-500-G.png?v=638725459608030000",
-  productUrl: "https://secure.obahortifruti.com.br/alcatra-suina-moura-oba-reserve-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alcatra-suina-moura-oba-reserve-500-g/p",
+  popularity: 380
  },
  {
   sku: "oba-100008894",
@@ -3813,7 +4193,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10140321/Leite-Semidesnatado-Zero-Lactose-Oba-Bem-Querer-1-L.jpg?v=638710700031970000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-semidesnatado-zero-lactose-oba-bem-querer-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-semidesnatado-zero-lactose-oba-bem-querer-1-l/p",
+  popularity: 381
  },
  {
   sku: "oba-100008893",
@@ -3823,7 +4204,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10140319/Leite-Integral-Oba-Bem-Querer-1-L.jpg?v=638710700011100000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-integral-oba-bem-querer-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-integral-oba-bem-querer-1-l/p",
+  popularity: 382
  },
  {
   sku: "oba-100008889",
@@ -3833,7 +4215,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482621/Iogurte-Desnatado-Oba-Bem-Querer-550-G.jpg?v=639087595924800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-oba-bem-querer-550-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-oba-bem-querer-550-g/p",
+  popularity: 383
  },
  {
   sku: "oba-100008842",
@@ -3843,7 +4226,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9002196/Cubos-File-Frango-Kg.png?v=638588228647830000",
-  productUrl: "https://secure.obahortifruti.com.br/cubos-file-frango-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/cubos-file-frango-kg/p",
+  popularity: 384
  },
  {
   sku: "oba-100008808",
@@ -3853,7 +4237,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9147843/File-Frango-Empanado-Oba-Kg.jpg?v=638598600213800000",
-  productUrl: "https://secure.obahortifruti.com.br/file-frango-empanado-oba-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-frango-empanado-oba-kg/p",
+  popularity: 385
  },
  {
   sku: "oba-100008639",
@@ -3863,7 +4248,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios fondue & especiais fondue",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474678/Fondue-De-Queijo-Gruyere-Emmental-E-Prato-Oba-Bem-Querer-400-G.jpg?v=638884402706100000",
-  productUrl: "https://secure.obahortifruti.com.br/fondue-de-queijo-gruyere--emmental-e-prato-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/fondue-de-queijo-gruyere--emmental-e-prato-oba-bem-querer-400-g/p",
+  popularity: 386
  },
  {
   sku: "oba-100008625",
@@ -3873,7 +4259,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios fondue & especiais fondue",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518717/Fondue-De-Chocolate-Oba-Bem-Querer-250-G.png?v=639155911102600000",
-  productUrl: "https://secure.obahortifruti.com.br/fondue-de-chocolate-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/fondue-de-chocolate-oba-bem-querer-250-g/p",
+  popularity: 387
  },
  {
   sku: "oba-100008492",
@@ -3883,7 +4270,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10154476/Refrigerante-Coca-Cola-Zero-250-Ml.png?v=638713327967900000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-coca-cola-zero-250-ml/p",
+  popularity: 388
  },
  {
   sku: "oba-100008280",
@@ -3893,7 +4281,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518711/Bisnaguinha-Fermentacao-Natural-Oba-Bem-Querer-300-G.jpg?v=639155911058130000",
-  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-fermentacao-natural-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-fermentacao-natural-oba-bem-querer-300-g/p",
+  popularity: 389
  },
  {
   sku: "oba-100008277",
@@ -3903,7 +4292,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890915/Pao-De-Forma-Castanha---Quinoa-Fermentacao-Natural-Oba-Bem-Querer-400-G.png?v=638667680563730000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-castanha---quinoa-fermentacao-natural-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-castanha---quinoa-fermentacao-natural-oba-bem-querer-400-g/p",
+  popularity: 390
  },
  {
   sku: "oba-100008276",
@@ -3913,7 +4303,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9928705/Pao-De-Forma-Chia---Macadamia-Fermentacao-Natural-Oba-Bem-Querer-400-G.jpg?v=638673800752530000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-chia---macadamia-fermentacao-natural-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-chia---macadamia-fermentacao-natural-oba-bem-querer-400-g/p",
+  popularity: 391
  },
  {
   sku: "oba-100007827",
@@ -3923,7 +4314,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos castanhas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5431341/Mix-Frutas-Secas-Oba-Bem-Querer-520-G.png?v=638372015219570000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-frutas-secas-oba-bem-querer-520-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-frutas-secas-oba-bem-querer-520-g/p",
+  popularity: 392
  },
  {
   sku: "oba-100007821",
@@ -3933,7 +4325,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890903/Sorvete-Doce-De-Leite-Oba-Bem-Querer-15-L.png?v=638667680433570000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-doce-de-leite-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-doce-de-leite-oba-bem-querer-1-5-l/p",
+  popularity: 393
  },
  {
   sku: "oba-100007439",
@@ -3943,7 +4336,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes cenoura",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6168124/Cenoura-Ralada-300g.png?v=638465395258200000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-ralada-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-ralada-300g/p",
+  popularity: 394
  },
  {
   sku: "oba-100007272",
@@ -3953,7 +4347,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9690279/Alface-Lisa-Verde-Baby-Villa-Das-Folhas-150g.png?v=638641761137370000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-lisa-verde-baby-villa-das-folhas-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-lisa-verde-baby-villa-das-folhas-150-g/p",
+  popularity: 395
  },
  {
   sku: "oba-100007147",
@@ -3963,7 +4358,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523354/Queijo-Parmesao-Scala-06-Meses-Ralado.jpg?v=639186792457070000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-scala-06-meses-ralado/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-scala-06-meses-ralado/p",
+  popularity: 396
  },
  {
   sku: "oba-100006966",
@@ -3973,7 +4369,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5244841/Extrato-De-Tomate-Elefante-300-G.jpg?v=638344700673070000",
-  productUrl: "https://secure.obahortifruti.com.br/extrato-de-tomate-elefante-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/extrato-de-tomate-elefante-300-g/p",
+  popularity: 397
  },
  {
   sku: "oba-100006097",
@@ -3983,7 +4380,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes legumes congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9896568/Batata-Mccain-Airfryer-600g.png?v=638668616063400000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-mccain-airfryer-600g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-mccain-airfryer-600g/p",
+  popularity: 398
  },
  {
   sku: "oba-100005937",
@@ -3993,7 +4391,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos ovos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10211481/Ovo-Vermelho-Grande-Organico-Raiar-Com-20-Unidades.png?v=638725423465300000",
-  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-grande-organico-raiar-com-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovo-vermelho-grande-organico-raiar-com-20-unidades/p",
+  popularity: 399
  },
  {
   sku: "oba-100005914",
@@ -4003,7 +4402,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491165/Salgadinho-Garytos-Sequoia-120-G.jpg?v=639128910565230000",
-  productUrl: "https://secure.obahortifruti.com.br/salgadinho-garytos-sequoia-120-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/salgadinho-garytos-sequoia-120-g/p",
+  popularity: 400
  },
  {
   sku: "oba-100005809",
@@ -4013,7 +4413,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos antepastos & conservas boursin",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8449400/Boursin-Azeitona-Preta-Oba-Bem-Querer-200-G.jpg?v=638498193749100000",
-  productUrl: "https://secure.obahortifruti.com.br/boursin-azeitona-preta-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/boursin-azeitona-preta-oba-bem-querer-200-g/p",
+  popularity: 401
  },
  {
   sku: "oba-100005266",
@@ -4023,7 +4424,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523094/Geleia-De-Tangerina-E-Laranja-Sem-Acucar-Oba-Bem-Querer-284-G.jpg?v=639185262405600000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-de-tangerina-e-laranja-sem-acucar-oba-bem-querer-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-de-tangerina-e-laranja-sem-acucar-oba-bem-querer-284-g/p",
+  popularity: 402
  },
  {
   sku: "oba-100005264",
@@ -4033,7 +4435,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522950/Geleia-Israelense-De-Maca-E-Canela-Oba-Bem-Querer-284-G.jpg?v=639183318653200000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-de-maca-e-canela-oba-bem-querer-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-de-maca-e-canela-oba-bem-querer-284-g/p",
+  popularity: 403
  },
  {
   sku: "oba-100005263",
@@ -4043,7 +4446,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517617/Batata-Chips-Rustica-Lisa-Oba-Bem-Querer-280-G.png?v=639150727913730000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-chips-rustica-lisa-oba-bem-querer-280-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-chips-rustica-lisa-oba-bem-querer-280-g/p",
+  popularity: 404
  },
  {
   sku: "oba-100005165",
@@ -4053,7 +4457,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481331/Massa-Italiana-Linguine-Com-Trufas-Elite-Com-Ovos-La-Campofilone-200-G.jpg?v=639077268403200000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-linguine-com-trufas-elite-com-ovos-la-campofilone-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-linguine-com-trufas-elite-com-ovos-la-campofilone-200-g/p",
+  popularity: 405
  },
  {
   sku: "oba-100004857",
@@ -4063,7 +4468,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446437/Creme-De-Leite-Nestle-300g.jpg?v=638498190690030000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-nestle-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-nestle-300g/p",
+  popularity: 406
  },
  {
   sku: "oba-100004793",
@@ -4073,7 +4479,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia arroz",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446425/Arroz-Camil-1-Kg.jpg?v=638498190679700000",
-  productUrl: "https://secure.obahortifruti.com.br/arroz-camil-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/arroz-camil-1-kg/p",
+  popularity: 407
  },
  {
   sku: "oba-100004760",
@@ -4083,7 +4490,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9560159/Farinha-De-Trigo-Tradicional-Renata-1-Kg.png?v=638628691080470000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-de-trigo-tradicional-renata-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-de-trigo-tradicional-renata-1-kg/p",
+  popularity: 408
  },
  {
   sku: "oba-100004747",
@@ -4093,7 +4501,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520317/Manteiga-Tablete-Com-Sal-Aviacao-200g.jpg?v=639168684395230000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-com-sal-aviacao-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-com-sal-aviacao-200g/p",
+  popularity: 409
  },
  {
   sku: "oba-100004735",
@@ -4103,7 +4512,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras couve-flor",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5395757/Couve-Flor-Floretes-Oba.png?v=638368664631430000",
-  productUrl: "https://secure.obahortifruti.com.br/couve-flor-floretes-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/couve-flor-floretes-oba/p",
+  popularity: 410
  },
  {
   sku: "oba-100004707",
@@ -4113,7 +4523,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua mineral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446310/Agua-Mineral-Sem-Gas-Minalba-15-L.jpg?v=638498190569230000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-sem-gas-minalba-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-sem-gas-minalba-1-5-l/p",
+  popularity: 411
  },
  {
   sku: "oba-100004694",
@@ -4123,7 +4534,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251650/Kit-Sopa-Oba.jpg?v=638144113306730000",
-  productUrl: "https://secure.obahortifruti.com.br/kit-sopa-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/kit-sopa-oba/p",
+  popularity: 412
  },
  {
   sku: "oba-100004602",
@@ -4133,7 +4545,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5692186/Cenoura-E-Repolho-Oba.png?v=638390192810630000",
-  productUrl: "https://secure.obahortifruti.com.br/cenoura-e-repolho-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/cenoura-e-repolho-oba/p",
+  popularity: 413
  },
  {
   sku: "oba-225092",
@@ -4143,7 +4556,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9781423/Creme-De-Leite-Leve-Nestle-200g.png?v=638652954850400000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-leve-nestle-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-leve-nestle-200g/p",
+  popularity: 414
  },
  {
   sku: "oba-100002533",
@@ -4153,7 +4567,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448401/Suco-Pink-Lemonade-Natural-One-900-Ml.jpg?v=638498192752900000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-pink-lemonade-natural-one-900-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-pink-lemonade-natural-one-900-ml/p",
+  popularity: 415
  },
  {
   sku: "oba-100002445",
@@ -4163,7 +4578,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes palmito",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173598/Palmito-Pupunha-Rodela-Oba-Bem-Querer-300g.jpg?v=638716927442670000",
-  productUrl: "https://secure.obahortifruti.com.br/palmito-pupunha-rodela-oba-bem-querer-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palmito-pupunha-rodela-oba-bem-querer-300g/p",
+  popularity: 416
  },
  {
   sku: "oba-100001008",
@@ -4173,7 +4589,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua mineral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477394/Agua-Mineral-Natural-Sem-Gas-Oba-Bem-Querer-6-L.jpg?v=639014002580200000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-natural-sem-gas-oba-bem-querer-6-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-natural-sem-gas-oba-bem-querer-6-l/p",
+  popularity: 417
  },
  {
   sku: "oba-100002309",
@@ -4183,7 +4600,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517321/Milho-Torrado-Salgado-Natural-Oba-Bem-Querer-200-G.jpg?v=639144696426430000",
-  productUrl: "https://secure.obahortifruti.com.br/milho-torrado-salgado-natural-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/milho-torrado-salgado-natural-oba-bem-querer-200-g/p",
+  popularity: 418
  },
  {
   sku: "oba-100003524",
@@ -4193,7 +4611,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10394342/Queijo-Minas-Meia-Cura-Rigoni-Fracionado.png?v=638765204002630000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-meia-cura-rigoni-fracionado/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-meia-cura-rigoni-fracionado/p",
+  popularity: 419
  },
  {
   sku: "oba-100003231",
@@ -4203,7 +4622,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9928621/Passata-De-Tomate-Italiana-Com-Manjericao-Oba-Bem-Querer-680-G.jpg?v=638673799710700000",
-  productUrl: "https://secure.obahortifruti.com.br/passata-de-tomate-italiana-com-manjericao-oba-bem-querer-680-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/passata-de-tomate-italiana-com-manjericao-oba-bem-querer-680-g/p",
+  popularity: 420
  },
  {
   sku: "oba-100001501",
@@ -4213,7 +4633,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria presuntos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5904570/Presunto-Cru-Portugues-Oba-Bem-Querer-Fatiado-100-G.png?v=638412764718600000",
-  productUrl: "https://secure.obahortifruti.com.br/presunto-cru-portugues-oba-bem-querer-fatiado-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/presunto-cru-portugues-oba-bem-querer-fatiado-100-g/p",
+  popularity: 421
  },
  {
   sku: "oba-100002911",
@@ -4223,7 +4644,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras mix de verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488974/Salada-Campestre-Higienizada-La-Vita-200-G.jpg?v=639120258456130000",
-  productUrl: "https://secure.obahortifruti.com.br/salada-campestre-higienizada-la-vita-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/salada-campestre-higienizada-la-vita-200-g/p",
+  popularity: 422
  },
  {
   sku: "oba-100002815",
@@ -4233,7 +4655,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cafe torrado & moido",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447320/Cafe-Torrado-E-Moido-Tradicional-Melitta-500-G.jpg?v=638498191505330000",
-  productUrl: "https://secure.obahortifruti.com.br/cafe-torrado-e-moido-tradicional-melitta-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cafe-torrado-e-moido-tradicional-melitta-500-g/p",
+  popularity: 423
  },
  {
   sku: "oba-100003136",
@@ -4243,7 +4666,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos nozes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10461484/Nozes-Mariposa-Extra-Light-Oba-Bem-Querer-180-G.jpg?v=638770603653700000",
-  productUrl: "https://secure.obahortifruti.com.br/nozes-mariposa-extra-light-oba-bem-querer-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/nozes-mariposa-extra-light-oba-bem-querer-180-g/p",
+  popularity: 424
  },
  {
   sku: "oba-100001538",
@@ -4253,7 +4677,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9520825/Leite-Zero-Lactose-Molico-1-L.png?v=638625416569000000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-molico-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-molico-1-l/p",
+  popularity: 425
  },
  {
   sku: "oba-100002932",
@@ -4263,7 +4688,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477887/Creme-De-Leite-Zero-Lactose-Piracanjuba-200g.jpg?v=639033264383330000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-zero-lactose-piracanjuba-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-zero-lactose-piracanjuba-200g/p",
+  popularity: 426
  },
  {
   sku: "oba-100003329",
@@ -4273,7 +4699,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447041/Leite-Semidesnatado-Ninho-Levinho-1-L.jpg?v=638498191245530000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-semidesnatado-ninho-levinho-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-semidesnatado-ninho-levinho-1-l/p",
+  popularity: 427
  },
  {
   sku: "oba-100002069",
@@ -4283,7 +4710,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4254382/Queijo-Gorgonzola-Quata-Em-Lascas-Kg.jpg?v=638144115153870000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-gorgonzola-quata-em-lascas-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-gorgonzola-quata-em-lascas-kg/p",
+  popularity: 428
  },
  {
   sku: "oba-100003209",
@@ -4293,7 +4721,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobora",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5122545/Abobora-Seca-Descascada.png?v=638304969834900000",
-  productUrl: "https://secure.obahortifruti.com.br/abobora-seca-descascada/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobora-seca-descascada/p",
+  popularity: 429
  },
  {
   sku: "oba-13223",
@@ -4303,7 +4732,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9879029/Chocolate-Biscoito-Lu-Milka-87-G.jpg?v=638665987960300000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-importado-biscoito-lu-milka-87-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-importado-biscoito-lu-milka-87-g/p",
+  popularity: 430
  },
  {
   sku: "oba-100001099",
@@ -4313,7 +4743,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251683/Sopa-De-Legumes-Oba.jpg?v=638144113331270000",
-  productUrl: "https://secure.obahortifruti.com.br/sopa-de-legumes-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/sopa-de-legumes-oba/p",
+  popularity: 431
  },
  {
   sku: "oba-100002221",
@@ -4323,7 +4754,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos coxao duro",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251776/Cubos-Nobres-Bovino-Kg.jpg?v=638144113396600000",
-  productUrl: "https://secure.obahortifruti.com.br/cubos-nobres-bovino-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/cubos-nobres-bovino-kg/p",
+  popularity: 432
  },
  {
   sku: "oba-13058",
@@ -4333,7 +4765,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8593512/Bisnaga-De-Dupla-Polpa-De-Tomate-Italiano-Concentrado-Mutti-130-G.png?v=638514787545100000",
-  productUrl: "https://secure.obahortifruti.com.br/bisnaga-de-dupla-polpa-de-tomate-italiano-concentrado-mutti-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisnaga-de-dupla-polpa-de-tomate-italiano-concentrado-mutti-130-g/p",
+  popularity: 433
  },
  {
   sku: "oba-13035",
@@ -4343,7 +4776,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10696343/Queijo-Parmesao-La-Paulina-Ralado-Kg.jpg?v=638788891085430000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-la-paulina-ralado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-la-paulina-ralado-kg/p",
+  popularity: 434
  },
  {
   sku: "oba-12998",
@@ -4353,7 +4787,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523834/Coxa-Com-Sobrecoxa-Sem-Osso-Kg.png?v=639189486679200000",
-  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-sem-osso-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/coxa-com-sobrecoxa-sem-osso-kg/p",
+  popularity: 435
  },
  {
   sku: "oba-100002915",
@@ -4363,7 +4798,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10038058/Farinha-De-Rosca-Oba-Bem-Querer-500-G.jpg?v=638691943479400000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-de-rosca-oba-bem-querer-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-de-rosca-oba-bem-querer-500-g/p",
+  popularity: 436
  },
  {
   sku: "oba-100003545",
@@ -4373,7 +4809,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4252647/Sopinha-Baby-Oba.jpg?v=638144114007900000",
-  productUrl: "https://secure.obahortifruti.com.br/sopinha-baby-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/sopinha-baby-oba/p",
+  popularity: 437
  },
  {
   sku: "oba-22463814",
@@ -4383,7 +4820,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520300/Manteiga-Tablete-Com-Sal-President-200g.jpg?v=639168678454600000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-com-sal-president-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-com-sal-president-200g/p",
+  popularity: 438
  },
  {
   sku: "oba-100002685",
@@ -4393,7 +4831,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos miudo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259291/Figado-Bovino-Fatiado-Kg.jpg?v=638144118366000000",
-  productUrl: "https://secure.obahortifruti.com.br/figado-bovino-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/figado-bovino-fatiado-kg/p",
+  popularity: 439
  },
  {
   sku: "oba-100001926",
@@ -4403,7 +4842,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos & condimentos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9593604/Ketchup-Heinz-Tradicional--397g.png?v=638631355928770000",
-  productUrl: "https://secure.obahortifruti.com.br/ketchup-heinz-tradicional--397g/p"
+  productUrl: "https://secure.obahortifruti.com.br/ketchup-heinz-tradicional--397g/p",
+  popularity: 440
  },
  {
   sku: "oba-100002022",
@@ -4413,7 +4853,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877109/Macarrao-Spaghetti-Nero-Seppia-La-Molisana-500-G.png?v=638575391329730000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-spaghetti-nero-seppia-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-spaghetti-nero-seppia-la-molisana-500-g/p",
+  popularity: 441
  },
  {
   sku: "oba-100001884",
@@ -4423,7 +4864,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446377/Manteiga-Tablete-Sem-Sal-Aviacao-200g.jpg?v=638498190634170000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-sem-sal-aviacao-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-sem-sal-aviacao-200g/p",
+  popularity: 442
  },
  {
   sku: "oba-100002065",
@@ -4433,7 +4875,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520316/Manteiga-Pote-Com-Sal-Aviacao-500g.jpg?v=639168684384930000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-pote-com-sal-aviacao-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-pote-com-sal-aviacao-500g/p",
+  popularity: 443
  },
  {
   sku: "oba-13084",
@@ -4443,7 +4886,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos musculo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524768/Musculo-Bovino-Oba-Reserve-Kg.png?v=639197202432270000",
-  productUrl: "https://secure.obahortifruti.com.br/musculo-bovino-oba-reserve-as-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/musculo-bovino-oba-reserve-as-kg/p",
+  popularity: 444
  },
  {
   sku: "oba-100002934",
@@ -4453,7 +4897,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos secos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474852/Tempero-Louro-Em-Folhas-Aroma-Das-Ervas-15-G.png?v=638896572382800000",
-  productUrl: "https://secure.obahortifruti.com.br/tempero-louro-em-folhas-aroma-das-ervas-15-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/tempero-louro-em-folhas-aroma-das-ervas-15-g/p",
+  popularity: 445
  },
  {
   sku: "oba-100001899",
@@ -4463,7 +4908,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua com gas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446741/Agua-Mineral-Sao-Lourenco-Com-Gas-126-Litro.jpg?v=638498190968200000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-sao-lourenco-com-gas-1-26-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-sao-lourenco-com-gas-1-26-litro/p",
+  popularity: 446
  },
  {
   sku: "oba-22463815",
@@ -4473,7 +4919,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473724/Manteiga-Tablete-Sem-Sal-President-200g.jpg?v=638835320877170000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-sem-sal-president-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-tablete-sem-sal-president-200g/p",
+  popularity: 447
  },
  {
   sku: "oba-12909",
@@ -4483,7 +4930,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos & condimentos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446565/Mostarda-Heinz-255-G.jpg?v=638498190806170000",
-  productUrl: "https://secure.obahortifruti.com.br/mostarda-heinz-255-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mostarda-heinz-255-g/p",
+  popularity: 448
  },
  {
   sku: "oba-11436",
@@ -4493,7 +4941,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria peito de peru & frango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11486956/Peito-De-Peru-Cozido-Defumado-Sadia-Fatiado-Kg.png?v=639104946426630000",
-  productUrl: "https://secure.obahortifruti.com.br/peito-de-peru-cozido-defumado-sadia-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/peito-de-peru-cozido-defumado-sadia-fatiado-kg/p",
+  popularity: 449
  },
  {
   sku: "oba-11384",
@@ -4503,7 +4952,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8751402/Limao-Tahiti-Organico-500-G.png?v=638550031601670000",
-  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti-organico-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/limao-tahiti-organico-500-g/p",
+  popularity: 450
  },
  {
   sku: "oba-9666",
@@ -4513,7 +4963,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473774/Queijo-Minas-Frescal-Alilatte-Kg.jpg?v=638835320901700000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-alilatte-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-alilatte-kg/p",
+  popularity: 451
  },
  {
   sku: "oba-10245",
@@ -4523,7 +4974,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447987/Iogurte-Natural-Integral-Danone-160-G.jpg?v=638498192323070000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-danone-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-danone-160-g/p",
+  popularity: 452
  },
  {
   sku: "oba-4353",
@@ -4533,7 +4985,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446719/Farinha-De-Trigo-Tradicional-Dona-Benta-1-Kg.jpg?v=638498190948200000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-de-trigo-tradicional-dona-benta-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-de-trigo-tradicional-dona-benta-1-kg/p",
+  popularity: 453
  },
  {
   sku: "oba-5953",
@@ -4543,7 +4996,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco natural",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4921800/Suco-Mix-Rosa-Pitaya-Morango-Laranja-Oba-Bem-Querer-500ml.jpg?v=638268394624200000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-mix-rosa-pitaya-morango-laranja-oba-bem-querer-500ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-mix-rosa-pitaya-morango-laranja-oba-bem-querer-500ml/p",
+  popularity: 454
  },
  {
   sku: "oba-9915",
@@ -4553,7 +5007,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11483370/Iogurte-Desnatado-0--Gordura-Yorgus-500g.jpg?v=639098682532230000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-0--gordura-yorgus-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-0--gordura-yorgus-500g/p",
+  popularity: 455
  },
  {
   sku: "oba-6376",
@@ -4563,7 +5018,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos linguica suina",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482804/Linguica-Calabresa-Fina-Selecao-Dia-A-Dia-Kg.jpg?v=639089372506100000",
-  productUrl: "https://secure.obahortifruti.com.br/linguica-calabresa-fina-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/linguica-calabresa-fina-selecao-dia-a-dia-kg/p",
+  popularity: 456
  },
  {
   sku: "oba-4330",
@@ -4573,7 +5029,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475779/Massa-Italiana-Spaghetti-La-Molisana-500-G.jpg?v=638938806421870000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-spaghetti-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-spaghetti-la-molisana-500-g/p",
+  popularity: 457
  },
  {
   sku: "oba-8590",
@@ -4583,7 +5040,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas banana",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481640/Banana-Ouro-Kg.png?v=639080787710270000",
-  productUrl: "https://secure.obahortifruti.com.br/banana-ouro-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/banana-ouro-kg/p",
+  popularity: 458
  },
  {
   sku: "oba-5940",
@@ -4593,7 +5051,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10918662/Queijo-Tipo-Burrata-De-Bufala-Bom-Destino-200-G.jpg?v=638824963374270000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-tipo-burrata-de-bufala-bom-destino-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-tipo-burrata-de-bufala-bom-destino-200-g/p",
+  popularity: 459
  },
  {
   sku: "oba-5001",
@@ -4603,7 +5062,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua de coco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8731517/Agua-De-Coco-Oba-Bem-Querer-500-Ml.png?v=638545135316100000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-de-coco-oba-bem-querer-500-ml-206757-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-de-coco-oba-bem-querer-500-ml-206757-1/p",
+  popularity: 460
  },
  {
   sku: "oba-6523",
@@ -4613,7 +5073,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas vegetais bebida de aveia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476283/Alimento-De-Aveia-E-Caju-Barista-A-Tal-Da-Castanha-1-L.jpg?v=638956253757930000",
-  productUrl: "https://secure.obahortifruti.com.br/alimento-de-aveia-e-caju-barista-a-tal-da-castanha-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/alimento-de-aveia-e-caju-barista-a-tal-da-castanha-1-l/p",
+  popularity: 461
  },
  {
   sku: "oba-4613",
@@ -4623,7 +5084,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250092/Requeijao-Cremoso-Tradicional-Bisnaga-Catupiry-250-G.jpg?v=638144112161230000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-bisnaga-catupiry-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-tradicional-bisnaga-catupiry-250-g/p",
+  popularity: 462
  },
  {
   sku: "oba-11845",
@@ -4633,7 +5095,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10812211/Capeletti-Com-Presunto-Parma-Bertagni-500-G.jpg?v=638803975525070000",
-  productUrl: "https://secure.obahortifruti.com.br/capeletti-com-presunto-parma-bertagni-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/capeletti-com-presunto-parma-bertagni-500-g/p",
+  popularity: 463
  },
  {
   sku: "oba-5538",
@@ -4643,7 +5106,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue peixes tilapia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488976/File-Tilapia-Empanado-Multigraos-Copacol-400-G.jpg?v=639120258487830000",
-  productUrl: "https://secure.obahortifruti.com.br/file-tilapia-empanado-multigraos-copacol-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-tilapia-empanado-multigraos-copacol-400-g/p",
+  popularity: 464
  },
  {
   sku: "oba-10349",
@@ -4653,7 +5117,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos costela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524127/Costela-Suina-Temperada-Oba-Reserve-Kg.png?v=639190350538070000",
-  productUrl: "https://secure.obahortifruti.com.br/costela-suina-temperada-oba-reserve-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/costela-suina-temperada-oba-reserve-kg/p",
+  popularity: 465
  },
  {
   sku: "oba-8659",
@@ -4663,7 +5128,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258593/Massa-Italiana-Pappardelle-La-Molisana-500-G.jpg?v=638144117889730000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-pappardelle-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-pappardelle-la-molisana-500-g/p",
+  popularity: 466
  },
  {
   sku: "oba-4341",
@@ -4673,7 +5139,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877054/Massa-Italiana-Fusilli-La-Molisana-500-G.png?v=638575391187400000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-fusilli-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-fusilli-la-molisana-500-g/p",
+  popularity: 467
  },
  {
   sku: "oba-4466",
@@ -4683,7 +5150,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia atomatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448919/Molho-De-Tomate-Tradicional-Salsaretti-300-G.jpg?v=638498193265430000",
-  productUrl: "https://secure.obahortifruti.com.br/molho-de-tomate-tradicional-salsaretti-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/molho-de-tomate-tradicional-salsaretti-300-g/p",
+  popularity: 468
  },
  {
   sku: "oba-8205",
@@ -4693,7 +5161,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9964720/Batata-Palha-Tradicional-Oba-Bem-Querer-100-G.jpg?v=638679776596930000",
-  productUrl: "https://secure.obahortifruti.com.br/batata-palha-tradicional-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/batata-palha-tradicional-oba-bem-querer-100-g/p",
+  popularity: 469
  },
  {
   sku: "oba-8575",
@@ -4703,7 +5172,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos ovos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474484/Ovos-Organicos-Caipira-Fazenda-Da-Toca-Com-20-Unidades.png?v=638872308368400000",
-  productUrl: "https://secure.obahortifruti.com.br/ovos-organicos-caipira-fazenda-da-toca-com-20-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/ovos-organicos-caipira-fazenda-da-toca-com-20-unidades/p",
+  popularity: 470
  },
  {
   sku: "oba-9561",
@@ -4713,7 +5183,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4251505/Queijo-Prato-Pj-Fatiado-Kg.jpg?v=638144113204600000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-pj-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-pj-fatiado-kg/p",
+  popularity: 471
  },
  {
   sku: "oba-10805",
@@ -4723,7 +5194,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448421/Cebola-Organica-500-G.jpg?v=638498192777900000",
-  productUrl: "https://secure.obahortifruti.com.br/cebola-organica-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cebola-organica-500-g/p",
+  popularity: 472
  },
  {
   sku: "oba-6525",
@@ -4733,7 +5205,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4254431/Manteiga-La-Motte-Com-Sal-President-250g.jpg?v=638144115184970000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-la-motte-com-sal-president-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-la-motte-com-sal-president-250g/p",
+  popularity: 473
  },
  {
   sku: "oba-7565",
@@ -4743,7 +5216,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes abobora",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473936/Abobora-Cabotia-Cortes-Oba.png?v=638836254942200000",
-  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-cortes-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/abobora-cabotia-cortes-oba/p",
+  popularity: 474
  },
  {
   sku: "oba-12543",
@@ -4753,7 +5227,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas secas fruta seca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258570/Damasco-Turco-Oba-Bem-Querer-300-G.jpg?v=638760004372230000",
-  productUrl: "https://secure.obahortifruti.com.br/damasco-turco-oba-bem-querer-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/damasco-turco-oba-bem-querer-300-g/p",
+  popularity: 475
  },
  {
   sku: "oba-11785",
@@ -4763,7 +5238,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "restaurante entrada",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4855570/Pao-Italiano-Filao-Oba-Bem-Querer-400-G.png?v=638257054725970000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-italiano-filao-oba-bem-querer-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-italiano-filao-oba-bem-querer-400-g/p",
+  popularity: 476
  },
  {
   sku: "oba-11155",
@@ -4773,7 +5249,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti cogumelos e brotos champignon",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517532/Cogumelo-Champignon-Paris-Hochibra-200-G.jpg?v=639149640475530000",
-  productUrl: "https://secure.obahortifruti.com.br/cogumelo-champignon-paris-hochibra-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cogumelo-champignon-paris-hochibra-200-g/p",
+  popularity: 477
  },
  {
   sku: "oba-5474",
@@ -4783,7 +5260,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos outros suinos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8610404/Bife-Ancho-Suino-Oba-Kg.png?v=638517380687430000",
-  productUrl: "https://secure.obahortifruti.com.br/bife-ancho-suino-oba-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/bife-ancho-suino-oba-kg/p",
+  popularity: 478
  },
  {
   sku: "oba-12454",
@@ -4793,7 +5271,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos contrafile",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475327/Contra-File-Bovino-Selecao-Dia-A-Dia-Peca-A-Vacuo-Kg.png?v=638914631700100000",
-  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-selecao-dia-a-dia-peca-a-vacuo-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/contra-file-bovino-selecao-dia-a-dia-peca-a-vacuo-kg/p",
+  popularity: 479
  },
  {
   sku: "oba-4088",
@@ -4803,7 +5282,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4249892/Alface-Crespa-Roxa-Hidroponica.jpg?v=638144111891070000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-roxa-hidroponica/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-roxa-hidroponica/p",
+  popularity: 480
  },
  {
   sku: "oba-8222",
@@ -4813,7 +5293,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10208095/Tomilho-Maco-Unidade.png?v=638724692028370000",
-  productUrl: "https://secure.obahortifruti.com.br/tomilho-maco-unidade/p"
+  productUrl: "https://secure.obahortifruti.com.br/tomilho-maco-unidade/p",
+  popularity: 481
  },
  {
   sku: "oba-8406",
@@ -4823,7 +5304,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173563/Biscoito-De-Polvilho-Parmesao-Oba-Bem-Querer-130-G.jpg?v=638716927009100000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-parmesao-oba-bem-querer-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-parmesao-oba-bem-querer-130-g/p",
+  popularity: 482
  },
  {
   sku: "oba-8900",
@@ -4833,7 +5315,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4253948/Salsinha-Organica-80-G.jpg?v=638144114865700000",
-  productUrl: "https://secure.obahortifruti.com.br/salsinha-organica-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/salsinha-organica-80-g/p",
+  popularity: 483
  },
  {
   sku: "oba-7194",
@@ -4843,7 +5326,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cacau & achocolatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446538/Chocolate-Em-Po-Dois-Frades-Nestle-200-G.jpg?v=638498190782930000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-em-po-dois-frades-nestle-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-em-po-dois-frades-nestle-200-g/p",
+  popularity: 484
  },
  {
   sku: "oba-9698",
@@ -4853,7 +5337,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10857429/Cebolinha-Organica-80-G.png?v=638811210485000000",
-  productUrl: "https://secure.obahortifruti.com.br/cebolinha-organica-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cebolinha-organica-80-g/p",
+  popularity: 485
  },
  {
   sku: "oba-5072",
@@ -4863,7 +5348,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478150/Azeite-Extra-Virgem-Blend-Las-Doscientas-500g.jpg?v=639041682400470000",
-  productUrl: "https://secure.obahortifruti.com.br/azeite-extra-virgem-blend-las-doscientas-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/azeite-extra-virgem-blend-las-doscientas-500g/p",
+  popularity: 486
  },
  {
   sku: "oba-3808",
@@ -4873,7 +5359,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877009/Biscoito-De-Polvilho-Salgado-Vovo-Lela-80-G.png?v=638575391077370000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-salgado-vovo-lela-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-salgado-vovo-lela-80-g/p",
+  popularity: 487
  },
  {
   sku: "oba-3787",
@@ -4883,7 +5370,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia utilidades",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447064/Filtro-De-Papel-Melitta-103-30-Unidades.jpg?v=638498191269530000",
-  productUrl: "https://secure.obahortifruti.com.br/filtro-de-papel-melitta-103-30-unidades/p"
+  productUrl: "https://secure.obahortifruti.com.br/filtro-de-papel-melitta-103-30-unidades/p",
+  popularity: 488
  },
  {
   sku: "oba-7244",
@@ -4893,7 +5381,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261237/Farinha-De-Panko-200g.jpg?v=638144119725330000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-de-panko-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-de-panko-200g/p",
+  popularity: 489
  },
  {
   sku: "oba-10774",
@@ -4903,7 +5392,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia conservas & enlatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474304/Atum-Gomes-Da-Costa-Solido-Natural-Light-170-G.png?v=638863704547770000",
-  productUrl: "https://secure.obahortifruti.com.br/atum-gomes-da-costa-solido-natural-light-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/atum-gomes-da-costa-solido-natural-light-170-g/p",
+  popularity: 490
  },
  {
   sku: "oba-7246",
@@ -4913,7 +5403,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446877/Vinagre-De-Alcool-Castelo-750-Ml.jpg?v=638498191092500000",
-  productUrl: "https://secure.obahortifruti.com.br/vinagre-de-alcool-castelo-750-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/vinagre-de-alcool-castelo-750-ml/p",
+  popularity: 491
  },
  {
   sku: "oba-8860",
@@ -4923,7 +5414,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia utilidades",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250729/Guardanapo-Snob-24x22-Cm-50-Uns.jpg?v=638144112643000000",
-  productUrl: "https://secure.obahortifruti.com.br/guardanapo-snob-24x22-cm-50-uns/p"
+  productUrl: "https://secure.obahortifruti.com.br/guardanapo-snob-24x22-cm-50-uns/p",
+  popularity: 492
  },
  {
   sku: "oba-8588",
@@ -4933,7 +5425,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras acelga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446318/Acelga.jpg?v=638498190577530000",
-  productUrl: "https://secure.obahortifruti.com.br/acelga/p"
+  productUrl: "https://secure.obahortifruti.com.br/acelga/p",
+  popularity: 493
  },
  {
   sku: "oba-3527",
@@ -4943,7 +5436,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474174/Queijo-Brie-Quata-Peca.jpg?v=638854150864900000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-brie-quata-peca/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-brie-quata-peca/p",
+  popularity: 494
  },
  {
   sku: "oba-4024",
@@ -4953,7 +5447,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520825/Iogurte-Integral-Atilatte-170g.jpg?v=639174726902800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-integral-atilatte-170g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-integral-atilatte-170g/p",
+  popularity: 495
  },
  {
   sku: "oba-6266",
@@ -4963,7 +5458,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10550623/Pao-De-Queijo-Congelado-Edicao-Especial-30-Anos-Forno-De-Minas-400-G.jpg?v=638777444781500000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-congelado-edicao-especial-30-anos-forno-de-minas-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-congelado-edicao-especial-30-anos-forno-de-minas-400-g/p",
+  popularity: 496
  },
  {
   sku: "oba-9318",
@@ -4973,7 +5469,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria mortadela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5904573/Mortadela-Finissimo-Oba-Bem-Querer-Kg.png?v=638412764762900000",
-  productUrl: "https://secure.obahortifruti.com.br/mortadela-finissimo-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/mortadela-finissimo-oba-bem-querer-kg/p",
+  popularity: 497
  },
  {
   sku: "oba-6650",
@@ -4983,7 +5480,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173610/Biscoito-Polvilho-Queijo-Provolone-Oba-Bem-Querer-100-G.jpg?v=638716927586570000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-polvilho-queijo-provolone-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-polvilho-queijo-provolone-oba-bem-querer-100-g/p",
+  popularity: 498
  },
  {
   sku: "oba-9016",
@@ -4993,7 +5491,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173609/Biscoito-Polvilho-Queijo-Prato-Oba-Bem-Querer-100-G.jpg?v=638716927570070000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-polvilho-queijo-prato-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-polvilho-queijo-prato-oba-bem-querer-100-g/p",
+  popularity: 499
  },
  {
   sku: "oba-10485",
@@ -5003,7 +5502,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos bisteca",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523814/Bisteca-Suina-Lombo-Kg.png?v=639189486411370000",
-  productUrl: "https://secure.obahortifruti.com.br/bisteca-suina-lombo-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisteca-suina-lombo-kg/p",
+  popularity: 500
  },
  {
   sku: "oba-3889",
@@ -5013,7 +5513,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4252190/Fermento-Po-Royal-100g.jpg?v=638144113685730000",
-  productUrl: "https://secure.obahortifruti.com.br/fermento-po-royal-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/fermento-po-royal-100g/p",
+  popularity: 501
  },
  {
   sku: "oba-4124",
@@ -5023,7 +5524,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524890/Massa-Italiana-Tagliatelle-La-Molisana-500-G.jpg?v=639198888404070000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-tagliatelle-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-tagliatelle-la-molisana-500-g/p",
+  popularity: 502
  },
  {
   sku: "oba-5280",
@@ -5033,7 +5535,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "higiene e limpeza limpeza da casa",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517688/Detergente-Neutro-Ype-500-Ml.jpg?v=639153141094330000",
-  productUrl: "https://secure.obahortifruti.com.br/detergente-neutro-ype-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/detergente-neutro-ype-500-ml/p",
+  popularity: 503
  },
  {
   sku: "oba-12070",
@@ -5043,7 +5546,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173603/Biscoito-De-Polvilho-Parmesao-E-Cebola-Oba-Bem-Querer-100-G.jpg?v=638716927505470000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-parmesao-e-cebola-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-polvilho-parmesao-e-cebola-oba-bem-querer-100-g/p",
+  popularity: 504
  },
  {
   sku: "oba-3798",
@@ -5053,7 +5557,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9656925/Alface-Tricolor.png?v=638637474723470000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-tricolor/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-tricolor/p",
+  popularity: 505
  },
  {
   sku: "oba-12429",
@@ -5063,7 +5568,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti cogumelos e brotos shitake",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517524/Cogumelo-Shiitake-Inteiro-Cogus.jpg?v=639149640372370000",
-  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shiitake-inteiro-cogus/p"
+  productUrl: "https://secure.obahortifruti.com.br/cogumelo-shiitake-inteiro-cogus/p",
+  popularity: 506
  },
  {
   sku: "oba-9344",
@@ -5073,7 +5579,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6092761/Queijo-Mussarela-Zero-Lactose-Fatiado-Oba-Bem-Querer-250-G.png?v=638444660468330000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-zero-lactose-fatiado-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-zero-lactose-fatiado-oba-bem-querer-250-g/p",
+  popularity: 507
  },
  {
   sku: "oba-12288",
@@ -5083,7 +5590,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9025948/File-De-Frango-Desfiado-Kg.png?v=638589919609570000",
-  productUrl: "https://secure.obahortifruti.com.br/file-de-frango-desfiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/file-de-frango-desfiado-kg/p",
+  popularity: 508
  },
  {
   sku: "oba-11147",
@@ -5093,7 +5601,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas coco",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259115/Coco-Seco-Pedacos-Sem-Pele-Oba-Bem-Querer-Kg.jpg?v=638941624559730000",
-  productUrl: "https://secure.obahortifruti.com.br/coco-seco-pedacos-sem-pele-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/coco-seco-pedacos-sem-pele-oba-bem-querer-kg/p",
+  popularity: 509
  },
  {
   sku: "oba-7165",
@@ -5103,7 +5612,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas nectarina",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478373/Nectarina-Importada-Oba-Bem-Querer.jpg?v=639047100669770000",
-  productUrl: "https://secure.obahortifruti.com.br/nectarina-importada-oba-bem-querer/p"
+  productUrl: "https://secure.obahortifruti.com.br/nectarina-importada-oba-bem-querer/p",
+  popularity: 510
  },
  {
   sku: "oba-7909",
@@ -5113,7 +5623,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261982/Aveia-Em-Flocos-Finos-Quaker-165g.jpg?v=638144120291370000",
-  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-finos-quaker-165g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-finos-quaker-165g/p",
+  popularity: 511
  },
  {
   sku: "oba-10923",
@@ -5123,7 +5634,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue aves aves",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5430857/Peito-De-Frango-Com-Osso-Kg.png?v=638371978900370000",
-  productUrl: "https://secure.obahortifruti.com.br/peito-de-frango-com-osso-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/peito-de-frango-com-osso-kg/p",
+  popularity: 512
  },
  {
   sku: "oba-6366",
@@ -5133,7 +5645,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos linguica suina",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6189467/Linguica-Toscana-Aurora-Kg.png?v=638471658788430000",
-  productUrl: "https://secure.obahortifruti.com.br/linguica-toscana-aurora-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/linguica-toscana-aurora-kg/p",
+  popularity: 513
  },
  {
   sku: "oba-3648",
@@ -5143,7 +5656,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9494173/Massa-Italiana-Penne-Rigate-La-Molisana-500-G.png?v=638623472610230000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-penne-rigate-la-molisana-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-penne-rigate-la-molisana-500-g/p",
+  popularity: 514
  },
  {
   sku: "oba-6037",
@@ -5153,7 +5667,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492424/Chocolate-Mesclado-Milka-90g.jpg?v=639135957095870000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-mesclado-milka-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-mesclado-milka-90g/p",
+  popularity: 515
  },
  {
   sku: "oba-7264",
@@ -5163,7 +5678,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras repolho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446424/Repolho-Roxo.jpg?v=638498190677700000",
-  productUrl: "https://secure.obahortifruti.com.br/repolho-roxo/p"
+  productUrl: "https://secure.obahortifruti.com.br/repolho-roxo/p",
+  popularity: 516
  },
  {
   sku: "oba-6095",
@@ -5173,7 +5689,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas outras frutas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6061541/Pitaya-Polpa-Vermelha.png?v=638438754880270000",
-  productUrl: "https://secure.obahortifruti.com.br/pitaya-polpa-vermelha/p"
+  productUrl: "https://secure.obahortifruti.com.br/pitaya-polpa-vermelha/p",
+  popularity: 517
  },
  {
   sku: "oba-12254",
@@ -5183,7 +5700,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10729187/Melao-Espanhol-Obq-Pr-Kg.jpg?v=638792310559370000",
-  productUrl: "https://secure.obahortifruti.com.br/melao-espanhol-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melao-espanhol-kg/p",
+  popularity: 518
  },
  {
   sku: "oba-9099",
@@ -5193,7 +5711,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446796/Chuchu-Organico-600-G.jpg?v=638498191017070000",
-  productUrl: "https://secure.obahortifruti.com.br/chuchu-organico-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chuchu-organico-600-g/p",
+  popularity: 519
  },
  {
   sku: "oba-12806",
@@ -5203,7 +5722,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes legumes congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481285/Aspargo-Verde-Congelado-Daucy-300-G.jpg?v=639077262430530000",
-  productUrl: "https://secure.obahortifruti.com.br/aspargo-verde-congelado-daucy-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aspargo-verde-congelado-daucy-300-g/p",
+  popularity: 520
  },
  {
   sku: "oba-7682",
@@ -5213,7 +5733,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517312/Amendoim-Crocante-Tradicional-Oba-Bem-Querer-260-G.jpg?v=639144690513230000",
-  productUrl: "https://secure.obahortifruti.com.br/amendoim-crocante-tradicional-oba-bem-querer-260-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/amendoim-crocante-tradicional-oba-bem-querer-260-g/p",
+  popularity: 521
  },
  {
   sku: "oba-3448",
@@ -5223,7 +5744,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9835323/Leite-Desnatado-Molico-1-L.png?v=638659866754670000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-desnatado-molico-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-desnatado-molico-1-l/p",
+  popularity: 522
  },
  {
   sku: "oba-4996",
@@ -5233,7 +5755,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua com gas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9928646/Agua-Mineral-Natural-Com-Gas-Oba-Bem-Querer-310-Ml.jpg?v=638673800033800000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-natural-com-gas-oba-bem-querer-310-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-natural-com-gas-oba-bem-querer-310-ml/p",
+  popularity: 523
  },
  {
   sku: "oba-9553",
@@ -5243,7 +5766,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523373/Pao-De-Queijo-Tradicional-Oba-Bem-Querer-1kg.jpg?v=639186798397830000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-tradicional-oba-bem-querer-1kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-tradicional-oba-bem-querer-1kg/p",
+  popularity: 524
  },
  {
   sku: "oba-3440",
@@ -5253,7 +5777,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446649/Amido-De-Milho-Maizena-200g.jpg?v=638498190884800000",
-  productUrl: "https://secure.obahortifruti.com.br/amido-de-milho-maizena-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/amido-de-milho-maizena-200g/p",
+  popularity: 525
  },
  {
   sku: "oba-9127",
@@ -5263,7 +5788,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448862/Pao-Mini-Brioche-De-Leite-S-Oui-270-G.jpg?v=638498193213300000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-mini-brioche-de-leite-s-oui-270-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-mini-brioche-de-leite-s-oui-270-g/p",
+  popularity: 526
  },
  {
   sku: "oba-11056",
@@ -5273,7 +5799,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes mix de legumes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446553/Yakissoba-Oba.jpg?v=638498190794930000",
-  productUrl: "https://secure.obahortifruti.com.br/yakissoba-oba/p"
+  productUrl: "https://secure.obahortifruti.com.br/yakissoba-oba/p",
+  popularity: 527
  },
  {
   sku: "oba-7869",
@@ -5283,7 +5810,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melancia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10089327/Melancia-Pingo-Doce-Amarela-Cortes-Kg.png?v=638701195439100000",
-  productUrl: "https://secure.obahortifruti.com.br/melancia-pingo-doce-amarela-cortes-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/melancia-pingo-doce-amarela-cortes-kg/p",
+  popularity: 528
  },
  {
   sku: "oba-3652",
@@ -5293,7 +5821,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia arroz",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446655/Arroz-Tipo-1-Prato-Fino-2-Kg.jpg?v=638498190892400000",
-  productUrl: "https://secure.obahortifruti.com.br/arroz-tipo-1-prato-fino-2-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/arroz-tipo-1-prato-fino-2-kg/p",
+  popularity: 529
  },
  {
   sku: "oba-12169",
@@ -5303,7 +5832,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas laranja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5095209/Laranja-Lima-Oba-Bem-Querer-Pacote-15-Kg.png?v=638298851349500000",
-  productUrl: "https://secure.obahortifruti.com.br/laranja-lima-oba-bem-querer-pacote-1-5-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/laranja-lima-oba-bem-querer-pacote-1-5-kg/p",
+  popularity: 530
  },
  {
   sku: "oba-6414",
@@ -5313,7 +5843,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4255920/Iogurte-Natural-Com-Laranja-Cenoura-E-Mel-Nestle-170g.jpg?v=638144116144870000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-com-laranja-cenoura-e-mel-nestle-170g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-com-laranja-cenoura-e-mel-nestle-170g/p",
+  popularity: 531
  },
  {
   sku: "oba-7025",
@@ -5323,7 +5854,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520827/Iogurte-Natural-Cremoso-De-Morango-Yopro-160g.jpg?v=639174726930470000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-cremoso-de-morango-yopro-160g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-cremoso-de-morango-yopro-160g/p",
+  popularity: 532
  },
  {
   sku: "oba-12825",
@@ -5333,7 +5865,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas frutas congeladas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477508/Morangos-Inteiros-Pratico-400-G.jpg?v=639014034502700000",
-  productUrl: "https://secure.obahortifruti.com.br/morangos-inteiros-pratico-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/morangos-inteiros-pratico-400-g/p",
+  popularity: 533
  },
  {
   sku: "oba-10125",
@@ -5343,7 +5876,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue bovinos alcatra",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482851/Miolo-Alcatra-Bovina-Peca.jpg?v=639093571818030000",
-  productUrl: "https://secure.obahortifruti.com.br/miolo-alcatra-bovina-peca/p"
+  productUrl: "https://secure.obahortifruti.com.br/miolo-alcatra-bovina-peca/p",
+  popularity: 534
  },
  {
   sku: "oba-8668",
@@ -5353,7 +5887,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acougue suinos linguica suina",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6061637/Linguica-Toscana-Selecao-Dia-A-Dia-Kg.png?v=638438756040200000",
-  productUrl: "https://secure.obahortifruti.com.br/linguica-toscana-selecao-dia-a-dia-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/linguica-toscana-selecao-dia-a-dia-kg/p",
+  popularity: 535
  },
  {
   sku: "oba-9864",
@@ -5363,7 +5898,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "higiene e limpeza limpeza da casa",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446367/Agua-Sanitaria-Super-Candida-1l.jpg?v=638498190624470000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-sanitaria-super-candida-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-sanitaria-super-candida-1l/p",
+  popularity: 536
  },
  {
   sku: "oba-11783",
@@ -5373,7 +5909,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5693087/Pimenta-Dedo-De-Moca-Vermelha-Oba-Bem-Querer-100-G.jpg?v=638390231947000000",
-  productUrl: "https://secure.obahortifruti.com.br/pimenta-dedo-de-moca-vermelha-oba-bem-querer-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pimenta-dedo-de-moca-vermelha-oba-bem-querer-100-g/p",
+  popularity: 537
  },
  {
   sku: "oba-6341",
@@ -5383,7 +5920,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti temperos temperos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10857430/Cheiro-Verde-Organico-80g.png?v=638811210494830000",
-  productUrl: "https://secure.obahortifruti.com.br/cheiro-verde-organico-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cheiro-verde-organico-80g/p",
+  popularity: 538
  },
  {
   sku: "oba-3690",
@@ -5393,7 +5931,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447208/Waffle-Tradicional-Forno-De-Minas-280g.jpg?v=638498191397870000",
-  productUrl: "https://secure.obahortifruti.com.br/waffle-tradicional-forno-de-minas-280g/p"
+  productUrl: "https://secure.obahortifruti.com.br/waffle-tradicional-forno-de-minas-280g/p",
+  popularity: 539
  },
  {
   sku: "oba-9696",
@@ -5403,7 +5942,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10214947/Alface-Crespa-Organica-200g.png?v=638726466518800000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-organica-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-organica-200g/p",
+  popularity: 540
  },
  {
   sku: "oba-7585",
@@ -5413,7 +5953,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras agriao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9025949/Agriao-Com-Rucula-Higienizado-Pronto--160-G.png?v=638589919623100000",
-  productUrl: "https://secure.obahortifruti.com.br/agriao-com-rucula-higienizado-pronto--160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/agriao-com-rucula-higienizado-pronto--160-g/p",
+  popularity: 541
  },
  {
   sku: "oba-10807",
@@ -5423,7 +5964,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras alface",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5692496/Alface-Crespa-Frisee-Hidroponoca-Higienizada-Oba-Bem-Querer-140-G.png?v=638390196434630000",
-  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-frisee-hidroponoca-higienizada-oba-bem-querer-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alface-crespa-frisee-hidroponoca-higienizada-oba-bem-querer-140-g/p",
+  popularity: 542
  },
  {
   sku: "oba-11314",
@@ -5433,7 +5975,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti legumes legumes congelados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10036634/Alho-Picado-Congelado-Daucy-300g.png?v=638691727825470000",
-  productUrl: "https://secure.obahortifruti.com.br/alho-picado-congelado-daucy-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alho-picado-congelado-daucy-300g/p",
+  popularity: 543
  },
  {
   sku: "oba-12820",
@@ -5443,7 +5986,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco natural",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8535422/Suco-De-Maca-Oba-Bem-Querer-Integral-1l.png?v=638505031864430000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-oba-bem-querer-integral-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-oba-bem-querer-integral-1l/p",
+  popularity: 544
  },
  {
   sku: "oba-3356",
@@ -5453,7 +5997,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5357127/Iogurte-De-Frutas-Vermelhas-Grego-Vigor-90g.png?v=638363372491270000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-frutas-vermelhas-grego-vigor-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-frutas-vermelhas-grego-vigor-90g/p",
+  popularity: 545
  },
  {
   sku: "oba-12125",
@@ -5463,7 +6008,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5506065/Queijo-Parmesao-Tirolez-Pedaco-Kg.png?v=638377413846970000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-tirolez-pedaco-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-parmesao-tirolez-pedaco-kg/p",
+  popularity: 546
  },
  {
   sku: "oba-4649",
@@ -5473,7 +6019,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477130/Leite-Integral-Pasteurizado-Letti-1l.jpg?v=638999472373900000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-integral-pasteurizado-letti-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-integral-pasteurizado-letti-1l/p",
+  popularity: 547
  },
  {
   sku: "oba-6720",
@@ -5483,7 +6030,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua com gas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10211445/Agua-Mineral-Oba-Bem-Querer-Natural-Com-Gas-15l.png?v=638725423038000000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-oba-bem-querer-natural-com-gas-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-mineral-oba-bem-querer-natural-com-gas-1-5l/p",
+  popularity: 548
  },
  {
   sku: "oba-11160",
@@ -5493,7 +6041,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti organicos verduras",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446376/Espinafre-Organico-200-G.jpg?v=638498190632800000",
-  productUrl: "https://secure.obahortifruti.com.br/espinafre-organico-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/espinafre-organico-200-g/p",
+  popularity: 549
  },
  {
   sku: "oba-12700",
@@ -5503,7 +6052,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti verduras repolho",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4265275/Repolho-Roxo-Picado-Oba-300g.jpg?v=638144122913570000",
-  productUrl: "https://secure.obahortifruti.com.br/repolho-roxo-picado-oba-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/repolho-roxo-picado-oba-300g/p",
+  popularity: 550
  },
  {
   sku: "oba-100007824",
@@ -5513,7 +6063,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890904/Sorvete-Morango-Oba-Bem-Querer-15-L.png?v=638667680442100000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-morango-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-morango-oba-bem-querer-1-5-l/p",
+  popularity: 551
  },
  {
   sku: "oba-100007822",
@@ -5523,7 +6074,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890902/Sorvete-Creme-Oba-Bem-Querer-15-L.png?v=638667680422870000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-creme-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-creme-oba-bem-querer-1-5-l/p",
+  popularity: 552
  },
  {
   sku: "oba-100007820",
@@ -5533,7 +6085,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890901/Sorvete-Chocolate-Oba-Bem-Querer-15-L.png?v=638667680411030000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-chocolate-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-chocolate-oba-bem-querer-1-5-l/p",
+  popularity: 553
  },
  {
   sku: "oba-100007819",
@@ -5543,7 +6096,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890900/Sorvete-Flocos-Oba-Bem-Querer-15-L.png?v=638667680398130000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-flocos-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-flocos-oba-bem-querer-1-5-l/p",
+  popularity: 554
  },
  {
   sku: "oba-7742",
@@ -5553,7 +6107,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10173570/Sorvete-Bacio-Di-Latte-Leite-E-Creme-De-Leite-490ml.jpg?v=638716927104230000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-leite-e-creme-de-leite-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-leite-e-creme-de-leite-490ml/p",
+  popularity: 555
  },
  {
   sku: "oba-1823",
@@ -5563,7 +6118,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10220451/Sorvete-Bacio-Di-Latte-Chocolate-Ao-Leite-Com-Pedacos-De-Chocolate-Belga-490ml.jpg?v=638728195024700000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-chocolate-ao-leite-com-pedacos-de-chocolate-belga-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-chocolate-ao-leite-com-pedacos-de-chocolate-belga-490ml/p",
+  popularity: 556
  },
  {
   sku: "oba-504",
@@ -5573,7 +6129,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478370/Sorvete-Belgian-Chocolate-Haagen-Dazs-473-Ml.jpg?v=639047100624200000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-belgian-chocolate-haagen-dazs-473-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-belgian-chocolate-haagen-dazs-473-ml/p",
+  popularity: 557
  },
  {
   sku: "oba-100010992",
@@ -5583,7 +6140,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476115/Gelato-Strawberry-Cheesecake-Bacio-Di-Latte-380g.jpg?v=638950941021530000",
-  productUrl: "https://secure.obahortifruti.com.br/gelato-strawberry-cheesecake-bacio-di-latte-380g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelato-strawberry-cheesecake-bacio-di-latte-380g/p",
+  popularity: 558
  },
  {
   sku: "oba-100010702",
@@ -5593,7 +6151,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475572/Sorbet-Organico-Acai-Oakberry-750-Ml.png?v=638935548370070000",
-  productUrl: "https://secure.obahortifruti.com.br/sorbet-organico-acai-oakberry-750-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorbet-organico-acai-oakberry-750-ml/p",
+  popularity: 559
  },
  {
   sku: "oba-100009671",
@@ -5603,7 +6162,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475509/Gelato-Pistacchio-Pote-Bacio-Di-Latte-490ml.jpg?v=638932746421900000",
-  productUrl: "https://secure.obahortifruti.com.br/gelato-pistacchio-pote-bacio-di-latte-380g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelato-pistacchio-pote-bacio-di-latte-380g/p",
+  popularity: 560
  },
  {
   sku: "oba-100009670",
@@ -5613,7 +6173,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475397/Gelato-Creme-De-Maracuja-Bacio-Di-Latte-380g.jpg?v=638920026412000000",
-  productUrl: "https://secure.obahortifruti.com.br/gelato-creme-de-maracuja-bacio-di-latte-380g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelato-creme-de-maracuja-bacio-di-latte-380g/p",
+  popularity: 561
  },
  {
   sku: "oba-100009667",
@@ -5623,7 +6184,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476315/Gelato-Caramelo-Salgado-Pote-Bacio-Di-Latte-380-Ml.jpg?v=638959760366770000",
-  productUrl: "https://secure.obahortifruti.com.br/gelato-caramelo-salgado-pote-bacio-di-latte-380-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelato-caramelo-salgado-pote-bacio-di-latte-380-ml/p",
+  popularity: 562
  },
  {
   sku: "oba-100008525",
@@ -5633,7 +6195,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8731735/Gelato-Brownie-Pote-Bacio-Di-Latte-490-Ml.png?v=638545172054200000",
-  productUrl: "https://secure.obahortifruti.com.br/gelato-brownie-pote-bacio-di-latte-490-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelato-brownie-pote-bacio-di-latte-490-ml/p",
+  popularity: 563
  },
  {
   sku: "oba-100007823",
@@ -5643,7 +6206,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890905/Sorvete-Napolitano-Oba-Bem-Querer-15-L.png?v=638667680454230000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-oba-bem-querer-1-5-l/p",
+  popularity: 564
  },
  {
   sku: "oba-100007818",
@@ -5653,7 +6217,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9890899/Sorvete-Coco-Oba-Bem-Querer-15-L.png?v=638667680388800000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-coco-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-coco-oba-bem-querer-1-5-l/p",
+  popularity: 565
  },
  {
   sku: "oba-7002",
@@ -5663,7 +6228,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10220448/Sorvete-Bacio-Di-Latte-Morango-Ao-Leite-490ml.png?v=638728194995700000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-morango-ao-leite-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-morango-ao-leite-490ml/p",
+  popularity: 566
  },
  {
   sku: "oba-9543",
@@ -5673,7 +6239,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10220449/Sorvete-Bacio-Di-Latte-Doce-De-Leite-490ml.png?v=638728195004370000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-doce-de-leite-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-doce-de-leite-490ml/p",
+  popularity: 567
  },
  {
   sku: "oba-576",
@@ -5683,7 +6250,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478374/Sorvete-Strawberry-Haagen-Dazs-473ml.jpg?v=639047100686630000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-strawberry-haagen-dazs-473ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-strawberry-haagen-dazs-473ml/p",
+  popularity: 568
  },
  {
   sku: "oba-100012315",
@@ -5693,7 +6261,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492735/Mini-Picole-Bacio-Di-Latte-Bacio-Di-Latte-180-G.jpg?v=639137004650300000",
-  productUrl: "https://secure.obahortifruti.com.br/mini-picole-bacio-di-latte-bacio-di-latte-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mini-picole-bacio-di-latte-bacio-di-latte-180-g/p",
+  popularity: 569
  },
  {
   sku: "oba-100012317",
@@ -5703,7 +6272,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492733/Mini-Picole-Pistacchio-Bacio-Di-Latte-180-G.jpg?v=639137004632100000",
-  productUrl: "https://secure.obahortifruti.com.br/mini-picole-pistacchio-bacio-di-latte-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mini-picole-pistacchio-bacio-di-latte-180-g/p",
+  popularity: 570
  },
  {
   sku: "oba-5762",
@@ -5713,7 +6283,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10220452/Sorvete-Bacio-Di-Latte-Avela-Com-Cacau-E-Avela-Caramelizadas-490ml.png?v=638728195038100000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-avela-com-cacau-e-avela-caramelizadas-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-avela-com-cacau-e-avela-caramelizadas-490ml/p",
+  popularity: 571
  },
  {
   sku: "oba-8459",
@@ -5723,7 +6294,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478371/Sorvete-Macadamia-Nut-Brittle-Haagen-Dazs-473-Ml.jpg?v=639047100639700000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-macadamia-nut-brittle-haagen-dazs-473-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-macadamia-nut-brittle-haagen-dazs-473-ml/p",
+  popularity: 572
  },
  {
   sku: "oba-1594",
@@ -5733,7 +6305,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877145/Sorvete-Bacio-Di-Latte-Leite-E-Creme-De-Avela-Com-Cacau-490ml.png?v=638575391421830000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-leite-e-creme-de-avela-com-cacau-490ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-bacio-di-latte-leite-e-creme-de-avela-com-cacau-490ml/p",
+  popularity: 573
  },
  {
   sku: "oba-100010092",
@@ -5743,7 +6316,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525673/Cone-Ciocchino-Pistacchio-75g.jpg?v=639210360452700000",
-  productUrl: "https://secure.obahortifruti.com.br/cone-ciocchino-pistacchio-75g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cone-ciocchino-pistacchio-75g/p",
+  popularity: 574
  },
  {
   sku: "oba-100009814",
@@ -5753,7 +6327,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474973/Bombom-De-Sorvete-Pistacchio-Bacio-Di-Latte-90g.jpg?v=638901855846900000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-pistacchio-bacio-di-latte-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-pistacchio-bacio-di-latte-90g/p",
+  popularity: 575
  },
  {
   sku: "oba-100005106",
@@ -5763,7 +6338,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520119/Sorvete-Haagen-Dazs-Strawberry-100-Ml.png?v=639167178369970000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-haagen-dazs-strawberry-100-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-haagen-dazs-strawberry-100-ml/p",
+  popularity: 576
  },
  {
   sku: "oba-100002788",
@@ -5773,7 +6349,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5876727/Sorvete-De-Creme-Cremosissimo-Kibon-15l.png?v=638408300389630000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-creme-cremosissimo-kibon-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-creme-cremosissimo-kibon-1-5l/p",
+  popularity: 577
  },
  {
   sku: "oba-100010988",
@@ -5783,7 +6360,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11523357/Bombom-De-Sorvete-Caramelo-Salgado-90g.jpg?v=639186792489800000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-caramelo-salgado-90g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-caramelo-salgado-90g/p",
+  popularity: 578
  },
  {
   sku: "oba-100009949",
@@ -5793,7 +6371,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475394/Bombom-Sorvete-De-Caramelo-Salgado-Bacio-Di-Latte-144g.jpg?v=638920020558700000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-sorvete-de-caramelo-salgado-bacio-di-latte-144g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-sorvete-de-caramelo-salgado-bacio-di-latte-144g/p",
+  popularity: 579
  },
  {
   sku: "oba-100008776",
@@ -5803,7 +6382,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9002564/Bombom-Sorvete-Cioccolato-Belga-Bacio-Di-Latte-144-G.png?v=638588235538670000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-sorvete-cioccolato-belga-bacio-di-latte-144-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-sorvete-cioccolato-belga-bacio-di-latte-144-g/p",
+  popularity: 580
  },
  {
   sku: "oba-100008777",
@@ -5813,7 +6393,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9002565/Bombom-De-Sorvete-De-Leite-Com-Creme-De-Leite-Bacio-Bacio-Di-Latte-144g.png?v=638588235551670000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-de-leite-com-creme-de-leite-bacio-di-latte-144g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-de-leite-com-creme-de-leite-bacio-di-latte-144g/p",
+  popularity: 581
  },
  {
   sku: "oba-7422",
@@ -5823,7 +6404,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447381/Sorvete-Lambada-Bariloche-15l.jpg?v=638498191577600000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-lambada-bariloche-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-lambada-bariloche-1-5l/p",
+  popularity: 582
  },
  {
   sku: "oba-100013528",
@@ -5833,7 +6415,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525686/Bombom-De-Sorvete-Cioccolato-Belga-90-G.jpg?v=639210360605100000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-cioccolato-belga-90-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-cioccolato-belga-90-g/p",
+  popularity: 583
  },
  {
   sku: "oba-100010815",
@@ -5843,7 +6426,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475042/Cobertura-Sorvete-Dr-Oetker-Sabor-Morango-190-G.png?v=638906003058630000",
-  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-dr-oetker-sabor-morango-190-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-dr-oetker-sabor-morango-190-g/p",
+  popularity: 584
  },
  {
   sku: "oba-100010814",
@@ -5853,7 +6437,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475043/Cobertura-Sorvete-Sabor-Chocolate-Dr-Oetker-190-G.png?v=638906003135530000",
-  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-sabor-chocolate-dr-oetker-190-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-sabor-chocolate-dr-oetker-190-g/p",
+  popularity: 585
  },
  {
   sku: "oba-100010813",
@@ -5863,7 +6448,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475044/Cobertura-Sorvete-Sabor-Caramelo-190-G.png?v=638906003188870000",
-  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-sabor-caramelo-190-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cobertura-sorvete-sabor-caramelo-190-g/p",
+  popularity: 586
  },
  {
   sku: "oba-100008778",
@@ -5873,7 +6459,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477021/Bombom-De-Sorvete-Pistacchio-Bacio-Di-Latte-144g.png?v=638989795157900000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-pistacchio-bacio-di-latte-144g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-sorvete-pistacchio-bacio-di-latte-144g/p",
+  popularity: 587
  },
  {
   sku: "oba-100005773",
@@ -5883,7 +6470,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4846968/Picole-Cioccolato-Belga-Com-Cobertura-Bacio-Di-Latte-70-G.jpg?v=638255618467870000",
-  productUrl: "https://secure.obahortifruti.com.br/picole-cioccolato-belga-com-cobertura-bacio-di-latte-70-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/picole-cioccolato-belga-com-cobertura-bacio-di-latte-70-g/p",
+  popularity: 588
  },
  {
   sku: "oba-100005770",
@@ -5893,7 +6481,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4434564/Picole-Bacio-Di-Latte-Com-Cobertura-Baccio-Di-Latte-70-G.jpg?v=638170742751670000",
-  productUrl: "https://secure.obahortifruti.com.br/picole-bacio-di-latte-com-cobertura-baccio-di-latte-70-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/picole-bacio-di-latte-com-cobertura-baccio-di-latte-70-g/p",
+  popularity: 589
  },
  {
   sku: "oba-100004879",
@@ -5903,7 +6492,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446264/Sorvete-Cookies-Cream-Haagen-Dazs-100-Ml.jpg?v=638498190527030000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-cookies-cream-haagen-dazs-100-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-cookies-cream-haagen-dazs-100-ml/p",
+  popularity: 590
  },
  {
   sku: "oba-100004711",
@@ -5913,7 +6503,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446263/Sorvete-Macadamia-Nut-Britlle-Haagen-Dazs-86-G.jpg?v=638498190525470000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-macadamia-nut-britlle-haagen-dazs-86-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-macadamia-nut-britlle-haagen-dazs-86-g/p",
+  popularity: 591
  },
  {
   sku: "oba-100000711",
@@ -5923,7 +6514,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259726/Sorvete-Napolitano-Cremosissimo-Kibon-15-L.jpg?v=638144118669970000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-cremosissimo-kibon-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-cremosissimo-kibon-1-5-l/p",
+  popularity: 592
  },
  {
   sku: "oba-100002502",
@@ -5933,7 +6525,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447093/Sorvete-Dulce-Leche-Haagen-Dazs-100ml.jpg?v=638498191292330000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-dulce-leche-haagen-dazs-100ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-dulce-leche-haagen-dazs-100ml/p",
+  popularity: 593
  },
  {
   sku: "oba-100002707",
@@ -5943,7 +6536,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258948/Sorvete-De-Flocos-Kibon-Cremosissimo-15l.jpg?v=638144118134570000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-flocos-kibon-cremosissimo-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-flocos-kibon-cremosissimo-1-5l/p",
+  popularity: 594
  },
  {
   sku: "oba-8453",
@@ -5953,7 +6547,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9640138/Sorvete-De-Pistache-Bariloche-15-L.png?v=638635785045100000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pistache-bariloche-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pistache-bariloche-1-5-l/p",
+  popularity: 595
  },
  {
   sku: "oba-5919",
@@ -5963,7 +6558,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261358/Sorvete-De-Chocolate-4-Em-1-Cremosissimo-Kibon-2-Litro.jpg?v=638144119822770000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-chocolate-4-em-1-cremosissimo-kibon-2-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-chocolate-4-em-1-cremosissimo-kibon-2-litro/p",
+  popularity: 596
  },
  {
   sku: "oba-2561",
@@ -5973,7 +6569,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447390/Sorvete-De-Pave-Bariloche-15l.jpg?v=638498191587730000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pave-bariloche-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-pave-bariloche-1-5l/p",
+  popularity: 597
  },
  {
   sku: "oba-7759",
@@ -5983,7 +6580,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259720/Sorvete-4x1-Cremosissimo-Kibon-2-L.jpg?v=638144118667930000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-4x1-cremosissimo-kibon-2-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-4x1-cremosissimo-kibon-2-l/p",
+  popularity: 598
  },
  {
   sku: "oba-1045",
@@ -5993,7 +6591,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9649215/Sorvete-Napolitano-Bariloche-15l.png?v=638636648848370000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-bariloche-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-napolitano-bariloche-1-5l/p",
+  popularity: 599
  },
  {
   sku: "oba-1185",
@@ -6003,7 +6602,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9594487/Sorvete-De-Cereja-Bariloche-15.png?v=638631428512600000",
-  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-cereja-bariloche-1-5/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorvete-de-cereja-bariloche-1-5/p",
+  popularity: 600
  },
  {
   sku: "oba-1198",
@@ -6013,7 +6613,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies smoothie",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/7782848/Mix-De-Acai-Com-Guarana-E-Banana-Oba-Bem-Querer-500-Ml.png?v=638490424306830000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-de-acai-com-guarana-e-banana-oba-bem-querer-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-de-acai-com-guarana-e-banana-oba-bem-querer-500-ml/p",
+  popularity: 601
  },
  {
   sku: "oba-100011817",
@@ -6023,7 +6624,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490685/Sorbet-Organico-Acai-Oakberry-Pote-15l.png?v=639124945904370000",
-  productUrl: "https://secure.obahortifruti.com.br/sorbet-organico-acai-oakberry-pote-1-5l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorbet-organico-acai-oakberry-pote-1-5l/p",
+  popularity: 602
  },
  {
   sku: "oba-1648",
@@ -6033,7 +6635,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8703459/Acai-Original-Frooty-15-Litro.jpg?v=638537971367500000",
-  productUrl: "https://secure.obahortifruti.com.br/acai-original-frooty-1-5-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/acai-original-frooty-1-5-litro/p",
+  popularity: 603
  },
  {
   sku: "oba-100013544",
@@ -6043,7 +6646,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522023/Iogurte-Natural-Whey-Acai-21-G-De-Proteina-Verde-Campo-250-G.png?v=639178281040470000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-whey-acai-21-g-de-proteina-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-whey-acai-21-g-de-proteina-verde-campo-250-g/p",
+  popularity: 604
  },
  {
   sku: "oba-100013510",
@@ -6053,7 +6657,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11521405/Bebida-Mista-De-Acai-Com-Morango-Greenpeople-500-Ml.png?v=639175041487630000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-morango-greenpeople-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-morango-greenpeople-500-ml/p",
+  popularity: 605
  },
  {
   sku: "oba-100007504",
@@ -6063,7 +6668,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6423356/Sorbet-Acai-Com-Banana-Gourmet-Oba-Bem-Querer-102-L.png?v=638474967715570000",
-  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-banana-gourmet-oba-bem-querer-1-02-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-banana-gourmet-oba-bem-querer-1-02-l/p",
+  popularity: 606
  },
  {
   sku: "oba-7778",
@@ -6073,7 +6679,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco natural",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6148747/Mix-De-Acai-Com-Guarana-E-Banana-Oba-Bem-Querer-1l.png?v=638456683247030000",
-  productUrl: "https://secure.obahortifruti.com.br/mix-de-acai-com-guarana-e-banana-oba-bem-querer-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/mix-de-acai-com-guarana-e-banana-oba-bem-querer-1l/p",
+  popularity: 607
  },
  {
   sku: "oba-100013511",
@@ -6083,7 +6690,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11521404/Suco-Misto-De-Acai-Com-Banana-Greenpeople-500-Ml.png?v=639175041487170000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-misto-de-acai-com-banana-greenpeople-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-misto-de-acai-com-banana-greenpeople-500-ml/p",
+  popularity: 608
  },
  {
   sku: "oba-100013485",
@@ -6093,7 +6701,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11521117/Bebida-Mista-De-Acai-Com-Morango-250-Ml.png?v=639174969507170000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-morango-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-morango-250-ml/p",
+  popularity: 609
  },
  {
   sku: "oba-100011456",
@@ -6103,7 +6712,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488612/The-Whaka-Acai-Excellence-85--500-Ml.png?v=639118788383000000",
-  productUrl: "https://secure.obahortifruti.com.br/the-whaka-acai-excellence-85--500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/the-whaka-acai-excellence-85--500-ml/p",
+  popularity: 610
  },
  {
   sku: "oba-100007994",
@@ -6113,7 +6723,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9332440/Iorgute-Desnatado-Com-Preparado-De-Frutas-Acai-Com-Banana-Zero-Lactose-160-G.png?v=638611343077300000",
-  productUrl: "https://secure.obahortifruti.com.br/iorgute-desnatado-com-preparado-de-frutas-acai-com-banana-zero-lactose-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iorgute-desnatado-com-preparado-de-frutas-acai-com-banana-zero-lactose-160-g/p",
+  popularity: 611
  },
  {
   sku: "oba-100007503",
@@ -6123,7 +6734,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5256795/Sorbet-Acai-Com-Guarana-Classico-Oba-Bem-Querer-15-L.png?v=638348000283900000",
-  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-guarana-classico-oba-bem-querer-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-guarana-classico-oba-bem-querer-1-5-l/p",
+  popularity: 612
  },
  {
   sku: "oba-100005923",
@@ -6133,7 +6745,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4516771/Acai-Gourmet-Whaka-1020-Kg.jpg?v=638189102100070000",
-  productUrl: "https://secure.obahortifruti.com.br/acai-gourmet-whaka-1-020-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acai-gourmet-whaka-1-020-kg/p",
+  popularity: 613
  },
  {
   sku: "oba-100013504",
@@ -6143,7 +6756,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11521399/Bebida-Mista-De-Acai-Com-Banana-Greenpeople-250-Ml.png?v=639175041471070000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-banana-greenpeople-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-mista-de-acai-com-banana-greenpeople-250-ml/p",
+  popularity: 614
  },
  {
   sku: "oba-10672",
@@ -6153,7 +6767,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8703441/Acai-Original-Frooty-700ml.jpg?v=638537971174970000",
-  productUrl: "https://secure.obahortifruti.com.br/acai-original-frooty-700ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/acai-original-frooty-700ml/p",
+  popularity: 615
  },
  {
   sku: "oba-100012365",
@@ -6163,7 +6778,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491905/Acai-Zero-The-Whaka-102-Kg.jpg?v=639130184864400000",
-  productUrl: "https://secure.obahortifruti.com.br/acai-zero-the-whaka-1-02-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acai-zero-the-whaka-1-02-kg/p",
+  popularity: 616
  },
  {
   sku: "oba-100007502",
@@ -6173,7 +6789,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvetes & sobremesas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6423355/Sorbet-Acai-Com-Abacate-Oba-Bem-Querer-102-L.png?v=638474967702300000",
-  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-abacate-oba-bem-querer-1-02-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/sorbet-acai-com-abacate-oba-bem-querer-1-02-l/p",
+  popularity: 617
  },
  {
   sku: "oba-100006045",
@@ -6183,7 +6800,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4609499/Snack-De-Quinua-Recheado-Com-Acai-40g.jpg?v=638918045233170000",
-  productUrl: "https://secure.obahortifruti.com.br/snack-de-quinua-recheado-com-acai-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/snack-de-quinua-recheado-com-acai-40g/p",
+  popularity: 618
  },
  {
   sku: "oba-100005324",
@@ -6193,7 +6811,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10090883/Cereal-Matinal-Zero-Acucar-Nesfit-Nestle-220-G.png?v=638701447809400000",
-  productUrl: "https://secure.obahortifruti.com.br/cereal-matinal-zero-acucar-nesfit-nestle-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cereal-matinal-zero-acucar-nesfit-nestle-220-g/p",
+  popularity: 619
  },
  {
   sku: "oba-100001439",
@@ -6203,7 +6822,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475803/Cha-Verde-Frutas-Vermelhas-Zero-Acucar-Yai-1-L.jpg?v=638938817345700000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-verde-frutas-vermelhas-zero-acucar-yai-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-verde-frutas-vermelhas-zero-acucar-yai-1-l/p",
+  popularity: 620
  },
  {
   sku: "oba-100002630",
@@ -6213,7 +6833,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476122/Cha-Verde-Com-Limao-Siciliano-Com-Hortela-Zero-Acucar-Yai-1-L.jpg?v=638950941358770000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-limao-siciliano-com-hortela-zero-acucar-yai-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-limao-siciliano-com-hortela-zero-acucar-yai-1-l/p",
+  popularity: 621
  },
  {
   sku: "oba-100002900",
@@ -6223,7 +6844,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475801/Cha-Verde-Com-Lichia-Zero-Acucar-Yai-1-L.jpg?v=638938817229070000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-lichia-zero-acucar-yai-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-lichia-zero-acucar-yai-1-l/p",
+  popularity: 622
  },
  {
   sku: "oba-100001781",
@@ -6233,7 +6855,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475802/Cha-Verde-Com-Laranja-E-Gengibre-Zero-Acucar-Yai-1-L.jpg?v=638938817284630000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-laranja-e-gengibre-zero-acucar-yai-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-verde-com-laranja-e-gengibre-zero-acucar-yai-1-l/p",
+  popularity: 623
  },
  {
   sku: "oba-11286",
@@ -6243,7 +6866,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446266/Refrigerante-Zero-Antarctica-350-Ml.jpg?v=638498190527970000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-antarctica-350-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-antarctica-350-ml/p",
+  popularity: 624
  },
  {
   sku: "oba-6311",
@@ -6253,7 +6877,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446289/Refrigerante-Zero-Antarctica-600-Ml.jpg?v=638498190551500000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-antarctica-600-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-antarctica-600-ml/p",
+  popularity: 625
  },
  {
   sku: "oba-6312",
@@ -6263,7 +6888,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476615/Refrigerante-Guarana-Antarctica-Zero-2-Litros.png?v=638974260217570000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-guarana-antarctica-zero-2-litros/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-guarana-antarctica-zero-2-litros/p",
+  popularity: 626
  },
  {
   sku: "oba-2040",
@@ -6273,7 +6899,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas agua tonica",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446755/Agua-Tonica-Zero-Antarctica-350ml.jpg?v=638498190980200000",
-  productUrl: "https://secure.obahortifruti.com.br/agua-tonica-zero-antarctica-350ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/agua-tonica-zero-antarctica-350ml/p",
+  popularity: 627
  },
  {
   sku: "oba-100012003",
@@ -6283,7 +6910,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525700/Creme-Zero-Acucar-Sabor-Pistache-Pistachino.jpg?v=639210372392200000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-zero-acucar-sabor-pistache-pistachino/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-zero-acucar-sabor-pistache-pistachino/p",
+  popularity: 628
  },
  {
   sku: "oba-100008847",
@@ -6293,7 +6921,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9242405/Palha-It-Germanos-Chocolate-Zero-30g.png?v=638604648403500000",
-  productUrl: "https://secure.obahortifruti.com.br/palha-it-germanos-chocolate-zero-acucar-30g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palha-it-germanos-chocolate-zero-acucar-30g/p",
+  popularity: 629
  },
  {
   sku: "oba-100006146",
@@ -6303,7 +6932,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476720/Palha-Italiana-Zero-Acucar-Banoffee-Germanos-30-G.jpg?v=638980511684830000",
-  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-banoffee-germanos-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-banoffee-germanos-30-g/p",
+  popularity: 630
  },
  {
   sku: "oba-100006125",
@@ -6313,7 +6943,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476280/Iogurte-Desnatado-Zero-Lactose-Sem-Adicao-De-Acucar-Morango-Corpus-800-G.jpg?v=638956253563600000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-sem-adicao-de-acucar-morango-corpus-800-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-sem-adicao-de-acucar-morango-corpus-800-g/p",
+  popularity: 631
  },
  {
   sku: "oba-100006117",
@@ -6323,7 +6954,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados leite fermentado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4609326/Leite-Fermentado-Desnatado-Com-Probioticos-Zero-Lactose-Sem-Adicao-De-Acucar-Ameixa-Activia-800-G.jpg?v=638213258844230000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-fermentado-desnatado-com-probioticos-zero-lactose-sem-adicao-de-acucar-ameixa-activia-800-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-fermentado-desnatado-com-probioticos-zero-lactose-sem-adicao-de-acucar-ameixa-activia-800-g/p",
+  popularity: 632
  },
  {
   sku: "oba-100000773",
@@ -6333,7 +6965,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria bolos, tortas & sanduiches",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5244838/Bolinho-Baunilha-Com-Chocolate-Zero-Belive-40-G.jpg?v=638344700666900000",
-  productUrl: "https://secure.obahortifruti.com.br/bolinho-baunilha-com-chocolate-zero-belive-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bolinho-baunilha-com-chocolate-zero-belive-40-g/p",
+  popularity: 633
  },
  {
   sku: "oba-100001119",
@@ -6343,7 +6976,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9836196/Granola-Sem-Acucar-Kobber-500g.png?v=638659974999730000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-sem-acucar-kobber-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-sem-acucar-kobber-500g/p",
+  popularity: 634
  },
  {
   sku: "oba-100003069",
@@ -6353,7 +6987,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447005/Cha-Icetea-Zero-Limao-Mate-Leao-15-Litro.jpg?v=638498191210030000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-icetea-zero-limao-mate-leao-1-5-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-icetea-zero-limao-mate-leao-1-5-litro/p",
+  popularity: 635
  },
  {
   sku: "oba-100001792",
@@ -6363,7 +6998,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446994/Cha-Icetea-Zero-Pessego-Mate-Leao-15-Litro.jpg?v=638498191198800000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-icetea-zero-pessego-mate-leao-1-5-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-icetea-zero-pessego-mate-leao-1-5-litro/p",
+  popularity: 636
  },
  {
   sku: "oba-10597",
@@ -6373,7 +7009,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9712118/Gelatina-Uva-Diet-Dr-Oetker--12-G.png?v=638644242972930000",
-  productUrl: "https://secure.obahortifruti.com.br/gelatina-uva-diet-dr-oetker--12-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelatina-uva-diet-dr-oetker--12-g/p",
+  popularity: 637
  },
  {
   sku: "oba-4365",
@@ -6383,7 +7020,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4257398/Iogurte-Natural-Lacfree-140g.jpg?v=638144117112700000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-lacfree-140g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-lacfree-140g/p",
+  popularity: 638
  },
  {
   sku: "oba-3669",
@@ -6393,7 +7031,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais energeticos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446709/Energetico-Sugarfree-Red-Bull-250-Ml.jpg?v=638498190938400000",
-  productUrl: "https://secure.obahortifruti.com.br/energetico-sugarfree-red-bull-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/energetico-sugarfree-red-bull-250-ml/p",
+  popularity: 639
  },
  {
   sku: "oba-3472",
@@ -6403,7 +7042,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446774/Pacoquita-Diet-Santa-Helena-144g.jpg?v=638498190997300000",
-  productUrl: "https://secure.obahortifruti.com.br/pacoquita-diet-santa-helena-144g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pacoquita-diet-santa-helena-144g/p",
+  popularity: 640
  },
  {
   sku: "oba-2548",
@@ -6413,7 +7053,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446676/Refrigerante-De-Limao-H2oh--500-Ml.jpg?v=638498190910130000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-de-limao-h2oh--500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-de-limao-h2oh--500-ml/p",
+  popularity: 641
  },
  {
   sku: "oba-9051",
@@ -6423,7 +7064,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8520145/Refrigerante-Limoneto-H2oh-500-Ml.jpg?v=638502520358570000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-limoneto-h2oh-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-limoneto-h2oh-500-ml/p",
+  popularity: 642
  },
  {
   sku: "oba-1244",
@@ -6433,7 +7075,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9836195/Granola-Sem-Acucar-Kobber-1-Kg.png?v=638659974992530000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-sem-acucar-kobber-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-sem-acucar-kobber-1-kg/p",
+  popularity: 643
  },
  {
   sku: "oba-100013212",
@@ -6443,7 +7086,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517201/Bombom-Musa-Ao-Leite-Zero-Acucar-Goldko-30-G.jpg?v=639143144136930000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-musa-ao-leite-zero-acucar-goldko-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-musa-ao-leite-zero-acucar-goldko-30-g/p",
+  popularity: 644
  },
  {
   sku: "oba-100010143",
@@ -6453,7 +7097,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477009/Iogurte-Vegetal-Morango-Sem-Acucar-Base-De-Aveia-Vida-Veg-500-G.jpg?v=638987275757000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-vegetal-morango-sem-acucar-base-de-aveia-vida-veg-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-vegetal-morango-sem-acucar-base-de-aveia-vida-veg-500-g/p",
+  popularity: 645
  },
  {
   sku: "oba-100009994",
@@ -6463,7 +7108,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11491760/Granola-Premium-Tradicional-Zero-Acucar-Granosquare-200-G.png?v=639130038392000000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-premium-tradicional-zero-acucar-granosquare-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-premium-tradicional-zero-acucar-granosquare-200-g/p",
+  popularity: 646
  },
  {
   sku: "oba-100009697",
@@ -6473,7 +7119,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473747/Chocolate-Ao-Leite-Zero-Goldko-80g.png?v=638835320887730000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-zero-goldko-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-zero-goldko-80g/p",
+  popularity: 647
  },
  {
   sku: "oba-100009693",
@@ -6483,7 +7130,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474855/Chocolate-Branco-Com-Cookies-Zero-Acucar-Goldko-80-G.png?v=638896698364130000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-branco-com-cookies-zero-acucar-goldko-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-branco-com-cookies-zero-acucar-goldko-80-g/p",
+  popularity: 648
  },
  {
   sku: "oba-100009695",
@@ -6493,7 +7141,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473834/Chocolate-Ao-Leite-Com-Caramelo---Flor-De-Sal-Zero-Goldko-80g.png?v=638835320941200000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-com-caramelo---flor-de-sal-zero-goldko-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-com-caramelo---flor-de-sal-zero-goldko-80g/p",
+  popularity: 649
  },
  {
   sku: "oba-100009692",
@@ -6503,7 +7152,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473800/Chocolate-70--Cacau-Zero-Goldko-80g.png?v=638835320917000000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-70--cacau-zero-goldko-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-70--cacau-zero-goldko-80g/p",
+  popularity: 650
  },
  {
   sku: "oba-100008687",
@@ -6513,7 +7163,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476723/Palha-Italiana-Germanos-Pistache-Zero-Acucar-30-G.jpg?v=638980512193430000",
-  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-germanos-pistache-zero-acucar-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-germanos-pistache-zero-acucar-30-g/p",
+  popularity: 651
  },
  {
   sku: "oba-100007007",
@@ -6523,7 +7174,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4721301/Refrigerante-Pepsi-Black-Zero-2-L.jpg?v=638237318494770000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-pepsi-black-zero-2-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-pepsi-black-zero-2-l/p",
+  popularity: 652
  },
  {
   sku: "oba-100006155",
@@ -6533,7 +7185,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476722/Palha-Italiana-Zero-Acucar-Doce-De-Leite-Germanos-30-G.jpg?v=638980512141700000",
-  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-doce-de-leite-germanos-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-doce-de-leite-germanos-30-g/p",
+  popularity: 653
  },
  {
   sku: "oba-225048",
@@ -6543,7 +7196,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4885595/Granola-Mais-Frutas-Zero-Acucar-Takinutri-280-G.jpg?v=638262347191470000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-mais-frutas-zero-acucar-takinutri-280-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-mais-frutas-zero-acucar-takinutri-280-g/p",
+  popularity: 654
  },
  {
   sku: "oba-12933",
@@ -6553,7 +7207,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas vegetais bebida de soja",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492864/Bebida-Vegetal-Notmilk-Original-Zero-Acucar-Notco-1-L.jpg?v=639138678389170000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-vegetal-notmilk-original-zero-acucar-notco-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-vegetal-notmilk-original-zero-acucar-notco-1-l/p",
+  popularity: 655
  },
  {
   sku: "oba-100013267",
@@ -6563,7 +7218,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518096/Chocolate-Deli-Deli-70--Cacau-Zero-Acucar-Goldko-70-G.jpg?v=639155165968430000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-deli-deli-70--cacau-zero-acucar-goldko-70-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-deli-deli-70--cacau-zero-acucar-goldko-70-g/p",
+  popularity: 656
  },
  {
   sku: "oba-100013262",
@@ -6573,7 +7229,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518046/Marshmallow-Musa-70--Cacau-Zero-Acucar-Goldko-30-G.jpg?v=639155094073930000",
-  productUrl: "https://secure.obahortifruti.com.br/marshmallow-musa-70--cacau-zero-acucar-goldko-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/marshmallow-musa-70--cacau-zero-acucar-goldko-30-g/p",
+  popularity: 657
  },
  {
   sku: "oba-100011601",
@@ -6583,7 +7240,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais energeticos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490596/Monster-Energy-Zero-Acucar-473-Ml.jpg?v=639124945152370000",
-  productUrl: "https://secure.obahortifruti.com.br/monster-energy-zero-acucar-473-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/monster-energy-zero-acucar-473-ml/p",
+  popularity: 658
  },
  {
   sku: "oba-100009699",
@@ -6593,7 +7251,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473827/Chocolate-Ao-Leite-Com-Avela-Zero-Goldko-80g.png?v=638835320934400000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-com-avela-zero-goldko-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-com-avela-zero-goldko-80g/p",
+  popularity: 659
  },
  {
   sku: "oba-100008528",
@@ -6603,7 +7262,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492373/Canjica-Okoshi-Zero-Acucar-40-G.jpg?v=639134958528370000",
-  productUrl: "https://secure.obahortifruti.com.br/canjica-okoshi-zero-acucar-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/canjica-okoshi-zero-acucar-40-g/p",
+  popularity: 660
  },
  {
   sku: "oba-100008285",
@@ -6613,7 +7273,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais energeticos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8660257/Energetico-Monster-Ultra-Melancia-Zero-Acucar-473-Ml.png?v=638526668264830000",
-  productUrl: "https://secure.obahortifruti.com.br/energetico-monster-ultra-melancia-zero-acucar-473-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/energetico-monster-ultra-melancia-zero-acucar-473-ml/p",
+  popularity: 661
  },
  {
   sku: "oba-100007331",
@@ -6623,7 +7284,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5067329/Cha-Verde-Jabuticaba-Yai-1-L.jpg?v=638293380653600000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-verde-jabuticaba-yai-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-verde-jabuticaba-yai-1-l/p",
+  popularity: 662
  },
  {
   sku: "oba-100002814",
@@ -6633,7 +7295,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259449/Refrigerante-Zero-Acucar-Itubaina-350-Ml.jpg?v=638981407353030000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-itubaina-350-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-itubaina-350-ml/p",
+  popularity: 663
  },
  {
   sku: "oba-100013252",
@@ -6643,7 +7306,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517981/Bombom-De-Chocolate-Deli-Deli-Ao-Leite-Zero-Acucar-Goldko-70-G.jpg?v=639155023410900000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-de-chocolate-deli-deli-ao-leite-zero-acucar-goldko-70-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-de-chocolate-deli-deli-ao-leite-zero-acucar-goldko-70-g/p",
+  popularity: 664
  },
  {
   sku: "oba-100010245",
@@ -6653,7 +7317,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474042/Cha-Branco-Lichia-Zero-Acucar-Leao-15-L.png?v=638844618382000000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-branco-lichia-zero-acucar-leao-1-5-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-branco-lichia-zero-acucar-leao-1-5-l/p",
+  popularity: 665
  },
  {
   sku: "oba-100009878",
@@ -6663,7 +7328,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11481357/Refrigerante-Zero-Acucar-Morango-Okf-350-Ml.webp?v=639077982361400000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-morango-okf-350-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-morango-okf-350-ml/p",
+  popularity: 666
  },
  {
   sku: "oba-100009696",
@@ -6673,7 +7339,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473813/Chocolate-70--Cacau-Com-Avela-Zero-Goldko-80g.png?v=638835320924230000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-70--cacau-com-avela-zero-goldko-80g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-70--cacau-com-avela-zero-goldko-80g/p",
+  popularity: 667
  },
  {
   sku: "oba-37",
@@ -6683,7 +7350,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492364/Chocolate-Ao-Leite-Montblanc-Zero-Acucar-80-G.jpg?v=639134958419170000",
-  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-montblanc-zero-acucar-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocolate-ao-leite-montblanc-zero-acucar-80-g/p",
+  popularity: 668
  },
  {
   sku: "oba-100010214",
@@ -6693,7 +7361,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476243/Bites-Wafer-Avela-Branco-Naked-26-G.png?v=638955381435770000",
-  productUrl: "https://secure.obahortifruti.com.br/bites-wafer-avela-branco-naked-26-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bites-wafer-avela-branco-naked-26-g/p",
+  popularity: 669
  },
  {
   sku: "oba-100009879",
@@ -6703,7 +7372,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476600/Refrigerante-Zero-Acucar-Uva-Okf-350-Ml.png?v=638972802404630000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-uva-okf-350-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-acucar-uva-okf-350-ml/p",
+  popularity: 670
  },
  {
   sku: "oba-100007766",
@@ -6713,7 +7383,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476673/Bombom-Cookies-N’Cream-Flormel-60-G.jpg?v=638977856747900000",
-  productUrl: "https://secure.obahortifruti.com.br/bombom-cookies-n%E2%80%99cream-flormel-60-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bombom-cookies-n%E2%80%99cream-flormel-60-g/p",
+  popularity: 671
  },
  {
   sku: "oba-100006151",
@@ -6723,7 +7394,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476721/Palha-Italiana-Zero-Acucar-Churros-Germanos-30-G.jpg?v=638980511732370000",
-  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-churros-germanos-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palha-italiana-zero-acucar-churros-germanos-30-g/p",
+  popularity: 672
  },
  {
   sku: "oba-100002167",
@@ -6733,7 +7405,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas & infusoes cha pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448273/Cha-Preto-Com-Cranberry-E-Hibisco-Casa-Madeira-500-Ml.jpg?v=638498192623600000",
-  productUrl: "https://secure.obahortifruti.com.br/cha-preto-com-cranberry-e-hibisco-casa-madeira-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cha-preto-com-cranberry-e-hibisco-casa-madeira-500-ml/p",
+  popularity: 673
  },
  {
   sku: "oba-100000686",
@@ -6743,7 +7416,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes & sodas refrigerante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4260400/Refrigerante-Zero-Wewi-Guarana-255-Ml.jpg?v=638144119143000000",
-  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-wewi-guarana-255-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/refrigerante-zero-wewi-guarana-255-ml/p",
+  popularity: 674
  },
  {
   sku: "oba-29",
@@ -6753,7 +7427,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9889390/Chocolate-Dark-70--Zero-Montblanc-80-G.jpg?v=638667463472630000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-70--cacau-zero-montblanc-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-chocolate-70--cacau-zero-montblanc-80-g/p",
+  popularity: 675
  },
  {
   sku: "oba-1053",
@@ -6763,7 +7438,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco natural",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5358571/Suco-Laranja-Xando-900ml.png?v=638363588973200000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-laranja-xando-900ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-laranja-xando-900ml/p",
+  popularity: 676
  },
  {
   sku: "oba-100010536",
@@ -6773,7 +7449,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518776/Suco-De-Uva-Rose-Integral-Oba-Bem-Querer-1l.jpg?v=639155911567600000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-rose-integral-oba-bem-querer-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-rose-integral-oba-bem-querer-1l/p",
+  popularity: 677
  },
  {
   sku: "oba-100009575",
@@ -6783,7 +7460,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476286/Biscoito-Infantil-Biscotti-Maca-E-Canela-Papapa-60-G.jpg?v=638956253967030000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-maca-e-canela-papapa-60-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-maca-e-canela-papapa-60-g/p",
+  popularity: 678
  },
  {
   sku: "oba-11957",
@@ -6793,7 +7471,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477524/Geleia-Israelense-Morango-Sem-Acucar-Aunt-Berta-284-G.png?v=639014052397730000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-morango-sem-acucar-aunt-berta-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-morango-sem-acucar-aunt-berta-284-g/p",
+  popularity: 679
  },
  {
   sku: "oba-3900",
@@ -6803,7 +7482,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446606/Acucar-Demerara-Organico-Dourado-Native-1-Kg.jpg?v=638498190847100000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-demerara-organico-dourado-native-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-demerara-organico-dourado-native-1-kg/p",
+  popularity: 680
  },
  {
   sku: "oba-100009576",
@@ -6813,7 +7493,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476298/Biscoito-Infantil-Biscotti-Laranja-E-Cenoura-Papapa-60-G.jpg?v=638956254449130000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-laranja-e-cenoura-papapa-60-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-infantil-biscotti-laranja-e-cenoura-papapa-60-g/p",
+  popularity: 681
  },
  {
   sku: "oba-100007632",
@@ -6823,7 +7504,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10632704/Suco-De-Uva-Refrigerado-Oba-Bem-Querer-17-L.jpg?v=638783709784470000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-refrigerado-oba-bem-querer-1-7-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-refrigerado-oba-bem-querer-1-7-l/p",
+  popularity: 682
  },
  {
   sku: "oba-100000750",
@@ -6833,7 +7515,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria bolos, tortas & sanduiches",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475254/Bolinho-De-Banana-Com-Canela-E-Chia-Sem-Acucar-E-Sem-Lactose-Belive-40-G.jpg?v=638914025191270000",
-  productUrl: "https://secure.obahortifruti.com.br/bolinho-de-banana-com-canela-e-chia-sem-acucar-e-sem-lactose-belive-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bolinho-de-banana-com-canela-e-chia-sem-acucar-e-sem-lactose-belive-40-g/p",
+  popularity: 683
  },
  {
   sku: "oba-100001930",
@@ -6843,7 +7526,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475791/Canjica-Okoshi-Milho-50g-Doce.jpg?v=638938816130370000",
-  productUrl: "https://secure.obahortifruti.com.br/canjica-okoshi-milho-50g-doce/p"
+  productUrl: "https://secure.obahortifruti.com.br/canjica-okoshi-milho-50g-doce/p",
+  popularity: 684
  },
  {
   sku: "oba-13154",
@@ -6853,7 +7537,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9521355/Suco-De-Abacaxi-Sem-Acucar-Suvalan-1-L.png?v=638625452986030000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-abacaxi-sem-acucar-suvalan-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-abacaxi-sem-acucar-suvalan-1-l/p",
+  popularity: 685
  },
  {
   sku: "oba-11956",
@@ -6863,7 +7548,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477523/Geleia-Israelense-Frutas-Vermelhas-Sem-Acucar-Aunt-Berta-284-G.png?v=639014052382000000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-frutas-vermelhas-sem-acucar-aunt-berta-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-frutas-vermelhas-sem-acucar-aunt-berta-284-g/p",
+  popularity: 686
  },
  {
   sku: "oba-5733",
@@ -6873,7 +7559,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9712120/Gelatina-Abacaxi-Diet-Dr-Oetker--12-G.png?v=638644242996270000",
-  productUrl: "https://secure.obahortifruti.com.br/gelatina-abacaxi-diet-dr-oetker--12-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelatina-abacaxi-diet-dr-oetker--12-g/p",
+  popularity: 687
  },
  {
   sku: "oba-4299",
@@ -6883,7 +7570,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4275671/Suco-De-Uva-Sem-Acucar-Suvalan-200-Ml.jpg?v=638146765727930000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-sem-acucar-suvalan-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-sem-acucar-suvalan-200-ml/p",
+  popularity: 688
  },
  {
   sku: "oba-4269",
@@ -6893,7 +7581,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877064/Suco-De-Maca-Sem-Acucar-Suvalan-1-Litro.png?v=638575391214800000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-sem-acucar-suvalan-1-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-sem-acucar-suvalan-1-litro/p",
+  popularity: 689
  },
  {
   sku: "oba-3452",
@@ -6903,7 +7592,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9509270/Suco-De-Uva-Branca-Sem-Acucar-Suvalan-1-Litro.png?v=638624588606300000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-branca-sem-acucar-suvalan-1-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-branca-sem-acucar-suvalan-1-litro/p",
+  popularity: 690
  },
  {
   sku: "oba-5164",
@@ -6913,7 +7603,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446430/Acucar-Organico-Cristal-Native-1-Kg.jpg?v=638498190684870000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-organico-cristal-native-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-organico-cristal-native-1-kg/p",
+  popularity: 691
  },
  {
   sku: "oba-3175",
@@ -6923,7 +7614,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9657340/Bananinha-Sem-Acucar-Tachao-200-G.png?v=638637511572730000",
-  productUrl: "https://secure.obahortifruti.com.br/bananinha-sem-acucar-tachao-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bananinha-sem-acucar-tachao-200-g/p",
+  popularity: 692
  },
  {
   sku: "oba-2509",
@@ -6933,7 +7625,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9509271/Suco-De-Uva-Branca-Sem-Acucar-Suvalan-200-Ml.png?v=638624588622530000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-branca-sem-acucar-suvalan-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-branca-sem-acucar-suvalan-200-ml/p",
+  popularity: 693
  },
  {
   sku: "oba-6360",
@@ -6943,7 +7636,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia nutricao infantil",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448658/Papinha-Organica-Maca---Ameixa-Sem-Adicao-De-Acucar-Papapa-100-G.jpg?v=638498193018800000",
-  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-maca---ameixa-sem-adicao-de-acucar-papapa-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-maca---ameixa-sem-adicao-de-acucar-papapa-100-g/p",
+  popularity: 694
  },
  {
   sku: "oba-5171",
@@ -6953,7 +7647,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia nutricao infantil",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8520150/Papinha-Organica-De-Manga-Sem-Adicao-De-Acucar-Papapa-100-G.jpg?v=638502520410670000",
-  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-de-manga-sem-adicao-de-acucar-papapa-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-de-manga-sem-adicao-de-acucar-papapa-100-g/p",
+  popularity: 695
  },
  {
   sku: "oba-100010597",
@@ -6963,7 +7658,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477526/Geleia-Israelense-Aunt-Figo-Sem-Acucar-Berta-284-G.png?v=639014052425970000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-aunt-figo-sem-acucar-berta-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-aunt-figo-sem-acucar-berta-284-g/p",
+  popularity: 696
  },
  {
   sku: "oba-100007513",
@@ -6973,7 +7669,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477525/Geleia-Israelense-Mirtilo-Aunt-Berta-284-G.png?v=639014052414470000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-mirtilo-aunt-berta-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-mirtilo-aunt-berta-284-g/p",
+  popularity: 697
  },
  {
   sku: "oba-100005996",
@@ -6983,7 +7680,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4581726/Biscoito-Espanhol-Digestive-Com-Aveia-Sem-Acucar-Gullon-410-G.jpg?v=639045974205200000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-espanhol-digestive-com-aveia-sem-acucar-gullon-410-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-espanhol-digestive-com-aveia-sem-acucar-gullon-410-g/p",
+  popularity: 698
  },
  {
   sku: "oba-100005984",
@@ -6993,7 +7691,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4581732/Biscoito-Espanhol-Wafer-De-Chocolate-Sem-Acucar-Gullon-180-G.jpg?v=638207030590030000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-espanhol-wafer-de-chocolate-sem-acucar-gullon-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-espanhol-wafer-de-chocolate-sem-acucar-gullon-180-g/p",
+  popularity: 699
  },
  {
   sku: "oba-100000766",
@@ -7003,7 +7702,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4265893/Pao-De-Mel-Sem-Acucar-Belive-45-G.jpg?v=638144123522930000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-mel-sem-acucar-belive-45-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-mel-sem-acucar-belive-45-g/p",
+  popularity: 700
  },
  {
   sku: "oba-225020",
@@ -7013,7 +7713,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia geleias & mel",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477522/Geleia-Israelense-Damasco-Sem-Acucar-Aunt-Berta-284-G.png?v=639014052367300000",
-  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-damasco-sem-acucar-aunt-berta-284-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/geleia-israelense-damasco-sem-acucar-aunt-berta-284-g/p",
+  popularity: 701
  },
  {
   sku: "oba-13137",
@@ -7023,7 +7724,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados kefir",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261404/Kefir-Integral-Sem-Acucar-Keiff-500g.jpg?v=638144119859200000",
-  productUrl: "https://secure.obahortifruti.com.br/kefir-integral-sem-acucar-keiff-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/kefir-integral-sem-acucar-keiff-500g/p",
+  popularity: 702
  },
  {
   sku: "oba-100002204",
@@ -7033,7 +7735,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9649226/Pasta-De-Amendoim-Integral-Mandubim-102-Kg.png?v=638636648966930000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-integral-mandubim-1-02-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-integral-mandubim-1-02-kg/p",
+  popularity: 703
  },
  {
   sku: "oba-5281",
@@ -7043,7 +7746,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475746/Acucar-De-Coco-Copra-350-G.png?v=638937356645970000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-de-coco-copra-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-de-coco-copra-350-g/p",
+  popularity: 704
  },
  {
   sku: "oba-4380",
@@ -7053,7 +7757,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4275667/Suco-De-Uva-Sem-Acucar-Suvalan-1-Litro.jpg?v=638146765726870000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-sem-acucar-suvalan-1-litro/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-sem-acucar-suvalan-1-litro/p",
+  popularity: 705
  },
  {
   sku: "oba-9757",
@@ -7063,7 +7768,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados kefir",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261403/Kefir-Desnatado-Sem-Acucar-Keiff-500g.jpg?v=638144119857770000",
-  productUrl: "https://secure.obahortifruti.com.br/kefir-desnatado-sem-acucar-keiff-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/kefir-desnatado-sem-acucar-keiff-500g/p",
+  popularity: 706
  },
  {
   sku: "oba-8858",
@@ -7073,7 +7779,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476718/Doce-De-Bananinha-Sem-Acucar-Paraibuna-200-G.jpg?v=638980511555700000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-de-bananinha-sem-acucar-paraibuna-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-de-bananinha-sem-acucar-paraibuna-200-g/p",
+  popularity: 707
  },
  {
   sku: "oba-3687",
@@ -7083,7 +7790,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447081/Acucar-Naturale-Uniao-1-Kg.jpg?v=638498191282830000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-naturale-uniao-1-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-naturale-uniao-1-kg/p",
+  popularity: 708
  },
  {
   sku: "oba-4820",
@@ -7093,7 +7801,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia nutricao infantil",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8520149/Papinha-Organica-Pera-Espinafre-E-Aborinha-Sem-Adicao-De-Acucar-100-G.jpg?v=638502520399400000",
-  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-pera--espinafre-e-aborinha-sem-adicao-de-acucar-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-pera--espinafre-e-aborinha-sem-adicao-de-acucar-100-g/p",
+  popularity: 709
  },
  {
   sku: "oba-9221",
@@ -7103,7 +7812,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco integral",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446963/Suco-De-Uva-Tinto-Casa-Madeira-1-L.jpg?v=638498191169670000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-tinto-casa-madeira-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-uva-tinto-casa-madeira-1-l/p",
+  popularity: 710
  },
  {
   sku: "oba-2028",
@@ -7113,7 +7823,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4257384/Suco-De-Maca-Sem-Acucar-Suvalan-200-Ml.jpg?v=638144117101530000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-sem-acucar-suvalan-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-maca-sem-acucar-suvalan-200-ml/p",
+  popularity: 711
  },
  {
   sku: "oba-5855",
@@ -7123,7 +7834,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9657110/Acucar-Mascavo-Organico-Native-250-G.png?v=638637476856030000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-mascavo-organico-native-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-mascavo-organico-native-250-g/p",
+  popularity: 712
  },
  {
   sku: "oba-6152",
@@ -7133,7 +7845,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia nutricao infantil",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492846/Papinha-Organica-Maca-Cenoura-E-Batata-Doce-Sem-Adicao-De-Acucar-Papapa-100-G.jpg?v=639138672415100000",
-  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-maca--cenoura-e-batata-doce-sem-adicao-de-acucar-papapa-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/papinha-organica-maca--cenoura-e-batata-doce-sem-adicao-de-acucar-papapa-100-g/p",
+  popularity: 713
  },
  {
   sku: "oba-1675",
@@ -7143,7 +7856,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5154397/Bananada-Nutrilac-Natural-Sem-Acucar-230g.jpg?v=638314186399570000",
-  productUrl: "https://secure.obahortifruti.com.br/bananada-nutrilac-natural-sem-acucar-230g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bananada-nutrilac-natural-sem-acucar-230g/p",
+  popularity: 714
  },
  {
   sku: "oba-100012007",
@@ -7153,7 +7867,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos & smoothies suco pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490798/Suco-De-Tangerina-Integral-Fazenda-Bela-Vista-300-Ml.jpg?v=639124946828600000",
-  productUrl: "https://secure.obahortifruti.com.br/suco-de-tangerina-integral-fazenda-bela-vista-300-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/suco-de-tangerina-integral-fazenda-bela-vista-300-ml/p",
+  popularity: 715
  },
  {
   sku: "oba-100011106",
@@ -7163,7 +7878,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas destilados & drinks xarope",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478507/Monin-Pure-Sem-Acucar-Maca-Verde-330ml.png?v=639047934687530000",
-  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-maca-verde-330ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-maca-verde-330ml/p",
+  popularity: 716
  },
  {
   sku: "oba-100002947",
@@ -7173,7 +7889,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia oleos e azeites e vinagres",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524983/Vinagre-De-Maca-Sem-Acucar-Sr-Viccino-500-Ml.jpg?v=639201510421800000",
-  productUrl: "https://secure.obahortifruti.com.br/vinagre-de-maca-sem-acucar-sr-viccino-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/vinagre-de-maca-sem-acucar-sr-viccino-500-ml/p",
+  popularity: 717
  },
  {
   sku: "oba-4334",
@@ -7183,7 +7900,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447119/Granola-Premium-Com-Acucar-Mascavo-Takinutri-500g.jpg?v=638498191318430000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-premium-com-acucar-mascavo-takinutri-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-premium-com-acucar-mascavo-takinutri-500g/p",
+  popularity: 718
  },
  {
   sku: "oba-8660",
@@ -7193,7 +7911,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475381/Acucar-Mascavo-Organico-Organic-Saude-Natural-500-G.jpg?v=638920020376100000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-mascavo-organico-organic-saude-natural-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-mascavo-organico-organic-saude-natural-500-g/p",
+  popularity: 719
  },
  {
   sku: "oba-3282",
@@ -7203,7 +7922,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258309/Acucar-Premium-Uniao-Sache-200-G-10-Uns.jpg?v=638144117700730000",
-  productUrl: "https://secure.obahortifruti.com.br/acucar-premium-uniao-sache-200-g-10-uns/p"
+  productUrl: "https://secure.obahortifruti.com.br/acucar-premium-uniao-sache-200-g-10-uns/p",
+  popularity: 720
  },
  {
   sku: "oba-100011080",
@@ -7213,7 +7933,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas destilados & drinks xarope",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478497/Monin-Pure-Sem-Acucar-Frutas-Vermelhas-330ml.png?v=639047928745900000",
-  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-frutas-vermelhas-330ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-frutas-vermelhas-330ml/p",
+  popularity: 721
  },
  {
   sku: "oba-100008786",
@@ -7223,7 +7944,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475348/Biscoito-Folhado-Amanteigado-Polones-Com-Cobertura-De-Acucar-Tago-135-G.png?v=638917188383670000",
-  productUrl: "https://secure.obahortifruti.com.br/bisc-folhado-amant-pol-c-cob-acucar-tago-135g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisc-folhado-amant-pol-c-cob-acucar-tago-135g/p",
+  popularity: 722
  },
  {
   sku: "oba-100013233",
@@ -7233,7 +7955,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517595/Cookies-Double-Chocolate-Sem-Acucar-Sem-Gluten-E-Sem-Lactose-Belive-67-G.jpg?v=639149983108700000",
-  productUrl: "https://secure.obahortifruti.com.br/cookies-double-chocolate-sem-acucar--sem-gluten-e-sem-lactose-belive-67-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cookies-double-chocolate-sem-acucar--sem-gluten-e-sem-lactose-belive-67-g/p",
+  popularity: 723
  },
  {
   sku: "oba-100011107",
@@ -7243,7 +7966,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas destilados & drinks xarope",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517203/Monin-Pure-Sem-Acucar-Manga-Maracuja-330ml.png?v=639143592092200000",
-  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-manga-maracuja-330ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/monin-pure-sem-acucar-manga-maracuja-330ml/p",
+  popularity: 724
  },
  {
   sku: "oba-2867",
@@ -7253,7 +7977,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525203/Iogurte-Desnatado-Zero-Lactose-Grego-Yorgus-130g.jpg?v=639204985638000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-grego-yorgus-130g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-grego-yorgus-130g/p",
+  popularity: 725
  },
  {
   sku: "oba-100009795",
@@ -7263,7 +7988,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476810/Iogurte-Whey-Frutas-Vermelhas-Verde-Campo-140g.png?v=638983937991870000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-frutas-vermelhas-verde-campo-140g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-frutas-vermelhas-verde-campo-140g/p",
+  popularity: 726
  },
  {
   sku: "oba-100009794",
@@ -7273,7 +7999,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476812/Iogurte-Whey-E-Proteina-Banana-E-Canela-Verde-Campo-140g.png?v=638983938140930000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-e-proteina-banana-e-canela-verde-campo-140g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-e-proteina-banana-e-canela-verde-campo-140g/p",
+  popularity: 727
  },
  {
   sku: "oba-100009793",
@@ -7283,7 +8010,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476816/Iogurte-Whey-Maracuja-Verde-Campo-140g.png?v=638983939048770000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-maracuja-verde-campo-140g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-maracuja-verde-campo-140g/p",
+  popularity: 728
  },
  {
   sku: "oba-100003195",
@@ -7293,7 +8021,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474458/Iogurte-De-Coco-Whey-14-G-Verde-Campo-250-G.jpg?v=638871593713900000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-coco-whey-14-g-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-coco-whey-14-g-verde-campo-250-g/p",
+  popularity: 729
  },
  {
   sku: "oba-6289",
@@ -7303,7 +8032,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525200/Iogurte-Com-Mel-Zero-Grego-Yorgus-130g.jpg?v=639204985589330000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-com-mel-zero-grego-yorgus-130g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-com-mel-zero-grego-yorgus-130g/p",
+  popularity: 730
  },
  {
   sku: "oba-1844",
@@ -7313,7 +8043,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520828/Iogurte-Natural-Cremosos-De-Coco-Yopro-160g.jpg?v=639174726942830000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-cremosos-de-coco-yopro-160g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-cremosos-de-coco-yopro-160g/p",
+  popularity: 731
  },
  {
   sku: "oba-100011907",
@@ -7323,7 +8054,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490740/Iogurte-Desnatadp-Com-Preparo-De-Maracuja-250-G.png?v=639124946364300000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatadp-com-preparo-de-maracuja-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatadp-com-preparo-de-maracuja-250-g/p",
+  popularity: 732
  },
  {
   sku: "oba-100011768",
@@ -7333,7 +8065,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais isotonicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490666/Juice-Protein-Maca-Moving-300-Ml.png?v=639124945740930000",
-  productUrl: "https://secure.obahortifruti.com.br/juice-protein-maca-moving-300-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/juice-protein-maca-moving-300-ml/p",
+  popularity: 733
  },
  {
   sku: "oba-100009791",
@@ -7343,7 +8076,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476817/Iogurte-Whey-Abacaxi-E-Coco-Verde-Campo-140-G.png?v=638983939131870000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-abacaxi-e-coco-verde-campo-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-abacaxi-e-coco-verde-campo-140-g/p",
+  popularity: 734
  },
  {
   sku: "oba-10684",
@@ -7353,7 +8087,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474456/Iogurte-Whey-28-G-De-Proteina-Sabor-Coockies-E-Cream-Verde-Campo-500-G.jpg?v=638871593594270000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-28-g-de-proteina-sabor-coockies-e-cream-verde-campo-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-whey-28-g-de-proteina-sabor-coockies-e-cream-verde-campo-500-g/p",
+  popularity: 735
  },
  {
   sku: "oba-8738",
@@ -7363,7 +8098,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4260084/Iogurte-De-Doce-Leite-Lacfree-Verde-Campo-250-G.jpg?v=638144118921600000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-doce-leite-lacfree-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-doce-leite-lacfree-verde-campo-250-g/p",
+  popularity: 736
  },
  {
   sku: "oba-1872",
@@ -7373,7 +8109,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474471/Iogurte-De-Baunilha-Sem-Lactose-Natural-Whey-Lacfree-Verde-Campo-250-G.jpg?v=638871594818100000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-baunilha-sem-lactose-natural-whey-lacfree-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-baunilha-sem-lactose-natural-whey-lacfree-verde-campo-250-g/p",
+  popularity: 737
  },
  {
   sku: "oba-5327",
@@ -7383,7 +8120,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9593658/Iogurte-Semidesnatado-Zero-Lactose-Natural-Com-Morango-Moo-130-G.png?v=638631356543030000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-semidesnatado-zero-lactose-natural-com-morango-moo-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-semidesnatado-zero-lactose-natural-com-morango-moo-130-g/p",
+  popularity: 738
  },
  {
   sku: "oba-1969",
@@ -7393,7 +8131,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474827/Iogurte-De-Cookies-Cream-Lacfree-Verde-Campo.jpg?v=638895814379030000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-cookies-cream-lacfree-verde-campo/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-cookies-cream-lacfree-verde-campo/p",
+  popularity: 739
  },
  {
   sku: "oba-1821",
@@ -7403,7 +8142,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492844/Iogurte-De-Frutas-Silvestres-Sem-Lactose-Ultra-Yorgus-300g.jpg?v=639138672382970000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-frutas-silvestres-sem-lactose-ultra-yorgus-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-frutas-silvestres-sem-lactose-ultra-yorgus-300g/p",
+  popularity: 740
  },
  {
   sku: "oba-100010630",
@@ -7413,7 +8153,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480696/Bebida-Proteica-Mulkshake-De-Coco-Com-Caramelo--Mu-250-Ml.jpg?v=639074508530270000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-proteica-mulkshake-de-coco-com-caramelo--mu-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-proteica-mulkshake-de-coco-com-caramelo--mu-250-ml/p",
+  popularity: 741
  },
  {
   sku: "oba-100009727",
@@ -7423,7 +8164,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474386/Whey-Grego-Mousse-De-Maracuja-Oba-Bem-Querer-Nutrata-900g.jpg?v=638866257885930000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-mousse-de-maracuja-oba-bem-querer-nutrata-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-mousse-de-maracuja-oba-bem-querer-nutrata-900g/p",
+  popularity: 742
  },
  {
   sku: "oba-100008549",
@@ -7433,7 +8175,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477216/Whey-Protein-Concentrado-De-Doce-De-Leite-Dux-Nutrition-28-G.jpg?v=639007936547200000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-doce-de-leite-dux-nutrition-28-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-doce-de-leite-dux-nutrition-28-g/p",
+  popularity: 743
  },
  {
   sku: "oba-100005542",
@@ -7443,7 +8186,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477991/Iogurte-Skyr-De-Maracuja-Atilatte-170-G.jpg?v=639040080410470000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-de-maracuja-atilatte-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-de-maracuja-atilatte-160-g/p",
+  popularity: 744
  },
  {
   sku: "oba-100000994",
@@ -7453,7 +8197,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4262757/Iogurte-Skyr-Original-Atilatte-160-G.jpg?v=638144120870000000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-original-atilatte-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-original-atilatte-160-g/p",
+  popularity: 745
  },
  {
   sku: "oba-12861",
@@ -7463,7 +8208,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8449114/Bebida-Nude-Pro-Cacau-250ml.jpg?v=638498193446700000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-nude-pro-cacau-250ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-nude-pro-cacau-250ml/p",
+  popularity: 746
  },
  {
   sku: "oba-100013270",
@@ -7473,7 +8219,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia arroz",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518100/Risoto-Proteico-De-Espinafre-E-Alho-Poro-Mexidona-180-G.jpg?v=639155165970170000",
-  productUrl: "https://secure.obahortifruti.com.br/risoto-proteico-de-espinafre-e-alho-poro-mexidona-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/risoto-proteico-de-espinafre-e-alho-poro-mexidona-180-g/p",
+  popularity: 747
  },
  {
   sku: "oba-100011761",
@@ -7483,7 +8230,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11486882/Massa-Fusilli-High-Protein-Garofalo-500-G.jpg?v=639102156492600000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-fusilli-high-protein-garofalo-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-fusilli-high-protein-garofalo-500-g/p",
+  popularity: 748
  },
  {
   sku: "oba-100011014",
@@ -7493,7 +8241,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477276/Whey-Protein-Concentrado-Cookies-Sache-Dux-30-G.jpg?v=639007977384170000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-cookies-sache-dux-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-cookies-sache-dux-30-g/p",
+  popularity: 749
  },
  {
   sku: "oba-100009915",
@@ -7503,7 +8252,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525195/Barra-Proteica-Bacio-Di-Latte-Pistache-Nutrata-40-G.jpg?v=639204978968000000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-proteica-bacio-di-latte-pistache-nutrata-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-proteica-bacio-di-latte-pistache-nutrata-40-g/p",
+  popularity: 750
  },
  {
   sku: "oba-100009724",
@@ -7513,7 +8263,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522960/Whey-Grego-Cheesecake-De-Chocolate-Oba-Bem-Querer-Nutrata-Sache-40g.jpg?v=639183318748730000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-cheesecake-de-chocolate-oba-bem-querer-nutrata-sache-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-cheesecake-de-chocolate-oba-bem-querer-nutrata-sache-40g/p",
+  popularity: 751
  },
  {
   sku: "oba-100009725",
@@ -7523,7 +8274,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522958/Whey-Grego-Banoffee-Oba-Bem-Querer-Nutrata-Sache-40g.jpg?v=639183318729570000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-banoffee-oba-bem-querer-nutrata-sache-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-banoffee-oba-bem-querer-nutrata-sache-40g/p",
+  popularity: 752
  },
  {
   sku: "oba-100007866",
@@ -7533,7 +8285,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/6740532/Barra-Proteica-Protobar-Avela-Nutrata-70-G.png?v=638478501449070000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-proteica-protobar-avela-nutrata-70-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-proteica-protobar-avela-nutrata-70-g/p",
+  popularity: 753
  },
  {
   sku: "oba-100008923",
@@ -7543,7 +8296,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474985/Chocowafer-Sabor-Chocolate-Com-Avela--Mu-25-G.jpg?v=638901857597500000",
-  productUrl: "https://secure.obahortifruti.com.br/chocowafer-sabor-chocolate-com-avela--mu-25-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocowafer-sabor-chocolate-com-avela--mu-25-g/p",
+  popularity: 754
  },
  {
   sku: "oba-100011759",
@@ -7553,7 +8307,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478839/Crush-Bar-20-Sabor-Duo-Mais-Mu-35-G.png?v=639052423189000000",
-  productUrl: "https://secure.obahortifruti.com.br/crush-bar-2-0-sabor-duo-mais-mu-35-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/crush-bar-2-0-sabor-duo-mais-mu-35-g/p",
+  popularity: 755
  },
  {
   sku: "oba-100011028",
@@ -7563,7 +8318,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477207/Fresh-Whey-Pistache-Chocolate-Branco-Dux-450g.jpg?v=639007935891130000",
-  productUrl: "https://secure.obahortifruti.com.br/fresh-whey-pistache-chocolate-branco-dux-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/fresh-whey-pistache-chocolate-branco-dux-450g/p",
+  popularity: 756
  },
  {
   sku: "oba-100011017",
@@ -7573,7 +8329,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477209/Whey-Protein-Concentrado-Cookies-Dux-450-G.jpg?v=639007936028600000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-cookies-dux-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-cookies-dux-450-g/p",
+  popularity: 757
  },
  {
   sku: "oba-100010839",
@@ -7583,7 +8340,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476696/Proteina-Em-Bastao-Tube-Pistache-Bold-40g.png?v=638979445011070000",
-  productUrl: "https://secure.obahortifruti.com.br/proteina-em-bastao-tube-pistache-bold-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/proteina-em-bastao-tube-pistache-bold-40g/p",
+  popularity: 758
  },
  {
   sku: "oba-100009733",
@@ -7593,7 +8351,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473901/Whey-Grego-Vitamina-De-Frutas-Oba-Bem-Querer-Nutrata-Sache-40g.jpg?v=638836006233500000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-vitamina-de-frutas-oba-bem-querer-nutrata-sache-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-vitamina-de-frutas-oba-bem-querer-nutrata-sache-40g/p",
+  popularity: 759
  },
  {
   sku: "oba-100008924",
@@ -7603,7 +8362,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474478/Whey-Chocolate-Com-Avela-Mais-Mu-450-G.jpg?v=638871595203300000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-avela-mais-mu-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-avela-mais-mu-450-g/p",
+  popularity: 760
  },
  {
   sku: "oba-100008922",
@@ -7613,7 +8373,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474466/Whey-Chocolate-Com-Coco-Mais-Mu-35-G.jpg?v=638871594427600000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-coco-mais-mu-35-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-coco-mais-mu-35-g/p",
+  popularity: 761
  },
  {
   sku: "oba-100005675",
@@ -7623,7 +8384,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11488993/Proto-Wafer-Chocolate-Belga-Nutrata-30-G.jpg?v=639120264494570000",
-  productUrl: "https://secure.obahortifruti.com.br/proto-wafer-chocolate-belga-nutrata-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/proto-wafer-chocolate-belga-nutrata-30-g/p",
+  popularity: 762
  },
  {
   sku: "oba-13253",
@@ -7633,7 +8395,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474982/Chocowheyfer-Mais-Mu-Chocolate-25g.jpg?v=638901857388170000",
-  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-chocolate-25g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-chocolate-25g/p",
+  popularity: 763
  },
  {
   sku: "oba-13217",
@@ -7643,7 +8406,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474980/Chocowheyfer-Mais-Mu-Baunilha-25g.jpg?v=638901857178400000",
-  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-baunilha-25g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-baunilha-25g/p",
+  popularity: 764
  },
  {
   sku: "oba-11653",
@@ -7653,7 +8417,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474978/Alimento-Proteico-Para-Atletas-Chocolate-Mais-Mu-450-G.jpg?v=638901857050700000",
-  productUrl: "https://secure.obahortifruti.com.br/alimento-proteico-para-atletas-chocolate-mais-mu-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/alimento-proteico-para-atletas-chocolate-mais-mu-450-g/p",
+  popularity: 765
  },
  {
   sku: "oba-100011178",
@@ -7663,7 +8428,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11516930/Bebida-Lactea-Yopro-23g-Peotein-Zero-Lactose-Baunilha-250-Ml.png?v=639142884392830000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-yopro-23g-peotein-zero-lactose-baunilha-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-yopro-23g-peotein-zero-lactose-baunilha-250-ml/p",
+  popularity: 766
  },
  {
   sku: "oba-100007993",
@@ -7673,7 +8439,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9332442/Bebida-Lactea-Morango-Yopro-250-Ml.png?v=638611343098930000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-morango-yopro-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-morango-yopro-250-ml/p",
+  popularity: 767
  },
  {
   sku: "oba-100007991",
@@ -7683,7 +8450,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9332438/Bebida-Lactea-Ultra-Coffee-Cafe-Cappuccino-Zero-Lactose-Yopro-250-Ml.png?v=638611343054470000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-ultra-coffee-cafe-cappuccino-zero-lactose-yopro-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-ultra-coffee-cafe-cappuccino-zero-lactose-yopro-250-ml/p",
+  popularity: 768
  },
  {
   sku: "oba-100011123",
@@ -7693,7 +8461,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477645/Barra-Chocolate-Yopro-55g.png?v=639015918385570000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-chocolate-yopro-55g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-chocolate-yopro-55g/p",
+  popularity: 769
  },
  {
   sku: "oba-11281",
@@ -7703,7 +8472,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476272/Bebida-Sabor-Cacau-Com-Whey-Sem-Lactose-Piracanjuba-250-Ml.png?v=638956147151500000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-sabor-cacau-com-whey-sem-lactose-piracanjuba-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-sabor-cacau-com-whey-sem-lactose-piracanjuba-250-ml/p",
+  popularity: 770
  },
  {
   sku: "oba-100012307",
@@ -7713,7 +8483,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525695/Whey-Sabor-Chocolate-Oba-Bem-Querer-200-Ml.jpg?v=639210366481330000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-chocolate-oba-bem-querer-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-chocolate-oba-bem-querer-200-ml/p",
+  popularity: 771
  },
  {
   sku: "oba-100009730",
@@ -7723,7 +8494,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474383/Whey-Grego-Morango-Com-Chantilly-Oba-Bem-Querer-Nutrata-900g.jpg?v=638866257695700000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-morango-com-chantilly-oba-bem-querer-nutrata-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-morango-com-chantilly-oba-bem-querer-nutrata-900g/p",
+  popularity: 772
  },
  {
   sku: "oba-6302",
@@ -7733,7 +8505,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476270/Bebida-Sabor-Frutas-Vermelhas-Com-Whey-Sem-Lactose-Piracanjuba-250-Ml.png?v=638956147026530000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-sabor-frutas-vermelhas-com-whey-sem-lactose-piracanjuba-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-sabor-frutas-vermelhas-com-whey-sem-lactose-piracanjuba-250-ml/p",
+  popularity: 773
  },
  {
   sku: "oba-5769",
@@ -7743,7 +8516,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474040/Iogurte-De-Banana-Sem-Lactose-Natural-Whey-Lacfree-Verde-Campo-250-G.jpg?v=638842116484730000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-banana-sem-lactose-natural-whey-lacfree-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-banana-sem-lactose-natural-whey-lacfree-verde-campo-250-g/p",
+  popularity: 774
  },
  {
   sku: "oba-100013546",
@@ -7753,7 +8527,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522019/Iogurte-Natural-Whey-Maracuja-21-G-De-Proteina-Verde-Campo-250-G.png?v=639178281022430000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-whey-maracuja-21-g-de-proteina-verde-campo-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-whey-maracuja-21-g-de-proteina-verde-campo-250-g/p",
+  popularity: 775
  },
  {
   sku: "oba-100012284",
@@ -7763,7 +8538,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525693/Whey-Sabor-Morango-Oba-Bem-Querer-250-Ml.jpg?v=639210366456870000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-morango-oba-bem-querer-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-morango-oba-bem-querer-250-ml/p",
+  popularity: 776
  },
  {
   sku: "oba-100009732",
@@ -7773,7 +8549,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473832/Whey-Oba-Bem-Querer-Vitaminas-De-Frutas-900g.png?v=638835320940200000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-oba-bem-querer-vitaminas-de-frutas-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-oba-bem-querer-vitaminas-de-frutas-900g/p",
+  popularity: 777
  },
  {
   sku: "oba-100009722",
@@ -7783,7 +8560,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474385/Whey-Grego-Banoffee-Oba-Bem-Querer-Nutrata-900g.jpg?v=638866257821330000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-banoffee-oba-bem-querer-nutrata-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-banoffee-oba-bem-querer-nutrata-900g/p",
+  popularity: 778
  },
  {
   sku: "oba-100007877",
@@ -7793,7 +8571,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477281/Whey-Protein-Shake-Cookies-Dux-Nutrition-250-Ml.png?v=639007980371200000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-cookies-dux-nutrition-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-cookies-dux-nutrition-250-ml/p",
+  popularity: 779
  },
  {
   sku: "oba-100007876",
@@ -7803,7 +8582,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477245/Whey-Protein-Shake-Chocolate-Branco-Dux-Nutrition-250-Ml.jpg?v=639007961082530000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-chocolate-branco-dux-nutrition-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-chocolate-branco-dux-nutrition-250-ml/p",
+  popularity: 780
  },
  {
   sku: "oba-100007874",
@@ -7813,7 +8593,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477243/Whey-Protein-Shake-Doce-De-Leite-Dux-Nutrition-250-Ml.jpg?v=639007960704800000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-doce-de-leite-dux-nutrition-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-doce-de-leite-dux-nutrition-250-ml/p",
+  popularity: 781
  },
  {
   sku: "oba-100007875",
@@ -7823,7 +8604,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477244/Whey-Protein-Shake-Chocolate-Dux-Nutrition-250-Ml.jpg?v=639007960973800000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-chocolate-dux-nutrition-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-chocolate-dux-nutrition-250-ml/p",
+  popularity: 782
  },
  {
   sku: "oba-100007048",
@@ -7833,7 +8615,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476271/Bebida-Lactea-Whey-Zerolactose-Sabor-Amendoim-Piracanjuba-250-Ml.png?v=638956147079770000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-whey-zerolactose-sabor-amendoim-piracanjuba-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-whey-zerolactose-sabor-amendoim-piracanjuba-250-ml/p",
+  popularity: 783
  },
  {
   sku: "oba-5607",
@@ -7843,7 +8626,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474459/Shake-Natural-Whey-Lacfree-Chocolate-Verde-Campo-250-Ml.jpg?v=638871593779170000",
-  productUrl: "https://secure.obahortifruti.com.br/shake-natural-whey-lacfree-chocolate-verde-campo-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/shake-natural-whey-lacfree-chocolate-verde-campo-250-ml/p",
+  popularity: 784
  },
  {
   sku: "oba-100013234",
@@ -7853,7 +8637,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517613/Whey-Vanilla-Sache-Essential-Nutrition-25g.png?v=639150199093630000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-vanilla-sache-essential-nutrition-25g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-vanilla-sache-essential-nutrition-25g/p",
+  popularity: 785
  },
  {
   sku: "oba-100012399",
@@ -7863,7 +8648,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11492561/Monodose-Whey-Protein-Em-Po-Chocolate-Emana-30-G.png?v=639136088163500000",
-  productUrl: "https://secure.obahortifruti.com.br/monodose-whey-protein-em-po-chocolate-emana-30-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/monodose-whey-protein-em-po-chocolate-emana-30-g/p",
+  popularity: 786
  },
  {
   sku: "oba-100012283",
@@ -7873,7 +8659,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525692/Whey-Sabor-Baunilha-Oba-Bem-Querer-250-Ml.jpg?v=639210366445030000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-baunilha-oba-bem-querer-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-sabor-baunilha-oba-bem-querer-250-ml/p",
+  popularity: 787
  },
  {
   sku: "oba-100012208",
@@ -7883,7 +8670,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490851/Whey-Protein-Em-Po-Sabor-Chocolate-Belga-Emana-450-G.png?v=639124947269430000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-em-po-sabor-chocolate-belga-emana-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-em-po-sabor-chocolate-belga-emana-450-g/p",
+  popularity: 788
  },
  {
   sku: "oba-100011018",
@@ -7893,7 +8681,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas funcionais termogenicos & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477212/Whey-Protein-Shake-De-Coco-Dux-250-Ml.jpg?v=639007936275430000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-de-coco-dux-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-shake-de-coco-dux-250-ml/p",
+  popularity: 789
  },
  {
   sku: "oba-100010191",
@@ -7903,7 +8692,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475113/Whey-Npro-100--Sabor-Morango-Refil-Nutrata-900gr.png?v=638906044180400000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100--sabor-morango-refil-nutrata-900gr/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100--sabor-morango-refil-nutrata-900gr/p",
+  popularity: 790
  },
  {
   sku: "oba-100008921",
@@ -7913,7 +8703,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474477/Whey-Chocolate-Com-Avela-Tradicional-Mais-Mu-35-G.jpg?v=638871595133900000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-avela-tradicional-mais-mu-35-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-chocolate-com-avela-tradicional-mais-mu-35-g/p",
+  popularity: 791
  },
  {
   sku: "oba-100008903",
@@ -7923,7 +8714,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9242922/Pasta-Amendoim-Com-Whey-Sabor-Brownie-Nutrata-600-G.png?v=638604684107200000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-brownie-nutrata-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-brownie-nutrata-600-g/p",
+  popularity: 792
  },
  {
   sku: "oba-100008547",
@@ -7933,7 +8725,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477221/Whey-Protein-Concentrado-De-Chocolate-Dux-Nutrition-28-G.jpg?v=639007938391070000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-chocolate-dux-nutrition-28-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-chocolate-dux-nutrition-28-g/p",
+  popularity: 793
  },
  {
   sku: "oba-100008545",
@@ -7943,7 +8736,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477241/Whey-Protein-Concentrado-De-Baunilha-Dux-Nutrition-28-G.jpg?v=639007960614270000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-baunilha-dux-nutrition-28-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-baunilha-dux-nutrition-28-g/p",
+  popularity: 794
  },
  {
   sku: "oba-100005866",
@@ -7953,7 +8747,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4475092/Pasta-De-Amendoim-Sabor-Avela-Com-Whey-Dr-Peanut-600-G.jpg?v=638177907012370000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-sabor-avela-com-whey-dr--peanut-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-sabor-avela-com-whey-dr--peanut-600-g/p",
+  popularity: 795
  },
  {
   sku: "oba-100005864",
@@ -7963,7 +8758,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4475086/Pasta-De-Amendoim-Sabor-Leite-Em-Po-Com-Whey-Dr-Peanut-600-G.jpg?v=638177907007070000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-sabor-leite-em-po-com-whey-dr--peanut-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-sabor-leite-em-po-com-whey-dr--peanut-600-g/p",
+  popularity: 796
  },
  {
   sku: "oba-100011626",
@@ -7973,7 +8769,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490615/Choco-Wheyfer-Sabor-Doce-De-Leite--Mu-25-G.png?v=639124945309330000",
-  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-doce-de-leite--mu-25-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-doce-de-leite--mu-25-g/p",
+  popularity: 797
  },
  {
   sku: "oba-100010519",
@@ -7983,7 +8780,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520358/Whey-Vanilla-Lata-Essential-Nutrition-375g.png?v=639168732370800000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-vanilla-lata-essential-nutrition-375g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-vanilla-lata-essential-nutrition-375g/p",
+  popularity: 798
  },
  {
   sku: "oba-100009731",
@@ -7993,7 +8791,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473920/Whey-Grego-Torta-De-Limao-Oba-Bem-Querer-Nutrata-Sache-40g.jpg?v=638836026369570000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-torta-de-limao-oba-bem-querer-nutrata-sache-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-torta-de-limao-oba-bem-querer-nutrata-sache-40g/p",
+  popularity: 799
  },
  {
   sku: "oba-100009729",
@@ -8003,7 +8802,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525274/Whey-Grego-Torta-De-Limao-Oba-Bem-Querer-Nutrata-900g.png?v=639207537115930000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-torta-de-limao-oba-bem-querer-nutrata-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-torta-de-limao-oba-bem-querer-nutrata-900g/p",
+  popularity: 800
  },
  {
   sku: "oba-100009726",
@@ -8013,7 +8813,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473898/Whey-Grego-Morango-Com-Chantilly-Oba-Bem-Querer-Nutrata-Sache-40g.jpg?v=638836006018970000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-grego-morango-com-chantilly-oba-bem-querer-nutrata-sache-40g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-grego-morango-com-chantilly-oba-bem-querer-nutrata-sache-40g/p",
+  popularity: 801
  },
  {
   sku: "oba-100008930",
@@ -8023,7 +8824,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474983/Choco-Wheyfer-Sabor-Cookies-Mais-Mu-25-G.jpg?v=638901857450800000",
-  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-cookies-mais-mu-25-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-cookies-mais-mu-25-g/p",
+  popularity: 802
  },
  {
   sku: "oba-100008907",
@@ -8033,7 +8835,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9242925/Pasta-Amendoim-Com-Whey-Sabor-Dulce-De-Leche-Crunchy-Havanna-Nutrata-600-G.png?v=638604684140670000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-dulce-de-leche-crunchy-havanna-nutrata-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-dulce-de-leche-crunchy-havanna-nutrata-600-g/p",
+  popularity: 803
  },
  {
   sku: "oba-100008905",
@@ -8043,7 +8846,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10344398/Pasta-De-Amendoim-Com-Whey-Leite-Trufado-Nutrata-600-G.jpg?v=638758471934570000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-com-whey-leite-trufado-nutrata-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-com-whey-leite-trufado-nutrata-600-g/p",
+  popularity: 804
  },
  {
   sku: "oba-100000865",
@@ -8053,7 +8857,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474472/Bebida-Pronta-Lactea-Com-Whey-Cappuccino-Mais-Mu-250-Ml.jpg?v=638871594868030000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-pronta-lactea-com-whey-cappuccino-mais-mu-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-pronta-lactea-com-whey-cappuccino-mais-mu-250-ml/p",
+  popularity: 805
  },
  {
   sku: "oba-10871",
@@ -8063,7 +8868,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448548/Barrinha-Grego-Bar-Doce-De-Leite-Havanna-Nutrata-40-G.jpg?v=638498192902770000",
-  productUrl: "https://secure.obahortifruti.com.br/barrinha-grego-bar-doce-de-leite-havanna-nutrata-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barrinha-grego-bar-doce-de-leite-havanna-nutrata-40-g/p",
+  popularity: 806
  },
  {
   sku: "oba-100013455",
@@ -8073,7 +8879,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520531/Whey-Protein-Concentrado-Sabor-Chocolate-Branco-450-G.png?v=639171442050070000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-sabor-chocolate-branco-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-sabor-chocolate-branco-450-g/p",
+  popularity: 807
  },
  {
   sku: "oba-100013360",
@@ -8083,7 +8890,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519547/Choco-Wheyfer-Sabor-Pacoquita-Mais-Mu-25-G.png?v=639160353463300000",
-  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-pacoquita-mais-mu-25-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-pacoquita-mais-mu-25-g/p",
+  popularity: 808
  },
  {
   sku: "oba-100011625",
@@ -8093,7 +8901,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490614/Choco-Wheyfer-Sabor-Pistache---Mu-25-G.png?v=639124945301500000",
-  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-pistache---mu-25-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/choco-wheyfer-sabor-pistache---mu-25-g/p",
+  popularity: 809
  },
  {
   sku: "oba-100011299",
@@ -8103,7 +8912,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519651/Whey-Protein-Isolado-Lingua-De-Gato-450g.png?v=639161058612800000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-isolado-lingua-de-gato-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-isolado-lingua-de-gato-450g/p",
+  popularity: 810
  },
  {
   sku: "oba-100011027",
@@ -8113,7 +8923,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477208/Fresh-Whey-Pistache-Chocolate-Branco-Sache-Dux-30g.jpg?v=639007935970700000",
-  productUrl: "https://secure.obahortifruti.com.br/fresh-whey-pistache-chocolate-branco-sache-dux-30g/p"
+  productUrl: "https://secure.obahortifruti.com.br/fresh-whey-pistache-chocolate-branco-sache-dux-30g/p",
+  popularity: 811
  },
  {
   sku: "oba-100011008",
@@ -8123,7 +8934,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517740/Whey-Cappuccino-Essential-Nutrition-30g.png?v=639153338505670000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-cappuccino-essential-nutrition-30g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-cappuccino-essential-nutrition-30g/p",
+  popularity: 812
  },
  {
   sku: "oba-100010794",
@@ -8133,7 +8945,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11526700/Pasta-De-Amendoim-E-Pistache-Com-Whey-Nutrata-400g.png?v=639223122369570000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-e-pistache-com-whey-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-de-amendoim-e-pistache-com-whey-400g/p",
+  popularity: 813
  },
  {
   sku: "oba-100010625",
@@ -8143,7 +8956,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11480491/Whey-Isolado-Chocolate-Pura-Vida-450g.png?v=639071058443870000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-isolado-chocolate-pura-vida-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-isolado-chocolate-pura-vida-450g/p",
+  popularity: 814
  },
  {
   sku: "oba-100010622",
@@ -8153,7 +8967,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475361/Whey-Isolado-Vanilla-Pura-Vida-450g.png?v=638917194435230000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-isolado-vanilla-pura-vida-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-isolado-vanilla-pura-vida-450g/p",
+  popularity: 815
  },
  {
   sku: "oba-100010323",
@@ -8163,7 +8978,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios doces lacteos sobremesa lactea",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517743/Whey-Cacao-Sache-Essential-Nutrition-28g.png?v=639153338524630000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-cacao-sache-essential-nutrition-28g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-cacao-sache-essential-nutrition-28g/p",
+  popularity: 816
  },
  {
   sku: "oba-100010298",
@@ -8173,7 +8989,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios doces lacteos sobremesa lactea",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517742/Whey-Red-Berry-Sache-Essential-Nutrition-30g.png?v=639153338509570000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-red-berry-sache-essential-nutrition-30g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-red-berry-sache-essential-nutrition-30g/p",
+  popularity: 817
  },
  {
   sku: "oba-100010297",
@@ -8183,7 +9000,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478045/Whey-Immuno-Pro-Glutathione-Cacao-Lata-Essential-Nutrition-465-G.png?v=639040104451470000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-immuno-pro-glutathione-cacao-lata-essential-nutrition-465-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-immuno-pro-glutathione-cacao-lata-essential-nutrition-465-g/p",
+  popularity: 818
  },
  {
   sku: "oba-100010194",
@@ -8193,7 +9011,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475114/Whey-Npro-100---Sabor-Baunilha-Ref-Nutrata-900g.png?v=638906044225870000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100---sabor-baunilha-ref-nutrata-900g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100---sabor-baunilha-ref-nutrata-900g/p",
+  popularity: 819
  },
  {
   sku: "oba-100010193",
@@ -8203,7 +9022,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475115/Whey-Npro-100--Sabor-Choco-Refil-Nutrata-900gr.png?v=638906044275100000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100--sabor-choco-refil-nutrata-900gr/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-npro-100--sabor-choco-refil-nutrata-900gr/p",
+  popularity: 820
  },
  {
   sku: "oba-100008929",
@@ -8213,7 +9033,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474476/Whey-Cookies-Tradicional-Mais-Mu-31-G.jpg?v=638871595085230000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-cookies-tradicional-mais-mu-31-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-cookies-tradicional-mais-mu-31-g/p",
+  popularity: 821
  },
  {
   sku: "oba-100008904",
@@ -8223,7 +9044,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9242924/Pasta-Amendoim-Com-Whey-Sabor-Dulce-De-Leche-Cream-Havanna-Nutrata-600-G.png?v=638604684130070000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-dulce-de-leche-cream-havanna-nutrata-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-dulce-de-leche-cream-havanna-nutrata-600-g/p",
+  popularity: 822
  },
  {
   sku: "oba-100008902",
@@ -8233,7 +9055,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9242921/Pasta-Amendoim-Com-Whey-Sabor-Avela-Nutrata-600-G.png?v=638604684095370000",
-  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-avela-nutrata-600-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pasta-amendoim-com-whey-sabor-avela-nutrata-600-g/p",
+  popularity: 823
  },
  {
   sku: "oba-100008548",
@@ -8243,7 +9066,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477282/Whey-Protein-Concentradode-Doce-De-Leite-Dux-Nutrition-450-G.png?v=639007980387600000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentradode-doce-de-leite-dux-nutrition-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentradode-doce-de-leite-dux-nutrition-450-g/p",
+  popularity: 824
  },
  {
   sku: "oba-100008546",
@@ -8253,7 +9077,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477220/Whey-Protein-Concentrado-De-Chocolate-Dux-Nutrition-450-G.jpg?v=639007938375070000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-chocolate-dux-nutrition-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-chocolate-dux-nutrition-450-g/p",
+  popularity: 825
  },
  {
   sku: "oba-100008543",
@@ -8263,7 +9088,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477242/Whey-Protein-Concentrado-De-Baunilha-Dux-Nutrition-450-G.jpg?v=639007960651400000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-baunilha-dux-nutrition-450-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-concentrado-de-baunilha-dux-nutrition-450-g/p",
+  popularity: 826
  },
  {
   sku: "oba-100005672",
@@ -8273,7 +9099,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10344370/Barra-De-Proteina-Grego-Doce-De-Leite-Com-Limao-Havanna-Nutrata-40-G.jpg?v=638758471608630000",
-  productUrl: "https://secure.obahortifruti.com.br/barra-de-proteina-grego-doce-de-leite-com-limao-havanna-nutrata-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/barra-de-proteina-grego-doce-de-leite-com-limao-havanna-nutrata-40-g/p",
+  popularity: 827
  },
  {
   sku: "oba-100002648",
@@ -8283,7 +9110,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474475/Whey-Protein-Mais-Mu-Baun-450g.jpg?v=638871595033670000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-mais-mu-baun-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-mais-mu-baun-450g/p",
+  popularity: 828
  },
  {
   sku: "oba-100001816",
@@ -8293,7 +9121,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474473/Bebida-Pronta-Lactea-Com-Whey-Chocolate-Mais-Mu-250-Ml.jpg?v=638871594921770000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-pronta-lactea-com-whey-chocolate-mais-mu-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-pronta-lactea-com-whey-chocolate-mais-mu-250-ml/p",
+  popularity: 829
  },
  {
   sku: "oba-13234",
@@ -8303,7 +9132,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476737/Chocowheyfer-Mais-Mu-Chocolate-Branco-25g.jpg?v=638980513098170000",
-  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-chocolate-branco-25g/p"
+  productUrl: "https://secure.obahortifruti.com.br/chocowheyfer-mais-mu-chocolate-branco-25g/p",
+  popularity: 830
  },
  {
   sku: "oba-12981",
@@ -8313,7 +9143,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474084/Whey-Protein-Mais-Mu-Cookies---Cream-450g.jpg?v=638848134464230000",
-  productUrl: "https://secure.obahortifruti.com.br/whey-protein-mais-mu-cookies---cream-450g/p"
+  productUrl: "https://secure.obahortifruti.com.br/whey-protein-mais-mu-cookies---cream-450g/p",
+  popularity: 831
  },
  {
   sku: "oba-2190",
@@ -8323,7 +9154,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas bebidas lacteas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475514/Shake-Natural-Whey-Lacfree-Baunilha-Verde-Campo-250-Ml.jpg?v=638932752421100000",
-  productUrl: "https://secure.obahortifruti.com.br/shake-natural-whey-lacfree-baunilha-verde-campo-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/shake-natural-whey-lacfree-baunilha-verde-campo-250-ml/p",
+  popularity: 832
  },
  {
   sku: "oba-100000739",
@@ -8333,7 +9165,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cappuccino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10871903/Cappuccino-Diet-3-Coracoes-150-G.jpg?v=638813658561330000",
-  productUrl: "https://secure.obahortifruti.com.br/cappuccino-diet-3-coracoes-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cappuccino-diet-3-coracoes-150-g/p",
+  popularity: 833
  },
  {
   sku: "oba-5867",
@@ -8343,7 +9176,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9712119/Gelatina-Morango-Diet-Dr-Oetker-12-G.png?v=638644242985600000",
-  productUrl: "https://secure.obahortifruti.com.br/gelatina-morango-diet-dr-oetker-12-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelatina-morango-diet-dr-oetker-12-g/p",
+  popularity: 834
  },
  {
   sku: "oba-100011833",
@@ -8353,7 +9187,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11526179/Iogurte-Desnatado-Para-Dietas-Com-Restricao-De-Lactose-Muai-140-G.jpg?v=639217050618070000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-para-dietas-com-restricao-de-lactose-muai-140-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-para-dietas-com-restricao-de-lactose-muai-140-g/p",
+  popularity: 835
  },
  {
   sku: "oba-4533",
@@ -8363,7 +9198,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9712117/Gelatina-Cereja-Diet-Dr-Oetker--12-G.png?v=638644242959770000",
-  productUrl: "https://secure.obahortifruti.com.br/gelatina-cereja-diet-dr-oetker--12-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/gelatina-cereja-diet-dr-oetker--12-g/p",
+  popularity: 836
  },
  {
   sku: "oba-100008010",
@@ -8373,7 +9209,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474217/Doce-De-Abobora-Com-Coco-Diet-House-250-G.png?v=638857656269400000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-de-abobora-com-coco-diet-house-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-de-abobora-com-coco-diet-house-250-g/p",
+  popularity: 837
  },
  {
   sku: "oba-507",
@@ -8383,7 +9220,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia acucar e adocante",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4255897/Adocante-Em-Po-Sucralose-Diet-Uniao--50-Uns.jpg?v=638144116129800000",
-  productUrl: "https://secure.obahortifruti.com.br/adocante-em-po-sucralose-diet-uniao--50-uns/p"
+  productUrl: "https://secure.obahortifruti.com.br/adocante-em-po-sucralose-diet-uniao--50-uns/p",
+  popularity: 838
  },
  {
   sku: "oba-100008009",
@@ -8393,7 +9231,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9240542/Doce-Laranja-Kinkan-Diet-House-250-G.png?v=638604538422330000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-laranja-kinkan-diet-house-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-laranja-kinkan-diet-house-250g/p",
+  popularity: 839
  },
  {
   sku: "oba-100008008",
@@ -8403,7 +9242,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474218/Doce-De-Goiabada-Cascao-Diet-House-250-G.png?v=638857656329800000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-de-goiabada-cascao-diet-house-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-de-goiabada-cascao-diet-house-250-g/p",
+  popularity: 840
  },
  {
   sku: "oba-9226",
@@ -8413,7 +9253,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cacau & achocolatados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9603724/Achocolatado-Em-Po-Diet-Gold-Premium-Sweet-Pote-200-G.png?v=638632291940170000",
-  productUrl: "https://secure.obahortifruti.com.br/achocolatado-em-po-diet-gold-premium-sweet-pote-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/achocolatado-em-po-diet-gold-premium-sweet-pote-200-g/p",
+  popularity: 841
  },
  {
   sku: "oba-100008006",
@@ -8423,7 +9264,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8731724/Doce-Bananada-Diet-House-250-G.jpg?v=638545171926700000",
-  productUrl: "https://secure.obahortifruti.com.br/doce-bananada-diet-house-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/doce-bananada-diet-house-250g/p",
+  popularity: 842
  },
  {
   sku: "oba-2939",
@@ -8433,7 +9275,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447196/Iogurte-3-Sabores-Light-Grego-Nestle-540g.jpg?v=638498191387230000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-3-sabores-light-grego-nestle-540g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-3-sabores-light-grego-nestle-540g/p",
+  popularity: 843
  },
  {
   sku: "oba-2812",
@@ -8443,7 +9286,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520321/Cream-Cheese-Light-Philadelphia-300-G.jpg?v=639168684444070000",
-  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-philadelphia-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-philadelphia-300-g/p",
+  popularity: 844
  },
  {
   sku: "oba-100012197",
@@ -8453,7 +9297,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490841/Requeijao-Light-Zero-Lactose-180-G.jpg?v=639124947188130000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-light-zero-lactose-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-light-zero-lactose-180-g/p",
+  popularity: 845
  },
  {
   sku: "oba-100004830",
@@ -8463,7 +9308,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos & condimentos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9656961/Maionese-Hellmann-S-Light-500-G.png?v=638637475127530000",
-  productUrl: "https://secure.obahortifruti.com.br/maionese-hellmann-s-light-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/maionese-hellmann-s-light-500-g/p",
+  popularity: 846
  },
  {
   sku: "oba-100000912",
@@ -8473,7 +9319,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517690/Creme-De-Ricota-Light-Quata-150-G.png?v=639153141096500000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-ricota-light-quata-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-ricota-light-quata-150-g/p",
+  popularity: 847
  },
  {
   sku: "oba-100001987",
@@ -8483,7 +9330,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476352/Queijo-Minas-Frescal-Light-Polenghi-400g.png?v=638960442975770000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-polenghi-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-polenghi-400g/p",
+  popularity: 848
  },
  {
   sku: "oba-100002892",
@@ -8493,7 +9341,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9521162/Requeijao-Cremoso-Light-Aviacao-250-G.png?v=638625450842630000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-aviacao-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-aviacao-250-g/p",
+  popularity: 849
  },
  {
   sku: "oba-3442",
@@ -8503,7 +9352,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria peito de peru & frango",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4256964/Peito-De-Frango-Light-Defumado-Ceratti-Fatiado-Kg.jpg?v=638144116827470000",
-  productUrl: "https://secure.obahortifruti.com.br/peito-de-frango-light-defumado-ceratti-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/peito-de-frango-light-defumado-ceratti-fatiado-kg/p",
+  popularity: 850
  },
  {
   sku: "oba-6629",
@@ -8513,7 +9363,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces & chocolates",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10211259/Pessego-Grego--Em-Calda-Light-Oba-Bem-Querer-680-G.png?v=638725387063100000",
-  productUrl: "https://secure.obahortifruti.com.br/pessego-grego--em-calda-light-oba-bem-querer-680-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pessego-grego--em-calda-light-oba-bem-querer-680-g/p",
+  popularity: 851
  },
  {
   sku: "oba-5566",
@@ -8523,7 +9374,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448691/Requeijao-Cremoso-Light-Crioulo-220-G.jpg?v=638498193055130000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-crioulo-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-crioulo-220-g/p",
+  popularity: 852
  },
  {
   sku: "oba-1593",
@@ -8533,7 +9385,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261339/Queijo-Minas-Padr-Light-Verde-Campo-Kg.jpg?v=638144119805470000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padr-light-verde-campo-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padr-light-verde-campo-kg/p",
+  popularity: 853
  },
  {
   sku: "oba-100004643",
@@ -8543,7 +9396,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476350/Queijo-Frescatino-Light-Polenghi-250g.png?v=638960442858830000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-frescatino-light-polenghi-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-frescatino-light-polenghi-250g/p",
+  popularity: 854
  },
  {
   sku: "oba-7342",
@@ -8553,7 +9407,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia etnicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446313/Molho-Shoyu-Light-Sakura-150-Ml.jpg?v=638498190572530000",
-  productUrl: "https://secure.obahortifruti.com.br/molho-shoyu-light-sakura-150-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/molho-shoyu-light-sakura-150-ml/p",
+  popularity: 855
  },
  {
   sku: "oba-6109",
@@ -8563,7 +9418,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10140284/Leite-De-Coco-Light-Oba-Bem-Querer-200-Ml.jpg?v=638710699594300000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-de-coco-light-oba-bem-querer-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-de-coco-light-oba-bem-querer-200-ml/p",
+  popularity: 856
  },
  {
   sku: "oba-9303",
@@ -8573,7 +9429,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9781409/Pao-Estar-Leve-Forma-Wickbold-300g.png?v=638652954690370000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-light-estar-leve-wickbold-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-light-estar-leve-wickbold-300-g/p",
+  popularity: 857
  },
  {
   sku: "oba-1524",
@@ -8583,7 +9440,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti castanhas e graos nozes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258555/Nozes-Quartilhos-Extra-Light-Oba-Bem-Querer-230-G.jpg?v=638895639217670000",
-  productUrl: "https://secure.obahortifruti.com.br/nozes-quartilhos-extra-light-oba-bem-querer-230-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/nozes-quartilhos-extra-light-oba-bem-querer-230-g/p",
+  popularity: 858
  },
  {
   sku: "oba-1195",
@@ -8593,7 +9451,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8446881/Cream-Cheese-Light-Philadelphia-150-G.jpg?v=638498191096000000",
-  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-philadelphia-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-philadelphia-150-g/p",
+  popularity: 859
  },
  {
   sku: "oba-991",
@@ -8603,7 +9462,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10222744/Queijo-Minas-Frescal-Light-Atilatte.png?v=638729022886400000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-atilatte/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-atilatte/p",
+  popularity: 860
  },
  {
   sku: "oba-100013707",
@@ -8613,7 +9473,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524596/Creme-De-Ricota-Light-Scala-200-G.png?v=639195848034100000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-ricota-light-scala-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-ricota-light-scala-200-g/p",
+  popularity: 861
  },
  {
   sku: "oba-100010383",
@@ -8623,7 +9484,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522049/Requeijao-Cremoso-Light-Muai-200-G.png?v=639178344459200000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-muai-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-cremoso-light-muai-200-g/p",
+  popularity: 862
  },
  {
   sku: "oba-100005795",
@@ -8633,7 +9495,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5030153/Queijo-Prato-Light-Tirolez-Ralado-Kg.png?v=638287545987670000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-light-tirolez-ralado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-prato-light-tirolez-ralado-kg/p",
+  popularity: 863
  },
  {
   sku: "oba-100004882",
@@ -8643,7 +9506,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4250053/Cream-Cheese-Light-Danubio-150-G.jpg?v=638144112127500000",
-  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-danubio-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cream-cheese-light-danubio-150-g/p",
+  popularity: 864
  },
  {
   sku: "oba-100004876",
@@ -8653,7 +9517,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos & condimentos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517705/Sal-Cisne-Light-500-G.png?v=639153142311070000",
-  productUrl: "https://secure.obahortifruti.com.br/sal-cisne-light-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/sal-cisne-light-500-g/p",
+  popularity: 865
  },
  {
   sku: "oba-100004236",
@@ -8663,7 +9528,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4256359/Queijo-Mini-Saint-Paulin-Light-Babybel-100-G.jpg?v=638954529821830000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mini-saint-paulin-light-babybel-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mini-saint-paulin-light-babybel-100-g/p",
+  popularity: 866
  },
  {
   sku: "oba-3523",
@@ -8673,7 +9539,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos embutidos & charcutaria mortadela",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447192/Mortadela-Bologna-Light-Ceratti-100-G.png?v=638498191383970000",
-  productUrl: "https://secure.obahortifruti.com.br/mortadela-bologna-light-ceratti-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/mortadela-bologna-light-ceratti-100-g/p",
+  popularity: 867
  },
  {
   sku: "oba-9774",
@@ -8683,7 +9550,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5358523/Leite-Light-Pasteurizado-Tipo-A-Xando-1l.png?v=638363588304500000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-light-pasteurizado-tipo-a-xando-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-light-pasteurizado-tipo-a-xando-1l/p",
+  popularity: 868
  },
  {
   sku: "oba-2724",
@@ -8693,7 +9561,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia etnicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9712166/Molho-Shoyu-Light-Sakura-500-Ml.png?v=638644243523270000",
-  productUrl: "https://secure.obahortifruti.com.br/molho-shoyu-light-sakura-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/molho-shoyu-light-sakura-500-ml/p",
+  popularity: 869
  },
  {
   sku: "oba-9568",
@@ -8703,7 +9572,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258598/Iogurte-De-Leite-De-Ovelha-Com-Geleia-De-Damasco-Light-Casa-Da-Ovelha-500-G.jpg?v=638144117892870000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-com-geleia-de-damasco-light-casa-da-ovelha-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-com-geleia-de-damasco-light-casa-da-ovelha-500-g/p",
+  popularity: 870
  },
  {
   sku: "oba-6321",
@@ -8713,7 +9583,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10596026/Queijo-Minas-Frescal-Light-Quata-Peca.png?v=638780934711100000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-quata-peca/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-light-quata-peca/p",
+  popularity: 871
  },
  {
   sku: "oba-5527",
@@ -8723,7 +9594,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448606/Cerveja-Michelob-Ultra-Long-Neck-330-Ml.jpg?v=638498192963430000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-michelob-ultra-long-neck-330-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-michelob-ultra-long-neck-330-ml/p",
+  popularity: 872
  },
  {
   sku: "oba-593",
@@ -8733,7 +9605,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448889/Cerveja-Ultra-Lata-Sleek-Michelob-350-Ml.jpg?v=638498193238900000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-ultra-lata-sleek-michelob-350-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-ultra-lata-sleek-michelob-350-ml/p",
+  popularity: 873
  },
  {
   sku: "oba-716",
@@ -8743,7 +9616,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447139/Torrada-Slim-Light-Fhom-110-G.jpg?v=638498191335370000",
-  productUrl: "https://secure.obahortifruti.com.br/torrada-slim-light-fhom-110-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/torrada-slim-light-fhom-110-g/p",
+  popularity: 874
  },
  {
   sku: "oba-544",
@@ -8753,7 +9627,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519219/Iogurte-De-Leite-De-Ovelha-Com-Geleia-De-Amora-Light-Casa-Da-Ovelha-500-G.png?v=639159306781530000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-com-geleia-de-amora-light-casa-da-ovelha-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-com-geleia-de-amora-light-casa-da-ovelha-500-g/p",
+  popularity: 875
  },
  {
   sku: "oba-100013846",
@@ -8763,7 +9638,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11526530/Bisnaga-De-Requeijao-Light-Catupiry-250g.png?v=639222414627600000",
-  productUrl: "https://secure.obahortifruti.com.br/bisnaga-de-requeijao-light-catupiry-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisnaga-de-requeijao-light-catupiry-250g/p",
+  popularity: 876
  },
  {
   sku: "oba-100012209",
@@ -8773,7 +9649,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490852/Yo-Snack-Sal-Light-Nhami-Mami-40-G.png?v=639124947277730000",
-  productUrl: "https://secure.obahortifruti.com.br/yo-snack-sal-light-nhami-mami-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/yo-snack-sal-light-nhami-mami-40-g/p",
+  popularity: 877
  },
  {
   sku: "oba-100009599",
@@ -8783,7 +9660,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios creme de leite, nata & chantilly creme de leite",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10596484/Creme-De-Queijo-Light-Em-Copo-Quata-180g.png?v=638780938955970000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-queijo-light-em-copo-quata-180g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-queijo-light-em-copo-quata-180g/p",
+  popularity: 878
  },
  {
   sku: "oba-6357",
@@ -8793,7 +9671,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261252/Leite-Cond-Piracanjuba-Light-395ml.jpg?v=638144119737130000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-cond-piracanjuba-light-395ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-cond-piracanjuba-light-395ml/p",
+  popularity: 879
  },
  {
   sku: "oba-2539",
@@ -8803,7 +9682,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474590/Queijo-Cottage-Zero-Lactose-Lacfree-Verde-Campo-200-G.jpg?v=638878334989800000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-zero-lactose-lacfree-verde-campo-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-zero-lactose-lacfree-verde-campo-200-g/p",
+  popularity: 880
  },
  {
   sku: "oba-1869",
@@ -8813,7 +9693,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477131/Requeijao-Sem-Lactose-Lacfree-Verde-Campo-180-G.jpg?v=638999472393300000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-sem-lactose-lacfree-verde-campo-180-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-sem-lactose-lacfree-verde-campo-180-g/p",
+  popularity: 881
  },
  {
   sku: "oba-2352",
@@ -8823,7 +9704,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477810/Queijo-Mussarela-De-Bufala-Zero-Lactose-Bom-Destino.jpg?v=639021073346170000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-de-bufala-zero-lactose-bom-destino/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-de-bufala-zero-lactose-bom-destino/p",
+  popularity: 882
  },
  {
   sku: "oba-6063",
@@ -8833,7 +9715,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8910852/Palitos-De-Queijo-Mozzarella-Zero-Lactose-Atilatte-304-G.png?v=638580350732870000",
-  productUrl: "https://secure.obahortifruti.com.br/palitos-de-queijo-mozzarella-zero-lactose-atilatte-304-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/palitos-de-queijo-mozzarella-zero-lactose-atilatte-304-g/p",
+  popularity: 883
  },
  {
   sku: "oba-100008887",
@@ -8843,7 +9726,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11482622/Iogurte-Zero-Lactose-Mirtilo-Oba-Bem-Querer-250-G.jpg?v=639087595927170000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-zero-lactose-mirtilo-oba-bem-querer-250-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-zero-lactose-mirtilo-oba-bem-querer-250-g/p",
+  popularity: 884
  },
  {
   sku: "oba-100006122",
@@ -8853,7 +9737,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5154598/Leite-Fermentado-Desnatado-Morango-Zero-Lactose-Activia-Zero-Garrafa-800g.jpg?v=638314258533130000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-fermentado-desnatado-morango-zero-lactose-activia-zero-garrafa-800g/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-fermentado-desnatado-morango-zero-lactose-activia-zero-garrafa-800g/p",
+  popularity: 885
  },
  {
   sku: "oba-100001937",
@@ -8863,7 +9748,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474369/Pao-De-Forma-Sem-Gluten-E-Sem-Lactose-Multigraos-Schar-200-G.jpg?v=638866256486430000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-e-sem-lactose-multigraos-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-e-sem-lactose-multigraos-schar-200-g/p",
+  popularity: 886
  },
  {
   sku: "oba-100001205",
@@ -8873,7 +9759,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9592360/Leite-Condensado-Zero-Lactose-Piracanjuba-395g.png?v=638631248423800000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-condensado-zero-lactose-piracanjuba-395g/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-condensado-zero-lactose-piracanjuba-395g/p",
+  popularity: 887
  },
  {
   sku: "oba-100001990",
@@ -8883,7 +9770,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4257401/Queijo-Minas-Padrao-Lacfree-Verde-Campo-Kg.jpg?v=638144117113500000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padrao-lacfree-verde-campo-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-padrao-lacfree-verde-campo-kg/p",
+  popularity: 888
  },
  {
   sku: "oba-5455",
@@ -8893,7 +9781,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9594570/Pao-De-Forma-Sem-Gluten-E-Sem-Lactose-Tradicional-Schar-200-G.png?v=638631429462300000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-e-sem-lactose-tradicional-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-e-sem-lactose-tradicional-schar-200-g/p",
+  popularity: 889
  },
  {
   sku: "oba-10255",
@@ -8903,7 +9792,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473620/Iogurte-Desnatado-Zero-Lactose-Atilatte-170-G.jpg?v=638835320830830000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-atilatte-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-desnatado-zero-lactose-atilatte-170-g/p",
+  popularity: 890
  },
  {
   sku: "oba-2459",
@@ -8913,7 +9803,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473600/Iogurte-Integral-Zero-Lactose-Atilatte-170-G.jpg?v=638835320821230000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-integral-zero-lactose-atilatte-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-integral-zero-lactose-atilatte-170-g/p",
+  popularity: 891
  },
  {
   sku: "oba-6301",
@@ -8923,7 +9814,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517673/Iogurte-Natural-Semidesnatado-Zero-Lactose-Moo-130-G.jpg?v=639153139914030000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-semidesnatado-zero-lactose-moo-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-semidesnatado-zero-lactose-moo-130-g/p",
+  popularity: 892
  },
  {
   sku: "oba-8277",
@@ -8933,7 +9825,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11525669/Iogurte-De-Morango-Grego-Yorgus-130g.jpg?v=639210360402570000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-grego-yorgus-130g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-grego-yorgus-130g/p",
+  popularity: 893
  },
  {
   sku: "oba-6528",
@@ -8943,7 +9836,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476504/Leite-Zero-Lactose-Xando-1l.jpg?v=638968438063400000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-xando-1l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-xando-1l/p",
+  popularity: 894
  },
  {
   sku: "oba-10134",
@@ -8953,7 +9847,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476505/Iogurte-Blueberry-E-Amora-Zero-Lactose-Delicari-340-G.jpg?v=638968438130330000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-blueberry-e-amora-zero-lactose-delicari-340-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-blueberry-e-amora-zero-lactose-delicari-340-g/p",
+  popularity: 895
  },
  {
   sku: "oba-892",
@@ -8963,7 +9858,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso queijo cremoso",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9157070/Queijo-Cottage-Sem-Lactose-Lacfree-Verde-Campo-400-G.png?v=638599243738230000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-sem-lactose-lacfree-verde-campo-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-cottage-sem-lactose-lacfree-verde-campo-400-g/p",
+  popularity: 896
  },
  {
   sku: "oba-10381",
@@ -8973,7 +9869,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473831/Iogurte-Natural-Parcialmente-Desnatado-Zero-Lactose-Leitissimo-170-G.jpg?v=638835320937970000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-parcialmente-desnatado-zero-lactose-leitissimo-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-parcialmente-desnatado-zero-lactose-leitissimo-170-g/p",
+  popularity: 897
  },
  {
   sku: "oba-950",
@@ -8983,7 +9880,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios creme de leite, nata & chantilly creme de leite",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519809/Creme-De-Leite-Lacfree-Verde-Campo-500-G.jpg?v=639162198515200000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-lacfree-verde-campo-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-leite-lacfree-verde-campo-500-g/p",
+  popularity: 898
  },
  {
   sku: "oba-100009666",
@@ -8993,7 +9891,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11490940/Manteiga-Zero-Lactose-Aviacao-200g.png?v=639125646372400000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-zero-lactose-aviacao-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-zero-lactose-aviacao-200g/p",
+  popularity: 899
  },
  {
   sku: "oba-100008876",
@@ -9003,7 +9902,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios requeijao & queijo cremoso requeijao",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11520826/Requeijao-De-Bufala-Cremoso-Zero-Lactose-Bom-Destino-200g.jpg?v=639174726918100000",
-  productUrl: "https://secure.obahortifruti.com.br/requeijao-de-bufala-cremoso-zero-lactose-bom-destino-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/requeijao-de-bufala-cremoso-zero-lactose-bom-destino-200g/p",
+  popularity: 900
  },
  {
   sku: "oba-100007645",
@@ -9013,7 +9913,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10550759/Pao-De-Forma-Quinoa-E-Linhaca-Com-Fibra-De-Psyllium-Sem-Gluten-Zero-Lactose-Schar-200-G.jpg?v=638777445898930000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-quinoa-e-linhaca-com-fibra-de-psyllium-sem-gluten-zero-lactose-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-quinoa-e-linhaca-com-fibra-de-psyllium-sem-gluten-zero-lactose-schar-200-g/p",
+  popularity: 901
  },
  {
   sku: "oba-100007353",
@@ -9023,7 +9924,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5067535/Leitissimo-Iogurte-Natural-Zero-Lactose-Integral-Delicari-500-G.jpg?v=638293416641670000",
-  productUrl: "https://secure.obahortifruti.com.br/leitissimo-iogurte-natural-zero-lactose-integral-delicari-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/leitissimo-iogurte-natural-zero-lactose-integral-delicari-500-g/p",
+  popularity: 902
  },
  {
   sku: "oba-100005326",
@@ -9033,7 +9935,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478397/Leite-Piracanjuba-1-L-Desnatado-Zero-Lactose.jpg?v=639047106625600000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-piracanjuba-1-l-desnatado-zero-lactose/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-piracanjuba-1-l-desnatado-zero-lactose/p",
+  popularity: 903
  },
  {
   sku: "oba-100003064",
@@ -9043,7 +9946,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite em po",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478376/Leite-Zero-Lactose-Ninho-380-G.jpg?v=639047100710500000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-ninho-380-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-ninho-380-g/p",
+  popularity: 904
  },
  {
   sku: "oba-6285",
@@ -9053,7 +9957,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473818/Iogurte-Natural-Integral-Zero-Lactose-Leitissimo-170-G.jpg?v=638835320928900000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-zero-lactose-leitissimo-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-integral-zero-lactose-leitissimo-170-g/p",
+  popularity: 905
  },
  {
   sku: "oba-11273",
@@ -9063,7 +9968,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476503/Iogurte-De-Morango-E-Framboesa-Zero-Lactose-Delicari-340-G.jpg?v=638968437983700000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-e-framboesa-zero-lactose-delicari-340-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-e-framboesa-zero-lactose-delicari-340-g/p",
+  popularity: 906
  },
  {
   sku: "oba-3574",
@@ -9073,7 +9979,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4256509/Iogurte-Natural-Lacfree-Verde-Campo-500g.jpg?v=638144116529300000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-lacfree-verde-campo-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-lacfree-verde-campo-500g/p",
+  popularity: 907
  },
  {
   sku: "oba-4975",
@@ -9083,7 +9990,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9353705/Iogurte-Sem-Lactose-Tipo-Skyr-Sabor-Coco-Moo-130-G.png?v=638613071145100000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-sem-lactose-tipo-skyr-sabor-coco-moo-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-sem-lactose-tipo-skyr-sabor-coco-moo-130-g/p",
+  popularity: 908
  },
  {
   sku: "oba-5948",
@@ -9093,7 +10001,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite pasteurizado",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476728/Leite-A-Pasteurizado-Zero-Lactose-Fazenda-Bela-Vista-1-L.jpg?v=638980512427570000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-a-pasteurizado-zero-lactose-fazenda-bela-vista-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-a-pasteurizado-zero-lactose-fazenda-bela-vista-1-l/p",
+  popularity: 909
  },
  {
   sku: "oba-10031",
@@ -9103,7 +10012,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477076/Iogurte-Grego-De-Maracuja-E-Manga-Zero-Lactose-Delicari-340-G.jpg?v=638991762864370000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-de-maracuja-e-manga-zero-lactose-delicari-340-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-grego-de-maracuja-e-manga-zero-lactose-delicari-340-g/p",
+  popularity: 910
  },
  {
   sku: "oba-10687",
@@ -9113,7 +10023,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4738661/Queijo-Mussarela-Zero-Lactose-Pedaco-Oba-Bem-Querer-Kg.png?v=638238334800300000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-zero-lactose-pedaco-oba-bem-querer-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-zero-lactose-pedaco-oba-bem-querer-kg/p",
+  popularity: 911
  },
  {
   sku: "oba-100013395",
@@ -9123,7 +10034,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos frescos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519667/Queijo-Minas-Frescal-Zero-Lactose-Fazenda-Bela-Vista-Kg.png?v=639161141959370000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-zero-lactose-fazenda-bela-vista-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-minas-frescal-zero-lactose-fazenda-bela-vista-kg/p",
+  popularity: 912
  },
  {
   sku: "oba-100013296",
@@ -9133,7 +10045,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518974/Queijo-De-Coalho-Em-Palito-Zero-Lactose-Crioulo-340-G.jpg?v=639156101958600000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-de-coalho-em-palito-zero-lactose-crioulo-340-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-de-coalho-em-palito-zero-lactose-crioulo-340-g/p",
+  popularity: 913
  },
  {
   sku: "oba-100007552",
@@ -9143,7 +10056,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10550758/Pao-De-Forma-Maca-Com-Canela-Com-Fibra-De-Psyllium-Sem-Gluten-Zero-Lactose-Schar-200-G.jpg?v=638777445886270000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-maca-com-canela-com-fibra-de-psyllium-sem-gluten-zero-lactose-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-maca-com-canela-com-fibra-de-psyllium-sem-gluten-zero-lactose-schar-200-g/p",
+  popularity: 914
  },
  {
   sku: "oba-100000749",
@@ -9153,7 +10067,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478396/Brownie-Chocolate-Com-Coco-Sem-Gluten-E-Sem-Lactose-Belive-40-G.jpg?v=639047106612470000",
-  productUrl: "https://secure.obahortifruti.com.br/brownie-chocolate-com-coco-sem-gluten-e-sem-lactose-belive-40-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/brownie-chocolate-com-coco-sem-gluten-e-sem-lactose-belive-40-g/p",
+  popularity: 915
  },
  {
   sku: "oba-100003033",
@@ -9163,7 +10078,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475960/Aveia-Em-Flocos-Finos-Sem-Gluten-Vitalin-200g.png?v=638944038519530000",
-  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-finos-sem-gluten-vitalin-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-finos-sem-gluten-vitalin-200g/p",
+  popularity: 916
  },
  {
   sku: "oba-100002639",
@@ -9173,7 +10089,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9521338/Leite-Zero-Lactose-Semi-Desnatado-Shefa-1-L.png?v=638625452802900000",
-  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-semi-desnatado-shefa-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/leite-zero-lactose-semi-desnatado-shefa-1-l/p",
+  popularity: 917
  },
  {
   sku: "oba-100001612",
@@ -9183,7 +10100,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos fatiados",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474589/Queijo-Mucarela-Lacfree-Verde-Campo-Fatiado-Kg.png?v=638878333027370000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-lacfree-verde-campo-fatiado-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mucarela-lacfree-verde-campo-fatiado-kg/p",
+  popularity: 918
  },
  {
   sku: "oba-100002514",
@@ -9193,7 +10111,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11475390/Queijo-Pecorino-Sem-Lactose-Casa-Da-Ovelha-100-G.jpg?v=638920020510700000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-pecorino-sem-lactose-casa-da-ovelha-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-pecorino-sem-lactose-casa-da-ovelha-100-g/p",
+  popularity: 919
  },
  {
   sku: "oba-100003124",
@@ -9203,7 +10122,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524984/Iogurte-De-Leite-De-Ovelha-Natural-Sem-Lactose-Casa-Da-Ovelha-130-G.jpg?v=639201510429800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-natural-sem-lactose-casa-da-ovelha-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-leite-de-ovelha-natural-sem-lactose-casa-da-ovelha-130-g/p",
+  popularity: 920
  },
  {
   sku: "oba-7384",
@@ -9213,7 +10133,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos classicos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10918673/Queijo-Mussarela-Mini-Lacfree-Kg.jpg?v=638824963488800000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-mini-lacfree-kg/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-mussarela-mini-lacfree-kg/p",
+  popularity: 921
  },
  {
   sku: "oba-7336",
@@ -9223,7 +10144,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11237528/Torrada--Integral-Sem-Gluten-Sem-Lactose-Schar-125-G.jpg?v=638832993253970000",
-  productUrl: "https://secure.obahortifruti.com.br/torrada--integral-sem-gluten-sem-lactose-schar-125-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/torrada--integral-sem-gluten-sem-lactose-schar-125-g/p",
+  popularity: 922
  },
  {
   sku: "oba-11851",
@@ -9233,7 +10155,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4259388/Iogurte-De-Morango-Sem-Lactose-Lacfree-Verde-Campo-170-G.jpg?v=638144118435900000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-sem-lactose-lacfree-verde-campo-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-sem-lactose-lacfree-verde-campo-170-g/p",
+  popularity: 923
  },
  {
   sku: "oba-10900",
@@ -9243,7 +10166,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria bolos, tortas & sanduiches",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10550585/Bolo-De-Chocolate-Schar-Sem-Gluten-Sem-Lactose-200-G.jpg?v=638777444425530000",
-  productUrl: "https://secure.obahortifruti.com.br/bolo-de-chocolate-schar-sem-gluten-sem-lactose-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bolo-de-chocolate-schar-sem-gluten-sem-lactose-200-g/p",
+  popularity: 924
  },
  {
   sku: "oba-1795",
@@ -9253,7 +10177,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261195/Iogurte-Tipo-Skyr-De-Maracuja-2--Gordura-Sem-Lactose-Moo-130-G.jpg?v=638144119695300000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-tipo-skyr-de-maracuja-2--gordura-sem-lactose-moo-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-tipo-skyr-de-maracuja-2--gordura-sem-lactose-moo-130-g/p",
+  popularity: 925
  },
  {
   sku: "oba-1169",
@@ -9263,7 +10188,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473711/Biscoito-Cream-Crackers-Sem-Gluten-E-Sem-Lactose-Schar-210-G.jpg?v=638835320871670000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-cream-crackers-sem-gluten-e-sem-lactose-schar-210-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-cream-crackers-sem-gluten-e-sem-lactose-schar-210-g/p",
+  popularity: 926
  },
  {
   sku: "oba-733",
@@ -9273,7 +10199,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4258524/Iogurte-Com-Goji-Berry-E-Cranberry-Lacfree-Verde-Campo-500-G.jpg?v=638144117841300000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-com-goji-berry-e-cranberry-lacfree-verde-campo-500-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-com-goji-berry-e-cranberry-lacfree-verde-campo-500-g/p",
+  popularity: 927
  },
  {
   sku: "oba-100008659",
@@ -9283,7 +10210,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cappuccino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8726712/Bebida-Lactea-Cappuccino-Doce-De-Leite-Com-Cafe-E-Cacau-Zero-Lactose-3-Coracoes-250-Ml.png?v=638544020218530000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-doce-de-leite-com-cafe-e-cacau-zero-lactose-3-coracoes-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-doce-de-leite-com-cafe-e-cacau-zero-lactose-3-coracoes-250-ml/p",
+  popularity: 928
  },
  {
   sku: "oba-100007801",
@@ -9293,7 +10221,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios leites & bebidas lacteas leite longa vida",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5238662/KIT12134455.png?v=638343396416370000",
-  productUrl: "https://secure.obahortifruti.com.br/kit-de-leite-zero-lactose-zero-piracanjuba-1-l---12-unidades-1/p"
+  productUrl: "https://secure.obahortifruti.com.br/kit-de-leite-zero-lactose-zero-piracanjuba-1-l---12-unidades-1/p",
+  popularity: 929
  },
  {
   sku: "oba-100007254",
@@ -9303,7 +10232,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524988/Iogurte-Firme-Sem-Lactose-Sabor-Morango-Casa-Da-Ovelha-130-G.jpg?v=639201510468800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-firme-sem-lactose-sabor-morango-casa-da-ovelha-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-firme-sem-lactose-sabor-morango-casa-da-ovelha-130-g/p",
+  popularity: 930
  },
  {
   sku: "oba-100006968",
@@ -9313,7 +10243,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios manteigas & margarinas manteiga",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10918697/Manteiga-De-Primeira-Qualidade-Com-Sal-Sem-Lactose-Muai-200-G.jpg?v=638824963760030000",
-  productUrl: "https://secure.obahortifruti.com.br/manteiga-de-primeira-qualidade-com-sal-sem-lactose-muai-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/manteiga-de-primeira-qualidade-com-sal-sem-lactose-muai-200-g/p",
+  popularity: 931
  },
  {
   sku: "oba-11470",
@@ -9323,7 +10254,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8877072/Pretzel-Salinis-Sem-Gluten-E-Sem-Lactose-Schar-60-G.png?v=638575391234400000",
-  productUrl: "https://secure.obahortifruti.com.br/pretzel-salinis-sem-gluten-e-sem-lactose-schar-60-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pretzel-salinis-sem-gluten-e-sem-lactose-schar-60-g/p",
+  popularity: 932
  },
  {
   sku: "oba-7900",
@@ -9333,7 +10265,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476295/Cereal-Sem-Gluten-E-Sem-Lactose-Fruits-Premium-Goody-S-220-G.jpg?v=638956254407200000",
-  productUrl: "https://secure.obahortifruti.com.br/cereal-sem-gluten-e-sem-lactose-fruits-premium-goody-s-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cereal-sem-gluten-e-sem-lactose-fruits-premium-goody-s-220-g/p",
+  popularity: 933
  },
  {
   sku: "oba-11212",
@@ -9343,7 +10276,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10918653/Torrada-Sem-Gluten-E-Sem-Lactose-Schar-150-G.jpg?v=638824963270300000",
-  productUrl: "https://secure.obahortifruti.com.br/torrada-sem-gluten-e-sem-lactose-schar-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/torrada-sem-gluten-e-sem-lactose-schar-150-g/p",
+  popularity: 934
  },
  {
   sku: "oba-10685",
@@ -9353,7 +10287,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9593657/Iogute-Semidesnatado-Moo-Sem-Lactose-Com-Mel-130-G.png?v=638631356531800000",
-  productUrl: "https://secure.obahortifruti.com.br/iogute-semidesnatado-moo-sem-lactose-com-mel-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogute-semidesnatado-moo-sem-lactose-com-mel-130-g/p",
+  popularity: 935
  },
  {
   sku: "oba-9341",
@@ -9363,7 +10298,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8447557/Iogurte-De-Morango-Zero-Lactose-Activia-170-G.jpg?v=638498191783530000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-zero-lactose-activia-170-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-de-morango-zero-lactose-activia-170-g/p",
+  popularity: 936
  },
  {
   sku: "oba-8048",
@@ -9373,7 +10309,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473651/Wafer-Chocolate-Sem-Gluten-E-Sem-Lactose-Schar-125-G.jpg?v=638835320844870000",
-  productUrl: "https://secure.obahortifruti.com.br/wafer-chocolate-sem-gluten-e-sem-lactose-schar-125-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/wafer-chocolate-sem-gluten-e-sem-lactose-schar-125-g/p",
+  popularity: 937
  },
  {
   sku: "oba-9560",
@@ -9383,7 +10320,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "frios & embutidos queijos queijos especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11524982/Queijo-Labneh-Natural-Sem-Lactose-Casa-Da-Ovelha-100-G.jpg?v=639201510406770000",
-  productUrl: "https://secure.obahortifruti.com.br/queijo-labneh-natural-sem-lactose-casa-da-ovelha-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/queijo-labneh-natural-sem-lactose-casa-da-ovelha-100-g/p",
+  popularity: 938
  },
  {
   sku: "oba-9480",
@@ -9393,7 +10331,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474850/Biscoito-Rosquinha-Sem-Gluten-Sem-Lactose-Dr-Schar-200-G.png?v=638896500366370000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-rosquinha-sem-gluten-sem-lactose-dr-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-rosquinha-sem-gluten-sem-lactose-dr-schar-200-g/p",
+  popularity: 939
  },
  {
   sku: "oba-9036",
@@ -9403,7 +10342,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448003/Iogurte-Skyr-Moo-2--Ameixa-Sem-Lactose-Moo-130-G.jpg?v=638498192339500000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-moo-2--ameixa-sem-lactose-moo-130-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-skyr-moo-2--ameixa-sem-lactose-moo-130-g/p",
+  popularity: 940
  },
  {
   sku: "oba-2354",
@@ -9413,7 +10353,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria torradas & crostatas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9356500/Torrada-Crostini-Sem-Gluten-E-Sem-Lactose-Schar-150-G.png?v=638613285394170000",
-  productUrl: "https://secure.obahortifruti.com.br/torrada-crostini-sem-gluten-e-sem-lactose-schar-150-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/torrada-crostini-sem-gluten-e-sem-lactose-schar-150-g/p",
+  popularity: 941
  },
  {
   sku: "oba-4893",
@@ -9423,7 +10364,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474543/Cereal-Sem-Gluten-E-Sem-Lactose-Premium-Boll-Goody-S-220-G.jpg?v=638877456843830000",
-  productUrl: "https://secure.obahortifruti.com.br/cereal-sem-gluten-e-sem-lactose-premium-boll-goody-s-220-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cereal-sem-gluten-e-sem-lactose-premium-boll-goody-s-220-g/p",
+  popularity: 942
  },
  {
   sku: "oba-1578",
@@ -9433,7 +10375,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "laticinios iogurtes & fermentados iogurte",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4257549/Iogurte-Natural-Sem-Adocante-Lacfree-Verde-Campo-500g.jpg?v=638144117212070000",
-  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-sem-adocante-lacfree-verde-campo-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/iogurte-natural-sem-adocante-lacfree-verde-campo-500g/p",
+  popularity: 943
  },
  {
   sku: "oba-100009972",
@@ -9443,7 +10386,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia refeicoes & pratos pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476426/Pao-De-Queijo-Chef-Pill-500g.jpg?v=638963018087870000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-chef-pill-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-queijo-chef-pill-500g/p",
+  popularity: 944
  },
  {
   sku: "oba-5163",
@@ -9453,7 +10397,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces & confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10550586/Sobremesas-De-Laranja-Sem-Gluten-Sem-Lactose-Schar-200-G.jpg?v=638777444435730000",
-  productUrl: "https://secure.obahortifruti.com.br/sobremesas-de-laranja-sem-gluten-sem-lactose-schar-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/sobremesas-de-laranja-sem-gluten-sem-lactose-schar-200-g/p",
+  popularity: 945
  },
  {
   sku: "oba-12578",
@@ -9463,7 +10408,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas vegetais bebida mixes & especiais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448630/Bebida-Vegetal-Not-Milkinho-Chocolate-Notco-200-Ml.jpg?v=638498192990430000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-vegetal-not-milkinho-chocolate-notco-200-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-vegetal-not-milkinho-chocolate-notco-200-ml/p",
+  popularity: 946
  },
  {
   sku: "oba-2639",
@@ -9473,7 +10419,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477006/Corn-Flakes-Sem-Gluten-E-Sem-Lactose-Schar-250g.jpg?v=638987275522270000",
-  productUrl: "https://secure.obahortifruti.com.br/corn-flakes-sem-gluten-e-sem-lactose-schar-250g/p"
+  productUrl: "https://secure.obahortifruti.com.br/corn-flakes-sem-gluten-e-sem-lactose-schar-250g/p",
+  popularity: 947
  },
  {
   sku: "oba-8210",
@@ -9483,7 +10430,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474968/Cereal-Acucarado-Premium-Sem-Gluten-E-Sem-Lactose-Goody-S-270-G.jpg?v=638901855269970000",
-  productUrl: "https://secure.obahortifruti.com.br/cereal-acucarado-premium-sem-gluten-e-sem-lactose-goody-s-270-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cereal-acucarado-premium-sem-gluten-e-sem-lactose-goody-s-270-g/p",
+  popularity: 948
  },
  {
   sku: "oba-100008657",
@@ -9493,7 +10441,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cappuccino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8726711/Bebida-Lactea-Cappuccino-Cookies-N-Cream-Com-Cafe-E-Cacau-Zero-Lactose-3-Coracoes.png?v=638544020205700000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-cookies-n-cream-com-cafe-e-cacau-zero-lactose-3-coracoes/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-cookies-n-cream-com-cafe-e-cacau-zero-lactose-3-coracoes/p",
+  popularity: 949
  },
  {
   sku: "oba-100008661",
@@ -9503,7 +10452,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cappuccino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8734748/Bebida-Lactea-Cappuccino-Classico-Com-Cafe-Cacau-E-Canela-Zero-Lactose-3-Coracoes-250-Ml.png?v=638545927872730000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-classico-com-cafe-cacau-e-canela-zero-lactose-3-coracoes-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-classico-com-cafe-cacau-e-canela-zero-lactose-3-coracoes-250-ml/p",
+  popularity: 950
  },
  {
   sku: "oba-100008660",
@@ -9513,7 +10463,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cafes cappuccino",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8726707/Bebida-Lactea-Cappuccino-Chocolate-Com-Cafe-E-Cacau-Zero-Lactose-3-Coracoes-250-Ml.png?v=638544020165570000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-chocolate-com-cafe-e-cacau-zero-lactose-3-coracoes-250-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-lactea-cappuccino-chocolate-com-cafe-e-cacau-zero-lactose-3-coracoes-250-ml/p",
+  popularity: 951
  },
  {
   sku: "oba-3480",
@@ -9523,7 +10474,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8910794/Biscoito-Salti-Sem-Gluten-E-Sem-Lactose-Schar-175-G.png?v=638580349975800000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-salti-sem-gluten-e-sem-lactose-schar-175-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-salti-sem-gluten-e-sem-lactose-schar-175-g/p",
+  popularity: 952
  },
  {
   sku: "oba-100009523",
@@ -9533,7 +10485,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473962/Aveia-Flocos-Oba-Bem-Querer-Grossos-Sem-Gluten-200-G.jpg?v=638839718650770000",
-  productUrl: "https://secure.obahortifruti.com.br/aveia-flocos-oba-bem-querer-grossos-sem-gluten-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aveia-flocos-oba-bem-querer-grossos-sem-gluten-200-g/p",
+  popularity: 953
  },
  {
   sku: "oba-100009519",
@@ -9543,7 +10496,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11474102/Farinha-Aveia-Integral-Oba-Bem-Querer-200g.jpg?v=638848265028200000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-aveia-integral-oba-bem-querer-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-aveia-integral-oba-bem-querer-200g/p",
+  popularity: 954
  },
  {
   sku: "oba-100009318",
@@ -9553,7 +10507,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11518179/Aveia-Flocos-Finos-Sem-Gluten-Oba-Bem-Querer-200-G.jpg?v=639155700669070000",
-  productUrl: "https://secure.obahortifruti.com.br/aveia-flocos-finos-sem-gluten-oba-bem-querer-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aveia-flocos-finos-sem-gluten-oba-bem-querer-200-g/p",
+  popularity: 955
  },
  {
   sku: "oba-100007166",
@@ -9563,7 +10518,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10344376/Quinoa-Graos-Organica-Vitalin-200g.jpg?v=638758471684370000",
-  productUrl: "https://secure.obahortifruti.com.br/quinoa-graos-organica-vitalin-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/quinoa-graos-organica-vitalin-200g/p",
+  popularity: 956
  },
  {
   sku: "oba-225025",
@@ -9573,7 +10529,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473672/Biscoito-De-Arroz-Grande-Sem-Gluten-Kodilar-80-G.jpg?v=638835320853970000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-arroz-grande-sem-gluten-kodilar-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-arroz-grande-sem-gluten-kodilar-80-g/p",
+  popularity: 957
  },
  {
   sku: "oba-100002076",
@@ -9583,7 +10540,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas vegetais bebida de aveia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477854/Bebida-De-Aveia-Organico-Sem-Gluten-Nude-1-L.jpg?v=639033066382300000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-de-aveia-organico-sem-gluten-nude-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-de-aveia-organico-sem-gluten-nude-1-l/p",
+  popularity: 958
  },
  {
   sku: "oba-100009516",
@@ -9593,7 +10551,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos alimentares",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476847/Psyllium-Vitalin-100g.png?v=638984600699230000",
-  productUrl: "https://secure.obahortifruti.com.br/psyllium-vitalin-100g/p"
+  productUrl: "https://secure.obahortifruti.com.br/psyllium-vitalin-100g/p",
+  popularity: 959
  },
  {
   sku: "oba-225080",
@@ -9603,7 +10562,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia saudaveis & funcionais",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4265847/Biscoito-De-Arroz-Grande-7-Graos-Sem-Gluten-Kodilar-80-G.jpg?v=638144123488370000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-arroz-grande-7-graos-sem-gluten-kodilar-80-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-arroz-grande-7-graos-sem-gluten-kodilar-80-g/p",
+  popularity: 960
  },
  {
   sku: "oba-12846",
@@ -9613,7 +10573,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ingredientes confeitaria",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517658/Creme-De-Aveia-Vegano-Culinario-Nude-200-G.jpg?v=639153138706670000",
-  productUrl: "https://secure.obahortifruti.com.br/creme-de-aveia-vegano-culinario-nude-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/creme-de-aveia-vegano-culinario-nude-200-g/p",
+  popularity: 961
  },
  {
   sku: "oba-11930",
@@ -9623,7 +10584,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9662715/Canjica-Okoshi-Milho-40g-Salgada.png?v=638638196066400000",
-  productUrl: "https://secure.obahortifruti.com.br/canjica-milho-salgado-okoshi-50-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/canjica-milho-salgado-okoshi-50-g/p",
+  popularity: 962
  },
  {
   sku: "oba-1240",
@@ -9633,7 +10595,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5253930/Macarrao-Italiano-Gnocco-Sardo-Sem-Gluten-Garofalo-400-G.png?v=638346955386100000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-italiano-gnocco-sardo-sem-gluten-garofalo-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-italiano-gnocco-sardo-sem-gluten-garofalo-400-g/p",
+  popularity: 963
  },
  {
   sku: "oba-100010706",
@@ -9643,7 +10606,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519176/Pao-De-Forma-Sem-Gluten-Frutas-E-Sementes-Vitalin-300-G.jpg?v=639156546937630000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-frutas-e-sementes-vitalin-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-frutas-e-sementes-vitalin-300-g/p",
+  popularity: 964
  },
  {
   sku: "oba-100008859",
@@ -9653,7 +10617,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10338666/Cerveja-Pure-Gold-Long-Neck-Stella-Artois-Sem-Gluten-330-Ml.png?v=638757401749770000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-pure-gold-long-neck-stella-artois-sem-gluten-330-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-pure-gold-long-neck-stella-artois-sem-gluten-330-ml/p",
+  popularity: 965
  },
  {
   sku: "oba-100007763",
@@ -9663,7 +10628,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9169476/Pao-De-Forma-Tradicional-Sem-Gluten-Belive-400-G.png?v=638600109778100000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-tradicional-sem-gluten-belive-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-tradicional-sem-gluten-belive-400-g/p",
+  popularity: 966
  },
  {
   sku: "oba-100007162",
@@ -9673,7 +10639,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farinhas & farofas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4907994/Farinha-De-Arroz-Sem-Gluten-Kodilar-500g.jpg?v=638266021068500000",
-  productUrl: "https://secure.obahortifruti.com.br/farinha-de-arroz-sem-gluten-kodilar-500g/p"
+  productUrl: "https://secure.obahortifruti.com.br/farinha-de-arroz-sem-gluten-kodilar-500g/p",
+  popularity: 967
  },
  {
   sku: "oba-100001830",
@@ -9683,7 +10650,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519193/Macarrao-Pene-Cenoura-Batata-Chia-Curcuma-Sem-Gluten-Casarao-300-G.jpg?v=639156558660000000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-pene-cenoura-batata--chia-curcuma-sem-gluten-casarao-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-pene-cenoura-batata--chia-curcuma-sem-gluten-casarao-300-g/p",
+  popularity: 968
  },
  {
   sku: "oba-100002588",
@@ -9693,7 +10661,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473751/Granola-Sem-Gluten-Com-Quinoa--E-Castanha-Vitalin-200g.jpg?v=638835320888700000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-sem-gluten-com-quinoa--e-castanha-vitalin-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-sem-gluten-com-quinoa--e-castanha-vitalin-200g/p",
+  popularity: 969
  },
  {
   sku: "oba-5732",
@@ -9703,7 +10672,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261351/Snack-Rice-Cracker-Cheese-Tai-Kalassi-100-G.jpg?v=638144119818700000",
-  productUrl: "https://secure.obahortifruti.com.br/snack-rice-cracker-cheese-tai-kalassi-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/snack-rice-cracker-cheese-tai-kalassi-100-g/p",
+  popularity: 970
  },
  {
   sku: "oba-2357",
@@ -9713,7 +10683,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/10344317/Aveia-Em-Flocos-Sem-Gluten-Vitalin-200g.jpg?v=638758471033770000",
-  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-sem-gluten-vitalin-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/aveia-em-flocos-sem-gluten-vitalin-200g/p",
+  popularity: 971
  },
  {
   sku: "oba-6919",
@@ -9723,7 +10694,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11478394/Massa-Italiana-Linguine-S-Gluten-Garofalo-400g.jpg?v=639047106579030000",
-  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-linguine-s-gluten-garofalo-400g/p"
+  productUrl: "https://secure.obahortifruti.com.br/massa-italiana-linguine-s-gluten-garofalo-400g/p",
+  popularity: 972
  },
  {
   sku: "oba-1643",
@@ -9733,7 +10705,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4261354/Snack-Rice-Cracker-Sour-Onion-Tai-Kalassi-100-G.jpg?v=638144119820100000",
-  productUrl: "https://secure.obahortifruti.com.br/snack-rice-cracker-sour-onion-tai-kalassi-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/snack-rice-cracker-sour-onion-tai-kalassi-100-g/p",
+  popularity: 973
  },
  {
   sku: "oba-4843",
@@ -9743,7 +10716,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519185/Massa-Italiana-Spaghetti-S-Gluten-Garofalo-400g.jpg?v=639156552765200000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-italiano-spaghetti-sem-gluten-garofalo-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-italiano-spaghetti-sem-gluten-garofalo-400-g/p",
+  popularity: 974
  },
  {
   sku: "oba-100013204",
@@ -9753,7 +10727,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia refeicoes & pratos pronto",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11517172/Paozinho-De-Batata-Sem-Gluten-Belive-198-G.jpg?v=639143072679830000",
-  productUrl: "https://secure.obahortifruti.com.br/paozinho-de-batata-sem-gluten-belive-198-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/paozinho-de-batata-sem-gluten-belive-198-g/p",
+  popularity: 975
  },
  {
   sku: "oba-100007779",
@@ -9763,7 +10738,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sopas e cremes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5810992/Canja-De-Frango-Mexidona-115-G.png?v=638399087165470000",
-  productUrl: "https://secure.obahortifruti.com.br/canja-de-frango-mexidona-115-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/canja-de-frango-mexidona-115-g/p",
+  popularity: 976
  },
  {
   sku: "oba-100007767",
@@ -9773,7 +10749,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476509/Bisnaguinha-Tradicional-Sem-Gluten-Belive-200-G.jpg?v=638968438383270000",
-  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-tradicional-sem-gluten-belive-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-tradicional-sem-gluten-belive-200-g/p",
+  popularity: 977
  },
  {
   sku: "oba-100007764",
@@ -9783,7 +10760,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476508/Pao-De-Forma-Multigraos-Com-Castanha-Do-Para-Sem-Gluten-Belive-400-G.jpg?v=638968438311200000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-multigraos-com-castanha-do-para-sem-gluten-belive-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-multigraos-com-castanha-do-para-sem-gluten-belive-400-g/p",
+  popularity: 978
  },
  {
   sku: "oba-7456",
@@ -9793,7 +10771,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas bebidas vegetais bebida de aveia",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11477855/Bebida-De-Aveia-Sem-Gluten---Calcio-Nude-1-L.jpg?v=639033066401330000",
-  productUrl: "https://secure.obahortifruti.com.br/bebida-de-aveia-sem-gluten---calcio-nude-1-l/p"
+  productUrl: "https://secure.obahortifruti.com.br/bebida-de-aveia-sem-gluten---calcio-nude-1-l/p",
+  popularity: 979
  },
  {
   sku: "oba-5478",
@@ -9803,7 +10782,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8910813/Pao-Multigraos-Sem-Gluten-Jasmine-350-G.png?v=638580350221200000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-multigraos-sem-gluten-jasmine-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-multigraos-sem-gluten-jasmine-350-g/p",
+  popularity: 980
  },
  {
   sku: "oba-5472",
@@ -9813,7 +10793,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9594477/Pao-Fatiado-Tradicional-Sem-Gluten-Jasmine-350-G.png?v=638631428395470000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-tradicional-sem-gluten-jasmine-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-tradicional-sem-gluten-jasmine-350-g/p",
+  popularity: 981
  },
  {
   sku: "oba-9144",
@@ -9823,7 +10804,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519186/Massa-Italiana-Mafalda-Corta-S-Gluten-Garofalo-400g.jpg?v=639156552777100000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-mafalda-corta-sem-gluten-italiano-garofalo-400-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-mafalda-corta-sem-gluten-italiano-garofalo-400-g/p",
+  popularity: 982
  },
  {
   sku: "oba-4963",
@@ -9833,7 +10815,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/8448837/Cerveja-Lager-Puro-Malte-Sem-Gluten-Amstel-Ultra-269-Ml.jpg?v=638498193188570000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-lager-puro-malte-sem-gluten-amstel-ultra-269-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-lager-puro-malte-sem-gluten-amstel-ultra-269-ml/p",
+  popularity: 983
  },
  {
   sku: "oba-5192",
@@ -9843,7 +10826,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9594478/Pao-Fatiado-Frutas-E-Castanhas-Sem-Gluten-Jasmine-350-G.png?v=638631428407970000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-frutas-e-castanhas-sem-gluten-jasmine-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-frutas-e-castanhas-sem-gluten-jasmine-350-g/p",
+  popularity: 984
  },
  {
   sku: "oba-100010705",
@@ -9853,7 +10837,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519190/Pao-De-Forma-Sem-Gluten-Gergelim-Linhaca-Vitalin-300-G.jpg?v=639156552825530000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-gergelim-linhaca-vitalin-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-de-forma-sem-gluten-gergelim-linhaca-vitalin-300-g/p",
+  popularity: 985
  },
  {
   sku: "oba-100003025",
@@ -9863,7 +10848,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11473908/Macarrao-Fusilli-Cenoura-Batata-Chia-Curcuma-Sem-Gluten-Casarao-300-G.jpg?v=638836007190770000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-cenoura-batata-chia-curcuma-sem-gluten-casarao-300-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-cenoura-batata-chia-curcuma-sem-gluten-casarao-300-g/p",
+  popularity: 986
  },
  {
   sku: "oba-100003164",
@@ -9873,7 +10859,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519183/Macarrao-Fusilli-Espinafre-Berinjela-Pimentao-Sem-Gluten-Casarao-200-G.jpg?v=639156552747570000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-espinafre-berinjela-pimentao-sem-gluten-casarao-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-fusilli-espinafre-berinjela-pimentao-sem-gluten-casarao-200-g/p",
+  popularity: 987
  },
  {
   sku: "oba-11973",
@@ -9883,7 +10870,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5254603/Cerveja-Amber-Vienna-Lager-Louvada-500-Ml.png?v=638347207861170000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-amber-vienna-lager-louvada-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-amber-vienna-lager-louvada-500-ml/p",
+  popularity: 988
  },
  {
   sku: "oba-10915",
@@ -9893,7 +10881,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9025929/Cookie-Chocolate-Sem-Gluten-Schar-100-G.png?v=638589919402500000",
-  productUrl: "https://secure.obahortifruti.com.br/cookie-chocolate-sem-gluten-schar-100-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/cookie-chocolate-sem-gluten-schar-100-g/p",
+  popularity: 989
  },
  {
   sku: "oba-100013568",
@@ -9903,7 +10892,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas ale & ipa",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11522305/Cerveja-Sem-Gluten-Heineken-Ultimate-330-Ml.png?v=639178569358370000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-sem-gluten-heineken-ultimate-330-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-sem-gluten-heineken-ultimate-330-ml/p",
+  popularity: 990
  },
  {
   sku: "oba-100010817",
@@ -9913,7 +10903,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia cereais, aveia & graos",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476512/Granola-Cappuccino-Granosquare-200g.jpg?v=638968438559170000",
-  productUrl: "https://secure.obahortifruti.com.br/granola-cappuccino-granosquare-200g/p"
+  productUrl: "https://secure.obahortifruti.com.br/granola-cappuccino-granosquare-200g/p",
+  popularity: 991
  },
  {
   sku: "oba-100007765",
@@ -9923,7 +10914,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5810984/Bisnaguinha-Multigraos-Sem-Gluten-Belive-Belive-200-G.png?v=638399087066900000",
-  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-multigraos-sem-gluten-belive-belive-200-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/bisnaguinha-multigraos-sem-gluten-belive-belive-200-g/p",
+  popularity: 992
  },
  {
   sku: "oba-100007052",
@@ -9933,7 +10925,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sopas e cremes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4907307/Sopa-Rosa-Mexidona-160-G.png?v=638265912816530000",
-  productUrl: "https://secure.obahortifruti.com.br/sopa-rosa-mexidona-160-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/sopa-rosa-mexidona-160-g/p",
+  popularity: 993
  },
  {
   sku: "oba-100005223",
@@ -9943,7 +10936,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/4265971/Pao-Fatiado-De-Sanduiche-Com-Chia-E-Ervas-Finas-Sem-Gluten-Jasmine-350-G.jpg?v=638792013704400000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-de-sanduiche-com-chia-e-ervas-finas-sem-gluten-jasmine-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-de-sanduiche-com-chia-e-ervas-finas-sem-gluten-jasmine-350-g/p",
+  popularity: 994
  },
  {
   sku: "oba-100005186",
@@ -9953,7 +10947,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11519823/Pao-Fatiado-De-Sanduiche-Com-Batata-Doce-Sem-Gluten-Jasmine-350-G.jpg?v=639162198650800000",
-  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-de-sanduiche-com-batata-doce-sem-gluten-jasmine-350-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/pao-fatiado-de-sanduiche-com-batata-doce-sem-gluten-jasmine-350-g/p",
+  popularity: 995
  },
  {
   sku: "oba-100001136",
@@ -9963,7 +10958,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/9836201/Biscoito-Maria-Sem-Gluten-Schar-125-G.png?v=638659975053100000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-maria-sem-gluten-schar-125-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-maria-sem-gluten-schar-125-g/p",
+  popularity: 996
  },
  {
   sku: "oba-12952",
@@ -9973,7 +10969,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia massas secas & frescas",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476293/Macarrao-Fussili-Beterraba-Banana-E-Pimenta-Caiena-Casarao-Sem-Gluten-300g.jpg?v=638956254378870000",
-  productUrl: "https://secure.obahortifruti.com.br/macarrao-fussili-beterraba--banana-e-pimenta-caiena-casarao-sem-gluten-300g/p"
+  productUrl: "https://secure.obahortifruti.com.br/macarrao-fussili-beterraba--banana-e-pimenta-caiena-casarao-sem-gluten-300g/p",
+  popularity: 997
  },
  {
   sku: "oba-4582",
@@ -9983,7 +10980,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/5227408/Cerveja-Premium-Hoplager-Louvada-500-Ml.jpg?v=638340259578030000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-premium-hoplager-louvada-500-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-premium-hoplager-louvada-500-ml/p",
+  popularity: 998
  },
  {
   sku: "oba-4845",
@@ -9993,7 +10991,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia biscoitos & snacks",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11476116/Biscoito-De-Chocolate-Com-Recheio-De-Creme-De-Leite-Sem-Gluten-Schar-165-G.jpg?v=638950941099400000",
-  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-chocolate-com-recheio-de-creme-de-leite-sem-gluten-schar-165-g/p"
+  productUrl: "https://secure.obahortifruti.com.br/biscoito-de-chocolate-com-recheio-de-creme-de-leite-sem-gluten-schar-165-g/p",
+  popularity: 999
  },
  {
   sku: "oba-5519",
@@ -10003,6 +11002,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas lager & pilsen",
   imageUrl: "https://obahortifruti.vteximg.com.br/arquivos/ids/11526722/Cerveja-Lager-Puro-Malte-Sem-Gluten-Amstel-Ultra-275-Ml.png?v=639223230359030000",
-  productUrl: "https://secure.obahortifruti.com.br/cerveja-lager-puro-malte-sem-gluten-amstel-ultra-275-ml/p"
+  productUrl: "https://secure.obahortifruti.com.br/cerveja-lager-puro-malte-sem-gluten-amstel-ultra-275-ml/p",
+  popularity: 1000
  }
 ];

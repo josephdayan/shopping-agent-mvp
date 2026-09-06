@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214867/621397-carne-moida-de-patinho_inn.jpg?v=639084109078800000",
-  productUrl: "https://loja.swift.com.br/carne-moida-de-patinho-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-de-patinho-swift-1kg/p",
+  popularity: 1
  },
  {
   sku: "swift-2635",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207723/618333-file-de-tilapia_inn.jpg?v=638851776246570000",
-  productUrl: "https://loja.swift.com.br/file-de-tilapia-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-tilapia-swift-800g/p",
+  popularity: 2
  },
  {
   sku: "swift-281",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213064/616919-sobrecoxa-de-frango_inn.jpg?v=639014328162830000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-swift-1kg/p",
+  popularity: 3
  },
  {
   sku: "swift-265",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207661/616920-file-de-peito-de-frango_inn.jpg?v=638851741988830000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-swift-1kg/p",
+  popularity: 4
  },
  {
   sku: "swift-264",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213048/616917-coxinha-da-asa_inn.jpg?v=639014150458730000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-swift-1kg/p",
+  popularity: 5
  },
  {
   sku: "swift-263",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207627/616905-filezinho-sassami_inn.jpg?v=638851655702630000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-swift-1kg/p",
+  popularity: 6
  },
  {
   sku: "swift-55",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216229/615901-linguica-toscana_inn.jpg?v=639126371195970000",
-  productUrl: "https://loja.swift.com.br/linguica-toscana-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/linguica-toscana-swift-700g/p",
+  popularity: 7
  },
  {
   sku: "swift-7686",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217986/623437-bife-de-alcatra_inn.jpg?v=639197146796400000",
-  productUrl: "https://loja.swift.com.br/bife-de-alcatra-swift-1kg-1/p"
+  productUrl: "https://loja.swift.com.br/bife-de-alcatra-swift-1kg-1/p",
+  popularity: 8
  },
  {
   sku: "swift-6352",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218382/622577-morango-congelado_inn.jpg?v=639204918289730000",
-  productUrl: "https://loja.swift.com.br/morango-congelado-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/morango-congelado-swift-1-02kg/p",
+  popularity: 9
  },
  {
   sku: "swift-5653",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214986/622012-bife-de-contrafile-combo_inn.jpg?v=639088568483670000",
-  productUrl: "https://loja.swift.com.br/bife-de-contrafile-combo-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-contrafile-combo-1kg/p",
+  popularity: 10
  },
  {
   sku: "swift-5648",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216944/621995-contrafile-combo_inn.jpg?v=639147967308300000",
-  productUrl: "https://loja.swift.com.br/contrafile-swift-linha-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/contrafile-swift-linha-combo-kg/p",
+  popularity: 11
  },
  {
   sku: "swift-4997",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208758/621372-cubos-de-acem_inn.jpg?v=638870792734770000",
-  productUrl: "https://loja.swift.com.br/cubos-de-acem-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-acem-swift-1kg/p",
+  popularity: 12
  },
  {
   sku: "swift-4797",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos moida",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207773/621362-carne-moida-tubete_inn.jpg?v=638851800013300000",
-  productUrl: "https://loja.swift.com.br/carne-moida-tubete-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-tubete-swift-500g/p",
+  popularity: 13
  },
  {
   sku: "swift-4743",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210978/621236-peito-de-frango-temperado-desfiado_inn.jpg?v=638943223429470000",
-  productUrl: "https://loja.swift.com.br/peito-de-frango-temperado-desfiado-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/peito-de-frango-temperado-desfiado-swift-400g/p",
+  popularity: 14
  },
  {
   sku: "swift-4701",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais brocolis",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207752/621359-brocolis_inn.jpg?v=638851787691170000",
-  productUrl: "https://loja.swift.com.br/brocolis-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/brocolis-swift-1-02kg/p",
+  popularity: 15
  },
  {
   sku: "swift-4039",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217374/620111-filezinho-sassami-empanado-lar_inn.jpg?v=639167050793600000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-lar-1-5kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-lar-1-5kg/p",
+  popularity: 16
  },
  {
   sku: "swift-1577",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212512/617813-linguica-tipo-calabresa--defumada_inn.jpg?v=639143913517070000",
-  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-defumada-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-defumada-swift-400g/p",
+  popularity: 17
  },
  {
   sku: "swift-1542",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208903/617769-almondegas-bovinas_rec.jpg?v=638875995088100000",
-  productUrl: "https://loja.swift.com.br/almondegas-bovinas-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/almondegas-bovinas-swift-500g/p",
+  popularity: 18
  },
  {
   sku: "swift-1510",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos musculo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214011/617757-cubos-de-musculo_inn.jpg?v=639054016743470000",
-  productUrl: "https://loja.swift.com.br/cubos-de-musculo-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-musculo-swift-500g/p",
+  popularity: 19
  },
  {
   sku: "swift-1486",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213598/617730-tiras-de-patinho_inn.jpg?v=639027909308730000",
-  productUrl: "https://loja.swift.com.br/tiras-de-patinho-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-patinho-swift-500g/p",
+  popularity: 20
  },
  {
   sku: "swift-1314",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213456/617599-filezinho-sassami-temperado_inn.jpg?v=639023601935530000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-temperado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-temperado-swift-1kg/p",
+  popularity: 21
  },
  {
   sku: "swift-1292",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215092/617604-meio-da-asa-tulipa_inn.jpg?v=639092898636800000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-swift-1kg/p",
+  popularity: 22
  },
  {
   sku: "swift-1115",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212492/617496-iscas-de-frango_rec.jpg?v=638998727389330000",
-  productUrl: "https://loja.swift.com.br/isca-de-frango-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/isca-de-frango-swift-300g/p",
+  popularity: 23
  },
  {
   sku: "swift-420",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207645/616915-file-de-sobrecoxa-de-frango_inn.jpg?v=638851687909830000",
-  productUrl: "https://loja.swift.com.br/file-de-sobrecoxa-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-sobrecoxa-de-frango-swift-1kg/p",
+  popularity: 24
  },
  {
   sku: "swift-261",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213878/616861-cubos-de-file-de-peito-de-frango_inn.jpg?v=639051127850500000",
-  productUrl: "https://loja.swift.com.br/cubos-de-file-de-peito-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-file-de-peito-de-frango-swift-1kg/p",
+  popularity: 25
  },
  {
   sku: "swift-160",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212878/616484-carne-moida-de-patinho_inn.jpg?v=639009117857430000",
-  productUrl: "https://loja.swift.com.br/carne-moida-de-patinho-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-de-patinho-swift-500g/p",
+  popularity: 26
  },
  {
   sku: "swift-54",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216057/615900-linguica-de-pernil_inn.jpg?v=639119699235430000",
-  productUrl: "https://loja.swift.com.br/linguica-pernil-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/linguica-pernil-swift-700g/p",
+  popularity: 27
  },
  {
   sku: "swift-7815",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216025/623810-carne-moida-e-legumes-com-arroz-e-feijao-swift-prato-feito_rec.jpg?v=639118767112900000",
-  productUrl: "https://loja.swift.com.br/carne-moida-e-legumes-com-arroz-e-feijao-swift-prato-feito-300g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-e-legumes-com-arroz-e-feijao-swift-prato-feito-300g/p",
+  popularity: 28
  },
  {
   sku: "swift-7688",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216879/623439-bife-de-patinho_inn.jpg?v=639144497543330000",
-  productUrl: "https://loja.swift.com.br/bife-de-patinho-swift-1kg-1/p"
+  productUrl: "https://loja.swift.com.br/bife-de-patinho-swift-1kg-1/p",
+  popularity: 29
  },
  {
   sku: "swift-7681",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213996/623438-bife-de-file-mignon_inn.jpg?v=639053685230000000",
-  productUrl: "https://loja.swift.com.br/bife-de-file-mignon-swift-1kg-1/p"
+  productUrl: "https://loja.swift.com.br/bife-de-file-mignon-swift-1kg-1/p",
+  popularity: 30
  },
  {
   sku: "swift-6931",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mistura de legumes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212461/623042-mix-tradicional-de-legumes_inn.jpg?v=638998429651430000",
-  productUrl: "https://loja.swift.com.br/mix-tradicional-de-legumes-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/mix-tradicional-de-legumes-swift-1-02kg/p",
+  popularity: 31
  },
  {
   sku: "swift-6393",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212449/622635-espinafre-em-folhas_inn.jpg?v=638997851197270000",
-  productUrl: "https://loja.swift.com.br/espinafre-em-folhas-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/espinafre-em-folhas-swift-300g/p",
+  popularity: 32
  },
  {
   sku: "swift-6388",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais vagem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212455/622620-vagem_inn.jpg?v=638997852834000000",
-  productUrl: "https://loja.swift.com.br/vagem-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/vagem-swift-300g/p",
+  popularity: 33
  },
  {
   sku: "swift-6374",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207135/622614-abobora-em-cubos_inn.jpg?v=638835223323730000",
-  productUrl: "https://loja.swift.com.br/abobora-em-cubos-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/abobora-em-cubos-swift-300g/p",
+  popularity: 34
  },
  {
   sku: "swift-6322",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves moela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216294/616908-moela-de-frango-seara_inn.jpg?v=639129208975470000",
-  productUrl: "https://loja.swift.com.br/moela-frango-seara/p"
+  productUrl: "https://loja.swift.com.br/moela-frango-seara/p",
+  popularity: 35
  },
  {
   sku: "swift-6282",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216876/622442-ostrinha-da-sobrecoxa_inn.jpg?v=639144494668600000",
-  productUrl: "https://loja.swift.com.br/ostrinha-da-sobrecoxa-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/ostrinha-da-sobrecoxa-swift-700g/p",
+  popularity: 36
  },
  {
   sku: "swift-6147",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209024/622269-batata-palito_rec.jpg?v=638881001098800000",
-  productUrl: "https://loja.swift.com.br/batata-palito-swift-1-5kg/p"
+  productUrl: "https://loja.swift.com.br/batata-palito-swift-1-5kg/p",
+  popularity: 37
  },
  {
   sku: "swift-6146",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218056/622271-hamburguer-de-picanha-swift-legado-1855_inn.jpg?v=639198165966170000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-picanha-swift-legado-1855-180g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-picanha-swift-legado-1855-180g/p",
+  popularity: 38
  },
  {
   sku: "swift-6145",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218070/622273-hamburguer-de-costela-swift-legado-1855_inn.jpg?v=639198237672630000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-costela-swift-legado-1855-180g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-costela-swift-legado-1855-180g/p",
+  popularity: 39
  },
  {
   sku: "swift-5766",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207911/622039-pao-frances-480g_rec.jpg?v=638852187355000000",
-  productUrl: "https://loja.swift.com.br/pao-frances-swift-480g/p"
+  productUrl: "https://loja.swift.com.br/pao-frances-swift-480g/p",
+  popularity: 40
  },
  {
   sku: "swift-5651",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215835/621998-fraldinha-combo_inn.jpg?v=639113569249000000",
-  productUrl: "https://loja.swift.com.br/fralda-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/fralda-combo-kg/p",
+  popularity: 41
  },
  {
   sku: "swift-5584",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209022/621781-empanado-recheado-presunto-e-queijo_rec.jpg?v=638880989499500000",
-  productUrl: "https://loja.swift.com.br/empanado-recheado-presunto-e-queijo-swift-110g/p"
+  productUrl: "https://loja.swift.com.br/empanado-recheado-presunto-e-queijo-swift-110g/p",
+  popularity: 42
  },
  {
   sku: "swift-5417",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos bife do vazio",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215078/621769-bife-do-vazio_inn.jpg?v=639092855215770000",
-  productUrl: "https://loja.swift.com.br/bife-do-vazio-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-do-vazio-swift-1kg/p",
+  popularity: 43
  },
  {
   sku: "swift-5291",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208526/621692-file-de-tilapia_inn.jpg?v=638866510809930000",
-  productUrl: "https://loja.swift.com.br/file-de-tilapia-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/file-de-tilapia-swift-400g/p",
+  popularity: 44
  },
  {
   sku: "swift-5082",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214983/621601-tiras-de-file-mignon-suino_inn.jpg?v=639088541192330000",
-  productUrl: "https://loja.swift.com.br/tiras-de-file-mignon-suino-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-file-mignon-suino-swift-500g/p",
+  popularity: 45
  },
  {
   sku: "swift-5056",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bacon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208669/621530-bacon-em-cubos_inn.jpg?v=638869958258600000",
-  productUrl: "https://loja.swift.com.br/bacon-em-cubos-swift-250g-1/p"
+  productUrl: "https://loja.swift.com.br/bacon-em-cubos-swift-250g-1/p",
+  popularity: 46
  },
  {
   sku: "swift-5008",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos moida",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214878/621396-carne-moida-bolonhesa_inn.jpg?v=639084250255670000",
-  productUrl: "https://loja.swift.com.br/carne-moida-bolonhesa-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-bolonhesa-swift-1kg/p",
+  popularity: 47
  },
  {
   sku: "swift-4655",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bisteca",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209514/621334-bisteca-fatiada_inn.jpg?v=638893029123230000",
-  productUrl: "https://loja.swift.com.br/bisteca-fatiada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bisteca-fatiada-swift-kg/p",
+  popularity: 48
  },
  {
   sku: "swift-3939",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209365/619972-bife-de-lombo-suino-linha-mais_inn.jpg?v=638887919716930000",
-  productUrl: "https://loja.swift.com.br/bife-de-lombo-suino-linha-mais-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-lombo-suino-linha-mais-1kg/p",
+  popularity: 49
  },
  {
   sku: "swift-1763",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208595/617981-linguica-defumada-fininha_inn.jpg?v=638869774662100000",
-  productUrl: "https://loja.swift.com.br/linguica-defumada-fininha-swift-215g/p"
+  productUrl: "https://loja.swift.com.br/linguica-defumada-fininha-swift-215g/p",
+  popularity: 50
  },
  {
   sku: "swift-1762",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207450/617979-filezinho-sassami-empanado_inn.jpg?v=638847276360300000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-swift-700g/p",
+  popularity: 51
  },
  {
   sku: "swift-1678",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais alho e cebola",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208690/617916-alho-picado_inn.jpg?v=638870659361330000",
-  productUrl: "https://loja.swift.com.br/alho-picado-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/alho-picado-swift-200g/p",
+  popularity: 52
  },
  {
   sku: "swift-1513",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217910/617760-espetinho-de-carne-bovina-temperada_inn.jpg?v=639192911832970000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-carne-bovina-temperada-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-carne-bovina-temperada-swift-900g/p",
+  popularity: 53
  },
  {
   sku: "swift-1485",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213595/617729-cubos-de-acem_inn.jpg?v=639027899227970000",
-  productUrl: "https://loja.swift.com.br/cubos-de-acem-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-acem-swift-500g/p",
+  popularity: 54
  },
  {
   sku: "swift-1465",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213499/617695-sobrecoxa-temperada-ja-pro-forno_rec.jpg?v=639026403832630000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-temperada-ja-pro-forno-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-temperada-ja-pro-forno-swift-800g/p",
+  popularity: 55
  },
  {
   sku: "swift-1323",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207615/617614-meio-da-asa-tulipa-temperada_inn.jpg?v=638851121995500000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-swift-1kg/p",
+  popularity: 56
  },
  {
   sku: "swift-1322",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215466/617612-file-de-coxa-e-sobrecoxa-sem-pele_inn.jpg?v=639101552915930000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-sem-pele-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-sem-pele-swift-1kg/p",
+  popularity: 57
  },
  {
   sku: "swift-1113",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207613/617494-chicken-croc-tradicional_rec.jpg?v=638851108823330000",
-  productUrl: "https://loja.swift.com.br/chicken-crok-tradicional-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/chicken-crok-tradicional-swift-300g/p",
+  popularity: 58
  },
  {
   sku: "swift-1462",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208857/617456-costela-suina_inn.jpg?v=638872508528830000",
-  productUrl: "https://loja.swift.com.br/costela-suina-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-swift-kg/p",
+  popularity: 59
  },
  {
   sku: "swift-1381",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212795/617455_file-mignon-suino_inn.jpg?v=639004614368270000",
-  productUrl: "https://loja.swift.com.br/file-mignon-suino-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-suino-swift-kg/p",
+  popularity: 60
  },
  {
   sku: "swift-1066",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207609/617439-pao-de-alho-bolinha-com-queijo_rec.jpg?v=638851089396900000",
-  productUrl: "https://loja.swift.com.br/pao-de-alho-bolinha-com-queijo-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-alho-bolinha-com-queijo-swift-300g/p",
+  popularity: 61
  },
  {
   sku: "swift-826",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213239/616906-sobrecoxa-de-frango-sem-pele_inn.jpg?v=639017585750000000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-sem-pele-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-sem-pele-swift-1kg/p",
+  popularity: 62
  },
  {
   sku: "swift-828",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos frios e embutidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207817/617153-salsicha-hot-dog_inn.jpg?v=638851819800570000",
-  productUrl: "https://loja.swift.com.br/salsicha-hot-dog-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/salsicha-hot-dog-swift-500g/p",
+  popularity: 63
  },
  {
   sku: "swift-434",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207567/615457-medalhao-de-picanha_inn.jpg?v=638850794648030000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-picanha-swift/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-picanha-swift/p",
+  popularity: 64
  },
  {
   sku: "swift-283",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213067/616918-coxa-de-frango_inn.jpg?v=639014864398930000",
-  productUrl: "https://loja.swift.com.br/coxa-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxa-de-frango-swift-1kg/p",
+  popularity: 65
  },
  {
   sku: "swift-262",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213881/616902-tiras-de-file-de-peito-de-frango_inn.jpg?v=639051128893200000",
-  productUrl: "https://loja.swift.com.br/tiras-de-file-de-peito-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-file-de-peito-de-frango-swift-1kg/p",
+  popularity: 66
  },
  {
   sku: "swift-260",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212887/616860-sobrecoxa-de-frango-temperada_inn.jpg?v=639009786668330000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-temperada-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-de-frango-temperada-swift-1kg/p",
+  popularity: 67
  },
  {
   sku: "swift-259",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207814/616859-coxinha-da-asa-temperada-_inn.jpg?v=638866388466570000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-temperada-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-temperada-swift-1kg/p",
+  popularity: 68
  },
  {
   sku: "swift-239",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212884/616831-tiras-de-alcatra_inn.jpg?v=639009751360170000",
-  productUrl: "https://loja.swift.com.br/tiras-de-alcatra-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-alcatra-swift-500g/p",
+  popularity: 69
  },
  {
   sku: "swift-222",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209565/616673-pao-de-alho-baguete-tradicional_rec.jpg?v=638893257311970000",
-  productUrl: "https://loja.swift.com.br/pao-de-alho-baguete-tradicional-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-alho-baguete-tradicional-swift-400g/p",
+  popularity: 70
  },
  {
   sku: "swift-217",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207800/616667-espetinho-de-queijo-coalho_inn.jpg?v=638851812712670000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-queijo-coalho-swift-385g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-queijo-coalho-swift-385g/p",
+  popularity: 71
  },
  {
   sku: "swift-202",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos moida",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212881/616614-carne-moida-light_inn.jpg?v=639009725098730000",
-  productUrl: "https://loja.swift.com.br/carne-moida-light-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-light-swift-500g/p",
+  popularity: 72
  },
  {
   sku: "swift-171",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais ervilha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208648/616505-ervilha_inn.jpg?v=638869827026730000",
-  productUrl: "https://loja.swift.com.br/ervilha-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/ervilha-swift-300g/p",
+  popularity: 73
  },
  {
   sku: "swift-169",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mistura de legumes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208645/616500-mistura-de-4-legumes_inn.jpg?v=638869825520230000",
-  productUrl: "https://loja.swift.com.br/mistura-de-4-legumes-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mistura-de-4-legumes-swift-300g/p",
+  popularity: 74
  },
  {
   sku: "swift-145",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207956/616419-pao-de-queijo-coquetel_rec.jpg?v=638852412104700000",
-  productUrl: "https://loja.swift.com.br/pao-de-queijo-coquetel-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-queijo-coquetel-swift-400g/p",
+  popularity: 75
  },
  {
   sku: "swift-89",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212831/616098-iscas-de-figado_inn.jpg?v=639005482425070000",
-  productUrl: "https://loja.swift.com.br/iscas-de-figado-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/iscas-de-figado-swift-500g/p",
+  popularity: 76
  },
  {
   sku: "swift-77",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209154/616003-pedacos-de-file-de-salmao_inn.jpg?v=638882839751400000",
-  productUrl: "https://loja.swift.com.br/pedacos-de-file-de-salmao-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/pedacos-de-file-de-salmao-swift-500g/p",
+  popularity: 77
  },
  {
   sku: "swift-53",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210533/615899-linguica-de-frango_inn.jpg?v=638931300143430000",
-  productUrl: "https://loja.swift.com.br/linguica-de-frango-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-frango-swift-700g/p",
+  popularity: 78
  },
  {
   sku: "swift-7951",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218333/624053-file-de-peito-combo_mck.jpg?v=639204072754930000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-combo-kg/p",
+  popularity: 79
  },
  {
   sku: "swift-7835",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216041/623813-linguica-tipo-calabresa-com-tutu-de-feijao-swift-prato-feito_rec.jpg?v=639119438464100000",
-  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-com-tutu-de-feijao-swift-prato-feito-300g/p"
+  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-com-tutu-de-feijao-swift-prato-feito-300g/p",
+  popularity: 80
  },
  {
   sku: "swift-7693",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216045/623815-strogonoff-de-frango-com-arroz-swift-prato-feito_rec.jpg?v=639119468973170000",
-  productUrl: "https://loja.swift.com.br/strogonoff-de-frango-com-arroz-swift-prato-feito-300g/p"
+  productUrl: "https://loja.swift.com.br/strogonoff-de-frango-com-arroz-swift-prato-feito-300g/p",
+  popularity: 81
  },
  {
   sku: "swift-7683",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mix de frutas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214003/623054-mix-de-frutas-vermelhas_inn.jpg?v=639053696529970000",
-  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-swift-1-02kg/p",
+  popularity: 82
  },
  {
   sku: "swift-7677",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos frios e embutidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218128/623649-queijo-mussarela-fatiado_inn.jpg?v=639198959359800000",
-  productUrl: "https://loja.swift.com.br/queijo-mussarela-fatiado-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/queijo-mussarela-fatiado-swift-300g/p",
+  popularity: 83
  },
  {
   sku: "swift-6961",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mandioca",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218081/623201-mandioca-tolete_inn.jpg?v=639198244085400000",
-  productUrl: "https://loja.swift.com.br/mandioca-tolete-swift/p"
+  productUrl: "https://loja.swift.com.br/mandioca-tolete-swift/p",
+  popularity: 84
  },
  {
   sku: "swift-6960",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais batata",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212466/623200-batata-bolinha_inn.jpg?v=638998699425830000",
-  productUrl: "https://loja.swift.com.br/batata-bolinha-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/batata-bolinha-swift-1-02kg/p",
+  popularity: 85
  },
  {
   sku: "swift-6801",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria croissant",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208226/622880-mini-croissant_rec.jpg?v=638860372648870000",
-  productUrl: "https://loja.swift.com.br/mini-croissant-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mini-croissant-swift-300g/p",
+  popularity: 86
  },
  {
   sku: "swift-6646",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212458/622832-mandioquinha-em-cubos_inn.jpg?v=638997853340130000",
-  productUrl: "https://loja.swift.com.br/mandioquinha-cubos-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mandioquinha-cubos-swift-300g/p",
+  popularity: 87
  },
  {
   sku: "swift-6653",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212353/622777-lombo-suino_inn.jpg?v=638996791601270000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-porcionado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-porcionado-swift-kg/p",
+  popularity: 88
  },
  {
   sku: "swift-6379",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212452/622615-grao-de-bico_inn.jpg?v=638997852192570000",
-  productUrl: "https://loja.swift.com.br/grao-de-bico-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/grao-de-bico-swift-300g/p",
+  popularity: 89
  },
  {
   sku: "swift-6345",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211230/622270-frango-a-passarinho-premium_inn.jpg?v=638957105086070000",
-  productUrl: "https://loja.swift.com.br/frango-a-passarinho-premium-1kg/p"
+  productUrl: "https://loja.swift.com.br/frango-a-passarinho-premium-1kg/p",
+  popularity: 90
  },
  {
   sku: "swift-6275",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216251/622286-empanado-de-frango-recheado-com-cheddar-e-bacon-seara_rec.jpg?v=639126608169970000",
-  productUrl: "https://loja.swift.com.br/empanado-de-frango-recheado-com-cheddar-e-bacon-seara-110g/p"
+  productUrl: "https://loja.swift.com.br/empanado-de-frango-recheado-com-cheddar-e-bacon-seara-110g/p",
+  popularity: 91
  },
  {
   sku: "swift-6207",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213970/622291-batata-airfryer-mccain_rec.jpg?v=639052968041100000",
-  productUrl: "https://loja.swift.com.br/batata-airfryer-mccain-1-2kg/p"
+  productUrl: "https://loja.swift.com.br/batata-airfryer-mccain-1-2kg/p",
+  popularity: 92
  },
  {
   sku: "swift-6004",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coracao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215538/616910-coracao-de-frango-congelado-seara_inn.jpg?v=639105627992900000",
-  productUrl: "https://loja.swift.com.br/coracao-de-frango-congelado-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/coracao-de-frango-congelado-seara-1kg/p",
+  popularity: 93
  },
  {
   sku: "swift-5772",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215387/622052-pao-de-queijo-assado-forno-de-minas_rec.jpg?v=639099804952000000",
-  productUrl: "https://loja.swift.com.br/pao-de-queijo-assado-forno-de-minas-400g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-queijo-assado-forno-de-minas-400g/p",
+  popularity: 94
  },
  {
   sku: "swift-5654",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos moida",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215292/622011-carne-moida-combo_inn.jpg?v=639098704671500000",
-  productUrl: "https://loja.swift.com.br/carne-moida-combo-1kg/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-combo-1kg/p",
+  popularity: 95
  },
  {
   sku: "swift-5419",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209356/621770-medalhao-de-file-mignon-suino_inn.jpg?v=638887858009270000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-suino-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-suino-swift-1kg/p",
+  popularity: 96
  },
  {
   sku: "swift-5416",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao mole",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207485/621762-coxao-mole-em-bifes_inn.jpg?v=638847501947230000",
-  productUrl: "https://loja.swift.com.br/coxao-mole-bifes-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxao-mole-bifes-swift-1kg/p",
+  popularity: 97
  },
  {
   sku: "swift-5074",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209780/621586-cubos-file-mignon-suino_inn.jpg?v=638896593327830000",
-  productUrl: "https://loja.swift.com.br/cubos-file-mignon-suino-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-file-mignon-suino-swift-500g/p",
+  popularity: 98
  },
  {
   sku: "swift-5057",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bacon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217667/621531-bacon-fatiado_inn.jpg?v=639184253915400000",
-  productUrl: "https://loja.swift.com.br/bacon-fatiado-swift-250g-1/p"
+  productUrl: "https://loja.swift.com.br/bacon-fatiado-swift-250g-1/p",
+  popularity: 99
  },
  {
   sku: "swift-5019",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207906/621600-frango-karaague-empanado_inn.jpg?v=638852180215630000",
-  productUrl: "https://loja.swift.com.br/frango-karaague-empanado-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/frango-karaague-empanado-swift-700g/p",
+  popularity: 100
  },
  {
   sku: "swift-4996",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214864/621374-bife-de-contrafile_inn.jpg?v=639084094476300000",
-  productUrl: "https://loja.swift.com.br/bife-de-contrafile-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-contrafile-swift-1kg/p",
+  popularity: 101
  },
  {
   sku: "swift-4760",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211136/621419-mini-pao-frances_rec.jpg?v=638953578406930000",
-  productUrl: "https://loja.swift.com.br/mini-pao-frances-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mini-pao-frances-swift-300g/p",
+  popularity: 102
  },
  {
   sku: "swift-4702",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais couve flor",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218392/621360-couve-flor_inn.jpg?v=639204979518030000",
-  productUrl: "https://loja.swift.com.br/couve-flor-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/couve-flor-swift-1-02kg/p",
+  popularity: 103
  },
  {
   sku: "swift-4684",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/193019/620031_HEINEKEN-269ML---CAIXA-_2.jpg?v=638288584386030000",
-  productUrl: "https://loja.swift.com.br/pack-8-latas-heineken-269ml/p"
+  productUrl: "https://loja.swift.com.br/pack-8-latas-heineken-269ml/p",
+  popularity: 104
  },
  {
   sku: "swift-4488",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214691/621133-costelinha-suina-temperada-rezende_mck.jpg?v=639077974325130000",
-  productUrl: "https://loja.swift.com.br/costelinha-suina-temperada-rezende-1kg/p"
+  productUrl: "https://loja.swift.com.br/costelinha-suina-temperada-rezende-1kg/p",
+  popularity: 105
  },
  {
   sku: "swift-4056",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bisteca",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216438/620002-bisteca-suina-swift-mais_inn.jpg?v=639131606562870000",
-  productUrl: "https://loja.swift.com.br/bisteca-suina-swift-mais-1kg/p"
+  productUrl: "https://loja.swift.com.br/bisteca-suina-swift-mais-1kg/p",
+  popularity: 106
  },
  {
   sku: "swift-3578",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217838/618927-espetinho-de-panceta-temperada_inn.jpg?v=639189424991370000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-panceta-temperada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-panceta-temperada-swift-500g/p",
+  popularity: 107
  },
  {
   sku: "swift-3351",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214493/618720-carne-de-panela-em-cubos_inn.jpg?v=639072122919270000",
-  productUrl: "https://loja.swift.com.br/cubos-de-panela-em-cubos-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-panela-em-cubos-swift-500g/p",
+  popularity: 108
  },
  {
   sku: "swift-2973",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria croissant",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207755/618457-croissant-de-presunto-e-queijo_rec.jpg?v=638851787953500000",
-  productUrl: "https://loja.swift.com.br/croissant-de-presunto-e-queijo-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/croissant-de-presunto-e-queijo-swift-180g/p",
+  popularity: 109
  },
  {
   sku: "swift-2107",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210356/618254-file-de-tilapia-temperado-empanado_inn.jpg?v=638924389317330000",
-  productUrl: "https://loja.swift.com.br/file-de-tilapia-temperado-empanado-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-tilapia-temperado-empanado-swift-500g/p",
+  popularity: 110
  },
  {
   sku: "swift-2075",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214239/618212-cubos-de-patinho_inn.jpg?v=639064132810270000",
-  productUrl: "https://loja.swift.com.br/cubos-de-patinho-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-patinho-swift-500g/p",
+  popularity: 111
  },
  {
   sku: "swift-2029",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209461/618163-caldo-verde-de-fios-de-couve-e-calabresa_rec.jpg?v=638890536767130000",
-  productUrl: "https://loja.swift.com.br/caldo-verde-de-fios-de-couve-e-calabresa-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-verde-de-fios-de-couve-e-calabresa-swift-350g/p",
+  popularity: 112
  },
  {
   sku: "swift-2022",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209264/618162-caldo-de-mandioquinha-com-frango_rec.jpg?v=638884526747070000",
-  productUrl: "https://loja.swift.com.br/caldo-de-mandioquinha-com-frango-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-mandioquinha-com-frango-swift-350g/p",
+  popularity: 113
  },
  {
   sku: "swift-1976",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207971/618144-pao-de-queijo-gourmet_rec.jpg?v=638852458335600000",
-  productUrl: "https://loja.swift.com.br/pao-de-queijo-premium-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-queijo-premium-swift-400g/p",
+  popularity: 114
  },
  {
   sku: "swift-1945",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados merluza",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207830/618122-file-de-merluza_inn.jpg?v=638851825647570000",
-  productUrl: "https://loja.swift.com.br/file-de-merluza-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-merluza-swift-800g/p",
+  popularity: 115
  },
  {
   sku: "swift-1775",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217292/617992-espetinho-de-queijo-provolone-defumado-bolinha_inn.jpg?v=639162901513930000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-queijo-provolone-defumado-bolinha-swift-310g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-queijo-provolone-defumado-bolinha-swift-310g/p",
+  popularity: 116
  },
  {
   sku: "swift-1677",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais alho e cebola",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208687/617915-cebola-picada_inn.jpg?v=638870657257630000",
-  productUrl: "https://loja.swift.com.br/cebola-picada-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/cebola-picada-swift-300g/p",
+  popularity: 117
  },
  {
   sku: "swift-1656",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208737/617882-linguica-de-pernil-com-queijo-coalho_inn.jpg?v=638870721508370000",
-  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-queijo-coalho-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-queijo-coalho-500g/p",
+  popularity: 118
  },
  {
   sku: "swift-1555",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207622/617793-pao-frances-rustico_rec.jpg?v=638851141846800000",
-  productUrl: "https://loja.swift.com.br/pao-frances-rustico-swift-120g/p"
+  productUrl: "https://loja.swift.com.br/pao-frances-rustico-swift-120g/p",
+  popularity: 119
  },
  {
   sku: "swift-1541",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208563/617768-kibe-bovino_rec.jpg?v=638869725028300000",
-  productUrl: "https://loja.swift.com.br/kibe-bovino-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/kibe-bovino-swift-500g/p",
+  popularity: 120
  },
  {
   sku: "swift-1511",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214014/617758-cubos-de-costela_inn.jpg?v=639056311177170000",
-  productUrl: "https://loja.swift.com.br/cubos-de-costela-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-costela-swift-500g/p",
+  popularity: 121
  },
  {
   sku: "swift-1498",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217284/617745-espetinho-de-coracao-de-frango-temperado_inn.jpg?v=639162881239000000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-coracao-de-frango-temperado-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-coracao-de-frango-temperado-swift-900g/p",
+  popularity: 122
  },
  {
   sku: "swift-1474",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos variado",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213528/617723-carne-moida-suina_inn.jpg?v=639027168403100000",
-  productUrl: "https://loja.swift.com.br/carne-moida-suina-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-suina-swift-500g/p",
+  popularity: 123
  },
  {
   sku: "swift-1401",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217134/617687-coxinha-de-costela-pre-frita_rec.jpg?v=639154836745700000",
-  productUrl: "https://loja.swift.com.br/coxinha-de-costela-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-de-costela-pre-frita-swift-300g/p",
+  popularity: 124
  },
  {
   sku: "swift-1382",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208897/617666-coxinha-de-frango-mandioca-pre-frita_rec.jpg?v=638875872661630000",
-  productUrl: "https://loja.swift.com.br/coxinha-de-frango-mandioca-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-de-frango-mandioca-pre-frita-swift-300g/p",
+  popularity: 125
  },
  {
   sku: "swift-1204",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213412/616916-file-de-peito-de-frango-em-bifes_inn.jpg?v=639021863310030000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-em-bifes-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-em-bifes-swift-1kg/p",
+  popularity: 126
  },
  {
   sku: "swift-1161",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212498/617520-file-de-peito-frango_inn.jpg?v=638998735684330000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-swift-do-campo-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-de-frango-swift-do-campo-1kg/p",
+  popularity: 127
  },
  {
   sku: "swift-1114",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213262/617495-chicken-croc-queijo_rec.jpg?v=639020124949830000",
-  productUrl: "https://loja.swift.com.br/chicken-crok-com-queijo-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/chicken-crok-com-queijo-swift-300g/p",
+  popularity: 128
  },
  {
   sku: "swift-1111",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209180/617492-penne-ao-molho-parisiense_rec.jpg?v=638883556459200000",
-  productUrl: "https://loja.swift.com.br/penne-ao-molho-parisiense-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/penne-ao-molho-parisiense-swift-350g/p",
+  popularity: 129
  },
  {
   sku: "swift-1023",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213253/617392-cubos-de-pernil-suino_inn.jpg?v=639017743219070000",
-  productUrl: "https://loja.swift.com.br/cubos-de-pernil-suino-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-pernil-suino-swift-500g/p",
+  popularity: 130
  },
  {
   sku: "swift-1022",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213250/617391-bife-de-copa-lombo-suino_inn.jpg?v=639017721195400000",
-  productUrl: "https://loja.swift.com.br/bife-de-copa-lombo-suino-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-copa-lombo-suino-swift-1kg/p",
+  popularity: 131
  },
  {
   sku: "swift-847",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209189/617291-carvao-vegetal_inn.jpg?v=638883605067070000",
-  productUrl: "https://loja.swift.com.br/carvao-vegetal-5kg/p"
+  productUrl: "https://loja.swift.com.br/carvao-vegetal-5kg/p",
+  popularity: 132
  },
  {
   sku: "swift-483",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213236/615520-bife-ancho_inn.jpg?v=639017572408500000",
-  productUrl: "https://loja.swift.com.br/bife-ancho-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-ancho-swift-kg/p",
+  popularity: 133
  },
  {
   sku: "swift-475",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218700/615458-picanha-swift-legado-1855_inn.jpg?v=639219821415730000",
-  productUrl: "https://loja.swift.com.br/picanha-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-swift-legado-1855-kg/p",
+  popularity: 134
  },
  {
   sku: "swift-258",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/201244/616858-carne-moida-de-frango_1.jpg?v=638652044461170000",
-  productUrl: "https://loja.swift.com.br/carne-moida-de-frango-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-de-frango-swift-500g/p",
+  popularity: 135
  },
  {
   sku: "swift-209",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados sardinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209342/616630-sardinha-espalmada_inn.jpg?v=638887230255000000",
-  productUrl: "https://loja.swift.com.br/sardinha-espalmada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sardinha-espalmada-swift-500g/p",
+  popularity: 136
  },
  {
   sku: "swift-173",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais brocolis",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208654/616507-brocolis_inn.jpg?v=638869831661530000",
-  productUrl: "https://loja.swift.com.br/brocolis-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/brocolis-swift-300g/p",
+  popularity: 137
  },
  {
   sku: "swift-170",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais polenta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208551/616504-polenta-palito_rec.jpg?v=638869069882130000",
-  productUrl: "https://loja.swift.com.br/polenta-palito-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/polenta-palito-swift-600g/p",
+  popularity: 138
  },
  {
   sku: "swift-168",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais milho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211121/616499-milho_inn.jpg?v=638953544956900000",
-  productUrl: "https://loja.swift.com.br/milho-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/milho-swift-300g/p",
+  popularity: 139
  },
  {
   sku: "swift-166",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais cenoura",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208894/616497-cenoura-baby_inn.jpg?v=638875175838130000",
-  productUrl: "https://loja.swift.com.br/cenoura-baby-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/cenoura-baby-swift-300g/p",
+  popularity: 140
  },
  {
   sku: "swift-159",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212869/616483-carne-moida-paleta_inn.jpg?v=639008914665130000",
-  productUrl: "https://loja.swift.com.br/carne-moida-paleta-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-paleta-swift-500g/p",
+  popularity: 141
  },
  {
   sku: "swift-157",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208892/616463-kibe-recheado-com-requeijao-pre-frito_rec.jpg?v=638875169872900000",
-  productUrl: "https://loja.swift.com.br/kibe-recheado-com-requeijao-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/kibe-recheado-com-requeijao-pre-frito-swift-300g/p",
+  popularity: 142
  },
  {
   sku: "swift-156",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208632/616462-bolinhas-de-queijo-pre-frita_rec.jpg?v=638869809555970000",
-  productUrl: "https://loja.swift.com.br/bolinhas-de-queijo-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/bolinhas-de-queijo-pre-frita-swift-300g/p",
+  popularity: 143
  },
  {
   sku: "swift-152",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207596/616437-camarao-pre-cozido-descascado-sem-cabeca-eviscerado-30-50-36-40_inn.jpg?v=638851010398700000",
-  productUrl: "https://loja.swift.com.br/camarao-descascado-sem-cabeca-eviscerado-30-50-36-40-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/camarao-descascado-sem-cabeca-eviscerado-30-50-36-40-swift-400g/p",
+  popularity: 144
  },
  {
   sku: "swift-135",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farofa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207797/616394-farofa-tradicional_inn.jpg?v=638851811225800000",
-  productUrl: "https://loja.swift.com.br/farofa-tradicional-400g-1/p"
+  productUrl: "https://loja.swift.com.br/farofa-tradicional-400g-1/p",
+  popularity: 145
  },
  {
   sku: "swift-87",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao mole",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207587/616094-cubos-de-coxao-mole_inn.jpg?v=638850948233470000",
-  productUrl: "https://loja.swift.com.br/cubos-de-coxao-mole-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-coxao-mole-swift-500g/p",
+  popularity: 146
  },
  {
   sku: "swift-84",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao mole",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212670/616085-tiras-de-coxao-mole_inn.jpg?v=639003054435170000",
-  productUrl: "https://loja.swift.com.br/tiras-de-coxao-mole-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-coxao-mole-swift-500g/p",
+  popularity: 147
  },
  {
   sku: "swift-83",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos moida",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212665/616084-carne-moida-bolonhesa_inn.jpg?v=639003000101900000",
-  productUrl: "https://loja.swift.com.br/carne-moida-bolonhesa-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/carne-moida-bolonhesa-swift-500g/p",
+  popularity: 148
  },
  {
   sku: "swift-76",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209842/616001-salmao-porcionado_inn.jpg?v=638900840503700000",
-  productUrl: "https://loja.swift.com.br/salmao-porcionado-swift-125g/p"
+  productUrl: "https://loja.swift.com.br/salmao-porcionado-swift-125g/p",
+  popularity: 149
  },
  {
   sku: "swift-70",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212658/615967-fettucine-bolonhesa-seara_rec.jpg?v=639002855363570000",
-  productUrl: "https://loja.swift.com.br/fettucine-bolonhesa-seara-350g/p"
+  productUrl: "https://loja.swift.com.br/fettucine-bolonhesa-seara-350g/p",
+  popularity: 150
  },
  {
   sku: "swift-67",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214395/615963-lasanha-a-bolonhesa_rec.jpg?v=639068472819500000",
-  productUrl: "https://loja.swift.com.br/lasanha-a-bolonhesa-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-a-bolonhesa-swift-600g/p",
+  popularity: 151
  },
  {
   sku: "swift-47",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210829/615776-camarao-pre-cozido-descascado-sem-cabeca-60-80-71-90_inn.jpg?v=638938960897200000",
-  productUrl: "https://loja.swift.com.br/camarao-sem-cabeca-descascado-cozido-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/camarao-sem-cabeca-descascado-cozido-swift-400g/p",
+  popularity: 152
  },
  {
   sku: "swift-20",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208890/615110-batata-palito-pre-frita_rec.jpg?v=638875146269530000",
-  productUrl: "https://loja.swift.com.br/batata-palito-pre-frita-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/batata-palito-pre-frita-swift-400g/p",
+  popularity: 153
  },
  {
   sku: "swift-7902",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218143/624054-file-de-coxa-e-sobrecoxa-combo_mck.jpg?v=639199189857900000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-combo-kg/p",
+  popularity: 154
  },
  {
   sku: "swift-7901",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218142/624051-coxa-com-sobrecoxa-combo_mck.jpg?v=639199181532470000",
-  productUrl: "https://loja.swift.com.br/coxa-com-sobrecoxa-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/coxa-com-sobrecoxa-combo-kg/p",
+  popularity: 155
  },
  {
   sku: "swift-7880",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217440/624135-hamburguer-de-angus-premium-aurora_mck.jpg?v=639168896837100000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-angus-premium-aurora-150g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-angus-premium-aurora-150g/p",
+  popularity: 156
  },
  {
   sku: "swift-7814",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216027/623811-costela-e-mandioca-com-arroz-swift-prato-feito_rec.jpg?v=639118771797330000",
-  productUrl: "https://loja.swift.com.br/costela-e-mandioca-com-arroz-swift-prato-feito-300g/p"
+  productUrl: "https://loja.swift.com.br/costela-e-mandioca-com-arroz-swift-prato-feito-300g/p",
+  popularity: 157
  },
  {
   sku: "swift-7762",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217109/623931-steak-de-frango-empanado-combo_inn.jpg?v=639153379110300000",
-  productUrl: "https://loja.swift.com.br/steak-de-frango-empanado-combo-700g/p"
+  productUrl: "https://loja.swift.com.br/steak-de-frango-empanado-combo-700g/p",
+  popularity: 158
  },
  {
   sku: "swift-7734",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217360/623378-chocofrut-framboesa-com-chocolate-branco-e-ao-leite_inn.jpg?v=639167013870930000",
-  productUrl: "https://loja.swift.com.br/chocofrut-framboesa-com-chocolate-branco-e-ao-leite-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/chocofrut-framboesa-com-chocolate-branco-e-ao-leite-swift-150g/p",
+  popularity: 159
  },
  {
   sku: "swift-7729",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217364/623400-chocofrut-morango-com-chocolate-branco-e-ao-leite_inn.jpg?v=639167017774800000",
-  productUrl: "https://loja.swift.com.br/chocofrut-morango-com-chocolate-branco-e-ao-leite-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/chocofrut-morango-com-chocolate-branco-e-ao-leite-swift-150g/p",
+  popularity: 160
  },
  {
   sku: "swift-7687",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213986/623319-file-de-panga_inn.jpg?v=639053409716130000",
-  productUrl: "https://loja.swift.com.br/file-de-panga-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-panga-swift-800g/p",
+  popularity: 161
  },
  {
   sku: "swift-7680",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213999/623440-medalhao-de-file-mignon_inn.jpg?v=639053690039900000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-1kg-1/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-1kg-1/p",
+  popularity: 162
  },
  {
   sku: "swift-7065",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bisteca",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212330/623372-bisteca-fatiada-frimesa_mck.jpg?v=638996035274170000",
-  productUrl: "https://loja.swift.com.br/bisteca-suina-fatiada-frimesa-kg/p"
+  productUrl: "https://loja.swift.com.br/bisteca-suina-fatiada-frimesa-kg/p",
+  popularity: 163
  },
  {
   sku: "swift-6912",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213867/623169-linguica-calabresa_inn.jpg?v=639050494356900000",
-  productUrl: "https://loja.swift.com.br/linguica-calabresa-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-calabresa-swift-500g/p",
+  popularity: 164
  },
  {
   sku: "swift-6866",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217373/623203-alho-inteiro-descascado-easychef_mck.jpg?v=639167049224730000",
-  productUrl: "https://loja.swift.com.br/alho-inteiro-descascado-easychef-1-1-kg/p"
+  productUrl: "https://loja.swift.com.br/alho-inteiro-descascado-easychef-1-1-kg/p",
+  popularity: 165
  },
  {
   sku: "swift-6823",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212064/623186-coxa-e-sobrecoxa-sem-osso-temperada-copacol_mck.jpg?v=638989862670600000",
-  productUrl: "https://loja.swift.com.br/coxa-e-sobrecoxa-sem-osso-temperada-copacol-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxa-e-sobrecoxa-sem-osso-temperada-copacol-1kg/p",
+  popularity: 166
  },
  {
   sku: "swift-6809",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210872/622941-lasanha-a-bolonhesa_rec.jpg?v=638941477124830000",
-  productUrl: "https://loja.swift.com.br/lasanha-a-bolonhesa-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-a-bolonhesa-swift-350g/p",
+  popularity: 167
  },
  {
   sku: "swift-6932",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218682/623090-bife-ancho-entrecote-swift-legado-1855_inn.jpg?v=639219592113130000",
-  productUrl: "https://loja.swift.com.br/bife-ancho-entrecote-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-ancho-entrecote-swift-legado-1855-kg/p",
+  popularity: 168
  },
  {
   sku: "swift-6943",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218101/623084-fraldinha-swift-legado-1855_inn.jpg?v=639198288619930000",
-  productUrl: "https://loja.swift.com.br/fraldinha-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/fraldinha-swift-legado-1855-kg/p",
+  popularity: 169
  },
  {
   sku: "swift-6769",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados pescada",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207560/622955-iscas-de-file-de-panga-empanadas-baita_mck.jpg?v=638848417767100000",
-  productUrl: "https://loja.swift.com.br/iscas-de-file-de-panga-empanadas-baita-700g/p"
+  productUrl: "https://loja.swift.com.br/iscas-de-file-de-panga-empanadas-baita-700g/p",
+  popularity: 170
  },
  {
   sku: "swift-6681",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ovos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216317/622958-ovo-branco-jumbo-mantiqueira_mck.jpg?v=639129965679900000",
-  productUrl: "https://loja.swift.com.br/ovo-branco-jumbo-mantiqueira-10-und/p"
+  productUrl: "https://loja.swift.com.br/ovo-branco-jumbo-mantiqueira-10-und/p",
+  popularity: 171
  },
  {
   sku: "swift-6678",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207936/622933-file-de-coxa-de-frango_inn.jpg?v=638852221609170000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-frango-swift-1kg/p",
+  popularity: 172
  },
  {
   sku: "swift-6652",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215853/622886-meio-da-asa-tulipa-seara_inn.jpg?v=639114250945630000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-seara-1kg/p",
+  popularity: 173
  },
  {
   sku: "swift-6648",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218428/622830-batata-doce-em-cubos_inn.jpg?v=639207574704600000",
-  productUrl: "https://loja.swift.com.br/batata-doce-cubos-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/batata-doce-cubos-swift-300g/p",
+  popularity: 174
  },
  {
   sku: "swift-6647",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212123/622831-couve-manteiga_inn.jpg?v=638990749163600000",
-  productUrl: "https://loja.swift.com.br/couve-manteiga-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/couve-manteiga-swift-1-02kg/p",
+  popularity: 175
  },
  {
   sku: "swift-6454",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207390/622706-batata-smiles-mccain_rec.jpg?v=638845677581770000",
-  productUrl: "https://loja.swift.com.br/batata-smiles-mccain-400g/p"
+  productUrl: "https://loja.swift.com.br/batata-smiles-mccain-400g/p",
+  popularity: 176
  },
  {
   sku: "swift-6436",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211398/622704-isca-de-tilapia-brazilian-fish_inn.jpg?v=638966765000200000",
-  productUrl: "https://loja.swift.com.br/isca-de-tilapia-brazilian-fish-300g/p"
+  productUrl: "https://loja.swift.com.br/isca-de-tilapia-brazilian-fish-300g/p",
+  popularity: 177
  },
  {
   sku: "swift-6431",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212068/622692-bolinho-de-arroz-pre-frito_rec.jpg?v=638989878280600000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-arroz-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-arroz-pre-frito-swift-300g/p",
+  popularity: 178
  },
  {
   sku: "swift-6340",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208245/622531-coca-cola-zero-garrafa_mck.jpg?v=638862958910670000",
-  productUrl: "https://loja.swift.com.br/coca-cola-zero-garrafa-2l/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-zero-garrafa-2l/p",
+  popularity: 179
  },
  {
   sku: "swift-6321",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216280/622505-file-de-coxa-e-sobrecoxa-empanada-baita_inn.jpg?v=639129148107430000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-empanada-baita-700g/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-empanada-baita-700g/p",
+  popularity: 180
  },
  {
   sku: "swift-6315",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207368/622493-file-de-polaca-do-alaska_inn.jpg?v=638844925600470000",
-  productUrl: "https://loja.swift.com.br/file-de-polaca-do-alaska-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-polaca-do-alaska-swift-500g/p",
+  popularity: 181
  },
  {
   sku: "swift-6281",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216825/622441-bife-de-lombo-suino-empanado-baita_inn.jpg?v=639143872012630000",
-  productUrl: "https://loja.swift.com.br/bife-de-lombo-suino-empanado-baita-700g/p"
+  productUrl: "https://loja.swift.com.br/bife-de-lombo-suino-empanado-baita-700g/p",
+  popularity: 182
  },
  {
   sku: "swift-6226",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria waffle",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216047/622317-waffle-forno-de-minas_rec.jpg?v=639119514519600000",
-  productUrl: "https://loja.swift.com.br/waffle-forno-de-minas-280g/p"
+  productUrl: "https://loja.swift.com.br/waffle-forno-de-minas-280g/p",
+  popularity: 183
  },
  {
   sku: "swift-6301",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215841/622309-paleta-combo_inn.jpg?v=639113594903870000",
-  productUrl: "https://loja.swift.com.br/paleta-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/paleta-combo-kg/p",
+  popularity: 184
  },
  {
   sku: "swift-6148",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218053/622272-hamburguer-de-fraldinha-swift-legado-1855_inn.jpg?v=639198165750000000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-fraldinha-swift-legado-1855-180g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-fraldinha-swift-legado-1855-180g/p",
+  popularity: 185
  },
  {
   sku: "swift-6144",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos cupim",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215838/622192-cupim-combo_inn.jpg?v=639113579471830000",
-  productUrl: "https://loja.swift.com.br/cupim-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/cupim-combo-kg/p",
+  popularity: 186
  },
  {
   sku: "swift-6214",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209310/622147-file-mignon-suino-extra-limpo_inn.jpg?v=638887036284300000",
-  productUrl: "https://loja.swift.com.br/file-mignon-suino-extra-limpo-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-suino-extra-limpo-swift-kg/p",
+  popularity: 187
  },
  {
   sku: "swift-5782",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos queijos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216813/622056-queijo-coalho-em-peca_inn.jpg?v=639143828496530000",
-  productUrl: "https://loja.swift.com.br/queijo-coalho-em-peca-swift-220g/p"
+  productUrl: "https://loja.swift.com.br/queijo-coalho-em-peca-swift-220g/p",
+  popularity: 188
  },
  {
   sku: "swift-5764",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215357/622023-coracao-da-alcatra-combo_inn.jpg?v=639099585519130000",
-  productUrl: "https://loja.swift.com.br/coracao-da-alcatra-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/coracao-da-alcatra-combo-kg/p",
+  popularity: 189
  },
  {
   sku: "swift-5773",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215389/622018-acem-combo_inn.jpg?v=639099819370070000",
-  productUrl: "https://loja.swift.com.br/acem-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/acem-combo-kg/p",
+  popularity: 190
  },
  {
   sku: "swift-5649",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215264/621997-maminha-da-alcatra-combo_inn.jpg?v=639096359904000000",
-  productUrl: "https://loja.swift.com.br/maminha-da-alcatra-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-da-alcatra-combo-kg/p",
+  popularity: 191
  },
  {
   sku: "swift-5650",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216899/621994-picanha-combo_inn.jpg?v=639144576656470000",
-  productUrl: "https://loja.swift.com.br/picanha-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-combo-kg/p",
+  popularity: 192
  },
  {
   sku: "swift-5418",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos musculo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215103/621771-musculo-dianteiro_inn.jpg?v=639093533157030000",
-  productUrl: "https://loja.swift.com.br/musculo-dianteiro-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/musculo-dianteiro-swift-kg/p",
+  popularity: 193
  },
  {
   sku: "swift-5397",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211141/621765-pao-brioche_rec.jpg?v=638953583530000000",
-  productUrl: "https://loja.swift.com.br/pao-brioche-swift-280g/p"
+  productUrl: "https://loja.swift.com.br/pao-brioche-swift-280g/p",
+  popularity: 194
  },
  {
   sku: "swift-5049",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214907/621508-coxinha-da-asa-empanada-seara_inn.jpg?v=639087435366300000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-empanada-seara-400g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-empanada-seara-400g/p",
+  popularity: 195
  },
  {
   sku: "swift-4987",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212805/620602-mini-churros-com-doce-de-leite-pre-frito_rec.jpg?v=639004622955400000",
-  productUrl: "https://loja.swift.com.br/mini-churros-com-doce-de-leite-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mini-churros-com-doce-de-leite-pre-frito-swift-300g/p",
+  popularity: 196
  },
  {
   sku: "swift-4924",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214843/621506-file-de-peito-empanado-seara_mck.jpg?v=639083090843670000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-empanado-seara-400g/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-empanado-seara-400g/p",
+  popularity: 197
  },
  {
   sku: "swift-4882",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214805/621390-bife-de-file-mignon_inn.jpg?v=639082345647870000",
-  productUrl: "https://loja.swift.com.br/bife-de-file-mignon-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-file-mignon-swift-1kg/p",
+  popularity: 198
  },
  {
   sku: "swift-4565",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco linguicas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208746/621191-linguica-de-frango-fina_inn.jpg?v=638870728494170000",
-  productUrl: "https://loja.swift.com.br/linguica-de-frango-fina-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-frango-fina-swift-400g/p",
+  popularity: 199
  },
  {
   sku: "swift-4338",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212802/621154-hamburguer-de-wagyu_inn.jpg?v=639004619650170000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-wagyu-swift-165g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-wagyu-swift-165g/p",
+  popularity: 200
  },
  {
   sku: "swift-4304",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205311/617197-chicken-supreme_2.jpg.jpg?v=638761103105670000",
-  productUrl: "https://loja.swift.com.br/chicken-supreme-seara-300g/p"
+  productUrl: "https://loja.swift.com.br/chicken-supreme-seara-300g/p",
+  popularity: 201
  },
  {
   sku: "swift-4038",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209228/620109-canja-de-galinha_rec.jpg?v=638883822023970000",
-  productUrl: "https://loja.swift.com.br/canja-de-galinha-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/canja-de-galinha-swift-350g/p",
+  popularity: 202
  },
  {
   sku: "swift-3945",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207741/619961-filezinho-de-sassami-linha-mais_inn.jpg?v=638851782688900000",
-  productUrl: "https://loja.swift.com.br/filezinho-de-sassami-linha-mais-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-de-sassami-linha-mais-1kg/p",
+  popularity: 203
  },
  {
   sku: "swift-3747",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208699/619151-batata-noisettes-pre-frita_rec.jpg?v=638870672012370000",
-  productUrl: "https://loja.swift.com.br/batata-noisettes-pre-frita-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/batata-noisettes-pre-frita-swift-400g/p",
+  popularity: 204
  },
  {
   sku: "swift-3651",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coracao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214558/619049-coracao-com-ervas-finas-swift-grill_inn.jpg?v=639075360640900000",
-  productUrl: "https://loja.swift.com.br/coracao-com-ervas-finas-swift-grill-800g/p"
+  productUrl: "https://loja.swift.com.br/coracao-com-ervas-finas-swift-grill-800g/p",
+  popularity: 205
  },
  {
   sku: "swift-3579",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218647/618925-espetinho-de-coxa-e-sobrecoxa-de-frango_inn.jpg?v=639217240199000000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-coxa-e-sobrecoxa-de-frango-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-coxa-e-sobrecoxa-de-frango-swift-900g/p",
+  popularity: 206
  },
  {
   sku: "swift-3402",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208422/618739-picanha-linha-mais_inn.jpg?v=638866318729100000",
-  productUrl: "https://loja.swift.com.br/picanha-linha-mais-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-linha-mais-kg/p",
+  popularity: 207
  },
  {
   sku: "swift-3523",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213905/618668-pao-com-calabresa-e-queijo_rec.jpg?v=639051164908970000",
-  productUrl: "https://loja.swift.com.br/pao-de-calabresa-com-queijo-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-calabresa-com-queijo-swift-300g/p",
+  popularity: 208
  },
  {
   sku: "swift-3384",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216238/618388-pao-australiano_rec.jpg?v=639126387530100000",
-  productUrl: "https://loja.swift.com.br/pao-australiano-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/pao-australiano-swift-180g/p",
+  popularity: 209
  },
  {
   sku: "swift-3116",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209262/618603-caldo-de-mandioca-com-costela_rec.jpg?v=638884516390970000",
-  productUrl: "https://loja.swift.com.br/caldo-de-mandioca-com-costela-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-mandioca-com-costela-swift-350g/p",
+  popularity: 210
  },
  {
   sku: "swift-3115",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209442/618602-caldo-de-feijao_rec.jpg?v=638889649518970000",
-  productUrl: "https://loja.swift.com.br/caldo-de-feijao-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-feijao-swift-350g/p",
+  popularity: 211
  },
  {
   sku: "swift-2975",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria croissant",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207757/618465-croissant-de-frango-com-requeijao_rec.jpg?v=638851790285000000",
-  productUrl: "https://loja.swift.com.br/croissant-de-frango-com-requeijao-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/croissant-de-frango-com-requeijao-swift-180g/p",
+  popularity: 212
  },
  {
   sku: "swift-2972",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria croissant",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212093/618456-croissant-de-chocolate-kitkat_rec.jpg?v=638990144621170000",
-  productUrl: "https://loja.swift.com.br/croissant-de-chocolate-kit-kat-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/croissant-de-chocolate-kit-kat-swift-180g/p",
+  popularity: 213
  },
  {
   sku: "swift-2700",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213892/618359-file-de-frango-aperitivo-com-bacon_inn.jpg?v=639051146140600000",
-  productUrl: "https://loja.swift.com.br/file-de-frango-aperitivo-com-bacon-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/file-de-frango-aperitivo-com-bacon-swift-350g/p",
+  popularity: 214
  },
  {
   sku: "swift-2640",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217877/618344-hamburguer-gran-reserva_inn.jpg?v=639190442654470000",
-  productUrl: "https://loja.swift.com.br/hamburguer-gran-reserva-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-gran-reserva-swift-400g/p",
+  popularity: 215
  },
  {
   sku: "swift-2440",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos carpaccio",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209875/618294-carpaccio-bovino_inn.jpg?v=638900926469870000",
-  productUrl: "https://loja.swift.com.br/carpaccio-bovino-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/carpaccio-bovino-swift-200g/p",
+  popularity: 216
  },
  {
   sku: "swift-1972",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207833/618133-donuts-de-doce-de-leite_inn.jpg?v=638851828450670000",
-  productUrl: "https://loja.swift.com.br/donuts-de-doce-de-leite-swift-140g/p"
+  productUrl: "https://loja.swift.com.br/donuts-de-doce-de-leite-swift-140g/p",
+  popularity: 217
  },
  {
   sku: "swift-1800",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco paes para churrasco",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218098/618022-pao-recheado-doce-de-leite_mck.jpg?v=639198265538700000",
-  productUrl: "https://loja.swift.com.br/pao-recheado-doce-de-leite-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-recheado-doce-de-leite-swift-300g/p",
+  popularity: 218
  },
  {
   sku: "swift-1595",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos variado",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214084/617844-kit-feijoada_inn.jpg?v=639058199454130000",
-  productUrl: "https://loja.swift.com.br/kit-feijoada-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/kit-feijoada-swift-1kg/p",
+  popularity: 219
  },
  {
   sku: "swift-1554",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209576/617792-pao-frances_rec.jpg?v=638893289295670000",
-  productUrl: "https://loja.swift.com.br/pao-frances-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/pao-frances-swift-180g/p",
+  popularity: 220
  },
  {
   sku: "swift-1550",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209289/617782-linguica-de-pernil-com-pimenta-biquinho_inn.jpg?v=638884666998270000",
-  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-pimenta-biquinho-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-pimenta-biquinho-swift-500g/p",
+  popularity: 221
  },
  {
   sku: "swift-1864",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos lagarto",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214207/617749-lagarto_inn.jpg?v=639062691844070000",
-  productUrl: "https://loja.swift.com.br/lagarto-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/lagarto-swift-kg/p",
+  popularity: 222
  },
  {
   sku: "swift-1500",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213601/617747-espetinho-de-kafta_inn.jpg?v=639027920953270000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-kafta-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-kafta-swift-900g/p",
+  popularity: 223
  },
  {
   sku: "swift-1499",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217288/617746-espetinho-de-frango-temperado_inn.jpg?v=639162894642270000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-frango-temperado-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-frango-temperado-swift-900g/p",
+  popularity: 224
  },
  {
   sku: "swift-1487",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas espetinho linguica",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217830/617731-espetinho-de-linguica_inn.jpg?v=639189408457870000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-linguica-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-linguica-swift-900g/p",
+  popularity: 225
  },
  {
   sku: "swift-1466",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208561/617696-file-de-peito-temperado-ja-pro-forno_rec.jpg?v=638869715854870000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-temperado-ja-pro-forno-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-temperado-ja-pro-forno-swift-800g/p",
+  popularity: 226
  },
  {
   sku: "swift-1564",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214066/617694-frango-inteiro-temperado-ja-pro-forno_rec.jpg?v=639058064204270000",
-  productUrl: "https://loja.swift.com.br/frango-inteiro-temperado-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/frango-inteiro-temperado-ja-pro-forno-swift-kg/p",
+  popularity: 227
  },
  {
   sku: "swift-1400",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217131/617686-bolinhos-de-mandioca-e-carne-seca-pre-frita_rec.jpg?v=639154829272600000",
-  productUrl: "https://loja.swift.com.br/bolinhos-de-mandioca-e-carne-seca-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/bolinhos-de-mandioca-e-carne-seca-pre-frita-swift-300g/p",
+  popularity: 228
  },
  {
   sku: "swift-1342",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208469/617632-frango-a-passarinho-temperado_inn.jpg?v=638866448769900000",
-  productUrl: "https://loja.swift.com.br/frango-a-passarinho-temperado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/frango-a-passarinho-temperado-swift-1kg/p",
+  popularity: 229
  },
  {
   sku: "swift-1312",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212792/617597-file-de-coxa-e-sobrecoxa-sem-pele-do-campo_inn.jpg?v=639004611749870000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-sem-pele-swift-do-campo-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-sem-pele-swift-do-campo-1kg/p",
+  popularity: 230
  },
  {
   sku: "swift-1284",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207989/617594-coxade-frango-temperada_inn.jpg?v=638852577392800000",
-  productUrl: "https://loja.swift.com.br/coxa-de-frango-temperada-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxa-de-frango-temperada-swift-1kg/p",
+  popularity: 231
  },
  {
   sku: "swift-1112",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208402/617493-fettuccine-com-peito-de-peru-e-brocolis_rec.jpg?v=638866293270600000",
-  productUrl: "https://loja.swift.com.br/fettuccine-com-peito-de-peru-e-brocolis-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/fettuccine-com-peito-de-peru-e-brocolis-swift-350g/p",
+  popularity: 232
  },
  {
   sku: "swift-1968",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214222/617458-pernil-suino-temperado-ja-pro-forno_rec.jpg?v=639063340996700000",
-  productUrl: "https://loja.swift.com.br/pernil-suino-temperado-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pernil-suino-temperado-ja-pro-forno-swift-kg/p",
+  popularity: 233
  },
  {
   sku: "swift-1032",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208373/617401-pao-bolinha-com-catupiry_rec.jpg?v=638865522616430000",
-  productUrl: "https://loja.swift.com.br/pao-bolinha-com-catupiry-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-bolinha-com-catupiry-swift-300g/p",
+  popularity: 234
  },
  {
   sku: "swift-896",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209403/617346-linguica-de-pernil-com-provolone_inn.jpg?v=638888855856830000",
-  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-provolone-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-provolone-swift-500g/p",
+  popularity: 235
  },
  {
   sku: "swift-2605",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214428/617249-baby-picanha-ponta_inn.jpg?v=639070169335930000",
-  productUrl: "https://loja.swift.com.br/baby-picanha-ponta-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/baby-picanha-ponta-swift-kg/p",
+  popularity: 236
  },
  {
   sku: "swift-849",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209062/617293-linguica-tipo-calabresa-fina_inn.jpg?v=638881876802000000",
-  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-fina-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-tipo-calabresa-fina-swift-500g/p",
+  popularity: 237
  },
  {
   sku: "swift-846",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209400/617288-linguica-de-pernil-com-alho_inn.jpg?v=638888841668200000",
-  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-alho-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-alho-swift-500g/p",
+  popularity: 238
  },
  {
   sku: "swift-844",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208439/617284-linguica-toscana-fina_inn.jpg?v=638866374429470000",
-  productUrl: "https://loja.swift.com.br/linguica-toscana-fina-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-toscana-fina-swift-500g/p",
+  popularity: 239
  },
  {
   sku: "swift-841",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209436/617278-linguica-fina-de-pernil-apimentada_inn.jpg?v=638889631388600000",
-  productUrl: "https://loja.swift.com.br/linguica-fina-de-pernil-apimentada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-fina-de-pernil-apimentada-swift-500g/p",
+  popularity: 240
  },
  {
   sku: "swift-827",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados pescada",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207471/617101-file-de-pescada_inn.jpg?v=638847395238670000",
-  productUrl: "https://loja.swift.com.br/file-de-pescada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-pescada-swift-500g/p",
+  popularity: 241
  },
  {
   sku: "swift-1538",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214040/617075-panceta-suina-gourmet--temperada-sulita_inn.jpg?v=639062609794570000",
-  productUrl: "https://loja.swift.com.br/panceta-suina-temperada-kg/p"
+  productUrl: "https://loja.swift.com.br/panceta-suina-temperada-kg/p",
+  popularity: 242
  },
  {
   sku: "swift-457",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213216/616097-bife-de-figado_inn.jpg?v=639016857244300000",
-  productUrl: "https://loja.swift.com.br/bife-de-figado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-figado-swift-kg/p",
+  popularity: 243
  },
  {
   sku: "swift-442",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218679/615535-centro-de-file-mignon-swift-legado-1855_inn.jpg?v=639219590683130000",
-  productUrl: "https://loja.swift.com.br/centro-de-file-mignon-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/centro-de-file-mignon-swift-legado-1855-kg/p",
+  popularity: 244
  },
  {
   sku: "swift-436",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213198/615481-contrafile_inn.jpg?v=639016710010230000",
-  productUrl: "https://loja.swift.com.br/contrafile-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/contrafile-swift-kg/p",
+  popularity: 245
  },
  {
   sku: "swift-288",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208367/616921-file-de-salmao-premium_inn.jpg?v=638865506353100000",
-  productUrl: "https://loja.swift.com.br/file-de-salmao-premium-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/file-de-salmao-premium-swift-900g/p",
+  popularity: 246
  },
  {
   sku: "swift-282",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211227/617014-asa-de-frango_inn.jpg?v=638957080351130000",
-  productUrl: "https://loja.swift.com.br/asa-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/asa-de-frango-swift-1kg/p",
+  popularity: 247
  },
  {
   sku: "swift-180",
@@ -2483,7 +2730,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais champignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211117/616533-champignon-fatiado_inn.jpg?v=638953543454970000",
-  productUrl: "https://loja.swift.com.br/champignon-fatiado-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/champignon-fatiado-swift-300g/p",
+  popularity: 248
  },
  {
   sku: "swift-158",
@@ -2493,7 +2741,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207958/616472-mandioca-pre-cozida_rec.jpg?v=638852416737330000",
-  productUrl: "https://loja.swift.com.br/mandioca-pacote-600g-1/p"
+  productUrl: "https://loja.swift.com.br/mandioca-pacote-600g-1/p",
+  popularity: 249
  },
  {
   sku: "swift-154",
@@ -2503,7 +2752,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208630/616444-mousse-de-chocolate-ao-leite_rec.jpg?v=638869805807870000",
-  productUrl: "https://loja.swift.com.br/mousse-de-chocolate-ao-leite-swift-80g/p"
+  productUrl: "https://loja.swift.com.br/mousse-de-chocolate-ao-leite-swift-80g/p",
+  popularity: 250
  },
  {
   sku: "swift-107",
@@ -2513,7 +2763,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212840/616182-cerveja-barril-heineken_mck.jpg?v=639005574859230000",
-  productUrl: "https://loja.swift.com.br/cerveja-barril-heineken-5litros/p"
+  productUrl: "https://loja.swift.com.br/cerveja-barril-heineken-5litros/p",
+  popularity: 251
  },
  {
   sku: "swift-88",
@@ -2523,7 +2774,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216938/616095-tiras-de-file-mignon-para-strogonoff_rec.jpg?v=639147957022230000",
-  productUrl: "https://loja.swift.com.br/tiras-de-file-mignon-para-strogonoff-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-file-mignon-para-strogonoff-swift-500g/p",
+  popularity: 252
  },
  {
   sku: "swift-37",
@@ -2533,7 +2785,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211374/615742-filezinho-sassami-seara_inn.jpg?v=638966713993830000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-seara-1kg/p",
+  popularity: 253
  },
  {
   sku: "swift-34",
@@ -2543,7 +2796,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212631/615728-costela-suina-com-molho-barbecue-seara_inn.jpg?v=639002145270770000",
-  productUrl: "https://loja.swift.com.br/costela-suina-com-molho-barbecue-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-com-molho-barbecue-seara-1kg/p",
+  popularity: 254
  },
  {
   sku: "swift-26",
@@ -2553,7 +2807,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209562/615551-bacalhau-desfiado-dessalgado_inn.jpg?v=638893244294600000",
-  productUrl: "https://loja.swift.com.br/bacalhau-desfiado-dessalgado-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/bacalhau-desfiado-dessalgado-swift-500g/p",
+  popularity: 255
  },
  {
   sku: "swift-1051",
@@ -2563,7 +2818,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213875/102349-hamburguer-bovino_inn.jpg?v=639051123579570000",
-  productUrl: "https://loja.swift.com.br/hamburguer-bovino-caixa-672g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-bovino-caixa-672g/p",
+  popularity: 256
  },
  {
   sku: "swift-7899",
@@ -2573,7 +2829,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218141/624050-filezinho-sassami-combo_mck.jpg?v=639199178910130000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-combo-kg/p",
+  popularity: 257
  },
  {
   sku: "swift-7881",
@@ -2583,7 +2840,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217439/624134-hamburguer-de-toscana-premium-aurora_mck.jpg?v=639168882489870000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-toscana-premium-aurora-150g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-toscana-premium-aurora-150g/p",
+  popularity: 258
  },
  {
   sku: "swift-7847",
@@ -2593,7 +2851,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216078/624067-molho-de-tomate-tradicional-salsaretti_mck.jpg?v=639122919613500000",
-  productUrl: "https://loja.swift.com.br/molho-de-tomate-tradicional-salsaretti-300g/p"
+  productUrl: "https://loja.swift.com.br/molho-de-tomate-tradicional-salsaretti-300g/p",
+  popularity: 259
  },
  {
   sku: "swift-7813",
@@ -2603,7 +2862,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216043/623814-sobrecoxa-com-mostarda-e-mel-com-batatas-e-arroz-swift-prato-feito_rec.jpg?v=639119450313200000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-com-mostarda-e-mel-com-batatas-e-arroz-swift-prato-feito-300g/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-com-mostarda-e-mel-com-batatas-e-arroz-swift-prato-feito-300g/p",
+  popularity: 260
  },
  {
   sku: "swift-7807",
@@ -2613,7 +2873,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos frios e embutidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218131/623646-queijo-sabor-cheddar-fatiado_inn.jpg?v=639198972300200000",
-  productUrl: "https://loja.swift.com.br/queijo-sabor-cheddar-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/queijo-sabor-cheddar-swift-200g/p",
+  popularity: 261
  },
  {
   sku: "swift-7757",
@@ -2623,7 +2884,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao mole",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216940/623966-coxao-mole-combo_inn.jpg?v=639147962091100000",
-  productUrl: "https://loja.swift.com.br/coxao-mole-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/coxao-mole-combo-kg/p",
+  popularity: 262
  },
  {
   sku: "swift-7756",
@@ -2633,7 +2895,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216942/623967-patinho-combo_inn.jpg?v=639147965379430000",
-  productUrl: "https://loja.swift.com.br/patinho-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/patinho-combo-kg/p",
+  popularity: 263
  },
  {
   sku: "swift-7725",
@@ -2643,7 +2906,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mistura de legumes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217372/623579-mistura-japonesa-daucy_mck.jpg?v=639167048646900000",
-  productUrl: "https://loja.swift.com.br/mistura-japonesa-daucy-1kg/p"
+  productUrl: "https://loja.swift.com.br/mistura-japonesa-daucy-1kg/p",
+  popularity: 264
  },
  {
   sku: "swift-7724",
@@ -2653,7 +2917,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas manga",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216446/623887-manga-em-cubos_inn.jpg?v=639131621852000000",
-  productUrl: "https://loja.swift.com.br/manga-em-cubos-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/manga-em-cubos-swift-300g/p",
+  popularity: 265
  },
  {
   sku: "swift-7719",
@@ -2663,7 +2928,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217111/623783-pastel-de-nata_rec.jpg?v=639153380116000000",
-  productUrl: "https://loja.swift.com.br/pastel-de-nata-swift-360g/p"
+  productUrl: "https://loja.swift.com.br/pastel-de-nata-swift-360g/p",
+  popularity: 266
  },
  {
   sku: "swift-7717",
@@ -2673,7 +2939,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216717/623881-manteiga-premium-com-sal_mck.jpg?v=639142823178670000",
-  productUrl: "https://loja.swift.com.br/manteiga-premium-com-sal-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/manteiga-premium-com-sal-swift-200g/p",
+  popularity: 267
  },
  {
   sku: "swift-7718",
@@ -2683,7 +2950,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doce de leite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216718/623880-doce-de-leite-tipo-argentino_mck.jpg?v=639142826896800000",
-  productUrl: "https://loja.swift.com.br/doce-de-leite-tipo-argentino-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-leite-tipo-argentino-swift-400g/p",
+  popularity: 268
  },
  {
   sku: "swift-7716",
@@ -2693,7 +2961,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doce de leite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216719/623879-doce-de-leite_mck.jpg?v=639142827793300000",
-  productUrl: "https://loja.swift.com.br/doce-de-leite-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-leite-swift-400g/p",
+  popularity: 269
  },
  {
   sku: "swift-7696",
@@ -2703,7 +2972,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214068/623734-feijao-preto_mck.jpg?v=639058069416870000",
-  productUrl: "https://loja.swift.com.br/feijao-preto-swit-1kg/p"
+  productUrl: "https://loja.swift.com.br/feijao-preto-swit-1kg/p",
+  popularity: 270
  },
  {
   sku: "swift-7694",
@@ -2713,7 +2983,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214065/623736-arroz-branco_mck.jpg?v=639058062471600000",
-  productUrl: "https://loja.swift.com.br/arroz-branco-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/arroz-branco-swift-1kg/p",
+  popularity: 271
  },
  {
   sku: "swift-7187",
@@ -2723,7 +2994,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213927/623678-esfiha-de-queijo_rec.jpg?v=639051367902170000",
-  productUrl: "https://loja.swift.com.br/esfiha-de-queijo-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/esfiha-de-queijo-swift-300g/p",
+  popularity: 272
  },
  {
   sku: "swift-7184",
@@ -2733,7 +3005,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213512/623730-esfiha-de-carne_rec.jpg?v=639027033776770000",
-  productUrl: "https://loja.swift.com.br/esfiha-de-carne-swift-360g/p"
+  productUrl: "https://loja.swift.com.br/esfiha-de-carne-swift-360g/p",
+  popularity: 273
  },
  {
   sku: "swift-7134",
@@ -2743,7 +3016,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217442/623656-leite-integral-ninho-nestle_mck.jpg?v=639168961379900000",
-  productUrl: "https://loja.swift.com.br/leite-integral-ninho-nestle-1l/p"
+  productUrl: "https://loja.swift.com.br/leite-integral-ninho-nestle-1l/p",
+  popularity: 274
  },
  {
   sku: "swift-7105",
@@ -2753,7 +3027,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais champignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214364/623361-shimeji_inn.jpg?v=639065266660100000",
-  productUrl: "https://loja.swift.com.br/shimeji-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/shimeji-swift-300g/p",
+  popularity: 275
  },
  {
   sku: "swift-7099",
@@ -2763,7 +3038,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212653/623215-fricasse-de-frango_mck.jpg?v=639002832295230000",
-  productUrl: "https://loja.swift.com.br/fricasse-de-frango-swift-300g-1/p"
+  productUrl: "https://loja.swift.com.br/fricasse-de-frango-swift-300g-1/p",
+  popularity: 276
  },
  {
   sku: "swift-7063",
@@ -2773,7 +3049,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213736/623236-creme-de-ervilha-com-calabresa_rec.jpg?v=639041703608270000",
-  productUrl: "https://loja.swift.com.br/creme-de-ervilha-com-calabresa-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-ervilha-com-calabresa-swift-350g/p",
+  popularity: 277
  },
  {
   sku: "swift-7009",
@@ -2783,7 +3060,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais milho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211292/623225-milho-verde-meia-espiga_inn.jpg?v=638963217358970000",
-  productUrl: "https://loja.swift.com.br/milho-verde-meia-espiga-swift/p"
+  productUrl: "https://loja.swift.com.br/milho-verde-meia-espiga-swift/p",
+  popularity: 278
  },
  {
   sku: "swift-6930",
@@ -2793,7 +3071,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais batata",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218073/623202-batata-em-cubos_inn.jpg?v=639198239001300000",
-  productUrl: "https://loja.swift.com.br/batata-em-cubos-swift/p"
+  productUrl: "https://loja.swift.com.br/batata-em-cubos-swift/p",
+  popularity: 279
  },
  {
   sku: "swift-6915",
@@ -2803,7 +3082,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212090/623313-file-de-abadejo-sem-pele_inn.jpg?v=638990141859630000",
-  productUrl: "https://loja.swift.com.br/file-de-abadejo-sem-pele-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-abadejo-sem-pele-swift-500g/p",
+  popularity: 280
  },
  {
   sku: "swift-6865",
@@ -2813,7 +3093,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211074/623206-dadinho-de-tapioca-nuu_mck.jpg?v=638950335171500000",
-  productUrl: "https://loja.swift.com.br/dadinho-de-tapioca-nuu-300g/p"
+  productUrl: "https://loja.swift.com.br/dadinho-de-tapioca-nuu-300g/p",
+  popularity: 281
  },
  {
   sku: "swift-7007",
@@ -2823,7 +3104,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218653/623212-costela-suina-frimesa_inn.jpg?v=639217273789270000",
-  productUrl: "https://loja.swift.com.br/costela-suina-frimesa-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-frimesa-kg/p",
+  popularity: 282
  },
  {
   sku: "swift-6840",
@@ -2833,7 +3115,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211295/623140-brownie-de-chocolate-com-nozes-mr-bey_rec.jpg?v=638963252535530000",
-  productUrl: "https://loja.swift.com.br/brownie-de-chocolate-com-nozes-mr-bey-140g/p"
+  productUrl: "https://loja.swift.com.br/brownie-de-chocolate-com-nozes-mr-bey-140g/p",
+  popularity: 283
  },
  {
   sku: "swift-6811",
@@ -2843,7 +3126,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211893/622939-lasanha-de-4-queijos_mck.jpg?v=638984695398570000",
-  productUrl: "https://loja.swift.com.br/lasanha-de-4-queijos-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-de-4-queijos-swift-600g/p",
+  popularity: 284
  },
  {
   sku: "swift-6810",
@@ -2853,7 +3137,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210876/622940-lasanha-de-4-queijos_rec.jpg?v=638941483580530000",
-  productUrl: "https://loja.swift.com.br/lasanha-de-4-queijos-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-de-4-queijos-swift-350g/p",
+  popularity: 285
  },
  {
   sku: "swift-6941",
@@ -2863,7 +3148,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218688/623092-picanha-ponta-swift-legado-1855_inn.jpg?v=639219612501130000",
-  productUrl: "https://loja.swift.com.br/picanha-ponta-baby-swift-legado-1855-kg-1/p"
+  productUrl: "https://loja.swift.com.br/picanha-ponta-baby-swift-legado-1855-kg-1/p",
+  popularity: 286
  },
  {
   sku: "swift-6944",
@@ -2873,7 +3159,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218095/623089-chorizo-swift-legado-1855_inn.jpg?v=639198263533970000",
-  productUrl: "https://loja.swift.com.br/chorizo-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/chorizo-swift-legado-1855-kg/p",
+  popularity: 287
  },
  {
   sku: "swift-6722",
@@ -2883,7 +3170,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207344/622924-ravioli-de-mozzarella-de-bufala-spoleto_rec.jpg?v=638842343022130000",
-  productUrl: "https://loja.swift.com.br/ravioli-de-mozzarella-de-bufala-spoleto-400g/p"
+  productUrl: "https://loja.swift.com.br/ravioli-de-mozzarella-de-bufala-spoleto-400g/p",
+  popularity: 288
  },
  {
   sku: "swift-6721",
@@ -2893,7 +3181,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208243/622932-batata-airfryer-crinkle-mccain_rec.jpg?v=638860481347370000",
-  productUrl: "https://loja.swift.com.br/batata-airfryer-crinkle-mccain-500g/p"
+  productUrl: "https://loja.swift.com.br/batata-airfryer-crinkle-mccain-500g/p",
+  popularity: 289
  },
  {
   sku: "swift-6711",
@@ -2903,7 +3192,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207275/622956-suco-de-laranja-natural-one_mck.jpg?v=638841219122200000",
-  productUrl: "https://loja.swift.com.br/suco-de-laranja-natural-one-900-ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-laranja-natural-one-900-ml/p",
+  popularity: 290
  },
  {
   sku: "swift-6684",
@@ -2913,7 +3203,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207820/622891-pao-de-alho-bolinha_rec.jpg?v=638851820937400000",
-  productUrl: "https://loja.swift.com.br/pao-de-alho-bolinha-zinho-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-alho-bolinha-zinho-300g/p",
+  popularity: 291
  },
  {
   sku: "swift-6614",
@@ -2923,7 +3214,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211874/622810-pipoquinha-de-pao-de-queijo-nuu_rec.jpg?v=638981418705400000",
-  productUrl: "https://loja.swift.com.br/pipoquinha-de-pao-de-queijo-nuu-300g/p"
+  productUrl: "https://loja.swift.com.br/pipoquinha-de-pao-de-queijo-nuu-300g/p",
+  popularity: 292
  },
  {
   sku: "swift-6534",
@@ -2933,7 +3225,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212030/622747-chipa_rec.jpg?v=638987425688700000",
-  productUrl: "https://loja.swift.com.br/chipa-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/chipa-swift-400g/p",
+  popularity: 293
  },
  {
   sku: "swift-6716",
@@ -2943,7 +3236,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207491/622729-coracao-bovino_inn.jpg?v=638847521818170000",
-  productUrl: "https://loja.swift.com.br/coracao-bovino-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/coracao-bovino-swift-kg/p",
+  popularity: 294
  },
  {
   sku: "swift-6419",
@@ -2953,7 +3247,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209273/622683-mousse-de-maracuja_rec.jpg?v=638884596749770000",
-  productUrl: "https://loja.swift.com.br/mousse-de-maracuja-swift-80g/p"
+  productUrl: "https://loja.swift.com.br/mousse-de-maracuja-swift-80g/p",
+  popularity: 295
  },
  {
   sku: "swift-6376",
@@ -2963,7 +3258,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais ervilha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211808/622613-ervilha_inn.jpg?v=638980574313670000",
-  productUrl: "https://loja.swift.com.br/ervilha-swift-102kg/p"
+  productUrl: "https://loja.swift.com.br/ervilha-swift-102kg/p",
+  popularity: 296
  },
  {
   sku: "swift-6334",
@@ -2973,7 +3269,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208244/622530-coca-cola-garrafa_mck.jpg?v=638862948323200000",
-  productUrl: "https://loja.swift.com.br/coca-cola-garrafa-2l/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-garrafa-2l/p",
+  popularity: 297
  },
  {
   sku: "swift-6311",
@@ -2983,7 +3280,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia azeite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207183/622474-azeite-extra-virgem_mck.jpg?v=638838896083400000",
-  productUrl: "https://loja.swift.com.br/azeite-extra-virgem-gallo-500ml/p"
+  productUrl: "https://loja.swift.com.br/azeite-extra-virgem-gallo-500ml/p",
+  popularity: 298
  },
  {
   sku: "swift-6273",
@@ -2993,7 +3291,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209102/622110-milanesa-de-frango-individual-seara_rec.jpg?v=638882036133370000",
-  productUrl: "https://loja.swift.com.br/milanesa-de-frango-individual-seara-100g/p"
+  productUrl: "https://loja.swift.com.br/milanesa-de-frango-individual-seara-100g/p",
+  popularity: 299
  },
  {
   sku: "swift-6258",
@@ -3003,7 +3302,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211715/622397-torta-de-frango-com-requeijao_rec.jpg?v=638978867565230000",
-  productUrl: "https://loja.swift.com.br/torta-de-frango-com-requeijao-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/torta-de-frango-com-requeijao-swift-400g/p",
+  popularity: 300
  },
  {
   sku: "swift-6235",
@@ -3013,7 +3313,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211005/622381-torta-de-maca-125_rec.jpg?v=638944104994200000",
-  productUrl: "https://loja.swift.com.br/torta-de-maca-swift-125g/p"
+  productUrl: "https://loja.swift.com.br/torta-de-maca-swift-125g/p",
+  popularity: 301
  },
  {
   sku: "swift-6233",
@@ -3023,7 +3324,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves moela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216049/622371-moela-de-frango_inn.jpg?v=639119539738830000",
-  productUrl: "https://loja.swift.com.br/moela-de-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/moela-de-frango-swift-1kg/p",
+  popularity: 302
  },
  {
   sku: "swift-6302",
@@ -3033,7 +3335,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216287/622310-peito-bovino-combo_inn.jpg?v=639129201117330000",
-  productUrl: "https://loja.swift.com.br/peito-bovino-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/peito-bovino-combo-kg/p",
+  popularity: 303
  },
  {
   sku: "swift-6163",
@@ -3043,7 +3346,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos pao de queijo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/199976/622053-PALITO-TAPIOCA-SWIFT-300G-IMGP6509---2-.jpg?v=638566745280500000",
-  productUrl: "https://loja.swift.com.br/palitinho-de-tapioca-nuu-300g/p"
+  productUrl: "https://loja.swift.com.br/palitinho-de-tapioca-nuu-300g/p",
+  popularity: 304
  },
  {
   sku: "swift-6101",
@@ -3053,7 +3357,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217874/622200-camarao-descascado-costa-sul_inn.jpg?v=639190380489470000",
-  productUrl: "https://loja.swift.com.br/camarao-descascado-costa-sul-400g/p"
+  productUrl: "https://loja.swift.com.br/camarao-descascado-costa-sul-400g/p",
+  popularity: 305
  },
  {
   sku: "swift-6010",
@@ -3063,7 +3368,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pizzas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215709/616874-pizza-calabresa-seara-inteira_rec.jpg?v=639107439420330000",
-  productUrl: "https://loja.swift.com.br/pizza-calabresa-seara-460g/p"
+  productUrl: "https://loja.swift.com.br/pizza-calabresa-seara-460g/p",
+  popularity: 306
  },
  {
   sku: "swift-5824",
@@ -3073,7 +3379,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212024/622076-pernil-suino-desfiado-temperado_inn.jpg?v=638987422235570000",
-  productUrl: "https://loja.swift.com.br/pernil-suino-desfiado-temperado-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/pernil-suino-desfiado-temperado-swift-400g/p",
+  popularity: 307
  },
  {
   sku: "swift-5797",
@@ -3083,7 +3390,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216869/622074-bolinho-de-bacalhau-pre-frito_rec.jpg?v=639144486627470000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-bacalhau-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-bacalhau-pre-frito-swift-300g/p",
+  popularity: 308
  },
  {
   sku: "swift-5786",
@@ -3093,7 +3401,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213916/622062-feijao-tropeiro_rec.jpg?v=639051235195900000",
-  productUrl: "https://loja.swift.com.br/feijao-tropeiro-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/feijao-tropeiro-swift-500g/p",
+  popularity: 309
  },
  {
   sku: "swift-5784",
@@ -3103,7 +3412,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215483/622060-baiao-de-dois_rec.jpg?v=639102238356600000",
-  productUrl: "https://loja.swift.com.br/baiao-de-dois-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/baiao-de-dois-swift-500g/p",
+  popularity: 310
  },
  {
   sku: "swift-5669",
@@ -3113,7 +3423,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217021/621969-banha-suina_inn.jpg?v=639149911237270000",
-  productUrl: "https://loja.swift.com.br/banha-suina-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/banha-suina-swift-400g/p",
+  popularity: 311
  },
  {
   sku: "swift-5639",
@@ -3123,7 +3434,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213910/621916-creme-de-milho_rec.jpg?v=639051192912800000",
-  productUrl: "https://loja.swift.com.br/creme-de-milho-swift-210g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-milho-swift-210g/p",
+  popularity: 312
  },
  {
   sku: "swift-5791",
@@ -3133,7 +3445,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208385/621928-picanha-suina-grill_inn.jpg?v=638865600173800000",
-  productUrl: "https://loja.swift.com.br/picanha-suina-grill-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-suina-grill-swift-kg/p",
+  popularity: 313
  },
  {
   sku: "swift-5647",
@@ -3143,7 +3456,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218134/621996-file-mignon-combo_inn.jpg?v=639198974181500000",
-  productUrl: "https://loja.swift.com.br/file-mignon-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-combo-kg/p",
+  popularity: 314
  },
  {
   sku: "swift-5547",
@@ -3153,7 +3467,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209671/621905-file-de-peito-organico-seara_inn.jpg?v=638894899918570000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-organico-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-organico-seara-600g/p",
+  popularity: 315
  },
  {
   sku: "swift-5509",
@@ -3163,7 +3478,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos carne de bananinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215235/621430-bananinha_inn.jpg?v=639095478760300000",
-  productUrl: "https://loja.swift.com.br/bananinha-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bananinha-swift-1kg/p",
+  popularity: 316
  },
  {
   sku: "swift-5269",
@@ -3173,7 +3489,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207977/621700-empanada-de-carne_rec.jpg?v=638852472496900000",
-  productUrl: "https://loja.swift.com.br/empanada-de-carne-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/empanada-de-carne-swift-240g/p",
+  popularity: 317
  },
  {
   sku: "swift-4929",
@@ -3183,7 +3500,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209315/621537-creme-de-palmito_rec.jpg?v=638887060092330000",
-  productUrl: "https://loja.swift.com.br/creme-de-palmito-swift-320g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-palmito-swift-320g/p",
+  popularity: 318
  },
  {
   sku: "swift-4831",
@@ -3193,7 +3511,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209521/621352-cebola-alho-e-salsa_inn.jpg?v=638893100024670000",
-  productUrl: "https://loja.swift.com.br/cebola-alho-e-salsa-swift-85g/p"
+  productUrl: "https://loja.swift.com.br/cebola-alho-e-salsa-swift-85g/p",
+  popularity: 319
  },
  {
   sku: "swift-4806",
@@ -3203,7 +3522,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217029/621394-cubos-de-costela-dianteiro_inn.jpg?v=639149914095100000",
-  productUrl: "https://loja.swift.com.br/cubos-de-costela-dianteiro-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/cubos-de-costela-dianteiro-swift-1kg/p",
+  popularity: 320
  },
  {
   sku: "swift-4759",
@@ -3213,7 +3533,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211139/621424-pao-frances-integral_rec.jpg?v=638953582736200000",
-  productUrl: "https://loja.swift.com.br/pao-frances-integral-swift-210g/p"
+  productUrl: "https://loja.swift.com.br/pao-frances-integral-swift-210g/p",
+  popularity: 321
  },
  {
   sku: "swift-4741",
@@ -3223,7 +3544,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209539/621331-lemon-pepper_inn.jpg?v=638893141861400000",
-  productUrl: "https://loja.swift.com.br/lemon-pepper-swift-90g/p"
+  productUrl: "https://loja.swift.com.br/lemon-pepper-swift-90g/p",
+  popularity: 322
  },
  {
   sku: "swift-4728",
@@ -3233,7 +3555,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salada de maionese",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209476/621382-salada-de-maionese-com-frango-e-legumes_inn.jpg?v=638890574656400000",
-  productUrl: "https://loja.swift.com.br/salada-de-maionese-com-frango-e-legumes-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/salada-de-maionese-com-frango-e-legumes-swift-300g/p",
+  popularity: 323
  },
  {
   sku: "swift-4635",
@@ -3243,7 +3566,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ovos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214722/621324-ovo-vermelho-mantiqueira_mck.jpg?v=639080614722430000",
-  productUrl: "https://loja.swift.com.br/ovo-vermelho-mantiqueira-20-und/p"
+  productUrl: "https://loja.swift.com.br/ovo-vermelho-mantiqueira-20-und/p",
+  popularity: 324
  },
  {
   sku: "swift-4610",
@@ -3253,7 +3577,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209194/621217-jerked-beef_inn.jpg?v=638883628256970000",
-  productUrl: "https://loja.swift.com.br/jerked-beef-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/jerked-beef-swift-400g/p",
+  popularity: 325
  },
  {
   sku: "swift-4520",
@@ -3263,7 +3588,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209766/621126-pao-com-queijo-provolone_rec.jpg?v=638896557484130000",
-  productUrl: "https://loja.swift.com.br/pao-recheado-queijo-provolone-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/pao-recheado-queijo-provolone-swift-300g/p",
+  popularity: 326
  },
  {
   sku: "swift-4509",
@@ -3273,7 +3599,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ossobuco",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214695/621115-osso-tutano_inn.jpg?v=639078034499300000",
-  productUrl: "https://loja.swift.com.br/osso-tutano-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/osso-tutano-swift-kg/p",
+  popularity: 327
  },
  {
   sku: "swift-4357",
@@ -3283,7 +3610,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209124/621113-tiras-de-file-de-peixe-empanado_1.jpg?v=638882048288830000",
-  productUrl: "https://loja.swift.com.br/tiras-file-de-peixe-empanado-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/tiras-file-de-peixe-empanado-swift-300g/p",
+  popularity: 328
  },
  {
   sku: "swift-4311",
@@ -3293,7 +3621,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209525/621107-alho-frito_inn.jpg?v=638893110762800000",
-  productUrl: "https://loja.swift.com.br/alho-frito-swift-65g/p"
+  productUrl: "https://loja.swift.com.br/alho-frito-swift-65g/p",
+  popularity: 329
  },
  {
   sku: "swift-4188",
@@ -3303,7 +3632,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209222/620605-linguica-de-pernil-com-queijo-gorgonzola_inn.jpg?v=638883806004970000",
-  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-queijo-gorgonzola-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-pernil-com-queijo-gorgonzola-swift-500g/p",
+  popularity: 330
  },
  {
   sku: "swift-4153",
@@ -3313,7 +3643,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214643/620584-jerked-suino-seara_inn.jpg?v=639077071945300000",
-  productUrl: "https://loja.swift.com.br/jerked-suino-seara-400g/p"
+  productUrl: "https://loja.swift.com.br/jerked-suino-seara-400g/p",
+  popularity: 331
  },
  {
   sku: "swift-4035",
@@ -3323,7 +3654,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/190452/620031_HEINEKEN-269ML.jpg?v=638224505418430000",
-  productUrl: "https://loja.swift.com.br/cerveja-heineken-269ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-heineken-269ml/p",
+  popularity: 332
  },
  {
   sku: "swift-3814",
@@ -3333,7 +3665,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214573/619150-file-coxa-e-sobrecoxa-temperado_inn.jpg?v=639075583618300000",
-  productUrl: "https://loja.swift.com.br/file-coxa-e-sobrecoxa-temperado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-coxa-e-sobrecoxa-temperado-swift-1kg/p",
+  popularity: 333
  },
  {
   sku: "swift-3783",
@@ -3343,7 +3676,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208621/619244-caldo-de-legumes_rec.jpg?v=638869798061470000",
-  productUrl: "https://loja.swift.com.br/caldo-de-legumes-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-legumes-swift-350g/p",
+  popularity: 334
  },
  {
   sku: "swift-3650",
@@ -3353,7 +3687,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209197/619048-meio-da-asa-com-molho-barbecue-swift-grill_inn.jpg?v=638883637360630000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-com-molho-barbecue-swift-grill-800g/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-com-molho-barbecue-swift-grill-800g/p",
+  popularity: 335
  },
  {
   sku: "swift-3649",
@@ -3363,7 +3698,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209878/619057-coxinha-da-asa-buffalo-wings_inn.jpg?v=638900933810600000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-buffalo-wings-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-buffalo-wings-swift-800g/p",
+  popularity: 336
  },
  {
   sku: "swift-3592",
@@ -3373,7 +3709,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco espetinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218643/618928-espetinho-suino-innatura.jpg?v=639217234005630000",
-  productUrl: "https://loja.swift.com.br/espetinho-suino-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-suino-swift-900g/p",
+  popularity: 337
  },
  {
   sku: "swift-3526",
@@ -3383,7 +3720,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209144/618912-anel-de-cebola_rec.jpg?v=638882755155200000",
-  productUrl: "https://loja.swift.com.br/anel-de-cebola-swift-1-1kg/p"
+  productUrl: "https://loja.swift.com.br/anel-de-cebola-swift-1-1kg/p",
+  popularity: 338
  },
  {
   sku: "swift-3522",
@@ -3393,7 +3731,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218088/618888-fraldinha-sem-gordura-swift-legado-1855_inn.jpg?v=639198252890000000",
-  productUrl: "https://loja.swift.com.br/fraldinha-sem-gordura-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/fraldinha-sem-gordura-legado-1855-kg/p",
+  popularity: 339
  },
  {
   sku: "swift-3427",
@@ -3403,7 +3742,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209206/618725-kani-kama_inn.jpg?v=638883738127630000",
-  productUrl: "https://loja.swift.com.br/kani-kama-swift-250g/p"
+  productUrl: "https://loja.swift.com.br/kani-kama-swift-250g/p",
+  popularity: 340
  },
  {
   sku: "swift-3404",
@@ -3413,7 +3753,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos lagarto",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218638/618742-lagarto-linha-mais_inn.jpg?v=639217189371900000",
-  productUrl: "https://loja.swift.com.br/lagarto-linha-mais-kg/p"
+  productUrl: "https://loja.swift.com.br/lagarto-linha-mais-kg/p",
+  popularity: 341
  },
  {
   sku: "swift-2998",
@@ -3423,7 +3764,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208616/618474-escondidinho-de-carne-moida_rec.jpg?v=638869795895230000",
-  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-com-carne-moida-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-com-carne-moida-swift-350g/p",
+  popularity: 342
  },
  {
   sku: "swift-2960",
@@ -3433,7 +3775,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209549/618442-arroz-carreteiro_rec.jpg?v=638893164559130000",
-  productUrl: "https://loja.swift.com.br/arroz-carreteiro-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/arroz-carreteiro-swift-300g/p",
+  popularity: 343
  },
  {
   sku: "swift-2707",
@@ -3443,7 +3786,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos medalhoes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213900/618368-medalhao-de-file-de-frango-com-bacon_inn.jpg?v=639051150092030000",
-  productUrl: "https://loja.swift.com.br/medalhao-file-de-frango-com-bacon-swift/p"
+  productUrl: "https://loja.swift.com.br/medalhao-file-de-frango-com-bacon-swift/p",
+  popularity: 344
  },
  {
   sku: "swift-2630",
@@ -3453,7 +3797,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pizzas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207855/618284-pizza-artesanal-de-mussarela_rec.jpg?v=638851842154900000",
-  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-mussarela-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-mussarela-swift-400g/p",
+  popularity: 345
  },
  {
   sku: "swift-2111",
@@ -3463,7 +3808,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207708/618252-camarao_empanado_inn.jpg?v=638851772006600000",
-  productUrl: "https://loja.swift.com.br/camarao-empanado-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/camarao-empanado-swift-300g/p",
+  popularity: 346
  },
  {
   sku: "swift-2035",
@@ -3473,7 +3819,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208623/618169-feijoada_rec.jpg?v=638869802766630000",
-  productUrl: "https://loja.swift.com.br/feijoada-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/feijoada-swift-350g/p",
+  popularity: 347
  },
  {
   sku: "swift-1911",
@@ -3483,7 +3830,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos lagarto",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209200/618094-bife-de-lagarto-empanado_inn.jpg?v=638883648770670000",
-  productUrl: "https://loja.swift.com.br/bife-de-lagarto-empanado-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/bife-de-lagarto-empanado-swift-700g/p",
+  popularity: 348
  },
  {
   sku: "swift-1872",
@@ -3493,7 +3841,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pizzas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214216/618062-pizza-de-frango-com-catupiry-seara_rec.jpg?v=639063278128930000",
-  productUrl: "https://loja.swift.com.br/pizza-de-frango-com-catupiry-seara-460g/p"
+  productUrl: "https://loja.swift.com.br/pizza-de-frango-com-catupiry-seara-460g/p",
+  popularity: 349
  },
  {
   sku: "swift-1729",
@@ -3503,7 +3852,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mix de frutas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208715/617907-mix-de-frutas-vermelhas_inn.jpg?v=638870702332670000",
-  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-swift-300g/p",
+  popularity: 350
  },
  {
   sku: "swift-1675",
@@ -3513,7 +3863,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas blueberry",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211129/617913-blueberry-congelados_inn.jpg?v=638953571410030000",
-  productUrl: "https://loja.swift.com.br/blueberry-congelados-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/blueberry-congelados-swift-300g/p",
+  popularity: 351
  },
  {
   sku: "swift-1663",
@@ -3523,7 +3874,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas amora",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209055/617902-amoras-inteiras_inn.jpg?v=638881188103870000",
-  productUrl: "https://loja.swift.com.br/amoras-inteiras-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/amoras-inteiras-swift-300g/p",
+  popularity: 352
  },
  {
   sku: "swift-1831",
@@ -3533,7 +3885,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209391/617876-costela-bafo-swift-gran-reserva_inn.jpg?v=638888797317930000",
-  productUrl: "https://loja.swift.com.br/costela-bafo-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-bafo-swift-gran-reserva-kg/p",
+  popularity: 353
  },
  {
   sku: "swift-1733",
@@ -3543,7 +3896,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207968/617835-picanha-suina-temperada_inn.jpg?v=638852452370800000",
-  productUrl: "https://loja.swift.com.br/picanha-suina-temp-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-suina-temp-swift-kg/p",
+  popularity: 354
  },
  {
   sku: "swift-1488",
@@ -3553,7 +3907,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas espetinho linguica",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208731/617742-espetinho-de-linguica-apimentada_inn.jpg?v=638870717798270000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-linguica-apimentada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-linguica-apimentada-swift-500g/p",
+  popularity: 355
  },
  {
   sku: "swift-1313",
@@ -3563,7 +3918,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213453/617598-file-de-peito-temperado_inn.jpg?v=639023575332470000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-temperado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-temperado-swift-1kg/p",
+  popularity: 356
  },
  {
   sku: "swift-1220",
@@ -3573,7 +3929,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212789/617559-file-de-salmao-premium_inn.jpg?v=639004609338000000",
-  productUrl: "https://loja.swift.com.br/file-de-salmao-premium-swift-650g/p"
+  productUrl: "https://loja.swift.com.br/file-de-salmao-premium-swift-650g/p",
+  popularity: 357
  },
  {
   sku: "swift-1164",
@@ -3583,7 +3940,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208454/617533-torresmo-pre-frito_inn.jpg?v=638866436480030000",
-  productUrl: "https://loja.swift.com.br/torresmo-pre-frito-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/torresmo-pre-frito-swift-500g/p",
+  popularity: 358
  },
  {
   sku: "swift-1147",
@@ -3593,7 +3951,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209620/617524-coxinha-da-asa-swift-do-campo_inn.jpg?v=638894846338070000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-swift-do-campo-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-swift-do-campo-1kg/p",
+  popularity: 359
  },
  {
   sku: "swift-1146",
@@ -3603,7 +3962,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209617/617523-filezinho-sassami-do-campo_inn.jpg?v=638894834880530000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-do-campo-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-do-campo-swift-1kg/p",
+  popularity: 360
  },
  {
   sku: "swift-1694",
@@ -3613,7 +3973,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214121/617459-lombo-suino-temperado-ja-pro-forno_rec.jpg?v=639059793805230000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-ja-pro-forno-swift-kg/p",
+  popularity: 361
  },
  {
   sku: "swift-2768",
@@ -3623,7 +3984,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208449/617457-picanha-suina-ja-pro-forno_rec.jpg?v=638866432411330000",
-  productUrl: "https://loja.swift.com.br/picanha-suina-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-suina-ja-pro-forno-swift-kg/p",
+  popularity: 362
  },
  {
   sku: "swift-1016",
@@ -3633,7 +3995,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207669/617385-tiras-de-pernil-suino_inn.jpg?v=638851746164430000",
-  productUrl: "https://loja.swift.com.br/tiras-de-pernil-suino-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/tiras-de-pernil-suino-swift-500g/p",
+  popularity: 363
  },
  {
   sku: "swift-902",
@@ -3643,7 +4006,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas recheadas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209096/617352-linguica-de-carne-bovina-tipo-cuiabana_inn.jpg?v=638882029059400000",
-  productUrl: "https://loja.swift.com.br/linguica-de-carne-bovina-tipo-cuiabana-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-carne-bovina-tipo-cuiabana-swift-900g/p",
+  popularity: 364
  },
  {
   sku: "swift-901",
@@ -3653,7 +4017,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas recheadas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209394/617351-linguica-de-carne-suina-tipo-cuiabana_inn.jpg?v=638888815570500000",
-  productUrl: "https://loja.swift.com.br/linguica-de-carne-suina-tipo-cuiabana-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-carne-suina-tipo-cuiabana-swift-900g/p",
+  popularity: 365
  },
  {
   sku: "swift-1546",
@@ -3663,7 +4028,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214104/617345-galeto-swift-congelado_inn.jpg?v=639058359344470000",
-  productUrl: "https://loja.swift.com.br/galeto-swift-congelado-kg/p"
+  productUrl: "https://loja.swift.com.br/galeto-swift-congelado-kg/p",
+  popularity: 366
  },
  {
   sku: "swift-887",
@@ -3673,7 +4039,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209362/617247-acai_inn.jpg?v=638887909343570000",
-  productUrl: "https://loja.swift.com.br/acai-swift/p"
+  productUrl: "https://loja.swift.com.br/acai-swift/p",
+  popularity: 367
  },
  {
   sku: "swift-454",
@@ -3683,7 +4050,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ossobuco",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208816/616032-ossobuco_inn.jpg?v=638871646509800000",
-  productUrl: "https://loja.swift.com.br/ossobuco-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/ossobuco-swift-kg/p",
+  popularity: 368
  },
  {
   sku: "swift-441",
@@ -3693,7 +4061,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218067/615526-bombom-de-alcatra-swift-legado-1855_inn.jpg?v=639198178724600000",
-  productUrl: "https://loja.swift.com.br/bombom-de-alcatra-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/bombom-de-alcatra-swift-legado-1855-kg/p",
+  popularity: 369
  },
  {
   sku: "swift-439",
@@ -3703,7 +4072,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos lagarto",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218703/615499-lagarto-sem-pele-swift-legado-1855_inn.jpg?v=639219821946170000",
-  productUrl: "https://loja.swift.com.br/lagarto-sem-pele-swift-legado-1855/p"
+  productUrl: "https://loja.swift.com.br/lagarto-sem-pele-swift-legado-1855/p",
+  popularity: 370
  },
  {
   sku: "swift-432",
@@ -3713,7 +4083,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213195/615439-rabo_inn.jpg?v=639016638937930000",
-  productUrl: "https://loja.swift.com.br/rabo-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/rabo-swift-kg/p",
+  popularity: 371
  },
  {
   sku: "swift-2613",
@@ -3723,7 +4094,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos baby beef",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209869/615398-medalhao-de-baby-beef_inn.jpg?v=638900915241900000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-baby-beef-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-baby-beef-swift-kg/p",
+  popularity: 372
  },
  {
   sku: "swift-287",
@@ -3733,7 +4105,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207648/616907-coxa-de-frango-sem-pele_inn.jpg?v=638851689694430000",
-  productUrl: "https://loja.swift.com.br/coxa-de-frango-sem-pele-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coxa-de-frango-sem-pele-swift-1kg/p",
+  popularity: 373
  },
  {
   sku: "swift-1212",
@@ -3743,7 +4116,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209371/616674-costela-suina-temperada_inn.jpg?v=638887957678170000",
-  productUrl: "https://loja.swift.com.br/costela-suina-temperada-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-temperada-kg/p",
+  popularity: 374
  },
  {
   sku: "swift-2767",
@@ -3753,7 +4127,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209952/616814-panceta-suina-temperada_inn.jpg?v=638901686761130000",
-  productUrl: "https://loja.swift.com.br/panceta-suina-temperada-swift-kg-1/p"
+  productUrl: "https://loja.swift.com.br/panceta-suina-temperada-swift-kg-1/p",
+  popularity: 375
  },
  {
   sku: "swift-1468",
@@ -3763,7 +4138,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212477/616679-file-mignon-suino-temperado_inn.jpg?v=638998707775900000",
-  productUrl: "https://loja.swift.com.br/file-mignon-suino-temperado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-suino-temperado-swift-kg/p",
+  popularity: 376
  },
  {
   sku: "swift-1539",
@@ -3773,7 +4149,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208819/616675-pernil-suino-sem-osso-temperado_inn.jpg?v=638871725360870000",
-  productUrl: "https://loja.swift.com.br/pernil-suino-sem-osso-temperado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pernil-suino-sem-osso-temperado-swift-kg/p",
+  popularity: 377
  },
  {
   sku: "swift-221",
@@ -3783,7 +4160,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209359/616671-mocoto-bovino_inn.jpg?v=638887872038370000",
-  productUrl: "https://loja.swift.com.br/mocoto-bovino-swift-1-3kg/p"
+  productUrl: "https://loja.swift.com.br/mocoto-bovino-swift-1-3kg/p",
+  popularity: 378
  },
  {
   sku: "swift-206",
@@ -3793,7 +4171,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209275/616624-manjuba-inteira_inn.jpg?v=638884609694130000",
-  productUrl: "https://loja.swift.com.br/manjuba-inteira-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/manjuba-inteira-swift-500g/p",
+  popularity: 379
  },
  {
   sku: "swift-134",
@@ -3803,7 +4182,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia farofa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207590/616393-farofa-apimentada_inn.jpg?v=638850964694700000",
-  productUrl: "https://loja.swift.com.br/farofa-apimentada-400g/p"
+  productUrl: "https://loja.swift.com.br/farofa-apimentada-400g/p",
+  popularity: 380
  },
  {
   sku: "swift-120",
@@ -3813,7 +4193,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212865/616283-pudim-de-leite-condensado_rec.jpg?v=639008162288300000",
-  productUrl: "https://loja.swift.com.br/pudim-de-leite-condensado-swift-90g/p"
+  productUrl: "https://loja.swift.com.br/pudim-de-leite-condensado-swift-90g/p",
+  popularity: 381
  },
  {
   sku: "swift-119",
@@ -3823,7 +4204,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213919/616281-petit-gateau-de-chocolate_rec.jpg?v=639051317841400000",
-  productUrl: "https://loja.swift.com.br/petit-gateau-de-chocolate-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/petit-gateau-de-chocolate-swift-240g/p",
+  popularity: 382
  },
  {
   sku: "swift-90",
@@ -3833,7 +4215,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212837/616099-dobradinha_inn.jpg?v=639005562564300000",
-  productUrl: "https://loja.swift.com.br/dobradinha-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/dobradinha-swift-500g/p",
+  popularity: 383
  },
  {
   sku: "swift-48",
@@ -3843,7 +4226,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207581/615777-camarao-pre-cozido-sem-cabeca-60-80-71-90_inn.jpg?v=638850933462130000",
-  productUrl: "https://loja.swift.com.br/camarao-pre-cozido-sem-cabeca-60-80-71-90-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/camarao-pre-cozido-sem-cabeca-60-80-71-90-swift-400g/p",
+  popularity: 384
  },
  {
   sku: "swift-32",
@@ -3853,7 +4237,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207570/615688-kit-paella-lula-camaroes-e-mexilhoes_inn.jpg?v=638850815738470000",
-  productUrl: "https://loja.swift.com.br/kit-paella-lula-camaroes-e-mexilhoes-400g/p"
+  productUrl: "https://loja.swift.com.br/kit-paella-lula-camaroes-e-mexilhoes-400g/p",
+  popularity: 385
  },
  {
   sku: "swift-21",
@@ -3863,7 +4248,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214023/615163-hamburguer-sabor-picanha_inn.jpg?v=639056438497400000",
-  productUrl: "https://loja.swift.com.br/hamburguer-sabor-picanha-swift-480g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-sabor-picanha-swift-480g/p",
+  popularity: 386
  },
  {
   sku: "swift-7926",
@@ -3873,7 +4259,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217641/mockup-pack-suco-de-laranja-180ml_mck.jpg?v=639183342277730000",
-  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-laranja-natural-one-180ml-sp/p"
+  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-laranja-natural-one-180ml-sp/p",
+  popularity: 387
  },
  {
   sku: "swift-7923",
@@ -3883,7 +4270,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217635/mockup-pack-suco-de-uva-180ml_mck.jpg?v=639183328683670000",
-  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-uva-natural-one-180ml-sp/p"
+  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-uva-natural-one-180ml-sp/p",
+  popularity: 388
  },
  {
   sku: "swift-7903",
@@ -3893,7 +4281,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218631/623183-isca-de-tilapia-temperada-empanada_mck.jpg?v=639217017607800000",
-  productUrl: "https://loja.swift.com.br/isca-de-tilapia-temperada-empanada-swift-700g/p"
+  productUrl: "https://loja.swift.com.br/isca-de-tilapia-temperada-empanada-swift-700g/p",
+  popularity: 389
  },
  {
   sku: "swift-7888",
@@ -3903,7 +4292,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mistura de legumes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218751/624132-mistura-4-legumes-imp_mck.jpg?v=639221496652430000",
-  productUrl: "https://loja.swift.com.br/mistura-4-legumes-imp-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/mistura-4-legumes-imp-swift-1-02kg/p",
+  popularity: 390
  },
  {
   sku: "swift-7836",
@@ -3913,7 +4303,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216459/623886-empanada-de-escarola-com-queijo_mck.jpg?v=639131649334270000",
-  productUrl: "https://loja.swift.com.br/empanada-de-escarola-com-queijo-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/empanada-de-escarola-com-queijo-swift-240g/p",
+  popularity: 391
  },
  {
   sku: "swift-7812",
@@ -3923,7 +4314,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218110/623672-tempero-para-batata-frita-heinz_mck.jpg?v=639198360853830000",
-  productUrl: "https://loja.swift.com.br/tempero-para-batata-frita-heinz-70g/p"
+  productUrl: "https://loja.swift.com.br/tempero-para-batata-frita-heinz-70g/p",
+  popularity: 392
  },
  {
   sku: "swift-7731",
@@ -3933,7 +4325,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217358/623377-chocofrut-abacaxi-com-chocolate-branco_inn.jpg?v=639167010948830000",
-  productUrl: "https://loja.swift.com.br/chocofrut-abacaxi-com-chocolate-branco-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/chocofrut-abacaxi-com-chocolate-branco-swift-150g/p",
+  popularity: 393
  },
  {
   sku: "swift-7728",
@@ -3943,7 +4336,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas uva",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217355/623889-uva-verde-sem-semente_inn.jpg?v=639167004964270000",
-  productUrl: "https://loja.swift.com.br/uva-verde-sem-semente-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/uva-verde-sem-semente-swift-300g/p",
+  popularity: 394
  },
  {
   sku: "swift-7726",
@@ -3953,7 +4347,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais vagem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217231/623578-edamame-sem-vagem-daucy_inn.jpg?v=639159984275430000",
-  productUrl: "https://loja.swift.com.br/edamame-sem-vagem-daucy-300g/p"
+  productUrl: "https://loja.swift.com.br/edamame-sem-vagem-daucy-300g/p",
+  popularity: 395
  },
  {
   sku: "swift-7715",
@@ -3963,7 +4358,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216081/623669-mel-silvestre_mck.jpg?v=639123006718430000",
-  productUrl: "https://loja.swift.com.br/mel-silvestre-swift-280g/p"
+  productUrl: "https://loja.swift.com.br/mel-silvestre-swift-280g/p",
+  popularity: 396
  },
  {
   sku: "swift-7695",
@@ -3973,7 +4369,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214069/623735-feijao-carioca_mck.jpg?v=639058071162370000",
-  productUrl: "https://loja.swift.com.br/feijao-carioca-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/feijao-carioca-swift-1kg/p",
+  popularity: 397
  },
  {
   sku: "swift-7673",
@@ -3983,7 +4380,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos queijos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218104/623648-queijo-provolone-fresco-defumado-bola_inn.jpg?v=639198343718830000",
-  productUrl: "https://loja.swift.com.br/queijo-provolone-fresco-defumado-bola-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/queijo-provolone-fresco-defumado-bola-swift-240g/p",
+  popularity: 398
  },
  {
   sku: "swift-7674",
@@ -3993,7 +4391,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos queijos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218125/623647-queijo-mussarela-bolinha_inn.jpg?v=639198953215270000",
-  productUrl: "https://loja.swift.com.br/queijo-mussarela-bolinha-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/queijo-mussarela-bolinha-swift-300g/p",
+  popularity: 399
  },
  {
   sku: "swift-7671",
@@ -4003,7 +4402,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213655/623410-sashimi-de-salmao_inn.jpg?v=639035874439730000",
-  productUrl: "https://loja.swift.com.br/sashimi-de-salmao-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/sashimi-de-salmao-swift-150g/p",
+  popularity: 400
  },
  {
   sku: "swift-7670",
@@ -4013,7 +4413,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216932/623591-harburguer-bovino_inn.jpg?v=639147920892430000",
-  productUrl: "https://loja.swift.com.br/hamburguer-bovino-swift-56g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-bovino-swift-56g/p",
+  popularity: 401
  },
  {
   sku: "swift-7610",
@@ -4023,7 +4424,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217970/623779-focaccia-azeite-tomate-cereja-alecrim-panibrasil_rec.jpg?v=639195572985500000",
-  productUrl: "https://loja.swift.com.br/focaccia-azeitona-tomate-cereja-e-alecrim-panibrasil-300g/p"
+  productUrl: "https://loja.swift.com.br/focaccia-azeitona-tomate-cereja-e-alecrim-panibrasil-300g/p",
+  popularity: 402
  },
  {
   sku: "swift-7608",
@@ -4033,7 +4435,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas recheadas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213930/623463-ragu-de-linguica_rec.jpg?v=639051373881830000",
-  productUrl: "https://loja.swift.com.br/ragu-de-linguica-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/ragu-de-linguica-swift-500g/p",
+  popularity: 403
  },
  {
   sku: "swift-7603",
@@ -4043,7 +4446,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217113/623686-whey-protein-morango-swift-proefit_mck.jpg?v=639153627701100000",
-  productUrl: "https://loja.swift.com.br/whey-protein-morango-swift-proefit-900g/p"
+  productUrl: "https://loja.swift.com.br/whey-protein-morango-swift-proefit-900g/p",
+  popularity: 404
  },
  {
   sku: "swift-7602",
@@ -4053,7 +4457,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217115/623692-whey-protein-chocolate-swift-proefit_mck.jpg?v=639153627885630000",
-  productUrl: "https://loja.swift.com.br/whey-protein-chocolate-swift-proefit-900g/p"
+  productUrl: "https://loja.swift.com.br/whey-protein-chocolate-swift-proefit-900g/p",
+  popularity: 405
  },
  {
   sku: "swift-7581",
@@ -4063,7 +4468,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213992/623260-creme-de-leite-nestle_mck.jpg?v=639053449882170000",
-  productUrl: "https://loja.swift.com.br/creme-de-leite-nestle-200g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-leite-nestle-200g/p",
+  popularity: 406
  },
  {
   sku: "swift-7578",
@@ -4073,7 +4479,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria muffin",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213514/623738-muffin-de-chocolate-com-gotas-de-chocolate-melhor-bocado_rec.jpg?v=639027046735630000",
-  productUrl: "https://loja.swift.com.br/muffin-de-chocolate-com-gotas-de-chocolate-melhor-bocado-80g/p"
+  productUrl: "https://loja.swift.com.br/muffin-de-chocolate-com-gotas-de-chocolate-melhor-bocado-80g/p",
+  popularity: 407
  },
  {
   sku: "swift-7577",
@@ -4083,7 +4490,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria muffin",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213516/623739-muffin-red-velvet-melhor-bocado_rec.jpg?v=639027059122670000",
-  productUrl: "https://loja.swift.com.br/muffin-red-velvet-melhor-bocado-80g/p"
+  productUrl: "https://loja.swift.com.br/muffin-red-velvet-melhor-bocado-80g/p",
+  popularity: 408
  },
  {
   sku: "swift-7191",
@@ -4093,7 +4501,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215328/623358-mini-ciabatta_rec.jpg?v=639099509974000000",
-  productUrl: "https://loja.swift.com.br/mini-ciabatta-swift-410g/p"
+  productUrl: "https://loja.swift.com.br/mini-ciabatta-swift-410g/p",
+  popularity: 409
  },
  {
   sku: "swift-7185",
@@ -4103,7 +4512,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214534/623679-kibe_rec.jpg?v=639074721633500000",
-  productUrl: "https://loja.swift.com.br/kibe-swift-360g/p"
+  productUrl: "https://loja.swift.com.br/kibe-swift-360g/p",
+  popularity: 410
  },
  {
   sku: "swift-7157",
@@ -4113,7 +4523,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216688/623677-pao-com-linguica-suina-e-queijo-mussarela-choripan_mck.jpg?v=639141300777570000",
-  productUrl: "https://loja.swift.com.br/pao-com-linguica-suina-e-queijo-mussarela-choripan-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/pao-com-linguica-suina-e-queijo-mussarela-choripan-swift-350g/p",
+  popularity: 411
  },
  {
   sku: "swift-7067",
@@ -4123,7 +4534,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211558/623475-espaguete-com-ovos-barilla_mck.jpg?v=638973691014000000",
-  productUrl: "https://loja.swift.com.br/espaguete-com-ovos-barilla-500g/p"
+  productUrl: "https://loja.swift.com.br/espaguete-com-ovos-barilla-500g/p",
+  popularity: 412
  },
  {
   sku: "swift-7068",
@@ -4133,7 +4545,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211562/623474-penne-com-ovos-barilla_mck.jpg?v=638973696998200000",
-  productUrl: "https://loja.swift.com.br/penne-com-ovos-barilla-500g/p"
+  productUrl: "https://loja.swift.com.br/penne-com-ovos-barilla-500g/p",
+  popularity: 413
  },
  {
   sku: "swift-7064",
@@ -4143,7 +4556,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213740/623234-creme-de-abobora-com-carne-desfiada_rec.jpg?v=639041709802900000",
-  productUrl: "https://loja.swift.com.br/creme-de-abobora-com-carne-desfiada-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-abobora-com-carne-desfiada-swift-350g/p",
+  popularity: 414
  },
  {
   sku: "swift-7062",
@@ -4153,7 +4567,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213738/623252-creme-de-couve-flor-com-parmesao_rec.jpg?v=639041706084000000",
-  productUrl: "https://loja.swift.com.br/creme-de-couve-flor-com-parmesao-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-couve-flor-com-parmesao-swift-350g/p",
+  popularity: 415
  },
  {
   sku: "swift-7061",
@@ -4163,7 +4578,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211880/623139-tartar-de-salmao_inn.jpg?v=638983789290670000",
-  productUrl: "https://loja.swift.com.br/tartar-de-salmao-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/tartar-de-salmao-swift-200g/p",
+  popularity: 416
  },
  {
   sku: "swift-7060",
@@ -4173,7 +4589,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214642/623315-carne-seca-suina-desfiada_mck.jpg?v=639077068690570000",
-  productUrl: "https://loja.swift.com.br/carne-seca-suina-desfiada-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/carne-seca-suina-desfiada-swift-200g/p",
+  popularity: 417
  },
  {
   sku: "swift-7056",
@@ -4183,7 +4600,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212103/623461-filezinho-sassami-copacol_mck.jpg?v=638990198213870000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-copacol-1kg/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-copacol-1kg/p",
+  popularity: 418
  },
  {
   sku: "swift-6917",
@@ -4193,7 +4611,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218077/623209-escondidinho-de-batata-com-carne-seca-desfiada_mck.jpg?v=639198241772570000",
-  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-com-carne-seca-desfiada-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-com-carne-seca-desfiada-swift-350g/p",
+  popularity: 419
  },
  {
   sku: "swift-6829",
@@ -4203,7 +4622,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211013/623086-queijo-parmesao-cilindro-faixa-azul_mck.jpg?v=638944943404530000",
-  productUrl: "https://loja.swift.com.br/queijo-parmesao-cilindro-faixa-azul-195g/p"
+  productUrl: "https://loja.swift.com.br/queijo-parmesao-cilindro-faixa-azul-195g/p",
+  popularity: 420
  },
  {
   sku: "swift-6814",
@@ -4213,7 +4633,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208280/623129-milho-para-pipoca-da-terrinha-mck.jpg?v=638864531560200000",
-  productUrl: "https://loja.swift.com.br/milho-para-pipoca-da-terrinha-400g/p"
+  productUrl: "https://loja.swift.com.br/milho-para-pipoca-da-terrinha-400g/p",
+  popularity: 421
  },
  {
   sku: "swift-6802",
@@ -4223,7 +4644,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213861/622879-mini-enroladinho-de-salsicha_rec.jpg?v=639050303386230000",
-  productUrl: "https://loja.swift.com.br/mini-enroladinho-de-salsicha-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mini-enroladinho-de-salsicha-swift-300g/p",
+  popularity: 422
  },
  {
   sku: "swift-6799",
@@ -4233,7 +4655,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217865/623098-queijo-parmesao-ralado-vigor_mck.jpg?v=639189664495230000",
-  productUrl: "https://loja.swift.com.br/queijo-parmesao-ralado-vigor-100g/p"
+  productUrl: "https://loja.swift.com.br/queijo-parmesao-ralado-vigor-100g/p",
+  popularity: 423
  },
  {
   sku: "swift-6790",
@@ -4243,7 +4666,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "churrasco linguicas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209600/622819-linguica-mista-combo_inn.jpg?v=638893956002230000",
-  productUrl: "https://loja.swift.com.br/linguica-mista-combo-1-5kg/p"
+  productUrl: "https://loja.swift.com.br/linguica-mista-combo-1-5kg/p",
+  popularity: 424
  },
  {
   sku: "swift-6942",
@@ -4253,7 +4677,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218122/623088-maminha-swift-legado-1855_inn.jpg?v=639198893757230000",
-  productUrl: "https://loja.swift.com.br/maminha-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-swift-legado-1855-kg/p",
+  popularity: 425
  },
  {
   sku: "swift-6727",
@@ -4263,7 +4688,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207267/622923-ravioli-de-carne-spoleto_rec.jpg?v=638840660809770000",
-  productUrl: "https://loja.swift.com.br/ravioli-de-carne-spoleto-400g/p"
+  productUrl: "https://loja.swift.com.br/ravioli-de-carne-spoleto-400g/p",
+  popularity: 426
  },
  {
   sku: "swift-6723",
@@ -4273,7 +4699,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207354/622922-gnocchi-de-batatas-spoleto_rec.jpg?v=638842361567570000",
-  productUrl: "https://loja.swift.com.br/gnocchi-de-batatas-spoleto-400g/p"
+  productUrl: "https://loja.swift.com.br/gnocchi-de-batatas-spoleto-400g/p",
+  popularity: 427
  },
  {
   sku: "swift-6710",
@@ -4283,7 +4710,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207276/622971-suco-de-uva-e-maca-natural-one_mck.jpg?v=638841220154570000",
-  productUrl: "https://loja.swift.com.br/suco-de-uva-e-maca-natural-one-900ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-uva-e-maca-natural-one-900ml/p",
+  popularity: 428
  },
  {
   sku: "swift-6696",
@@ -4293,7 +4721,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212339/622919-tapioca-da-terrinha_mck.jpg?v=638996064797000000",
-  productUrl: "https://loja.swift.com.br/tapioca-da-terrinha-500g/p"
+  productUrl: "https://loja.swift.com.br/tapioca-da-terrinha-500g/p",
+  popularity: 429
  },
  {
   sku: "swift-6682",
@@ -4303,7 +4732,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207849/622852-hamburguer-bovino-airfryer_inn.jpg?v=638851835560270000",
-  productUrl: "https://loja.swift.com.br/hamburguer-bovino-airfryer-seara-150g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-bovino-airfryer-seara-150g/p",
+  popularity: 430
  },
  {
   sku: "swift-6573",
@@ -4313,7 +4743,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/203825/heineken-pack_1.png.png?v=638714341769200000",
-  productUrl: "https://loja.swift.com.br/pack-8-latas-heineken-zero-269ml/p"
+  productUrl: "https://loja.swift.com.br/pack-8-latas-heineken-zero-269ml/p",
+  popularity: 431
  },
  {
   sku: "swift-6429",
@@ -4323,7 +4754,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211981/622694-brocolis-empanado-pre-frito_rec.jpg?v=638986620724200000",
-  productUrl: "https://loja.swift.com.br/brocolis-empanado-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/brocolis-empanado-pre-frito-swift-300g/p",
+  popularity: 432
  },
  {
   sku: "swift-6427",
@@ -4333,7 +4765,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211983/622696-bolinho-de-carne-com-mussarela-pre-frito_rec.jpg?v=638986641413430000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-carne-com-mussarela-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-carne-com-mussarela-pre-frito-swift-300g/p",
+  popularity: 433
  },
  {
   sku: "swift-6432",
@@ -4343,7 +4776,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211901/622690-banana-empanada-pre-frita_rec.jpg?v=638984880995200000",
-  productUrl: "https://loja.swift.com.br/banana-empanada-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/banana-empanada-pre-frita-swift-300g/p",
+  popularity: 434
  },
  {
   sku: "swift-6417",
@@ -4353,7 +4787,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208749/622684-mousse-de-limao_rec.jpg?v=638870729604200000",
-  productUrl: "https://loja.swift.com.br/mousse-de-limao-swift-80g/p"
+  productUrl: "https://loja.swift.com.br/mousse-de-limao-swift-80g/p",
+  popularity: 435
  },
  {
   sku: "swift-6314",
@@ -4363,7 +4798,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia azeite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207184/622487-azeite-oliva-dia-a-dia-gallo_mck.jpg?v=638839465259000000",
-  productUrl: "https://loja.swift.com.br/azeite-oliva-dia-a-dia-gallo-400ml/p"
+  productUrl: "https://loja.swift.com.br/azeite-oliva-dia-a-dia-gallo-400ml/p",
+  popularity: 436
  },
  {
   sku: "swift-6312",
@@ -4373,7 +4809,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209955/622485-lombo-bacalhau-dessalgado_inn.jpg?v=638901692506930000",
-  productUrl: "https://loja.swift.com.br/lombo-de-bacalhau-dessalgado-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/lombo-de-bacalhau-dessalgado-swift-800g/p",
+  popularity: 437
  },
  {
   sku: "swift-6274",
@@ -4383,7 +4820,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216871/622247-chicken-supreme-seara-com-2-molhos_mck.jpg?v=639144488440800000",
-  productUrl: "https://loja.swift.com.br/chicken-supreme-seara-com-2-molhos-269g/p"
+  productUrl: "https://loja.swift.com.br/chicken-supreme-seara-com-2-molhos-269g/p",
+  popularity: 438
  },
  {
   sku: "swift-6224",
@@ -4393,7 +4831,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211712/622316-torta-de-palmito_rec.jpg?v=638978824997030000",
-  productUrl: "https://loja.swift.com.br/torta-de-palmito-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/torta-de-palmito-swift-400g/p",
+  popularity: 439
  },
  {
   sku: "swift-6303",
@@ -4403,7 +4842,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216272/622315-costela-do-traseiro-combo_inn.jpg?v=639129039267500000",
-  productUrl: "https://loja.swift.com.br/costela-do-traseiro-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-do-traseiro-combo-kg/p",
+  popularity: 440
  },
  {
   sku: "swift-6208",
@@ -4413,7 +4853,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207488/622292-galeto-desossado-temperado_inn.jpg?v=638847514568530000",
-  productUrl: "https://loja.swift.com.br/galeto-desossado-temperado-swift-415g/p"
+  productUrl: "https://loja.swift.com.br/galeto-desossado-temperado-swift-415g/p",
+  popularity: 441
  },
  {
   sku: "swift-6082",
@@ -4423,7 +4864,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215783/622191-doce-de-abobora-com-coco_rec.jpg?v=639112596752300000",
-  productUrl: "https://loja.swift.com.br/doce-de-abobora-com-coco-swift-180g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-abobora-com-coco-swift-180g/p",
+  popularity: 442
  },
  {
   sku: "swift-5999",
@@ -4433,7 +4875,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212808/622131-barriga-suina-temperada-aperitivo_inn.jpg?v=639004626856970000",
-  productUrl: "https://loja.swift.com.br/barriga-suina-temperada-aperitivo-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/barriga-suina-temperada-aperitivo-swift-800g/p",
+  popularity: 443
  },
  {
   sku: "swift-5796",
@@ -4443,7 +4886,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209268/622073-filezinho-sassami-empanado_inn.jpg?v=638884534912530000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-swift/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-empanado-swift/p",
+  popularity: 444
  },
  {
   sku: "swift-5785",
@@ -4453,7 +4897,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216834/622059-arroz-carreteiro_rec.jpg?v=639143890788030000",
-  productUrl: "https://loja.swift.com.br/arroz-carreteiro-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/arroz-carreteiro-swift-500g/p",
+  popularity: 445
  },
  {
   sku: "swift-5768",
@@ -4463,7 +4908,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213913/622047-arroz-cremoso-caprese_rec.jpg?v=639051194201770000",
-  productUrl: "https://loja.swift.com.br/arroz-cremoso-caprese-swift-320g/p"
+  productUrl: "https://loja.swift.com.br/arroz-cremoso-caprese-swift-320g/p",
+  popularity: 446
  },
  {
   sku: "swift-5765",
@@ -4473,7 +4919,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215365/622040-arroz-com-brocolis_rec.jpg?v=639099611646130000",
-  productUrl: "https://loja.swift.com.br/arroz-com-brocolis-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/arroz-com-brocolis-swift-500g/p",
+  popularity: 447
  },
  {
   sku: "swift-5673",
@@ -4483,7 +4930,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais mistura de legumes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207783/621852-Mistura-4-legumes_inn.jpg?v=638851804364330000",
-  productUrl: "https://loja.swift.com.br/mistura-4-legumes-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/mistura-4-legumes-swift-1-02kg/p",
+  popularity: 448
  },
  {
   sku: "swift-5541",
@@ -4493,7 +4941,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215244/621903-batata-airfryer-extra-crocante-mccain_rec.jpg?v=639095517814100000",
-  productUrl: "https://loja.swift.com.br/batata-airfryer-extra-crocante-mccain-600g/p"
+  productUrl: "https://loja.swift.com.br/batata-airfryer-extra-crocante-mccain-600g/p",
+  popularity: 449
  },
  {
   sku: "swift-5478",
@@ -4503,7 +4952,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209804/621776-empanada-frango-requeijao_rec.jpg?v=638896765389600000",
-  productUrl: "https://loja.swift.com.br/empanada-de-frango-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/empanada-de-frango-swift-240g/p",
+  popularity: 450
  },
  {
   sku: "swift-5479",
@@ -4513,7 +4963,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213908/621777-empanada-de-queijo-e-cebola_rec.jpg?v=639051174709930000",
-  productUrl: "https://loja.swift.com.br/empanada-de-queijo-e-cebola-swift-240g/p"
+  productUrl: "https://loja.swift.com.br/empanada-de-queijo-e-cebola-swift-240g/p",
+  popularity: 451
  },
  {
   sku: "swift-5415",
@@ -4523,7 +4974,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao mole",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209191/621772-pera-do-coxao-mole_inn.jpg?v=638883617452030000",
-  productUrl: "https://loja.swift.com.br/pera-do-coxao-mole-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pera-do-coxao-mole-swift-kg/p",
+  popularity: 452
  },
  {
   sku: "swift-5210",
@@ -4533,7 +4985,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215058/621585-medalhao-de-file-mignon_inn.jpg?v=639090306910470000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-1kg/p",
+  popularity: 453
  },
  {
   sku: "swift-5155",
@@ -4543,7 +4996,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos cupim",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212990/621659-cupim-swift-legado-1855_inn.jpg?v=639014017169900000",
-  productUrl: "https://loja.swift.com.br/cupim-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/cupim-swift-legado-1855-kg/p",
+  popularity: 454
  },
  {
   sku: "swift-5005",
@@ -4553,7 +5007,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208607/621409-porchetta-premium_inn.jpg?v=638869781254200000",
-  productUrl: "https://loja.swift.com.br/porchetta-premium-swift-kg-1/p"
+  productUrl: "https://loja.swift.com.br/porchetta-premium-swift-kg-1/p",
+  popularity: 455
  },
  {
   sku: "swift-4920",
@@ -4563,7 +5018,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209531/621349-paprica-picante_inn.jpg?v=638893124011970000",
-  productUrl: "https://loja.swift.com.br/paprica-picante-swift-70g/p"
+  productUrl: "https://loja.swift.com.br/paprica-picante-swift-70g/p",
+  popularity: 456
  },
  {
   sku: "swift-4904",
@@ -4573,7 +5029,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209523/621332-lemon-e-herbs_inn.jpg?v=638893106640930000",
-  productUrl: "https://loja.swift.com.br/lemon-herbs-swift-120g/p"
+  productUrl: "https://loja.swift.com.br/lemon-herbs-swift-120g/p",
+  popularity: 457
  },
  {
   sku: "swift-4894",
@@ -4583,7 +5040,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209463/621535-creme-de-batata-com-bacon_rec.jpg?v=638890544678870000",
-  productUrl: "https://loja.swift.com.br/caldo-de-batata-com-bacon-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-batata-com-bacon-swift-350g/p",
+  popularity: 458
  },
  {
   sku: "swift-4834",
@@ -4593,7 +5051,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209519/621351-cebola-crocante_inn.jpg?v=638893040581770000",
-  productUrl: "https://loja.swift.com.br/cebola-crocante-swift-140g/p"
+  productUrl: "https://loja.swift.com.br/cebola-crocante-swift-140g/p",
+  popularity: 459
  },
  {
   sku: "swift-4794",
@@ -4603,7 +5062,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209537/621323-tempero-para-bovinos_inn.jpg?v=638893137492330000",
-  productUrl: "https://loja.swift.com.br/tempero-para-bovinos-swift-120g/p"
+  productUrl: "https://loja.swift.com.br/tempero-para-bovinos-swift-120g/p",
+  popularity: 460
  },
  {
   sku: "swift-4742",
@@ -4613,7 +5073,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209535/621321-tempero-para-aves_inn.jpg?v=638893134333470000",
-  productUrl: "https://loja.swift.com.br/tempero-para-aves-swift-135g/p"
+  productUrl: "https://loja.swift.com.br/tempero-para-aves-swift-135g/p",
+  popularity: 461
  },
  {
   sku: "swift-4523",
@@ -4623,7 +5084,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209764/621058-broa-milho-erva-doce_rec.jpg?v=638896554771170000",
-  productUrl: "https://loja.swift.com.br/broa-de-milho-com-erva-doce-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/broa-de-milho-com-erva-doce-swift-400g/p",
+  popularity: 462
  },
  {
   sku: "swift-4185",
@@ -4633,7 +5095,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215447/620151-bife-de-contrafile-bandeja_inn.jpg?v=639100757484930000",
-  productUrl: "https://loja.swift.com.br/bife-de-contrafile-bandeja-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-contrafile-bandeja-swift-kg/p",
+  popularity: 463
  },
  {
   sku: "swift-4143",
@@ -4643,7 +5106,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216820/620154-bife-de-alcatra-bandeja_inn.jpg?v=639143863614900000",
-  productUrl: "https://loja.swift.com.br/bife-de-alcatra-bandeja-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-alcatra-bandeja-swift-kg/p",
+  popularity: 464
  },
  {
   sku: "swift-4112",
@@ -4653,7 +5117,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209323/620530-arroz-com-brocolis_rec.jpg?v=638887105774730000",
-  productUrl: "https://loja.swift.com.br/arroz-com-brocolis-swift-170g/p"
+  productUrl: "https://loja.swift.com.br/arroz-com-brocolis-swift-170g/p",
+  popularity: 465
  },
  {
   sku: "swift-4156",
@@ -4663,7 +5128,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209319/619864-galinhada_rec.jpg?v=638887084368470000",
-  productUrl: "https://loja.swift.com.br/galinhada-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/galinhada-swift-300g/p",
+  popularity: 466
  },
  {
   sku: "swift-4002",
@@ -4673,7 +5139,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mistura para suco verde",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208701/619180-mistura-para-suco-verde_inn.jpg?v=638870673284630000",
-  productUrl: "https://loja.swift.com.br/mistura-para-suco-verde-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/mistura-para-suco-verde-swift-300g/p",
+  popularity: 467
  },
  {
   sku: "swift-3982",
@@ -4683,7 +5150,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208290/619905-alcool-gel-acendedor_mck.jpg?v=638864721585170000",
-  productUrl: "https://loja.swift.com.br/alcool-gel-ascendedor-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/alcool-gel-ascendedor-swift-500g/p",
+  popularity: 468
  },
  {
   sku: "swift-3836",
@@ -4693,7 +5161,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados merluza",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209473/619212-medalhao-de-merluza_inn.jpg?v=638890568011630000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-merluza-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-merluza-swift-500g/p",
+  popularity: 469
  },
  {
   sku: "swift-3778",
@@ -4703,7 +5172,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos bife do vazio",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217866/619216-medalhao-bovino_inn.jpg?v=639190316282670000",
-  productUrl: "https://loja.swift.com.br/medalhao-bovino-swift-250g/p"
+  productUrl: "https://loja.swift.com.br/medalhao-bovino-swift-250g/p",
+  popularity: 470
  },
  {
   sku: "swift-3611",
@@ -4713,7 +5183,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208675/618926-espetinho-de-frango-com-bacon_inn.jpg?v=638869977967130000",
-  productUrl: "https://loja.swift.com.br/espetinho-de-frango-com-bacon-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-de-frango-com-bacon-swift-900g/p",
+  popularity: 471
  },
  {
   sku: "swift-3340",
@@ -4723,7 +5194,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207877/618719-lombo-suino-fatiado-com-barbecue_inn.jpg?v=638852154744870000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-fatiado-com-barbecue-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-fatiado-com-barbecue-swift-1kg/p",
+  popularity: 472
  },
  {
   sku: "swift-3162",
@@ -4733,7 +5205,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207764/618628-hamburguer-de-salmao_inn.jpg?v=638851796465500000",
-  productUrl: "https://loja.swift.com.br/hamburguer-de-salmao-swift-360g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-de-salmao-swift-360g/p",
+  popularity: 473
  },
  {
   sku: "swift-3117",
@@ -4743,7 +5216,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209317/618604-creme-de-queijo_rec.jpg?v=638887075064430000",
-  productUrl: "https://loja.swift.com.br/creme-de-queijo-swift-320g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-queijo-swift-320g/p",
+  popularity: 474
  },
  {
   sku: "swift-3110",
@@ -4753,7 +5227,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209313/618590-creme-de-cebola_rec.jpg?v=638887049674930000",
-  productUrl: "https://loja.swift.com.br/creme-de-cebola-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-cebola-swift-350g/p",
+  popularity: 475
  },
  {
   sku: "swift-3038",
@@ -4763,7 +5238,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207474/619138-ancho-suino-ao-chimichurri-swift-grill_inn.jpg?v=638847454799730000",
-  productUrl: "https://loja.swift.com.br/ancho-suino-chimichurri-swift-grill/p"
+  productUrl: "https://loja.swift.com.br/ancho-suino-chimichurri-swift-grill/p",
+  popularity: 476
  },
  {
   sku: "swift-2653",
@@ -4773,7 +5249,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213889/618352-lasanha-a-bolonhesa_rec.jpg?v=639051132606230000",
-  productUrl: "https://loja.swift.com.br/lasanha-bolonhesa-swift-380g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-bolonhesa-swift-380g/p",
+  popularity: 477
  },
  {
   sku: "swift-2648",
@@ -4783,7 +5260,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros t-bone de cordeiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214431/618348-t-bone-cordeiro-chileno_inn.jpg?v=639070191107030000",
-  productUrl: "https://loja.swift.com.br/t-bone-cordeiro-chileno-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/t-bone-cordeiro-chileno-swift-600g/p",
+  popularity: 478
  },
  {
   sku: "swift-2579",
@@ -4793,7 +5271,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pizzas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207860/618296-pizza-artesanal-de-pepperon_rec.jpg?v=638851846024500000",
-  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-pepperoni-swift-420g/p"
+  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-pepperoni-swift-420g/p",
+  popularity: 479
  },
  {
   sku: "swift-2578",
@@ -4803,7 +5282,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pizzas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213885/618283-pizza-artesanal-calabresa_inn.jpg?v=639051131497770000",
-  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-calabresa-swift-420g/p"
+  productUrl: "https://loja.swift.com.br/pizza-artesanal-de-calabresa-swift-420g/p",
+  popularity: 480
  },
  {
   sku: "swift-2106",
@@ -4813,7 +5293,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados merluza",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209467/618253-file-de-merluza-empanado_inn.jpg?v=638890560741670000",
-  productUrl: "https://loja.swift.com.br/file-de-merluza-empanado-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-merluza-empanado-swift-500g/p",
+  popularity: 481
  },
  {
   sku: "swift-2132",
@@ -4823,7 +5304,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209353/618181-panceta-piano_inn.jpg?v=638887832677530000",
-  productUrl: "https://loja.swift.com.br/panceta-piano-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/panceta-piano-swift-kg/p",
+  popularity: 482
  },
  {
   sku: "swift-2131",
@@ -4833,7 +5315,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209348/618180-costelinha-suina-premium_inn.jpg?v=638887262661670000",
-  productUrl: "https://loja.swift.com.br/costelinha-suina-premium-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costelinha-suina-premium-swift-kg/p",
+  popularity: 483
  },
  {
   sku: "swift-2046",
@@ -4843,7 +5326,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207843/618182-caldo-culinario-de-carne_inn.jpg?v=638851832308330000",
-  productUrl: "https://loja.swift.com.br/caldo-culinario-de-carne-200ml/p"
+  productUrl: "https://loja.swift.com.br/caldo-culinario-de-carne-200ml/p",
+  popularity: 484
  },
  {
   sku: "swift-2030",
@@ -4853,7 +5337,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos caldos e sopas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209230/618164-caldo-de-abobora-com-leite-de-coco_rec.jpg?v=638883831800270000",
-  productUrl: "https://loja.swift.com.br/caldo-de-abobora-com-leite-de-coco-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/caldo-de-abobora-com-leite-de-coco-swift-350g/p",
+  popularity: 485
  },
  {
   sku: "swift-1730",
@@ -4863,7 +5348,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas morango",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211125/617908-morango_inn.jpg?v=638953565669800000",
-  productUrl: "https://loja.swift.com.br/morango-swift-300-g/p"
+  productUrl: "https://loja.swift.com.br/morango-swift-300-g/p",
+  popularity: 486
  },
  {
   sku: "swift-1830",
@@ -4873,7 +5359,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ossobuco",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218685/617850-ossobuco-swift-legado-1855_inn.jpg?v=639219593530100000",
-  productUrl: "https://loja.swift.com.br/ossobuco-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/ossobuco-swift-legado-1855-kg/p",
+  popularity: 487
  },
  {
   sku: "swift-1604",
@@ -4883,7 +5370,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209665/617840-filezinho-sassami-organico-seara_inn.jpg?v=638894888113970000",
-  productUrl: "https://loja.swift.com.br/filezinho-sassami-organico-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/filezinho-sassami-organico-seara-600g/p",
+  popularity: 488
  },
  {
   sku: "swift-1602",
@@ -4893,7 +5381,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214107/617838-file-de-coxa-e-sobrecoxa-organico-seara_1.jpg.jpg?v=639059040505100000",
-  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-organico-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/file-de-coxa-e-sobrecoxa-organico-seara-600g/p",
+  popularity: 489
  },
  {
   sku: "swift-1600",
@@ -4903,7 +5392,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209623/617836-file-peito-em-bifes-organico-seara_inn.jpg?v=638894852479500000",
-  productUrl: "https://loja.swift.com.br/file-peito-em-bifes-organico-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/file-peito-em-bifes-organico-seara-600g/p",
+  popularity: 490
  },
  {
   sku: "swift-1688",
@@ -4913,7 +5403,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207701/617823-bombom-da-alcatra-swift-gran-reserva_inn.jpg?v=638851766227600000",
-  productUrl: "https://loja.swift.com.br/bombom-da-alcatra-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/bombom-da-alcatra-swift-gran-reserva-kg/p",
+  popularity: 491
  },
  {
   sku: "swift-1682",
@@ -4923,7 +5414,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216642/617817-maminha-swift-gran-reserva_inn.jpg?v=639138469339070000",
-  productUrl: "https://loja.swift.com.br/maminha-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-swift-gran-reserva-kg/p",
+  popularity: 492
  },
  {
   sku: "swift-1679",
@@ -4933,7 +5425,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216639/617814-bife-de-chorizo-swift-gran-reserva_inn.jpg?v=639138454959970000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-gran-reserva-kg/p",
+  popularity: 493
  },
  {
   sku: "swift-1552",
@@ -4943,7 +5436,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213308/617786-lombos-de-balhacau-dessalgado_inn.jpg?v=639020985753600000",
-  productUrl: "https://loja.swift.com.br/lombo-bacalhau-dessalgado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-bacalhau-dessalgado-swift-1kg/p",
+  popularity: 494
  },
  {
   sku: "swift-1514",
@@ -4953,7 +5447,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214017/617761-espetinho-bovino-com-bacon_inn.jpg?v=639056361237030000",
-  productUrl: "https://loja.swift.com.br/espetinho-bovino-com-bacon-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/espetinho-bovino-com-bacon-swift-900g/p",
+  popularity: 495
  },
  {
   sku: "swift-1865",
@@ -4963,7 +5458,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214210/617750-peixinho-extra-limpo_inn.jpg?v=639063256192470000",
-  productUrl: "https://loja.swift.com.br/peixinho-extra-limpo-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/peixinho-extra-limpo-swift-kg/p",
+  popularity: 496
  },
  {
   sku: "swift-1311",
@@ -4973,7 +5469,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207824/617596-salmao-defumado-fatiado_inn.jpg?v=638851822062770000",
-  productUrl: "https://loja.swift.com.br/salmao-defumado-fatiado-80g/p"
+  productUrl: "https://loja.swift.com.br/salmao-defumado-fatiado-80g/p",
+  popularity: 497
  },
  {
   sku: "swift-1251",
@@ -4983,7 +5480,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208460/617551-lombo-de-pirarucu_inn.jpg?v=638866439661570000",
-  productUrl: "https://loja.swift.com.br/lombo-de-pirarucu-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/lombo-de-pirarucu-swift-300g/p",
+  popularity: 498
  },
  {
   sku: "swift-1245",
@@ -4993,7 +5491,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213501/617573-tentaculos-de-polvo_inn.jpg?v=639026957288930000",
-  productUrl: "https://loja.swift.com.br/tentaculos-de-polvo-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/tentaculos-de-polvo-swift-200g/p",
+  popularity: 499
  },
  {
   sku: "swift-1221",
@@ -5003,7 +5502,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208292/617560-casquinha-com-camarao-temperada_inn.jpg?v=638864737700030000",
-  productUrl: "https://loja.swift.com.br/casquinha-com-camarao-temperada-swift-330g/p"
+  productUrl: "https://loja.swift.com.br/casquinha-com-camarao-temperada-swift-330g/p",
+  popularity: 500
  },
  {
   sku: "swift-1969",
@@ -5013,7 +5513,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215084/617522-frango-inteiro_inn.jpg?v=639092894411670000",
-  productUrl: "https://loja.swift.com.br/frango-inteiro-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/frango-inteiro-swift-kg/p",
+  popularity: 501
  },
  {
   sku: "swift-2752",
@@ -5023,7 +5524,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214436/617486-costela-bovina-temperada-ja-pro-forno_rec.jpg?v=639070226847630000",
-  productUrl: "https://loja.swift.com.br/costela-bovina-temperada-ja-pro-forno-swift-kg-/p"
+  productUrl: "https://loja.swift.com.br/costela-bovina-temperada-ja-pro-forno-swift-kg-/p",
+  popularity: 502
  },
  {
   sku: "swift-898",
@@ -5033,7 +5535,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209397/617348-linguica-de-lombo-fina_inn.jpg?v=638888823709900000",
-  productUrl: "https://loja.swift.com.br/linguica-de-lombo-fina-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-lombo-fina-swift-500g/p",
+  popularity: 503
  },
  {
   sku: "swift-1315",
@@ -5043,7 +5546,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados truta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213459/617244-file-de-truta_inn.jpg?v=639023676273430000",
-  productUrl: "https://loja.swift.com.br/file-de-truta-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/file-de-truta-swift-400g/p",
+  popularity: 504
  },
  {
   sku: "swift-845",
@@ -5053,7 +5557,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas recheadas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209089/617286-linguica-de-carne-de-frango-tipo-cuiabana_inn.jpg?v=638882020174300000",
-  productUrl: "https://loja.swift.com.br/linguica-de-carne-de-frango-tipo-cuiabana-swift-900g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-carne-de-frango-tipo-cuiabana-swift-900g/p",
+  popularity: 505
  },
  {
   sku: "swift-1527",
@@ -5063,7 +5568,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos miudos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218363/616672-lingua-fatiada_inn.jpg?v=639204288682430000",
-  productUrl: "https://loja.swift.com.br/lingua-fatiada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/lingua-fatiada-swift-kg/p",
+  popularity: 506
  },
  {
   sku: "swift-1524",
@@ -5073,7 +5579,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao duro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214026/616092-bife-para-role-linha-mais_inn.jpg?v=639056440599000000",
-  productUrl: "https://loja.swift.com.br/bife-para-role-linha-mais-kg-1/p"
+  productUrl: "https://loja.swift.com.br/bife-para-role-linha-mais-kg-1/p",
+  popularity: 507
  },
  {
   sku: "swift-451",
@@ -5083,7 +5590,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos assado de tiras",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207465/615866-assado-de-tiras_inn.jpg?v=638847375040170000",
-  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-kg/p",
+  popularity: 508
  },
  {
   sku: "swift-488",
@@ -5093,7 +5601,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207872/615560-costela-bafo_inn.jpg?v=638851855609170000",
-  productUrl: "https://loja.swift.com.br/costela-bafo-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-bafo-swift-kg/p",
+  popularity: 509
  },
  {
   sku: "swift-443",
@@ -5103,7 +5612,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207857/615557-chuleta_inn.jpg?v=638851845494500000",
-  productUrl: "https://loja.swift.com.br/chuleta-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/chuleta-swift-kg/p",
+  popularity: 510
  },
  {
   sku: "swift-437",
@@ -5113,7 +5623,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208364/615483-file-de-costela-noix_inn.jpg?v=638865499463200000",
-  productUrl: "https://loja.swift.com.br/file-de-costela-noix-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-costela-noix-swift-kg/p",
+  popularity: 511
  },
  {
   sku: "swift-435",
@@ -5123,7 +5634,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209368/615475-alcatra_inn.jpg?v=638887933204170000",
-  productUrl: "https://loja.swift.com.br/alcatra-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/alcatra-swift-kg/p",
+  popularity: 512
  },
  {
   sku: "swift-430",
@@ -5133,7 +5645,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212783/615410-bife-de-chorizo_inn.jpg?v=639004600087800000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-kg/p",
+  popularity: 513
  },
  {
   sku: "swift-1520",
@@ -5143,7 +5656,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214020/614748-picanha-uruguaia_inn.jpg?v=639056417140970000",
-  productUrl: "https://loja.swift.com.br/picanha-uruguaia-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-uruguaia-swift-kg/p",
+  popularity: 514
  },
  {
   sku: "swift-1540",
@@ -5153,7 +5667,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207803/616678-lombo-suino-temperado_inn.jpg?v=638851814677730000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-swift-kg-1/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-swift-kg-1/p",
+  popularity: 515
  },
  {
   sku: "swift-218",
@@ -5163,7 +5678,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209214/616668-mexilhao_inn.jpg?v=638883756737800000",
-  productUrl: "https://loja.swift.com.br/mexilhao-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/mexilhao-swift-400g/p",
+  popularity: 516
  },
  {
   sku: "swift-216",
@@ -5173,7 +5689,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados pescada",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209345/616665-file-de-pescada-amarela_inn.jpg?v=638887239807530000",
-  productUrl: "https://loja.swift.com.br/file-de-pescada-amarela-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/file-de-pescada-amarela-swift-400g/p",
+  popularity: 517
  },
  {
   sku: "swift-167",
@@ -5183,7 +5700,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais alcachofra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207624/616498-fundo-de-alcachofra_inn.jpg?v=638851623493270000",
-  productUrl: "https://loja.swift.com.br/fundo-de-alcachofra-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/fundo-de-alcachofra-swift-300g/p",
+  popularity: 518
  },
  {
   sku: "swift-146",
@@ -5193,7 +5711,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216196/616422-sal-grosso_inn.jpg?v=639125742529530000",
-  productUrl: "https://loja.swift.com.br/sal-grosso-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/sal-grosso-swift-1kg/p",
+  popularity: 519
  },
  {
   sku: "swift-17",
@@ -5203,7 +5722,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos carpaccio",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207494/614772-carpaccio-de-salmao_inn.jpg?v=638847528049130000",
-  productUrl: "https://loja.swift.com.br/carpaccio-salmao-swift-100g/p"
+  productUrl: "https://loja.swift.com.br/carpaccio-salmao-swift-100g/p",
+  popularity: 520
  },
  {
   sku: "swift-7937",
@@ -5213,7 +5733,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218744/624218-file-mignon-suino-palmali_mck.jpg?v=639221456695870000",
-  productUrl: "https://loja.swift.com.br/file-mignon-suino-palmali-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-suino-palmali-kg/p",
+  popularity: 521
  },
  {
   sku: "swift-7896",
@@ -5223,7 +5744,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217416/624020-sashimi-de-atum-fatiado_mck.jpg?v=639167997410230000",
-  productUrl: "https://loja.swift.com.br/sashimi-de-atum-fatiado-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/sashimi-de-atum-fatiado-swift-150g/p",
+  popularity: 522
  },
  {
   sku: "swift-7849",
@@ -5233,7 +5755,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216079/624064-passata-rustica-salsaretti_mck.jpg?v=639122931804930000",
-  productUrl: "https://loja.swift.com.br/passata-rustica-salsaretti-300g/p"
+  productUrl: "https://loja.swift.com.br/passata-rustica-salsaretti-300g/p",
+  popularity: 523
  },
  {
   sku: "swift-7837",
@@ -5243,7 +5766,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216951/623975-file-de-tilapia-imp_inn.jpg?v=639148088923000000",
-  productUrl: "https://loja.swift.com.br/file-de-tilapia-imp-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-tilapia-imp-swift-800g/p",
+  popularity: 524
  },
  {
   sku: "swift-7808",
@@ -5253,7 +5777,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215368/623675-tempero-mix-carnes-bbq-br-spices_mck.jpg?v=639099614107730000",
-  productUrl: "https://loja.swift.com.br/tempero-mix-carnes-bbq-br-spices-80g/p"
+  productUrl: "https://loja.swift.com.br/tempero-mix-carnes-bbq-br-spices-80g/p",
+  popularity: 525
  },
  {
   sku: "swift-7811",
@@ -5263,7 +5788,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215363/623671-flor-de-sal-br-spices_mck.jpg?v=639099604429630000",
-  productUrl: "https://loja.swift.com.br/flor-de-sal-br-spices-100g/p"
+  productUrl: "https://loja.swift.com.br/flor-de-sal-br-spices-100g/p",
+  popularity: 526
  },
  {
   sku: "swift-7747",
@@ -5273,7 +5799,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214385/mockup-36-hamburgueres-bovino_mck.png?v=639066100869930000",
-  productUrl: "https://loja.swift.com.br/36-hamburgueres-bovino-swift-56g/p"
+  productUrl: "https://loja.swift.com.br/36-hamburgueres-bovino-swift-56g/p",
+  popularity: 527
  },
  {
   sku: "swift-7744",
@@ -5283,7 +5810,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214631/623885-azeitona-verde-fatiada-tozzi_mck.jpg?v=639076521072430000",
-  productUrl: "https://loja.swift.com.br/azeitona-verde-fatiada-tozzi-120g/p"
+  productUrl: "https://loja.swift.com.br/azeitona-verde-fatiada-tozzi-120g/p",
+  popularity: 528
  },
  {
   sku: "swift-7733",
@@ -5293,7 +5821,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217366/623380-chocofrut-mirtilo-com-chocolate-branco-e-ao-leite_inn.jpg?v=639167018620630000",
-  productUrl: "https://loja.swift.com.br/chocofrut-mirtilo-com-chocolate-branco-e-ao-leite-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/chocofrut-mirtilo-com-chocolate-branco-e-ao-leite-swift-150g/p",
+  popularity: 529
  },
  {
   sku: "swift-7730",
@@ -5303,7 +5832,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217362/623381-chocofrut-uva-com-chocolate-ao-leite_inn.jpg?v=639167015093000000",
-  productUrl: "https://loja.swift.com.br/chocofrut-uva-com-chocolate-ao-leite-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/chocofrut-uva-com-chocolate-ao-leite-swift-150g/p",
+  popularity: 530
  },
  {
   sku: "swift-7727",
@@ -5313,7 +5843,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas melao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216449/623888-melao-em-cubos_inn.jpg?v=639131622458230000",
-  productUrl: "https://loja.swift.com.br/melao-em-cubos-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/melao-em-cubos-swift-300g/p",
+  popularity: 531
  },
  {
   sku: "swift-7678",
@@ -5323,7 +5854,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213983/623816-uva-passa-escura-sem-semente-brasil-frutt_mck.jpg?v=639053382691370000",
-  productUrl: "https://loja.swift.com.br/uva-passa-escura-sem-semente-brasil-frutt-200g/p"
+  productUrl: "https://loja.swift.com.br/uva-passa-escura-sem-semente-brasil-frutt-200g/p",
+  popularity: 532
  },
  {
   sku: "swift-7676",
@@ -5333,7 +5865,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214656/623845-creme-de-avela-com-cacau_mck.jpg?v=639077147989470000",
-  productUrl: "https://loja.swift.com.br/creme-de-avela-com-cacau-swift-290g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-avela-com-cacau-swift-290g/p",
+  popularity: 533
  },
  {
   sku: "swift-7607",
@@ -5343,7 +5876,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212638/623693-creatina-monohidratada-swift-proefit_mck.jpg?v=639002226023030000",
-  productUrl: "https://loja.swift.com.br/creatina-monohidratada-swift-proefit-300g/p"
+  productUrl: "https://loja.swift.com.br/creatina-monohidratada-swift-proefit-300g/p",
+  popularity: 534
  },
  {
   sku: "swift-7596",
@@ -5353,7 +5887,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217370/623758-pao-com-nozes-peca-sabor-de-france_mck.jpg?v=639167046142200000",
-  productUrl: "https://loja.swift.com.br/pao-com-nozes-peca-sabor-de-france-210g/p"
+  productUrl: "https://loja.swift.com.br/pao-com-nozes-peca-sabor-de-france-210g/p",
+  popularity: 535
  },
  {
   sku: "swift-7597",
@@ -5363,7 +5898,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217371/623754-pao-com-azeitona-preta-e-alecrim-sabor-de-france_mck.jpg?v=639167047946500000",
-  productUrl: "https://loja.swift.com.br/pao-com-azeitona-preta-e-alecrim-sabor-de-france-210g/p"
+  productUrl: "https://loja.swift.com.br/pao-com-azeitona-preta-e-alecrim-sabor-de-france-210g/p",
+  popularity: 536
  },
  {
   sku: "swift-7579",
@@ -5373,7 +5909,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria muffin",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213515/623737-muffin-de-baunilha-com-gotas-de-chocolate-melhor-bocado_rec.jpg?v=639027052207230000",
-  productUrl: "https://loja.swift.com.br/muffin-de-baunilha-com-gotas-de-chocolate-melhor-bocado-80g/p"
+  productUrl: "https://loja.swift.com.br/muffin-de-baunilha-com-gotas-de-chocolate-melhor-bocado-80g/p",
+  popularity: 537
  },
  {
   sku: "swift-7189",
@@ -5383,7 +5920,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215333/623364-mini-baguette_rec.jpg?v=639099513850770000",
-  productUrl: "https://loja.swift.com.br/mini-baguette-swift-410g/p"
+  productUrl: "https://loja.swift.com.br/mini-baguette-swift-410g/p",
+  popularity: 538
  },
  {
   sku: "swift-7162",
@@ -5393,7 +5931,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214371/623708-pudim-de-leite-condensado_rec.jpg?v=639065955952530000",
-  productUrl: "https://loja.swift.com.br/pudim-de-leite-condensado-swift-550g/p"
+  productUrl: "https://loja.swift.com.br/pudim-de-leite-condensado-swift-550g/p",
+  popularity: 539
  },
  {
   sku: "swift-7127",
@@ -5403,7 +5942,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216502/623665-leite-de-coco-da-terrinha_mck.jpg?v=639135189592600000",
-  productUrl: "https://loja.swift.com.br/leite-de-coco-da-terrinha-200ml/p"
+  productUrl: "https://loja.swift.com.br/leite-de-coco-da-terrinha-200ml/p",
+  popularity: 540
  },
  {
   sku: "swift-7091",
@@ -5413,7 +5953,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213691/623534-picanha-suina-temperada-suinco_mck.jpg?v=639040079945100000",
-  productUrl: "https://loja.swift.com.br/picanha-suina-temperada-suinco-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-suina-temperada-suinco-kg/p",
+  popularity: 541
  },
  {
   sku: "swift-7089",
@@ -5423,7 +5964,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212464/623264-biscoito-de-polvilho-salgado-cassini_mck.jpg?v=638998674790530000",
-  productUrl: "https://loja.swift.com.br/biscoito-de-polvilho-salgado-cassini-100g/p"
+  productUrl: "https://loja.swift.com.br/biscoito-de-polvilho-salgado-cassini-100g/p",
+  popularity: 542
  },
  {
   sku: "swift-7081",
@@ -5433,7 +5975,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213486/623542-pao-petit-6-cereais-sabor-de-france_rec.jpg?v=639026233090400000",
-  productUrl: "https://loja.swift.com.br/pao-petit-6-cereais-sabor-de-france-410g/p"
+  productUrl: "https://loja.swift.com.br/pao-petit-6-cereais-sabor-de-france-410g/p",
+  popularity: 543
  },
  {
   sku: "swift-7014",
@@ -5443,7 +5986,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212987/623159-medalhao-de-file-mignon-swift-legado-1855_inn.jpg?v=639014016871530000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-file-mignon-swift-legado-1855-kg/p",
+  popularity: 544
  },
  {
   sku: "swift-7000",
@@ -5453,7 +5997,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia azeite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212101/623388-oleo-de-olliva-suave-gallo_mck.jpg?v=638990184452470000",
-  productUrl: "https://loja.swift.com.br/oleo-de-olliva-suave-gallo-500ml/p"
+  productUrl: "https://loja.swift.com.br/oleo-de-olliva-suave-gallo-500ml/p",
+  popularity: 545
  },
  {
   sku: "swift-6948",
@@ -5463,7 +6008,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212098/623347-pate-de-atum-com-azeitonas-gomes-da-costa_mck.jpg?v=638990168215800000",
-  productUrl: "https://loja.swift.com.br/pate-de-atum-com-azeitonas-gomes-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/pate-de-atum-com-azeitonas-gomes-costa-170g/p",
+  popularity: 546
  },
  {
   sku: "swift-6937",
@@ -5473,7 +6019,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211145/pack-redbull-tradicional_mck.jpg?v=638953585627970000",
-  productUrl: "https://loja.swift.com.br/pack-4-energetico-red-bull/p"
+  productUrl: "https://loja.swift.com.br/pack-4-energetico-red-bull/p",
+  popularity: 547
  },
  {
   sku: "swift-6916",
@@ -5483,7 +6030,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212087/623107-biscoito-choco-biscuit-bauducco-80g_mck.jpg?v=638990130203200000",
-  productUrl: "https://loja.swift.com.br/biscoito-choco-biscuit-bauducco-80g/p"
+  productUrl: "https://loja.swift.com.br/biscoito-choco-biscuit-bauducco-80g/p",
+  popularity: 548
  },
  {
   sku: "swift-6919",
@@ -5493,7 +6041,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210158/623080-molho-barbecue-rustico_rec.jpg?v=638908774998130000",
-  productUrl: "https://loja.swift.com.br/molho-barbecue-rustico-swift-340g/p"
+  productUrl: "https://loja.swift.com.br/molho-barbecue-rustico-swift-340g/p",
+  popularity: 549
  },
  {
   sku: "swift-6867",
@@ -5503,7 +6052,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas chas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213495/623237-cha-preto-ice-tea-de-pessego-leao_mck.jpg?v=639026287115900000",
-  productUrl: "https://loja.swift.com.br/cha-preto-ice-tea-de-pessego-leao-1-5l/p"
+  productUrl: "https://loja.swift.com.br/cha-preto-ice-tea-de-pessego-leao-1-5l/p",
+  popularity: 550
  },
  {
   sku: "swift-6864",
@@ -5513,7 +6063,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217381/623221-copa-lombo-suino-fatiado-frimesa_mck.jpg?v=639167063933100000",
-  productUrl: "https://loja.swift.com.br/copa-lombo-suino-fatiado-frimesa-kg/p"
+  productUrl: "https://loja.swift.com.br/copa-lombo-suino-fatiado-frimesa-kg/p",
+  popularity: 551
  },
  {
   sku: "swift-6843",
@@ -5523,7 +6074,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216469/623022-chocolate-ao-leite-suflair-nestle_mck.jpg?v=639131775267770000",
-  productUrl: "https://loja.swift.com.br/chocolate-ao-leite-suflair-nestle-50g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-ao-leite-suflair-nestle-50g/p",
+  popularity: 552
  },
  {
   sku: "swift-6833",
@@ -5533,7 +6085,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210316/623041-atum-solido-ao-natural-gomes-da-costa_mck.jpg?v=638920867700630000",
-  productUrl: "https://loja.swift.com.br/atum-solido-ao-natural-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-solido-ao-natural-gomes-da-costa-170g/p",
+  popularity: 553
  },
  {
   sku: "swift-6825",
@@ -5543,7 +6096,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218754/623135-file-de-sobrecoxa-com-chimichurri-aurora_mck.jpg?v=639221506533870000",
-  productUrl: "https://loja.swift.com.br/file-de-sobrecoxa-com-chimichurri-aurora-800g/p"
+  productUrl: "https://loja.swift.com.br/file-de-sobrecoxa-com-chimichurri-aurora-800g/p",
+  popularity: 554
  },
  {
   sku: "swift-6726",
@@ -5553,7 +6107,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207241/622921-ravioli-de-ricota-e-espinafre-spoleto_rec.jpg?v=638840564692300000",
-  productUrl: "https://loja.swift.com.br/ravioli-ricota-e-espinafre-spoleto-400g/p"
+  productUrl: "https://loja.swift.com.br/ravioli-ricota-e-espinafre-spoleto-400g/p",
+  popularity: 555
  },
  {
   sku: "swift-6679",
@@ -5563,7 +6118,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207543/619791-massa-folhada-laminada-massa-leve_rec.jpg?v=638848373196800000",
-  productUrl: "https://loja.swift.com.br/massa-folhada-laminada-massa-leve-300g/p"
+  productUrl: "https://loja.swift.com.br/massa-folhada-laminada-massa-leve-300g/p",
+  popularity: 556
  },
  {
   sku: "swift-6698",
@@ -5573,7 +6129,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212144/622890-costela-suina-aurora_inn.jpg?v=638990894876930000",
-  productUrl: "https://loja.swift.com.br/costela-suina-aurora-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-aurora-kg/p",
+  popularity: 557
  },
  {
   sku: "swift-6636",
@@ -5583,7 +6140,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205020/baden-baden-witibier-pack_1.jpg.jpg?v=638752485460500000",
-  productUrl: "https://loja.swift.com.br/pack-baden-witbier-350ml/p"
+  productUrl: "https://loja.swift.com.br/pack-baden-witbier-350ml/p",
+  popularity: 558
  },
  {
   sku: "swift-6634",
@@ -5593,7 +6151,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205022/baden-baden-ipa-pack_1.jpg.jpg?v=638752486860870000",
-  productUrl: "https://loja.swift.com.br/pack-baden-ipa-350ml/p"
+  productUrl: "https://loja.swift.com.br/pack-baden-ipa-350ml/p",
+  popularity: 559
  },
  {
   sku: "swift-6422",
@@ -5603,7 +6162,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207979/622687-torta-holandesa_rec.jpg?v=638852474981470000",
-  productUrl: "https://loja.swift.com.br/torta-holandesa-swift-450g/p"
+  productUrl: "https://loja.swift.com.br/torta-holandesa-swift-450g/p",
+  popularity: 560
  },
  {
   sku: "swift-6425",
@@ -5613,7 +6173,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209271/622689-mousse-de-pistache_rec.jpg?v=638884594126500000",
-  productUrl: "https://loja.swift.com.br/mousse-de-pistache-swift-80g/p"
+  productUrl: "https://loja.swift.com.br/mousse-de-pistache-swift-80g/p",
+  popularity: 561
  },
  {
   sku: "swift-6418",
@@ -5623,7 +6184,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211897/622682-queijo-provolone-empanado-pre-frito_rec.jpg?v=638984823815900000",
-  productUrl: "https://loja.swift.com.br/queijo-provolone-empanado-pre-frito-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/queijo-provolone-empanado-pre-frito-swift-300g/p",
+  popularity: 562
  },
  {
   sku: "swift-6414",
@@ -5633,7 +6195,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207397/622676-bis-ao-leite-mondelez_mck.jpg?v=638845770620770000",
-  productUrl: "https://loja.swift.com.br/bis-ao-leite-mondelez/p"
+  productUrl: "https://loja.swift.com.br/bis-ao-leite-mondelez/p",
+  popularity: 563
  },
  {
   sku: "swift-6412",
@@ -5643,7 +6206,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207402/622671-caixa-de-bombom-lacta-favoritos-mondelez_mck.jpg?v=638845776501170000",
-  productUrl: "https://loja.swift.com.br/caixa-bombom-lacta-favoritos-mondelez/p"
+  productUrl: "https://loja.swift.com.br/caixa-bombom-lacta-favoritos-mondelez/p",
+  popularity: 564
  },
  {
   sku: "swift-6392",
@@ -5653,7 +6217,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211825/622637-lombo-de-salmao-para-sashimi_inn.jpg?v=638981210502330000",
-  productUrl: "https://loja.swift.com.br/lombo-de-salmao-para-sashimi-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/lombo-de-salmao-para-sashimi-swift-200g/p",
+  popularity: 565
  },
  {
   sku: "swift-6377",
@@ -5663,7 +6228,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211522/622605-gran-gateau_rec.jpg?v=638969367906000000",
-  productUrl: "https://loja.swift.com.br/gran-gateau-swift-450g/p"
+  productUrl: "https://loja.swift.com.br/gran-gateau-swift-450g/p",
+  popularity: 566
  },
  {
   sku: "swift-6351",
@@ -5673,7 +6239,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216831/622574-medalhao-de-salmao-damm_inn.jpg?v=639143886169270000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-salmao-damm-480g/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-salmao-damm-480g/p",
+  popularity: 567
  },
  {
   sku: "swift-6336",
@@ -5683,7 +6250,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212289/622534-cola-cola_mck.jpg?v=638995822949100000",
-  productUrl: "https://loja.swift.com.br/coca-cola-600ml/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-600ml/p",
+  popularity: 568
  },
  {
   sku: "swift-6341",
@@ -5693,7 +6261,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212291/622535-coca-cola-zero_mck.jpg?v=638995828033870000",
-  productUrl: "https://loja.swift.com.br/coca-cola-zero-600ml/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-zero-600ml/p",
+  popularity: 569
  },
  {
   sku: "swift-6342",
@@ -5703,7 +6272,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208246/622538-agua-com-gas-crystal_mck.jpg?v=638862969606430000",
-  productUrl: "https://loja.swift.com.br/agua-com-gas-crystal-1-5l/p"
+  productUrl: "https://loja.swift.com.br/agua-com-gas-crystal-1-5l/p",
+  popularity: 570
  },
  {
   sku: "swift-6305",
@@ -5713,7 +6283,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216836/622446-petit-gateau-de-doce-de-leite-havanna_rec.jpg?v=639143892759330000",
-  productUrl: "https://loja.swift.com.br/petit-gateau-de-doce-de-leite-havanna-160g/p"
+  productUrl: "https://loja.swift.com.br/petit-gateau-de-doce-de-leite-havanna-160g/p",
+  popularity: 571
  },
  {
   sku: "swift-6234",
@@ -5723,7 +6294,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coracao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212335/622372-coracao-de-frango_inn.jpg?v=638996045129630000",
-  productUrl: "https://loja.swift.com.br/coracao-frango-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/coracao-frango-swift-1kg/p",
+  popularity: 572
  },
  {
   sku: "swift-6304",
@@ -5733,7 +6305,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216275/622306-capa-de-file-combo_inn.jpg?v=639129120924400000",
-  productUrl: "https://loja.swift.com.br/capa-de-file-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/capa-de-file-combo-kg/p",
+  popularity: 573
  },
  {
   sku: "swift-5982",
@@ -5743,7 +6316,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia ovos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215537/622129-ovo-branco-mantiqueira_mck.jpg?v=639105619809130000",
-  productUrl: "https://loja.swift.com.br/ovo-branco-mantiqueira-10-und/p"
+  productUrl: "https://loja.swift.com.br/ovo-branco-mantiqueira-10-und/p",
+  popularity: 574
  },
  {
   sku: "swift-5770",
@@ -5753,7 +6327,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207176/622044-arroz-cremoso-de-alho-poro-e-palmito_rec.jpg?v=638838722766900000",
-  productUrl: "https://loja.swift.com.br/arroz-cremoso-de-alho-poro-palmito-swift-320g/p"
+  productUrl: "https://loja.swift.com.br/arroz-cremoso-de-alho-poro-palmito-swift-320g/p",
+  popularity: 575
  },
  {
   sku: "swift-5707",
@@ -5763,7 +6338,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217246/621787-provoleta_inn.jpg?v=639161134160500000",
-  productUrl: "https://loja.swift.com.br/provoleta-swift-250g/p"
+  productUrl: "https://loja.swift.com.br/provoleta-swift-250g/p",
+  popularity: 576
  },
  {
   sku: "swift-5671",
@@ -5773,7 +6349,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209335/621917-feijao-carioca_rec.jpg?v=638887212601700000",
-  productUrl: "https://loja.swift.com.br/feijao-carioca-swift-220g/p"
+  productUrl: "https://loja.swift.com.br/feijao-carioca-swift-220g/p",
+  popularity: 577
  },
  {
   sku: "swift-5665",
@@ -5783,7 +6360,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217685/621966-torresmo-pre-frito_inn.jpg?v=639184312458630000",
-  productUrl: "https://loja.swift.com.br/torresmo-pre-frito-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/torresmo-pre-frito-swift-200g/p",
+  popularity: 578
  },
  {
   sku: "swift-5660",
@@ -5793,7 +6371,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207787/621959-chuck-eye-roll-acem-swift-gran-reserva_inn.jpg?v=638851807017970000",
-  productUrl: "https://loja.swift.com.br/chuck-eye-roll-acem-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/chuck-eye-roll-acem-swift-gran-reserva-kg/p",
+  popularity: 579
  },
  {
   sku: "swift-5477",
@@ -5803,7 +6382,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218708/621894-cerveja-heineken-zero-alcool_rec.jpg?v=639220586272470000",
-  productUrl: "https://loja.swift.com.br/cerveja-heineken-zero-alcool-269ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-heineken-zero-alcool-269ml/p",
+  popularity: 580
  },
  {
   sku: "swift-5715",
@@ -5813,7 +6393,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos assado de tiras",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212993/621870-assado-de-tiras-swift-legado-1855_inn.jpg?v=639014017449770000",
-  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-legado-1855-kg/p",
+  popularity: 581
  },
  {
   sku: "swift-5010",
@@ -5823,7 +6404,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214890/621376-bife-de-alcatra_inn.jpg?v=639086707065930000",
-  productUrl: "https://loja.swift.com.br/bife-de-alcatra-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-alcatra-swift-1kg/p",
+  popularity: 582
  },
  {
   sku: "swift-4796",
@@ -5833,7 +6415,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214749/621431-maminha_inn.jpg?v=639081444388570000",
-  productUrl: "https://loja.swift.com.br/maminha-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-swift-kg/p",
+  popularity: 583
  },
  {
   sku: "swift-4765",
@@ -5843,7 +6426,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209529/621327-oregano_inn.jpg?v=638893121570930000",
-  productUrl: "https://loja.swift.com.br/oregano-swift-25g/p"
+  productUrl: "https://loja.swift.com.br/oregano-swift-25g/p",
+  popularity: 584
  },
  {
   sku: "swift-4763",
@@ -5853,7 +6437,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/189938/chimichurri-swift-45g-616864-1.jpg?v=638200369828100000",
-  productUrl: "https://loja.swift.com.br/chimichurri-swift-45g/p"
+  productUrl: "https://loja.swift.com.br/chimichurri-swift-45g/p",
+  popularity: 585
  },
  {
   sku: "swift-4740",
@@ -5863,7 +6448,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209527/621348-mix-de-pimentas_inn.jpg?v=638893114031900000",
-  productUrl: "https://loja.swift.com.br/mix-de-pimentas-swift-35g/p"
+  productUrl: "https://loja.swift.com.br/mix-de-pimentas-swift-35g/p",
+  popularity: 586
  },
  {
   sku: "swift-4196",
@@ -5873,7 +6459,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos coxao duro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216902/620155-bife-de-coxao-duro-bandeja_inn.jpg?v=639144597365570000",
-  productUrl: "https://loja.swift.com.br/bife-de-coxao-duro-bandeja-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-coxao-duro-bandeja-swift-kg/p",
+  popularity: 587
  },
  {
   sku: "swift-4151",
@@ -5883,7 +6470,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209388/620612-costela-suina-ao-molho-barbecue-south-caroline_inn.jpg?v=638888782120330000",
-  productUrl: "https://loja.swift.com.br/costela-suina-ao-molho-barbecue-south-caroline-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-ao-molho-barbecue-south-caroline-swift-kg/p",
+  popularity: 588
  },
  {
   sku: "swift-4110",
@@ -5893,7 +6481,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209321/620529-arroz-branco_rec.jpg?v=638887090925900000",
-  productUrl: "https://loja.swift.com.br/arroz-branco-swift-170g/p"
+  productUrl: "https://loja.swift.com.br/arroz-branco-swift-170g/p",
+  popularity: 589
  },
  {
   sku: "swift-4047",
@@ -5903,7 +6492,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208428/620020-lombo-suino-linha-mais_inn.jpg?v=638866321426100000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-swift-mais-kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-swift-mais-kg/p",
+  popularity: 590
  },
  {
   sku: "swift-3748",
@@ -5913,7 +6503,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214567/619184-batata-rustica-pre-frita_rec.jpg?v=639075505789570000",
-  productUrl: "https://loja.swift.com.br/batata-rustica-pre-frita-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/batata-rustica-pre-frita-swift-400g/p",
+  popularity: 591
  },
  {
   sku: "swift-2823",
@@ -5923,7 +6514,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207975/618385-molho-de-alho-cremoso-defumado_rec.jpg?v=638852466663270000",
-  productUrl: "https://loja.swift.com.br/molho-de-alho-cremoso-defumado-swift-210g/p"
+  productUrl: "https://loja.swift.com.br/molho-de-alho-cremoso-defumado-swift-210g/p",
+  popularity: 592
  },
  {
   sku: "swift-2822",
@@ -5933,7 +6525,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207973/618384-molho-de-alho-cremoso_rec.jpg?v=638852462751400000",
-  productUrl: "https://loja.swift.com.br/molho-de-alho-cremoso-swift-210g/p"
+  productUrl: "https://loja.swift.com.br/molho-de-alho-cremoso-swift-210g/p",
+  popularity: 593
  },
  {
   sku: "swift-2702",
@@ -5943,7 +6536,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos file mignon suino",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208508/618361-file-mignon-suino-aperetivo-bacon_inn.jpg?v=638866496329270000",
-  productUrl: "https://loja.swift.com.br/file-mignon-suino-aperitivo-com-bacon-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-suino-aperitivo-com-bacon-swift-350g/p",
+  popularity: 594
  },
  {
   sku: "swift-2652",
@@ -5953,7 +6547,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos massas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207919/618351-lasanha-de-4-queijos_rec.jpg?v=638852199659070000",
-  productUrl: "https://loja.swift.com.br/lasanha-4-queijos-swift-380g/p"
+  productUrl: "https://loja.swift.com.br/lasanha-4-queijos-swift-380g/p",
+  popularity: 595
  },
  {
   sku: "swift-2634",
@@ -5963,7 +6558,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209603/618332-file-de-linguado_inn.jpg?v=638893958897800000",
-  productUrl: "https://loja.swift.com.br/file-de-linguado-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-linguado-swift-500g/p",
+  popularity: 596
  },
  {
   sku: "swift-2126",
@@ -5973,7 +6569,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214403/616159-alcatra-com-picanha-cordeiro-chileno_inn.jpg?v=639068612681500000",
-  productUrl: "https://loja.swift.com.br/alcatra-com-picanha-cordeiro-chileno-kg/p"
+  productUrl: "https://loja.swift.com.br/alcatra-com-picanha-cordeiro-chileno-kg/p",
+  popularity: 597
  },
  {
   sku: "swift-2048",
@@ -5983,7 +6580,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207720/618184-caldo-culinario-de-legumes_inn.jpg?v=638851776030770000",
-  productUrl: "https://loja.swift.com.br/caldo-culinario-de-legumes-200ml/p"
+  productUrl: "https://loja.swift.com.br/caldo-culinario-de-legumes-200ml/p",
+  popularity: 598
  },
  {
   sku: "swift-2047",
@@ -5993,7 +6591,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207846/618183-caldo-culinario-de-galinha_inn.jpg?v=638851834151230000",
-  productUrl: "https://loja.swift.com.br/caldo-culinario-de-galinha-200ml/p"
+  productUrl: "https://loja.swift.com.br/caldo-culinario-de-galinha-200ml/p",
+  popularity: 599
  },
  {
   sku: "swift-1888",
@@ -6003,7 +6602,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209546/616632-fraldinha-swift-black_inn.jpg?v=638893157649400000",
-  productUrl: "https://loja.swift.com.br/fraldinha-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/fraldinha-swift-black-kg/p",
+  popularity: 600
  },
  {
   sku: "swift-1895",
@@ -6013,7 +6613,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208636/618049-fraldinha-red-swift-gran-reserva_inn.jpg?v=638869812850730000",
-  productUrl: "https://loja.swift.com.br/fraldinha-red-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/fraldinha-red-swift-gran-reserva-kg/p",
+  popularity: 601
  },
  {
   sku: "swift-1789",
@@ -6023,7 +6624,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218180/618012-sal-para-parrilla_inn.jpg?v=639201752604370000",
-  productUrl: "https://loja.swift.com.br/sal-para-parrilla-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-para-parrilla-swift-500g/p",
+  popularity: 602
  },
  {
   sku: "swift-1785",
@@ -6033,7 +6635,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207728/618007-molho-de-pimenta-cremoso-defumado_rec.jpg?v=638851778002770000",
-  productUrl: "https://loja.swift.com.br/molho-de-pimenta-cremoso-defumado-swift-215ml/p"
+  productUrl: "https://loja.swift.com.br/molho-de-pimenta-cremoso-defumado-swift-215ml/p",
+  popularity: 603
  },
  {
   sku: "swift-1784",
@@ -6043,7 +6646,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/173742/dry-rub-swift-100g-618009-1.jpg?v=637544711274130000",
-  productUrl: "https://loja.swift.com.br/dry-rub-swift-100g/p"
+  productUrl: "https://loja.swift.com.br/dry-rub-swift-100g/p",
+  popularity: 604
  },
  {
   sku: "swift-1745",
@@ -6053,7 +6657,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais pato",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208693/617963-coxa-e-sobrecoxa-de-pato_inn.jpg?v=638870661290230000",
-  productUrl: "https://loja.swift.com.br/coxas-e-sobrecoxas-de-pato-swift-480g/p"
+  productUrl: "https://loja.swift.com.br/coxas-e-sobrecoxas-de-pato-swift-480g/p",
+  popularity: 605
  },
  {
   sku: "swift-1744",
@@ -6063,7 +6668,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais pato",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209337/617962-peito-de-pato_inn.jpg?v=638887219300030000",
-  productUrl: "https://loja.swift.com.br/peito-de-pato-swift-480g/p"
+  productUrl: "https://loja.swift.com.br/peito-de-pato-swift-480g/p",
+  popularity: 606
  },
  {
   sku: "swift-1603",
@@ -6073,7 +6679,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209662/617839-sobrecoxa-organica-seara_inn.jpg?v=638894881830700000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-organica-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-organica-seara-600g/p",
+  popularity: 607
  },
  {
   sku: "swift-1686",
@@ -6083,7 +6690,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207704/617825-brisket-swift-gran-reserva_inn.jpg?v=638851770054000000",
-  productUrl: "https://loja.swift.com.br/brisket-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/brisket-swift-gran-reserva-kg/p",
+  popularity: 608
  },
  {
   sku: "swift-1977",
@@ -6093,7 +6701,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos assado de tiras",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207698/617820-assado-de-tiras-swift-gran-reserva_inn.jpg?v=638851763833470000",
-  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/assado-de-tiras-swift-gran-reserva-kg/p",
+  popularity: 609
  },
  {
   sku: "swift-1684",
@@ -6103,7 +6712,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207930/617819-picanha-gran-reserva_inn.jpg?v=638852212675770000",
-  productUrl: "https://loja.swift.com.br/picanha-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-swift-gran-reserva-kg/p",
+  popularity: 610
  },
  {
   sku: "swift-1683",
@@ -6113,7 +6723,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207695/617818-raquete-shoulder-swift-gran-reserva_inn.jpg?v=638851761917500000",
-  productUrl: "https://loja.swift.com.br/raquete-shoulder-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/raquete-shoulder-swift-gran-reserva-kg/p",
+  popularity: 611
  },
  {
   sku: "swift-1431",
@@ -6123,7 +6734,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213497/617636-peito-bovino-ja-pro-forno_rec.jpg?v=639026365843370000",
-  productUrl: "https://loja.swift.com.br/peito-bovino-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/peito-bovino-ja-pro-forno-swift-kg/p",
+  popularity: 612
  },
  {
   sku: "swift-1240",
@@ -6133,7 +6745,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209511/617564-file-de-pirarucu_inn.jpg?v=638893021471800000",
-  productUrl: "https://loja.swift.com.br/file-de-pirarucu-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-pirarucu-swift-500g/p",
+  popularity: 613
  },
  {
   sku: "swift-1123",
@@ -6143,7 +6756,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213264/617484-maminha-ja-pro-forno_rec.jpg?v=639020146134900000",
-  productUrl: "https://loja.swift.com.br/maminha-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-ja-pro-forno-swift-kg/p",
+  popularity: 614
  },
  {
   sku: "swift-1528",
@@ -6153,7 +6767,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208556/617344-frango-inteiro-caipira_inn.jpg?v=638869113287370000",
-  productUrl: "https://loja.swift.com.br/frango-inteiro-caipira-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/frango-inteiro-caipira-swift-kg/p",
+  popularity: 615
  },
  {
   sku: "swift-829",
@@ -6163,7 +6778,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215475/617162-postas-de-bacalhau-dessalgado_inn.jpg?v=639101574765630000",
-  productUrl: "https://loja.swift.com.br/postas-de-bacalhau-dessalgado-swift-800g/p"
+  productUrl: "https://loja.swift.com.br/postas-de-bacalhau-dessalgado-swift-800g/p",
+  popularity: 616
  },
  {
   sku: "swift-455",
@@ -6173,7 +6789,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos t-bone",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213201/616045-t-bone_inn.jpg?v=639016725312100000",
-  productUrl: "https://loja.swift.com.br/t-bone-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/t-bone-swift-kg/p",
+  popularity: 617
  },
  {
   sku: "swift-485",
@@ -6183,7 +6800,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208571/615553-fraldinha_inn.jpg?v=638869756643370000",
-  productUrl: "https://loja.swift.com.br/fraldinha-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/fraldinha-swift-kg/p",
+  popularity: 618
  },
  {
   sku: "swift-427",
@@ -6193,7 +6811,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209946/615385-picanha-black_inn.jpg?v=638901681344600000",
-  productUrl: "https://loja.swift.com.br/picanha-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-swift-black-kg/p",
+  popularity: 619
  },
  {
   sku: "swift-424",
@@ -6203,7 +6822,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros carre",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214860/599073-carre-curto-cordeiro-uruguaio_inn.jpg?v=639084029667430000",
-  productUrl: "https://loja.swift.com.br/carre-curto-cordeiro-uruguaio-swift-kg-/p"
+  productUrl: "https://loja.swift.com.br/carre-curto-cordeiro-uruguaio-swift-kg-/p",
+  popularity: 620
  },
  {
   sku: "swift-2002",
@@ -6213,7 +6833,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208553/616676-copa-lombo-suina-temperada_inn.jpg?v=638869084733600000",
-  productUrl: "https://loja.swift.com.br/copa-lombo-suina-temperada-swift/p"
+  productUrl: "https://loja.swift.com.br/copa-lombo-suina-temperada-swift/p",
+  popularity: 621
  },
  {
   sku: "swift-213",
@@ -6223,7 +6844,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209209/616653-aneis-de-lula_inn.jpg?v=638883746647400000",
-  productUrl: "https://loja.swift.com.br/aneis-de-lula-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/aneis-de-lula-swift-400g/p",
+  popularity: 622
  },
  {
   sku: "swift-82",
@@ -6233,7 +6855,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208295/616043-casquinha-de-peixe-temperada_inn.jpg?v=638864746603630000",
-  productUrl: "https://loja.swift.com.br/casquinha-de-peixe-temperada-swift-330g/p"
+  productUrl: "https://loja.swift.com.br/casquinha-de-peixe-temperada-swift-330g/p",
+  popularity: 623
  },
  {
   sku: "swift-51",
@@ -6243,7 +6866,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212648/615816-frango-a-passarinho-seara_inn.jpg?v=639002801763030000",
-  productUrl: "https://loja.swift.com.br/frango-a-passarinho-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/frango-a-passarinho-seara-1kg/p",
+  popularity: 624
  },
  {
   sku: "swift-7947",
@@ -6253,7 +6877,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218758/623404-calzone-de-marguerita_mck.jpg?v=639221524857130000",
-  productUrl: "https://loja.swift.com.br/calzone-de-marguerita-swift-280g/p"
+  productUrl: "https://loja.swift.com.br/calzone-de-marguerita-swift-280g/p",
+  popularity: 625
  },
  {
   sku: "swift-7925",
@@ -6263,7 +6888,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217640/mockup-pack-suco-de-maca-180ml_mck.jpg?v=639183335324300000",
-  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-maca-natural-one-180ml-sp/p"
+  productUrl: "https://loja.swift.com.br/pack-6-sucos-de-maca-natural-one-180ml-sp/p",
+  popularity: 626
  },
  {
   sku: "swift-7889",
@@ -6273,7 +6899,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti vegetais ervilha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218752/624131-ervilha-imp_mck.jpg?v=639221499786100000",
-  productUrl: "https://loja.swift.com.br/ervilha-imp-swift-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/ervilha-imp-swift-1-02kg/p",
+  popularity: 627
  },
  {
   sku: "swift-7887",
@@ -6283,7 +6910,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216515/623892-molho-de-pimenta-tradicional-habanero_mck.jpg?v=639135985485000000",
-  productUrl: "https://loja.swift.com.br/molho-de-pimenta-tradicional-habanero-swift-60ml/p"
+  productUrl: "https://loja.swift.com.br/molho-de-pimenta-tradicional-habanero-swift-60ml/p",
+  popularity: 628
  },
  {
   sku: "swift-7873",
@@ -6293,7 +6921,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217431/624111-amendoim-crokissimo-de-chocolate-santa-helena_mck.jpg?v=639168080989030000",
-  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-chocolate-santa-helena-45g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-chocolate-santa-helena-45g/p",
+  popularity: 629
  },
  {
   sku: "swift-7830",
@@ -6303,7 +6932,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215096/623853-aveia-flocos-finos-nestle_mck.jpg?v=639092903786570000",
-  productUrl: "https://loja.swift.com.br/aveia-flocos-finos-nestle-170g/p"
+  productUrl: "https://loja.swift.com.br/aveia-flocos-finos-nestle-170g/p",
+  popularity: 630
  },
  {
   sku: "swift-7809",
@@ -6313,7 +6943,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215364/623674-tempero-fit-ovos-br-spices_mck.jpg?v=639099607771630000",
-  productUrl: "https://loja.swift.com.br/tempero-fit-ovos-br-spices-55g/p"
+  productUrl: "https://loja.swift.com.br/tempero-fit-ovos-br-spices-55g/p",
+  popularity: 631
  },
  {
   sku: "swift-7745",
@@ -6323,7 +6954,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214630/623884-azeitona-verde-sem-caroco-tozzi_mck.jpg?v=639076517376600000",
-  productUrl: "https://loja.swift.com.br/azeitona-verde-sem-caroco-tozzi-120g/p"
+  productUrl: "https://loja.swift.com.br/azeitona-verde-sem-caroco-tozzi-120g/p",
+  popularity: 632
  },
  {
   sku: "swift-7669",
@@ -6333,7 +6965,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos bisteca",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215351/623348-bisteca-suina-aurora_mck.jpg?v=639099563967470000",
-  productUrl: "https://loja.swift.com.br/bisteca-suina-aurora-kg/p"
+  productUrl: "https://loja.swift.com.br/bisteca-suina-aurora-kg/p",
+  popularity: 633
  },
  {
   sku: "swift-7640",
@@ -6343,7 +6976,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214649/623681-chocolate-ao-leite-lacta_mck.jpg?v=639077091989570000",
-  productUrl: "https://loja.swift.com.br/chocolate-ao-leite-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-ao-leite-lacta-145g/p",
+  popularity: 634
  },
  {
   sku: "swift-7609",
@@ -6353,7 +6987,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215339/623784-focaccia-de-azeite-azeitona-e-alecrim_rec.jpg?v=639099525160930000",
-  productUrl: "https://loja.swift.com.br/focaccia-azeite-azeitona-e-alecrim-panibrasi-300g/p"
+  productUrl: "https://loja.swift.com.br/focaccia-azeite-azeitona-e-alecrim-panibrasi-300g/p",
+  popularity: 635
  },
  {
   sku: "swift-7612",
@@ -6363,7 +6998,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213518/623771-mini-paes-sortidos-panibrasil_rec.jpg?v=639027068998770000",
-  productUrl: "https://loja.swift.com.br/mini-paes-sortidos-panibrasil-265g/p"
+  productUrl: "https://loja.swift.com.br/mini-paes-sortidos-panibrasil-265g/p",
+  popularity: 636
  },
  {
   sku: "swift-7611",
@@ -6373,7 +7009,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213517/623757-pao-frances-cereais-panibrasil_rec.jpg?v=639027065267130000",
-  productUrl: "https://loja.swift.com.br/pao-frances-cereais-panibrasil-180g/p"
+  productUrl: "https://loja.swift.com.br/pao-frances-cereais-panibrasil-180g/p",
+  popularity: 637
  },
  {
   sku: "swift-7604",
@@ -6383,7 +7020,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212640/623696-pre-treino-limao-swift-proefit_mck.jpg?v=639002232710000000",
-  productUrl: "https://loja.swift.com.br/pre-treino-limao-swift-proefit-300g/p"
+  productUrl: "https://loja.swift.com.br/pre-treino-limao-swift-proefit-300g/p",
+  popularity: 638
  },
  {
   sku: "swift-7583",
@@ -6393,7 +7031,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215099/623690-chips-de-parmesao-com-cebola-e-salsa-faixa-azul_mck.jpg?v=639093471102330000",
-  productUrl: "https://loja.swift.com.br/chips-de-parmesao-com-cebola-e-salsa-faixa-azul-35g/p"
+  productUrl: "https://loja.swift.com.br/chips-de-parmesao-com-cebola-e-salsa-faixa-azul-35g/p",
+  popularity: 639
  },
  {
   sku: "swift-7183",
@@ -6403,7 +7042,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217369/623743-pao-com-semente-de-abobora-e-mel-sabor-de-france_mck.jpg?v=639167045520070000",
-  productUrl: "https://loja.swift.com.br/pao-com-semente-de-abobora-e-mel-sabor-de-france-210g/p"
+  productUrl: "https://loja.swift.com.br/pao-com-semente-de-abobora-e-mel-sabor-de-france-210g/p",
+  popularity: 640
  },
  {
   sku: "swift-7182",
@@ -6413,7 +7053,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212182/623332-sacola-retornavel-termica-rafia-swift_mck.jpg?v=638991756897600000",
-  productUrl: "https://loja.swift.com.br/sacola-retornavel-termica-rafia-swift/p"
+  productUrl: "https://loja.swift.com.br/sacola-retornavel-termica-rafia-swift/p",
+  popularity: 641
  },
  {
   sku: "swift-7161",
@@ -6423,7 +7064,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217306/623715-pao-de-batata-com-calabresa-e-requeijao_mck.jpg?v=639165309045370000",
-  productUrl: "https://loja.swift.com.br/pao-de-batata-com-calabresa-e-requeijao-swift-150g/p"
+  productUrl: "https://loja.swift.com.br/pao-de-batata-com-calabresa-e-requeijao-swift-150g/p",
+  popularity: 642
  },
  {
   sku: "swift-7123",
@@ -6433,7 +7075,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214087/623572-bolinho-de-chocolate-duplo-bauducco_mck.jpg?v=639058263865300000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-chocolate-duplo-bauducco-40g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-chocolate-duplo-bauducco-40g/p",
+  popularity: 643
  },
  {
   sku: "swift-7108",
@@ -6443,7 +7086,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213918/623207-escondidinho-de-batata-doce-com-frango_mck.jpg?v=639051249659130000",
-  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-doce-com-frango-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/escondidinho-de-batata-doce-com-frango-swift-350g/p",
+  popularity: 644
  },
  {
   sku: "swift-7098",
@@ -6453,7 +7097,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212982/623498-castanha-de-caju-torrada-e-salgada-brasil-frutt_mck.jpg?v=639012342013870000",
-  productUrl: "https://loja.swift.com.br/castanha-de-caju-torrada-e-salgada-brasil-frutt-200g/p"
+  productUrl: "https://loja.swift.com.br/castanha-de-caju-torrada-e-salgada-brasil-frutt-200g/p",
+  popularity: 645
  },
  {
   sku: "swift-7094",
@@ -6463,7 +7108,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212984/623582-milho-torrado-com-mostarda-e-mel_mck.jpg?v=639012351701200000",
-  productUrl: "https://loja.swift.com.br/milho-torrado-com-mostarda-e-mel-brasil-frutt-160g/p"
+  productUrl: "https://loja.swift.com.br/milho-torrado-com-mostarda-e-mel-brasil-frutt-160g/p",
+  popularity: 646
  },
  {
   sku: "swift-7090",
@@ -6473,7 +7119,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213690/623539-costela-suina-temperada-suinco_mck.jpg?v=639040074130070000",
-  productUrl: "https://loja.swift.com.br/costela-suina-temperada-suinco-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-temperada-suinco-kg/p",
+  popularity: 647
  },
  {
   sku: "swift-7085",
@@ -6483,7 +7130,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212115/623549-chocolate-alpino-nestle_mck.jpg?v=638990280312700000",
-  productUrl: "https://loja.swift.com.br/chocolate-alpino-nestle-195g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-alpino-nestle-195g/p",
+  popularity: 648
  },
  {
   sku: "swift-7080",
@@ -6493,7 +7141,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213510/623540-pao-petit-rustico-sabor-de-france_rec.jpg?v=639027023538870000",
-  productUrl: "https://loja.swift.com.br/pao-petit-rustico-sabor-de-france-410g/p"
+  productUrl: "https://loja.swift.com.br/pao-petit-rustico-sabor-de-france-410g/p",
+  popularity: 649
  },
  {
   sku: "swift-7079",
@@ -6503,7 +7152,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213488/623541-pao-petit-italiano-sabor-de-france_rec.jpg?v=639026240853400000",
-  productUrl: "https://loja.swift.com.br/pao-petit-italiano-sabor-de-france-410g/p"
+  productUrl: "https://loja.swift.com.br/pao-petit-italiano-sabor-de-france-410g/p",
+  popularity: 650
  },
  {
   sku: "swift-7069",
@@ -6513,7 +7163,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211566/623473-massa-para-lasanha-com-ovos-barilla_mck.jpg?v=638973704210570000",
-  productUrl: "https://loja.swift.com.br/massa-para-lasanha-com-ovos-barilla-200g/p"
+  productUrl: "https://loja.swift.com.br/massa-para-lasanha-com-ovos-barilla-200g/p",
+  popularity: 651
  },
  {
   sku: "swift-7015",
@@ -6523,7 +7174,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216648/623422-picanha-swift-gran-reserva-raizes-do-sul_inn.jpg?v=639138470877370000",
-  productUrl: "https://loja.swift.com.br/picanha-swift-gran-reserva-raizes-do-sul-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-swift-gran-reserva-raizes-do-sul-kg/p",
+  popularity: 652
  },
  {
   sku: "swift-6997",
@@ -6533,7 +7185,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211240/623433-suco-de-uva-pera-e-maca-natural-one_mck.jpg?v=638957203935200000",
-  productUrl: "https://loja.swift.com.br/suco-de-uva-pera-maca-natural-one-180ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-uva-pera-maca-natural-one-180ml/p",
+  popularity: 653
  },
  {
   sku: "swift-6934",
@@ -6543,7 +7196,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211001/622538-pack-agua-com-gas-1-5_mck.png?v=638944041970770000",
-  productUrl: "https://loja.swift.com.br/pack-6-agua-com-gas-garrafa/p"
+  productUrl: "https://loja.swift.com.br/pack-6-agua-com-gas-garrafa/p",
+  popularity: 654
  },
  {
   sku: "swift-6933",
@@ -6553,7 +7207,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211000/622537-pack-agua-sem-gas-1-5_mck.jpg?v=638944041589470000",
-  productUrl: "https://loja.swift.com.br/pack-6-agua-sem-gas-garrafa/p"
+  productUrl: "https://loja.swift.com.br/pack-6-agua-sem-gas-garrafa/p",
+  popularity: 655
  },
  {
   sku: "swift-6927",
@@ -6563,7 +7218,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211143/623328-batata-airfryer-hashtag-mccain_rec.jpg?v=638953584940700000",
-  productUrl: "https://loja.swift.com.br/batata-airfryer-hashtag-mccain-450g/p"
+  productUrl: "https://loja.swift.com.br/batata-airfryer-hashtag-mccain-450g/p",
+  popularity: 656
  },
  {
   sku: "swift-6918",
@@ -6573,7 +7229,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210210/623081-mostarda-amalera_rec.jpg?v=638911213952730000",
-  productUrl: "https://loja.swift.com.br/mostarda-amarela-swift-330g/p"
+  productUrl: "https://loja.swift.com.br/mostarda-amarela-swift-330g/p",
+  popularity: 657
  },
  {
   sku: "swift-6923",
@@ -6583,7 +7240,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210208/623077-ketchup_rec.jpg?v=638911213705130000",
-  productUrl: "https://loja.swift.com.br/ketchup-swift-340g/p"
+  productUrl: "https://loja.swift.com.br/ketchup-swift-340g/p",
+  popularity: 658
  },
  {
   sku: "swift-6922",
@@ -6593,7 +7251,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210159/623078-molho-sweet-chilli_rec.jpg?v=638908778237200000",
-  productUrl: "https://loja.swift.com.br/molho-sweet-chilli-swift-340g/p"
+  productUrl: "https://loja.swift.com.br/molho-sweet-chilli-swift-340g/p",
+  popularity: 659
  },
  {
   sku: "swift-6924",
@@ -6603,7 +7262,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210161/623073-maionese-grill_rec.jpg?v=638908797183800000",
-  productUrl: "https://loja.swift.com.br/maionese-grill-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/maionese-grill-swift-300g/p",
+  popularity: 660
  },
  {
   sku: "swift-6854",
@@ -6613,7 +7273,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais pato",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212065/623220-coxa-e-sobrecoxa-de-pato-assa-facil_inn.jpg?v=638989867389130000",
-  productUrl: "https://loja.swift.com.br/coxa-e-sobrecoxa-de-pato-assa-facil-700g/p"
+  productUrl: "https://loja.swift.com.br/coxa-e-sobrecoxa-de-pato-assa-facil-700g/p",
+  popularity: 661
  },
  {
   sku: "swift-6846",
@@ -6623,7 +7284,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais exoticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211114/623213-codorna-villa-germania_inn.jpg?v=638953541335100000",
-  productUrl: "https://loja.swift.com.br/codorna-villa-germania-820g/p"
+  productUrl: "https://loja.swift.com.br/codorna-villa-germania-820g/p",
+  popularity: 662
  },
  {
   sku: "swift-6842",
@@ -6633,7 +7295,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212340/623023-chocolate-kitkat-nestle_mck.jpg?v=638996077936170000",
-  productUrl: "https://loja.swift.com.br/chocolate-kitkat-nestle-41-5-g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-kitkat-nestle-41-5-g/p",
+  popularity: 663
  },
  {
   sku: "swift-6834",
@@ -6643,7 +7306,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210325/623034-atum-em-pedacos-em-oleo-gomes-da-costa_mck.jpg?v=638920953131130000",
-  productUrl: "https://loja.swift.com.br/atum-em-pedacos-em-oleo-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-em-pedacos-em-oleo-gomes-da-costa-170g/p",
+  popularity: 664
  },
  {
   sku: "swift-6827",
@@ -6653,7 +7317,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211554/623192-energetico-zero-monster_mck.jpg?v=638973685943000000",
-  productUrl: "https://loja.swift.com.br/energetico-zero-monster-473ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-zero-monster-473ml/p",
+  popularity: 665
  },
  {
   sku: "swift-6797",
@@ -6663,7 +7328,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217378/622870-polaca-do-alasca-dessalgada-desfiada-riberalves_inn.jpg?v=639167052284370000",
-  productUrl: "https://loja.swift.com.br/polaca-do-alasca-dessalgada-desfiada-riberalves-500g/p"
+  productUrl: "https://loja.swift.com.br/polaca-do-alasca-dessalgada-desfiada-riberalves-500g/p",
+  popularity: 666
  },
  {
   sku: "swift-6792",
@@ -6673,7 +7339,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218717/623047-pacoquita-original-santa-helena_mck.jpg?v=639221390354730000",
-  productUrl: "https://loja.swift.com.br/pacoquita-original-santa-helena-18g/p"
+  productUrl: "https://loja.swift.com.br/pacoquita-original-santa-helena-18g/p",
+  popularity: 667
  },
  {
   sku: "swift-6791",
@@ -6683,7 +7350,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215544/623070-file-de-peito-pioneiro_inn.jpg?v=639105640207230000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-pioneiro-kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-pioneiro-kg/p",
+  popularity: 668
  },
  {
   sku: "swift-6956",
@@ -6693,7 +7361,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210578/623045-costela-minga-suina-temperada-sulita_inn.jpg?v=638931996514700000",
-  productUrl: "https://loja.swift.com.br/costela-minga-suina-temperada-sulita-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-minga-suina-temperada-sulita-kg/p",
+  popularity: 669
  },
  {
   sku: "swift-6649",
@@ -6703,7 +7372,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215285/622899-batata-palha-extra-fina-elma-chips-pepsico_mck.jpg?v=639096421275300000",
-  productUrl: "https://loja.swift.com.br/batata-palha-extra-fina-elma-chips-pepsico-90g/p"
+  productUrl: "https://loja.swift.com.br/batata-palha-extra-fina-elma-chips-pepsico-90g/p",
+  popularity: 670
  },
  {
   sku: "swift-6644",
@@ -6713,7 +7383,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205762/622535_coca_zero_garrafa-1.png.png?v=638787774025400000",
-  productUrl: "https://loja.swift.com.br/pack-6-garrafas-coca-zero-600ml/p"
+  productUrl: "https://loja.swift.com.br/pack-6-garrafas-coca-zero-600ml/p",
+  popularity: 671
  },
  {
   sku: "swift-6643",
@@ -6723,7 +7394,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/206568/mockup-pack-12-coca-zero-350ml_1.jpg.jpg?v=638815463372930000",
-  productUrl: "https://loja.swift.com.br/pack-12-latas-coca-zero-350ml/p"
+  productUrl: "https://loja.swift.com.br/pack-12-latas-coca-zero-350ml/p",
+  popularity: 672
  },
  {
   sku: "swift-6635",
@@ -6733,7 +7405,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205021/baden-baden-cristal-pack_1.jpg.jpg?v=638752485704000000",
-  productUrl: "https://loja.swift.com.br/pack-baden-ipa-cristal-350ml/p"
+  productUrl: "https://loja.swift.com.br/pack-baden-ipa-cristal-350ml/p",
+  popularity: 673
  },
  {
   sku: "swift-6505",
@@ -6743,7 +7416,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207180/622742-aspargos--grano_inn.jpg?v=638838872948500000",
-  productUrl: "https://loja.swift.com.br/aspargos-grano-1kg/p"
+  productUrl: "https://loja.swift.com.br/aspargos-grano-1kg/p",
+  popularity: 674
  },
  {
   sku: "swift-6430",
@@ -6753,7 +7427,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos empanados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211903/622691-berinjela-empanada-pre-frita_rec.jpg?v=638984894394970000",
-  productUrl: "https://loja.swift.com.br/berinjela-empanada-pre-frita-swift-300g/p"
+  productUrl: "https://loja.swift.com.br/berinjela-empanada-pre-frita-swift-300g/p",
+  popularity: 675
  },
  {
   sku: "swift-6410",
@@ -6763,7 +7438,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207392/622673-bis-branco-mondelez_mck.jpg?v=638845711998170000",
-  productUrl: "https://loja.swift.com.br/bis-branco-mondelez-100g/p"
+  productUrl: "https://loja.swift.com.br/bis-branco-mondelez-100g/p",
+  popularity: 676
  },
  {
   sku: "swift-6335",
@@ -6773,7 +7449,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212282/622533-coca-cola-zero-lata_mck.jpg?v=638993547537470000",
-  productUrl: "https://loja.swift.com.br/coca-cola-zero-lata-350ml/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-zero-lata-350ml/p",
+  popularity: 677
  },
  {
   sku: "swift-6330",
@@ -6783,7 +7460,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos carne de bananinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216296/622312-bananinha-combo_inn.jpg?v=639129220142200000",
-  productUrl: "https://loja.swift.com.br/bananinha-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/bananinha-combo-kg/p",
+  popularity: 678
  },
  {
   sku: "swift-6066",
@@ -6793,7 +7471,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214616/622178-mini-sorvete-doce-de-leite-kibon_mck.jpg?v=639076470275500000",
-  productUrl: "https://loja.swift.com.br/mini-sorvete-doce-de-leite-kibon-92g/p"
+  productUrl: "https://loja.swift.com.br/mini-sorvete-doce-de-leite-kibon-92g/p",
+  popularity: 679
  },
  {
   sku: "swift-6272",
@@ -6803,7 +7482,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos variado",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216193/622143-joelho-de-porco-defumado-temperado_rec.jpg?v=639125692718400000",
-  productUrl: "https://loja.swift.com.br/joelho-de-porco-defumado-temperado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/joelho-de-porco-defumado-temperado-swift-kg/p",
+  popularity: 680
  },
  {
   sku: "swift-5209",
@@ -6813,7 +7493,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos patinho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215023/621648-bife-de-patinho_inn.jpg?v=639090110300600000",
-  productUrl: "https://loja.swift.com.br/bife-de-patinho-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-patinho-swift-1kg/p",
+  popularity: 681
  },
  {
   sku: "swift-4900",
@@ -6823,7 +7504,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209541/621328-tempero-para-pescados_inn.jpg?v=638893145319530000",
-  productUrl: "https://loja.swift.com.br/tempero-para-pescados-swift-100g/p"
+  productUrl: "https://loja.swift.com.br/tempero-para-pescados-swift-100g/p",
+  popularity: 682
  },
  {
   sku: "swift-4752",
@@ -6833,7 +7515,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209533/621330-sal-grosso-com-chimichurri_inn.jpg?v=638893129756430000",
-  productUrl: "https://loja.swift.com.br/sal-grosso-com-chimichurri-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-grosso-com-chimichurri-swift-500g/p",
+  popularity: 683
  },
  {
   sku: "swift-4398",
@@ -6843,7 +7526,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213525/620512-entrana-swift-legado-1855_inn.jpg?v=639027077062700000",
-  productUrl: "https://loja.swift.com.br/entrana-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/entrana-swift-legado-1855-kg/p",
+  popularity: 684
  },
  {
   sku: "swift-6595",
@@ -6853,7 +7537,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos fraldinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212322/620016-fraldinha-temperada_inn.jpg?v=638996014399900000",
-  productUrl: "https://loja.swift.com.br/fralda-temperada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/fralda-temperada-swift-kg/p",
+  popularity: 685
  },
  {
   sku: "swift-3581",
@@ -6863,7 +7548,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218676/618889-steak-ribeye-cap-swift-legado-1855_inn.jpg?v=639219588631230000",
-  productUrl: "https://loja.swift.com.br/steak-ribeye-cap-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/steak-ribeye-cap-swift-legado-1855-kg/p",
+  popularity: 686
  },
  {
   sku: "swift-2606",
@@ -6873,7 +7559,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208500/618287-bolsa-termica_mck.jpg?v=638866482919170000",
-  productUrl: "https://loja.swift.com.br/bolsa-termica-20-litros-swift/p"
+  productUrl: "https://loja.swift.com.br/bolsa-termica-20-litros-swift/p",
+  popularity: 687
  },
  {
   sku: "swift-2315",
@@ -6883,7 +7570,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216471/618292_SAL-PIMENTA-PRETA-GRELHADOS-E-HAMB-500G-BAIXA.jpg?v=639135030253870000",
-  productUrl: "https://loja.swift.com.br/sal-granulado-para-parrilla-com-pimenta-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-granulado-para-parrilla-com-pimenta-swift-500g/p",
+  popularity: 688
  },
  {
   sku: "swift-2125",
@@ -6893,7 +7581,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214802/616158-pernil-cordeiro-chileno_inn.jpg?v=639082336270730000",
-  productUrl: "https://loja.swift.com.br/pernil-cordeiro-chileno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pernil-cordeiro-chileno-swift-kg/p",
+  popularity: 689
  },
  {
   sku: "swift-2124",
@@ -6903,7 +7592,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214397/616157-paleta-cordeiro-chileno_inn.jpg?v=639068496288400000",
-  productUrl: "https://loja.swift.com.br/paleta-cordeiro-chileno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/paleta-cordeiro-chileno-swift-kg/p",
+  popularity: 690
  },
  {
   sku: "swift-2049",
@@ -6913,7 +7603,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207852/618185-caldo-culinario-de-camarao_inn.jpg?v=638851836017700000",
-  productUrl: "https://loja.swift.com.br/caldo-culinario-de-camarao-200ml/p"
+  productUrl: "https://loja.swift.com.br/caldo-culinario-de-camarao-200ml/p",
+  popularity: 691
  },
  {
   sku: "swift-1841",
@@ -6923,7 +7614,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados truta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209678/618054-file-de-truta-da-patagonia_inn.jpg?v=638894975125700000",
-  productUrl: "https://loja.swift.com.br/file-de-truta-da-patagonia-swift-125g/p"
+  productUrl: "https://loja.swift.com.br/file-de-truta-da-patagonia-swift-125g/p",
+  popularity: 692
  },
  {
   sku: "swift-1783",
@@ -6933,7 +7625,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207733/618008-molho-de-pimenta-cremoso_rec.jpg?v=638851778902330000",
-  productUrl: "https://loja.swift.com.br/molho-de-pimenta-cremoso-swift-215ml/p"
+  productUrl: "https://loja.swift.com.br/molho-de-pimenta-cremoso-swift-215ml/p",
+  popularity: 693
  },
  {
   sku: "swift-1601",
@@ -6943,7 +7636,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209659/617837-coxinha-asa-organica-seara_inn.jpg?v=638894868437570000",
-  productUrl: "https://loja.swift.com.br/coxinha-asa-organica-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-asa-organica-seara-600g/p",
+  popularity: 694
  },
  {
   sku: "swift-1687",
@@ -6953,7 +7647,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos mignon",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207939/617826-file-mignon-gran-reserva_inn.jpg?v=638852223255700000",
-  productUrl: "https://loja.swift.com.br/file-mignon-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/file-mignon-swift-gran-reserva-kg/p",
+  popularity: 695
  },
  {
   sku: "swift-1685",
@@ -6963,7 +7658,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos baby beef",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208864/617824-baby-beef-swift-gran-geserva_inn.jpg?v=638872523607330000",
-  productUrl: "https://loja.swift.com.br/baby-beef-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/baby-beef-swift-gran-reserva-kg/p",
+  popularity: 696
  },
  {
   sku: "swift-1680",
@@ -6973,7 +7669,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216691/617815-bife-ancho-swift-gran-reserva_inn.jpg?v=639141873988230000",
-  productUrl: "https://loja.swift.com.br/bife-ancho-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-ancho-swift-gran-reserva-kg/p",
+  popularity: 697
  },
  {
   sku: "swift-1970",
@@ -6983,7 +7680,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves inteiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215088/617592-galinha-inteira_inn.jpg?v=639092896064530000",
-  productUrl: "https://loja.swift.com.br/galinha-inteira-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/galinha-inteira-swift-kg/p",
+  popularity: 698
  },
  {
   sku: "swift-1293",
@@ -6993,7 +7691,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213433/617512-costela-quadrada_inn.jpg?v=639023487416930000",
-  productUrl: "https://loja.swift.com.br/costela-quadrada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-quadrada-swift-kg/p",
+  popularity: 699
  },
  {
   sku: "swift-1124",
@@ -7003,7 +7702,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213275/617485-alcatra-ja-pro-forno_rec.jpg?v=639020268848900000",
-  productUrl: "https://loja.swift.com.br/alcatra-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/alcatra-ja-pro-forno-swift-kg/p",
+  popularity: 700
  },
  {
   sku: "swift-1471",
@@ -7013,7 +7713,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos cupim",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213504/617482-cupim-ja-pro-forno_rec.jpg?v=639026963879770000",
-  productUrl: "https://loja.swift.com.br/cupim-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/cupim-ja-pro-forno-swift-kg/p",
+  popularity: 701
  },
  {
   sku: "swift-824",
@@ -7023,7 +7724,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais pato",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209327/616642-pato-inteiro_inn.jpg?v=638887121117700000",
-  productUrl: "https://loja.swift.com.br/pato-inteiro-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pato-inteiro-swift-kg/p",
+  popularity: 702
  },
  {
   sku: "swift-456",
@@ -7033,7 +7735,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207584/616046-prime-rib_inn.jpg?v=638850940230800000",
-  productUrl: "https://loja.swift.com.br/prime-rib-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/prime-rib-swift-kg/p",
+  popularity: 703
  },
  {
   sku: "swift-500",
@@ -7043,7 +7746,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207948/615862-costela-do-traseiro-fatiada_inn.jpg?v=638852376384900000",
-  productUrl: "https://loja.swift.com.br/costela-do-traseiro-fatiada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-do-traseiro-fatiada-swift-kg/p",
+  popularity: 704
  },
  {
   sku: "swift-445",
@@ -7053,7 +7757,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208287/615617-bife-de-chorizo-swift-black_inn.jpg?v=638864670259030000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-black-kg/p",
+  popularity: 705
  },
  {
   sku: "swift-426",
@@ -7063,7 +7768,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209146/615357-maminha-swift-black_inn.jpg?v=638882783665930000",
-  productUrl: "https://loja.swift.com.br/maminha-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-swift-black-kg/p",
+  popularity: 706
  },
  {
   sku: "swift-425",
@@ -7073,7 +7779,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208678/615253-bife-ancho-swift-black_inn.jpg?v=638869995033770000",
-  productUrl: "https://loja.swift.com.br/bife-ancho-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-ancho-swift-black-kg/p",
+  popularity: 707
  },
  {
   sku: "swift-293",
@@ -7083,7 +7790,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213072/599185-costela-cordeiro-uruguaio_inn.jpg?v=639015035626530000",
-  productUrl: "https://loja.swift.com.br/costela-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-cordeiro-uruguaio-swift-kg/p",
+  popularity: 708
  },
  {
   sku: "swift-289",
@@ -7093,7 +7801,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214741/599070-pernil-de-cordeiro-uruguaio_inn.jpg?v=639081360131100000",
-  productUrl: "https://loja.swift.com.br/pernil-de-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/pernil-de-cordeiro-uruguaio-swift-kg/p",
+  popularity: 709
  },
  {
   sku: "swift-7966",
@@ -7103,7 +7812,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218759/624081-salame-de-chocolate-com-amendoim_rec.jpg?v=639221529221900000",
-  productUrl: "https://loja.swift.com.br/salame-de-chocolate-com-amendoim-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/salame-de-chocolate-com-amendoim-swift-350g/p",
+  popularity: 710
  },
  {
   sku: "swift-7948",
@@ -7113,7 +7823,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218757/623402-calzone-de-calabresa_mck.jpg?v=639221521849100000",
-  productUrl: "https://loja.swift.com.br/calzone-de-calabresa-swift-280g/p"
+  productUrl: "https://loja.swift.com.br/calzone-de-calabresa-swift-280g/p",
+  popularity: 711
  },
  {
   sku: "swift-7945",
@@ -7123,7 +7834,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos pernil",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218530/624224-pernil-de-leitao-swift-legado-1855_inn.jpg?v=639211267082630000",
-  productUrl: "https://loja.swift.com.br/pernil-de-leitao-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/pernil-de-leitao-swift-legado-1855-kg/p",
+  popularity: 712
  },
  {
   sku: "swift-7952",
@@ -7133,7 +7845,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218745/624052-peito-com-osso-com-pele-combo_mck.jpg?v=639221470548230000",
-  productUrl: "https://loja.swift.com.br/peito-com-osso-com-pele-combo-kg/p"
+  productUrl: "https://loja.swift.com.br/peito-com-osso-com-pele-combo-kg/p",
+  popularity: 713
  },
  {
   sku: "swift-7883",
@@ -7143,7 +7856,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216556/624075-album-de-figurinhas-capa-dura-fifa-world-cup-2026_mck.jpg?v=639136935529170000",
-  productUrl: "https://loja.swift.com.br/album-de-figurinhas-capa-dura-fifa-world-cup-2026/p"
+  productUrl: "https://loja.swift.com.br/album-de-figurinhas-capa-dura-fifa-world-cup-2026/p",
+  popularity: 714
  },
  {
   sku: "swift-7876",
@@ -7153,7 +7867,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218755/624085-coxinha-da-asa-temperada-big-frango_inn.jpg?v=639221515323570000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-temperada-big-frango-kg/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-temperada-big-frango-kg/p",
+  popularity: 715
  },
  {
   sku: "swift-7866",
@@ -7163,7 +7878,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217432/624103-pe-de-moleque-crocante-santa-helena_mck.jpg?v=639168086986200000",
-  productUrl: "https://loja.swift.com.br/pe-de-moleque-crocante-santa-helena-225g/p"
+  productUrl: "https://loja.swift.com.br/pe-de-moleque-crocante-santa-helena-225g/p",
+  popularity: 716
  },
  {
   sku: "swift-7861",
@@ -7173,7 +7889,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217391/624114-salgadinho-fandangos-de-milho-e-presunto-pepsico_mck.jpg?v=639167134843900000",
-  productUrl: "https://loja.swift.com.br/salgadinho-fandangos-de-milho-e-presunto-pepsico-85g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-fandangos-de-milho-e-presunto-pepsico-85g/p",
+  popularity: 717
  },
  {
   sku: "swift-7848",
@@ -7183,7 +7900,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216080/624065-passata-rustica-em-vidro-salsaretti_mck.jpg?v=639122935053900000",
-  productUrl: "https://loja.swift.com.br/passata-rustica-em-vidro-salsaretti-500g/p"
+  productUrl: "https://loja.swift.com.br/passata-rustica-em-vidro-salsaretti-500g/p",
+  popularity: 718
  },
  {
   sku: "swift-7845",
@@ -7193,7 +7911,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216483/624037-vinho-tinto-cabernet-sauvignon-magnolia-negra_mck.jpg?v=639135067234630000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-cabernet-sauvignon-magnolia-negra-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-cabernet-sauvignon-magnolia-negra-750ml/p",
+  popularity: 719
  },
  {
   sku: "swift-7841",
@@ -7203,7 +7922,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216484/624035-vinho-tinto-malbec-finca-magnolia_mck.jpg?v=639135070239730000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-finca-magnolia-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-finca-magnolia-750ml/p",
+  popularity: 720
  },
  {
   sku: "swift-7764",
@@ -7213,7 +7933,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados sardinha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217377/624007-sardinha-inteira-frumar_mck.jpg?v=639167051434630000",
-  productUrl: "https://loja.swift.com.br/sardinha-inteira-frumar-800g/p"
+  productUrl: "https://loja.swift.com.br/sardinha-inteira-frumar-800g/p",
+  popularity: 721
  },
  {
   sku: "swift-7765",
@@ -7223,7 +7944,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218706/624019-polvo-portugues-brasmar_mck.jpg?v=639219836127800000",
-  productUrl: "https://loja.swift.com.br/polvo-portugues-brasmar-800g/p"
+  productUrl: "https://loja.swift.com.br/polvo-portugues-brasmar-800g/p",
+  popularity: 722
  },
  {
   sku: "swift-7740",
@@ -7233,7 +7955,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214629/623883-azeitona-verde-tozzi_mck.jpg?v=639076510089370000",
-  productUrl: "https://loja.swift.com.br/azeitona-verde-tozzi-120g/p"
+  productUrl: "https://loja.swift.com.br/azeitona-verde-tozzi-120g/p",
+  popularity: 723
  },
  {
   sku: "swift-7738",
@@ -7243,7 +7966,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214625/623882-azeitona-preta-tozzi_mck.jpg?v=639076497789770000",
-  productUrl: "https://loja.swift.com.br/azeitona-preta-tozzi-80g/p"
+  productUrl: "https://loja.swift.com.br/azeitona-preta-tozzi-80g/p",
+  popularity: 724
  },
  {
   sku: "swift-7702",
@@ -7253,7 +7977,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214369/623638-energetico-maca-zer-acucar-red-bull_mck.jpg?v=639065905626270000",
-  productUrl: "https://loja.swift.com.br/energetico-maca-zero-acucar-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-maca-zero-acucar-red-bull-250ml/p",
+  popularity: 725
  },
  {
   sku: "swift-7638",
@@ -7263,7 +7988,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218109/623684-chocolate-shot-lacta_mck.jpg?v=639198356178330000",
-  productUrl: "https://loja.swift.com.br/chocolate-shot-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-shot-lacta-145g/p",
+  popularity: 726
  },
  {
   sku: "swift-7637",
@@ -7273,7 +7999,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214648/623685-chocolate-diamante-negro-com-laka-lacta_mck.jpg?v=639077084814600000",
-  productUrl: "https://loja.swift.com.br/chocolate-diamante-negro-com-laka-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-diamante-negro-com-laka-lacta-145g/p",
+  popularity: 727
  },
  {
   sku: "swift-7635",
@@ -7283,7 +8010,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214647/623683-chocolate-diamante-negro-lacta_mck.jpg?v=639077083445530000",
-  productUrl: "https://loja.swift.com.br/chocolate-diamante-negro-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-diamante-negro-lacta-145g/p",
+  popularity: 728
  },
  {
   sku: "swift-7606",
@@ -7293,7 +8021,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212639/623694-creatina-creasafe-swift-proefit_mck.jpg?v=639002229024130000",
-  productUrl: "https://loja.swift.com.br/creatina-creasafe-swift-proefit-300g/p"
+  productUrl: "https://loja.swift.com.br/creatina-creasafe-swift-proefit-300g/p",
+  popularity: 729
  },
  {
   sku: "swift-7582",
@@ -7303,7 +8032,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215101/623691-chips-de-parmesao-faixa-azul_mck.jpg?v=639093482520770000",
-  productUrl: "https://loja.swift.com.br/chips-de-parmesao-faixa-azul-35g/p"
+  productUrl: "https://loja.swift.com.br/chips-de-parmesao-faixa-azul-35g/p",
+  popularity: 730
  },
  {
   sku: "swift-7575",
@@ -7313,7 +8043,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215087/623653-vinagre-de-vinho-branco-castelo_mck.jpg?v=639092895315530000",
-  productUrl: "https://loja.swift.com.br/vinagre-de-vinho-branco-castelo-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinagre-de-vinho-branco-castelo-750ml/p",
+  popularity: 731
  },
  {
   sku: "swift-7122",
@@ -7323,7 +8054,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214088/623573-bolinho-de-laranja-bauducco_mck.jpg?v=639058284096400000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-laranja-bauducco-40g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-laranja-bauducco-40g/p",
+  popularity: 732
  },
  {
   sku: "swift-7120",
@@ -7333,7 +8065,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213704/623608-vinho-brisa-cabernet-sauvignon-vistamar_mck.png?v=639040158315570000",
-  productUrl: "https://loja.swift.com.br/vinho-brisa-cabernet-sauvignon-vistamar-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-brisa-cabernet-sauvignon-vistamar-750ml/p",
+  popularity: 733
  },
  {
   sku: "swift-7106",
@@ -7343,7 +8076,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211637/623468-bala-minhocas-azedinhas-fini_mck.jpg?v=638975300782530000",
-  productUrl: "https://loja.swift.com.br/bala-minhocas-azedinhas-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-minhocas-azedinhas-fini-80g/p",
+  popularity: 734
  },
  {
   sku: "swift-7093",
@@ -7353,7 +8087,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212981/623584-mix-petisco-samba-brasil-frutt_mck.jpg?v=639012326721970000",
-  productUrl: "https://loja.swift.com.br/mix-petisco-samba-brasil-frutt-410g/p"
+  productUrl: "https://loja.swift.com.br/mix-petisco-samba-brasil-frutt-410g/p",
+  popularity: 735
  },
  {
   sku: "swift-7088",
@@ -7363,7 +8098,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212465/623543-arroz-arborio-italiano-la-pastina_mck.jpg?v=638998682173330000",
-  productUrl: "https://loja.swift.com.br/arroz-arborio-italiano-la-pastina-500g/p"
+  productUrl: "https://loja.swift.com.br/arroz-arborio-italiano-la-pastina-500g/p",
+  popularity: 736
  },
  {
   sku: "swift-7083",
@@ -7373,7 +8109,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212112/623516-chocolate-recheado-com-prestigio-nestle_mck.jpg?v=638990270638930000",
-  productUrl: "https://loja.swift.com.br/chocolate-recheado-com-prestigio-nestle-90g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-recheado-com-prestigio-nestle-90g/p",
+  popularity: 737
  },
  {
   sku: "swift-7070",
@@ -7383,7 +8120,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211460/623492-spaghetti-n5-grano-duro-barilla_mck.jpg?v=638967893548030000",
-  productUrl: "https://loja.swift.com.br/spaghetti-n5-grano-duro-barilla-500g/p"
+  productUrl: "https://loja.swift.com.br/spaghetti-n5-grano-duro-barilla-500g/p",
+  popularity: 738
  },
  {
   sku: "swift-7066",
@@ -7393,7 +8131,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211461/623476-penne-rigate-n73-grano-duro-barilla_mck.jpg?v=638967900358700000",
-  productUrl: "https://loja.swift.com.br/penne-rigate-n73-grano-duro-barilla-500g/p"
+  productUrl: "https://loja.swift.com.br/penne-rigate-n73-grano-duro-barilla-500g/p",
+  popularity: 739
  },
  {
   sku: "swift-7044",
@@ -7403,7 +8142,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211634/623453-marshmallows-torcao-fini_mck.jpg?v=638975119487430000",
-  productUrl: "https://loja.swift.com.br/marshmallows-torcao-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/marshmallows-torcao-fini-80g/p",
+  popularity: 740
  },
  {
   sku: "swift-7040",
@@ -7413,7 +8153,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211633/623449-bala-dentaduras-fini_mck.jpg?v=638975104535430000",
-  productUrl: "https://loja.swift.com.br/bala-dentaduras-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-dentaduras-fini-80g/p",
+  popularity: 741
  },
  {
   sku: "swift-7039",
@@ -7423,7 +8164,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211630/623452-bala-tubes-de-morango-azedinho-fini_mck.jpg?v=638975079465270000",
-  productUrl: "https://loja.swift.com.br/bala-tubes-de-morango-azedinho-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-tubes-de-morango-azedinho-fini-80g/p",
+  popularity: 742
  },
  {
   sku: "swift-6999",
@@ -7433,7 +8175,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211239/623409-suco-de-laranja-natural-one_mck.jpg?v=638957198783170000",
-  productUrl: "https://loja.swift.com.br/suco-de-laranja-natural-one-180ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-laranja-natural-one-180ml/p",
+  popularity: 743
  },
  {
   sku: "swift-6998",
@@ -7443,7 +8186,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211238/623431-suco-de-maca-natural-one_mck.jpg?v=638957198300700000",
-  productUrl: "https://loja.swift.com.br/suco-de-maca-natural-one-180ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-maca-natural-one-180ml/p",
+  popularity: 744
  },
  {
   sku: "swift-6835",
@@ -7453,7 +8197,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210326/623033-atum-ralado-ao-natural-gomes-da-costa_mck.jpg?v=638920956357630000",
-  productUrl: "https://loja.swift.com.br/atum-ralado-ao-natural-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-ralado-ao-natural-gomes-da-costa-170g/p",
+  popularity: 745
  },
  {
   sku: "swift-6832",
@@ -7463,7 +8208,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210328/623051-files-de-atum-em-azeite-de-oliva-gomes-da-costa_mck.jpg?v=638920968131130000",
-  productUrl: "https://loja.swift.com.br/files-de-atum-em-azeite-de-oliva-gomes-da-costa-125g/p"
+  productUrl: "https://loja.swift.com.br/files-de-atum-em-azeite-de-oliva-gomes-da-costa-125g/p",
+  popularity: 746
  },
  {
   sku: "swift-6824",
@@ -7473,7 +8219,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211553/623190-energetico-monster_mck.jpg?v=638973680674870000",
-  productUrl: "https://loja.swift.com.br/energetico-monster-473ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-monster-473ml/p",
+  popularity: 747
  },
  {
   sku: "swift-6816",
@@ -7483,7 +8230,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208812/622917-tapioca-na-medida-da-terrinha_mck.jpg?v=638871544519900000",
-  productUrl: "https://loja.swift.com.br/tapioca-na-medida-da-terrinha-490g/p"
+  productUrl: "https://loja.swift.com.br/tapioca-na-medida-da-terrinha-490g/p",
+  popularity: 748
  },
  {
   sku: "swift-6945",
@@ -7493,7 +8241,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218059/623095-medalhao-picanha-swift-legado-1855_inn.jpg?v=639198172887630000",
-  productUrl: "https://loja.swift.com.br/medalhao-de-picanha-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/medalhao-de-picanha-swift-legado-1855-kg/p",
+  popularity: 749
  },
  {
   sku: "swift-6645",
@@ -7503,7 +8252,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205760/622534_coca_garrafa-1.png.png?v=638787773054900000",
-  productUrl: "https://loja.swift.com.br/pack-6-garrafas-coca-cola-600ml/p"
+  productUrl: "https://loja.swift.com.br/pack-6-garrafas-coca-cola-600ml/p",
+  popularity: 750
  },
  {
   sku: "swift-6642",
@@ -7513,7 +8263,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/206567/mockup-pack-12-coca-350ml_1.jpg.jpg?v=638815461336430000",
-  productUrl: "https://loja.swift.com.br/pack-12-latas-coca-350ml/p"
+  productUrl: "https://loja.swift.com.br/pack-12-latas-coca-350ml/p",
+  popularity: 751
  },
  {
   sku: "swift-6640",
@@ -7523,7 +8274,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205759/620804_agua_com_gas-1.png.png?v=638787772559000000",
-  productUrl: "https://loja.swift.com.br/pack-agua-com-gas-500ml/p"
+  productUrl: "https://loja.swift.com.br/pack-agua-com-gas-500ml/p",
+  popularity: 752
  },
  {
   sku: "swift-6630",
@@ -7533,7 +8285,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216476/622847-meio-da-asa-temperada-copacol_inn.jpg?v=639135042241830000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-temperada-copacol-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-temperada-copacol-1kg/p",
+  popularity: 753
  },
  {
   sku: "swift-6390",
@@ -7543,7 +8296,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207235/622631-salgadinho-sabor-churrasco-torcida_mck.jpg?v=638840459620070000",
-  productUrl: "https://loja.swift.com.br/salgadinho-sabor-churrasco-torcida-pepsico-100g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-sabor-churrasco-torcida-pepsico-100g/p",
+  popularity: 754
  },
  {
   sku: "swift-6394",
@@ -7553,7 +8307,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207145/622629-amendoim-ovinho-pepsico_mck.jpg?v=638835263151430000",
-  productUrl: "https://loja.swift.com.br/amendoim-ovinho-pepsico-145g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-ovinho-pepsico-145g/p",
+  popularity: 755
  },
  {
   sku: "swift-6385",
@@ -7563,7 +8318,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212300/622627-doritos-nacho-pepsico_mck.jpg?v=638995883419070000",
-  productUrl: "https://loja.swift.com.br/doritos-nacho-pepsico-120g/p"
+  productUrl: "https://loja.swift.com.br/doritos-nacho-pepsico-120g/p",
+  popularity: 756
  },
  {
   sku: "swift-6338",
@@ -7573,7 +8329,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208247/622537-agua-sem-gas-crystal-mck.jpg?v=638862976517770000",
-  productUrl: "https://loja.swift.com.br/agua-sem-gas-crystal-1-5l/p"
+  productUrl: "https://loja.swift.com.br/agua-sem-gas-crystal-1-5l/p",
+  popularity: 757
  },
  {
   sku: "swift-6319",
@@ -7583,7 +8340,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207279/621882-beef-jerky--original-jack-links_mck.jpg?v=638907847267430000",
-  productUrl: "https://loja.swift.com.br/beef-jerky-original-jack-links-30g/p"
+  productUrl: "https://loja.swift.com.br/beef-jerky-original-jack-links-30g/p",
+  popularity: 758
  },
  {
   sku: "swift-6280",
@@ -7593,7 +8351,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208538/622377-pote-de-sorvete-de-flocos-kibon_mck.jpg?v=638868916005770000",
-  productUrl: "https://loja.swift.com.br/pote-de-sorvete-de-flocos-kibon-1-5l/p"
+  productUrl: "https://loja.swift.com.br/pote-de-sorvete-de-flocos-kibon-1-5l/p",
+  popularity: 759
  },
  {
   sku: "swift-6279",
@@ -7603,7 +8362,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208540/622379-pote-de-sorvete-napolitano-cremosissimo-Kibon_mck.jpg?v=638868939969400000",
-  productUrl: "https://loja.swift.com.br/pote-de-sorvete-napolitano-cremosissimo-kibon-1-5l/p"
+  productUrl: "https://loja.swift.com.br/pote-de-sorvete-napolitano-cremosissimo-kibon-1-5l/p",
+  popularity: 760
  },
  {
   sku: "swift-6054",
@@ -7613,7 +8373,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214618/622169-mini-sorvete-chicabon-kibon_mck.jpg?v=639076470971700000",
-  productUrl: "https://loja.swift.com.br/mini-sorvete-chicabon-kibon-92g/p"
+  productUrl: "https://loja.swift.com.br/mini-sorvete-chicabon-kibon-92g/p",
+  popularity: 761
  },
  {
   sku: "swift-6038",
@@ -7623,7 +8384,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218360/622150-file-de-linguado-frumar_inn.jpg?v=639204287741000000",
-  productUrl: "https://loja.swift.com.br/file-de-linguado-frumar-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-linguado-frumar-500g/p",
+  popularity: 762
  },
  {
   sku: "swift-5941",
@@ -7633,7 +8395,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207458/622093-picadinho-suino_inn.jpg?v=638847315114270000",
-  productUrl: "https://loja.swift.com.br/picadinho-suino-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/picadinho-suino-swift-1kg/p",
+  popularity: 763
  },
  {
   sku: "swift-5638",
@@ -7643,7 +8406,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos pratos rapidos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209325/621915-creme-de-espinafre_rec.jpg?v=638887111263270000",
-  productUrl: "https://loja.swift.com.br/creme-de-espinafre-swift-210g/p"
+  productUrl: "https://loja.swift.com.br/creme-de-espinafre-swift-210g/p",
+  popularity: 764
  },
  {
   sku: "swift-5512",
@@ -7653,7 +8417,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217868/621844-cerveja-baden-ipa_rec.jpg?v=639190333854230000",
-  productUrl: "https://loja.swift.com.br/cerveja-baden-ipa-350ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-baden-ipa-350ml/p",
+  popularity: 765
  },
  {
   sku: "swift-5511",
@@ -7663,7 +8428,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215240/621843-cerveja-baden-witbier_rec.jpg?v=639095498188300000",
-  productUrl: "https://loja.swift.com.br/cerveja-baden-witbier-350ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-baden-witbier-350ml/p",
+  popularity: 766
  },
  {
   sku: "swift-4782",
@@ -7673,7 +8439,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209783/621365-costelinha-suina-passarinho-temperada_inn.jpg?v=638896615299630000",
-  productUrl: "https://loja.swift.com.br/costelinha-passarinho-temp-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/costelinha-passarinho-temp-swift-1kg/p",
+  popularity: 767
  },
  {
   sku: "swift-4426",
@@ -7683,7 +8450,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207140/620804-agua-com-gas-crystal_mck.jpg?v=638835243094830000",
-  productUrl: "https://loja.swift.com.br/agua-com-gas-crystal-500ml/p"
+  productUrl: "https://loja.swift.com.br/agua-com-gas-crystal-500ml/p",
+  popularity: 768
  },
  {
   sku: "swift-6596",
@@ -7693,7 +8461,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211501/620015-chorizo-temperado_inn.jpg?v=638969297342700000",
-  productUrl: "https://loja.swift.com.br/chorizo-temperado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/chorizo-temperado-swift-kg/p",
+  popularity: 769
  },
  {
   sku: "swift-3753",
@@ -7703,7 +8472,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209753/619139-picanha-suina-alho_inn.jpg?v=638896467147330000",
-  productUrl: "https://loja.swift.com.br/picanha-suina-alho-swift-grill-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-suina-alho-swift-grill-kg/p",
+  popularity: 770
  },
  {
   sku: "swift-3492",
@@ -7713,7 +8483,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214515/618893-maminha-temperada-na-cerveja-ja-pro-forno_inn.jpg?v=639074580638900000",
-  productUrl: "https://loja.swift.com.br/maminha-temperada-na-cerveja-ja-pro-forno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-temperada-na-cerveja-ja-pro-forno-swift-kg/p",
+  popularity: 771
  },
  {
   sku: "swift-3388",
@@ -7723,7 +8494,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos contra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209747/618736-contrafile-linha-mais_inn.jpg?v=638895912224070000",
-  productUrl: "https://loja.swift.com.br/contrafile-linha-mais-kg/p"
+  productUrl: "https://loja.swift.com.br/contrafile-linha-mais-kg/p",
+  popularity: 772
  },
  {
   sku: "swift-6277",
@@ -7733,7 +8505,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208298/618712-costela-do-dianteiro-swift-black_inn.jpg?v=638864754785070000",
-  productUrl: "https://loja.swift.com.br/costela-do-dianteiro-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-do-dianteiro-swift-black-kg/p",
+  popularity: 773
  },
  {
   sku: "swift-2316",
@@ -7743,7 +8516,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214913/618293_SAL-PARRILLA-COM-MOSTARDA-E-HORTELA-500G-BAIXA.jpg?v=639087613413370000",
-  productUrl: "https://loja.swift.com.br/sal-granulado-para-parrilla-com-mostarda-e-hortela-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-granulado-para-parrilla-com-mostarda-e-hortela-swift-500g/p",
+  popularity: 774
  },
  {
   sku: "swift-2127",
@@ -7753,7 +8527,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros carre",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214406/616160-carre-curto-cordeiro-chileno_inn.jpg?v=639068639343030000",
-  productUrl: "https://loja.swift.com.br/carre-curto-cordeiro-chileno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/carre-curto-cordeiro-chileno-swift-kg/p",
+  popularity: 775
  },
  {
   sku: "swift-2769",
@@ -7763,7 +8538,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos t-bone",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208391/618072-t-bone-swift-gran-reserva_inn.jpg?v=638865614380870000",
-  productUrl: "https://loja.swift.com.br/tbone-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/tbone-swift-gran-reserva-kg/p",
+  popularity: 776
  },
  {
   sku: "swift-1833",
@@ -7773,7 +8549,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados truta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212798/618052-file-de-truta-da-patagonia_inn.jpg?v=639004617015900000",
-  productUrl: "https://loja.swift.com.br/file-de-truta-da-patagonia-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/file-de-truta-da-patagonia-swift-600g/p",
+  popularity: 777
  },
  {
   sku: "swift-1793",
@@ -7783,7 +8560,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214196/sal-parrilla-salsa-criolla-swift-500g-618001-1.jpg?v=639062633823600000",
-  productUrl: "https://loja.swift.com.br/sal-para-parrilla-com-salsa-criolla-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-para-parrilla-com-salsa-criolla-swift-500g/p",
+  popularity: 778
  },
  {
   sku: "swift-1893",
@@ -7793,7 +8571,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208625/617877-short-rib-swift-gran-reserva_inn.jpg?v=638869803460630000",
-  productUrl: "https://loja.swift.com.br/short-rib-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/short-rib-swift-gran-reserva-kg/p",
+  popularity: 779
  },
  {
   sku: "swift-1607",
@@ -7803,7 +8582,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados salmao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208388/617848-salmao-temperado-com-limao-e-ervas_inn.jpg?v=638865607311030000",
-  productUrl: "https://loja.swift.com.br/salmao-temperado-com-limao-e-ervas-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/salmao-temperado-com-limao-e-ervas-swift-200g/p",
+  popularity: 780
  },
  {
   sku: "swift-1732",
@@ -7813,7 +8593,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218161/617771-ojo-de-bife-swift-legado-1855_inn.jpg?v=639201557216200000",
-  productUrl: "https://loja.swift.com.br/ojo-de-bife-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/ojo-de-bife-swift-legado-1855-kg/p",
+  popularity: 781
  },
  {
   sku: "swift-1399",
@@ -7823,7 +8604,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais exoticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213480/617685-ra-congelada_inn.jpg?v=639026217808870000",
-  productUrl: "https://loja.swift.com.br/ra-congelada-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/ra-congelada-swift-500g/p",
+  popularity: 782
  },
  {
   sku: "swift-1283",
@@ -7833,7 +8615,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216487/617593-frango-a-passarinho_inn.jpg?v=639135094623100000",
-  productUrl: "https://loja.swift.com.br/frango-a-passarinho-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/frango-a-passarinho-swift-1kg/p",
+  popularity: 783
  },
  {
   sku: "swift-1246",
@@ -7843,7 +8626,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208466/617574-vieira_inn.jpg?v=638866443544830000",
-  productUrl: "https://loja.swift.com.br/vieira-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/vieira-swift-200g/p",
+  popularity: 784
  },
  {
   sku: "swift-463",
@@ -7853,7 +8637,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214514/617104-bolsa-termica-lateral_mck.jpg?v=639074567768570000",
-  productUrl: "https://loja.swift.com.br/bolsa-termica-lateral-swift-13l/p"
+  productUrl: "https://loja.swift.com.br/bolsa-termica-lateral-swift-13l/p",
+  popularity: 785
  },
  {
   sku: "swift-450",
@@ -7863,7 +8648,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos acem",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208813/615863-short-rib-swift-black_inn.jpg?v=638871641068330000",
-  productUrl: "https://loja.swift.com.br/short-rib-swift-black-kg/p"
+  productUrl: "https://loja.swift.com.br/short-rib-swift-black-kg/p",
+  popularity: 786
  },
  {
   sku: "swift-468",
@@ -7873,7 +8659,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos picanha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213232/614657-picanha-argentina-_inn.jpg?v=639129002137300000",
-  productUrl: "https://loja.swift.com.br/picanha-argentina-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/picanha-argentina-swift-kg/p",
+  popularity: 787
  },
  {
   sku: "swift-7996",
@@ -7883,7 +8670,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218715/622858-cerveja-amstel-puro-malte_pack.jpg?v=639220602133130000",
-  productUrl: "https://loja.swift.com.br/pack-12-latas-amstel-269ml/p"
+  productUrl: "https://loja.swift.com.br/pack-12-latas-amstel-269ml/p",
+  popularity: 788
  },
  {
   sku: "swift-7967",
@@ -7893,7 +8681,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218760/624080-salame-de-chocolate-rec.jpg?v=639221534011430000",
-  productUrl: "https://loja.swift.com.br/salame-de-chocolate-swift-350g/p"
+  productUrl: "https://loja.swift.com.br/salame-de-chocolate-swift-350g/p",
+  popularity: 789
  },
  {
   sku: "swift-7943",
@@ -7903,7 +8692,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218533/624222-costela-de-leitao-swift-legado-1855_inn.jpg?v=639211270765330000",
-  productUrl: "https://loja.swift.com.br/costela-de-leitao-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/costela-de-leitao-swift-legado-1855-kg/p",
+  popularity: 790
  },
  {
   sku: "swift-7944",
@@ -7913,7 +8703,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos variado",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218527/624223-paleta-de-leitao-swift-legado-1855_inn.jpg?v=639211264053470000",
-  productUrl: "https://loja.swift.com.br/paleta-de-leitao-swift-legado-1855-kg/p"
+  productUrl: "https://loja.swift.com.br/paleta-de-leitao-swift-legado-1855-kg/p",
+  popularity: 791
  },
  {
   sku: "swift-7936",
@@ -7923,7 +8714,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218753/624217-meio-da-asa-tulipa-temperada-itabom_mck.jpg?v=639221503436030000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-itabom-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-itabom-1kg/p",
+  popularity: 792
  },
  {
   sku: "swift-7929",
@@ -7933,7 +8725,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218747/624076-sal-rosa-do-himalaia_mck.jpg?v=639221476775830000",
-  productUrl: "https://loja.swift.com.br/sal-rosa-do-himalaia-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-rosa-do-himalaia-swift-500g/p",
+  popularity: 793
  },
  {
   sku: "swift-7885",
@@ -7943,7 +8736,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216557/624083-envelope-com-7-figurinhas-cromos-copa-do-mundo-fifa-world-cup-2026_mck.jpg?v=639136936441270000",
-  productUrl: "https://loja.swift.com.br/envelope-com-7-figurinhas-cromos-copa-do-mundo-fifa-world-cup-2026/p"
+  productUrl: "https://loja.swift.com.br/envelope-com-7-figurinhas-cromos-copa-do-mundo-fifa-world-cup-2026/p",
+  popularity: 794
  },
  {
   sku: "swift-7882",
@@ -7953,7 +8747,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216652/624060-album-de-figurinhas-capa-brochura-fifa-world-cup-2026_mck.jpg?v=639138654741730000",
-  productUrl: "https://loja.swift.com.br/album-de-figurinhas-capa-brochura-fifa-world-cup-2026/p"
+  productUrl: "https://loja.swift.com.br/album-de-figurinhas-capa-brochura-fifa-world-cup-2026/p",
+  popularity: 795
  },
  {
   sku: "swift-7870",
@@ -7963,7 +8758,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217430/624097-amendoim-crokissimo-de-caramelo-santa-helena_mck.jpg?v=639168068802700000",
-  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-caramelo-santa-helena-45g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-caramelo-santa-helena-45g/p",
+  popularity: 796
  },
  {
   sku: "swift-7871",
@@ -7973,7 +8769,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217433/624096-amendoim-crokissimo-de-churrasco-santa-helena_mck.jpg?v=639168738287000000",
-  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-churrasco-santa-helena-400g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-churrasco-santa-helena-400g/p",
+  popularity: 797
  },
  {
   sku: "swift-7867",
@@ -7983,7 +8780,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217429/624099-amendoim-crokissimo-de-frutas-vermelhas-santa-helena_mck.jpg?v=639168061710100000",
-  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-frutas-vermelhas-santa-helena-45g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-crokissimo-de-frutas-vermelhas-santa-helena-45g/p",
+  popularity: 798
  },
  {
   sku: "swift-7864",
@@ -7993,7 +8791,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217887/624117-salgadinho-batata-lays-queijo-camembert-pepsico_mck.jpg?v=639190537320900000",
-  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-queijo-camembert-pepsico-62g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-queijo-camembert-pepsico-62g/p",
+  popularity: 799
  },
  {
   sku: "swift-7865",
@@ -8003,7 +8802,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217392/624116-salgadinho-batata-lays-picanha-pepsico_mck.jpg?v=639167139841630000",
-  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-picanha-pepsico-62g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-picanha-pepsico-62g/p",
+  popularity: 800
  },
  {
   sku: "swift-7859",
@@ -8013,7 +8813,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217390/624112-salgadinho-cheetos-onda-requeijao-pepsico_mck.jpg?v=639167126931230000",
-  productUrl: "https://loja.swift.com.br/salgadinho-cheetos-onda-requeijao-pepsico-90g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-cheetos-onda-requeijao-pepsico-90g/p",
+  popularity: 801
  },
  {
   sku: "swift-7844",
@@ -8023,7 +8824,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216480/624033-vinho-tinto-malbec-syrah-alta-magnolia_mck.jpg?v=639135058762430000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-syrah-alta-magnolia-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-syrah-alta-magnolia-750ml/p",
+  popularity: 802
  },
  {
   sku: "swift-7843",
@@ -8033,7 +8835,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216479/624031-vinho-branco-blend-de-blancas-finca-magnolia_mck.jpg?v=639135051749070000",
-  productUrl: "https://loja.swift.com.br/vinho-branco-blend-de-blancas-finca-magnolia-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-branco-blend-de-blancas-finca-magnolia-750ml/p",
+  popularity: 803
  },
  {
   sku: "swift-7842",
@@ -8043,7 +8846,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216481/624034-vinho-tinto-cabernet-sauvignon-finca-magnolia_mck.jpg?v=639135061348400000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-cabernet-sauvignon-finca-magnolia-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-cabernet-sauvignon-finca-magnolia-750ml/p",
+  popularity: 804
  },
  {
   sku: "swift-7838",
@@ -8053,7 +8857,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados frutos do mar",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215754/624025-lula-inteira-noronha_mck.jpg?v=639111873995570000",
-  productUrl: "https://loja.swift.com.br/lula-inteira-noronha-200g/p"
+  productUrl: "https://loja.swift.com.br/lula-inteira-noronha-200g/p",
+  popularity: 805
  },
  {
   sku: "swift-7810",
@@ -8063,7 +8868,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218740/623673-tempero-para-hamburguer-heinz_mck.jpg?v=639221434208630000",
-  productUrl: "https://loja.swift.com.br/tempero-para-hamburguer-heinz-80g/p"
+  productUrl: "https://loja.swift.com.br/tempero-para-hamburguer-heinz-80g/p",
+  popularity: 806
  },
  {
   sku: "swift-7672",
@@ -8073,7 +8879,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213657/623460-bala-amoras-fini_mck.jpg?v=639035878596700000",
-  productUrl: "https://loja.swift.com.br/bala-amoras-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-amoras-fini-80g/p",
+  popularity: 807
  },
  {
   sku: "swift-7188",
@@ -8083,7 +8890,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214632/623638-energetico-summer-nectarina-zero-acucar-red-bull_mck.jpg?v=639076527253730000",
-  productUrl: "https://loja.swift.com.br/energetico-summer-nectarina-zero-acucar-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-summer-nectarina-zero-acucar-red-bull-250ml/p",
+  popularity: 808
  },
  {
   sku: "swift-7125",
@@ -8093,7 +8901,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214089/623667-coco-ralado-umido-adocado-da-terrinha_mck.jpg?v=639058291033670000",
-  productUrl: "https://loja.swift.com.br/coco-ralado-umido-adocado-da-terrinha-100g/p"
+  productUrl: "https://loja.swift.com.br/coco-ralado-umido-adocado-da-terrinha-100g/p",
+  popularity: 809
  },
  {
   sku: "swift-7118",
@@ -8103,7 +8912,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214070/623623-vinho-pinot-noir-la-belle-angele_mck.jpg?v=639058075161970000",
-  productUrl: "https://loja.swift.com.br/vinho-pinot-noir-la-belle-angele-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-pinot-noir-la-belle-angele-750ml/p",
+  popularity: 810
  },
  {
   sku: "swift-7107",
@@ -8113,7 +8923,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211636/623467-bala-ursinhos-fini_mck.jpg?v=638975296561600000",
-  productUrl: "https://loja.swift.com.br/bala-ursinhos-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-ursinhos-fini-80g/p",
+  popularity: 811
  },
  {
   sku: "swift-7103",
@@ -8123,7 +8934,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211638/623466-bala-bananas-fini_mck.jpg?v=638975301981300000",
-  productUrl: "https://loja.swift.com.br/bala-bananas-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-bananas-fini-80g/p",
+  popularity: 812
  },
  {
   sku: "swift-7102",
@@ -8133,7 +8945,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211642/623469-bala-minhocas-fini-mck.jpg?v=638975306060370000",
-  productUrl: "https://loja.swift.com.br/bala-minhocas-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-minhocas-fini-80g/p",
+  popularity: 813
  },
  {
   sku: "swift-7097",
@@ -8143,7 +8956,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212985/623499-mix-agridoce-brasil-frutt_mck.jpg?v=639012362834430000",
-  productUrl: "https://loja.swift.com.br/mix-agridoce-brasil-frutt-200g/p"
+  productUrl: "https://loja.swift.com.br/mix-agridoce-brasil-frutt-200g/p",
+  popularity: 814
  },
  {
   sku: "swift-7096",
@@ -8153,7 +8967,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212986/623500-mix-fruta-seca-brasil-frutt_mck.jpg?v=639012367432070000",
-  productUrl: "https://loja.swift.com.br/mix-fruta-seca-brasil-frutt-200g/p"
+  productUrl: "https://loja.swift.com.br/mix-fruta-seca-brasil-frutt-200g/p",
+  popularity: 815
  },
  {
   sku: "swift-7084",
@@ -8163,7 +8978,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212113/623520-chocolate-recheado-com-charge-nestle_mck.jpg?v=638990273660300000",
-  productUrl: "https://loja.swift.com.br/chocolate-revheado-com-charge-nestle-90g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-revheado-com-charge-nestle-90g/p",
+  popularity: 816
  },
  {
   sku: "swift-7087",
@@ -8173,7 +8989,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212116/623518-chocolate-kitkat-celebreak-nestle_mck.jpg?v=638990284510730000",
-  productUrl: "https://loja.swift.com.br/chocolate-kitkat-celebreak-nestle/p"
+  productUrl: "https://loja.swift.com.br/chocolate-kitkat-celebreak-nestle/p",
+  popularity: 817
  },
  {
   sku: "swift-7086",
@@ -8183,7 +9000,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212114/623519-chocolate-kitkat-mystery-nestle_mck.jpg?v=638990277517800000",
-  productUrl: "https://loja.swift.com.br/chocolate-kitkat-mystery-nestle-41-5g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-kitkat-mystery-nestle-41-5g/p",
+  popularity: 818
  },
  {
   sku: "swift-7013",
@@ -8193,7 +9011,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212528/623418-bife-ancho-entrecote-swift-gran-reserva-raizes-do-sul_inn.jpg?v=638999328190270000",
-  productUrl: "https://loja.swift.com.br/bife-ancho-entrecote-swift-gran-reserva-raizes-do-sul-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-ancho-entrecote-swift-gran-reserva-raizes-do-sul-kg/p",
+  popularity: 819
  },
  {
   sku: "swift-7006",
@@ -8203,7 +9022,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212341/623351-energetico-zero-red-bull_mck.jpg?v=638996101699670000",
-  productUrl: "https://loja.swift.com.br/energetico-zero-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-zero-red-bull-250ml/p",
+  popularity: 820
  },
  {
   sku: "swift-6947",
@@ -8213,7 +9033,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212099/623349-pate-de-atum-gomes-da-costa_mck.jpg?v=638990172258700000",
-  productUrl: "https://loja.swift.com.br/pate-de-atum-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/pate-de-atum-gomes-da-costa-170g/p",
+  popularity: 821
  },
  {
   sku: "swift-6938",
@@ -8223,7 +9044,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211147/pack-redbull-zero_mck.jpg?v=638953590025370000",
-  productUrl: "https://loja.swift.com.br/pack-4-energetico-red-bull-zero/p"
+  productUrl: "https://loja.swift.com.br/pack-4-energetico-red-bull-zero/p",
+  popularity: 822
  },
  {
   sku: "swift-6920",
@@ -8233,7 +9055,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212086/623106-biscoito-choco-biscuit-bauducco-36g_mck.jpg?v=638990127033070000",
-  productUrl: "https://loja.swift.com.br/biscoito-choco-biscuit-bauducco-36g/p"
+  productUrl: "https://loja.swift.com.br/biscoito-choco-biscuit-bauducco-36g/p",
+  popularity: 823
  },
  {
   sku: "swift-6921",
@@ -8243,7 +9066,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia molhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210879/623079-molho-swift_rec.jpg?v=638941716248470000",
-  productUrl: "https://loja.swift.com.br/molho-swift-330g/p"
+  productUrl: "https://loja.swift.com.br/molho-swift-330g/p",
+  popularity: 824
  },
  {
   sku: "swift-6841",
@@ -8253,7 +9077,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215283/623210-salgadinho-ruffles-original-pepsico_mck.jpg?v=639096409558870000",
-  productUrl: "https://loja.swift.com.br/salgadinho-ruffles-original-pepsico-115g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-ruffles-original-pepsico-115g/p",
+  popularity: 825
  },
  {
   sku: "swift-6830",
@@ -8263,7 +9088,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210324/623064-atum-em-pedacos-ao-natural-gomes-da-costa_mck.jpg?v=638920952503400000",
-  productUrl: "https://loja.swift.com.br/atum-em-pedacos-ao-natural-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-em-pedacos-ao-natural-gomes-da-costa-170g/p",
+  popularity: 826
  },
  {
   sku: "swift-6836",
@@ -8273,7 +9099,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210327/623076-atum-ralado-em-oleo-gomes-da-costa_mck.jpg?v=638920964076900000",
-  productUrl: "https://loja.swift.com.br/atum-ralado-em-oleo-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-ralado-em-oleo-gomes-da-costa-170g/p",
+  popularity: 827
  },
  {
   sku: "swift-6800",
@@ -8283,7 +9110,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208444/623101-fondue-de-queijo-vigor_rec.jpg?v=638866377603630000",
-  productUrl: "https://loja.swift.com.br/fondue-de-queijo-vigor-400g/p"
+  productUrl: "https://loja.swift.com.br/fondue-de-queijo-vigor-400g/p",
+  popularity: 828
  },
  {
   sku: "swift-6798",
@@ -8293,7 +9121,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208442/623094-fondue-de-chocolate-vigor_rec.jpg?v=638866376397170000",
-  productUrl: "https://loja.swift.com.br/fondue-de-chcolate-vigor-250g/p"
+  productUrl: "https://loja.swift.com.br/fondue-de-chcolate-vigor-250g/p",
+  popularity: 829
  },
  {
   sku: "swift-6794",
@@ -8303,7 +9132,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217241/623027-amendoim-japones-mendorato-santa-helena_mck.jpg?v=639160934965500000",
-  productUrl: "https://loja.swift.com.br/amendoim-japones-mendorato-santa-helena-90g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-japones-mendorato-santa-helena-90g/p",
+  popularity: 830
  },
  {
   sku: "swift-6796",
@@ -8313,7 +9143,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217240/623026-amendoim-japones-mendorato-santa-helena_mck.jpg?v=639160933609030000",
-  productUrl: "https://loja.swift.com.br/amendoim-japones-mendorato-santa-helena-400g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-japones-mendorato-santa-helena-400g/p",
+  popularity: 831
  },
  {
   sku: "swift-6782",
@@ -8323,7 +9154,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211526/623085-energetico-pomelo-red-bull_mck.jpg?v=638972832058900000",
-  productUrl: "https://loja.swift.com.br/energetico-pomelo-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-pomelo-red-bull-250ml/p",
+  popularity: 832
  },
  {
   sku: "swift-6677",
@@ -8333,7 +9165,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212270/622953-file-de-peito-bandeja-congelada-seara_inn.jpg?v=638993498409300000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-bandeja-congelada-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-bandeja-congelada-seara-1kg/p",
+  popularity: 833
  },
  {
   sku: "swift-6641",
@@ -8343,7 +9176,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/205758/620797_agua_sem_gas-1.png.png?v=638787772245430000",
-  productUrl: "https://loja.swift.com.br/pack-agua-sem-gas-crystal-500ml/p"
+  productUrl: "https://loja.swift.com.br/pack-agua-sem-gas-crystal-500ml/p",
+  popularity: 834
  },
  {
   sku: "swift-6461",
@@ -8353,7 +9187,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/202744/622712-sacola-natalina-vermelha_1.jpg?v=638678062938930000",
-  productUrl: "https://loja.swift.com.br/sacola-termica-natalina/p"
+  productUrl: "https://loja.swift.com.br/sacola-termica-natalina/p",
+  popularity: 835
  },
  {
   sku: "swift-6434",
@@ -8363,7 +9198,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados tilapia e saint peter",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211401/622702-posta-de-tilapia-brazilian-fish_inn.jpg?v=638966775772300000",
-  productUrl: "https://loja.swift.com.br/posta-de-tilapia-brazilian-fish-700g/p"
+  productUrl: "https://loja.swift.com.br/posta-de-tilapia-brazilian-fish-700g/p",
+  popularity: 836
  },
  {
   sku: "swift-6416",
@@ -8373,7 +9209,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212310/622678-chiclete-trident-menta_mck.jpg?v=638995901862130000",
-  productUrl: "https://loja.swift.com.br/chiclete-trident-menta-8g/p"
+  productUrl: "https://loja.swift.com.br/chiclete-trident-menta-8g/p",
+  popularity: 837
  },
  {
   sku: "swift-6411",
@@ -8383,7 +9220,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207393/622672-bis-oreo-xtra-mondelez_mck.jpg?v=638845716353600000",
-  productUrl: "https://loja.swift.com.br/bis-oreo-xtra-mondelez-45g/p"
+  productUrl: "https://loja.swift.com.br/bis-oreo-xtra-mondelez-45g/p",
+  popularity: 838
  },
  {
   sku: "swift-6413",
@@ -8393,7 +9231,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212309/622674-chiclete-trident-hortela_mck.jpg?v=638995894422600000",
-  productUrl: "https://loja.swift.com.br/chiclete-trident-hortela-8g/p"
+  productUrl: "https://loja.swift.com.br/chiclete-trident-hortela-8g/p",
+  popularity: 839
  },
  {
   sku: "swift-6407",
@@ -8403,7 +9242,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212315/622670-bala-extra-forte-halls-preto-mondelez_mck.jpg?v=638995968153730000",
-  productUrl: "https://loja.swift.com.br/bala-extra-forte-halls-preto-mondelez-27-5g/p"
+  productUrl: "https://loja.swift.com.br/bala-extra-forte-halls-preto-mondelez-27-5g/p",
+  popularity: 840
  },
  {
   sku: "swift-6384",
@@ -8413,7 +9253,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207236/622628-salgadinho-sabor-pimenta-mexicana-torcida_mck.jpg?v=638840472296270000",
-  productUrl: "https://loja.swift.com.br/salgadinho-sabor-pimenta-mexicana-torcida-pepsico-100g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-sabor-pimenta-mexicana-torcida-pepsico-100g/p",
+  popularity: 841
  },
  {
   sku: "swift-6395",
@@ -8423,7 +9264,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207278/622624-salgadinho-batata-lays-classica_mck.jpg?v=638841269051770000",
-  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-classica-pepsico-115g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-classica-pepsico-115g/p",
+  popularity: 842
  },
  {
   sku: "swift-6373",
@@ -8433,7 +9275,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209581/622604-camarao-inteiro-pre-cozido-80-100_inn.jpg?v=638893339894270000",
-  productUrl: "https://loja.swift.com.br/camarao-inteiro-80-100-pre-cozido-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/camarao-inteiro-80-100-pre-cozido-swift-400g/p",
+  popularity: 843
  },
  {
   sku: "swift-6343",
@@ -8443,7 +9286,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207566/622540-pote-de-sorvete-de-creme-kibon_mck.png?v=638850735092670000",
-  productUrl: "https://loja.swift.com.br/pote-de-creme-kibon-1-5l/p"
+  productUrl: "https://loja.swift.com.br/pote-de-creme-kibon-1-5l/p",
+  popularity: 844
  },
  {
   sku: "swift-6333",
@@ -8453,7 +9297,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212288/622532-coca-cola-lata_mck.jpg?v=638995819113070000",
-  productUrl: "https://loja.swift.com.br/coca-cola-lata-350ml/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-lata-350ml/p",
+  popularity: 845
  },
  {
   sku: "swift-6162",
@@ -8463,7 +9308,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216022/622275-meio-da-asa-tulipa--sweet-chilli-aurora_inn.jpg?v=639118660231330000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-sweet-chilli-aurora-800g/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-sweet-chilli-aurora-800g/p",
+  popularity: 846
  },
  {
   sku: "swift-6768",
@@ -8473,7 +9319,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros t-bone de cordeiro",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210587/622221-t-bone-cordeiro-uruguaio_inn.jpg?v=638932038045870000",
-  productUrl: "https://loja.swift.com.br/t-bone-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/t-bone-cordeiro-uruguaio-swift-kg/p",
+  popularity: 847
  },
  {
   sku: "swift-6057",
@@ -8483,7 +9330,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214617/622170-mini-sorvete-eskibon-kibon_mck.jpg?v=639076470602200000",
-  productUrl: "https://loja.swift.com.br/mini-sorvete-eskibon-kibon-105g/p"
+  productUrl: "https://loja.swift.com.br/mini-sorvete-eskibon-kibon-105g/p",
+  popularity: 848
  },
  {
   sku: "swift-6039",
@@ -8493,7 +9341,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216636/622148-file-de-peito-em-bifes_inn.jpg?v=639138433308600000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-em-bifes-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-em-bifes-swift-1kg/p",
+  popularity: 849
  },
  {
   sku: "swift-6372",
@@ -8503,7 +9352,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos costela",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216315/622075-costela-suina-brown-sugar_rec.jpg?v=639129948633500000",
-  productUrl: "https://loja.swift.com.br/costela-suina-brown-sugar-swift-kg-/p"
+  productUrl: "https://loja.swift.com.br/costela-suina-brown-sugar-swift-kg-/p",
+  popularity: 850
  },
  {
   sku: "swift-5510",
@@ -8513,7 +9363,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215238/621845-cerveja-baden-cristal_rec.jpg?v=639095486057170000",
-  productUrl: "https://loja.swift.com.br/cerveja-baden-cristal-350ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-baden-cristal-350ml/p",
+  popularity: 851
  },
  {
   sku: "swift-4372",
@@ -8523,7 +9374,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas aguas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207147/620797-agua-sem-gas-crystal_mck.jpg?v=638835265992870000",
-  productUrl: "https://loja.swift.com.br/agua-crystal-sem-gas-500ml/p"
+  productUrl: "https://loja.swift.com.br/agua-crystal-sem-gas-500ml/p",
+  popularity: 852
  },
  {
   sku: "swift-3989",
@@ -8533,7 +9385,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207933/620014-bife-ancho-temperado-com-chimichurri-grill_inn.jpg?v=638852216338070000",
-  productUrl: "https://loja.swift.com.br/ancho-argentino-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/ancho-argentino-swift-kg/p",
+  popularity: 853
  },
  {
   sku: "swift-3946",
@@ -8543,7 +9396,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves peito",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217025/619960-file-de-peito-linha-mais_inn.jpg?v=639149913063100000",
-  productUrl: "https://loja.swift.com.br/file-de-peito-linha-mais-1kg/p"
+  productUrl: "https://loja.swift.com.br/file-de-peito-linha-mais-1kg/p",
+  popularity: 854
  },
  {
   sku: "swift-3580",
@@ -8553,7 +9407,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/181927/Sacola-1-lat-5.jpg?v=637858849261000000",
-  productUrl: "https://loja.swift.com.br/sacola-retornavel-respeito-ao-planeta-swift/p"
+  productUrl: "https://loja.swift.com.br/sacola-retornavel-respeito-ao-planeta-swift/p",
+  popularity: 855
  },
  {
   sku: "swift-3781",
@@ -8563,7 +9418,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos ancho",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210033/618924-tomahawk-swift-gran-reserva_inn.jpg?v=638902825556170000",
-  productUrl: "https://loja.swift.com.br/tomahawk-swift-gran-reserva-kg/p"
+  productUrl: "https://loja.swift.com.br/tomahawk-swift-gran-reserva-kg/p",
+  popularity: 856
  },
  {
   sku: "swift-2128",
@@ -8573,7 +9429,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros carre",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214409/616161-carre-frances-cordeiro-chileno_inn.jpg?v=639068660927630000",
-  productUrl: "https://loja.swift.com.br/carre-frances-cordeiro-chileno-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/carre-frances-cordeiro-chileno-swift-kg/p",
+  popularity: 857
  },
  {
   sku: "swift-1826",
@@ -8583,7 +9440,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214199/618042-bolsa-termica-swift-gran-reserva-16L-frente_mck.jpg?v=639062638509430000",
-  productUrl: "https://loja.swift.com.br/bolsa-termica-swift-gran-reserva-16l/p"
+  productUrl: "https://loja.swift.com.br/bolsa-termica-swift-gran-reserva-16l/p",
+  popularity: 858
  },
  {
   sku: "swift-1269",
@@ -8593,7 +9451,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213424/617576-camarao-rosa_inn.jpg?v=639022022021870000",
-  productUrl: "https://loja.swift.com.br/camarao-rosa-swift-200g/p"
+  productUrl: "https://loja.swift.com.br/camarao-rosa-swift-200g/p",
+  popularity: 859
  },
  {
   sku: "swift-539",
@@ -8603,7 +9462,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212786/616684-paleta-de-cordeiro-temperada_inn.jpg?v=639004603031230000",
-  productUrl: "https://loja.swift.com.br/paleta-de-cordeiro-temperada-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/paleta-de-cordeiro-temperada-swift-kg/p",
+  popularity: 860
  },
  {
   sku: "swift-467",
@@ -8613,7 +9473,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros alcatra",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214743/599186-alcatra-com-picanha-cordeiro-uruguaio_inn.jpg?v=639081361586270000",
-  productUrl: "https://loja.swift.com.br/alcatra-com-picanha-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/alcatra-com-picanha-cordeiro-uruguaio-swift-kg/p",
+  popularity: 861
  },
  {
   sku: "swift-465",
@@ -8623,7 +9484,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros carre",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214745/599072-carre-frances-cordeiro-uruguaio_inn.jpg?v=639081366770230000",
-  productUrl: "https://loja.swift.com.br/carre-frances-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/carre-frances-cordeiro-uruguaio-swift-kg/p",
+  popularity: 862
  },
  {
   sku: "swift-7915",
@@ -8633,7 +9495,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218750/623538-lombo-suino-temperado-suinco_mck.jpg?v=639221492498530000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-suinco-kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-suinco-kg/p",
+  popularity: 863
  },
  {
   sku: "swift-7863",
@@ -8643,7 +9506,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217888/624118-salgadinho-batata-lays-taco-mexicano-pepsico_mck.jpg?v=639190540291100000",
-  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-taco-mexicano-pepsico-62g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-batata-lays-taco-mexicano-pepsico-62g/p",
+  popularity: 864
  },
  {
   sku: "swift-7858",
@@ -8653,7 +9517,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218749/624069-lombo-de-saithe-dessalgado_mck.jpg?v=639221484607000000",
-  productUrl: "https://loja.swift.com.br/lombo-de-saithe-dessalgado-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-de-saithe-dessalgado-swift-1kg/p",
+  popularity: 865
  },
  {
   sku: "swift-7840",
@@ -8663,7 +9528,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216482/624036-vinho-tinto-malbec-magnolia-negra_mck.jpg?v=639135063848530000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-magnolia-negra-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-malbec-magnolia-negra-750ml/p",
+  popularity: 866
  },
  {
   sku: "swift-7634",
@@ -8673,7 +9539,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218741/623777-chocolate-laka-com-oreo-lacta_mck.jpg?v=639221437250100000",
-  productUrl: "https://loja.swift.com.br/chocolate-laka-com-oreo-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-laka-com-oreo-lacta-145g/p",
+  popularity: 867
  },
  {
   sku: "swift-7574",
@@ -8683,7 +9550,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215091/623654-vinagre-de-vinho-tinto-castelo_mck.jpg?v=639092897789000000",
-  productUrl: "https://loja.swift.com.br/vinagre-de-vinho-tinto-castelo-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinagre-de-vinho-tinto-castelo-750ml/p",
+  popularity: 868
  },
  {
   sku: "swift-7170",
@@ -8693,7 +9561,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria doces",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217177/623719-cuca-de-creme-de-leite-ninho_rec.jpg?v=639155969830100000",
-  productUrl: "https://loja.swift.com.br/cuca-de-creme-de-leite-ninho-swift-420g/p"
+  productUrl: "https://loja.swift.com.br/cuca-de-creme-de-leite-ninho-swift-420g/p",
+  popularity: 869
  },
  {
   sku: "swift-7116",
@@ -8703,7 +9572,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213702/623592-vinho-branco-sauvignon-vistamar_mck.jpg?v=639040151017130000",
-  productUrl: "https://loja.swift.com.br/vinho-branco-sauvignon-vistamar-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-branco-sauvignon-vistamar-750ml/p",
+  popularity: 870
  },
  {
   sku: "swift-7119",
@@ -8713,7 +9583,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213712/623617-vinho-brisa-rose-vistamar_mck.png?v=639040207389770000",
-  productUrl: "https://loja.swift.com.br/vinho-brisa-rose-vistamar-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-brisa-rose-vistamar-750ml/p",
+  popularity: 871
  },
  {
   sku: "swift-7121",
@@ -8723,7 +9594,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213701/623607-vinho-pinot-noir-vistamar_mck.png?v=639040145387700000",
-  productUrl: "https://loja.swift.com.br/vinho-pinot-noir-vistamar-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-pinot-noir-vistamar-750ml/p",
+  popularity: 872
  },
  {
   sku: "swift-7104",
@@ -8733,7 +9605,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211641/623465-bala-beijos-fini_mck.jpg?v=638975303614100000",
-  productUrl: "https://loja.swift.com.br/bala-beijos-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-beijos-fini-80g/p",
+  popularity: 873
  },
  {
   sku: "swift-7082",
@@ -8743,7 +9616,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212111/623517-chocolate-recheado-com-negresco-nestle_mck.jpg?v=638990263781300000",
-  productUrl: "https://loja.swift.com.br/chocolate-recheado-com-negresco-nestle-90g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-recheado-com-negresco-nestle-90g/p",
+  popularity: 874
  },
  {
   sku: "swift-7011",
@@ -8753,7 +9627,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212530/623420-bife-de-chorizo-swift-gran-reserva-raizes-do-sul_inn.jpg?v=638999329936770000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-gran-reserva-raizes-do-sul-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-gran-reserva-raizes-do-sul-kg/p",
+  popularity: 875
  },
  {
   sku: "swift-6890",
@@ -8763,7 +9638,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas sucos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218039/623279-suco-de-uva-del-valle-kapo_mck.jpg?v=639198136224730000",
-  productUrl: "https://loja.swift.com.br/suco-de-uva-del-valle-kapo-200ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-uva-del-valle-kapo-200ml/p",
+  popularity: 876
  },
  {
   sku: "swift-6831",
@@ -8773,7 +9649,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/210322/623056-atum-solido-em-oleo-gomes-da-costa_mck.jpg?v=638920953258070000",
-  productUrl: "https://loja.swift.com.br/atum-solido-em-oleo-gomes-da-costa-170g/p"
+  productUrl: "https://loja.swift.com.br/atum-solido-em-oleo-gomes-da-costa-170g/p",
+  popularity: 877
  },
  {
   sku: "swift-6807",
@@ -8783,7 +9660,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "hortifruti frutas mix de frutas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208263/623053-mix-de-frutas-vermelhas-pratico_inn.jpg?v=638863645591070000",
-  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-pratico-1-02kg/p"
+  productUrl: "https://loja.swift.com.br/mix-de-frutas-vermelhas-pratico-1-02kg/p",
+  popularity: 878
  },
  {
   sku: "swift-6783",
@@ -8793,7 +9671,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214370/623082-energetico-amora-zero-acucar-red-bull_mck.jpg?v=639065911504000000",
-  productUrl: "https://loja.swift.com.br/energetico-amora-zero-acucar-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-amora-zero-acucar-red-bull-250ml/p",
+  popularity: 879
  },
  {
   sku: "swift-6771",
@@ -8803,7 +9682,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213492/622928-barra-de-proteina-doce-de-leite-havanna-nutrata_mck.jpg?v=639026250495500000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-doce-de-leite-havanna-nutrata-40g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-doce-de-leite-havanna-nutrata-40g/p",
+  popularity: 880
  },
  {
   sku: "swift-6720",
@@ -8813,7 +9693,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207372/622968-pao-petit-baguette-sabor-de-france_rec.jpg?v=638844951891100000",
-  productUrl: "https://loja.swift.com.br/pao-petit-baguette-sabor-de-france-410g/p"
+  productUrl: "https://loja.swift.com.br/pao-petit-baguette-sabor-de-france-410g/p",
+  popularity: 881
  },
  {
   sku: "swift-6611",
@@ -8823,7 +9704,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia sorvete",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216457/622797-pote-mini-sorvete-chicabon-kibon_mck.jpg?v=639131637600000000",
-  productUrl: "https://loja.swift.com.br/pote-mini-sorvete-bombom-chicabon-kibon-184g/p"
+  productUrl: "https://loja.swift.com.br/pote-mini-sorvete-bombom-chicabon-kibon-184g/p",
+  popularity: 882
  },
  {
   sku: "swift-6598",
@@ -8833,7 +9715,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos panceta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215346/622794-barriga-suina-aperitivo-temperada-rezende_mck.jpg?v=639099551900030000",
-  productUrl: "https://loja.swift.com.br/barriga-suina-aperitivo-temperada-rezende-800g/p"
+  productUrl: "https://loja.swift.com.br/barriga-suina-aperitivo-temperada-rezende-800g/p",
+  popularity: 883
  },
  {
   sku: "swift-6332",
@@ -8843,7 +9726,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212278/622529-energetico-red-bull_mck.jpg?v=638993529716830000",
-  productUrl: "https://loja.swift.com.br/energetico-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-red-bull-250ml/p",
+  popularity: 884
  },
  {
   sku: "swift-6328",
@@ -8853,7 +9737,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas energeticos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212342/622519-energetico-sugarfree-red-bull_mck.jpg?v=638996103867630000",
-  productUrl: "https://loja.swift.com.br/energetico-sugarfree-red-bull-250ml/p"
+  productUrl: "https://loja.swift.com.br/energetico-sugarfree-red-bull-250ml/p",
+  popularity: 885
  },
  {
   sku: "swift-1304",
@@ -8863,7 +9748,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207468/617446-bife-de-chorizo-swift-wagyu_inn.jpg?v=638847385819500000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-wagyu-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-swift-wagyu-kg/p",
+  popularity: 886
  },
  {
   sku: "swift-8000",
@@ -8873,7 +9759,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218730/623067-pacoquita-zero-santa-helena_pack.jpg?v=639221406242270000",
-  productUrl: "https://loja.swift.com.br/24-pacoquita-zero-santa-helena-18g/p"
+  productUrl: "https://loja.swift.com.br/24-pacoquita-zero-santa-helena-18g/p",
+  popularity: 887
  },
  {
   sku: "swift-7998",
@@ -8883,7 +9770,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218723/623047-pacoquita-original-santa-helena_pack.jpg?v=639221398833830000",
-  productUrl: "https://loja.swift.com.br/24-pacoquita-original-santa-helena-18g/p"
+  productUrl: "https://loja.swift.com.br/24-pacoquita-original-santa-helena-18g/p",
+  popularity: 888
  },
  {
   sku: "swift-7977",
@@ -8893,7 +9781,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218707/622858-cerveja-amstel-puro-malte_mck.jpg?v=639220585404930000",
-  productUrl: "https://loja.swift.com.br/cerveja-amstel-puro-malte-269ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-amstel-puro-malte-269ml/p",
+  popularity: 889
  },
  {
   sku: "swift-7968",
@@ -8903,7 +9792,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218761/624079-torta-ramona_rec.jpg?v=639221537947630000",
-  productUrl: "https://loja.swift.com.br/torta-ramona-swift-600g/p"
+  productUrl: "https://loja.swift.com.br/torta-ramona-swift-600g/p",
+  popularity: 890
  },
  {
   sku: "swift-7928",
@@ -8913,7 +9803,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia temperos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218746/624077-sal-marinho-de-mossoro_mck.jpg?v=639221474010400000",
-  productUrl: "https://loja.swift.com.br/sal-marinho-de-mossoro-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/sal-marinho-de-mossoro-swift-500g/p",
+  popularity: 891
  },
  {
   sku: "swift-7891",
@@ -8923,7 +9814,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia bolsas e sacolas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217305/624084-sacola-termica-brasil_mck.jpg?v=639165279922170000",
-  productUrl: "https://loja.swift.com.br/sacola-termica-brasil-swift/p"
+  productUrl: "https://loja.swift.com.br/sacola-termica-brasil-swift/p",
+  popularity: 892
  },
  {
   sku: "swift-7872",
@@ -8933,7 +9825,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217441/624095-ovinhos-de-amendoim-mendorato-santa-helena_mck.jpg?v=639168937544270000",
-  productUrl: "https://loja.swift.com.br/ovinhos-de-amendoim-mendorato-santa-helena-350g/p"
+  productUrl: "https://loja.swift.com.br/ovinhos-de-amendoim-mendorato-santa-helena-350g/p",
+  popularity: 893
  },
  {
   sku: "swift-7869",
@@ -8943,7 +9836,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218116/624098-doce-de-amendoim-gibi-santa-helena_mck.jpg?v=639198364654530000",
-  productUrl: "https://loja.swift.com.br/doce-de-amendoim-gibi-santa-helena-600g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-amendoim-gibi-santa-helena-600g/p",
+  popularity: 894
  },
  {
   sku: "swift-7868",
@@ -8953,7 +9847,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218718/623067-pacoquita-zero-santa-helena_mck.jpg?v=639221391623730000",
-  productUrl: "https://loja.swift.com.br/pacoquita-zero-santa-helena-18g/p"
+  productUrl: "https://loja.swift.com.br/pacoquita-zero-santa-helena-18g/p",
+  popularity: 895
  },
  {
   sku: "swift-7839",
@@ -8963,7 +9858,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados camarao",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215753/624016-camarao-descascado-eviscerado-21-25-noronha_mck.jpg?v=639111868293630000",
-  productUrl: "https://loja.swift.com.br/camarao-descascado-eviscerado-21-25-noronha-200g/p"
+  productUrl: "https://loja.swift.com.br/camarao-descascado-eviscerado-21-25-noronha-200g/p",
+  popularity: 896
  },
  {
   sku: "swift-7821",
@@ -8973,7 +9869,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215098/623833-vodka-absolut-sprite_mck.jpg?v=639092914543230000",
-  productUrl: "https://loja.swift.com.br/vodka-absolut-sprite-269ml/p"
+  productUrl: "https://loja.swift.com.br/vodka-absolut-sprite-269ml/p",
+  popularity: 897
  },
  {
   sku: "swift-7826",
@@ -8983,7 +9880,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215370/623869-pao-briochine-bauducco_mck.jpg?v=639099626678300000",
-  productUrl: "https://loja.swift.com.br/pao-briochine-bauducco-200g/p"
+  productUrl: "https://loja.swift.com.br/pao-briochine-bauducco-200g/p",
+  popularity: 898
  },
  {
   sku: "swift-7823",
@@ -8993,7 +9891,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "suinos lombo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215267/623830-lombo-suino-temperado-seara_mck.jpg?v=639096371217970000",
-  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-seara-kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-suino-temperado-seara-kg/p",
+  popularity: 899
  },
  {
   sku: "swift-7820",
@@ -9003,7 +9902,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215097/623834-spritz-mixed-schweppes_mck.jpg?v=639092909296000000",
-  productUrl: "https://loja.swift.com.br/spritz-mixed-schweppes-269ml/p"
+  productUrl: "https://loja.swift.com.br/spritz-mixed-schweppes-269ml/p",
+  popularity: 900
  },
  {
   sku: "swift-7805",
@@ -9013,7 +9913,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas tradicionais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215362/623316-linguica-de-frango-seara_mck.jpg?v=639099599890900000",
-  productUrl: "https://loja.swift.com.br/linguica-de-frango-seara-600g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-frango-seara-600g/p",
+  popularity: 901
  },
  {
   sku: "swift-7752",
@@ -9023,7 +9924,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218742/623039-sardinhas-com-molho-de-tomate-gomes-da-costa_mck.jpg?v=639221440920770000",
-  productUrl: "https://loja.swift.com.br/sardinhas-com-molho-de-tomate-gomes-da-costa-125g/p"
+  productUrl: "https://loja.swift.com.br/sardinhas-com-molho-de-tomate-gomes-da-costa-125g/p",
+  popularity: 902
  },
  {
   sku: "swift-7753",
@@ -9033,7 +9935,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218743/623032-sardinhas-em-oleo-gomes-da-costa_mck.jpg?v=639221445494730000",
-  productUrl: "https://loja.swift.com.br/sardinhas-em-oleo-gomes-da-costa-125g/p"
+  productUrl: "https://loja.swift.com.br/sardinhas-em-oleo-gomes-da-costa-125g/p",
+  popularity: 903
  },
  {
   sku: "swift-7739",
@@ -9043,7 +9946,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "linguicas linguicas especiais",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218748/623712-linguica-de-porco-preto-maiale-canastra-fabene_mck.jpg?v=639221480857070000",
-  productUrl: "https://loja.swift.com.br/linguica-de-porco-preto-maiale-canastra-fabene-400g/p"
+  productUrl: "https://loja.swift.com.br/linguica-de-porco-preto-maiale-canastra-fabene-400g/p",
+  popularity: 904
  },
  {
   sku: "swift-7737",
@@ -9053,7 +9957,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214624/623873-salgadinho-batata-pringles_mck.jpg?v=639076489955900000",
-  productUrl: "https://loja.swift.com.br/salgadinho-batata-pringles-35g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-batata-pringles-35g/p",
+  popularity: 905
  },
  {
   sku: "swift-7679",
@@ -9063,7 +9968,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/217206/623741-manteiga-aviacao_mck.jpg?v=639156803836870000",
-  productUrl: "https://loja.swift.com.br/manteiga-aviacao-200g/p"
+  productUrl: "https://loja.swift.com.br/manteiga-aviacao-200g/p",
+  popularity: 906
  },
  {
   sku: "swift-7666",
@@ -9073,7 +9979,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214368/623835-vodka-citrus-mixed-schweppes_mck.jpg?v=639065277347270000",
-  productUrl: "https://loja.swift.com.br/vodka-citrus-mixed-schweppes-269ml/p"
+  productUrl: "https://loja.swift.com.br/vodka-citrus-mixed-schweppes-269ml/p",
+  popularity: 907
  },
  {
   sku: "swift-7636",
@@ -9083,7 +9990,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/214650/623680-chocolate-amaro-lacta_mck.jpg?v=639077095519830000",
-  productUrl: "https://loja.swift.com.br/chocolate-amaro-lacta-145g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-amaro-lacta-145g/p",
+  popularity: 908
  },
  {
   sku: "swift-7580",
@@ -9093,7 +10001,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215100/623689-chips-de-parmesao-com-pimenta-e-salsa-faixa-azul_mck.jpg?v=639093477723700000",
-  productUrl: "https://loja.swift.com.br/chips-de-parmesao-com-pimenta-e-salsa-faixa-azul-35g/p"
+  productUrl: "https://loja.swift.com.br/chips-de-parmesao-com-pimenta-e-salsa-faixa-azul-35g/p",
+  popularity: 909
  },
  {
   sku: "swift-7576",
@@ -9103,7 +10012,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215083/623651-vinagre-de-maca-castelo_mck.jpg?v=639092889701170000",
-  productUrl: "https://loja.swift.com.br/vinagre-de-maca-castelo-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinagre-de-maca-castelo-750ml/p",
+  popularity: 910
  },
  {
   sku: "swift-7168",
@@ -9113,7 +10023,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213925/623720-empada-de-frango-com-requeijao_rec.jpg?v=639051359705930000",
-  productUrl: "https://loja.swift.com.br/empada-de-frango-com-requeijao-swift-260g/p"
+  productUrl: "https://loja.swift.com.br/empada-de-frango-com-requeijao-swift-260g/p",
+  popularity: 911
  },
  {
   sku: "swift-7166",
@@ -9123,7 +10034,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213926/623723-empada-de-palmito_rec.jpg?v=639051365864200000",
-  productUrl: "https://loja.swift.com.br/empada-de-palmito-swift-260g/p"
+  productUrl: "https://loja.swift.com.br/empada-de-palmito-swift-260g/p",
+  popularity: 912
  },
  {
   sku: "swift-7149",
@@ -9133,7 +10045,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216458/623706-mini-pastel-com-calabresa_mck.jpg?v=639131646864330000",
-  productUrl: "https://loja.swift.com.br/mini-pastel-com-calabresa-swift-1kg/p"
+  productUrl: "https://loja.swift.com.br/mini-pastel-com-calabresa-swift-1kg/p",
+  popularity: 913
  },
  {
   sku: "swift-7136",
@@ -9143,7 +10056,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218037/623662-leite-semi-desnatado-piracanjuba_mck.jpg?v=639198121940900000",
-  productUrl: "https://loja.swift.com.br/leite-semidesnatado-piracanjuba-1l/p"
+  productUrl: "https://loja.swift.com.br/leite-semidesnatado-piracanjuba-1l/p",
+  popularity: 914
  },
  {
   sku: "swift-7137",
@@ -9153,7 +10067,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218038/623663-leite-semidesnatado-zero-lactose-piracanjuba_mck.jpg?v=639198126444900000",
-  productUrl: "https://loja.swift.com.br/leite-semidesnatado-zero-lactose-piracanjuba-1l/p"
+  productUrl: "https://loja.swift.com.br/leite-semidesnatado-zero-lactose-piracanjuba-1l/p",
+  popularity: 915
  },
  {
   sku: "swift-7135",
@@ -9163,7 +10078,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218035/623655-leite-desnatado-piracanjuba_mck.jpg?v=639198110861570000",
-  productUrl: "https://loja.swift.com.br/leite-desnatado-piracanjuba-1l/p"
+  productUrl: "https://loja.swift.com.br/leite-desnatado-piracanjuba-1l/p",
+  popularity: 916
  },
  {
   sku: "swift-7132",
@@ -9173,7 +10089,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218036/623659-leite-integral-piracanjuba_mck.jpg?v=639198118737230000",
-  productUrl: "https://loja.swift.com.br/leite-integral-piracanjuba-1l/p"
+  productUrl: "https://loja.swift.com.br/leite-integral-piracanjuba-1l/p",
+  popularity: 917
  },
  {
   sku: "swift-7129",
@@ -9183,7 +10100,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas espumantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213206/623632-espumante-ouro-moscatel-salton_mck.jpg?v=639016759738630000",
-  productUrl: "https://loja.swift.com.br/espumante-ouro-moscatel-salton-750-ml/p"
+  productUrl: "https://loja.swift.com.br/espumante-ouro-moscatel-salton-750-ml/p",
+  popularity: 918
  },
  {
   sku: "swift-7128",
@@ -9193,7 +10111,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas espumantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213207/623637-espumante-brut-rose-ouro-salton_mck.jpg?v=639016780610970000",
-  productUrl: "https://loja.swift.com.br/espumante-brut-rose-ouro-salton-750ml/p"
+  productUrl: "https://loja.swift.com.br/espumante-brut-rose-ouro-salton-750ml/p",
+  popularity: 919
  },
  {
   sku: "swift-7130",
@@ -9203,7 +10122,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212256/623622-chocolate-broken-hazelnut-milka_mck.jpg?v=638993349508300000",
-  productUrl: "https://loja.swift.com.br/chocolate-broken-hazelnut-milka-90g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-broken-hazelnut-milka-90g/p",
+  popularity: 920
  },
  {
   sku: "swift-7131",
@@ -9213,7 +10133,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas espumantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213205/623597-espumante-brut-outo-salton_mck.jpg?v=639016754425800000",
-  productUrl: "https://loja.swift.com.br/espumante-brut-ouro-salton-750ml/p"
+  productUrl: "https://loja.swift.com.br/espumante-brut-ouro-salton-750ml/p",
+  popularity: 921
  },
  {
   sku: "swift-7113",
@@ -9223,7 +10144,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213714/623604-vinho-tinto-vinha-de-loris_mck.webp?v=639040218319000000",
-  productUrl: "https://loja.swift.com.br/vinho-tinto-vinha-de-loris-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-tinto-vinha-de-loris-750ml/p",
+  popularity: 922
  },
  {
   sku: "swift-7117",
@@ -9233,7 +10155,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas vinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213713/623624-vinho-branco-chardonnay-la-belle-angele_mck.png?v=639040213045270000",
-  productUrl: "https://loja.swift.com.br/vinho-branco-chardonnay-la-belle-angele-750ml/p"
+  productUrl: "https://loja.swift.com.br/vinho-branco-chardonnay-la-belle-angele-750ml/p",
+  popularity: 923
  },
  {
   sku: "swift-7095",
@@ -9243,7 +10166,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212983/623507-amendoa-defumada-brasil-frutt_mck.jpg?v=639012347243870000",
-  productUrl: "https://loja.swift.com.br/amendoa-defumada-brasil-frutt-200g/p"
+  productUrl: "https://loja.swift.com.br/amendoa-defumada-brasil-frutt-200g/p",
+  popularity: 924
  },
  {
   sku: "swift-7072",
@@ -9253,7 +10177,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212209/623559-chocolate-oreo-milka_mck.jpg?v=638991803448330000",
-  productUrl: "https://loja.swift.com.br/chocolate-oreo-milka-100g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-oreo-milka-100g/p",
+  popularity: 925
  },
  {
   sku: "swift-7071",
@@ -9263,7 +10188,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212208/623560-chocolate-alpine-milk-milka_mck.jpg?v=638991801175770000",
-  productUrl: "https://loja.swift.com.br/chocolate-alpine-milk-milka-90g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-alpine-milk-milka-90g/p",
+  popularity: 926
  },
  {
   sku: "swift-7073",
@@ -9273,7 +10199,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212210/623558-chocolate-strawberry-milka_mck.jpg?v=638991806987870000",
-  productUrl: "https://loja.swift.com.br/chocolate-strawberry-milka-100g/p"
+  productUrl: "https://loja.swift.com.br/chocolate-strawberry-milka-100g/p",
+  popularity: 927
  },
  {
   sku: "swift-7038",
@@ -9283,7 +10210,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213494/623454-marshmallows-camping-fini_mck.jpg?v=639026279607430000",
-  productUrl: "https://loja.swift.com.br/marshmallows-camping-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/marshmallows-camping-fini-80g/p",
+  popularity: 928
  },
  {
   sku: "swift-7037",
@@ -9293,7 +10221,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211632/623455-bala-tubes-de-morango-fini_mck.jpg?v=638975092482170000",
-  productUrl: "https://loja.swift.com.br/bala-tubes-de-morango-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-tubes-de-morango-fini-80g/p",
+  popularity: 929
  },
  {
   sku: "swift-7045",
@@ -9303,7 +10232,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211631/623456-bala-tubes-de-tutti-frutti-azedinho-fini_mck.jpg?v=638975086589500000",
-  productUrl: "https://loja.swift.com.br/bala-tubes-de-tutti-frutti-azedinho-fini-80g/p"
+  productUrl: "https://loja.swift.com.br/bala-tubes-de-tutti-frutti-azedinho-fini-80g/p",
+  popularity: 930
  },
  {
   sku: "swift-7010",
@@ -9313,7 +10243,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos maminha",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212532/623421-maminha-swift-gran-reserva-raizes-do-sul_inn.jpg?v=638999330993730000",
-  productUrl: "https://loja.swift.com.br/maminha-swift-gran-reserva-raizes-do-sul-kg/p"
+  productUrl: "https://loja.swift.com.br/maminha-swift-gran-reserva-raizes-do-sul-kg/p",
+  popularity: 931
  },
  {
   sku: "swift-6911",
@@ -9323,7 +10254,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados bacalhau",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212095/623224-lombo-saithe-dessalgado-ribeiralves_mck.jpg?v=638990154043730000",
-  productUrl: "https://loja.swift.com.br/lombo-saithe-dessalgado-riberalves-1kg/p"
+  productUrl: "https://loja.swift.com.br/lombo-saithe-dessalgado-riberalves-1kg/p",
+  popularity: 932
  },
  {
   sku: "swift-6902",
@@ -9333,7 +10265,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas refrigerantes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215369/623307-coca-cola-ks-250_mck.jpg?v=639099621093300000",
-  productUrl: "https://loja.swift.com.br/coca-cola-ks-250ml/p"
+  productUrl: "https://loja.swift.com.br/coca-cola-ks-250ml/p",
+  popularity: 933
  },
  {
   sku: "swift-6888",
@@ -9343,7 +10276,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218040/623280-suco-de-morango-del-valle-kapo_mck.jpg?v=639198141655930000",
-  productUrl: "https://loja.swift.com.br/suco-de-morango-del-valle-kapo-200ml/p"
+  productUrl: "https://loja.swift.com.br/suco-de-morango-del-valle-kapo-200ml/p",
+  popularity: 934
  },
  {
   sku: "swift-6848",
@@ -9353,7 +10287,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215282/623219-salgadinho-fandangos-de-milho-e-presunto-pepsico_mck.jpg?v=639096407729430000",
-  productUrl: "https://loja.swift.com.br/salgadinho-fandangos-de-milho-e-presunto-pepsico-105g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-fandangos-de-milho-e-presunto-pepsico-105g/p",
+  popularity: 935
  },
  {
   sku: "swift-6849",
@@ -9363,7 +10298,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/215284/623217-salgadinho-cheetos-onda-requeijao-pepsico_mck.jpg?v=639096416825900000",
-  productUrl: "https://loja.swift.com.br/salgadinho-cheetos-onda-requeijao-pepsico-105g/p"
+  productUrl: "https://loja.swift.com.br/salgadinho-cheetos-onda-requeijao-pepsico-105g/p",
+  popularity: 936
  },
  {
   sku: "swift-6847",
@@ -9373,7 +10309,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212080/623065-barra-de-proteina-chocolate-belga-holy-nuts_mck.jpg?v=638990047862900000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-chocolate-belga-holy-nuts-45g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-chocolate-belga-holy-nuts-45g/p",
+  popularity: 937
  },
  {
   sku: "swift-6844",
@@ -9383,7 +10320,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212084/623068-barra-de-proteina-cookies-n-cream-holy-nuts_mck.jpg?v=638990067049400000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-cookies-n-cream-holy-nuts-45g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-cookies-n-cream-holy-nuts-45g/p",
+  popularity: 938
  },
  {
   sku: "swift-6845",
@@ -9393,7 +10331,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212085/623048-barra-de-proteina-bolo-de-nuts-holy-nuts_mck.jpg?v=638990074176130000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-bolo-de-nuts-holy-nuts-45g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-bolo-de-nuts-holy-nuts-45g/p",
+  popularity: 939
  },
  {
   sku: "swift-6828",
@@ -9403,7 +10342,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doce de leite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216519/623179-doce-de-leite-com-cafe-rocca_mck.jpg?v=639136728687700000",
-  productUrl: "https://loja.swift.com.br/doce-de-leite-com-cafe-rocca-400g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-leite-com-cafe-rocca-400g/p",
+  popularity: 940
  },
  {
   sku: "swift-6772",
@@ -9413,7 +10353,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212081/622913-barra-de-proteina-chocolate-nutrata-yopro_mck.jpg?v=638990050976400000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-chocolate-nutrata-yopro-55g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-chocolate-nutrata-yopro-55g/p",
+  popularity: 941
  },
  {
   sku: "swift-6770",
@@ -9423,7 +10364,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213493/622914-barra-de-proteina-brownie-de-chocolate-e-doce-de-leite-havanna-nutrata_mck.jpg?v=639026259270300000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-brownie-de-chocolate-e-doce-de-leite-havana-nutrata-40g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-brownie-de-chocolate-e-doce-de-leite-havana-nutrata-40g/p",
+  popularity: 942
  },
  {
   sku: "swift-6773",
@@ -9433,7 +10375,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia suplementos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212082/622912-barra-de-proteina-morango-nutrata-yopro_mck.jpg?v=638990057496800000",
-  productUrl: "https://loja.swift.com.br/barra-de-proteina-morango-nutrata-yopro-55g/p"
+  productUrl: "https://loja.swift.com.br/barra-de-proteina-morango-nutrata-yopro-55g/p",
+  popularity: 943
  },
  {
   sku: "swift-6764",
@@ -9443,7 +10386,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doce de leite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216518/622999-doce-de-leite-rocca_mck.jpg?v=639136725675230000",
-  productUrl: "https://loja.swift.com.br/doce-de-leite-rocca-400g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-leite-rocca-400g/p",
+  popularity: 944
  },
  {
   sku: "swift-6762",
@@ -9453,7 +10397,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doce de leite",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216520/623001-doce-de-leite-com-avela-rocca_mck.jpg?v=639136729635800000",
-  productUrl: "https://loja.swift.com.br/doce-de-leite-com-avela-rocca-400g/p"
+  productUrl: "https://loja.swift.com.br/doce-de-leite-com-avela-rocca-400g/p",
+  popularity: 945
  },
  {
   sku: "swift-6719",
@@ -9463,7 +10408,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "padaria paes",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207373/622969-pao-petit-ciabatta-sabor-de-france_rec.jpg?v=638844956013030000",
-  productUrl: "https://loja.swift.com.br/pao-petit-ciabatta-sabor-de-france-410g/p"
+  productUrl: "https://loja.swift.com.br/pao-petit-ciabatta-sabor-de-france-410g/p",
+  popularity: 946
  },
  {
   sku: "swift-6709",
@@ -9473,7 +10419,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos salgados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212641/622944-bolinho-de-carne-suina-com-barbecue-seara_rec.jpg?v=639002730338830000",
-  productUrl: "https://loja.swift.com.br/bolinho-de-carne-suina-com-barbecue-seara-270g/p"
+  productUrl: "https://loja.swift.com.br/bolinho-de-carne-suina-com-barbecue-seara-270g/p",
+  popularity: 947
  },
  {
   sku: "swift-6683",
@@ -9483,7 +10430,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos cupim",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212812/622837-cupim-fatiado_inn.jpg?v=639004629006700000",
-  productUrl: "https://loja.swift.com.br/cupim-fatiado-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/cupim-fatiado-swift-kg/p",
+  popularity: 948
  },
  {
   sku: "swift-6552",
@@ -9493,7 +10441,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos batata frita",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207562/622749-batata-tradicional--bem-brasil_rec.jpg?v=638894415979000000",
-  productUrl: "https://loja.swift.com.br/batata-tradicional-bem-brasil-400g/p"
+  productUrl: "https://loja.swift.com.br/batata-tradicional-bem-brasil-400g/p",
+  popularity: 949
  },
  {
   sku: "swift-6533",
@@ -9503,7 +10452,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pratos prontos sobremesas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211007/622746-torta-de-maca-com-canela_rec.jpg?v=638944216564930000",
-  productUrl: "https://loja.swift.com.br/torta-de-maca-com-canela-swift-400g/p"
+  productUrl: "https://loja.swift.com.br/torta-de-maca-com-canela-swift-400g/p",
+  popularity: 950
  },
  {
   sku: "swift-6415",
@@ -9513,7 +10463,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207396/622677-bis-ao-leite-xtra-mondelez_mck.jpg?v=638845761827500000",
-  productUrl: "https://loja.swift.com.br/bis-ao-leite-extra-mondelez-45g/p"
+  productUrl: "https://loja.swift.com.br/bis-ao-leite-extra-mondelez-45g/p",
+  popularity: 951
  },
  {
   sku: "swift-6381",
@@ -9523,7 +10474,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212299/622632-tostitos-redondo-sal-marinho-pepsico_mck.jpg?v=638995880373370000",
-  productUrl: "https://loja.swift.com.br/tostitos-redondo-sal-marinho-pepsico-110g/p"
+  productUrl: "https://loja.swift.com.br/tostitos-redondo-sal-marinho-pepsico-110g/p",
+  popularity: 952
  },
  {
   sku: "swift-6386",
@@ -9533,7 +10485,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207234/622626-batata-palha-tradicional-elma-chips_mck.jpg?v=638840452217030000",
-  productUrl: "https://loja.swift.com.br/batata-palha-tradicional-elma-chips-pepsico-215g/p"
+  productUrl: "https://loja.swift.com.br/batata-palha-tradicional-elma-chips-pepsico-215g/p",
+  popularity: 953
  },
  {
   sku: "swift-6383",
@@ -9543,7 +10496,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/207143/622633-amendoim-japones-pepsico_mck.jpg?v=638835258674570000",
-  productUrl: "https://loja.swift.com.br/amendoim-japones-pepsico-145g/p"
+  productUrl: "https://loja.swift.com.br/amendoim-japones-pepsico-145g/p",
+  popularity: 954
  },
  {
   sku: "swift-6382",
@@ -9553,7 +10507,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia salgadinhos",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212304/622630-tostitos-redondo-pimenta-mexicana-pepsico_mck.jpg?v=638995887178000000",
-  productUrl: "https://loja.swift.com.br/tostitos-redondo-pm-pepsico-110g/p"
+  productUrl: "https://loja.swift.com.br/tostitos-redondo-pm-pepsico-110g/p",
+  popularity: 955
  },
  {
   sku: "swift-6348",
@@ -9563,7 +10518,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia doces e chocolates",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212109/622571-mini-panettone-de-frutas-bauducco-80g_mck.jpg?v=638990255776000000",
-  productUrl: "https://loja.swift.com.br/mini-panettone-de-frutas-bauducco-80g/p"
+  productUrl: "https://loja.swift.com.br/mini-panettone-de-frutas-bauducco-80g/p",
+  popularity: 956
  },
  {
   sku: "swift-6318",
@@ -9573,7 +10529,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212277/621884-linguicinha-de-frango-original-jack-links_mck.jpg?v=638993525218000000",
-  productUrl: "https://loja.swift.com.br/linguicinha-frango-origin-jack-links-30g/p"
+  productUrl: "https://loja.swift.com.br/linguicinha-frango-origin-jack-links-30g/p",
+  popularity: 957
  },
  {
   sku: "swift-6320",
@@ -9583,7 +10540,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia variados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/212276/621886-linguicinha-de-frango-sabor-churrasco-jack-links_mck.jpg?v=638993519239330000",
-  productUrl: "https://loja.swift.com.br/linguicinha-frango-churr-jack-link-30g/p"
+  productUrl: "https://loja.swift.com.br/linguicinha-frango-churr-jack-link-30g/p",
+  popularity: 958
  },
  {
   sku: "swift-6161",
@@ -9593,7 +10551,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/216016/622274-coxinha-da-asa-apimentada-aurora_inn.jpg?v=639118653580400000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-apimentada-aurora-800g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-apimentada-aurora-800g/p",
+  popularity: 959
  },
  {
   sku: "swift-5855",
@@ -9603,7 +10562,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bebidas cervejas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/218710/620803-cerveja-heineken-long-neck_mck.jpg?v=639220595161900000",
-  productUrl: "https://loja.swift.com.br/cerveja-heineken-long-neck-330ml/p"
+  productUrl: "https://loja.swift.com.br/cerveja-heineken-long-neck-330ml/p",
+  popularity: 960
  },
  {
   sku: "swift-3917",
@@ -9613,7 +10573,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "bovinos chorizo",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208871/619889-bife-de-chorizo-linha-mais_inn.jpg?v=638872541275530000",
-  productUrl: "https://loja.swift.com.br/bife-de-chorizo-linha-mais-kg/p"
+  productUrl: "https://loja.swift.com.br/bife-de-chorizo-linha-mais-kg/p",
+  popularity: 961
  },
  {
   sku: "swift-3655",
@@ -9623,7 +10584,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves coxa e sobrecoxa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/208868/619072-sobrecoxa-ao-chimichurri-swift-gril_inn.jpg?v=638872534847370000",
-  productUrl: "https://loja.swift.com.br/sobrecoxa-ao-chimichurri-swift-gril-800g/p"
+  productUrl: "https://loja.swift.com.br/sobrecoxa-ao-chimichurri-swift-gril-800g/p",
+  popularity: 962
  },
  {
   sku: "swift-3043",
@@ -9633,7 +10595,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves asas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/211414/618527-coxinha-da-asa-buffalo-wings-seara_inn.jpg?v=638967472010100000",
-  productUrl: "https://loja.swift.com.br/coxinha-da-asa-buffalo-wings-seara-800g/p"
+  productUrl: "https://loja.swift.com.br/coxinha-da-asa-buffalo-wings-seara-800g/p",
+  popularity: 963
  },
  {
   sku: "swift-1336",
@@ -9643,7 +10606,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aperitivos hamburguer e almondegas",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213474/617626-hamburguer--polpetone-seara-gourmet_inn.jpg?v=639112580892030000",
-  productUrl: "https://loja.swift.com.br/hamburguer-polpetone-seara-gourmet-320g/p"
+  productUrl: "https://loja.swift.com.br/hamburguer-polpetone-seara-gourmet-320g/p",
+  popularity: 964
  },
  {
   sku: "swift-1264",
@@ -9653,7 +10617,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "pescados outros pescados",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/209283/617584-file-de-mapara_inn.jpg?v=638884645172730000",
-  productUrl: "https://loja.swift.com.br/file-de-mapara-swift-500g/p"
+  productUrl: "https://loja.swift.com.br/file-de-mapara-swift-500g/p",
+  popularity: 965
  },
  {
   sku: "swift-1098",
@@ -9663,7 +10628,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "aves meio da asa - tulipa",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213259/617447-meio-da-asa-tulipa-temperada--seara_inn.jpg?v=639077102314600000",
-  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-seara-1kg/p"
+  productUrl: "https://loja.swift.com.br/meio-da-asa-tulipa-temperada-seara-1kg/p",
+  popularity: 966
  },
  {
   sku: "swift-464",
@@ -9673,7 +10639,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cortes especiais cordeiros paleta",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/213219/599071-paleta--cordeiro-uruguaio_inn.jpg?v=639016899169670000",
-  productUrl: "https://loja.swift.com.br/paleta-cordeiro-uruguaio-swift-kg/p"
+  productUrl: "https://loja.swift.com.br/paleta-cordeiro-uruguaio-swift-kg/p",
+  popularity: 967
  },
  {
   sku: "swift-92",
@@ -9683,6 +10650,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mercearia",
   imageUrl: "https://swiftbr.vteximg.com.br/arquivos/ids/161738/bolsa-termica-10l-swift-616129-3--1-.jpg?v=636942348532900000",
-  productUrl: "https://loja.swift.com.br/bolsa-termica-swift-10l-1/p"
+  productUrl: "https://loja.swift.com.br/bolsa-termica-swift-10l-1/p",
+  popularity: 968
  }
 ];

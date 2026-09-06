@@ -13,7 +13,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172538/Mini-Lajotinha-125G.png?v=639159136212230000",
-  productUrl: "https://www.kopenhagen.com.br/mini-lajotinha-12-5g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-lajotinha-12-5g/p",
+  popularity: 1
  },
  {
   sku: "kopenhagen-1675",
@@ -23,7 +24,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171534/Minitrufa-Limao-Siciliano-12g.png?v=639046134980630000",
-  productUrl: "https://www.kopenhagen.com.br/minitrufa-limao-siciliano-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitrufa-limao-siciliano-12g/p",
+  popularity: 2
  },
  {
   sku: "kopenhagen-1638",
@@ -33,7 +35,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170991/Lingua-de-Gato-Extra-Cremoso-85G.png?v=638973444158730000",
-  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-extra-cremoso-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-extra-cremoso-85g/p",
+  popularity: 3
  },
  {
   sku: "kopenhagen-1381",
@@ -43,7 +46,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169875/Colecao-Mil-Delicias-144G.png?v=638889000863630000",
-  productUrl: "https://www.kopenhagen.com.br/colecao-mil-delicias-144g/p"
+  productUrl: "https://www.kopenhagen.com.br/colecao-mil-delicias-144g/p",
+  popularity: 4
  },
  {
   sku: "kopenhagen-1123",
@@ -53,7 +57,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172557/1000x1000_mil_delicias_still_bg_branco.png?v=639179234446730000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---50-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---50-unidades/p",
+  popularity: 5
  },
  {
   sku: "kopenhagen-1122",
@@ -63,7 +68,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172563/1000x1000_mil_delicias_still_bg_branco.png?v=639179237702970000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---40-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---40-unidades/p",
+  popularity: 6
  },
  {
   sku: "kopenhagen-1119",
@@ -73,7 +79,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172554/1000x1000_mil_delicias_still_bg_branco.png?v=639179234126530000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---10-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---10-unidades/p",
+  popularity: 7
  },
  {
   sku: "kopenhagen-1013",
@@ -83,7 +90,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164843/Mini-Trufa-Caramelo-e-Flor-de-Sal-12G.png?v=638291117282430000",
-  productUrl: "https://www.kopenhagen.com.br/mini-trufa-caramelo-e-flor-de-sal-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-trufa-caramelo-e-flor-de-sal-12g/p",
+  popularity: 8
  },
  {
   sku: "kopenhagen-1010",
@@ -93,7 +101,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164834/Mini-Trufa-ao-Leite-Lingua-de-Gato-12G.png?v=638291105082130000",
-  productUrl: "https://www.kopenhagen.com.br/mini-trufa-ao-leite-lingua-de-gato-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-trufa-ao-leite-lingua-de-gato-12g/p",
+  popularity: 9
  },
  {
   sku: "kopenhagen-633",
@@ -103,7 +112,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169657/Tablete-Recheado-Lingua-de-Gato-90G.png?v=638890769132500000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-lingua-de-gato-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-lingua-de-gato-90g/p",
+  popularity: 10
  },
  {
   sku: "kopenhagen-80",
@@ -113,7 +123,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167751/Tablete-ao-Leite-C-Recheio-Cherry-90G.png?v=638890769306270000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-c-recheio-cherry-90g-1102015701/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-c-recheio-cherry-90g-1102015701/p",
+  popularity: 11
  },
  {
   sku: "kopenhagen-58",
@@ -123,7 +134,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170411/4-Nha-Benta-Tradicional-90G.png?v=638944326075900000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-90g-1101001301/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-90g-1101001301/p",
+  popularity: 12
  },
  {
   sku: "kopenhagen-43",
@@ -133,7 +145,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170731/Lingua de Gato Duas Unidades 170G.png?v=638955485463100000",
-  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-pack-170g-1101000901/p"
+  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-pack-170g-1101000901/p",
+  popularity: 13
  },
  {
   sku: "kopenhagen-41",
@@ -143,7 +156,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170787/Lingua-de-Gato-85G.png?v=639041732275800000",
-  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-85g-1101000801/p"
+  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-85g-1101000801/p",
+  popularity: 14
  },
  {
   sku: "kopenhagen-1737",
@@ -153,7 +167,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172473/Lingua-de-Gato-Recheado-Caramelo-85G.png?v=639161113190470000",
-  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-recheado-caramelo-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-recheado-caramelo-85g/p",
+  popularity: 15
  },
  {
   sku: "kopenhagen-1735",
@@ -163,7 +178,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172462/Wafer-Recheado-Lingua-de-Gato-25G-3.png?v=639171505990370000",
-  productUrl: "https://www.kopenhagen.com.br/wafer-recheado-lingua-de-gato-25g/p"
+  productUrl: "https://www.kopenhagen.com.br/wafer-recheado-lingua-de-gato-25g/p",
+  popularity: 16
  },
  {
   sku: "kopenhagen-1635",
@@ -173,7 +189,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170982/Lingua-de-Gato-Chocolate-Branco-85G.png?v=638968206123870000",
-  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-chocolate-branco-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-chocolate-branco-85g/p",
+  popularity: 17
  },
  {
   sku: "kopenhagen-1577",
@@ -183,7 +200,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170263/Tablete-70--Amargo-90G-1.png?v=638938867132100000",
-  productUrl: "https://www.kopenhagen.com.br/-tablete-70--amargo-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/-tablete-70--amargo-90g/p",
+  popularity: 18
  },
  {
   sku: "kopenhagen-1573",
@@ -193,7 +211,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170259/Minitrufa--Chokonut-12G.png?v=638933080881070000",
-  productUrl: "https://www.kopenhagen.com.br/minitrufa--chokonut-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitrufa--chokonut-12g/p",
+  popularity: 19
  },
  {
   sku: "kopenhagen-1559",
@@ -203,7 +222,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169958/KOPENHAGEN_TABLETE_PISTACHE_RECHEADO_90G_MKP_RGB.jpg?v=638907994910000000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-pistache-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-pistache-90g/p",
+  popularity: 20
  },
  {
   sku: "kopenhagen-1556",
@@ -213,7 +233,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169946/KOPENHAGEN_BOMBOM_NHA_BENTA_15G_MKP_RGB.jpg?v=638899317953770000",
-  productUrl: "https://www.kopenhagen.com.br/-bombom-nha-benta-15g--/p"
+  productUrl: "https://www.kopenhagen.com.br/-bombom-nha-benta-15g--/p",
+  popularity: 21
  },
  {
   sku: "kopenhagen-1377",
@@ -223,7 +244,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169330/Caixa-Classics-180G.png?v=638827422361300000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-classics-180g--/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-classics-180g--/p",
+  popularity: 22
  },
  {
   sku: "kopenhagen-1327",
@@ -233,7 +255,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172442/Mil-Delicias-Lingua-de-Gato-100G.png?v=639131659473930000",
-  productUrl: "https://www.kopenhagen.com.br/mil-delicias-lingua-de-gato-100g/p"
+  productUrl: "https://www.kopenhagen.com.br/mil-delicias-lingua-de-gato-100g/p",
+  popularity: 23
  },
  {
   sku: "kopenhagen-1269",
@@ -243,7 +266,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172521/Lingua-de-Gato-Recheado-Frutas-Vermelhas-85G.png?v=639154828327830000",
-  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-recheado-frutas-vermelhas-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-recheado-frutas-vermelhas-85g/p",
+  popularity: 24
  },
  {
   sku: "kopenhagen-1204",
@@ -253,7 +277,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios copos e garrafas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166032/Copo-Termico-Vermelho-com-Termometro-Led-480ml.png?v=638430237181530000",
-  productUrl: "https://www.kopenhagen.com.br/copo-termico-vermelho-com-termometro-led-480ml/p"
+  productUrl: "https://www.kopenhagen.com.br/copo-termico-vermelho-com-termometro-led-480ml/p",
+  popularity: 25
  },
  {
   sku: "kopenhagen-1199",
@@ -263,7 +288,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/165780/1000x1000_minitrufa_Cookies_Cream.png?v=638412854160770000",
-  productUrl: "https://www.kopenhagen.com.br/minitrufa-branca-cookies-and-cream-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitrufa-branca-cookies-and-cream-12g/p",
+  popularity: 26
  },
  {
   sku: "kopenhagen-1198",
@@ -273,7 +299,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/165779/1000x1000_minitrufa_frutas_vermelhas.png?v=638412851301030000",
-  productUrl: "https://www.kopenhagen.com.br/mini-trufa-amarga-frutas-vermelhas-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-trufa-amarga-frutas-vermelhas-12g/p",
+  popularity: 27
  },
  {
   sku: "kopenhagen-1143",
@@ -283,7 +310,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos crocantinho",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172530/Crocantinho-80G.png?v=639155999655030000",
-  productUrl: "https://www.kopenhagen.com.br/crocantinho-80g/p"
+  productUrl: "https://www.kopenhagen.com.br/crocantinho-80g/p",
+  popularity: 28
  },
  {
   sku: "kopenhagen-1121",
@@ -293,7 +321,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172560/1000x1000_mil_delicias_still_bg_branco.png?v=639179235340600000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---30-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---30-unidades/p",
+  popularity: 29
  },
  {
   sku: "kopenhagen-1120",
@@ -303,7 +332,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172550/1000x1000_mil_delicias_still_bg_branco.png?v=639179231630830000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---20-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mil-delicias--sortidas---20-unidades/p",
+  popularity: 30
  },
  {
   sku: "kopenhagen-1074",
@@ -313,7 +343,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164953/Mini-Trufa-Pistache-12G.png?v=638303213678830000",
-  productUrl: "https://www.kopenhagen.com.br/mini-trufa-pistache-12g-/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-trufa-pistache-12g-/p",
+  popularity: 31
  },
  {
   sku: "kopenhagen-1005",
@@ -323,7 +354,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164818/Mini-Tablete-Lingua-de-Gato-Extra-Cremoso-10G.png?v=638291054333070000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-lingua-de-gato-extra-cremoso-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-lingua-de-gato-extra-cremoso-10g/p",
+  popularity: 32
  },
  {
   sku: "kopenhagen-1004",
@@ -333,7 +365,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164815/Mini-Tijolinho-12G.png?v=638291050386370000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tijolinho-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tijolinho-12g/p",
+  popularity: 33
  },
  {
   sku: "kopenhagen-1003",
@@ -343,7 +376,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164812/Mini-Tablete-ao-leite-Crocante-10G.png?v=638291046909070000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-ao-leite-crocante-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-ao-leite-crocante-10g/p",
+  popularity: 34
  },
  {
   sku: "kopenhagen-1000",
@@ -353,7 +387,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164803/Mini-Tablete-ao-Leite-10G.png?v=638291031742800000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-ao-leite-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-ao-leite-10g/p",
+  popularity: 35
  },
  {
   sku: "kopenhagen-999",
@@ -363,7 +398,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170686/Minitablete--50--Amargo-10G.png?v=639041636215630000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-amargo-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-amargo-10g/p",
+  popularity: 36
  },
  {
   sku: "kopenhagen-898",
@@ -373,7 +409,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes pai",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170328/Combo-Especial-Trufas.png?v=639045188504470000",
-  productUrl: "https://www.kopenhagen.com.br/combo-especial-trufas/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-especial-trufas/p",
+  popularity: 37
  },
  {
   sku: "kopenhagen-632",
@@ -383,7 +420,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172526/Tablete-Recheado-Chokonut-90G.png?v=639154833266700000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-avela-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-avela-90g/p",
+  popularity: 38
  },
  {
   sku: "kopenhagen-428",
@@ -393,7 +431,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos bala leite",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170728/Pouch-Bala-Leite-120G.png?v=639041862705170000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-bala-leite-120g-1102024401/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-bala-leite-120g-1102024401/p",
+  popularity: 39
  },
  {
   sku: "kopenhagen-358",
@@ -403,7 +442,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170747/Colecao-Mil-Delicias-Lingua-De-Gato-204G.png?v=639041712159600000",
-  productUrl: "https://www.kopenhagen.com.br/colecao-mil-delicias-lingua-de-gato-204g/p"
+  productUrl: "https://www.kopenhagen.com.br/colecao-mil-delicias-lingua-de-gato-204g/p",
+  popularity: 40
  },
  {
   sku: "kopenhagen-317",
@@ -413,7 +453,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170576/Tablete-Soul-Good-10G-2.png?v=639041685499200000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-10g-soul-good-1102022201/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-10g-soul-good-1102022201/p",
+  popularity: 41
  },
  {
   sku: "kopenhagen-173",
@@ -423,7 +464,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170579/Lingua-De-Gato-Soul-Good-85G--2-.png?v=639203423994470000",
-  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-soul-good-85g1102017301/p"
+  productUrl: "https://www.kopenhagen.com.br/lingua-de-gato-soul-good-85g1102017301/p",
+  popularity: 42
  },
  {
   sku: "kopenhagen-98",
@@ -433,7 +475,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes aniversario",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170543/Trufas-Artesanais.jpg?v=639045186866830000",
-  productUrl: "https://www.kopenhagen.com.br/trufas-artesanais-135g-1102027001/p"
+  productUrl: "https://www.kopenhagen.com.br/trufas-artesanais-135g-1102027001/p",
+  popularity: 43
  },
  {
   sku: "kopenhagen-50",
@@ -443,7 +486,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lajotinha",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169894/Mini-Lajotinha-150G.png?v=638889007389700000",
-  productUrl: "https://www.kopenhagen.com.br/mini-lajotinha-150g-1101003501/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-lajotinha-150g-1101003501/p",
+  popularity: 44
  },
  {
   sku: "kopenhagen-36",
@@ -453,7 +497,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas keep kop",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170829/Keep-Kop-Flocos-De-Arroz-120G.png?v=639171531901270000",
-  productUrl: "https://www.kopenhagen.com.br/keep-kop-flocos-de-arroz-120g-1102018601/p"
+  productUrl: "https://www.kopenhagen.com.br/keep-kop-flocos-de-arroz-120g-1102018601/p",
+  popularity: 45
  },
  {
   sku: "kopenhagen-12",
@@ -463,7 +508,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169477/Bombons-Cereja-150g.png?v=638847336846730000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-cereja-150g-1102010901/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-cereja-150g-1102010901/p",
+  popularity: 46
  },
  {
   sku: "kopenhagen-1749",
@@ -473,7 +519,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172566/Tablete-Recheado-Doce-de-Leite-Minions-90G.png?v=639189561036700000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-doce-de-leite-minions-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-doce-de-leite-minions-90g/p",
+  popularity: 47
  },
  {
   sku: "kopenhagen-1748",
@@ -483,7 +530,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172570/Pouch-Drage-Cookie-Chocolate-Minions-85G.png?v=639189561393300000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-drage-cookie-chocolate-minions-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-drage-cookie-chocolate-minions-85g/p",
+  popularity: 48
  },
  {
   sku: "kopenhagen-1747",
@@ -493,7 +541,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172575/Pouch-Drage-Banana-Passa-Minions-85G.png?v=639189561785070000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-drage-banana-passa-minions-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-drage-banana-passa-minions-85g/p",
+  popularity: 49
  },
  {
   sku: "kopenhagen-1746",
@@ -503,7 +552,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172506/Minitrufa-Baunilha-Minions-12G.png?v=639173261276000000",
-  productUrl: "https://www.kopenhagen.com.br/minitrufa-baunilha-minions-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitrufa-baunilha-minions-12g/p",
+  popularity: 50
  },
  {
   sku: "kopenhagen-1745",
@@ -513,7 +563,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172502/Minitrufa-Banana-e-Caramelo-Crocante-Minions-12G.png?v=639173261611070000",
-  productUrl: "https://www.kopenhagen.com.br/minitrufa-banana-e-caramelo-crocante-minions-12g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitrufa-banana-e-caramelo-crocante-minions-12g/p",
+  popularity: 51
  },
  {
   sku: "kopenhagen-1736",
@@ -523,7 +574,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172459/Bombons-Sortidos-84G.png?v=639135812853700000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-sortidos-84g/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-sortidos-84g/p",
+  popularity: 52
  },
  {
   sku: "kopenhagen-1730",
@@ -533,7 +585,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172404/Caixa-Bombons-Coracoes-Recheados-92G.png?v=639131609858200000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-coracoes-recheados-92g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-coracoes-recheados-92g/p",
+  popularity: 53
  },
  {
   sku: "kopenhagen-1677",
@@ -543,7 +596,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios copos e garrafas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171541/Copo-Soul-Good-Amarelo-890ml.png?v=639052840254300000",
-  productUrl: "https://www.kopenhagen.com.br/copo-termico-amarelo-soul-good-890ml/p"
+  productUrl: "https://www.kopenhagen.com.br/copo-termico-amarelo-soul-good-890ml/p",
+  popularity: 54
  },
  {
   sku: "kopenhagen-1673",
@@ -553,7 +607,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171483/Colecao-Lingua-de-Gato-206G.png?v=639032452632900000",
-  productUrl: "https://www.kopenhagen.com.br/colecao-lingua-de-gato-206g/p"
+  productUrl: "https://www.kopenhagen.com.br/colecao-lingua-de-gato-206g/p",
+  popularity: 55
  },
  {
   sku: "kopenhagen-1636",
@@ -563,7 +618,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos cherry brandy",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172452/Selecao-Delicias-Mousse-Cherry-Brandy-96G.png?v=639131661843700000",
-  productUrl: "https://www.kopenhagen.com.br/selecao-delicias-mousse-cherry-brandy-96g/p"
+  productUrl: "https://www.kopenhagen.com.br/selecao-delicias-mousse-cherry-brandy-96g/p",
+  popularity: 56
  },
  {
   sku: "kopenhagen-1596",
@@ -573,7 +629,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170350/Tablete-ao-Leite-com-Crocante-de-Castanha-de-Caju-90g.png?v=638960434149070000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-crocante-de-castanha-de-caju-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-crocante-de-castanha-de-caju-90g/p",
+  popularity: 57
  },
  {
   sku: "kopenhagen-1595",
@@ -583,7 +640,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170347/Tablete-ao-Leite-90g.png?v=638960434779400000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-90g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-90g-1/p",
+  popularity: 58
  },
  {
   sku: "kopenhagen-1593",
@@ -593,7 +651,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170344/Tablete-ao-Leite-com-Macadamia-Pistache-e-Amendoas-90g.png?v=638960435304830000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-macadamia--pistache-e-amendoas-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-macadamia--pistache-e-amendoas-90g/p",
+  popularity: 59
  },
  {
   sku: "kopenhagen-1592",
@@ -603,7 +662,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170359/Tablete-50--Amargo-Caramelo-e-Flor-de-Sal-90G.png?v=639039264520030000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-caramelo-e-flor-de-sal-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-caramelo-e-flor-de-sal-90g/p",
+  popularity: 60
  },
  {
   sku: "kopenhagen-1589",
@@ -613,7 +673,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170341/Tablete-Lingua-de-Gato-Branco-90g.png?v=638960435817530000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-branco-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-branco-90g/p",
+  popularity: 61
  },
  {
   sku: "kopenhagen-1588",
@@ -623,7 +684,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170338/Tablete-Lingua-de-Gato-ao-Leite-com-Amendoas-90g.png?v=639039268284600000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-ao-leite-com-amendoas-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-ao-leite-com-amendoas-90g/p",
+  popularity: 62
  },
  {
   sku: "kopenhagen-1576",
@@ -633,7 +695,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170239/Tablete-Chocolate-Branco-com-Pistache-90G.png?v=639039209887100000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-chocolate-branco-com-pistache-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-chocolate-branco-com-pistache-90g/p",
+  popularity: 63
  },
  {
   sku: "kopenhagen-1575",
@@ -643,7 +706,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170242/Tablete-ao-Leite-Soul-Good-90G.png?v=639039271015030000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-soul-good-90g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-soul-good-90g-1/p",
+  popularity: 64
  },
  {
   sku: "kopenhagen-1574",
@@ -653,7 +717,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170250/Tablete-Lingua-de-Gato-Branco-com-Cookies-90G.png?v=639039271564800000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-branco-com-cookies-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-branco-com-cookies-90g/p",
+  popularity: 65
  },
  {
   sku: "kopenhagen-1572",
@@ -663,7 +728,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170256/Tablete-Lingua-de-Gato-Extra-Cremoso-90G.png?v=639039271893700000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-90g/p",
+  popularity: 66
  },
  {
   sku: "kopenhagen-1486",
@@ -673,7 +739,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170393/Lata Bombons Nuts Soul Good 194G-1.png?v=638944180310200000",
-  productUrl: "https://www.kopenhagen.com.br/lata-bombons-nuts-soul-good-194g/p"
+  productUrl: "https://www.kopenhagen.com.br/lata-bombons-nuts-soul-good-194g/p",
+  popularity: 67
  },
  {
   sku: "kopenhagen-1484",
@@ -683,7 +750,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170651/Caixa-Bombons-Frutas-e-Pistache-301G.png?v=639045312803070000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-frutas-e-pistache-301g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-frutas-e-pistache-301g/p",
+  popularity: 68
  },
  {
   sku: "kopenhagen-1404",
@@ -693,7 +761,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos cherry brandy",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171516/Cherry-Brandy-190G.png?v=639039135128800000",
-  productUrl: "https://www.kopenhagen.com.br/cherry-brandy-190g---/p"
+  productUrl: "https://www.kopenhagen.com.br/cherry-brandy-190g---/p",
+  popularity: 69
  },
  {
   sku: "kopenhagen-1403",
@@ -703,7 +772,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos cherry brandy",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167712/Cherry-Brandy-348G.png?v=638717634962900000",
-  productUrl: "https://www.kopenhagen.com.br/cherry-brandy-348g---/p"
+  productUrl: "https://www.kopenhagen.com.br/cherry-brandy-348g---/p",
+  popularity: 70
  },
  {
   sku: "kopenhagen-1402",
@@ -713,7 +783,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170660/Selecao-de-Coracoes-84G.png?v=639045198654670000",
-  productUrl: "https://www.kopenhagen.com.br/selecao-de-coracoes-84g-/p"
+  productUrl: "https://www.kopenhagen.com.br/selecao-de-coracoes-84g-/p",
+  popularity: 71
  },
  {
   sku: "kopenhagen-1203",
@@ -723,7 +794,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios copos e garrafas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166030/Garrafa-em-Vidro-e-Bambu-com-Cristais-500ml.png?v=638430235707470000",
-  productUrl: "https://www.kopenhagen.com.br/garrafa-em-vidro-e-bambu-com-cristais-500ml/p"
+  productUrl: "https://www.kopenhagen.com.br/garrafa-em-vidro-e-bambu-com-cristais-500ml/p",
+  popularity: 72
  },
  {
   sku: "kopenhagen-1200",
@@ -733,7 +805,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/165781/1000x1000_Minitablete-Coco_Crocant.png?v=638412859898300000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-branco-coco-crocante-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-branco-coco-crocante-10g/p",
+  popularity: 73
  },
  {
   sku: "kopenhagen-1075",
@@ -743,7 +816,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lajotinha",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172534/Pouch-Nano-Lajotinha-120G.png?v=639156000115170000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-nano-lajotinha-120g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-nano-lajotinha-120g/p",
+  popularity: 74
  },
  {
   sku: "kopenhagen-1002",
@@ -753,7 +827,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164809/Mini-Tablete-Branco-10G.png?v=638291043072370000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tablete-branco-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tablete-branco-10g/p",
+  popularity: 75
  },
  {
   sku: "kopenhagen-914",
@@ -763,7 +838,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170422/Nha-Benta-Frutas-Vermelhas-90g.png?v=638944327546700000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-frutas-vermelhas-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-frutas-vermelhas-90g/p",
+  popularity: 76
  },
  {
   sku: "kopenhagen-897",
@@ -773,7 +849,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes pai",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170532/Combo-Degrade-e-Mil-Delicias.png?v=638953757649500000",
-  productUrl: "https://www.kopenhagen.com.br/combo-degrade-e-mil-delicias/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-degrade-e-mil-delicias/p",
+  popularity: 77
  },
  {
   sku: "kopenhagen-864",
@@ -783,7 +860,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170695/Kit-Soul-Good-Lingua-de-Gato.png?v=639045311889000000",
-  productUrl: "https://www.kopenhagen.com.br/kit-soul-good-lingua-de-gato/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-soul-good-lingua-de-gato/p",
+  popularity: 78
  },
  {
   sku: "kopenhagen-618",
@@ -793,7 +871,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes pai",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171425/Caixa-Bombons--Degrade-Duo-176G-2.png?v=639008776937670000",
-  productUrl: "https://www.kopenhagen.com.br/--caixa-bombons--degrade-duo-176g/p"
+  productUrl: "https://www.kopenhagen.com.br/--caixa-bombons--degrade-duo-176g/p",
+  popularity: 79
  },
  {
   sku: "kopenhagen-429",
@@ -803,7 +882,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170724/Pouch-Drage-120G.png?v=639041862443600000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-drage-120g-1102024501/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-drage-120g-1102024501/p",
+  popularity: 80
  },
  {
   sku: "kopenhagen-75",
@@ -813,7 +893,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169781/Tablete-ao-Leite-40G.png?v=638881779065230000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-40g-1102008901/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-40g-1102008901/p",
+  popularity: 81
  },
  {
   sku: "kopenhagen-63",
@@ -823,7 +904,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172426/Rosa-Ao-Leite-160G.png?v=639131657002070000",
-  productUrl: "https://www.kopenhagen.com.br/rosa-ao-lte-160g-1102005601/p"
+  productUrl: "https://www.kopenhagen.com.br/rosa-ao-lte-160g-1102005601/p",
+  popularity: 82
  },
  {
   sku: "kopenhagen-62",
@@ -833,7 +915,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas keep kop",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170819/Keep-Kop-Pipoca-Gourmet-Com-Cobertura-De-Chocolate-10.png?v=639171531973870000",
-  productUrl: "https://www.kopenhagen.com.br/keep-kop-pipokop-100g-1102017701/p"
+  productUrl: "https://www.kopenhagen.com.br/keep-kop-pipokop-100g-1102017701/p",
+  popularity: 83
  },
  {
   sku: "kopenhagen-56",
@@ -843,7 +926,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170419/Nha-Benta-Tradicional-240G.png?v=638944327276300000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-240g-1101000101/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-240g-1101000101/p",
+  popularity: 84
  },
  {
   sku: "kopenhagen-55",
@@ -853,7 +937,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170416/Nha-Benta-Maracuja-90G.png?v=638944326429000000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-maracuja-90g-1101001401/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-maracuja-90g-1101001401/p",
+  popularity: 85
  },
  {
   sku: "kopenhagen-37",
@@ -863,7 +948,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lajotinha",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170557/Lajotinha-50G.png?v=638953845970270000",
-  productUrl: "https://www.kopenhagen.com.br/lajotinha-50g-1101000501/p"
+  productUrl: "https://www.kopenhagen.com.br/lajotinha-50g-1101000501/p",
+  popularity: 86
  },
  {
   sku: "kopenhagen-20",
@@ -873,7 +959,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163991/Colher-Lingua-De-Gato-Ao-Leite-10G.png?v=638197540223330000",
-  productUrl: "https://www.kopenhagen.com.br/colher-lg-de-gato-ao-lte-10g-1101002201/p"
+  productUrl: "https://www.kopenhagen.com.br/colher-lg-de-gato-ao-lte-10g-1101002201/p",
+  popularity: 87
  },
  {
   sku: "kopenhagen-1744",
@@ -883,7 +970,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172580/Caixa-Minitrufas-Minions-96G.png?v=639189562231130000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-minitrufas-minions-96g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-minitrufas-minions-96g/p",
+  popularity: 88
  },
  {
   sku: "kopenhagen-1742",
@@ -893,7 +981,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172492/Bombons-Gift-102G.png?v=639160012951630000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-gift-102g/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-gift-102g/p",
+  popularity: 89
  },
  {
   sku: "kopenhagen-1733",
@@ -903,7 +992,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172588/Tablete-ao-Leite-com-Nibs-de-Amendoas-Minions-90G.png?v=639189563786000000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-nibs-de-amendoas-minions-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-nibs-de-amendoas-minions-90g/p",
+  popularity: 90
  },
  {
   sku: "kopenhagen-1732",
@@ -913,7 +1003,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172584/Tablete-ao-Leite-Frutas-Vermelhas-90G.png?v=639189562542200000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-frutas-vermelhas-minions-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-frutas-vermelhas-minions-90g/p",
+  popularity: 91
  },
  {
   sku: "kopenhagen-1729",
@@ -923,7 +1014,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172421/Caixa-Flores-e-Coracoes-176G.png?v=639131612715030000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-flores-e-coracoes-176g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-flores-e-coracoes-176g/p",
+  popularity: 92
  },
  {
   sku: "kopenhagen-1713",
@@ -933,7 +1025,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios bolsas e necessaires",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172073/Tote-Bag-Estampas-Sortidas-Pascoa-Kopenhagen-2026.png?v=639075361499330000",
-  productUrl: "https://www.kopenhagen.com.br/tote-bag-estampas-sortidas-pascoa-kopenhagen-2026/p"
+  productUrl: "https://www.kopenhagen.com.br/tote-bag-estampas-sortidas-pascoa-kopenhagen-2026/p",
+  popularity: 93
  },
  {
   sku: "kopenhagen-1664",
@@ -943,7 +1036,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171480/Pouch-Wafer-Lingua-de-Gato-Forno-K-85G.png?v=639017683011470000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-wafer-lingua-de-gato-forno-k-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-wafer-lingua-de-gato-forno-k-85g/p",
+  popularity: 94
  },
  {
   sku: "kopenhagen-1663",
@@ -953,7 +1047,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171477/Pouch-Wafer-Avela-Forno-K-85G.png?v=639017682640070000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-wafer-avela-forno-k-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-wafer-avela-forno-k-85g/p",
+  popularity: 95
  },
  {
   sku: "kopenhagen-1657",
@@ -963,7 +1058,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171366/Biscoitos-Cookies-de-Rum-Forno-K-80g.png?v=639003837126430000",
-  productUrl: "https://www.kopenhagen.com.br/cookies-de-rum-forno-k-80g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/cookies-de-rum-forno-k-80g-1/p",
+  popularity: 96
  },
  {
   sku: "kopenhagen-1644",
@@ -973,7 +1069,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170957/Kit-Presente-G---340G.png?v=638967509711530000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presente-g---340g/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presente-g---340g/p",
+  popularity: 97
  },
  {
   sku: "kopenhagen-1643",
@@ -983,7 +1080,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170951/Kit-Presente-M---290G.png?v=638967509833830000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presente-m---290g/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presente-m---290g/p",
+  popularity: 98
  },
  {
   sku: "kopenhagen-1637",
@@ -993,7 +1091,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172438/Selecao-Delicias-Chokonut-96G.png?v=639131658994500000",
-  productUrl: "https://www.kopenhagen.com.br/selecao-delicias-chokonut-96g/p"
+  productUrl: "https://www.kopenhagen.com.br/selecao-delicias-chokonut-96g/p",
+  popularity: 99
  },
  {
   sku: "kopenhagen-1591",
@@ -1003,7 +1102,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170356/Tablete-50--Amargo-Frutas-Vermelhas-90G.png?v=639039265451430000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-frutas-vermelhas-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-frutas-vermelhas-90g/p",
+  popularity: 100
  },
  {
   sku: "kopenhagen-1590",
@@ -1013,7 +1113,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170353/Tablete-50--Amargo-90G.png?v=639039266932630000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-90g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-50--amargo-90g/p",
+  popularity: 101
  },
  {
   sku: "kopenhagen-1557",
@@ -1023,7 +1124,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170335/Bombom-Nha-Benta-Frutas-Vermelhas-15G.jpg?v=639039892906130000",
-  productUrl: "https://www.kopenhagen.com.br/bombom-nha-benta-frutas-vermelhas-15g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/bombom-nha-benta-frutas-vermelhas-15g-1/p",
+  popularity: 102
  },
  {
   sku: "kopenhagen-1545",
@@ -1033,7 +1135,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171523/Bombons-Cookies-And-Cream-Soul-Good-160G-2.png?v=639039136277830000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-cookies-and-cream-soul-good-160g/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-cookies-and-cream-soul-good-160g/p",
+  popularity: 103
  },
  {
   sku: "kopenhagen-1544",
@@ -1043,7 +1146,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170214/KOP_EP_CAIXA_SELECAOCORACAO_1000X1000.png?v=638923343666800000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-coracoes-emily-in-paris-84g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-coracoes-emily-in-paris-84g/p",
+  popularity: 104
  },
  {
   sku: "kopenhagen-1401",
@@ -1053,7 +1157,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167691/Tablete-Lingua-de-Gato-Chocolate-Branco-40G.png?v=638709264137900000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-chocolate-branco-40g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-chocolate-branco-40g/p",
+  popularity: 105
  },
  {
   sku: "kopenhagen-1399",
@@ -1063,7 +1168,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171276/Gourmet-Selection-284G.png?v=638996819913130000",
-  productUrl: "https://www.kopenhagen.com.br/gourmet-selection-284g/p"
+  productUrl: "https://www.kopenhagen.com.br/gourmet-selection-284g/p",
+  popularity: 106
  },
  {
   sku: "kopenhagen-1397",
@@ -1073,7 +1179,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167702/Nha-Benta-Tradicional-30G.png?v=638709308209370000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-30g/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-tradicional-30g/p",
+  popularity: 107
  },
  {
   sku: "kopenhagen-1376",
@@ -1083,7 +1190,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169334/Bombom-Trufado-Vinho-do-Porto-180G.png?v=638832629726270000",
-  productUrl: "https://www.kopenhagen.com.br/bombom-trufado-vinho-do-porto-180g---/p"
+  productUrl: "https://www.kopenhagen.com.br/bombom-trufado-vinho-do-porto-180g---/p",
+  popularity: 108
  },
  {
   sku: "kopenhagen-1375",
@@ -1093,7 +1201,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172447/Caixa-Degrade-208G.png?v=639131660281330000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-degrade-208g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-degrade-208g-1/p",
+  popularity: 109
  },
  {
   sku: "kopenhagen-1281",
@@ -1103,7 +1212,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166878/Capsulas-de-Cafe-Supremo-Kop-50G.png?v=638570124588270000",
-  productUrl: "https://www.kopenhagen.com.br/capsulas-de-cafe-supremo-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/capsulas-de-cafe-supremo-50g/p",
+  popularity: 110
  },
  {
   sku: "kopenhagen-1276",
@@ -1113,7 +1223,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166845/Trufa-Lingua-de-Gato-150G.png?v=638562200177870000",
-  productUrl: "https://www.kopenhagen.com.br/trufa-lingua-de-gato-150g/p"
+  productUrl: "https://www.kopenhagen.com.br/trufa-lingua-de-gato-150g/p",
+  popularity: 111
  },
  {
   sku: "kopenhagen-1235",
@@ -1123,7 +1234,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170674/Mix-Lingua-de-Gato-168G.png?v=638991699300530000",
-  productUrl: "https://www.kopenhagen.com.br/mix-lingua-de-gato-168g/p"
+  productUrl: "https://www.kopenhagen.com.br/mix-lingua-de-gato-168g/p",
+  popularity: 112
  },
  {
   sku: "kopenhagen-1207",
@@ -1133,7 +1245,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166036/Tablete-Lingua-de-Gato-Extra-Cremoso-40G.png?v=638430239745030000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-40g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-40g/p",
+  popularity: 113
  },
  {
   sku: "kopenhagen-1144",
@@ -1143,7 +1256,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos crocantinho",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/165630/Crocantinho-Black---White.png?v=638392847846530000",
-  productUrl: "https://www.kopenhagen.com.br/crocantinho-black---white-80g/p"
+  productUrl: "https://www.kopenhagen.com.br/crocantinho-black---white-80g/p",
+  popularity: 114
  },
  {
   sku: "kopenhagen-814",
@@ -1153,7 +1267,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170371/Pouch-Drage-Lingato-50g.png?v=638941751012970000",
-  productUrl: "https://www.kopenhagen.com.br/pouch-drage-lingato-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/pouch-drage-lingato-50g/p",
+  popularity: 115
  },
  {
   sku: "kopenhagen-780",
@@ -1163,7 +1278,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167165/Kit-Classicos.png?v=638616878350800000",
-  productUrl: "https://www.kopenhagen.com.br/kit-classicos/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-classicos/p",
+  popularity: 116
  },
  {
   sku: "kopenhagen-672",
@@ -1173,7 +1289,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170718/Pouch-Canutti-On-The-Go-120G.png?v=639041862173300000",
-  productUrl: "https://www.kopenhagen.com.br/canutti-on-the-go-120g/p"
+  productUrl: "https://www.kopenhagen.com.br/canutti-on-the-go-120g/p",
+  popularity: 117
  },
  {
   sku: "kopenhagen-598",
@@ -1183,7 +1300,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170538/Combo-Meus-Preferidos.png?v=639045357552470000",
-  productUrl: "https://www.kopenhagen.com.br/combo-meus-preferidos/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-meus-preferidos/p",
+  popularity: 118
  },
  {
   sku: "kopenhagen-581",
@@ -1193,7 +1311,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172430/Coracao-ao-Leite-130G.png?v=639131657456800000",
-  productUrl: "https://www.kopenhagen.com.br/coracao-ao-leite-130g/p"
+  productUrl: "https://www.kopenhagen.com.br/coracao-ao-leite-130g/p",
+  popularity: 119
  },
  {
   sku: "kopenhagen-576",
@@ -1203,7 +1322,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169887/Caixa-Colecao-Lingua-De-Gato.png?v=638889006624500000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-colecao-lingua-de-gato-201g-/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-colecao-lingua-de-gato-201g-/p",
+  popularity: 120
  },
  {
   sku: "kopenhagen-491",
@@ -1213,7 +1333,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167036/Caixa-Melt-180G.png?v=638599460640470000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-melt-180g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-melt-180g/p",
+  popularity: 121
  },
  {
   sku: "kopenhagen-413",
@@ -1223,7 +1344,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios pelucias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171254/7891823924177_1.png?v=638986369785930000",
-  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-1114002501/p"
+  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-1114002501/p",
+  popularity: 122
  },
  {
   sku: "kopenhagen-301",
@@ -1233,7 +1355,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170554/Petit-Wafer-Ao-Lte-75G-2.png?v=638953845084830000",
-  productUrl: "https://www.kopenhagen.com.br/petit-wafer-ao-lte-75g-1102022301/p"
+  productUrl: "https://www.kopenhagen.com.br/petit-wafer-ao-lte-75g-1102022301/p",
+  popularity: 123
  },
  {
   sku: "kopenhagen-295",
@@ -1243,7 +1366,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163901/kit-Colher-Lingua-De-Gato-Ao-Leite-10G.png?v=638195204032100000",
-  productUrl: "https://www.kopenhagen.com.br/kit-colher-lingua-de-gato-ao-leite-10g-5-un-kit14/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-colher-lingua-de-gato-ao-leite-10g-5-un-kit14/p",
+  popularity: 124
  },
  {
   sku: "kopenhagen-283",
@@ -1253,7 +1377,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lajotinha",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/165222/Kit-Lajotinha-50G---2-Un.png?v=638342721275500000",
-  productUrl: "https://www.kopenhagen.com.br/kit-lajotinha-50g-kit12/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-lajotinha-50g-kit12/p",
+  popularity: 125
  },
  {
   sku: "kopenhagen-122",
@@ -1263,7 +1388,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170594/Bombons Lingua De Gato Soul Good 160G-2.png?v=638953853153170000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-lg-soul-good-160g-1102021201/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-lg-soul-good-160g-1102021201/p",
+  popularity: 126
  },
  {
   sku: "kopenhagen-120",
@@ -1273,7 +1399,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170588/Bombons Avela Soul Good 160G-2.png?v=638953852693770000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-avela-soul-good-160g-1102021101/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-avela-soul-good-160g-1102021101/p",
+  popularity: 127
  },
  {
   sku: "kopenhagen-117",
@@ -1283,7 +1410,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170600/Tablete 70- Cacau Com Nibs Soul Good 30G-2.png?v=638953853601730000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-70-cacau-com-nibs-30g-1102020601/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-70-cacau-com-nibs-30g-1102020601/p",
+  popularity: 128
  },
  {
   sku: "kopenhagen-42",
@@ -1293,7 +1421,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171399/Lingua-de-Gato-Lingato-85G.png?v=639008289197770000",
-  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-lingato-85g-1101003801/p"
+  productUrl: "https://www.kopenhagen.com.br/lg-de-gato-lingato-85g-1101003801/p",
+  popularity: 129
  },
  {
   sku: "kopenhagen-8",
@@ -1303,7 +1432,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169307/Botoes-de-Rosa-40G.png?v=638827423225600000",
-  productUrl: "https://www.kopenhagen.com.br/botoes-de-rosa-40g-1103000301/p"
+  productUrl: "https://www.kopenhagen.com.br/botoes-de-rosa-40g-1103000301/p",
+  popularity: 130
  },
  {
   sku: "kopenhagen-1741",
@@ -1313,7 +1443,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172488/Bombons-Gift-76G.png?v=639160012652200000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-gift-76g/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-gift-76g/p",
+  popularity: 131
  },
  {
   sku: "kopenhagen-1740",
@@ -1323,7 +1454,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172484/Bombons-Gift-50G.png?v=639160012427370000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-gift-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-gift-50g/p",
+  popularity: 132
  },
  {
   sku: "kopenhagen-1731",
@@ -1333,7 +1465,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172416/Colecao-Coracao-Lingua-de-Gato-250G.png?v=639131612031100000",
-  productUrl: "https://www.kopenhagen.com.br/colecao-coracao-lingua-de-gato-250g/p"
+  productUrl: "https://www.kopenhagen.com.br/colecao-coracao-lingua-de-gato-250g/p",
+  popularity: 133
  },
  {
   sku: "kopenhagen-1676",
@@ -1343,7 +1476,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171537/Lata-Drage-Lingato-170g.png?v=639050390718300000",
-  productUrl: "https://www.kopenhagen.com.br/lata-drage-lingato-170g/p"
+  productUrl: "https://www.kopenhagen.com.br/lata-drage-lingato-170g/p",
+  popularity: 134
  },
  {
   sku: "kopenhagen-1674",
@@ -1353,7 +1487,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172246/Trufas Lingua de Gato Cookies - Cream 150g.png?v=639089408764430000",
-  productUrl: "https://www.kopenhagen.com.br/trufas-lingua-de-gato-cookies---cream-150g/p"
+  productUrl: "https://www.kopenhagen.com.br/trufas-lingua-de-gato-cookies---cream-150g/p",
+  popularity: 135
  },
  {
   sku: "kopenhagen-1668",
@@ -1363,7 +1498,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios pelucias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171248/Pelucia-Lingato-Detetive.png?v=638986369194200000",
-  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-detetive/p"
+  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-detetive/p",
+  popularity: 136
  },
  {
   sku: "kopenhagen-1667",
@@ -1373,7 +1509,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios pelucias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171251/Pelucia-Lingato-Astronauta.png?v=638986369484570000",
-  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-astronauta/p"
+  productUrl: "https://www.kopenhagen.com.br/pelucia-lingato-astronauta/p",
+  popularity: 137
  },
  {
   sku: "kopenhagen-1658",
@@ -1383,7 +1520,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171369/Cookies-Baunilha-Forno-K-80g.png?v=639003837549100000",
-  productUrl: "https://www.kopenhagen.com.br/cookies-baunilha-forno-k-80g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/cookies-baunilha-forno-k-80g-1/p",
+  popularity: 138
  },
  {
   sku: "kopenhagen-1656",
@@ -1393,7 +1531,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171201/Capsulas-Dolce-Gusto-Nestle®-Cappucino.png?v=639041847092300000",
-  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle%C2%AE-cappucino---10-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle%C2%AE-cappucino---10-unidades/p",
+  popularity: 139
  },
  {
   sku: "kopenhagen-1645",
@@ -1403,7 +1542,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171015/Canudo-Wafer-Recheado-Lingua-de-Gato-20G.png?v=638968309583900000",
-  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-lingua-de-gato-forno-k-20g/p"
+  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-lingua-de-gato-forno-k-20g/p",
+  popularity: 140
  },
  {
   sku: "kopenhagen-1642",
@@ -1413,7 +1553,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170946/Kit-Presente-P---255G.png?v=638967427180600000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presente-p---255g/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presente-p---255g/p",
+  popularity: 141
  },
  {
   sku: "kopenhagen-1640",
@@ -1423,7 +1564,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos crocantinho",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170997/Crocantinho-Cookies---Cream-80G.png?v=639041858167570000",
-  productUrl: "https://www.kopenhagen.com.br/crocantinho-cookies---cream-80g/p"
+  productUrl: "https://www.kopenhagen.com.br/crocantinho-cookies---cream-80g/p",
+  popularity: 142
  },
  {
   sku: "kopenhagen-1639",
@@ -1433,7 +1575,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170994/Selecao-Tabletes-160G.png?v=639039273696900000",
-  productUrl: "https://www.kopenhagen.com.br/selecao-tabletes-160g/p"
+  productUrl: "https://www.kopenhagen.com.br/selecao-tabletes-160g/p",
+  popularity: 143
  },
  {
   sku: "kopenhagen-1597",
@@ -1443,7 +1586,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170321/Combo-Soul-Good-Special-Nuts.png?v=638938855294600000",
-  productUrl: "https://www.kopenhagen.com.br/combo-soul-good-special-nuts/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-soul-good-special-nuts/p",
+  popularity: 144
  },
  {
   sku: "kopenhagen-1581",
@@ -1453,7 +1597,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170234/Tablete-Branco-com-Morango-90g---Moranguinho.png?v=638932875037230000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-branco-com-morango-90g---moranguinho/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-branco-com-morango-90g---moranguinho/p",
+  popularity: 145
  },
  {
   sku: "kopenhagen-1580",
@@ -1463,7 +1608,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170226/Kopenhagen-Linha-Tablete-Laranjinha_1000x1000.png?v=638931904508200000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-laranja-90g---laranjinha/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-com-laranja-90g---laranjinha/p",
+  popularity: 146
  },
  {
   sku: "kopenhagen-1578",
@@ -1473,7 +1619,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "mil delicias",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170246/Minitablete-70--Amargo-10G.png?v=639156681163270000",
-  productUrl: "https://www.kopenhagen.com.br/minitablete-70--amargo-10g/p"
+  productUrl: "https://www.kopenhagen.com.br/minitablete-70--amargo-10g/p",
+  popularity: 147
  },
  {
   sku: "kopenhagen-1548",
@@ -1483,7 +1630,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169915/Combo-2_22970.jpg?v=638890436077700000",
-  productUrl: "https://www.kopenhagen.com.br/combo-delicias-lingua-de-gato/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-delicias-lingua-de-gato/p",
+  popularity: 148
  },
  {
   sku: "kopenhagen-1546",
@@ -1493,7 +1641,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169872/Bombom-Cookies---Cream-Soul-Good-20g.jpg?v=638887834993870000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-cookies-and-cream-soul-good-20g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-cookies-and-cream-soul-good-20g-1/p",
+  popularity: 149
  },
  {
   sku: "kopenhagen-1533",
@@ -1503,7 +1652,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169622/Lingua-de-Gato-2_1000x1000.png?v=638864789541030000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----lingua-de-gato-85g/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----lingua-de-gato-85g/p",
+  popularity: 150
  },
  {
   sku: "kopenhagen-1531",
@@ -1513,7 +1663,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169606/Capsulas-Dolce-Gusto-Nestle®-Lajotinha-170g---10-unidades-1.jpg?v=638871675941170000",
-  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle--lajotinha-170g---10-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle--lajotinha-170g---10-unidades/p",
+  popularity: 151
  },
  {
   sku: "kopenhagen-1530",
@@ -1523,7 +1674,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169612/Capsulas-Dolce-Gusto-Nestle®-Lingua-de-Gato-162g---10-unidades.jpg?v=638864608348570000",
-  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle--lingua-de-gato-162g---10-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle--lingua-de-gato-162g---10-unidades/p",
+  popularity: 152
  },
  {
   sku: "kopenhagen-1508",
@@ -1533,7 +1685,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170622/Lata-Cookies-Canela-e-Baunilha-220G.png?v=639171526713400000",
-  productUrl: "https://www.kopenhagen.com.br/lata-cookies-canela-e-baunilha-220g/p"
+  productUrl: "https://www.kopenhagen.com.br/lata-cookies-canela-e-baunilha-220g/p",
+  popularity: 153
  },
  {
   sku: "kopenhagen-1507",
@@ -1543,7 +1696,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170626/Lata Nuts Avela e Amendoim 180g.png?v=638955440844300000",
-  productUrl: "https://www.kopenhagen.com.br/lata-nuts-avela-e-amendoim-180g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/lata-nuts-avela-e-amendoim-180g-1/p",
+  popularity: 154
  },
  {
   sku: "kopenhagen-1506",
@@ -1553,7 +1707,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170630/Lata Nuts Amendoa e Macadamia 180g.png?v=638955441231330000",
-  productUrl: "https://www.kopenhagen.com.br/lata-nuts-180g/p"
+  productUrl: "https://www.kopenhagen.com.br/lata-nuts-180g/p",
+  popularity: 155
  },
  {
   sku: "kopenhagen-1485",
@@ -1563,7 +1718,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171527/Amendoim-Drageado-Soul-Good-100G-2.png?v=639039136880530000",
-  productUrl: "https://www.kopenhagen.com.br/amendoim-drageado-soul-good-100g/p"
+  productUrl: "https://www.kopenhagen.com.br/amendoim-drageado-soul-good-100g/p",
+  popularity: 156
  },
  {
   sku: "kopenhagen-1400",
@@ -1573,7 +1729,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171430/Caixa-Bar-160G-2.png?v=639008777708000000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bar--160g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bar--160g/p",
+  popularity: 157
  },
  {
   sku: "kopenhagen-1379",
@@ -1583,7 +1740,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170362/Caixa-Selecao-de-Bombons-Castanha-de-Caju-225G.png?v=638941744206370000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-selecao-de-bombons-castanha-de-caju-225g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-selecao-de-bombons-castanha-de-caju-225g/p",
+  popularity: 158
  },
  {
   sku: "kopenhagen-1242",
@@ -1593,7 +1751,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166523/Kit-Presentes-Especiais.png?v=638494938049100000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presentes-especiais/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presentes-especiais/p",
+  popularity: 159
  },
  {
   sku: "kopenhagen-1230",
@@ -1603,7 +1762,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170523/Kit-Presentes-para-Agradar.png?v=639045265998970000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presentes-para-agradar/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presentes-para-agradar/p",
+  popularity: 160
  },
  {
   sku: "kopenhagen-813",
@@ -1613,7 +1773,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170374/Caixa-Colecao-Lingua-de-Gato-400g.png?v=638941751242300000",
-  productUrl: "https://www.kopenhagen.com.br/colecao-lingua-de-gato-400g/p"
+  productUrl: "https://www.kopenhagen.com.br/colecao-lingua-de-gato-400g/p",
+  popularity: 161
  },
  {
   sku: "kopenhagen-699",
@@ -1623,7 +1784,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170715/Cookies-Classicos-220G.png?v=639171526572970000",
-  productUrl: "https://www.kopenhagen.com.br/cookies-classicos-220g/p"
+  productUrl: "https://www.kopenhagen.com.br/cookies-classicos-220g/p",
+  popularity: 162
  },
  {
   sku: "kopenhagen-393",
@@ -1633,7 +1795,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170744/Pipoca-Lingato-50G.png?v=639046159121800000",
-  productUrl: "https://www.kopenhagen.com.br/pipoca-lingato-50g-1102023801/p"
+  productUrl: "https://www.kopenhagen.com.br/pipoca-lingato-50g-1102023801/p",
+  popularity: 163
  },
  {
   sku: "kopenhagen-349",
@@ -1643,7 +1806,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good comer de colher",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170571/Creme De Avela Soul Good Spreads 165G-2.png?v=638953850924000000",
-  productUrl: "https://www.kopenhagen.com.br/soul-good-spreads-avela-165g/p"
+  productUrl: "https://www.kopenhagen.com.br/soul-good-spreads-avela-165g/p",
+  popularity: 164
  },
  {
   sku: "kopenhagen-318",
@@ -1653,7 +1817,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170753/Mini-Tablete-Lingato-13G.png?v=639039216432200000",
-  productUrl: "https://www.kopenhagen.com.br/mini-tab-lingato-13g-1103006201/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-tab-lingato-13g-1103006201/p",
+  popularity: 165
  },
  {
   sku: "kopenhagen-296",
@@ -1663,7 +1828,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170759/Kit Bombom Recheado Avela Soul Good 20G - 4 Un.png?v=638955543041330000",
-  productUrl: "https://www.kopenhagen.com.br/kit-bombom-recheado-avela-20g-4-un-kit23/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-bombom-recheado-avela-20g-4-un-kit23/p",
+  popularity: 166
  },
  {
   sku: "kopenhagen-284",
@@ -1673,7 +1839,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170777/Kit-Alfajor-Amargo-55G---3-Un.png?v=639171524496030000",
-  productUrl: "https://www.kopenhagen.com.br/kit-alfajor-amargo-55g-3-un-kit13/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-alfajor-amargo-55g-3-un-kit13/p",
+  popularity: 167
  },
  {
   sku: "kopenhagen-276",
@@ -1683,7 +1850,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170774/Kit-Pao-de-Mel-40G---3-Un.png?v=639171528012030000",
-  productUrl: "https://www.kopenhagen.com.br/kit-pao-de-mel-40g-kit5/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-pao-de-mel-40g-kit5/p",
+  popularity: 168
  },
  {
   sku: "kopenhagen-228",
@@ -1693,7 +1861,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/168743/Brownie-55G.png.png?v=638784603862230000",
-  productUrl: "https://www.kopenhagen.com.br/brownie-55g-1102022601/p"
+  productUrl: "https://www.kopenhagen.com.br/brownie-55g-1102022601/p",
+  popularity: 169
  },
  {
   sku: "kopenhagen-125",
@@ -1703,7 +1872,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170610/Bombom-Recheado-Lingua-De-Gato-Soul-Good-20G-2.png.png?v=638953855365830000",
-  productUrl: "https://www.kopenhagen.com.br/bombom-recheado-lingua-de-gato-20g-1102021501/p"
+  productUrl: "https://www.kopenhagen.com.br/bombom-recheado-lingua-de-gato-20g-1102021501/p",
+  popularity: 170
  },
  {
   sku: "kopenhagen-124",
@@ -1713,7 +1883,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170606/Bombons Macicos Soul Good 85G-3.png?v=638953854783300000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-macicos-85g-1102020401/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-macicos-85g-1102020401/p",
+  popularity: 171
  },
  {
   sku: "kopenhagen-116",
@@ -1723,7 +1894,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170603/Tablete 70- Cacau Soul Good 30G-2.png?v=638953854187200000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-70-cacau-30g-1102020501/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-70-cacau-30g-1102020501/p",
+  popularity: 172
  },
  {
   sku: "kopenhagen-101",
@@ -1733,7 +1905,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/158945/7890110202202_1.png?v=637635438941400000",
-  productUrl: "https://www.kopenhagen.com.br/melt-30g-1102022001/p"
+  productUrl: "https://www.kopenhagen.com.br/melt-30g-1102022001/p",
+  popularity: 173
  },
  {
   sku: "kopenhagen-88",
@@ -1743,7 +1916,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170813/Tablete-Crocante-C-Castanha-De-Caju-40G.png?v=639021759223070000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-crocante-c-castanha-de-caju-40g-1102009201/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-crocante-c-castanha-de-caju-40g-1102009201/p",
+  popularity: 174
  },
  {
   sku: "kopenhagen-61",
@@ -1753,7 +1927,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170835/Pao-de-Mel-40G.png?v=639171528173070000",
-  productUrl: "https://www.kopenhagen.com.br/pao-de-mel-40g-1102000901/p"
+  productUrl: "https://www.kopenhagen.com.br/pao-de-mel-40g-1102000901/p",
+  popularity: 175
  },
  {
   sku: "kopenhagen-60",
@@ -1763,7 +1938,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes aniversario",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167040/Pao-de-Mel-240G.png?v=638600203741630000",
-  productUrl: "https://www.kopenhagen.com.br/pao-de-mel-240g-1102008001/p"
+  productUrl: "https://www.kopenhagen.com.br/pao-de-mel-240g-1102008001/p",
+  popularity: 176
  },
  {
   sku: "kopenhagen-54",
@@ -1773,7 +1949,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170431/Nha-Benta-Maracuja-90g-1.png?v=638944330483400000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-maracuja-40g/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-maracuja-40g/p",
+  popularity: 177
  },
  {
   sku: "kopenhagen-51",
@@ -1783,7 +1960,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171395/Mini-Nha-Benta-Lingato-60G.png?v=639008288777270000",
-  productUrl: "https://www.kopenhagen.com.br/mini-nha-benta-lingato-60g-1101004001/p"
+  productUrl: "https://www.kopenhagen.com.br/mini-nha-benta-lingato-60g-1101004001/p",
+  popularity: 178
  },
  {
   sku: "kopenhagen-21",
@@ -1793,7 +1971,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172434/Bombons-Collection-210G-2.png.png?v=639131657964170000",
-  productUrl: "https://www.kopenhagen.com.br/bombons-collection-210g-1102012301/p"
+  productUrl: "https://www.kopenhagen.com.br/bombons-collection-210g-1102012301/p",
+  popularity: 179
  },
  {
   sku: "kopenhagen-10",
@@ -1803,7 +1982,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/158996/7891823050166_1.png?v=637635393221670000",
-  productUrl: "https://www.kopenhagen.com.br/canudo-recheado-e-coberto-chocolate-amargo-20g-1102000701/p"
+  productUrl: "https://www.kopenhagen.com.br/canudo-recheado-e-coberto-chocolate-amargo-20g-1102000701/p",
+  popularity: 180
  },
  {
   sku: "kopenhagen-2",
@@ -1813,7 +1993,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170780/Alfajor-Amargo-55G.png?v=639171524644170000",
-  productUrl: "https://www.kopenhagen.com.br/alfajor-amargo-55g-1102001501/p"
+  productUrl: "https://www.kopenhagen.com.br/alfajor-amargo-55g-1102001501/p",
+  popularity: 181
  },
  {
   sku: "kopenhagen-1739",
@@ -1823,7 +2004,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes pai",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172480/Caixa-Bombons-de-Cafe-112G.png?v=639161114190930000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-de-cafe-112g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-de-cafe-112g/p",
+  popularity: 182
  },
  {
   sku: "kopenhagen-1738",
@@ -1833,7 +2015,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes pai",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/172476/Caixa-Bombons-Conhaque-e-Toffee-288G-1.png?v=639155942721270000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-conhaque-e-toffee-288g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-conhaque-e-toffee-288g/p",
+  popularity: 183
  },
  {
   sku: "kopenhagen-1649",
@@ -1843,7 +2026,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171055/Combo-Capsulas-Dolce-Gusto-Nestle®-Lingua-de-Gato---Mil-Delicias-Lingua-de-Gat.png?v=638974427911200000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lingua-de-gato---mil-delicias-lingua-de-gato/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lingua-de-gato---mil-delicias-lingua-de-gato/p",
+  popularity: 184
  },
  {
   sku: "kopenhagen-1648",
@@ -1853,7 +2037,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171052/Combo-Capsulas-Dolce-Gusto-Nestle®-Lingua-de-Gato---Colher-Lingua-de-Gato.png?v=638974424001900000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lingua-de-gato---colher-lingua-de-gato/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lingua-de-gato---colher-lingua-de-gato/p",
+  popularity: 185
  },
  {
   sku: "kopenhagen-1647",
@@ -1863,7 +2048,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171009/Canudo-Wafer-Recheado-Pistache-20G.png?v=638968299039770000",
-  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-pistache-forno-k-20g/p"
+  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-pistache-forno-k-20g/p",
+  popularity: 186
  },
  {
   sku: "kopenhagen-1646",
@@ -1873,7 +2059,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171012/Canudo-Wafer-Recheado-Chokonut-20G.png?v=638968309430930000",
-  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-chokonut-forno-k-20g/p"
+  productUrl: "https://www.kopenhagen.com.br/canudo-wafer-recheado-chokonut-forno-k-20g/p",
+  popularity: 187
  },
  {
   sku: "kopenhagen-1571",
@@ -1883,7 +2070,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good comer de colher",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170963/Creme Cookies And Cream Soul Good Spreads 165G.png?v=638967517924700000",
-  productUrl: "https://www.kopenhagen.com.br/creme-cookies-and-cream-soul-good-spreads-165g/p"
+  productUrl: "https://www.kopenhagen.com.br/creme-cookies-and-cream-soul-good-spreads-165g/p",
+  popularity: 188
  },
  {
   sku: "kopenhagen-1558",
@@ -1893,7 +2081,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios pins",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170613/Pin-Colecionavel-Emily-In-Paris.png?v=639159413040600000",
-  productUrl: "https://www.kopenhagen.com.br/pin-colecionavel-emily-in-paris/p"
+  productUrl: "https://www.kopenhagen.com.br/pin-colecionavel-emily-in-paris/p",
+  popularity: 189
  },
  {
   sku: "kopenhagen-1543",
@@ -1903,7 +2092,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170209/KOP_EP_TABLETE90G_CHERRY_1000X1000.png?v=638923343054800000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-cereja-emily-in-paris-90g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-cereja-emily-in-paris-90g-1/p",
+  popularity: 190
  },
  {
   sku: "kopenhagen-1535",
@@ -1913,7 +2103,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169628/Combo-Capsulas-Dolce-Gusto-Nestle®---Mini-Lajotinha-150g.png?v=638864796149400000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----mini-lajotinha-150g/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----mini-lajotinha-150g/p",
+  popularity: 191
  },
  {
   sku: "kopenhagen-1527",
@@ -1923,7 +2114,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169490/1-Combo-Amor-Inesquecivel.png?v=638847406214500000",
-  productUrl: "https://www.kopenhagen.com.br/combo-amor-inesquecivel/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-amor-inesquecivel/p",
+  popularity: 192
  },
  {
   sku: "kopenhagen-1275",
@@ -1933,7 +2125,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169408/Caixa-Coracoes-e-Rosas-Black-White-240G.png?v=638832627432900000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-coracoes-e-rosas-black-white-240g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-coracoes-e-rosas-black-white-240g/p",
+  popularity: 193
  },
  {
   sku: "kopenhagen-991",
@@ -1943,7 +2136,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos lingua de gato",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170692/Tablete-Lingua-de-Gato-Extra-Cremoso-100G.png?v=639039213605300000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-100g/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-lingua-de-gato-extra-cremoso-100g/p",
+  popularity: 194
  },
  {
   sku: "kopenhagen-911",
@@ -1953,7 +2147,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170426/Nha-Benta-Frutas-Vermelhas.png?v=638944330157530000",
-  productUrl: "https://www.kopenhagen.com.br/nha-benta-frutas-vermelhas-40g/p"
+  productUrl: "https://www.kopenhagen.com.br/nha-benta-frutas-vermelhas-40g/p",
+  popularity: 195
  },
  {
   sku: "kopenhagen-886",
@@ -1963,7 +2158,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170368/Medalhao-Lingato-150G.png?v=638941750798600000",
-  productUrl: "https://www.kopenhagen.com.br/medalhao-lingato-150g/p"
+  productUrl: "https://www.kopenhagen.com.br/medalhao-lingato-150g/p",
+  popularity: 196
  },
  {
   sku: "kopenhagen-881",
@@ -1973,7 +2169,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167163/Kit-Classicos-Momentos.png?v=638616875224630000",
-  productUrl: "https://www.kopenhagen.com.br/kit-classicos-momentos/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-classicos-momentos/p",
+  popularity: 197
  },
  {
   sku: "kopenhagen-858",
@@ -1983,7 +2180,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170507/Combo-Recheado-de-Carinho.png?v=639045379710930000",
-  productUrl: "https://www.kopenhagen.com.br/combo-recheado-de-carinho/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-recheado-de-carinho/p",
+  popularity: 198
  },
  {
   sku: "kopenhagen-788",
@@ -1993,7 +2191,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes embalagens",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170706/Caixa-Tamanho-G.png?v=639039380972400000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-g-10-5cm-x-27-8cm-x-39cm---somente-embalagem---nao-acompanha-os-produtos/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-g-10-5cm-x-27-8cm-x-39cm---somente-embalagem---nao-acompanha-os-produtos/p",
+  popularity: 199
  },
  {
   sku: "kopenhagen-787",
@@ -2003,7 +2202,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes embalagens",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170711/Caixa-Tamanho-M.png?v=639039381173730000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-m--8cm-x-22cm-x-26cm---somente-embalagem---nao-acompanha-os-produtos/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-m--8cm-x-22cm-x-26cm---somente-embalagem---nao-acompanha-os-produtos/p",
+  popularity: 200
  },
  {
   sku: "kopenhagen-603",
@@ -2013,7 +2213,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163933/Combo-Apaixonados.png?v=639178235510530000",
-  productUrl: "https://www.kopenhagen.com.br/combo-apaixonados/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-apaixonados/p",
+  popularity: 201
  },
  {
   sku: "kopenhagen-347",
@@ -2023,7 +2224,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good comer de colher",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170566/Creme De Lingua De Gato Soul Good Spreads 165G-2.png?v=638953850230670000",
-  productUrl: "https://www.kopenhagen.com.br/soul-good-spreads-lingua-de-gato-165g/p"
+  productUrl: "https://www.kopenhagen.com.br/soul-good-spreads-lingua-de-gato-165g/p",
+  popularity: 202
  },
  {
   sku: "kopenhagen-334",
@@ -2033,7 +2235,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos nha benta",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/164612/Kit-Nha-Benta-Tradicional-240G.png?v=638266025478830000",
-  productUrl: "https://www.kopenhagen.com.br/kit-nha-benta-tradicional-240g-2un/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-nha-benta-tradicional-240g-2un/p",
+  popularity: 203
  },
  {
   sku: "kopenhagen-322",
@@ -2043,7 +2246,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167057/Chokonut--2.png?v=638602815371830000",
-  productUrl: "https://www.kopenhagen.com.br/chokonut-33g-1102022701/p"
+  productUrl: "https://www.kopenhagen.com.br/chokonut-33g-1102022701/p",
+  popularity: 204
  },
  {
   sku: "kopenhagen-297",
@@ -2053,7 +2257,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170768/Kit Bombom Recheado Lingua de Gato Soul Good 20G - 4.png?v=638955548019670000",
-  productUrl: "https://www.kopenhagen.com.br/kit-bombom-recheado-lingua-de-gato-20g-4-un-kit25/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-bombom-recheado-lingua-de-gato-20g-4-un-kit25/p",
+  popularity: 205
  },
  {
   sku: "kopenhagen-294",
@@ -2063,7 +2268,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170771/Kit-Brownie-55G---3-Un.png?v=638955551395300000",
-  productUrl: "https://www.kopenhagen.com.br/kit-brownie-55g-3-un-kit26/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-brownie-55g-3-un-kit26/p",
+  popularity: 206
  },
  {
   sku: "kopenhagen-292",
@@ -2073,7 +2279,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/160189/Kit-Melt-30G-3-Un_1.png?v=637639623759270000",
-  productUrl: "https://www.kopenhagen.com.br/kit-melt-30g-3-un-kit22/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-melt-30g-3-un-kit22/p",
+  popularity: 207
  },
  {
   sku: "kopenhagen-287",
@@ -2083,7 +2290,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/160184/Kit-Sao-Paulo-Palito-25G-3-Un_1.png?v=637509069578530000",
-  productUrl: "https://www.kopenhagen.com.br/kit-sao-paulo-palito-25g-3-un-kit17/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-sao-paulo-palito-25g-3-un-kit17/p",
+  popularity: 208
  },
  {
   sku: "kopenhagen-282",
@@ -2093,7 +2301,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170762/Kit-Tablete-70--Cacau-com-Nibs--Soul-Good-30G---3-Un.png?v=639086882899230000",
-  productUrl: "https://www.kopenhagen.com.br/kit-tablete-70-cacau-com-nibs-30g-kit11/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-tablete-70-cacau-com-nibs-30g-kit11/p",
+  popularity: 209
  },
  {
   sku: "kopenhagen-281",
@@ -2103,7 +2312,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170765/Kit Tablete 70- Cacau Soul Good 30G - 3 Un.png?v=638955547537370000",
-  productUrl: "https://www.kopenhagen.com.br/kit-tablete-70-cacau-30g-kit10/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-tablete-70-cacau-30g-kit10/p",
+  popularity: 210
  },
  {
   sku: "kopenhagen-278",
@@ -2113,7 +2323,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/160174/Kit-Tablete-Ao-Leite-40G-3-Un_1.png?v=637639615281370000",
-  productUrl: "https://www.kopenhagen.com.br/kit-tablete-ao-leite-40g-kit7/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-tablete-ao-leite-40g-kit7/p",
+  popularity: 211
  },
  {
   sku: "kopenhagen-118",
@@ -2123,7 +2334,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "soul good bombons",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170563/Bombom Recheado Avela Soul Good 20G-2.png?v=638953849405630000",
-  productUrl: "https://www.kopenhagen.com.br/bombom-recheado-avela-20g-1102021401/p"
+  productUrl: "https://www.kopenhagen.com.br/bombom-recheado-avela-20g-1102021401/p",
+  popularity: 212
  },
  {
   sku: "kopenhagen-74",
@@ -2133,7 +2345,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170783/Tablete ao Leite 100G.png?v=638955557393400000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-100g-1102013001/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-ao-leite-100g-1102013001/p",
+  popularity: 213
  },
  {
   sku: "kopenhagen-68",
@@ -2143,7 +2356,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170797/Tablete-50--Amargo-100G.png?v=639039210197500000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-amargo-100g-1102013801/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-amargo-100g-1102013801/p",
+  popularity: 214
  },
  {
   sku: "kopenhagen-66",
@@ -2153,7 +2367,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170803/Tablete 70- Cacau 100g - Linha Chocolate Dark.png?v=638955560204470000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-70--cacau-100g---linha-chocolate-dark/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-70--cacau-100g---linha-chocolate-dark/p",
+  popularity: 215
  },
  {
   sku: "kopenhagen-65",
@@ -2163,7 +2378,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169785/Sao-Paulo-Palito-25G-2.png?v=638882050186500000",
-  productUrl: "https://www.kopenhagen.com.br/sao-paulo-palito-25g-1102001001/p"
+  productUrl: "https://www.kopenhagen.com.br/sao-paulo-palito-25g-1102001001/p",
+  popularity: 216
  },
  {
   sku: "kopenhagen-1655",
@@ -2173,7 +2389,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171207/Capsulas-Dolce-Gusto-Nestle®-Expresso.png?v=639041846753400000",
-  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle%C2%AE-expresso---10-unidades/p"
+  productUrl: "https://www.kopenhagen.com.br/capsulas-dolce-gusto-nestle%C2%AE-expresso---10-unidades/p",
+  popularity: 217
  },
  {
   sku: "kopenhagen-1594",
@@ -2183,7 +2400,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170970/Combo-Soul-Good-Delicias-Cookies-And-Cream.png?v=638967528704770000",
-  productUrl: "https://www.kopenhagen.com.br/combo-soul-good-delicias-cookies-and-cream-1/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-soul-good-delicias-cookies-and-cream-1/p",
+  popularity: 218
  },
  {
   sku: "kopenhagen-1552",
@@ -2193,7 +2411,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169928/Combo-Mix-de-Bombons.jpg?v=638890451292300000",
-  productUrl: "https://www.kopenhagen.com.br/combo-mix-de-bombons/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-mix-de-bombons/p",
+  popularity: 219
  },
  {
   sku: "kopenhagen-1551",
@@ -2203,7 +2422,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169925/Combo-5_9990.jpg?v=638890450662470000",
-  productUrl: "https://www.kopenhagen.com.br/combo-nuts---cookies-canela-e-baunilha/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-nuts---cookies-canela-e-baunilha/p",
+  popularity: 220
  },
  {
   sku: "kopenhagen-1541",
@@ -2213,7 +2433,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170204/KOP_EP_TABLETE90G_AVELA_1000X1000.png?v=638923342450100000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-avela-emily-in-paris-90g-1/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-recheado-avela-emily-in-paris-90g-1/p",
+  popularity: 221
  },
  {
   sku: "kopenhagen-1398",
@@ -2223,7 +2444,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169322/Caixa-Bombons-Ganache-304G.png?v=638827422743230000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-ganache-304g/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-bombons-ganache-304g/p",
+  popularity: 222
  },
  {
   sku: "kopenhagen-1205",
@@ -2233,7 +2455,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "acessorios copos e garrafas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/166034/Eco-Copo-Cafe-Kopenhagen-450ml.png?v=638430238285730000",
-  productUrl: "https://www.kopenhagen.com.br/eco-copo-cafe-kopenhagen-450ml/p"
+  productUrl: "https://www.kopenhagen.com.br/eco-copo-cafe-kopenhagen-450ml/p",
+  popularity: 223
  },
  {
   sku: "kopenhagen-1145",
@@ -2243,7 +2466,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171391/Crocantinho-Lingato-50G.png?v=639008288290570000",
-  productUrl: "https://www.kopenhagen.com.br/crocantinho-lingato-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/crocantinho-lingato-50g/p",
+  popularity: 224
  },
  {
   sku: "kopenhagen-786",
@@ -2253,7 +2477,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes embalagens",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170699/Embalagem-Cartucho---Nao-acompanha-os-produtos.png?v=639039381995600000",
-  productUrl: "https://www.kopenhagen.com.br/cartucho-mil-delicias-75cm-x-20cm-x-15cm/p"
+  productUrl: "https://www.kopenhagen.com.br/cartucho-mil-delicias-75cm-x-20cm-x-15cm/p",
+  popularity: 225
  },
  {
   sku: "kopenhagen-785",
@@ -2263,7 +2488,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes embalagens",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170703/Embalagem-para-3-Tabletes.png?v=639039214232330000",
-  productUrl: "https://www.kopenhagen.com.br/luva-de-tablete/p"
+  productUrl: "https://www.kopenhagen.com.br/luva-de-tablete/p",
+  popularity: 226
  },
  {
   sku: "kopenhagen-320",
@@ -2273,7 +2499,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163791/Kit-Mini-Tablete-Lingato-13G---4-Un.png?v=638194370363500000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mini-tablete-lingato-4-um-kit31/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mini-tablete-lingato-4-um-kit31/p",
+  popularity: 227
  },
  {
   sku: "kopenhagen-280",
@@ -2283,7 +2510,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/160176/Kit-Tablete-Crocante-C-Castanha-De-Caju-40G-3-Un_1.png?v=638871486333270000",
-  productUrl: "https://www.kopenhagen.com.br/kit-tablete-crocante-castanha-de-caju-40g-kit9/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-tablete-crocante-castanha-de-caju-40g-kit9/p",
+  popularity: 228
  },
  {
   sku: "kopenhagen-1670",
@@ -2293,7 +2521,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171335/Combo-Capsulas-Dolce-Gusto-Nestle®-Cappucino---Canudo-Wafer-Chokonut-Forno-K.png?v=639005280026500000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-cappucino---canudo-wafer-chokonut-forno-k/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-cappucino---canudo-wafer-chokonut-forno-k/p",
+  popularity: 229
  },
  {
   sku: "kopenhagen-1669",
@@ -2303,7 +2532,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171332/Combo-Capsulas-Dolce-Gusto-Nestle®-Expresso---Canudo-Wafer-Chokonut-Forno-K.png?v=638997809128270000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-expresso---canudo-wafer-chokonut-forno-k/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-expresso---canudo-wafer-chokonut-forno-k/p",
+  popularity: 230
  },
  {
   sku: "kopenhagen-1653",
@@ -2313,7 +2543,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171074/Combo-Capsulas-de-Cafe-Supremo---Canutti-On-The-Go.png?v=638974576121900000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-de-cafe-supremo---canutti-on-the-go/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-de-cafe-supremo---canutti-on-the-go/p",
+  popularity: 231
  },
  {
   sku: "kopenhagen-1651",
@@ -2323,7 +2554,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171067/Combo-Capsulas-de-Cafe-Supremo---Petit-Wafer-ao-Leite.png?v=639046046517230000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-de-cafe-supremo---petit-wafer-ao-leite/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-de-cafe-supremo---petit-wafer-ao-leite/p",
+  popularity: 232
  },
  {
   sku: "kopenhagen-1650",
@@ -2333,7 +2565,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171061/Combo-Capsulas-Dolce-Gusto-Nestle®-Lajotinha---Lajotinha-50g.png?v=638974443697300000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lajotinha---lajotinha-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle%C2%AE-lajotinha---lajotinha-50g/p",
+  popularity: 233
  },
  {
   sku: "kopenhagen-1641",
@@ -2343,7 +2576,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes embalagens",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170939/Caixa-Tamanho-P.png?v=638967429594600000",
-  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-p-3-5cm-x-18cm--x-20cm---somente-embalagem---nao-acompanha-os-produtos/p"
+  productUrl: "https://www.kopenhagen.com.br/caixa-tamanho-p-3-5cm-x-18cm--x-20cm---somente-embalagem---nao-acompanha-os-produtos/p",
+  popularity: 234
  },
  {
   sku: "kopenhagen-1550",
@@ -2353,7 +2587,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169922/Combo-Nuts---Cookies-Classicos.jpg?v=638890446589400000",
-  productUrl: "https://www.kopenhagen.com.br/combo-nuts---cookies-classicos/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-nuts---cookies-classicos/p",
+  popularity: 235
  },
  {
   sku: "kopenhagen-1549",
@@ -2363,7 +2598,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169919/Combo-Sabores-Irresistiveis.jpg?v=638890440871970000",
-  productUrl: "https://www.kopenhagen.com.br/combo-sabores-irresistiveis/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-sabores-irresistiveis/p",
+  popularity: 236
  },
  {
   sku: "kopenhagen-1534",
@@ -2373,7 +2609,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "cafes capsulas",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169625/Lajotinha-1_1000x1000.png?v=638864794114900000",
-  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----pouch-nano-lajotinha-120g/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-capsulas-dolce-gusto-nestle----pouch-nano-lajotinha-120g/p",
+  popularity: 237
  },
  {
   sku: "kopenhagen-1525",
@@ -2383,7 +2620,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169484/1-Combo-Te-amo-Para-Sempre.png?v=639045378633000000",
-  productUrl: "https://www.kopenhagen.com.br/combo-te-amo-para-sempre/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-te-amo-para-sempre/p",
+  popularity: 238
  },
  {
   sku: "kopenhagen-1524",
@@ -2393,7 +2631,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169480/1-Combo-Amor-Encantado.png?v=639045348712700000",
-  productUrl: "https://www.kopenhagen.com.br/combo-amor-encantado/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-amor-encantado/p",
+  popularity: 239
  },
  {
   sku: "kopenhagen-1231",
@@ -2403,7 +2642,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "classicos",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170518/Kit-Presentes-que-Marcam.png?v=639045349862530000",
-  productUrl: "https://www.kopenhagen.com.br/kit-presentes-que-marcam/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-presentes-que-marcam/p",
+  popularity: 240
  },
  {
   sku: "kopenhagen-1202",
@@ -2413,7 +2653,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171383/Bonequinho-Colecionavel-Lingato-Bone-50G.png?v=639008279258200000",
-  productUrl: "https://www.kopenhagen.com.br/bonequinho-colecionavel-lingato-bone-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/bonequinho-colecionavel-lingato-bone-50g/p",
+  popularity: 241
  },
  {
   sku: "kopenhagen-1201",
@@ -2423,7 +2664,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/171387/Bonequinho-Colecionavel-Lingato-50G.png?v=639008281843830000",
-  productUrl: "https://www.kopenhagen.com.br/bonequinho-colecionavel-lingato-50g/p"
+  productUrl: "https://www.kopenhagen.com.br/bonequinho-colecionavel-lingato-50g/p",
+  popularity: 242
  },
  {
   sku: "kopenhagen-876",
@@ -2433,7 +2675,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes mae",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163733/2-Kit-Tabletes-Chocolate.png?v=638189112908000000",
-  productUrl: "https://www.kopenhagen.com.br/kit-tabletes-chocolates---embalagem-exclusiva-kopenhagen/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-tabletes-chocolates---embalagem-exclusiva-kopenhagen/p",
+  popularity: 243
  },
  {
   sku: "kopenhagen-611",
@@ -2443,7 +2686,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "presentes namorados",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/169494/Combo-Rosas.png?v=638847424772330000",
-  productUrl: "https://www.kopenhagen.com.br/combo-rosas-/p"
+  productUrl: "https://www.kopenhagen.com.br/combo-rosas-/p",
+  popularity: 244
  },
  {
   sku: "kopenhagen-331",
@@ -2453,7 +2697,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/167054/Chokonut.png?v=638602809700800000",
-  productUrl: "https://www.kopenhagen.com.br/kit-chokonut/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-chokonut/p",
+  popularity: 245
  },
  {
   sku: "kopenhagen-275",
@@ -2463,7 +2708,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas infantil",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/163989/Kit-Mini-Nha-Benta-Lingato-60G---2-Un.png?v=638197536326330000",
-  productUrl: "https://www.kopenhagen.com.br/kit-mini-nha-benta-lingato-60g-kit4/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-mini-nha-benta-lingato-60g-kit4/p",
+  popularity: 246
  },
  {
   sku: "kopenhagen-273",
@@ -2473,7 +2719,8 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas variedades",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/160169/Kit-Canudo-Recheado-E-Coberto-Chocolate-Amargo-20G-3-UnKIT1KIT2_1.png?v=637639612392170000",
-  productUrl: "https://www.kopenhagen.com.br/kit-canudo-recheado-e-coberto-chocolate-amargo-20g-kit2/p"
+  productUrl: "https://www.kopenhagen.com.br/kit-canudo-recheado-e-coberto-chocolate-amargo-20g-kit2/p",
+  popularity: 247
  },
  {
   sku: "kopenhagen-111",
@@ -2483,6 +2730,7 @@ export const CATALOG: CatalogItem[] = [
   unit: "un",
   category: "nossas linhas tabletes",
   imageUrl: "https://kopenhagen.vteximg.com.br/arquivos/ids/170807/Tablete 80- 100G.png?v=638955561266270000",
-  productUrl: "https://www.kopenhagen.com.br/tablete-80-100g-1102021601/p"
+  productUrl: "https://www.kopenhagen.com.br/tablete-80-100g-1102021601/p",
+  popularity: 248
  }
 ];

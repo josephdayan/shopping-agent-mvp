@@ -64,7 +64,7 @@ async function page(from: number, to: number, category?: string, ft?: string): P
   throw new Error(`HTTP ${res.status} em ${url}`);
 }
 
-const out: { sku: string; name: string; brand?: string; unitPrice: number; unit: string; category: string; imageUrl?: string; productUrl: string }[] = [];
+const out: { sku: string; name: string; brand?: string; unitPrice: number; unit: string; category: string; imageUrl?: string; productUrl: string; popularity: number }[] = [];
 const seen = new Set<string>();
 let denied = 0;
 
@@ -91,7 +91,9 @@ function absorb(products: Product[]) {
       unit: "un",
       category: categoryLabel,
       imageUrl: item.images?.[0]?.imageUrl,
-      productUrl: new URL(link, origin).toString()
+      productUrl: new URL(link, origin).toString(),
+      // Posição no "mais vendidos" da loja (a varredura é O=OrderByTopSaleDESC).
+      popularity: out.length + 1
     });
   }
 }

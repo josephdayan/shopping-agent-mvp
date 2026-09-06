@@ -1,5 +1,20 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 05/09/2026 (2ª) — "mais vendido da loja" como desempate
+
+Dono: *"dá pra ranquear os que vêm antes por mais comprado?"* Pela Lia ainda não (7 pedidos
+reais); pela loja, sim, nas 9 VTEX: o harvest (`harvest-vtex-catalog.mts`) já varre com
+`O=OrderByTopSaleDESC`, então a posição no arquivo É o rank de vendas. Agora:
+1. `CatalogItem.popularity` (1 = campeão). O harvest emite o campo; os 9 catálogos existentes
+   ganharam por `scripts/backfill-popularity.mts` (sem rede, pela ordem do arquivo). Carrefour,
+   Petz, Boticário e demais NÃO têm o campo (ordem de página não é venda) — `ensurePopularity`
+   não roda em runtime por isso.
+2. `rankCatalog` usa `popularity` como desempate DEPOIS de relevância, variante infantil,
+   embalagem comum e básico-antes-de-variante (regras do dono) e ANTES do preço. Nunca passa
+   por cima de um match melhor. ML já pontuava por vendas/avaliações.
+3. Ranking pela própria Lia ("mais comprado aqui") fica para quando o piloto tiver volume.
+Testes: `popularity-rank` (3). Suíte 531/531.
+
 ## Atualização 05/09/2026 — regra do prazo por loja + "preciso pra hoje"
 
 Dono (05/09): *"pras que está exato você sempre manda; pras que não são, não manda; e se o
