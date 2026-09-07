@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { PurchaseAccounts, PurchaseReview, type PurchaseReviewJob } from "./PurchaseControl";
 import { hasCancelRequest, hasPendingRefund, isCardCharge, isRetailerDeliveryOrder } from "@/lib/order-flags";
 import { parseMoneyInput } from "@/lib/pricing";
 
@@ -17,6 +18,8 @@ type Fulfillment = {
 };
 
 type DeliveryOrder = {
+  purchaseJobs?: PurchaseReviewJob[];
+  events?: { id: string; kind: string; deliveryStatus: string; lastError?: string | null; occurredAt: string }[];
   id: string;
   phone: string;
   customerName?: string | null;
@@ -67,7 +70,8 @@ const STATUS_LABEL: Record<string, string> = {
   operator_buying: "🛒 Comprado — em preparação",
   ready_for_pickup: "📦 Pronto — courier autorizado",
   dispatched: "🛵 Saiu pra entrega",
-  refund_pending: "↩️ Estorno pendente"
+  refund_pending: "↩️ Estorno pendente",
+  delivered: "Entregue", refunded: "Estornado", canceled: "Cancelado"
 };
 
 // Where the operator double-checks the live price/stock before buying, per store.
@@ -268,8 +272,9 @@ export default function OpsBoard() {
 
   return (
     <div style={{ marginTop: 20, display: "grid", gap: 14 }}>
+      <PurchaseAccounts />
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <span style={{ fontSize: 12, color: "#667085" }}>Cotação e compra são manuais: nada é cobrado antes da aprovação do cliente.</span>
+        <span style={{ fontSize: 12, color: "#667085" }}>Compras e entregas: confira os pedidos que precisam de ação.</span>
       </div>
       {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
       {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
@@ -359,6 +364,14 @@ export default function OpsBoard() {
                 ))}
               </div>
             ) : null}
+            {o.events?.length ? <div style={{ marginTop: 8, fontSize: 12 }}>
+              <strong>Avisos ao cliente</strong>
+              {o.events.map(e => <div key={e.id}>
+                {{ bought: "Compra", out_for_delivery: "Saiu para entrega", delivered: "Entrega" }[e.kind] ?? e.kind}: {{ pending: "aguarda envio", sending: "enviando", accepted: "aceito pelo WhatsApp, sem recibo", delivered: "mensagem entregue", read: "mensagem lida", failed: "falhou — revisar", unknown: "envio incerto — revisar antes de reenviar", suppressed: "aviso antigo dispensado" }[e.deliveryStatus] ?? e.deliveryStatus}
+                {e.lastError ? <span style={{ color: "#b54708" }}> · {e.lastError}</span> : null}
+              </div>)}
+            </div> : null}
+            {o.purchaseJobs?.map(job => <PurchaseReview key={job.id} job={job} refresh={() => { void load(); }} />)}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
             {o.status === "awaiting_operator_quote" && (

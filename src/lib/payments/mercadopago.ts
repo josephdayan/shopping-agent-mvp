@@ -350,7 +350,8 @@ export async function getMercadoPagoPayment(paymentId: string): Promise<MercadoP
 // motivo (saldo, prazo, pagamento já estornado), nunca um "falhou" seco.
 export async function refundMercadoPagoPayment(
   paymentId: string,
-  amount?: number
+  amount?: number,
+  idempotencyKey?: string
 ): Promise<{ refundId: string; status: string; amount: number | null }> {
   if (!/^\d{1,20}$/.test(paymentId)) throw new PaymentProviderError(`id de pagamento inválido: ${paymentId}`);
   if (!hasCreds()) {
@@ -364,7 +365,7 @@ export async function refundMercadoPagoPayment(
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-      "X-Idempotency-Key": `refund:${paymentId}:${amount != null ? Number(amount.toFixed(2)) : "full"}`
+      "X-Idempotency-Key": idempotencyKey ?? `refund:${paymentId}:${amount != null ? Number(amount.toFixed(2)) : "full"}`
     },
     body,
     cache: "no-store",

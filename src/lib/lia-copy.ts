@@ -1488,3 +1488,5 @@ export function purchaseFailedRefunded(items: string[], total: number, reason?: 
   const why = reason ? ` (${reason.slice(0, 120)})` : "";
   return `Não consegui comprar ${items.length === 1 ? what : `estes itens:\n${what}`}${why}. Estornei o valor integral de ${brl(total)} — ele volta no mesmo Pix ou cartão em até 7 dias úteis. Se quiser, me manda outra opção que eu procuro de novo.`;
 }
+
+export const planBNotVerified = () => "Não consegui confirmar a disponibilidade da troca agora. Responda ‘trocar’ novamente em instantes.";

@@ -110,7 +110,8 @@ async function request<T>(path: string, init: RequestInit = {}, idempotencyKey?:
   const response = await fetch(`${baseUrl}${path}`, {
     ...init,
     headers,
-    cache: "no-store"
+    cache: "no-store",
+    signal: init.signal ?? AbortSignal.timeout(10_000)
   });
   const payload = await readJson(response);
   if (!response.ok) {
@@ -231,16 +232,16 @@ export const pagarmeAdapter = {
 
   // Estorno/cancelamento de uma charge (API v5: DELETE /charges/{id}; `amount` em
   // centavos para parcial). Lança PagarmeApiError com o corpo quando recusado.
-  async refundCharge(chargeId: string, amountCents?: number): Promise<{ status: string; reference: string }> {
+  async refundCharge(chargeId: string, amountCents?: number, idempotencyKey?: string): Promise<{ status: string; reference: string }> {
     if (mockEnabled() && !config().secretKey) {
       return { status: "refunded", reference: `refund_mock_${randomUUID()}` };
     }
     const result = await request<{ id?: string; status?: string; last_transaction?: { id?: string; status?: string } }>(
       `/charges/${encodeURIComponent(chargeId)}`,
       { method: "DELETE", body: amountCents != null ? JSON.stringify({ amount: amountCents }) : undefined },
-      `refund:${chargeId}:${amountCents ?? "full"}`
+      idempotencyKey ?? `refund:${chargeId}:${amountCents ?? "full"}`
     );
-    return { status: result.status ?? result.last_transaction?.status ?? "unknown", reference: result.last_transaction?.id ?? result.id ?? chargeId };
+    return { status: result.last_transaction?.status ?? result.status ?? "unknown", reference: result.last_transaction?.id ?? result.id ?? chargeId };
   },
 
   async getOrder(orderId: string): Promise<PagarmeSavedCardCharge> {

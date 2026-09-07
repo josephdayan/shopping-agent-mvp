@@ -11,7 +11,9 @@ test("token válido verifica; expirado, adulterado ou de outro segredo não", ()
   assert.ok(token);
   assert.equal(verifyOpsLoginToken(token, now + 60_000), true);
   assert.equal(verifyOpsLoginToken(token, now + OPS_LOGIN_TTL_MS + 1), false, "expirado");
-  assert.equal(verifyOpsLoginToken(token!.slice(0, -1) + "0", now), false, "assinatura adulterada");
+  // Alterar sempre: a assinatura original pode já terminar em zero (1/16 dos casos).
+  const changed = token.slice(0, -1) + (token.endsWith("0") ? "1" : "0");
+  assert.equal(verifyOpsLoginToken(changed, now), false, "assinatura adulterada");
   const [exp, nonce, sig] = token!.split(".");
   assert.equal(verifyOpsLoginToken(`${Number(exp) + 999_999}.${nonce}.${sig}`, now), false, "validade adulterada");
   assert.equal(verifyOpsLoginToken("", now), false);

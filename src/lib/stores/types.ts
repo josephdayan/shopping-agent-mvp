@@ -668,12 +668,14 @@ export function rankCatalog(query: string, items: CatalogItem[], limit: number):
   return items
     .map((item) => ({ item, score: scoreCatalogMatch(query, item) }))
     .filter((e) => e.score > 0)
+    // Calcular os desempates uma vez por candidato, em vez de repetir regex a cada comparação.
+    .map((entry) => ({ ...entry, child: childRank(entry.item), packaging: commonPackageRank(query, entry.item), variants: variantCount(query, entry.item) }))
     .sort(
       (a, b) =>
         b.score - a.score ||
-        childRank(a.item) - childRank(b.item) ||
-        commonPackageRank(query, a.item) - commonPackageRank(query, b.item) ||
-        variantCount(query, a.item) - variantCount(query, b.item) ||
+        a.child - b.child ||
+        a.packaging - b.packaging ||
+        a.variants - b.variants ||
         pop(a.item) - pop(b.item) ||
         a.item.unitPrice - b.item.unitPrice
     )

@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 // Dinheiro do pedido (revisão 02/09): emissão de Pix/cartão, troca de método,
 // cartão salvo, saída de awaiting_payment, evidência de pagamento e marcação de pago.
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
@@ -509,8 +510,8 @@ export async function issueValidatedRetailerQuotePayment(
     }
     return { expired: false };
   } catch (error) {
-    await prisma.deliveryOrder.update({
-      where: { id: order.id },
+    const rolledBack = await prisma.deliveryOrder.updateMany({
+      where: { id: order.id, status: { in: ["payment_issuing", "awaiting_payment"] } },
       // `total` volta à base (a taxa do cartão só existe com cobrança de cartão) e a
       // validade da cotação volta junto: o caminho do cartão já tinha zerado
       // `quoteExpiresAt` antes de falhar, e o "pix" seguinte cancelava o pedido como
@@ -522,6 +523,7 @@ export async function issueValidatedRetailerQuotePayment(
         notes: [notes, `⚠️ Falha ao emitir pagamento: ${error instanceof Error ? error.message.slice(0, 180) : "erro desconhecido"}`].filter(Boolean).join("\n")
       }
     });
+    if (!rolledBack.count) return { expired: false };
     await setQuoteConversationAwaitingConfirmation(order);
     // Mercado Pago fora do ar: a cotação continua de pé (o TTL ainda vale), então o
     // cliente repete *pix*/*cartão* e a Lia tenta emitir de novo. Não relança — isso
@@ -649,27 +651,23 @@ export type PaymentEvidence = {
   amount?: number | null;
 };
 
-// Razão de pagamentos: nunca bloqueia o fluxo do dinheiro (falha vira log).
-export async function ledgerRecord(order: { id: string; notes: string | null }, evidence: PaymentEvidence, status: "approved" | "unexpected") {
-  if (!evidence.paymentId || evidence.amount == null) return;
-  try {
-    await recordPayment({
-      deliveryOrderId: order.id,
-      provider: evidence.provider,
-      providerPaymentId: evidence.paymentId,
-      method: evidence.provider === "pagarme" || isCardCharge(order) ? "card" : "pix",
-      amountCents: Math.round(Number(evidence.amount.toFixed(2)) * 100),
-      status
-    });
-  } catch (error) {
-    console.error("[payment:ledger-failed]", order.id, error instanceof Error ? error.message : error);
+// Dinheiro e razão precisam confirmar juntos; falha no banco pede retry do webhook.
+export async function ledgerRecord(order: { id: string; notes: string | null }, evidence: PaymentEvidence, status: "approved" | "unexpected", db: Prisma.TransactionClient = prisma) {
+  if (!evidence.paymentId || evidence.amount == null || !Number.isFinite(evidence.amount) || evidence.amount <= 0) {
+    throw new Error("Evidência de pagamento incompleta ou inválida.");
   }
+  await recordPayment({
+    deliveryOrderId: order.id, provider: evidence.provider, providerPaymentId: evidence.paymentId,
+    method: evidence.provider === "pagarme" || isCardCharge(order) ? "card" : "pix",
+    amountCents: Math.round(evidence.amount * 100), status
+  }, db);
 }
 
 // Pagamento aprovado que NÃO bate com a cobrança na mesa: valor diferente, ou um Pix
 // que não é o vigente (código antigo pago depois de reabrir/trocar pra cartão).
 export function paymentEvidenceMismatch(order: { total: number; pixId: string | null }, evidence: PaymentEvidence): string | null {
-  if (evidence.amount != null && Math.abs(evidence.amount - order.total) > 0.01) {
+  if (!evidence.paymentId || evidence.amount == null || !Number.isFinite(evidence.amount) || evidence.amount <= 0) return "evidência de pagamento incompleta ou inválida";
+  if (Math.round(evidence.amount * 100) !== Math.round(order.total * 100)) {
     return `valor pago ${copy.brl(evidence.amount)} ≠ total ${copy.brl(order.total)}`;
   }
   // Link de cartão (Checkout Pro) guarda o id da PREFERÊNCIA em pixId e o pagamento
@@ -743,38 +741,46 @@ export async function flagCardOutcomeUnknown(orderId: string, attemptId: string,
 }
 
 export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence, opts: { notifyCustomer?: boolean } = {}) {
-  // Revisão 01/09: o webhook marcava "pago" sem conferir VALOR nem QUAL cobrança foi
-  // paga. Com a bolha nativa no chat, o código antigo (pedido reaberto/trocado pra
-  // cartão) segue pagável por 60 min — pagamento que não bate com a cobrança vigente
-  // NÃO aprova: vira nota + alerta pro operador conferir/estornar.
-  if (evidence) {
-    const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-    if (!current) return null;
-    if (current.status === "awaiting_payment") {
-      const mismatch = paymentEvidenceMismatch(current, evidence);
-      if (mismatch) {
-        await recordUnexpectedPayment(current, evidence, mismatch);
-        return current;
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${orderId} FOR UPDATE`;
+    const current = await tx.deliveryOrder.findUnique({ where: { id: orderId } });
+    if (!current) return { order: null, flipped: false, unexpected: null };
+    if (evidence) {
+      const known = evidence.paymentId ? await tx.payment.findUnique({ where: {
+        provider_providerPaymentId: { provider: evidence.provider, providerPaymentId: evidence.paymentId }
+      } }) : null;
+      if (known && known.deliveryOrderId !== orderId) throw new Error("Pagamento vinculado a outro pedido.");
+      if (current.status !== "awaiting_payment") {
+        if (known) return { order: current, flipped: false, unexpected: null };
+        return { order: current, flipped: false, unexpected: `pedido estava em "${current.status}"` };
       }
+      const mismatch = paymentEvidenceMismatch(current, evidence);
+      if (mismatch) return { order: current, flipped: false, unexpected: mismatch };
+      if (known && (known.refundedCents > 0 || ["refunded", "partially_refunded"].includes(known.status))) {
+        return { order: current, flipped: false, unexpected: "pagamento já estornado" };
+      }
+      await ledgerRecord(current, evidence, "approved", tx);
     }
-  }
-  // Atomic status flip: MP retries webhooks and the customer may text "paguei" at the
-  // same moment — only ONE caller wins, so the confirmation goes out exactly once.
-  const flipped = await prisma.deliveryOrder.updateMany({
-    where: { id: orderId, status: "awaiting_payment" },
-    data: { status: "paid", paidAt: new Date() }
+    if (current.status !== "awaiting_payment") return { order: current, flipped: false, unexpected: null };
+    const order = await tx.deliveryOrder.update({ where: { id: orderId }, data: { status: "paid", paidAt: new Date() } });
+    return { order, flipped: true, unexpected: null };
   });
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!order) return order;
-  if (flipped.count === 1 && evidence) await ledgerRecord(order, evidence, "approved");
-  if (flipped.count === 0) {
-    // Replay legítimo (já pago) é silencioso; dinheiro chegando em pedido cancelado/
-    // recotado não pode sumir sem rastro.
-    if (evidence && !order.paidAt && !PAID_OR_IN_FULFILLMENT_STATUSES.includes(order.status) && order.status !== "delivered") {
-      await recordUnexpectedPayment(order, evidence, `pedido estava em "${order.status}"`);
-    }
+  const order = result.order;
+  if (!order) return null;
+  if (result.unexpected && evidence) {
+    await recordUnexpectedPayment(order, evidence, result.unexpected);
     return order;
   }
+  // Create the durable local-worker task after the money state is committed. This is
+  // best-effort: a queue outage must not undo a real payment; claim() backfills paid
+  // orders that missed this hook.
+  try {
+    const { ensurePurchaseJobForPaidOrder } = await import("@/lib/purchase-worker");
+    await ensurePurchaseJobForPaidOrder(order.id);
+  } catch (error) {
+    console.error("[purchase-worker:enqueue-failed]", error instanceof Error ? error.message : error);
+  }
+  if (!result.flipped) return order;
   // Reset the conversation (keep the address) so the next message starts a fresh
   // basket instead of resurrecting the awaiting_payment step. If the customer has
   // ALREADY started a new basket in this conversation, leave it alone — the async
@@ -793,15 +799,6 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   // fora: foi este alerta que matou o pedido-zumbi de 2 dias em 11/08.
   if (process.env.LIA_OPERATOR_PAID_ALERT === "true") {
     await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total), order.phone);
-  }
-  // Create the durable local-worker task after the money state is committed. This is
-  // best-effort: a queue outage must not undo a real payment; claim() backfills paid
-  // orders that missed this hook.
-  try {
-    const { ensurePurchaseJobForPaidOrder } = await import("@/lib/purchase-worker");
-    await ensurePurchaseJobForPaidOrder(order.id);
-  } catch (error) {
-    console.error("[purchase-worker:enqueue-failed]", error instanceof Error ? error.message : error);
   }
   return order;
 }

@@ -481,7 +481,7 @@ export const whatsappAdapter = {
 
   async sendMessage(to: string, text: string, metadata?: unknown) {
     if (process.env.WHATSAPP_PROVIDER === "meta") {
-      return sendMetaMessage(to, text);
+      return sendMetaMessage(to, text, (metadata as { noticeId?: string } | undefined)?.noticeId);
     }
 
     console.log("[whatsapp:mock]", { to, text, metadata });
@@ -757,7 +757,7 @@ export const whatsappAdapter = {
     return this.sendMessage(to, reply.text);
   },
 
-  async sendTemplateMessage(to: string, input: WhatsAppTemplateInput) {
+  async sendTemplateMessage(to: string, input: WhatsAppTemplateInput, noticeId?: string) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") {
       console.log("[whatsapp:mock:template]", { to, name: input.name, bodyParams: input.bodyParams });
       return { provider: "mock", to, template: input.name };
@@ -765,7 +765,7 @@ export const whatsappAdapter = {
     const token = process.env.WHATSAPP_ACCESS_TOKEN;
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
-    return sendMetaPayload(phoneNumberId, token, buildTemplatePayload(to, input));
+    return sendMetaPayload(phoneNumberId, token, { ...buildTemplatePayload(to, input), ...(noticeId ? { biz_opaque_callback_data: noticeId } : {}) });
   }
 };
 
@@ -888,7 +888,7 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
   return { provider: "meta", mode: "delivery_choice_cards", to, messages };
 }
 
-async function sendMetaMessage(to: string, text: string) {
+async function sendMetaMessage(to: string, text: string, noticeId?: string) {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
@@ -904,6 +904,7 @@ async function sendMetaMessage(to: string, text: string) {
     },
     body: JSON.stringify({
       messaging_product: "whatsapp",
+      ...(noticeId ? { biz_opaque_callback_data: noticeId } : {}),
       recipient_type: "individual",
       to: normalizeWhatsAppPhone(to),
       type: "text",
@@ -911,7 +912,8 @@ async function sendMetaMessage(to: string, text: string) {
         preview_url: false,
         body: text.slice(0, 4000)
       }
-    })
+    }),
+    signal: AbortSignal.timeout(10_000)
   });
 
   const payload = await response.json();
@@ -1015,7 +1017,8 @@ async function sendMetaPayload(phoneNumberId: string, token: string, body: Recor
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(10_000)
   });
 
   const payload = await response.json();

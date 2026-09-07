@@ -1,3 +1,4 @@
+import { flushDeliveryEvents } from "@/lib/delivery-events";
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { reconcilePayments } from "@/lib/payments/reconcile";
@@ -18,7 +19,10 @@ function authorized(request: Request) {
 
 export async function GET(request: Request) {
   if (!authorized(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const report = await reconcilePayments();
+  const [payments, notifications] = await Promise.allSettled([reconcilePayments(), flushDeliveryEvents()]);
+  if (payments.status === "rejected") throw payments.reason;
+  const report = { ...payments.value, deliveryEventsChecked: notifications.status === "fulfilled" ? notifications.value : 0 };
+  if (notifications.status === "rejected") report.errors.push("delivery-events: falha ao processar avisos pendentes");
   if (report.errors.length) console.warn("[cron:reconcile-payments:errors]", report.errors);
   console.log("[cron:reconcile-payments]", { ...report, errors: report.errors.length });
   return NextResponse.json(report);

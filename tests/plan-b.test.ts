@@ -112,7 +112,7 @@ test("bloqueio → oferta de troca com substituto verificado (loja consultável,
   const msg = textsTo(o.phone, start);
   assert.match(msg, /A \*Natural da Terra\* ficou sem \*Ice Tea Pêssego Zero\*/);
   assert.match(msg, /Encontrei \*Chá Ice Tea Pêssego Zero 1,5L\* na \*Pague Menos\*, prazo da loja: 1 dia útil/);
-  assert.match(msg, /Sem custo extra\. Troco\?/);
+  assert.match(msg, /Sai R\$ ?0,55 mais barato e eu devolvo a diferença\. Troco\?/);
   assert.match(textsTo(OPERATOR, start), /ofereci troca ao cliente/);
   const after1 = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: o.orderId } });
   assert.match(after1.notes ?? "", new RegExp(PLAN_B_OFFERED_PREFIX));

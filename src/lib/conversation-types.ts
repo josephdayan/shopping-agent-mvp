@@ -139,7 +139,7 @@ export type DeliveryContext = {
   notFound?: string[];
   // Oferta pendente de busca na cauda longa (Mercado Livre) para as linhas que as
   // vitrines locais não cobriram (revisão 02/09). "sim" dispara a busca; "não" limpa.
-  longTailOffer?: { lines: Array<{ phrase: string; qty: number; qtyExplicit?: boolean; cap?: number }> };
+  longTailOffer?: { lines: Array<{ phrase: string; qty: number; qtyExplicit?: boolean; cap?: number; raw?: string }> };
   // Plano B (04/09): pedido PAGO travou na loja; substituto verificado ao vivo oferecido
   // com botões "Trocar"/"Devolver o dinheiro". Vive até a resposta ou o estorno automático.
   planB?: { orderId: string; substitutes: Array<{ fromSku: string; fromName: string; fromStore: string; qty: number; to: ChoiceOption }>; offeredAt: string };

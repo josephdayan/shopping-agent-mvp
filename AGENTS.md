@@ -1,5 +1,158 @@
 # Lia — contexto obrigatório para agentes
 
+
+## 06/09/2026 — esforço de autenticação e identidade na entrega
+
+Dono considera autenticação/CAPTCHA recorrentes um gargalo inaceitável e perguntou sobre
+cadastro de cartão e nome no pacote. Esclarecimento de escopo: há um cadastro operacional
+por loja ativada; a configuração local inicial contém só Drogaria SP, enquanto o
+preparador comum possui nove origens. Não pedir cadastro em nove lojas antes de homologar
+uma. Login persistente está implementado, mas não garante ausência de verificações da
+loja. A frequência real ainda não foi medida; operação com desafios frequentes não atende
+a expectativa do dono e deve reprovar a homologação para execução automática.
+
+Verificação do código: clientProfileData permanece da conta operacional; receiverName,
+CEP e endereço de entrega recebem os dados do cliente em cada pedido e são reconferidos.
+Isso não comprova o nome que cada loja imprime na etiqueta/nota/comprovante. Antes de
+ativar uma loja, validar também destinatário no pacote e quais dados do comprador ficam
+visíveis ao cliente. Não prometer que cadastrar dados pessoais do dono é invisível nem
+alterar dados fiscais para tentar ocultá-los. Nenhum cadastro ou compra real feito.
+
+
+## 06/09/2026 — aprovação sem janela de cinco minutos
+
+Dono pediu poder aprovar quando olhar o WhatsApp. Implementado localmente: o resumo e a
+aprovação ficam persistidos sem expirar após 5 minutos. Após preparar, o comprador remove
+somente os itens conferidos da própria cesta, confirma carrinho vazio, fecha o perfil e
+libera a conta. Outros pedidos/rastreios podem usar a conta durante a espera. A aprovação
+pode chegar antes ou depois dessa liberação; não se perde na corrida nem exige navegador
+aberto. Pedidos aprovados são retomados pelo comprador com token novo.
+
+Ao reconstruir o carrinho, só condições idênticas ao resumo aprovado habilitam a execução
+por 60 s. Mudança gera nova conferência/aprovação; violações do teto, endereço, estoque ou
+prazo do cliente exigem revisão. O botão não expira por idade do resumo. Pedido cancelado,
+estornado ou com pagamento inválido continua bloqueado: as regras de estorno do vigia
+não foram removidas. Interrupção durante uma ação de navegador continua exigindo
+reconciliação; resultado financeiro incerto nunca é repetido automaticamente.
+
+Validação desta alteração: **560/560 testes**, sem skips, schema/migrations coerentes,
+TypeScript do app e do runtime, lint e build aprovados; comprador e painel testados no
+Chrome com todas as requisições simuladas.
+
+**Não basta login em todas as lojas para funcionar perfeitamente.** É necessário cartão
+corporativo configurado e homologação do checkout/comprovante/status por loja. O aviso
+chega pelo WhatsApp; a aprovação continua no painel aberto pelo link. Exceções como
+CAPTCHA, autenticação, indisponibilidade e site alterado continuam possíveis. Mudança
+local, não publicada, sem compras/mensagens reais. Não requer nova migration além das
+já pendentes. Documento operacional: [compra e acompanhamento](docs/compra-e-acompanhamento-2026-09-06.md).
+
+
+## 06/09/2026 — comprador e leitor implementados, ativação real pendente
+
+Pedido do dono: “faça isso acontecer e implemente”. Entrega local:
+contas operacionais por loja, comprador contínuo com perfil Chrome próprio, preparação
+VTEX, conferência de carrinho e aprovação única no /ops (5 min para conferir, 60 s para
+executar), tentativa durável sem repetir clique incerto, recuperação auditada, trava
+compra/estorno/cancelamento e agenda de acompanhamento com leitor de credencial separada.
+Status explícito do pedido inteiro gera avisos; previsões e pacotes isolados não geram.
+Pedidos já comprados antes da migration são incluídos por número/loja.
+
+**Não implantado nem homologado em conta real.** Nove origens VTEX têm preparador comum;
+botão final, comprovante e página de status precisam de seletores observados em cada
+loja. Sem configuração final homologada, o runtime não reserva compras. ML permanece
+no caminho assistido anterior. E-mail operacional ainda não informado; cartão/login
+não cadastrados; leitor de e-mail não implementado. Não prometer zero aprovação humana.
+Não há parceria/API por acordo, nem subagentes acessando o mesmo carrinho simultaneamente.
+
+Novas tabelas PurchaseAccount/TrackingSubscription e campos de PurchaseJob estão na
+migration aditiva `20260906150000_purchase_execution`, após DeliveryEvent. Dois tokens
+separam comprador e leitor; aprovação requer sessão /ops. Chrome não herda chaves do
+processo. `LIA_PURCHASE_SUBMIT_OFF=true` pausa novas finalizações. A tarefa horária não
+foi modificada e nenhum processo foi deixado comprando.
+
+Validação final: **558/558**, zero skips, migrations sem drift, TypeScript do app e
+do runtime, lint e build aprovados. Chrome com loja e painel simulados aprovados.
+Teste antigo de adulteração do token corrigido para não depender do caractere sorteado.
+
+Implementação, validações e ativação: [compra-e-acompanhamento-2026-09-06.md](docs/compra-e-acompanhamento-2026-09-06.md).
+
+## Decisão 06/09/2026 — SEM lojas parceiras
+
+Dono: **“eu nao vou ter loja parceira acaba com essa ideia”**. Restrição vigente:
+a Lia compra como cliente nos sites existentes. Não propor parceria comercial, API
+privada de varejista dependente de acordo, faturamento negociado ou pivot para atender
+lojistas como solução de compra. Esta decisão substitui recomendações contrárias na
+revisão de 06/09 e no histórico abaixo.
+Arquitetura a desenvolver: contas da Lia nos sites, meio de pagamento corporativo,
+preparação/execução pelo checkout disponível ao comprador, fila por conta e
+reconciliação; rastreio por e-mails, links e área Meus pedidos. A restrição não autoriza
+compras nem elimina exigências de confirmação do canal. Reduzir intervenção dentro
+desse modelo; não voltar a oferecer parceria como saída para suas limitações.
+Relatório revisado: [docs/revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
+
+
+## Atualização 06/09/2026 — revisão integral, compras e acompanhamento (LOCAL, NÃO PUBLICADO)
+
+Pedido do dono: revisar código/eficiência, negócio, arquitetura de compra por IA e avisos
+de saída/entrega. Relatório atual: [docs/revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
+Correções locais: pagamento + razão atômicos; replay preserva estorno; segunda cobrança
+vira inesperada; estornos concorrentes serializados com identidade por parcela e conferência
+do resultado; rollback de emissão não sobrescreve pago; timeout de Pagar.me/Meta.
+Worker exige razão real e cesta/endereço válidos, domínio exato e reserva por loja; lease
+vencido exige reconciliação. Preparação pode habilitar nove VTEX por
+`LIA_PURCHASE_PREP_STORES`, mas o default continua ML e o payload sempre `cart_only`.
+Isso NÃO implementa robô para as lojas nem autoriza checkout final.
+
+`DeliveryEvent` + migration aditiva `20260906090000_delivery_events`: mudança de etapa e
+evento na mesma transação, número da compra obrigatório, dedupe, link preservado,
+aviso por template fora da janela, estados de envio/recibos Meta e pendências no /ops.
+Rota interna de evidência de rastreio usa `requireOpsKey`, desativada salvo
+`LIA_TRACKING_INGEST_ENABLED=true`; exige loja/número exatos e recusa múltiplas entregas.
+Não há conector real de e-mail/transportadora nesta entrega. **O monitor local alterado
+também consulta DeliveryEvent: não rodar contra produção antes da migration.**
+Plano B não aceita consulta desconhecida; margem passa a ser por unidade e devolve
+diferenças positivas menores que R$1. Ainda falta simulação da cesta substituta inteira.
+Teste sem TEST_DATABASE_URL não herda produção; shadow nunca usa DATABASE_URL como fallback.
+
+Validação: baseline 531/531; final 551/551, zero skips, Postgres local + migration/drift;
+tsc, lint e build aprovados. Busca determinística 34/38, sem LLM pago. Auditoria de
+dependências: 25 alertas (22 high, 3 moderate); Next14 fora de suporte, atualização ainda
+pendente. Nenhum deploy, compra, cobrança ou mensagem real nesta revisão. Automação horária
+foi apenas inspecionada; seu prompt já prepara outras lojas com cartão corporativo salvo
+e exige confirmação final. A fila durável, antes, representava somente ML.
+
+Recomendação (não mudança comercial aprovada): poucas lojas homologadas, uma loja por
+pedido no primeiro fluxo automatizado, compra disparada por evento de pagamento, meio de
+pagamento operacional separado do PSP do cliente, acompanhamento por pacote/evidência.
+Subagentes não removem aprovação financeira exigida pelo canal de Computer Use; eventual
+a execução deve respeitar as confirmações financeiras do canal.
+Consulta READ ONLY do razão às 10:18 UTC: 3 pedidos com PSP registrado, R$63,54, R$24,14
+de estorno registrado, 1 número de compra, 0 deliveredAt. Não é todo histórico nem prova
+de liquidação ou de inexistência de entregas; não usar 466 registros totais como vendas.
+
+
+## Atualização 06/09/2026 — caso real do isqueiro pra charuto (pai do dono): 4 consertos
+
+Conversa real 06/09 22h36: "Queria um isqueiro pra charuto" → a IA extraiu "isqueiro" (perdeu
+o qualificador) → sem vitrine local → oferta do ML → aceitou → isqueiros USB genéricos →
+"Estes não são bons. Tem que ser estilo tocha" (virou item novo "Estes não são bons") →
+"Isqueiro maçarico" (nada local → oferta do ML com escolha aberta) → "sim" ignorado (o
+handler da oferta exigia sem escolha aberta) → desistiu. Consertos:
+1. **`ParsedLine.raw`**: em `mergeShoppingLines`, quando a IA encurta a frase e a versão
+   determinística tem mais tokens de produto (≤ 6), a completa vai em `raw`; a oferta e
+   `rescueLongTail` buscam no ML com `raw` ("isqueiro pra charuto"), não com "isqueiro".
+2. **Especificação durante a escolha vira busca nova no ML** (`researchChoice`): texto que
+   compartilha o substantivo com a escolha aberta ("isqueiro maçarico") e não existe nas
+   vitrines → busca com `forceLongTail` e troca as opções ("Ficou entre essas de…"), sem
+   oferecer/perguntar. Paginação e refino sobre opções do ML também buscam no ML
+   (`choiceCandidates` com `forceLongTail` quando `storeKey === "mercadolivre"`).
+3. **"Estes não são bons. Tem que ser estilo X"** (`STYLE_ASK_RE`/`REJECT_ONLY_RE`):
+   rejeição opcional + "tem que ser / estilo / tipo / modelo X" → busca "<produto> X";
+   rejeição sozinha → próximas opções.
+4. **Oferta do ML com escolha aberta**: o BOTÃO "Sim, procura" vale sempre; a busca nova
+   substitui a escolha aberta do mesmo produto e mantém as de outros itens.
+Testes: `lighter-longtail` (4, ML por SearchCache semeado). Suíte 564/564.
+
 ## Atualização 05/09/2026 (2ª) — "mais vendido da loja" como desempate
 
 Dono: *"dá pra ranquear os que vêm antes por mais comprado?"* Pela Lia ainda não (7 pedidos

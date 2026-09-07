@@ -1,9 +1,10 @@
+import { recordDeliveryEvent } from "./delivery-events";
 // Ciclo de vida operado pelo /ops (revisão 02/09): cotação manual, comprado, saiu,
 // entregue, cancelar/estornar, fila e lista de espera.
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { normalizeCity } from "@/lib/coverage";
 import { normalizeMsg } from "@/lib/lia-intents";
-import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LABEL, OPS_QUEUE_STATUSES, PAID_OR_IN_FULFILLMENT_STATUSES, REFUND_CONFIRMED_PREFIX, REFUND_PENDING_FLAG, RETAILER_OUT_FOR_DELIVERY_STATUS, appendOrderNote, isOrderOutForDelivery, isRetailerDeliveryOrder, statusAfterStorePurchase } from "@/lib/order-flags";
+import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LABEL, OPS_QUEUE_STATUSES, PAID_OR_IN_FULFILLMENT_STATUSES, REFUND_CONFIRMED_PREFIX, REFUND_PENDING_FLAG, appendOrderNote } from "@/lib/order-flags";
 import { refundOrderViaProvider } from "@/lib/payments/ledger";
 import { serviceFeeForSubtotal } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
@@ -251,145 +252,41 @@ export async function opsPublishManualQuote(
 }
 
 export async function opsMarkBought(orderId: string, storeOrderNumber: string, trackingUrl?: string) {
-  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!current) throw new Error("Order not found");
-  if (current.status !== "paid") throw new Error("Somente um pedido pago pode ser marcado como comprado.");
-  // Link de acompanhamento do pedido NA LOJA (ML e afins), colado já na compra — que é
-  // quando o operador tem a página aberta. Sem isso o cliente só recebia rastreio no
-  // "saiu pra entrega", instante que nos pedidos entregues pela loja o operador não tem
-  // como saber (dono, 17/08: "ele tem que poder ver e acompanhar").
-  const safeTrackingUrl = (trackingUrl ?? "").trim();
-  if (safeTrackingUrl && !/^https:\/\//i.test(safeTrackingUrl)) {
-    throw new Error("O link de acompanhamento precisa ser uma URL https.");
-  }
-  const updated = await prisma.deliveryOrder.update({
-    where: { id: orderId },
-    // Blank input stays null so legacy pickupInstructions' "—" fallback works if
-    // this is an authorized-courier order.
-    data: {
-      status: statusAfterStorePurchase(current),
-      storeOrderNumber: storeOrderNumber.trim() || null,
-      // Coluna legada de courier = link de rastreio genérico voltado ao cliente (mesma
-      // usada por opsMarkRetailerOutForDelivery). Só sobrescreve quando veio link novo.
-      ...(safeTrackingUrl ? { courierTrackingUrl: safeTrackingUrl } : {}),
-      notes: appendOrderNote(current.notes, `🧾 Compra marcada pelo operador em ${new Date().toISOString()}.`)
-    }
+  return recordDeliveryEvent(orderId, {
+    kind: "bought", source: "operator", sourceReference: "Compra confirmada no /ops",
+    storeOrderNumber, trackingUrl
   });
-  // Keep the durable purchase queue aligned when the operator finishes a claimed
-  // job through /ops. This also makes recovery safe if the worker loses its HTTP
-  // response after the retailer accepted the order.
-  await prisma.purchaseJob.updateMany({
-    where: {
-      deliveryOrderId: orderId,
-      status: { in: ["queued", "retrying", "claimed", "awaiting_approval", "approved"] }
-    },
-    data: {
-      status: "completed",
-      storeOrderNumber: storeOrderNumber.trim() || null,
-      lockedAt: null,
-      nextAttemptAt: null,
-      completedAt: new Date()
-    }
-  });
-  // O cliente era o único que não sabia da compra (17/08): entre "pagamento confirmado" e
-  // "saiu pra entrega" ele ficava no silêncio, que num pedido de loja pode durar horas —
-  // e silêncio depois de pagar é onde nasce o "cadê meu pedido?". Falha de envio não
-  // desfaz a compra: o status já mudou e o /ops é a fonte da verdade.
-  try {
-    await reply(
-      updated.phone,
-      copy.orderStatusLine({
-        shortId: updated.id.slice(-6).toUpperCase(),
-        status: updated.status,
-        trackingUrl: updated.courierTrackingUrl
-      })
-    );
-  } catch (error) {
-    console.warn("[ops:mark-bought:notify-failed]", error instanceof Error ? error.message : error);
-  }
-  return updated;
 }
 
 export async function opsMarkRetailerOutForDelivery(orderId: string, trackingUrl?: string) {
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!order) throw new Error("Order not found");
-  if (!isRetailerDeliveryOrder(order)) {
-    throw new Error("Esta ação é exclusiva de pedidos entregues pelo varejista.");
-  }
-  if (!["retailer_preparing", "operator_buying"].includes(order.status)) {
-    throw new Error("O pedido precisa estar comprado e em preparação antes de sair para entrega.");
-  }
-  const safeTrackingUrl = (trackingUrl ?? "").trim();
-  if (safeTrackingUrl && !/^https:\/\//i.test(safeTrackingUrl)) {
-    throw new Error("O rastreio precisa ser uma URL https.");
-  }
-  const updated = await prisma.deliveryOrder.update({
-    where: { id: orderId },
-    data: {
-      status: RETAILER_OUT_FOR_DELIVERY_STATUS,
-      // This legacy column is now the generic customer-facing tracking URL. Keeping
-      // it avoids a risky production migration during the controlled pilot.
-      courierTrackingUrl: safeTrackingUrl || null,
-      courierDispatchedAt: new Date(),
-      notes: appendOrderNote(order.notes, `🧾 Varejista saiu para entrega em ${new Date().toISOString()}.`)
-    }
+  return recordDeliveryEvent(orderId, {
+    kind: "out_for_delivery", source: "operator", sourceReference: "Saída confirmada no /ops", trackingUrl
   });
-  await reply(order.phone, copy.retailerOutForDelivery(safeTrackingUrl || null));
-  return updated;
 }
 
 export async function opsMarkDelivered(orderId: string) {
-  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!current) throw new Error("Order not found");
-  if (!isOrderOutForDelivery(current.status)) {
-    throw new Error("O pedido precisa estar em rota antes de ser marcado como entregue.");
-  }
-  const order = await prisma.deliveryOrder.update({
-    where: { id: orderId },
-    data: {
-      status: "delivered",
-      deliveredAt: new Date(),
-      notes: appendOrderNote(current.notes, `🧾 Entrega marcada pelo operador em ${new Date().toISOString()}.`)
-    }
+  return recordDeliveryEvent(orderId, {
+    kind: "delivered", source: "operator", sourceReference: "Entrega confirmada no /ops"
   });
-  await reply(order.phone, copy.delivered());
-  return order;
 }
 
 export async function opsCancelRefund(orderId: string) {
-  const current = await prisma.deliveryOrder.findUnique({ where: { id: orderId } });
-  if (!current) throw new Error("Order not found");
-  if (current.status === "refund_pending") return current;
-  const paymentReceived = Boolean(current.paidAt) || PAID_OR_IN_FULFILLMENT_STATUSES.includes(current.status);
-  const [order] = await prisma.$transaction([
-    prisma.deliveryOrder.update({
-      where: { id: orderId },
-      data: paymentReceived
-        ? {
-            status: "refund_pending",
-            notes: appendOrderNote(
-              appendOrderNote(current.notes, REFUND_PENDING_FLAG),
-              `🧾 Estorno solicitado pelo operador em ${new Date().toISOString()}.`
-            )
-          }
-        : { status: "canceled", notes: appendOrderNote(current.notes, `🧾 Pedido cancelado sem pagamento em ${new Date().toISOString()}.`) }
-    }),
-    // Cancel every pre-purchase step so a released/abandoned cart never blocks the
-    // next customer. A job already in purchasing/ordered is intentionally preserved
-    // for reconciliation; the late store result cannot resurrect the DeliveryOrder.
-    prisma.purchaseJob.updateMany({
-      where: {
-        deliveryOrderId: orderId,
-        status: { in: ["preflight_queued", "preflighting", "cart_ready", "awaiting_approval", "approved"] }
-      },
-      data: {
-        status: "canceled",
-        lastErrorCode: "ORDER_CANCELED",
-        lastErrorMessage: "Pedido cancelado antes da finalização na loja.",
-        nextAttemptAt: null
-      }
-    })
-  ]);
+  const result = await prisma.$transaction(async tx => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${orderId} FOR UPDATE`;
+    const current = await tx.deliveryOrder.findUniqueOrThrow({where:{id:orderId}});
+    if (["refund_pending", "refunded", "canceled"].includes(current.status)) return {order:current,changed:false};
+    const uncertain = await tx.purchaseJob.findFirst({where:{deliveryOrderId:orderId,submissionId:{not:null},status:{in:["submitting","outcome_unknown"]}}});
+    if(uncertain) throw new Error("Confira o resultado da compra na loja antes de cancelar ou estornar.");
+    const paid = Boolean(current.paidAt) || PAID_OR_IN_FULFILLMENT_STATUSES.includes(current.status);
+    const updated = await tx.deliveryOrder.update({where:{id:orderId},data:paid ? {status:"refund_pending",notes:appendOrderNote(appendOrderNote(current.notes,REFUND_PENDING_FLAG),`🧾 Estorno solicitado pelo operador em ${new Date().toISOString()}.`)} : {status:"canceled",notes:appendOrderNote(current.notes,`🧾 Pedido cancelado sem pagamento em ${new Date().toISOString()}.`)}});
+    // Carrinho aberto continua reservando a conta até conferência, mesmo após cancelar.
+    await tx.purchaseJob.updateMany({where:{deliveryOrderId:orderId,status:{in:["claimed","awaiting_approval","approved"]},lockedAt:{not:null}},data:{status:"needs_review",lastErrorCode:"ORDER_CANCELED",lastErrorMessage:"Pedido cancelado; confira e esvazie o carrinho antes de liberar a conta."}});
+    await tx.purchaseJob.updateMany({where:{deliveryOrderId:orderId,status:{in:["queued","retrying","preflight_queued","preflighting","cart_ready","awaiting_approval","approved"]},lockedAt:null},data:{status:"canceled",nextAttemptAt:null}});
+    return {order:updated,changed:true};
+  });
+  const order=result.order;
+  if(!result.changed)return order;
+  const paymentReceived = Boolean(order.paidAt) || order.status === "refund_pending";
   // O pedido fechou: a conversa não pode continuar presa nele (revisão 18/08 — cliente
   // ouvia "ainda estou cotando" de pedido cancelado e, em `choosing_freight`, o botão de
   // frete não tinha saída).
@@ -465,9 +362,9 @@ const OPS_QUEUE_PRIORITY: Record<string, number> = {
 
 export async function getOperatorQueue() {
   const orders = await prisma.deliveryOrder.findMany({
-    where: { status: { in: OPS_QUEUE_STATUSES } },
+    where: { OR: [{ status: { in: OPS_QUEUE_STATUSES } }, { events: { some: { deliveryStatus: { in: ["pending", "unknown", "failed"] } } } }] },
     orderBy: { createdAt: "desc" },
-    include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } } }
+    include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } }, events: { orderBy: { occurredAt: "desc" }, take: 5 } }
   });
   return orders.sort((a, b) => (OPS_QUEUE_PRIORITY[a.status] ?? 9) - (OPS_QUEUE_PRIORITY[b.status] ?? 9) || b.createdAt.getTime() - a.createdAt.getTime());
 }

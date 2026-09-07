@@ -67,6 +67,10 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
       const details = await getMercadoPagoPayment(pixId);
       if (!details) continue;
       if (details.status === "approved") {
+        if (details.externalReference !== order.id || details.refundedAmount > 0) {
+          report.errors.push(`order ${order.id}: referência divergente ou pagamento já estornado; revisão necessária`);
+          continue;
+        }
         await brain.markDeliveryOrderPaid(order.id, { provider: "mercadopago", paymentId: details.id, amount: details.amount });
         report.pixApproved += 1;
       } else if (details.status === "cancelled" || details.status === "expired" || details.status === "rejected") {

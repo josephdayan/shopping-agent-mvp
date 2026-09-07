@@ -1,3 +1,4 @@
+import { recordDeliveryReceipt } from "@/lib/delivery-events";
 import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
@@ -140,6 +141,18 @@ export async function POST(request: Request) {
   // não pode injetar mensagem "de" um telefone qualquer em produção.
   if (process.env.VERCEL && process.env.WHATSAPP_PROVIDER === "meta" && inbound.provider !== "meta") {
     return NextResponse.json({ error: "Unsupported WhatsApp provider" }, { status: 400 });
+  }
+
+  // Recibos também podem vir em lotes que contêm uma mensagem ou pagamento.
+  if (inbound.provider === "meta") {
+    try {
+      const entries = (rawPayload as { entry?: Array<{ changes?: Array<{ value?: { statuses?: Array<Record<string, unknown>> } }> }> }).entry ?? [];
+      for (const entry of entries) for (const change of entry.changes ?? []) {
+        for (const status of change.value?.statuses ?? []) await recordDeliveryReceipt(status);
+      }
+    } catch {
+      return NextResponse.json({ ok: false, error: "receipt persistence unavailable" }, { status: 503 });
+    }
   }
 
   // One-Click confirmation has no user text. It must be handled before the generic

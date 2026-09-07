@@ -16,6 +16,9 @@ export type ParsedLine = {
   additive?: boolean;
   // "qualquer um, escolhe vc": a Lia escolhe o topo do ranking sozinha (28/08 S6).
   autoPick?: boolean;
+  // Frase COMPLETA do cliente quando a IA encurtou ("isqueiro pra charuto" → "isqueiro",
+  // 06/09, pai do dono): o Mercado Livre busca com ela, porque o qualificador muda o produto.
+  raw?: string;
 };
 
 export type Intent =
@@ -630,7 +633,11 @@ export function mergeShoppingLines(ai: ParsedLine[], deterministic: ParsedLine[]
     const twinCap = twin ? parsePriceCap(twin.phrase) : null;
     const phrase = twinCap != null && parsePriceCap(line.phrase) == null ? `${line.phrase} até ${twinCap} reais` : line.phrase;
     // "escolhe vc" também vive no gêmeo determinístico (28/08 S6).
-    const auto = twin?.autoPick ? { autoPick: true as const } : {};
+    // A IA encurta a frase ("isqueiro pra charuto" → "isqueiro"); a versão determinística
+    // completa vai em `raw` para a busca de cauda longa (06/09).
+    const twinTokens = twin ? meaningful(twin.phrase) : [];
+    const raw = twin && twinTokens.length > meaningful(line.phrase).length && twinTokens.length <= 6 ? { raw: twin.phrase } : {};
+    const auto = { ...(twin?.autoPick ? { autoPick: true as const } : {}), ...raw };
     if (line.qtyExplicit) return { ...line, phrase, ...auto };
     if (line.qty > 1) return { ...line, phrase, qtyExplicit: true, ...auto };
     if (twin?.qtyExplicit) return { ...line, phrase, qty: Math.max(line.qty, twin.qty), qtyExplicit: true, ...auto };

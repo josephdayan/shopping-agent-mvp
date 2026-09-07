@@ -18,7 +18,7 @@ import { humanEstimate, liveCheckConfigured, liveCheckSupported } from "./live-f
 import { PURCHASE_BLOCKED_PREFIX } from "./order-monitor";
 import { appendOrderNote } from "./order-flags";
 import { refundOrderViaProvider } from "./payments/ledger";
-import { serviceFeeForSubtotal } from "./pricing";
+import { serviceFeeForItems } from "./pricing";
 import { deliverNotice, markTurnReplied, notifyOperator, outsideServiceWindow, readCtx, reply, writeCtx } from "./turn-runtime";
 import type { BasketItem, ChoiceOption, DeliveryContext } from "./conversation-types";
 
@@ -121,10 +121,14 @@ export function refundDifference(order: { items: unknown; deliveryFee: number },
     const sub = subs.find((x) => x.fromSku === i.sku);
     return s + (sub ? sub.qty * sub.to.unitPrice : i.lineTotal);
   }, 0);
-  const oldBase = oldSubtotal + serviceFeeForSubtotal(oldSubtotal) + order.deliveryFee;
-  const newBase = newSubtotal + serviceFeeForSubtotal(newSubtotal) + (newDeliveryFee ?? order.deliveryFee);
+  const newPrices = items.map(i => {
+    const sub = subs.find(s => s.fromSku === i.sku);
+    return { unitPrice: sub?.to.unitPrice ?? i.unitPrice, qty: sub?.qty ?? i.qty };
+  });
+  const oldBase = oldSubtotal + serviceFeeForItems(items) + order.deliveryFee;
+  const newBase = newSubtotal + serviceFeeForItems(newPrices) + (newDeliveryFee ?? order.deliveryFee);
   const diff = Math.round((oldBase - newBase) * 100) / 100;
-  return diff >= 1 ? diff : 0;
+  return Math.max(0, diff);
 }
 
 export type OfferOutcome = "offered" | "none" | "skip";
@@ -203,6 +207,10 @@ export async function acceptPlanB(phone: string, ctx: DeliveryContext, convoId: 
     simulateOverride ?? undefined,
     simulateOverride ? liveCheckConfigured : liveCheckSupported
   );
+  if (state.substitutes.some(s => !live.checks.has(`${s.to.storeKey}:${s.to.sku}`))) {
+    await reply(phone, copy.planBNotVerified());
+    return "stale";
+  }
   const gone = state.substitutes.some((s) => {
     const check = live.checks.get(`${s.to.storeKey}:${s.to.sku}`);
     return check ? !check.available : false;
@@ -250,18 +258,24 @@ export async function acceptPlanB(phone: string, ctx: DeliveryContext, convoId: 
       refundNote = ` ⚠️ Diferença de R$ ${diff.toFixed(2).replace(".", ",")} NÃO devolvida (${error instanceof Error ? error.message.slice(0, 120) : "erro"}) — estornar parcial à mão.`;
     }
   }
-  await prisma.deliveryOrder.update({
+  await prisma.$transaction(async tx => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${order.id} FOR UPDATE`;
+    const current = await tx.deliveryOrder.findUniqueOrThrow({where:{id:order.id}});
+    if(current.status!=="paid" || current.storeOrderNumber || JSON.stringify(current.items)!==JSON.stringify(order.items)) throw new Error("Pedido mudou antes da troca; confira a operação.");
+    if(await tx.purchaseJob.findFirst({where:{deliveryOrderId:order.id,status:{in:["submitting","outcome_unknown"]},submissionId:{not:null}}})) throw new Error("Compra em conferência na loja; não substituir agora.");
+    await tx.deliveryOrder.update({
     where: { id: order.id },
     data: {
       items: newItems as unknown as object,
       itemsSubtotal: newSubtotal,
-      serviceFee: serviceFeeForSubtotal(newSubtotal),
+      serviceFee: serviceFeeForItems(newItems),
       ...storeFields,
       notes: appendOrderNote(
         cleanedNotes,
         `${PLAN_B_ACCEPTED_PREFIX} ${now.toISOString()}: ${state.substitutes.map((s) => `${s.fromName} → ${s.to.name} (${s.to.storeLabel ?? s.to.storeKey})${s.to.productUrl ? ` ${s.to.productUrl}` : ""}`).join("; ")}. Bloqueio anterior: ${blockedReasonOf(order.notes) ?? "-"}.${refundNote}`
       )
     }
+  });
   });
   await clearPlanB(ctx, convoId);
   try {

@@ -1,6 +1,8 @@
+import { preparationStores, purchaseUrlAllowed } from "./purchase-preparation";
 import { createHash, randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { isRetailerDeliveryOrder } from "@/lib/order-flags";
+import { hasCancelRequest, hasPendingRefund } from "@/lib/order-flags";
 
 type OrderItem = {
   sku: string;
@@ -30,13 +32,14 @@ function retryMs(): number {
   return Number.isFinite(configured) ? Math.max(60_000, Math.min(60 * 60_000, configured)) : 5 * 60_000;
 }
 
-function cartHash(items: OrderItem[], deliveryFee: number, promise?: string): string {
+export function purchaseCartHash(items: OrderItem[], deliveryFee: number, promise?: string, destination?: { cep?: string | null; deliveryAddress?: string | null }): string {
   const canonical = {
     items: items
-      .map((item) => ({ sku: item.sku, qty: item.qty, unitPrice: money(item.unitPrice), productUrl: item.productUrl ?? null }))
+      .map((item) => ({ storeKey: item.storeKey, sku: item.sku, qty: item.qty, unitPrice: money(item.unitPrice), productUrl: item.productUrl ?? null }))
       .sort((a, b) => a.sku.localeCompare(b.sku)),
     deliveryFee: money(deliveryFee),
-    promise: promise ?? null
+    promise: promise ?? null,
+    destination: { cep: destination?.cep ?? null, address: destination?.deliveryAddress ?? null }
   };
   return createHash("sha256").update(JSON.stringify(canonical)).digest("hex");
 }
@@ -49,30 +52,47 @@ function deliveryPromise(fulfillments: unknown): string | undefined {
   return values.length ? values.join(" · ") : undefined;
 }
 
-function mercadoLivreOnly(items: OrderItem[]): boolean {
-  return items.length > 0 && items.every((item) => item.storeKey === "mercadolivre" && /^https:\/\/[^/]*mercadolivre\.com\.br\//i.test(item.productUrl ?? ""));
+export function isMercadoLivrePurchaseUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password && !url.port &&
+      (url.hostname === "mercadolivre.com.br" || url.hostname.endsWith(".mercadolivre.com.br"));
+  } catch { return false; }
+}
+
+function preparationEligible(storeKey: string, items: OrderItem[], configured = false): boolean {
+  return (configured || preparationStores().includes(storeKey)) && items.length > 0 && items.every((item) => item.storeKey === storeKey &&
+    Number.isInteger(item.qty) && item.qty > 0 && Number.isFinite(item.unitPrice) && item.unitPrice > 0 &&
+    purchaseUrlAllowed(storeKey, item.productUrl ?? ""));
 }
 
 export async function ensurePurchaseJobForPaidOrder(orderId: string) {
-  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true, payments: true, paymentAttempts: { select: { status: true } } } });
   if (!order || order.status !== "paid" || !isRetailerDeliveryOrder(order)) return null;
+  if (order.storeOrderNumber || hasCancelRequest(order.notes) || hasPendingRefund(order.notes) || (order.notes ?? "").includes("🛑 COMPRA BLOQUEADA:")) return null;
+  const real = order.payments.filter((p) => ["mercadopago", "pagarme"].includes(p.provider));
+  if (!real.length || real.some((p) => p.status !== "approved" || p.refundedCents !== 0) ||
+      real.reduce((sum, p) => sum + p.amountCents, 0) !== Math.round(order.total * 100) ||
+      order.paymentAttempts.some((a) => a.status === "unknown_outcome")) return null;
   const items = ((order.items as unknown as OrderItem[]) ?? []).filter(Boolean);
-  // The first pilot is deliberately restricted to exact Mercado Livre listing URLs.
-  // Free-form concierge lines and mixed-store baskets always remain with the operator.
-  if (!mercadoLivreOnly(items)) return null;
-  const existing = order.purchaseJobs.find((job) => job.fulfillmentKey === "mercadolivre");
+  // Lojas precisam de habilitação explícita para preparação. Linhas livres, cestas
+  // mistas e checkout final continuam fora deste executor.
+  const storeKey = items[0]?.storeKey;
+  const account = storeKey ? await prisma.purchaseAccount.findUnique({ where: { storeKey } }) : null;
+  if (!preparationEligible(storeKey, items, Boolean(account?.enabled && account.loginReady && account.paymentReady))) return null;
+  const existing = order.purchaseJobs.find((job) => job.fulfillmentKey === storeKey);
   if (existing) return existing;
 
   const promise = deliveryPromise(order.fulfillments);
   const expectedTotal = money(order.itemsSubtotal + order.deliveryFee);
-  const hash = cartHash(items, order.deliveryFee, promise);
+  const hash = purchaseCartHash(items, order.deliveryFee, promise, order);
   try {
     return await prisma.purchaseJob.create({
       data: {
         deliveryOrderId: order.id,
-        fulfillmentKey: "mercadolivre",
-        storeKey: "mercadolivre",
-        storeLabel: "Mercado Livre",
+        fulfillmentKey: storeKey,
+        storeKey,
+        storeLabel: items[0].storeLabel,
         status: "queued",
         expectedTotal,
         approvalMaxTotal: expectedTotal,
@@ -96,7 +116,7 @@ export async function ensurePurchaseJobForPaidOrder(orderId: string) {
     // Payment webhooks may race. The unique (order, fulfillment) constraint is the
     // authority, so the loser returns the row created by the winner.
     const raced = await prisma.purchaseJob.findUnique({
-      where: { deliveryOrderId_fulfillmentKey: { deliveryOrderId: order.id, fulfillmentKey: "mercadolivre" } }
+      where: { deliveryOrderId_fulfillmentKey: { deliveryOrderId: order.id, fulfillmentKey: storeKey } }
     });
     if (raced) return raced;
     throw error;
@@ -104,39 +124,79 @@ export async function ensurePurchaseJobForPaidOrder(orderId: string) {
 }
 
 export async function backfillPaidPurchaseJobs(limit = 25) {
-  const orders = await prisma.deliveryOrder.findMany({
-    where: { status: "paid", purchaseJobs: { none: {} } },
-    orderBy: { paidAt: "asc" },
-    take: Math.max(1, Math.min(100, limit)),
-    select: { id: true }
-  });
+  let cursor: string | undefined;
   let created = 0;
-  for (const order of orders) if (await ensurePurchaseJobForPaidOrder(order.id)) created += 1;
+  const max = Math.max(1, Math.min(100, limit));
+  // Cestas ficam frequentemente com storeKey=concierge no cabeçalho. A loja real
+  // vem dos itens. Percorrer páginas evita que pedidos antigos inelegíveis escondam novos.
+  for (;;) {
+    const orders = await prisma.deliveryOrder.findMany({
+      where: { status: "paid", storeOrderNumber: null, purchaseJobs: { none: {} },
+        payments: { some: { provider: { in: ["mercadopago", "pagarme"] }, status: "approved", refundedCents: 0 } } },
+      orderBy: { id: "asc" }, take: 50,
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}), select: { id: true }
+    });
+    if (!orders.length) break;
+    for (const order of orders) {
+      if (await ensurePurchaseJobForPaidOrder(order.id)) created += 1;
+      if (created >= max) return created;
+    }
+    cursor = orders[orders.length - 1].id;
+    if (orders.length < 50) break;
+  }
   return created;
 }
 
-export async function claimNextPurchaseJob(workerId: string) {
+export async function claimNextPurchaseJob(workerId: string, allowedStores?: string[]) {
   await backfillPaidPurchaseJobs();
   const now = new Date();
   const stale = new Date(now.getTime() - leaseMs());
+  // Lease vencido é resultado desconhecido: nunca entregar o mesmo checkout a outro robô.
+  await prisma.purchaseJob.updateMany({
+    where: { status: "claimed", lockedAt: { lt: stale } },
+    data: { status: "needs_review", lastErrorCode: "WORKER_LEASE_EXPIRED", lastErrorMessage: "Executor interrompido. Reconciliar carrinho/pedido na loja antes de liberar nova tentativa." }
+  });
 
-  for (let attempt = 0; attempt < 5; attempt += 1) {
+  await prisma.purchaseJob.updateMany({ where: { status: "submitting", lockedAt: { lt: stale } }, data: { status: "outcome_unknown", lastErrorCode: "SUBMIT_INTERRUPTED", lastErrorMessage: "Confira histórico da loja; não repetir compra." } });
+  await prisma.purchaseJob.updateMany({ where: { status: { in: ["awaiting_approval", "approved"] }, lockedAt: { lt: stale } }, data: { status: "needs_review", lastErrorCode: "WORKER_LEASE_EXPIRED" } });
+  const configuredAccounts=allowedStores?[]:await prisma.purchaseAccount.findMany({where:{enabled:true},select:{storeKey:true}});
+  const claimStores=allowedStores??preparationStores().filter(store=>!configuredAccounts.some(a=>a.storeKey===store));
+  const blockedStores: string[] = [];
+  for (let attempt = 0; attempt < preparationStores().length + 5; attempt += 1) {
     const candidate = await prisma.purchaseJob.findFirst({
       where: {
-        status: { in: CLAIMABLE },
+        status: { in: allowedStores ? [...CLAIMABLE,"approved"] : CLAIMABLE },
+        storeKey: { notIn: blockedStores, in: claimStores },
         OR: [{ nextAttemptAt: null }, { nextAttemptAt: { lte: now } }],
         AND: [{ OR: [{ lockedAt: null }, { lockedAt: { lt: stale } }] }],
         deliveryOrder: { status: "paid" }
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: [{approvedAt:{sort:"asc",nulls:"last"}},{createdAt:"asc"}],
       select: { id: true, status: true }
     });
     if (!candidate) return null;
-    const claimed = await prisma.purchaseJob.updateMany({
-      where: { id: candidate.id, status: candidate.status, OR: [{ lockedAt: null }, { lockedAt: { lt: stale } }] },
-      data: { status: "claimed", lockedAt: now, browserSessionId: workerId, nextAttemptAt: null, lastErrorCode: null, lastErrorMessage: null }
+    const full = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: candidate.id }, include: { deliveryOrder: true } });
+    const eligible = await ensurePurchaseJobForPaidOrder(full.deliveryOrderId);
+    const snapshot = purchaseCartHash(full.deliveryOrder.items as unknown as OrderItem[], full.deliveryOrder.deliveryFee, deliveryPromise(full.deliveryOrder.fulfillments), full.deliveryOrder);
+    if (!eligible || snapshot !== full.cartHash) {
+      await prisma.purchaseJob.updateMany({ where: { id: full.id, status: candidate.status }, data: { status: "needs_review", lastErrorCode: "ORDER_CHANGED", lastErrorMessage: "Pagamento, cesta ou endereço mudou. Revalidar antes de comprar." } });
+      continue;
+    }
+    const claimed = await prisma.$transaction(async (tx) => {
+      // Hoje existe uma conta operacional por loja. A trava cobre o carrinho físico,
+      // não apenas o pedido: dois clientes jamais montam a mesma sacola em paralelo.
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${`purchase-account:${full.storeKey}`}))::text`;
+      const busy = await tx.purchaseJob.findFirst({ where: { storeKey: full.storeKey, OR: [
+        { status: { in: ["claimed", "submitting", "outcome_unknown"] } }, {status:{in:["awaiting_approval","approved"]},lockedAt:{not:null}}, { status: "needs_review", lockedAt: { not: null } }
+      ] }, select: { id: true } });
+      const trackingBusy = await tx.trackingSubscription.findFirst({where:{storeKey:full.storeKey,lockedAt:{gt:new Date(Date.now()-5*60_000)}}});
+      if (busy || trackingBusy) return { count: 0 };
+      return tx.purchaseJob.updateMany({
+      where: { id: candidate.id, status: candidate.status, deliveryOrder: { status: "paid", storeOrderNumber: null }, OR: [{ lockedAt: null }, { lockedAt: { lt: stale } }] },
+      data: { status: candidate.status==="approved"?"approved":"claimed", lockedAt: now, browserSessionId: workerId, nextAttemptAt: null, lastErrorCode: null, lastErrorMessage: null }
+      });
     });
-    if (!claimed.count) continue;
+    if (!claimed.count) { blockedStores.push(full.storeKey); continue; }
     return prisma.purchaseJob.findUnique({
       where: { id: candidate.id },
       include: { items: true, deliveryOrder: true }
@@ -150,10 +210,14 @@ export function workerPayload(job: NonNullable<Awaited<ReturnType<typeof claimNe
     jobId: job.id,
     orderId: job.deliveryOrderId,
     shortOrderId: job.deliveryOrderId.slice(-6).toUpperCase(),
+    storeKey: job.storeKey,
+    storeLabel: job.storeLabel,
+    deliveryPromise: deliveryPromise(job.deliveryOrder.fulfillments),
     expectedTotal: job.expectedTotal,
     maximumTotal: job.approvalMaxTotal,
     cartHash: job.cartHash,
-    mode: process.env.PURCHASE_AUTOMATION_MODE ?? "cart_only",
+    mode: "cart_only",
+    canSubmitPurchase: false,
     customer: {
       name: job.deliveryOrder.customerName,
       phone: job.deliveryOrder.phone,
@@ -191,13 +255,19 @@ export async function reportPurchaseJobFailure(jobId: string, workerId: string, 
 export async function validatePurchaseCompletion(jobId: string, workerId: string, input: { actualTotal: number; cartHash: string; storeOrderNumber: string }) {
   const job = await prisma.purchaseJob.findUnique({ where: { id: jobId } });
   if (!job || job.status !== "claimed" || job.browserSessionId !== workerId) throw new Error("Purchase job is not claimed by this worker.");
+  if (!job.lockedAt || job.lockedAt.getTime() + leaseMs() <= Date.now()) throw new Error("Purchase worker lease expired; reconcile the retailer order.");
   if ((process.env.PURCHASE_AUTOMATION_MODE ?? "cart_only") !== "purchase") throw new Error("Final purchase is disabled (cart_only).");
   if (job.approvalStatus !== "approved" || !job.approvedAt) throw new Error("Purchase job has no current operator approval.");
-  if (job.approvalExpiresAt && job.approvalExpiresAt < new Date()) throw new Error("Purchase approval expired.");
+  if (!job.approvalExpiresAt || job.approvalExpiresAt <= new Date()) throw new Error("Purchase approval expired or missing expiration.");
   if (!job.approvalCartHash || input.cartHash !== job.approvalCartHash) throw new Error("Cart changed after approval.");
   const actualTotal = money(input.actualTotal);
+  if (!Number.isFinite(input.actualTotal) || actualTotal <= 0) throw new Error("Invalid retailer total.");
   if (!job.approvalMaxTotal || actualTotal > money(job.approvalMaxTotal)) throw new Error("Retailer total exceeds the approved maximum.");
   if (!input.storeOrderNumber.trim()) throw new Error("Retailer order number is required.");
+  const order = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: job.deliveryOrderId } });
+  if (!await ensurePurchaseJobForPaidOrder(order.id) || purchaseCartHash(order.items as unknown as OrderItem[], order.deliveryFee, deliveryPromise(order.fulfillments), order) !== input.cartHash) {
+    throw new Error("Order or payment changed after approval; reconcile before completion.");
+  }
   return { job, actualTotal, completionToken: randomUUID() };
 }
 

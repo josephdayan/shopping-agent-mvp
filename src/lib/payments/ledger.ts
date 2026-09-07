@@ -2,6 +2,7 @@
 // provedor; o estorno por API grava aqui quanto voltou e com que referência. Este módulo
 // não fala com o cliente nem com o operador — só provedor + banco. Quem avisa é o
 // cérebro (delivery-service), que chama estas funções.
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PaymentProviderError, refundMercadoPagoPayment } from "./mercadopago";
 import { pagarmeAdapter } from "./pagarme";
@@ -23,8 +24,8 @@ function toCents(value: number) {
 }
 
 // Idempotente por (provedor, id): o replay do webhook não duplica linha.
-export async function recordPayment(input: RecordPaymentInput) {
-  return prisma.payment.upsert({
+export async function recordPayment(input: RecordPaymentInput, db: Prisma.TransactionClient = prisma) {
+  const payment = await db.payment.upsert({
     where: { provider_providerPaymentId: { provider: input.provider, providerPaymentId: input.providerPaymentId } },
     create: {
       deliveryOrderId: input.deliveryOrderId,
@@ -37,8 +38,15 @@ export async function recordPayment(input: RecordPaymentInput) {
     },
     // Um "unexpected" que depois se confirma como o pagamento certo pode virar approved;
     // o contrário nunca (approved não regride).
-    update: input.status === "approved" ? { status: "approved", rawStatus: input.rawStatus ?? null } : { rawStatus: input.rawStatus ?? null }
+    update: { rawStatus: input.rawStatus ?? null }
   });
+  if (payment.deliveryOrderId !== input.deliveryOrderId || payment.amountCents !== input.amountCents) {
+    throw new Error("Pagamento já vinculado a outro pedido ou valor.");
+  }
+  if (input.status === "approved") {
+    await db.payment.updateMany({ where: { id: payment.id, status: "unexpected", refundedCents: 0 }, data: { status: "approved" } });
+  }
+  return db.payment.findUniqueOrThrow({ where: { id: payment.id } });
 }
 
 export async function paymentsForOrder(deliveryOrderId: string) {
@@ -72,27 +80,47 @@ export async function refundOrderViaProvider(deliveryOrderId: string, amount?: n
   }
   const total = requestedCents === remainingCents;
 
-  let reference: string;
-  if (payment.provider === "mercadopago") {
-    const refund = await refundMercadoPagoPayment(payment.providerPaymentId, total && payment.refundedCents === 0 ? undefined : requestedCents / 100);
-    reference = `MP refund ${refund.refundId || "?"} (pagamento ${payment.providerPaymentId})`;
-  } else if (payment.provider === "pagarme") {
-    const refund = await pagarmeAdapter.refundCharge(payment.providerPaymentId, total ? undefined : requestedCents);
-    reference = `Pagar.me ${refund.reference} (${refund.status})`;
-  } else if (payment.provider === "mock") {
-    reference = `mock refund ${payment.providerPaymentId}`;
-  } else {
-    throw new PaymentProviderError(`provedor desconhecido: ${payment.provider}`);
-  }
-
-  const refundedCents = payment.refundedCents + requestedCents;
-  await prisma.payment.update({
-    where: { id: payment.id },
-    data: {
-      refundedCents,
-      refundReference: reference,
-      status: refundedCents >= payment.amountCents ? "refunded" : "partially_refunded"
+  // O lock também serializa cron, plano B e /ops. A chamada externa usa uma chave
+  // estável desta parcela: se o banco falhar depois do provedor, o retry a reutiliza.
+  return prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${deliveryOrderId} FOR UPDATE`;
+    const purchase = await tx.purchaseJob.findFirst({ where: { deliveryOrderId, status: { in: ["submitting", "outcome_unknown"] }, submissionId: { not: null } } });
+    if (purchase) throw new Error("Compra enviada ou com resultado desconhecido. Reconcilie a loja antes de estornar.");
+    await tx.$queryRaw`SELECT id FROM "Payment" WHERE id = ${payment.id} FOR UPDATE`;
+    const current = await tx.payment.findUniqueOrThrow({ where: { id: payment.id } });
+    if (current.refundedCents !== payment.refundedCents || current.status !== payment.status) {
+      throw new Error("Pagamento mudou durante o estorno. Recarregue antes de continuar.");
     }
-  });
-  return { provider: payment.provider as LedgerProvider, providerPaymentId: payment.providerPaymentId, amount: requestedCents / 100, reference, total };
+    const idempotencyKey = `refund:${payment.id}:${payment.refundedCents}:${requestedCents}`;
+
+    let reference: string;
+    if (payment.provider === "mercadopago") {
+      const refund = await refundMercadoPagoPayment(payment.providerPaymentId, requestedCents / 100, idempotencyKey);
+      if (refund.status !== "approved" || !refund.refundId || Math.round((refund.amount ?? 0) * 100) !== requestedCents) {
+        throw new Error("Estorno ainda não confirmado pelo Mercado Pago. Reconciliar antes de informar o cliente.");
+      }
+      reference = `MP refund ${refund.refundId || "?"} (pagamento ${payment.providerPaymentId})`;
+    } else if (payment.provider === "pagarme") {
+      const refund = await pagarmeAdapter.refundCharge(payment.providerPaymentId, requestedCents, idempotencyKey);
+      if (!["refunded", "partial_refunded", "canceled"].includes(refund.status)) {
+        throw new Error("Estorno ainda não confirmado pela Pagar.me. Reconciliar antes de informar o cliente.");
+      }
+      reference = `Pagar.me ${refund.reference} (${refund.status})`;
+    } else if (payment.provider === "mock") {
+      reference = `mock refund ${payment.providerPaymentId}`;
+    } else {
+      throw new PaymentProviderError(`provedor desconhecido: ${payment.provider}`);
+    }
+
+    const refundedCents = payment.refundedCents + requestedCents;
+    await tx.payment.update({
+      where: { id: payment.id },
+      data: {
+        refundedCents,
+        refundReference: reference,
+        status: refundedCents >= payment.amountCents ? "refunded" : "partially_refunded"
+      }
+    });
+    return { provider: payment.provider as LedgerProvider, providerPaymentId: payment.providerPaymentId, amount: requestedCents / 100, reference, total };
+  }, { timeout: 20_000, maxWait: 5_000 });
 }

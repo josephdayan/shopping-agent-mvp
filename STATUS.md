@@ -1,5 +1,113 @@
 # Lia — Status do Projeto
 
+
+## 06/09/2026 — esforço de autenticação e identidade na entrega
+
+Dono considera autenticação/CAPTCHA recorrentes um gargalo inaceitável e perguntou sobre
+cadastro de cartão e nome no pacote. Esclarecimento de escopo: há um cadastro operacional
+por loja ativada; a configuração local inicial contém só Drogaria SP, enquanto o
+preparador comum possui nove origens. Não pedir cadastro em nove lojas antes de homologar
+uma. Login persistente está implementado, mas não garante ausência de verificações da
+loja. A frequência real ainda não foi medida; operação com desafios frequentes não atende
+a expectativa do dono e deve reprovar a homologação para execução automática.
+
+Verificação do código: clientProfileData permanece da conta operacional; receiverName,
+CEP e endereço de entrega recebem os dados do cliente em cada pedido e são reconferidos.
+Isso não comprova o nome que cada loja imprime na etiqueta/nota/comprovante. Antes de
+ativar uma loja, validar também destinatário no pacote e quais dados do comprador ficam
+visíveis ao cliente. Não prometer que cadastrar dados pessoais do dono é invisível nem
+alterar dados fiscais para tentar ocultá-los. Nenhum cadastro ou compra real feito.
+
+
+## 06/09/2026 — aprovação sem janela de cinco minutos
+
+Dono pediu poder aprovar quando olhar o WhatsApp. Implementado localmente: o resumo e a
+aprovação ficam persistidos sem expirar após 5 minutos. Após preparar, o comprador remove
+somente os itens conferidos da própria cesta, confirma carrinho vazio, fecha o perfil e
+libera a conta. Outros pedidos/rastreios podem usar a conta durante a espera. A aprovação
+pode chegar antes ou depois dessa liberação; não se perde na corrida nem exige navegador
+aberto. Pedidos aprovados são retomados pelo comprador com token novo.
+
+Ao reconstruir o carrinho, só condições idênticas ao resumo aprovado habilitam a execução
+por 60 s. Mudança gera nova conferência/aprovação; violações do teto, endereço, estoque ou
+prazo do cliente exigem revisão. O botão não expira por idade do resumo. Pedido cancelado,
+estornado ou com pagamento inválido continua bloqueado: as regras de estorno do vigia
+não foram removidas. Interrupção durante uma ação de navegador continua exigindo
+reconciliação; resultado financeiro incerto nunca é repetido automaticamente.
+
+Validação desta alteração: **560/560 testes**, sem skips, schema/migrations coerentes,
+TypeScript do app e do runtime, lint e build aprovados; comprador e painel testados no
+Chrome com todas as requisições simuladas.
+
+**Não basta login em todas as lojas para funcionar perfeitamente.** É necessário cartão
+corporativo configurado e homologação do checkout/comprovante/status por loja. O aviso
+chega pelo WhatsApp; a aprovação continua no painel aberto pelo link. Exceções como
+CAPTCHA, autenticação, indisponibilidade e site alterado continuam possíveis. Mudança
+local, não publicada, sem compras/mensagens reais. Não requer nova migration além das
+já pendentes. Documento operacional: [compra e acompanhamento](docs/compra-e-acompanhamento-2026-09-06.md).
+
+
+## 06/09/2026 — comprador e leitor implementados, ativação real pendente
+
+Pedido do dono: “faça isso acontecer e implemente”. Entrega local:
+contas operacionais por loja, comprador contínuo com perfil Chrome próprio, preparação
+VTEX, conferência de carrinho e aprovação única no /ops (5 min para conferir, 60 s para
+executar), tentativa durável sem repetir clique incerto, recuperação auditada, trava
+compra/estorno/cancelamento e agenda de acompanhamento com leitor de credencial separada.
+Status explícito do pedido inteiro gera avisos; previsões e pacotes isolados não geram.
+Pedidos já comprados antes da migration são incluídos por número/loja.
+
+**Não implantado nem homologado em conta real.** Nove origens VTEX têm preparador comum;
+botão final, comprovante e página de status precisam de seletores observados em cada
+loja. Sem configuração final homologada, o runtime não reserva compras. ML permanece
+no caminho assistido anterior. E-mail operacional ainda não informado; cartão/login
+não cadastrados; leitor de e-mail não implementado. Não prometer zero aprovação humana.
+Não há parceria/API por acordo, nem subagentes acessando o mesmo carrinho simultaneamente.
+
+Novas tabelas PurchaseAccount/TrackingSubscription e campos de PurchaseJob estão na
+migration aditiva `20260906150000_purchase_execution`, após DeliveryEvent. Dois tokens
+separam comprador e leitor; aprovação requer sessão /ops. Chrome não herda chaves do
+processo. `LIA_PURCHASE_SUBMIT_OFF=true` pausa novas finalizações. A tarefa horária não
+foi modificada e nenhum processo foi deixado comprando.
+
+Validação final: **558/558**, zero skips, migrations sem drift, TypeScript do app e
+do runtime, lint e build aprovados. Chrome com loja e painel simulados aprovados.
+Teste antigo de adulteração do token corrigido para não depender do caractere sorteado.
+
+Implementação, validações e ativação: [compra-e-acompanhamento-2026-09-06.md](docs/compra-e-acompanhamento-2026-09-06.md).
+
+## Decisão 06/09/2026 — compra nos sites, sem parceiros
+
+O dono descartou lojas parceiras. A proposta de arquitetura foi revisada para usar
+contas e pagamento corporativo da Lia nos sites existentes, com acompanhamento pelo
+que o comprador recebe/acessa. Integração comercial com varejista saiu da estratégia.
+Só documentação alterada nesta decisão; nenhuma automação ou compra foi ativada.
+
+
+## 06/09/2026 — revisão técnica e operacional (local)
+
+Relatório: [revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
+Corrigidos riscos em pagamento/razão/estorno, reserva de carrinho, vínculo de aprovação,
+plano B e isolamento dos testes. Nova base de eventos de entrega com dedupe, recibos Meta
+e pendências no painel. Preparação por loja é configurável, default ML; compra final
+continua assistida. Leitor externo de rastreio ainda não conectado e ingestão desligada.
+
+551/551 testes locais, zero skips, schema/migrations coerentes, tsc/lint/build aprovados.
+25 alertas de dependências permanecem e Next14 precisa de atualização. **Não publicado.**
+Migration DeliveryEvent necessária antes de usar código/monitor novos em produção.
+Automação horária e cartões não foram alterados; nenhuma mensagem/compra real foi feita.
+
+Direção recomendada, sujeita a decisão de produto: fechar o ciclo em poucas lojas, iniciar
+compra por evento e acompanhar por evidência/pacote. Métricas do razão são uma amostra
+recente e incompleta, sem comprovação de retenção ou rentabilidade.
+
+
+## 06/09/2026 — isqueiro pra charuto
+
+Caso real do pai do dono: a IA encurtava a frase antes de buscar no Mercado Livre,
+"isqueiro maçarico"/"tem que ser estilo tocha" não viravam busca nova, e o "sim" da oferta
+era ignorado com escolha aberta. Os quatro pontos corrigidos. Detalhe em AGENTS.md (06/09).
+
 ## 05/09/2026 (2ª) — mais vendido da loja
 
 Nas 9 lojas VTEX, entre opções de mesma relevância, o produto que a loja mais vende vem

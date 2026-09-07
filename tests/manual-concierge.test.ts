@@ -316,7 +316,7 @@ test("concierge completo: pede → operador cota → paga → compra → loja en
   const stillPaid = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal(stillPaid!.status, "paid", "recusa do link não pode mexer no pedido");
   const beforeBought = outbox.length;
-  await opsMarkBought(pending!.id, "", TRACKING);
+  await opsMarkBought(pending!.id, "REVIEW-STORE-123", TRACKING);
   const bought = await prisma.deliveryOrder.findUnique({ where: { id: pending!.id } });
   assert.equal(bought!.status, "retailer_preparing");
   // O cliente é avisado da compra (17/08): silêncio entre "pago" e "saiu pra entrega"

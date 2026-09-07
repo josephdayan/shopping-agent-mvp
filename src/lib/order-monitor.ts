@@ -15,7 +15,8 @@ const monitorSelect = {
   payments: { select: {
     provider: true, status: true, amountCents: true, refundedCents: true
   } },
-  paymentAttempts: { select: { status: true } }
+  paymentAttempts: { select: { status: true } },
+  events: { select: { kind: true, deliveryStatus: true, lastError: true, occurredAt: true } }
 } satisfies Prisma.DeliveryOrderSelect;
 
 type MonitoredOrder = Prisma.DeliveryOrderGetPayload<{ select: typeof monitorSelect }>;
@@ -37,7 +38,7 @@ function summarize(order: MonitoredOrder) {
   const paymentIssue = order.payments.some(p => p.status === "unexpected")
     || order.paymentAttempts.some(p => p.status === "unknown_outcome");
   const blockers = (order.notes ?? "").split("\n").filter(line => line.startsWith(PURCHASE_BLOCKED_PREFIX));
-  const purchaseIssue = blockers.length > 0 || order.purchaseJobs.some(j => ["needs_review", "needs_human"].includes(j.status));
+  const purchaseIssue = blockers.length > 0 || order.purchaseJobs.some(j => ["needs_review", "needs_human", "outcome_unknown", "awaiting_approval"].includes(j.status));
   // Um job já reservado nunca vira uma segunda compra fora do worker. Estados
   // desconhecidos também exigem reconciliação, não uma tentativa paralela.
   const purchaseInProgress = order.purchaseJobs.some(j => !["queued", "retrying"].includes(j.status));
@@ -52,13 +53,14 @@ function summarize(order: MonitoredOrder) {
   } else if (["awaiting_operator_quote", "awaiting_supplier_validation"].includes(order.status)) action = "quote_required";
   else if (["retailer_preparing", "retailer_out_for_delivery", "operator_buying", "ready_for_pickup", "dispatched"].includes(order.status)) action = "track_delivery";
   else if (["delivered", "canceled", "refunded"].includes(order.status)) action = "closed";
+  if (["track_delivery", "closed"].includes(action) && order.events.some(e => ["pending", "unknown", "failed"].includes(e.deliveryStatus))) action = "delivery_notice_review";
   return {
     orderId: order.id, shortOrderId: order.id.slice(-6).toUpperCase(),
     status: order.status, action, createdAt: order.createdAt, updatedAt: order.updatedAt,
     paidAt: order.paidAt, total: order.total,
     maximumRetailerTotal: Math.round((order.itemsSubtotal + order.deliveryFee) * 100) / 100,
     paymentVerified, existingPurchase, cancellationRequested, blockers, items,
-    purchaseJobs: order.purchaseJobs
+    purchaseJobs: order.purchaseJobs, deliveryEvents: order.events
   };
 }
 
@@ -70,7 +72,8 @@ export async function monitorAllOrders(now = new Date()) {
         { status: { in: OPS_QUEUE_STATUSES } },
         { updatedAt: { gte: new Date(now.getTime() - 24 * 60 * 60_000) } },
         { payments: { some: { status: "unexpected" } } },
-        { paymentAttempts: { some: { status: "unknown_outcome" } } }
+        { paymentAttempts: { some: { status: "unknown_outcome" } } },
+        { events: { some: { deliveryStatus: { in: ["pending", "unknown", "failed"] } } } }
       ] },
       // Sem filtro por loja, por PurchaseJob ou limite dos primeiros N pedidos.
       orderBy: [{ createdAt: "asc" }, { id: "asc" }], select: monitorSelect

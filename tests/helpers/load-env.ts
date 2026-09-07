@@ -18,12 +18,21 @@ try {
 
 // Fronteira teste × produção (revisão 02/09): com TEST_DATABASE_URL definida, TODA a
 // suíte fala com esse banco (nunca com o DATABASE_URL de produção do .env). Sem ela, o
-// comportamento antigo continua (mesmo banco, telefones de teste auto-limpos) — mas
-// LIA_REQUIRE_DB=1 (CI) transforma "banco indisponível → skip" em falha.
+// destino é uma porta local fechada. LIA_REQUIRE_DB=1 (CI) exige configuração explícita.
 if (process.env.TEST_DATABASE_URL) {
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
   process.env.DIRECT_URL = process.env.TEST_DIRECT_URL ?? process.env.TEST_DATABASE_URL;
 }
+// Sem destino explícito, nenhum teste pode herdar o banco real do .env.
+else {
+  process.env.DATABASE_URL = "postgresql://test:test@127.0.0.1:1/lia_test";
+  process.env.DIRECT_URL = process.env.DATABASE_URL;
+  if (process.env.LIA_REQUIRE_DB === "1") throw new Error("Defina TEST_DATABASE_URL ou use npm run test:local.");
+}
+// Testes não herdam credenciais de cobrança nem de scraping do projeto.
+delete process.env.MERCADO_PAGO_ACCESS_TOKEN;
+delete process.env.PAGARME_SECRET_KEY;
+delete process.env.APIFY_API_TOKEN;
 
 process.env.WHATSAPP_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";

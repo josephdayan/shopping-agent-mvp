@@ -890,10 +890,13 @@ async function handleDeliveryTurn(
   // Resposta à oferta da cauda longa ("procuro no Mercado Livre?", revisão 02/09). Só
   // vale sem escolha aberta e fora de outras perguntas binárias (o de sempre, troca de
   // loja) — nesses, "sim" continua sendo delas.
-  if (ctx.longTailOffer && !ctx.pending?.length && (ctx.step === "collecting" || !ctx.step) && !ctx.repeatConfirm && !ctx.minSwap) {
+  // 06/09 (pai do dono): a oferta nasceu com uma escolha aberta e o "sim" era ignorado.
+  // Botão vale sempre; palavra solta ("sim") só quando não há escolha aberta.
+  if (ctx.longTailOffer && !ctx.repeatConfirm && !ctx.minSwap) {
     const n = normalizeMsg(text);
-    const yes = n === "longtail_sim" || (n.length <= 30 && /^(sim|pode|procura|procurar|manda|quero|bora|vai|ok|isso|claro|beleza|blz)\b/.test(n));
-    const no = n === "longtail_nao" || (n.length <= 30 && /^(n|nao|nao precisa|deixa|deixa pra la|esquece|nao quero|nem|dispensa)\b/.test(n));
+    const free = !ctx.pending?.length && (ctx.step === "collecting" || !ctx.step);
+    const yes = n === "longtail_sim" || (free && n.length <= 30 && /^(sim|pode|procura|procurar|manda|quero|bora|vai|ok|isso|claro|beleza|blz)\b/.test(n));
+    const no = n === "longtail_nao" || (free && n.length <= 30 && /^(n|nao|nao precisa|deixa|deixa pra la|esquece|nao quero|nem|dispensa)\b/.test(n));
     if (yes) {
       const offer = ctx.longTailOffer;
       ctx.longTailOffer = undefined;
@@ -2838,7 +2841,16 @@ async function handleChoosing(
   }
   // "não gostei"/"não curti" seco: o cliente quer OUTRAS opções, não abrir mão do
   // item (27/08 r3 S17: virava "deixei de fora" + "não entendi", beco).
-  if (/^(nao|não) (gostei|curti|quero ess[ea]s?)( d[eo]ss?[ea]s?( ai)?)?[\s!.]*$/.test(normalizeMsg(text))) {
+  // "Estes não são bons. Tem que ser estilo tocha" (06/09): rejeição + característica
+  // que a Lia não conhece = busca nova com a característica ("isqueiro tocha"), inclusive
+  // no Mercado Livre quando as opções vieram de lá. Rejeição sozinha = próximas opções.
+  const styleAsk = normalizeMsg(text).match(STYLE_ASK_RE);
+  if (styleAsk) {
+    // "tem que ser estilo tocha" → atributo "tocha" (o "estilo/tipo" é só conectivo).
+    const attr = styleAsk[1].replace(/[.!?]+$/, "").replace(/^(?:estilo|tipo|modelo|de|do|da|um|uma)\s+/, "").trim();
+    if (await researchChoice(phone, convoId, ctx, current, `${current.baseQuery ?? current.query} ${attr}`)) return;
+  }
+  if (/^(nao|não) (gostei|curti|quero ess[ea]s?)( d[eo]ss?[ea]s?( ai)?)?[\s!.]*$/.test(normalizeMsg(text)) || REJECT_ONLY_RE.test(normalizeMsg(text))) {
     await pageMoreOptions(phone, convoId, ctx, store);
     return;
   }
@@ -2998,6 +3010,12 @@ async function handleChoosing(
   // as new products — re-show the options instead.
   if (intent.kind === "free_text" && !isQuestion(text)) {
     const added = await buildChoicesWithSearchNotice(phone, text, undefined, undefined, undefined, ctx.cep);
+    // "Isqueiro maçarico" enquanto escolhe "isqueiro" (06/09): nada nas vitrines → busca
+    // direto no Mercado Livre com a frase nova e troca as opções, sem oferecer/perguntar.
+    if (!added.autoAdded.length && !added.pending.length && sharesProductNoun(text, current.query) && mercadoLivreEnabled()) {
+      ctx.longTailOffer = undefined;
+      if (await researchChoice(phone, convoId, ctx, current, text)) return;
+    }
     // "Só shampoo normal, sem preferência de marca" ENQUANTO escolhe shampoo é
     // esclarecimento do MESMO item — substitui as opções na mesa, nunca vira uma
     // segunda linha (rodada 5 dos testes de 14/08: a linha duplicada fez o cliente
@@ -3066,7 +3084,8 @@ async function choiceCandidates(store: StoreConnector, ctx: DeliveryContext, p: 
   const query = active.length ? (p.baseQuery ?? p.query) : p.query;
   let pool: ChoiceOption[];
   if (!ctx.storeKey) {
-    const candidates = await gatherCrossStoreCandidates(query, 40, 12);
+    const fromLongTail = (p.options ?? []).some((o) => o.storeKey === "mercadolivre");
+    const candidates = await gatherCrossStoreCandidates(query, 40, 12, { forceLongTail: fromLongTail });
     pool = candidates.map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }));
   } else {
     pool = (await store.searchItems(query, 40)).map((item) => toChoiceOption(item, { storeKey: store.key, storeLabel: store.label }));
@@ -3216,6 +3235,31 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
 // attribute. Only results where the attribute ACTUALLY applies count (attrMatchesItem)
 // — otherwise the search degrades to the base tokens and we'd re-show the same list
 // under a dishonest header. No match → say so and re-show what exists.
+// "estes não são bons" (rejeição) opcional + "tem que ser / estilo / tipo X".
+const REJECT_PREFIX = "(?:(?:estes|esses|essas|estas|isso|esse|essa|nenhum|nenhuma)\\s+(?:nao|não)\\s+(?:sao|são|servem?|prestam?|e|eh|da|dao)\\s*(?:bons|boas|bom|boa|legal|legais|isso)?[\\s.!,]*)?";
+const STYLE_ASK_RE = new RegExp(`^${REJECT_PREFIX}(?:tem que ser|precisa ser|tinha que ser|teria que ser|tem de ser|quero (?:um |uma )?(?:do |de )?(?:estilo|tipo|modelo)|estilo|tipo|modelo) (.{2,40})$`);
+const REJECT_ONLY_RE = new RegExp(`^(?:estes|esses|essas|estas|isso|esse|essa|nenhum|nenhuma)\\s+(?:nao|não)\\s+(?:sao|são|servem?|prestam?|e|eh|da|dao)\\s*(?:bons|boas|bom|boa|legal|legais|isso)?[\\s.!,]*$`);
+
+// Busca nova (vitrines + Mercado Livre) para a escolha ABERTA com uma frase mais
+// específica ("isqueiro maçarico", "isqueiro tocha") e troca as opções na mesa. Devolve
+// false quando nada aparece — o chamador segue o caminho de sempre.
+async function researchChoice(phone: string, convoId: string, ctx: DeliveryContext, current: PendingChoice, text: string): Promise<boolean> {
+  const found = await buildChoicesWithSearchNotice(phone, text, undefined, undefined, true, ctx.cep);
+  const choice = found.pending.find((p) => sharesProductNoun(p.query, current.query)) ?? found.pending[0];
+  if (!choice?.options.length) return false;
+  current.baseQuery = undefined;
+  current.attrs = undefined;
+  current.query = choice.query;
+  const remembered = new Set((current.shownOptions ?? current.options).map((o) => o.sku));
+  current.shownOptions = [...(current.shownOptions ?? current.options), ...choice.options.filter((o) => !remembered.has(o.sku))];
+  current.options = choice.options;
+  current.shownSkus = [...new Set([...(current.shownSkus ?? []), ...choice.options.map((o) => o.sku)])];
+  ctx.longTailOffer = undefined;
+  await writeCtx(convoId, ctx);
+  await sendChoices(phone, current, copy.narrowedChoices(current.query));
+  return true;
+}
+
 async function refineOptions(phone: string, convoId: string, ctx: DeliveryContext, store: StoreConnector, attrs: string[]) {
   const p = ctx.pending![0];
   const base = p.baseQuery ?? p.query;
@@ -3754,7 +3798,8 @@ async function handleConciergeRequest(
           phrase: line.phrase,
           qty: line.qty,
           ...(line.qtyExplicit ? { qtyExplicit: true } : {}),
-          ...(line.cap != null ? { cap: line.cap } : {})
+          ...(line.cap != null ? { cap: line.cap } : {}),
+          ...(line.raw ? { raw: line.raw } : {})
         }))
       }
     : undefined;
@@ -3988,24 +4033,30 @@ async function rescueLongTail(
 ) {
   void userId;
   const unavailable = lines.map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
-  for (const line of lines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
-  const retryText = lines.map((line) => (line.cap != null ? `${line.phrase} até ${line.cap} reais` : line.phrase)).join(", ");
+  // A busca no ML usa a frase COMPLETA do cliente quando a IA encurtou (06/09).
+  const searchPhrase = (line: (typeof lines)[number]) => line.raw ?? line.phrase;
+  for (const line of lines) prefetchMercadoLivre(splitPriceCap(searchPhrase(line)).phrase);
+  const retryText = lines.map((line) => (line.cap != null ? `${searchPhrase(line)} até ${line.cap} reais` : searchPhrase(line))).join(", ");
   const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
   const rescued: PendingChoice[] = [];
   for (const choice of retry.pending) {
     const strong = retry.reranked ? choice.options : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
     if (!strong.length) continue;
-    const original = lines.find((line) => normalizeMsg(line.phrase) === normalizeMsg(choice.query));
+    const original = lines.find((line) => [line.phrase, line.raw].some((v) => v && normalizeMsg(v) === normalizeMsg(choice.query)));
     rescued.push(original?.qtyExplicit ? { ...choice, options: strong, qty: original.qty, qtyExplicit: true } : { ...choice, options: strong });
   }
   const rescuedQueries = new Set(rescued.map((choice) => normalizeMsg(choice.query)));
-  const still = lines.filter((line) => !rescuedQueries.has(normalizeMsg(line.phrase))).map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
+  const still = lines
+    .filter((line) => !rescuedQueries.has(normalizeMsg(line.phrase)) && !rescuedQueries.has(normalizeMsg(line.raw ?? "")))
+    .map((line) => (line.qty > 1 ? `${line.qty}x ${line.phrase}` : line.phrase));
   ctx.flow = "delivery";
   ctx.storeKey = CONCIERGE_STORE_KEY;
   ctx.cep = ctx.cep ?? userCep ?? undefined;
   if (rescued.length) {
     ctx.step = "choosing";
-    ctx.pending = rescued;
+    // Escolha aberta do MESMO produto ("isqueiro" genérico) é substituída pela busca nova
+    // ("isqueiro pra charuto"); escolhas de outros itens continuam na fila.
+    ctx.pending = [...rescued, ...(ctx.pending ?? []).filter((p) => !rescued.some((r) => sharesProductNoun(r.query, p.query)))];
     await writeCtx(convoId, ctx);
     if (still.length) await reply(phone, copy.itemsNotAvailableWithOptions(still));
     if (rescued.length > 1) await reply(phone, copy.choiceSequence(rescued.map((p) => p.query)));

@@ -169,7 +169,7 @@ test("pagamento com valor diferente do total NÃO aprova: nota, alerta ao operad
 test("Pix antigo pago depois da troca de cobrança NÃO aprova (id não é o vigente)", async (t) => {
   if (!dbOk) return t.skip();
   const { orderId } = await orderInStep("awaiting_payment", { pixId: "222", pixCopiaECola: "00020126PIX-222" });
-  await markDeliveryOrderPaid(orderId, { provider: "mercadopago", paymentId: "111", amount: 30 });
+  await markDeliveryOrderPaid(orderId, { provider: "mercadopago", paymentId: "112", amount: 30 });
   const order = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: orderId } });
   assert.equal(order.status, "awaiting_payment");
   assert.match(order.notes ?? "", /não é a cobrança vigente/);
