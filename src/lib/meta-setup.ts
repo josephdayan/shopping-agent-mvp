@@ -83,16 +83,19 @@ export const ADDRESS_FLOW_JSON = {
 // do envio; a foto vem por link. O toque em "Escolher este" volta como `button.payload`,
 // que o parseInbound já lê. Limites: body do card ≤ 160, botão ≤ 25, corpo ≤ 1024, e o
 // corpo não pode terminar em variável.
-export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel";
+// v2 (07/09, dono: "precisa ter o botão outras opções"): 2 botões por card e iguais em
+// todos → "Escolher este" + "Outras opções"; a página do produto fica por texto
+// ("detalhes 2"). Nome novo porque template editado volta pra revisão.
+export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel_v2";
 export const CAROUSEL_CARD_COUNTS = [2, 3] as const;
 // Variável não pode abrir nem fechar o texto (2ª recusa da Meta, 07/09).
-export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados pra ver todas e toca em *Escolher este* no card que preferir.";
+export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados e toca em *Escolher este* no card que preferir. Pra ver a página de um produto, escreva *detalhes* e o número dele.";
 // A Meta exige proporção de palavras fixas por variável ("Params Words Ratio Exceeds
 // Limit", 1ª tentativa 07/09): o card precisa de rótulos, não só as 3 variáveis.
 export const CAROUSEL_CARD_BODY = "Produto: {{1}}\nPreço do item: *{{2}}*\nPrazo de entrega da loja: {{3}} (contado da compra)";
 export const CAROUSEL_BUTTONS = [
   { type: "quick_reply", text: "Escolher este" },
-  { type: "quick_reply", text: "Ver detalhes" }
+  { type: "quick_reply", text: "Outras opções" }
 ] as const;
 
 export function carouselTemplateName(cards: number): string {

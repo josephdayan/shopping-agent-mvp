@@ -303,7 +303,8 @@ export function buildCarouselPayload(to: string, templateName: string, header: s
                 ]
               },
               { type: "button", sub_type: "quick_reply", index: "0", parameters: [{ type: "payload", payload: option.id.slice(0, 128) }] },
-              { type: "button", sub_type: "quick_reply", index: "1", parameters: [{ type: "payload", payload: `optinfo:${option.sku ?? "none"}`.slice(0, 128) }] }
+              // "Outras opções" em todo card (Meta: botões iguais em todos): volta como opt:outras.
+              { type: "button", sub_type: "quick_reply", index: "1", parameters: [{ type: "payload", payload: "opt:outras" }] }
             ]
           }))
         }
