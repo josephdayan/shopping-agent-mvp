@@ -1,5 +1,29 @@
 # Lia — contexto obrigatório para agentes
 
+## Atualização 07/09/2026 — Mercado Livre entra sozinho: acabou o "procuro no Mercado Livre?"
+
+**Decisão do dono (07/09):** "não tem que perguntar se ele quer no Mercado Livre, só tem
+pesquisar. Se não tiver matches boas nas lojas normais já tem que ir pro Mercado Livre se
+a IA julgar melhor." Reverte o opt-in da revisão de 02/09.
+
+- **Padrão agora é automático.** `longTailOptInEnabled()` só é verdadeiro com
+  `LIA_LONGTAIL_OPTIN=true` (kill-switch de custo; a Vercel não tem a env → automático).
+  Fluxo: vitrines locais primeiro; se nenhuma passa no piso (`needsLongTailSearch`), o ML
+  entra na MESMA busca; se o rerank da IA descartou tudo o que havia, o resgate
+  (`turnElapsedMs <= LIA_RESCUE_BUDGET_MS`) busca no ML e mostra as opções direto. Quem
+  julga se a vitrine local serviu é a IA (rerank) — esse é o "se a IA julgar melhor".
+- **Frase completa do cliente no ML também no caminho automático.** `ParsedLine.raw`
+  (06/09) agora chega ao `gatherCrossStoreCandidates` por `longTailQuery` (só o ML recebe a
+  frase completa; as vitrines locais seguem com a linha curta), e o resgate automático
+  busca por `raw ?? phrase`. `ChoicesResult.lines` expõe as linhas extraídas pra linha
+  "fraca" (descartada pelo piso/rerank) recuperar o `raw`.
+- **A oferta (`longTailOffer`, botões `longtail_sim`/`longtail_nao`) continua no código**
+  só pro modo opt-in; os testes dela ligam a env por teste. Aviso de busca lenta
+  (`buildChoicesWithSearchNotice`) continua cobrindo a busca fria do ML.
+- Testes: `tests/lighter-longtail.test.ts` ganhou o caso padrão ("queria um isqueiro pra
+  charuto" → maçaricos do ML sem pergunta) e o do `longTailQuery`. `.env.example` atualizado.
+
+
 
 ## 06/09/2026 — esforço de autenticação e identidade na entrega
 

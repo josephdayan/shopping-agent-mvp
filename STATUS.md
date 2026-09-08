@@ -102,6 +102,13 @@ compra por evento e acompanhar por evidência/pacote. Métricas do razão são u
 recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 
+## 07/09/2026 — Mercado Livre sem pergunta
+
+Decisão do dono: acabou o "procuro no Mercado Livre?". Sem match bom nas vitrines (piso
+léxico e, no resgate, o rerank da IA), o ML entra na mesma busca e as opções aparecem
+direto; a frase completa do cliente vai pra essa busca. `LIA_LONGTAIL_OPTIN=true` volta ao
+modo com pergunta (kill-switch de custo). Detalhe em AGENTS.md (07/09).
+
 ## 06/09/2026 — isqueiro pra charuto
 
 Caso real do pai do dono: a IA encurtava a frase antes de buscar no Mercado Livre,
