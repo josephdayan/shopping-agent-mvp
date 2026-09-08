@@ -19,6 +19,11 @@ Brasil, mesmo dentro da janela de 24h) e com número de cards fixo por template.
 - Testes: `tests/carousel.test.ts` (limites do template, payload, envio, fallback).
 - Ativação: deploy → `?action=carousel` → esperar APPROVED em `?action=templates` →
   `LIA_CAROUSEL=true` na Vercel. Se a Meta recusar, o motivo aparece em `templates`.
+- Criados em 07/09 pela sessão do /ops (`vitrine_carrossel_2` id 1056736890461959,
+  `vitrine_carrossel_3` id 1540758381155769), status PENDING. Duas recusas antes, ambas
+  regra de texto da Meta: (1) "Params Words Ratio Exceeds Limit" — card só com variáveis;
+  precisa de rótulos fixos; (2) "Leading or Trailing Params Not Allowed" — variável não
+  pode abrir nem fechar o corpo nem o card. `tests/carousel.test.ts` guarda as duas.
 
 
 ## 07/09/2026 — referências: serviços por WhatsApp no Brasil e no mundo
