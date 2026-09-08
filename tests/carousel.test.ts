@@ -20,7 +20,10 @@ test("template do carrossel respeita os limites da Meta (2 e 3 cards)", () => {
     assert.equal(t.language, "pt_BR");
     const body = t.components[0];
     assert.ok(body.text.length <= 1024);
-    assert.doesNotMatch(body.text, /\{\{\d+\}\}\s*$/, "corpo não pode terminar em variável");
+    for (const text of [body.text, t.components[1].cards[0].components[1].text]) {
+      assert.doesNotMatch(text, /\{\{\d+\}\}\s*$/, `não pode terminar em variável: ${text}`);
+      assert.doesNotMatch(text, /^\s*\{\{\d+\}\}/, `não pode começar com variável: ${text}`);
+    }
     assert.ok(body.example.body_text[0].length === (body.text.match(/\{\{\d+\}\}/g) ?? []).length);
     const carousel = t.components[1];
     assert.equal(carousel.cards.length, cards);
