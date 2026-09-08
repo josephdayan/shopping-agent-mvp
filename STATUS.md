@@ -106,8 +106,9 @@ recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 LIGADO em 07/09 à noite: templates `vitrine_carrossel_2/_3` APROVADOS pela Meta em
 ~5 min (marketing, ~R$0,33/envio), `LIA_CAROUSEL=true` na Vercel. Vitrine com 2–3 opções
-e foto vai numa mensagem só ("Escolher este"/"Ver detalhes" por card); 1 opção ou foto
-ruim cai nos cards soltos. Observar a primeira vitrine real; desligar = env false.
+e foto vai numa mensagem só ("Escolher este" + "Outras opções" por card, v2 pedida pelo
+dono na mesma noite; "Ver detalhes" virou texto); 1 opção ou foto ruim cai nos cards
+soltos. Observar a primeira vitrine real; desligar = env false.
 
 ## 07/09/2026 — Mercado Livre sem pergunta
 

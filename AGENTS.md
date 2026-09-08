@@ -14,8 +14,12 @@ Brasil, mesmo dentro da janela de 24h) e com número de cards fixo por template.
   `null`. O toque volta como `button.payload` = `optsku:<sku>` / `optinfo:<sku>`, que o
   `parseInbound` já lia. Erro do Graph (template não aprovado) → `null` com warn.
 - `sendChoices`: com `LIA_CAROUSEL=true` tenta o carrossel antes; qualquer `null` cai nos
-  cards soltos de sempre (grátis). Sem "Outras opções" no carrossel (2 botões por card):
-  o cliente digita "outras".
+  cards soltos de sempre (grátis).
+- **v2 (mesma noite, dono: "precisa ter o botão outras opções")**: a Meta permite 2 botões
+  por card e IGUAIS em todos, então cada card leva "Escolher este" + "Outras opções"
+  (`opt:outras`); "Ver detalhes" saiu do carrossel e o corpo diz "escreva *detalhes* e o
+  número". Templates novos `vitrine_carrossel_v2_2` (id 2073146943589296) e
+  `_v2_3` (id 1397179925708771); os v1 ficam órfãos na Meta (podem ser apagados).
 - Testes: `tests/carousel.test.ts` (limites do template, payload, envio, fallback).
 - Ativação: deploy → `?action=carousel` → esperar APPROVED em `?action=templates` →
   `LIA_CAROUSEL=true` na Vercel. Se a Meta recusar, o motivo aparece em `templates`.
