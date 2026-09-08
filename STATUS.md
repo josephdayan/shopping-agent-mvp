@@ -104,10 +104,10 @@ recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 ## 07/09/2026 — carrossel da vitrine
 
-Código publicado e templates `vitrine_carrossel_2/_3` criados na Meta (marketing,
-~R$0,33/envio), status PENDING em 07/09 à noite. Envio em uma mensagem com "Escolher
-este"/"Ver detalhes" por card, fallback pros cards soltos. Falta: aprovação da Meta e
-ligar `LIA_CAROUSEL=true` na Vercel.
+LIGADO em 07/09 à noite: templates `vitrine_carrossel_2/_3` APROVADOS pela Meta em
+~5 min (marketing, ~R$0,33/envio), `LIA_CAROUSEL=true` na Vercel. Vitrine com 2–3 opções
+e foto vai numa mensagem só ("Escolher este"/"Ver detalhes" por card); 1 opção ou foto
+ruim cai nos cards soltos. Observar a primeira vitrine real; desligar = env false.
 
 ## 07/09/2026 — Mercado Livre sem pergunta
 
