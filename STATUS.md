@@ -102,6 +102,12 @@ compra por evento e acompanhar por evidência/pacote. Métricas do razão são u
 recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 
+## 07/09/2026 — carrossel da vitrine
+
+Código pronto e publicado: templates `vitrine_carrossel_2/_3` (marketing, ~R$0,33/envio),
+envio em uma mensagem com "Escolher este"/"Ver detalhes" por card, fallback pros cards
+soltos. Falta: criar os templates na Meta, aprovação, e ligar `LIA_CAROUSEL=true`.
+
 ## 07/09/2026 — Mercado Livre sem pergunta
 
 Decisão do dono: acabou o "procuro no Mercado Livre?". Sem match bom nas vitrines (piso

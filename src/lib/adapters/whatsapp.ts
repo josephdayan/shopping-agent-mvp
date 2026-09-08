@@ -264,6 +264,53 @@ export function buildTemplatePayload(to: string, input: WhatsAppTemplateInput) {
   };
 }
 
+// Carrossel da vitrine (dono, 07/09): UMA mensagem de template de marketing com 2–3 cards
+// (foto + nome/preço/prazo + "Escolher este"/"Ver detalhes"). O template é fixo em número
+// de cards (vitrine_carrossel_2/_3, criados em /api/ops/meta-setup?action=carousel); só o
+// conteúdo é variável. Cobrado por envio (~R$0,33): liga com LIA_CAROUSEL=true.
+export function carouselEnabled(): boolean {
+  return process.env.LIA_CAROUSEL === "true";
+}
+
+function templateParam(text: string, max = 1024) {
+  return text.replace(/\s*\n+\s*/g, " · ").replace(/\s{4,}/g, "   ").trim().slice(0, max) || "-";
+}
+
+export function buildCarouselPayload(to: string, templateName: string, header: string, options: WhatsAppDeliveryChoice[]) {
+  return {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: normalizeWhatsAppPhone(to),
+    type: "template",
+    template: {
+      name: templateName,
+      language: { code: process.env.LIA_TEMPLATE_LANG ?? "pt_BR" },
+      components: [
+        { type: "body", parameters: [{ type: "text", text: templateParam(header) }] },
+        {
+          type: "carousel",
+          cards: options.map((option, index) => ({
+            card_index: index,
+            components: [
+              { type: "header", parameters: [{ type: "image", image: { link: safeMediaLink(option.imageUrl ?? "") } }] },
+              {
+                type: "body",
+                parameters: [
+                  { type: "text", text: templateParam(option.badge ? `⭐ ${option.badge} · ${option.name}` : option.name, 90) },
+                  { type: "text", text: formatBRL(option.displayPrice) },
+                  { type: "text", text: templateParam(option.delivery ?? "Entrega pela loja", 60) }
+                ]
+              },
+              { type: "button", sub_type: "quick_reply", index: "0", parameters: [{ type: "payload", payload: option.id.slice(0, 128) }] },
+              { type: "button", sub_type: "quick_reply", index: "1", parameters: [{ type: "payload", payload: `optinfo:${option.sku ?? "none"}`.slice(0, 128) }] }
+            ]
+          }))
+        }
+      ]
+    }
+  };
+}
+
 export type WhatsAppListInput = {
   body: string;
   buttonText: string;
@@ -512,6 +559,28 @@ export const whatsappAdapter = {
   async sendDeliveryChoices(to: string, options: WhatsAppDeliveryChoice[]) {
     if (process.env.WHATSAPP_PROVIDER !== "meta" || !options.length) return null;
     return sendMetaDeliveryChoices(to, options.slice(0, 3));
+  },
+
+  // Carrossel (uma mensagem) no lugar dos cards soltos. null = não deu (desligado, 1
+  // opção, foto faltando/ruim, template não aprovado): o chamador cai nos cards de sempre.
+  async sendDeliveryCarousel(to: string, header: string, options: WhatsAppDeliveryChoice[]) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta" || !carouselEnabled()) return null;
+    const cards = options.slice(0, 3);
+    if (cards.length < 2) return null;
+    if (cards.some((option) => !isPublicMediaUrl(option.imageUrl ?? ""))) return null;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    if (!token || !phoneNumberId) throw new Error("Missing WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    const alive = await Promise.all(cards.map((option) => mediaLinkAlive(safeMediaLink(option.imageUrl ?? ""))));
+    if (alive.some((ok) => !ok)) return null;
+    const { carouselTemplateName } = await import("@/lib/meta-setup");
+    try {
+      const message = await sendMetaPayload(phoneNumberId, token, buildCarouselPayload(to, carouselTemplateName(cards.length), header, cards));
+      return { provider: "meta", mode: "delivery_choice_carousel", to, message };
+    } catch (error) {
+      console.warn("[whatsapp:meta:carousel:fallback-cards]", error instanceof Error ? error.message : error);
+      return null;
+    }
   },
 
   async sendQuantityChoices(to: string, productName: string) {

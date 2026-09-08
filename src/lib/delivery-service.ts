@@ -1,6 +1,6 @@
 import { displayPrice, serviceFeeForItems } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
-import { whatsappAdapter } from "@/lib/adapters/whatsapp";
+import { carouselEnabled, whatsappAdapter } from "@/lib/adapters/whatsapp";
 import { getStore, pickStoreForQueries, gatherCrossStoreCandidates, prefetchLongTailIfNeeded, longTailOptInEnabled, type StoreCandidate, type StoreConnector } from "@/lib/stores";
 import { mercadoLivreEnabled, prefetchMercadoLivre, searchMercadoLivre } from "@/lib/stores/mercadolivre";
 import { mlItemIdFrom } from "@/lib/ml-freight";
@@ -487,26 +487,34 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
   // Meta supports reply buttons inside the 24h customer-service window. One card per
   // option keeps each "Escolher este" button attached to the correct product.
   if (process.env.WHATSAPP_PROVIDER === "meta") {
+    // O id do botão carrega o SKU, não a posição: card antigo (de antes do
+    // "outras"/refino) tocado depois escolhe o produto DAQUELE card — id
+    // posicional confirmava outro produto quando a lista trocava por baixo.
+    const choices = p.options.map((o) => ({
+      id: `optsku:${o.sku}`,
+      name: customerChoiceName(p, o),
+      displayPrice: display(o.unitPrice),
+      imageUrl: o.imageUrl,
+      delivery: o.delivery,
+      ...(o.repeat ? { badge: "Você já pediu este" } : {}),
+      // Liga o botão "Ver detalhes" do card quando o produto tem página real.
+      productUrl: o.productUrl,
+      sku: o.sku
+    }));
+    // Carrossel (dono, 07/09): cabeçalho + cards numa mensagem só. Se não der (1 opção,
+    // foto faltando, template não aprovado, desligado), segue nos cards soltos.
+    if (carouselEnabled()) {
+      try {
+        markTurnReplied();
+        if (await whatsappAdapter.sendDeliveryCarousel(phone, header ?? choicesHeaderFor(p), choices)) return;
+      } catch (error) {
+        console.warn("[whatsapp:meta:carousel:error]", error instanceof Error ? error.message : error);
+      }
+    }
     await reply(phone, header ?? choicesHeaderFor(p));
     try {
       markTurnReplied();
-      const interactive = await whatsappAdapter.sendDeliveryChoices(
-        phone,
-        // O id do botão carrega o SKU, não a posição: card antigo (de antes do
-        // "outras"/refino) tocado depois escolhe o produto DAQUELE card — id
-        // posicional confirmava outro produto quando a lista trocava por baixo.
-        p.options.map((o) => ({
-          id: `optsku:${o.sku}`,
-          name: customerChoiceName(p, o),
-          displayPrice: display(o.unitPrice),
-          imageUrl: o.imageUrl,
-          delivery: o.delivery,
-          ...(o.repeat ? { badge: "Você já pediu este" } : {}),
-          // Liga o botão "Ver detalhes" do card quando o produto tem página real.
-          productUrl: o.productUrl,
-          sku: o.sku
-        }))
-      );
+      const interactive = await whatsappAdapter.sendDeliveryChoices(phone, choices);
       if (interactive) return;
     } catch (error) {
       console.warn("[whatsapp:meta:choices:fallback-text]", error instanceof Error ? error.message : error);

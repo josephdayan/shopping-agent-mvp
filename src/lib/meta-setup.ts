@@ -75,6 +75,46 @@ export const ADDRESS_FLOW_JSON = {
   ]
 };
 
+// Carrossel da vitrine (dono, 07/09: "eu quero fazer carrossel"). Na Meta, carrossel só
+// existe como TEMPLATE de MARKETING (não há carrossel livre na janela de 24h): cada envio
+// é cobrado (~R$0,33 no Brasil) e o número de cards é FIXO por template — por isso um
+// template por tamanho (2 e 3 cards; 1 opção continua no card simples). O texto do card
+// e o payload do botão são variáveis: nome, preço, prazo e `optsku:<sku>` entram na hora
+// do envio; a foto vem por link. O toque em "Escolher este" volta como `button.payload`,
+// que o parseInbound já lê. Limites: body do card ≤ 160, botão ≤ 25, corpo ≤ 1024, e o
+// corpo não pode terminar em variável.
+export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel";
+export const CAROUSEL_CARD_COUNTS = [2, 3] as const;
+export const CAROUSEL_BODY = "{{1}} Toca em *Escolher este* no card que preferir 👇";
+export const CAROUSEL_CARD_BODY = "{{1}}\n*{{2}}*\n{{3}}";
+export const CAROUSEL_BUTTONS = [
+  { type: "quick_reply", text: "Escolher este" },
+  { type: "quick_reply", text: "Ver detalhes" }
+] as const;
+
+export function carouselTemplateName(cards: number): string {
+  return `${CAROUSEL_TEMPLATE_PREFIX}_${cards}`;
+}
+
+export function buildCarouselTemplate(cards: number, headerHandle: string) {
+  const card = {
+    components: [
+      { type: "header", format: "image", example: { header_handle: [headerHandle] } },
+      { type: "body", text: CAROUSEL_CARD_BODY, example: { body_text: [["Ração Golden Adulto 15kg", "R$ 189,90", "Petz · prazo da loja: 1 dia útil"]] } },
+      { type: "buttons", buttons: CAROUSEL_BUTTONS.map((b) => ({ ...b })) }
+    ]
+  };
+  return {
+    name: carouselTemplateName(cards),
+    language: "pt_BR",
+    category: "marketing",
+    components: [
+      { type: "body", text: CAROUSEL_BODY, example: { body_text: [["Opções de *ração pra cachorro*:"]] } },
+      { type: "carousel", cards: Array.from({ length: cards }, () => JSON.parse(JSON.stringify(card))) }
+    ]
+  };
+}
+
 function creds() {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
@@ -116,7 +156,7 @@ async function ids(token: string) {
   return { appId, waba };
 }
 
-export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors";
+export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors" | "carousel" | "templates";
 
 // Erros de validação de um Flow (a Meta cria o rascunho mesmo inválido e recusa publicar).
 async function flowErrors(token: string, flowId: string) {
@@ -135,6 +175,22 @@ async function flowUpdateAndPublish(token: string, flowId: string) {
   if (list.length) return { updated, published: false, validation_errors: list };
   const published = await graph(token, `${flowId}/publish`, { method: "POST" });
   return { updated, published, status: await flowErrors(token, flowId) };
+}
+
+// Upload resumable da imagem da marca → handle usável em perfil e em exemplo de template.
+async function uploadBrandImage(token: string): Promise<string> {
+  const { appId } = await ids(token);
+  if (!appId) throw new Error("app_id não veio do debug_token");
+  const file = path.join(process.cwd(), "public/brand/lia-whatsapp-profile-hd.png");
+  const bytes = await readFile(file);
+  const session = (await graph(token, `${appId}/uploads?file_length=${bytes.length}&file_type=image/png`, { method: "POST" })) as { id: string };
+  const upload = (await graph(token, session.id, {
+    method: "POST",
+    raw: true,
+    headers: { file_offset: "0", "Content-Type": "application/octet-stream" },
+    body: new Uint8Array(bytes)
+  })) as { h: string };
+  return upload.h;
 }
 
 export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: string } = {}): Promise<Record<string, unknown>> {
@@ -158,21 +214,31 @@ export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: str
     return graph(token, `${phoneId}/whatsapp_business_profile`, { method: "POST", body: JSON.stringify(META_PROFILE) });
   }
   if (action === "picture") {
-    const { appId } = await ids(token);
-    if (!appId) throw new Error("app_id não veio do debug_token");
-    const file = path.join(process.cwd(), "public/brand/lia-whatsapp-profile-hd.png");
-    const bytes = await readFile(file);
-    const session = (await graph(token, `${appId}/uploads?file_length=${bytes.length}&file_type=image/png`, { method: "POST" })) as { id: string };
-    const upload = (await graph(token, session.id, {
-      method: "POST",
-      raw: true,
-      headers: { file_offset: "0", "Content-Type": "application/octet-stream" },
-      body: new Uint8Array(bytes)
-    })) as { h: string };
+    const handle = await uploadBrandImage(token);
     return graph(token, `${phoneId}/whatsapp_business_profile`, {
       method: "POST",
-      body: JSON.stringify({ messaging_product: "whatsapp", profile_picture_handle: upload.h })
+      body: JSON.stringify({ messaging_product: "whatsapp", profile_picture_handle: handle })
     });
+  }
+  if (action === "templates") {
+    const { waba } = await ids(token);
+    if (!waba) throw new Error("WABA id não veio do debug_token");
+    const names = CAROUSEL_CARD_COUNTS.map(carouselTemplateName);
+    const list = (await graph(token, `${waba}/message_templates?fields=name,status,category,rejected_reason,quality_score&limit=100`)) as { data?: Array<{ name: string }> };
+    return { carousel: (list.data ?? []).filter((t) => names.includes(t.name)), expected: names, enabled: process.env.LIA_CAROUSEL === "true" };
+  }
+  if (action === "carousel") {
+    const { waba } = await ids(token);
+    if (!waba) throw new Error("WABA id não veio do debug_token");
+    // A imagem de exemplo do header é só para a revisão da Meta; na hora do envio cada
+    // card recebe a foto do produto por link.
+    const handle = await uploadBrandImage(token);
+    const results: Record<string, unknown> = {};
+    for (const cards of CAROUSEL_CARD_COUNTS) {
+      const body = buildCarouselTemplate(cards, handle);
+      results[body.name] = await graph(token, `${waba}/message_templates`, { method: "POST", body: JSON.stringify(body) }).catch((e) => ({ error: String(e).slice(0, 600) }));
+    }
+    return results;
   }
   if (action === "welcome") {
     return graph(token, `${phoneId}/conversational_automation`, {

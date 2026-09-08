@@ -1,5 +1,26 @@
 # Lia — contexto obrigatório para agentes
 
+## 07/09/2026 — carrossel da vitrine (dono: "eu quero fazer carrossel")
+
+Na Meta, carrossel só existe como **template de MARKETING**: cobrado por envio (~R$0,33 no
+Brasil, mesmo dentro da janela de 24h) e com número de cards fixo por template. Feito:
+- `meta-setup.ts`: `buildCarouselTemplate(n, handle)` gera `vitrine_carrossel_2` e `_3`
+  (corpo com 1 variável = cabeçalho da vitrine; card = foto por link + `{{nome}}`,
+  `{{preço}}`, `{{prazo}}` + botões "Escolher este" e "Ver detalhes"). Ações novas em
+  `/api/ops/meta-setup`: `?action=carousel` cria os dois templates (imagem de exemplo =
+  marca, upload resumable) e `?action=templates` mostra status/motivo de recusa.
+- `adapters/whatsapp.ts`: `buildCarouselPayload` + `sendDeliveryCarousel(to, header,
+  options)`: 2–3 opções, todas com foto pública e viva → UMA mensagem de template; senão
+  `null`. O toque volta como `button.payload` = `optsku:<sku>` / `optinfo:<sku>`, que o
+  `parseInbound` já lia. Erro do Graph (template não aprovado) → `null` com warn.
+- `sendChoices`: com `LIA_CAROUSEL=true` tenta o carrossel antes; qualquer `null` cai nos
+  cards soltos de sempre (grátis). Sem "Outras opções" no carrossel (2 botões por card):
+  o cliente digita "outras".
+- Testes: `tests/carousel.test.ts` (limites do template, payload, envio, fallback).
+- Ativação: deploy → `?action=carousel` → esperar APPROVED em `?action=templates` →
+  `LIA_CAROUSEL=true` na Vercel. Se a Meta recusar, o motivo aparece em `templates`.
+
+
 ## 07/09/2026 — referências: serviços por WhatsApp no Brasil e no mundo
 
 Levantamento a pedido do dono (Magalu, Magie, JioMart, Uber Índia, iFood, KLM, MyGov, Poke,
