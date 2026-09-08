@@ -1,5 +1,14 @@
 # Lia — contexto obrigatório para agentes
 
+## 07/09/2026 — referências: serviços por WhatsApp no Brasil e no mundo
+
+Levantamento a pedido do dono (Magalu, Magie, JioMart, Uber Índia, iFood, KLM, MyGov, Poke,
+Luzia/Zapia, Yohana/Duckbill, Magic, Rappi) com números e a lição de cada um; padrões de
+quem deu certo (transação curta no chat, começar com quem já confia, proatividade,
+documento no chat, áudio/foto/PDF como entrada, bot de nicho com dinheiro). Detalhe em
+[docs/servicos-whatsapp-referencias-2026-09-07.md](docs/servicos-whatsapp-referencias-2026-09-07.md).
+
+
 ## 07/09/2026 — concorrência: "não existe uma Lia" era falso
 
 Pesquisa web a pedido do dono. O modelo existe em pedaços: Magic (EUA, 2015, "qualquer
