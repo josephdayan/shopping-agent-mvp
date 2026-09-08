@@ -185,19 +185,22 @@ export async function prefetchLongTailIfNeeded(query: string): Promise<void> {
 // veiculares) com o carregador de parede USB-C parado na Pague Menos. Quem decide o
 // que aparece é a camada de cima (rerank semântico; fallback = este ranking global).
 export type StoreCandidate = { store: StoreConnector; item: CatalogItem };
-// Cauda longa OPT-IN (revisão 02/09): por padrão a primeira busca é só nas vitrines
-// locais; o Mercado Livre (actor pago, 20–75s frio) só roda quando o cliente responde
-// "sim" à oferta — ou quando a rota já falhou de propósito (forceLongTail).
-// LIA_LONGTAIL_OPTIN=false volta ao comportamento automático.
+// Cauda longa AUTOMÁTICA (dono, 07/09: "não tem que perguntar se ele quer no Mercado
+// Livre, só tem pesquisar"): quando nenhuma vitrine local passa no piso de relevância (e,
+// no resgate, quando o rerank da IA descartou tudo), o Mercado Livre entra na mesma
+// busca, sem pergunta. `LIA_LONGTAIL_OPTIN=true` volta ao modo de 02/09, em que o ML só
+// rodava depois de um "sim" (mantido como kill-switch de custo; os testes da oferta o usam).
 export function longTailOptInEnabled(): boolean {
-  return process.env.LIA_LONGTAIL_OPTIN !== "false";
+  return process.env.LIA_LONGTAIL_OPTIN === "true";
 }
 
 export async function gatherCrossStoreCandidates(
   query: string,
   limit = 12,
   perStore = 4,
-  options?: { onLongTailSearch?: () => void; forceLongTail?: boolean }
+  // `longTailQuery`: frase COMPLETA do cliente para o ML quando a IA encurtou a linha
+  // ("isqueiro pra charuto" → "isqueiro"); as vitrines locais continuam com a frase curta.
+  options?: { onLongTailSearch?: () => void; forceLongTail?: boolean; longTailQuery?: string }
 ): Promise<StoreCandidate[]> {
   const stores = listStores();
   const longTail = stores.find((store) => store.key === mercadoLivreStore.key);
@@ -216,7 +219,7 @@ export async function gatherCrossStoreCandidates(
   let ranked = localRanked;
   if (longTail && (options?.forceLongTail || (!longTailOptInEnabled() && needsLongTailSearch(query, localRanked)))) {
     options?.onLongTailSearch?.();
-    const longTailHits = await searchSelectedStores([longTail], query, perStore);
+    const longTailHits = await searchSelectedStores([longTail], options?.longTailQuery ?? query, perStore);
     ranked = rankStoreCandidates(query, [...localHits, ...longTailHits]);
   }
   // Variantes do mesmo produto (cada loja manda seu top-4, que costuma ser a mesma

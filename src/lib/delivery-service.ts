@@ -175,7 +175,11 @@ async function buildChoices(
       const { phrase: searchPhrase, cap } = splitPriceCap(line.phrase);
       let candidates: StoreCandidate[];
       if (crossStore) {
-        candidates = await gatherCrossStoreCandidates(searchPhrase, 12, 4, { onLongTailSearch, forceLongTail });
+        candidates = await gatherCrossStoreCandidates(searchPhrase, 12, 4, {
+          onLongTailSearch,
+          forceLongTail,
+          ...(line.raw ? { longTailQuery: splitPriceCap(line.raw).phrase } : {})
+        });
       } else {
         const lineStore = lockedStoreKey ? getStore(lockedStoreKey) : await pickStoreForQueries([searchPhrase]);
         candidates = (await lineStore.searchItems(searchPhrase, 12)).map((item) => ({ store: lineStore, item }));
@@ -293,6 +297,7 @@ async function buildChoices(
     pending,
     notFound,
     notFoundLines,
+    lines,
     reranked: Boolean(rerank),
     greetingOnly: greetingOnly && autoAdded.length === 0 && pending.length === 0,
     containsMedicine,
@@ -3732,11 +3737,13 @@ async function handleConciergeRequest(
       : choice.options.filter((option) => conciergeMatchIsStrong(choice.query, option));
     if (strong.length) pending.push({ ...choice, options: strong });
     else {
+      const rawPhrase = raw.lines.find((line) => normalizeMsg(line.phrase) === normalizeMsg(choice.query))?.raw;
       weakLines.push({
         phrase: choice.query,
         qty: choice.qty,
         ...(choice.qtyExplicit ? { qtyExplicit: true } : {}),
-        ...(choice.cap != null ? { cap: choice.cap } : {})
+        ...(choice.cap != null ? { cap: choice.cap } : {}),
+        ...(rawPhrase ? { raw: rawPhrase } : {})
       });
     }
   }
@@ -3751,7 +3758,10 @@ async function handleConciergeRequest(
   // no exato caso em que a alternativa era recusar.
   const turnElapsedMs = Date.now() - (turnStartedAt.get(phone) ?? Date.now());
   const rescueBudgetMs = Number(process.env.LIA_RESCUE_BUDGET_MS ?? 120000);
+  // Sem pergunta (dono, 07/09): o ML entra sozinho no que as vitrines não resolveram.
   const optIn = longTailOptInEnabled();
+  // A busca no ML usa a frase COMPLETA do cliente quando a IA encurtou (06/09).
+  const rescuePhrase = (line: ParsedLine) => line.raw ?? line.phrase;
   if (notFoundLines.length && mercadoLivreEnabled() && !optIn && turnElapsedMs > rescueBudgetMs) {
     // O resgate custa mais uma rodada inteira (extração + actor + rerank, ~40-70s). Com
     // o turno já estourado, recusar honesto AGORA vence morrer no teto da função em
@@ -3761,11 +3771,11 @@ async function handleConciergeRequest(
   if (notFoundLines.length && mercadoLivreEnabled() && !optIn && turnElapsedMs <= rescueBudgetMs) {
     // O retry vai re-extrair e re-rankear (~3-6s de IA); o run do ML começa já, com a
     // frase determinística, e a busca do retry se acopla a ele (dedupe em voo).
-    for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(line.phrase).phrase);
+    for (const line of notFoundLines) prefetchMercadoLivre(splitPriceCap(rescuePhrase(line)).phrase);
     // O teto volta pra frase do retry: o resgate re-extrai e o cap re-filtra no build
     // (26/08: presente "até R$50" resgatado no ML saía sem teto nenhum).
     const retryText = notFoundLines
-      .map((line) => (line.cap != null ? `${line.phrase} até ${line.cap} reais` : line.phrase))
+      .map((line) => (line.cap != null ? `${rescuePhrase(line)} até ${line.cap} reais` : rescuePhrase(line)))
       .join(", ");
     const retry = await buildChoicesWithSearchNotice(phone, retryText, undefined, undefined, true);
     const rescued: PendingChoice[] = [];
@@ -3779,18 +3789,19 @@ async function handleConciergeRequest(
       // A linha resgatada sai de "não tenho" e vira escolha normal, com a quantidade
       // que o cliente pediu na mensagem original.
       const rescuedQueries = new Set(rescued.map((choice) => normalizeMsg(choice.query)));
-      notFoundLines = notFoundLines.filter((line) => !rescuedQueries.has(normalizeMsg(line.phrase)));
+      const wasRescued = (line: ParsedLine) => rescuedQueries.has(normalizeMsg(line.phrase)) || (line.raw ? rescuedQueries.has(normalizeMsg(line.raw)) : false);
+      notFoundLines = notFoundLines.filter((line) => !wasRescued(line));
       for (const choice of rescued) {
         const original = [...raw.notFoundLines, ...weakLines].find(
-          (line) => normalizeMsg(line.phrase) === normalizeMsg(choice.query)
+          (line) => [line.phrase, line.raw].some((v) => v && normalizeMsg(v) === normalizeMsg(choice.query))
         );
         pending.push(original?.qtyExplicit ? { ...choice, qty: original.qty, qtyExplicit: true } : choice);
       }
     }
   }
-  // Cauda longa OPT-IN (revisão 02/09): o que as vitrines locais não cobriram vira uma
-  // PERGUNTA ("procuro no Mercado Livre?"), não uma busca automática paga e lenta. A
-  // resposta "sim" cai em rescueLongTail; "não" limpa. Oferta nova substitui a antiga.
+  // Modo opt-in (só com LIA_LONGTAIL_OPTIN=true): o que as vitrines não cobriram vira a
+  // PERGUNTA "procuro no Mercado Livre?"; "sim" cai em rescueLongTail. Desde 07/09 o
+  // padrão é o resgate automático acima — este bloco fica como kill-switch de custo.
   const offerLongTail = notFoundLines.length > 0 && mercadoLivreEnabled() && optIn;
   ctx.longTailOffer = offerLongTail
     ? {

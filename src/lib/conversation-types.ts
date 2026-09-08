@@ -214,6 +214,9 @@ export type ChoicesResult = {
   // disso para transformar "2 pães de forma" numa linha livre com qty=2 em vez de perder o
   // número no caminho (o fluxo legado só mostra os nomes, por isso `notFound` é string[]).
   notFoundLines: ParsedLine[];
+  // Todas as linhas extraídas (com `raw`, a frase completa do cliente quando a IA
+  // encurtou) — o resgate no ML busca pela frase completa mesmo em linha "fraca".
+  lines: ParsedLine[];
   // As opções já passaram pelo julgamento semântico da IA (rerank). Quando true, o piso
   // léxico do concierge NÃO deve rodar por cima: a IA entende sinônimos que o piso mata
   // ("escova de dente" ≈ "Escova Dental") e já descartou o que não serve.

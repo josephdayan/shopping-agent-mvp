@@ -31,7 +31,6 @@ before(async () => {
   await import("./helpers/load-env");
   process.env.LIA_ENABLE_MERCADOLIVRE = "true";
   process.env.APIFY_API_TOKEN = process.env.APIFY_API_TOKEN || "apify_test_token";
-  process.env.LIA_LONGTAIL_OPTIN = "true";
   ({ prisma } = await import("../src/lib/prisma"));
   const adapters = await import("../src/lib/adapters/whatsapp");
   ({ handleDeliveryMessage } = await import("../src/lib/delivery-service"));
@@ -82,7 +81,11 @@ async function send(phone: string, text: string): Promise<string> {
   await handleDeliveryMessage({ phone, text, messageId: `lt_${RUN}_${++seq}` });
   return outbox.slice(start).filter((m) => m.to === phone).map((m) => m.text).join("\n");
 }
+let stores: typeof import("../src/lib/stores");
+// Os casos da OFERTA (modo opt-in, LIA_LONGTAIL_OPTIN=true) continuam cobertos; o padrão
+// desde 07/09 é o ML automático (testado no fim do arquivo).
 async function genericOnTable(phone: string) {
+  process.env.LIA_LONGTAIL_OPTIN = "true";
   const offer = await send(phone, "isqueiro");
   assert.match(offer, /Mercado Livre/i, offer.slice(0, 300));
   const options = await send(phone, "longtail_sim");
@@ -124,4 +127,23 @@ test("'isqueiro charuto' no meio da escolha não vira oferta ignorada: troca dir
   const reply = await send(phone, "isqueiro charuto");
   assert.doesNotMatch(reply, /procuro no Mercado Livre/i, reply.slice(0, 300));
   assert.match(reply, /Charuto/, reply.slice(0, 400));
+});
+
+// Dono, 07/09: "não tem que perguntar se ele quer no Mercado Livre, só tem pesquisar".
+test("padrão: sem match nas vitrines, o ML entra na mesma busca, sem pergunta", async (t) => {
+  if (!dbOk) return t.skip();
+  delete process.env.LIA_LONGTAIL_OPTIN;
+  const phone = await customer();
+  const reply = await send(phone, "queria um isqueiro pra charuto");
+  assert.doesNotMatch(reply, /procuro no Mercado Livre|longtail_sim/i, reply.slice(0, 400));
+  assert.match(reply, /Tocha|Maçarico/, reply.slice(0, 400));
+});
+
+test("longTailQuery: a frase completa vai pro ML mesmo quando a linha ficou curta", async (t) => {
+  if (!dbOk) return t.skip();
+  delete process.env.LIA_LONGTAIL_OPTIN;
+  stores = stores ?? (await import("../src/lib/stores"));
+  const found = await stores.gatherCrossStoreCandidates("isqueiro", 12, 4, { longTailQuery: "isqueiro pra charuto" });
+  assert.ok(found.some((c) => /Tocha/.test(c.item.name)), found.map((c) => c.item.name).join(" | "));
+  assert.ok(!found.some((c) => /Acendedor Elétrico/.test(c.item.name)));
 });
