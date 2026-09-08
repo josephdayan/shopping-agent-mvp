@@ -1,5 +1,18 @@
 # Lia — contexto obrigatório para agentes
 
+## 07/09/2026 — concorrência: "não existe uma Lia" era falso
+
+Pesquisa web a pedido do dono. O modelo existe em pedaços: Magic (EUA, 2015, "qualquer
+coisa por SMS", cobra o cartão), Rappi "Qualquer Coisa" (Brasil, compra em qualquer loja
+desde 2018), Amazon "Buy for Me" (agente compra em ~400 mil sites, 2026), Google/Perplexity
+checkout por agente (EUA). No WhatsApp brasileiro, a **Lu do Magalu** fecha compra com Pix no
+chat sobre 37 milhões de anúncios (1P + sellers). A OpenAI **matou** o checkout no ChatGPT em
+03/2026: o cliente compra onde já tem conta. Meta proíbe bot de IA de uso geral na API desde
+15/01/2026 (bot de compras é permitido; não virar assistente geral). Combinação exata da Lia
+(WhatsApp + qualquer loja + paga no chat + entrega do varejista) não encontrada no Brasil.
+Detalhe e fontes: [docs/concorrencia-2026-09-07.md](docs/concorrencia-2026-09-07.md).
+
+
 ## Atualização 07/09/2026 — Mercado Livre entra sozinho: acabou o "procuro no Mercado Livre?"
 
 **Decisão do dono (07/09):** "não tem que perguntar se ele quer no Mercado Livre, só tem
