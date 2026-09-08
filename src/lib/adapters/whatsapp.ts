@@ -298,7 +298,8 @@ export function buildCarouselPayload(to: string, templateName: string, header: s
                 parameters: [
                   { type: "text", text: templateParam(option.badge ? `⭐ ${option.badge} · ${option.name}` : option.name, 90) },
                   { type: "text", text: formatBRL(option.displayPrice) },
-                  { type: "text", text: templateParam(option.delivery ?? "Entrega pela loja", 60) }
+                  // O rótulo "Prazo de entrega da loja:" já está no template; tira o prefixo do texto.
+                  { type: "text", text: templateParam((option.delivery ?? "confirmo na cotação").replace(/^prazo da loja:\s*/i, ""), 60) }
                 ]
               },
               { type: "button", sub_type: "quick_reply", index: "0", parameters: [{ type: "payload", payload: option.id.slice(0, 128) }] },

@@ -52,8 +52,8 @@ test("payload do envio: header por link, 3 variáveis por card e botões com sku
   assert.match(body[0], /⭐ Você já pediu este · Ração Premier/);
   assert.doesNotMatch(body[0], /\n/, "parâmetro de template não aceita quebra de linha");
   assert.equal(body[1], "R$ 210,00");
-  assert.equal(body[2], "Entrega pela loja");
-  assert.equal(cards[2].components[1].parameters[2].text, "prazo da loja: 2 dias");
+  assert.equal(body[2], "confirmo na cotação");
+  assert.equal(cards[2].components[1].parameters[2].text, "2 dias");
   assert.equal(cards[0].components[2].parameters[0].payload, "optsku:petz-1");
   assert.equal(cards[0].components[3].parameters[0].payload, "optinfo:petz-1");
 });

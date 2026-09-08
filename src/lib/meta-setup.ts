@@ -85,8 +85,10 @@ export const ADDRESS_FLOW_JSON = {
 // corpo não pode terminar em variável.
 export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel";
 export const CAROUSEL_CARD_COUNTS = [2, 3] as const;
-export const CAROUSEL_BODY = "{{1}} Toca em *Escolher este* no card que preferir 👇";
-export const CAROUSEL_CARD_BODY = "{{1}}\n*{{2}}*\n{{3}}";
+export const CAROUSEL_BODY = "{{1}} Desliza pros lados pra ver todas e toca em *Escolher este* no card que preferir 👇";
+// A Meta exige proporção de palavras fixas por variável ("Params Words Ratio Exceeds
+// Limit", 1ª tentativa 07/09): o card precisa de rótulos, não só as 3 variáveis.
+export const CAROUSEL_CARD_BODY = "Produto: {{1}}\nPreço do item: *{{2}}*\nPrazo de entrega da loja: {{3}}";
 export const CAROUSEL_BUTTONS = [
   { type: "quick_reply", text: "Escolher este" },
   { type: "quick_reply", text: "Ver detalhes" }
@@ -100,7 +102,7 @@ export function buildCarouselTemplate(cards: number, headerHandle: string) {
   const card = {
     components: [
       { type: "header", format: "image", example: { header_handle: [headerHandle] } },
-      { type: "body", text: CAROUSEL_CARD_BODY, example: { body_text: [["Ração Golden Adulto 15kg", "R$ 189,90", "Petz · prazo da loja: 1 dia útil"]] } },
+      { type: "body", text: CAROUSEL_CARD_BODY, example: { body_text: [["Ração Golden Adulto 15kg", "R$ 189,90", "1 dia útil"]] } },
       { type: "buttons", buttons: CAROUSEL_BUTTONS.map((b) => ({ ...b })) }
     ]
   };
