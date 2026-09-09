@@ -19,6 +19,11 @@ não caiu nos cards. Feito na hora:
   → mandar uma vitrine de teste → `LIA_CAROUSEL=true`. Lição: template pago exige conta
   com cobrança; o `pedido_atualizacao` (utility) só funcionou porque utility na janela é
   grátis — fora da janela vai falhar do mesmo jeito até a cobrança existir.
+- **09/09**: dono configurou moeda/cobrança; `LIA_CAROUSEL=true` de volta. Ação nova
+  `?action=carousel_test` (manda um carrossel de amostra pro `LIA_OPERATOR_PHONE` e devolve
+  o wamid) — prova real de entrega: sem `Message(sender meta-status-failed)` em minutos =
+  entregue. Sessão do /ops no navegador interno se perde ao reabrir o painel; pedir link
+  novo ("ops" pra Lia).
 
 
 ## 07/09/2026 — carrossel da vitrine (dono: "eu quero fazer carrossel")

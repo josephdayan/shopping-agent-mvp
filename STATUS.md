@@ -104,10 +104,11 @@ recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 ## 07/09/2026 — carrossel da vitrine
 
-**DESLIGADO em 08/09** após o 1º uso real falhar em silêncio: erro 131042, conta WhatsApp
-Business sem moeda/cobrança configurada (template de marketing é pago). Rede de segurança
-publicada (falha assíncrona → cards soltos + alerta ao operador). Religa quando o dono
-configurar a cobrança no Business Manager. Detalhe em AGENTS.md (08/09).
+**RELIGADO em 09/09** depois que o dono configurou moeda/cobrança no Business Manager:
+`?action=carousel_test` mandou um carrossel de amostra pro operador e nenhum status
+`failed` voltou (na falha de 08/09 ele chegava em 14 s). Rede de segurança segue ativa
+(falha assíncrona → cards soltos + alerta). Histórico: desligado em 08/09 após o 1º uso
+real falhar em silêncio (131042, conta sem moeda). Detalhe em AGENTS.md (08/09).
 
 Histórico 07/09: templates `vitrine_carrossel_2/_3` APROVADOS pela Meta em
 ~5 min (marketing, ~R$0,33/envio), `LIA_CAROUSEL=true` na Vercel. Vitrine com 2–3 opções
