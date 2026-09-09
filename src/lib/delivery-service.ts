@@ -506,7 +506,11 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
     if (carouselEnabled()) {
       try {
         markTurnReplied();
-        if (await whatsappAdapter.sendDeliveryCarousel(phone, header ?? choicesHeaderFor(p), choices)) return;
+        const sent = await whatsappAdapter.sendDeliveryCarousel(phone, header ?? choicesHeaderFor(p), choices);
+        if (sent) {
+          await rememberCarousel(phone, sent.messageId, p, header ?? choicesHeaderFor(p));
+          return;
+        }
       } catch (error) {
         console.warn("[whatsapp:meta:carousel:error]", error instanceof Error ? error.message : error);
       }
@@ -540,6 +544,52 @@ async function sendChoices(phone: string, p: PendingChoice, header?: string) {
     if (gapMs > 0 && i < p.options.length - 1) await sleep(gapMs);
   }
   await reply(phone, copy.choicesAsk(p.options.length));
+}
+
+// Rede de segurança do carrossel (caso real 08/09: "quero um relógio barato" ficou sem
+// resposta). A Graph aceita o template e o WhatsApp descarta depois com status "failed"
+// (131042: conta sem moeda configurada — carrossel é template PAGO). O carrossel enviado
+// fica gravado como Message(sender "carousel", metadata = wamid) com o header e as opções;
+// quando o webhook recebe o "failed" daquele wamid, reenvia tudo como cards soltos.
+async function rememberCarousel(phone: string, messageId: string | undefined, p: PendingChoice, header: string) {
+  if (!messageId) return;
+  try {
+    const { convo } = await getOrCreateConvo(phone);
+    await prisma.message.create({
+      data: { conversationId: convo.id, sender: "carousel", metadata: messageId, text: JSON.stringify({ header, pending: p }) }
+    });
+  } catch (error) {
+    console.warn("[carousel:remember-failed]", error instanceof Error ? error.message : error);
+  }
+}
+
+export async function recoverFailedCarousel(messageId: string, recipientDigits: string, failure?: string): Promise<boolean> {
+  if (!messageId) return false;
+  const row = await prisma.message.findFirst({ where: { sender: "carousel", metadata: messageId } });
+  if (!row) return false;
+  // Idempotente: a Meta reenvia status em rajada; o segundo "failed" não manda cards de novo.
+  await prisma.message.update({ where: { id: row.id }, data: { sender: "carousel-recovered" } });
+  const phone = `+${recipientDigits.replace(/\D/g, "")}`;
+  const saved = JSON.parse(row.text) as { header: string; pending: PendingChoice };
+  console.warn("[carousel:recover]", phone.slice(-4), failure?.slice(0, 200));
+  await reply(phone, saved.header);
+  try {
+    const choices = saved.pending.options.map((o) => ({
+      id: `optsku:${o.sku}`,
+      name: customerChoiceName(saved.pending, o),
+      displayPrice: display(o.unitPrice),
+      imageUrl: o.imageUrl,
+      delivery: o.delivery,
+      ...(o.repeat ? { badge: "Você já pediu este" } : {}),
+      productUrl: o.productUrl,
+      sku: o.sku
+    }));
+    if (await whatsappAdapter.sendDeliveryChoices(phone, choices)) return true;
+  } catch (error) {
+    console.warn("[carousel:recover:cards-failed]", error instanceof Error ? error.message : error);
+  }
+  await reply(phone, choicesTextFor(saved.pending));
+  return true;
 }
 
 // CEP -> human address via ViaCEP. invalid=true means the CEP definitely doesn't

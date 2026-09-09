@@ -577,8 +577,11 @@ export const whatsappAdapter = {
     if (alive.some((ok) => !ok)) return null;
     const { carouselTemplateName } = await import("@/lib/meta-setup");
     try {
-      const message = await sendMetaPayload(phoneNumberId, token, buildCarouselPayload(to, carouselTemplateName(cards.length), header, cards));
-      return { provider: "meta", mode: "delivery_choice_carousel", to, message };
+      const message = (await sendMetaPayload(phoneNumberId, token, buildCarouselPayload(to, carouselTemplateName(cards.length), header, cards))) as { messages?: Array<{ id?: string }> };
+      // O wamid é a chave da rede de segurança: a Meta aceita (2xx) e pode descartar
+      // DEPOIS (status "failed" no webhook, ex.: 131042 conta sem moeda, 08/09) — aí o
+      // cérebro reenvia os cards soltos pelo id.
+      return { provider: "meta", mode: "delivery_choice_carousel", to, message, messageId: message.messages?.[0]?.id };
     } catch (error) {
       console.warn("[whatsapp:meta:carousel:fallback-cards]", error instanceof Error ? error.message : error);
       return null;

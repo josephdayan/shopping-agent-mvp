@@ -109,3 +109,42 @@ test("Meta: 1 opção, desligado ou template recusado → null (cai nos cards so
     assert.equal(bodies.length, 1, "só a tentativa recusada foi ao Graph");
   });
 });
+
+// Caso real 08/09: a Meta aceitou o carrossel e descartou depois (131042). O wamid gravado
+// permite reenviar os cards soltos quando o status "failed" chega no webhook.
+test("falha assíncrona do carrossel → cards soltos pelo wamid (idempotente)", async (t) => {
+  await import("./helpers/load-env");
+  const { prisma } = await import("../src/lib/prisma");
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+  } catch {
+    return t.skip();
+  }
+  const { recoverFailedCarousel } = await import("../src/lib/delivery-service");
+  const phone = `+5503${String(Date.now()).slice(-9)}`;
+  const user = await prisma.user.create({ data: { phone } });
+  const convo = await prisma.conversation.create({ data: { userId: user.id, status: "active" } });
+  const pending = { query: "relógio barato", qty: 1, options: [
+    { sku: "ml-1", name: "Relógio Digital Esportivo", unitPrice: 39.9, imageUrl: "https://example.com/1.jpg", storeKey: "mercadolivre", storeLabel: "Mercado Livre" },
+    { sku: "ml-2", name: "Relógio Casio Clássico", unitPrice: 89.9, imageUrl: "https://example.com/2.jpg", storeKey: "mercadolivre", storeLabel: "Mercado Livre" }
+  ] };
+  await prisma.message.create({ data: { conversationId: convo.id, sender: "carousel", metadata: "wamid.TEST1", text: JSON.stringify({ header: "Opções de *relógio barato*:", pending }) } });
+  const adapters = await import("../src/lib/adapters/whatsapp");
+  const sent: string[] = [];
+  const prev = { sendMessage: adapters.whatsappAdapter.sendMessage, sendDeliveryChoices: adapters.whatsappAdapter.sendDeliveryChoices };
+  (adapters.whatsappAdapter as any).sendMessage = async (_to: string, text: string) => { sent.push(`text:${text}`); return {}; };
+  (adapters.whatsappAdapter as any).sendDeliveryChoices = async (_to: string, options: any[]) => { sent.push(`cards:${options.map((o) => o.id).join(",")}`); return { mode: "delivery_choice_cards" }; };
+  try {
+    assert.equal(await recoverFailedCarousel("wamid.NAO_EXISTE", phone.slice(1)), false);
+    assert.equal(await recoverFailedCarousel("wamid.TEST1", phone.slice(1), "131042 Business eligibility payment issue"), true);
+    assert.deepEqual(sent, ["text:Opções de *relógio barato*:", "cards:optsku:ml-1,optsku:ml-2"]);
+    assert.equal(await recoverFailedCarousel("wamid.TEST1", phone.slice(1)), false, "segundo status failed não reenvia");
+  } finally {
+    (adapters.whatsappAdapter as any).sendMessage = prev.sendMessage;
+    (adapters.whatsappAdapter as any).sendDeliveryChoices = prev.sendDeliveryChoices;
+    await prisma.message.deleteMany({ where: { conversationId: convo.id } });
+    await prisma.conversation.delete({ where: { id: convo.id } });
+    await prisma.user.delete({ where: { id: user.id } });
+    await prisma.$disconnect();
+  }
+});

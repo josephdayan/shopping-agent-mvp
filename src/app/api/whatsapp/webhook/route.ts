@@ -4,7 +4,8 @@ import { waitUntil } from "@vercel/functions";
 import { z } from "zod";
 import { requireMetaSignature, requireWebhookSecret } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { handleDeliveryMessage, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
+import { handleDeliveryMessage, recoverFailedCarousel, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
+import { notifyOperator } from "@/lib/turn-runtime";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
@@ -189,6 +190,16 @@ export async function POST(request: Request) {
               // como Message da conversa do destinatário, senão o diagnóstico evapora
               // antes de alguém olhar (scripts/tail-messages.mts lê depois).
               const digits = String(status.recipient_id ?? "").replace(/\D/g, "");
+              // Carrossel descartado pela Meta → cards soltos no lugar (08/09). Conta sem
+              // moeda/cobrança (131042) é problema do dono: avisa uma vez por falha.
+              const errors = (status.errors as Array<{ code?: number; title?: string; error_data?: { details?: string } }> | undefined) ?? [];
+              const failure = errors.map((e) => `${e.code} ${e.title ?? ""} ${e.error_data?.details ?? ""}`).join(" | ");
+              if (digits && (await recoverFailedCarousel(String(status.id ?? ""), digits, failure))) {
+                console.warn("[carousel:recovered-as-cards]", status.id);
+                if (errors.some((e) => e.code === 131042)) {
+                  await notifyOperator(`⚠️ Carrossel recusado pela Meta (131042: conta WhatsApp Business sem moeda/cobrança). Reenviei como cards soltos. Configure a moeda no Business Manager (billing_hub) ou deixe LIA_CAROUSEL=false.`, `+${digits}`);
+                }
+              }
               if (digits) {
                 const user = await prisma.user.findUnique({ where: { phone: `+${digits}` } });
                 const convo = user

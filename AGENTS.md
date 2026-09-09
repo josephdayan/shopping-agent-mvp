@@ -1,5 +1,26 @@
 # Lia — contexto obrigatório para agentes
 
+## 08/09/2026 — carrossel: 1º uso real ficou em SILÊNCIO (131042) → desligado + rede de segurança
+
+Dono mandou "quero um relógio barato"; a Lia buscou, mandou o carrossel, a Graph aceitou
+(2xx) e 14 s depois o webhook trouxe status `failed` **131042 "Business eligibility
+payment issue: conta WhatsApp Business sem moeda configurada"**. Carrossel é template de
+MARKETING (pago) e a conta nunca teve cobrança configurada; o código achou que enviou e
+não caiu nos cards. Feito na hora:
+- `LIA_CAROUSEL=false` na Vercel (vitrine voltou aos cards soltos, grátis).
+- Rede de segurança: `sendDeliveryCarousel` devolve o wamid; `rememberCarousel` grava
+  `Message(sender "carousel", metadata = wamid, text = {header, pending})`; o webhook, ao
+  receber `failed` daquele wamid, chama `recoverFailedCarousel` → header + cards soltos
+  (ou lista em texto), idempotente (linha vira `carousel-recovered`). Se o erro for
+  131042, `notifyOperator` avisa uma vez. Teste em `tests/carousel.test.ts`.
+- **Ação do dono pra religar**: configurar moeda/cobrança da conta WhatsApp Business no
+  Business Manager (link do erro: `business.facebook.com/billing_hub/accounts/details/
+  ?business_id=1802515380110705&asset_id=1336161451961509&wizard_name=CHANGE_COUNTRY_CURRENCY`)
+  → mandar uma vitrine de teste → `LIA_CAROUSEL=true`. Lição: template pago exige conta
+  com cobrança; o `pedido_atualizacao` (utility) só funcionou porque utility na janela é
+  grátis — fora da janela vai falhar do mesmo jeito até a cobrança existir.
+
+
 ## 07/09/2026 — carrossel da vitrine (dono: "eu quero fazer carrossel")
 
 Na Meta, carrossel só existe como **template de MARKETING**: cobrado por envio (~R$0,33 no
