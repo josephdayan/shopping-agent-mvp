@@ -162,7 +162,7 @@ async function ids(token: string) {
   return { appId, waba };
 }
 
-export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors" | "carousel" | "templates";
+export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors" | "carousel" | "templates" | "carousel_test";
 
 // Erros de validação de um Flow (a Meta cria o rascunho mesmo inválido e recusa publicar).
 async function flowErrors(token: string, flowId: string) {
@@ -225,6 +225,19 @@ export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: str
       method: "POST",
       body: JSON.stringify({ messaging_product: "whatsapp", profile_picture_handle: handle })
     });
+  }
+  if (action === "carousel_test") {
+    // Manda um carrossel de amostra pro telefone do operador (prova real de entrega: a
+    // Graph aceita e o webhook diz se a Meta descartou — 08/09, erro 131042).
+    const to = process.env.LIA_OPERATOR_PHONE?.trim();
+    if (!to) throw new Error("LIA_OPERATOR_PHONE não configurado");
+    const { whatsappAdapter } = await import("@/lib/adapters/whatsapp");
+    const image = "https://liadelivery.com.br/brand/lia-whatsapp-profile-hd.png";
+    const sent = await whatsappAdapter.sendDeliveryCarousel(to, "Teste do carrossel — opções de *relógio barato*:", [
+      { id: "optsku:teste-1", sku: "teste-1", name: "Relógio Digital Esportivo (amostra)", displayPrice: 39.9, imageUrl: image, delivery: "prazo da loja: 2 dias úteis" },
+      { id: "optsku:teste-2", sku: "teste-2", name: "Relógio Clássico Pulseira de Couro (amostra)", displayPrice: 89.9, imageUrl: image, delivery: "prazo da loja: 1 dia útil" }
+    ]);
+    return { sent: Boolean(sent), messageId: sent?.messageId ?? null, enabled: process.env.LIA_CAROUSEL === "true" };
   }
   if (action === "templates") {
     const { waba } = await ids(token);
