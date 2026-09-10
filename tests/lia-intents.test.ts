@@ -890,3 +890,11 @@ test("01/09: botão Ver detalhes (optinfo:) e 'detalhes 2' digitado viram intent
   assert.notEqual(detectIntent("detalhes do pedido").kind, "product_details");
   assert.notEqual(detectIntent("manda o link").kind, "product_details");
 });
+
+test("escolha por ordinal: quarto e quinto (vitrine de 5 no carrossel, 10/09)", () => {
+  const five = Array.from({ length: 5 }, (_, i) => ({ sku: `s${i}`, name: `Opção ${i + 1}`, unitPrice: 10 + i, storeKey: "x", storeLabel: "X" }));
+  assert.deepEqual(parseChoiceReply("o quarto", five as any), { type: "pick", index: 3 });
+  assert.deepEqual(parseChoiceReply("quero a quinta", five as any), { type: "pick", index: 4 });
+  const short = parseChoiceReply("o quinto", five.slice(0, 3) as any);
+  assert.ok(!short || short.type !== "pick" || short.index !== 4, "quinto sem 5 opções não escolhe a 5ª");
+});

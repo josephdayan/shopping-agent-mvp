@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import { CAROUSEL_CARD_COUNTS, buildCarouselTemplate, carouselTemplateName } from "../src/lib/meta-setup";
 import { buildCarouselPayload, whatsappAdapter } from "../src/lib/adapters/whatsapp";
 
+const FIVE = (n: number) => Array.from({ length: n }, (_, i) => ({ id: `optsku:s${i}`, sku: `s${i}`, name: `Relógio ${i + 1}`, displayPrice: 10 * (i + 1), imageUrl: `https://example.com/${i}.jpg` }));
 const OPTIONS = [
   { id: "optsku:petz-1", sku: "petz-1", name: "Ração Golden Adulto 15kg", displayPrice: 189.9, imageUrl: "https://example.com/a.jpg", delivery: "prazo da loja: 1 dia útil" },
   { id: "optsku:ml-2", sku: "ml-2", name: "Ração Premier Adulto 15kg\nRaças médias", displayPrice: 210, imageUrl: "https://example.com/b.jpg", badge: "Você já pediu este" },
@@ -13,6 +14,7 @@ const OPTIONS = [
 ];
 
 test("template do carrossel respeita os limites da Meta (2 e 3 cards)", () => {
+  assert.deepEqual([...CAROUSEL_CARD_COUNTS], [2, 3, 4, 5]);
   for (const cards of CAROUSEL_CARD_COUNTS) {
     const t = buildCarouselTemplate(cards, "4::handle") as any;
     assert.equal(t.name, carouselTemplateName(cards));
@@ -95,6 +97,18 @@ test("Meta: 2 opções viram UMA mensagem de template vitrine_carrossel_v2_2", a
     assert.equal(bodies.length, 1);
     assert.equal(bodies[0].template.name, "vitrine_carrossel_v2_2");
     assert.equal(bodies[0].template.components[1].cards.length, 2);
+  });
+});
+
+test("Meta: 5 opções viram vitrine_carrossel_v2_5 com 5 cards; 6 cortam em 5; fallback solto fica em 3", async () => {
+  await withMeta(async (bodies) => {
+    const five = await whatsappAdapter.sendDeliveryCarousel("+5511999999999", "Opções:", FIVE(6));
+    assert.equal(five?.mode, "delivery_choice_carousel");
+    assert.equal(bodies[0].template.name, "vitrine_carrossel_v2_5");
+    assert.equal(bodies[0].template.components[1].cards.length, 5);
+    const before = bodies.length;
+    await whatsappAdapter.sendDeliveryChoices("+5511999999999", FIVE(5));
+    assert.equal(bodies.length - before, 3, "cards soltos: no máximo 3 mensagens");
   });
 });
 

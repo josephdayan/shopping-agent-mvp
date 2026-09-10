@@ -240,7 +240,8 @@ async function buildChoices(
             price: display(c.item.unitPrice),
             store: c.store.label
           }))
-        }))
+        })),
+        vitrineLimit()
       )
     : null;
   const rerankedSkus = new Map<(typeof perLine)[number], string[]>();
@@ -257,7 +258,7 @@ async function buildChoices(
     const chosen = rerankedSkus.get(entry);
     let options: StoreCandidate[] = chosen
       ? chosen.map((sku) => bySku.get(sku)).filter((c): c is StoreCandidate => Boolean(c))
-      : diversifyOptions(line.phrase, candidates.map((c) => c.item), 3).map((item) => bySku.get(item.sku)!);
+      : diversifyOptions(line.phrase, candidates.map((c) => c.item), vitrineLimit()).map((item) => bySku.get(item.sku)!);
     if (!options.length) {
       notFound.push(line.phrase);
       notFoundLines.push(line);
@@ -288,7 +289,7 @@ async function buildChoices(
           return preferredSkus?.has(item.sku) ? { ...option, repeat: true } : option;
         })
         .sort(byRepeatThenVerifiedThenEta)
-        .slice(0, 3)
+        .slice(0, vitrineLimit())
     });
   }
   return {
@@ -470,6 +471,16 @@ async function askStreetAndNumber(phone: string, ctx: DeliveryContext) {
     }
   }
   await reply(phone, copy.askFullDeliveryAddress());
+}
+
+// Tamanho da vitrine (dono, 10/09: "agora que tem carrossel, uns 5"): 5 opções quando o
+// carrossel está ligado (cabe numa mensagem, mesmo custo), 3 nos cards soltos e nos
+// testes. A IA do rerank recebe o mesmo teto e usa as vagas extras pra VARIAR dentro do
+// pedido (outra marca/loja/faixa de preço), nunca pra sair dele.
+function vitrineLimit(): number {
+  const env = Number(process.env.LIA_VITRINE_MAX);
+  if (Number.isFinite(env) && env >= 2 && env <= 5) return env;
+  return carouselEnabled() ? 5 : 3;
 }
 
 function choicesHeaderFor(p: PendingChoice): string {
@@ -3039,7 +3050,7 @@ async function handleChoosing(
     if (strong.length) {
       current.baseQuery = current.baseQuery ?? current.query;
       current.query = combinedQuery;
-      const opts = diversifyOptions(combinedQuery, strong, 3);
+      const opts = diversifyOptions(combinedQuery, strong, vitrineLimit());
       const remembered = new Set((current.shownOptions ?? current.options).map((o) => o.sku));
       current.shownOptions = [...(current.shownOptions ?? current.options), ...opts.filter((o) => !remembered.has(o.sku))];
       current.options = opts;
@@ -3245,11 +3256,11 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
   // Quem pediu "outras" dispensou o que está na mesa: variante do dispensado não é
   // "outra opção". Só volta a valer se não sobrar mais nada de distinto.
   const fresh = pool.filter((o) => !p.options.some((cur) => sameProductVariant(p.query, cur, o)));
-  const next = diversifyOptions(p.query, fresh.length ? fresh : pool, 3);
+  const next = diversifyOptions(p.query, fresh.length ? fresh : pool, vitrineLimit());
   // "Outras" tem que vir com 3 de verdade (pedido do dono, 11/08): completa com o que
   // sobrou no pool — variante repetida ainda atende melhor que uma opção solitária.
   for (const option of pool) {
-    if (next.length >= 3) break;
+    if (next.length >= vitrineLimit()) break;
     if (!next.some((n) => n.sku === option.sku)) next.push(option);
   }
   if (!next.length) {
@@ -3265,7 +3276,7 @@ async function pageMoreOptions(phone: string, convoId: string, ctx: DeliveryCont
           .map((c) => toChoiceOption(c.item, { storeKey: c.store.key, storeLabel: c.store.label }))
           .filter((o) => conciergeMatchIsStrong(relaxedQuery, o) && !shown.includes(o.sku))
           .filter((o) => p.cap == null || display(o.unitPrice) <= p.cap);
-        const rescueNext = diversifyOptions(relaxedQuery, rescue, 3);
+        const rescueNext = diversifyOptions(relaxedQuery, rescue, vitrineLimit());
         if (rescueNext.length) {
           const rememberedRescue = new Set((p.shownOptions ?? p.options).map((o) => o.sku));
           p.shownOptions = [...(p.shownOptions ?? p.options), ...rescueNext.filter((o) => !rememberedRescue.has(o.sku))];
@@ -3327,14 +3338,14 @@ async function refineOptions(phone: string, convoId: string, ctx: DeliveryContex
   const p = ctx.pending![0];
   const base = p.baseQuery ?? p.query;
   const refined = `${base} ${attrs.join(" ")}`;
-  let matches = diversifyOptions(refined, await choiceCandidates(store, ctx, p, attrs), 3);
+  let matches = diversifyOptions(refined, await choiceCandidates(store, ctx, p, attrs), vitrineLimit());
   let closest = false;
   if (!matches.length) {
     // 04/09 (dono): "quero do grande masculino"/"100ml" não podem morrer em "não achei".
     // Sem item que case os atributos à risca, a busca roda com a frase refinada inteira
     // (marca + atributos como termos) e mostra o mais perto — verificado ao vivo.
     const broadened = await choiceCandidates(store, ctx, { ...p, query: refined, baseQuery: undefined, attrs: undefined }, []);
-    matches = diversifyOptions(refined, broadened, 3);
+    matches = diversifyOptions(refined, broadened, vitrineLimit());
     closest = matches.length > 0;
   }
   if (!matches.length) {
@@ -3694,7 +3705,7 @@ async function handleSwap(
   const candidates: StoreCandidate[] = crossStore
     ? await gatherCrossStoreCandidates(searchPhrase, 12)
     : (await store.searchItems(searchPhrase, 3)).map((item) => ({ store, item }));
-  const options = diversifyOptions(searchPhrase, candidates.map((c) => c.item), 3)
+  const options = diversifyOptions(searchPhrase, candidates.map((c) => c.item), vitrineLimit())
     .filter((item) => conciergeMatchIsStrong(searchPhrase, item))
     .map((item) => candidates.find((c) => c.item.sku === item.sku)!);
 

@@ -1467,6 +1467,8 @@ export function parseChoiceReply(text: string, options: { name: string; unitPric
   if (/\b(primeir[ao])\b/.test(n)) return { type: "pick", index: 0 };
   if (/\b(segund[ao])\b/.test(n) && options.length > 1) return { type: "pick", index: 1 };
   if (/\b(terceir[ao])\b/.test(n) && options.length > 2) return { type: "pick", index: 2 };
+  if (/\b(quart[ao])\b/.test(n) && options.length > 3) return { type: "pick", index: 3 };
+  if (/\b(quint[ao])\b/.test(n) && options.length > 4) return { type: "pick", index: 4 };
   if (/\b(ultim[ao])\b/.test(n)) return { type: "pick", index: options.length - 1 };
   if (/\b(d[oe] meio)\b/.test(n) && options.length === 3) return { type: "pick", index: 1 };
   if (/\b(mais car[ao])\b/.test(n)) {

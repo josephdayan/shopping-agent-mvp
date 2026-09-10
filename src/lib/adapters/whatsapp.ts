@@ -567,7 +567,8 @@ export const whatsappAdapter = {
   // opção, foto faltando/ruim, template não aprovado): o chamador cai nos cards de sempre.
   async sendDeliveryCarousel(to: string, header: string, options: WhatsAppDeliveryChoice[]) {
     if (process.env.WHATSAPP_PROVIDER !== "meta" || !carouselEnabled()) return null;
-    const cards = options.slice(0, 3);
+    // Até 5 cards no carrossel (10/09); os cards soltos do fallback seguem em 3.
+    const cards = options.slice(0, 5);
     if (cards.length < 2) return null;
     if (cards.some((option) => !isPublicMediaUrl(option.imageUrl ?? ""))) return null;
     const token = process.env.WHATSAPP_ACCESS_TOKEN;

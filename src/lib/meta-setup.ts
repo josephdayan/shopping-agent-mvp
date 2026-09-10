@@ -87,7 +87,7 @@ export const ADDRESS_FLOW_JSON = {
 // todos → "Escolher este" + "Outras opções"; a página do produto fica por texto
 // ("detalhes 2"). Nome novo porque template editado volta pra revisão.
 export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel_v2";
-export const CAROUSEL_CARD_COUNTS = [2, 3] as const;
+export const CAROUSEL_CARD_COUNTS = [2, 3, 4, 5] as const;
 // Variável não pode abrir nem fechar o texto (2ª recusa da Meta, 07/09).
 export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados e toca em *Escolher este* no card que preferir. Pra ver a página de um produto, escreva *detalhes* e o número dele.";
 // A Meta exige proporção de palavras fixas por variável ("Params Words Ratio Exceeds
