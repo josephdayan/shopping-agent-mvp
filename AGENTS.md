@@ -1,5 +1,23 @@
 # Lia — contexto obrigatório para agentes
 
+## 10/09/2026 — vitrine de 5 no carrossel, 3 nos cards soltos
+
+Dono: "agora que tem carrossel fica suave colocar umas 5 … um pouco mais de variação, mas
+dentro do que o cliente pediu". Feito:
+- `vitrineLimit()` em delivery-service: 5 com `LIA_CAROUSEL=true`, 3 sem (e nos testes);
+  `LIA_VITRINE_MAX` (2–5) sobrepõe. Vale em `buildChoices`, paginação ("outras"), refino,
+  re-busca por marca e plano B. `sendDeliveryCarousel` aceita até 5; `sendDeliveryChoices`
+  (fallback) e a recuperação do carrossel seguem em 3 mensagens.
+- `rerankShoppingOptions(message, lines, limit)`: o prompt recebe o teto e a regra 3 diz
+  explicitamente que as vagas extras são pra VARIAR dentro do pedido (marca, loja, faixa
+  barato/intermediário/premium) e que é melhor devolver menos do que repetir variante.
+- Templates `vitrine_carrossel_v2_4` (id 1777270419939303) e `_v2_5` (id 2204265320507915)
+  criados em 10/09. Ordinais "quarto"/"quinto" em `parseChoiceReply`.
+- Deploy travou duas vezes: `.vercelignore` existia (só LIA_WHATSAPP.md) e sobrepõe o
+  `.gitignore`, então `.retail-buyer/` (1,3 GB de perfis do Chrome do comprador) subia.
+  Agora ignora `.retail-buyer/`, `.local-pg/`, `node_modules/`.
+
+
 ## 08/09/2026 — carrossel: 1º uso real ficou em SILÊNCIO (131042) → desligado + rede de segurança
 
 Dono mandou "quero um relógio barato"; a Lia buscou, mandou o carrossel, a Graph aceitou

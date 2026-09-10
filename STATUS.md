@@ -102,6 +102,12 @@ compra por evento e acompanhar por evidência/pacote. Métricas do razão são u
 recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 
+## 10/09/2026 — vitrine de 5 no carrossel
+
+Com o carrossel ligado a vitrine mostra até 5 opções (3 nos cards soltos e no fallback); a IA
+do rerank usa as vagas extras pra variar dentro do pedido. Templates de 4 e 5 cards criados
+na Meta em 10/09. Detalhe em AGENTS.md (10/09).
+
 ## 07/09/2026 — carrossel da vitrine
 
 **RELIGADO em 09/09** depois que o dono configurou moeda/cobrança no Business Manager:
