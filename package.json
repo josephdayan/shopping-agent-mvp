@@ -5,7 +5,6 @@
   "scripts": {
     "purchase-worker:monitor": "node --import tsx scripts/order-monitor.mts monitor",
     "purchase-worker:inspect": "node --import tsx scripts/order-monitor.mts inspect",
-    "purchase-worker:claim": "tsx scripts/purchase-worker-client.mts claim",
     "dev": "next dev",
     "build": "prisma generate && node scripts/migrate-on-build.mjs && next build && node scripts/check-bundle-emoji.mjs",
     "start": "next start",
@@ -28,7 +27,8 @@
     "purchase-worker:verify": "tsx scripts/retail-buyer/verify.mts",
     "purchase-worker:verify-ui": "tsx scripts/retail-buyer/verify-ui.mts",
     "purchase-worker:once": "tsx scripts/retail-buyer/run.mts once",
-    "purchase-worker:probe": "tsx scripts/retail-buyer/run.mts probe"
+    "purchase-worker:probe": "tsx scripts/retail-buyer/run.mts probe",
+    "purchase-worker:install-service": "bash scripts/retail-buyer/install-launchd.sh"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",

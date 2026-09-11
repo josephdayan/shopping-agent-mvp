@@ -1,5 +1,42 @@
 # Runbook do Operador da Lia
 
+> **Atualização de 11/09/2026 — como a compra funciona agora.** O plano de
+> [docs/plano-implementacao-compra-2026-09-11.md](plano-implementacao-compra-2026-09-11.md)
+> está implementado localmente (Fases 0–7). Resumo do que muda para quem opera:
+>
+> 1. **Comprador local sempre ligado.** `npm run purchase-worker:install-service` instala o
+>    processo como serviço do macOS (launchd + caffeinate, reinicia sozinho; logs em
+>    `~/Library/Logs/lia/`). Segredos no Chaves (`lia-purchase-worker`). Acesso remoto ao
+>    Mac pelo Tailscale para olhar a janela quando uma loja pedir algo.
+> 2. **Mercado Livre (canal principal) — degrau C.** O comprador monta o carrinho na conta
+>    da Lia e você recebe no WhatsApp **"carrinho pronto"** com os botões **Comprei / Não
+>    deu**. Abra o app do ML no celular (o carrinho já está lá), confira endereço e
+>    destinatário, pague com o **saldo Mercado Pago** e toque **Comprei**; a Lia pede o
+>    número do pedido — responda só o número. O cliente é avisado na hora. O mesmo pode ser
+>    feito no `/ops` (Comprei — registrar nº / Não deu).
+> 3. **Lojas VTEX homologadas — Pix da loja pago pela Lia.** O comprador finaliza com Pix,
+>    captura o copia-e-cola e o servidor paga por API bancária. Você só entra por botão:
+>    **recebedor novo** (Pagar e memorizar / Recusar, uma vez por loja), **Pix recusado**
+>    (Refazer / Estornar), **loja em silêncio** (Confirmar / Estornar), **acima do teto**
+>    (Autorizar / Estornar). Nenhum toque = nada acontece; expira e fica no `/ops`.
+> 4. **Fila manual.** Pedido pago de loja sem execução automática aparece com a faixa
+>    **COMPRA MANUAL**: compre no site e registre o número em "Confirmar compra na loja".
+> 5. **Cliente pode desistir até a compra sair**: "cancelar" com pedido pago e ainda não
+>    comprado estorna na hora, sozinho. Depois da compra, vale a regra antiga.
+> 6. **Ligar uma loja** exige três chaves independentes: conta salva no `/ops` (e-mail,
+>    login, "meio de pagamento pronto", como a Lia paga) + nome em `LIA_AUTO_PURCHASE_STORES`
+>    + receita com `submitSelector`/`receipt` no `config.json` do comprador (VTEX). Mercado
+>    Livre: conta no `/ops` com saldo MP + `LIA_AUTO_PURCHASE_STORES=mercadolivre`.
+> 7. **Kill-switches** (Vercel): `LIA_PURCHASE_SUBMIT_OFF=true` (nenhum clique final),
+>    `LIA_PIX_OUT_OFF=true` (nenhum Pix de saída), `LIA_AUTO_PURCHASE_OFF=true` (tudo vira
+>    aprovação individual), `LIA_OPS_BUTTONS_OFF=true` (só texto + link do painel).
+> 8. **Sondagens antes de ligar** (gates): `npm run purchase-worker:probe -- LOJA` (VTEX,
+>    até a tela de pagamento com Pix, sem finalizar) e
+>    `npm run purchase-worker:probe -- mercadolivre <URL do anúncio>`.
+> 9. **A tarefa horária do ChatGPT foi aposentada** (rota `/api/purchase-worker/claim` e o
+>    cliente removidos em 11/09). Desligue a tarefa no ChatGPT.
+
+
 _Guia de 1 página pra quem opera os pedidos. Criado em 2026-07-20._
 
 > **Nota de 02/09/2026.** Este runbook descreve o fluxo de julho (motoboy saindo da base).

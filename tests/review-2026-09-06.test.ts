@@ -7,7 +7,8 @@ import { recordPayment, refundOrderViaProvider } from "../src/lib/payments/ledge
 import { markDeliveryOrderPaid, opsMarkBought, opsMarkDelivered, opsMarkRetailerOutForDelivery } from "../src/lib/delivery-service";
 import { recordDeliveryEvent, recordDeliveryReceipt, dispatchDeliveryEvent } from "../src/lib/delivery-events";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
-import { ensurePurchaseJobForPaidOrder, claimNextPurchaseJob, isMercadoLivrePurchaseUrl, purchaseCartHash, validatePurchaseCompletion } from "../src/lib/purchase-worker";
+import { ensurePurchaseJobForPaidOrder, claimNextPurchaseJob, purchaseCartHash } from "../src/lib/purchase-worker";
+import { purchaseUrlAllowed } from "../src/lib/purchase-preparation";
 
 const userIds: string[] = [];
 const originalFetch = globalThis.fetch;
@@ -41,9 +42,9 @@ after(async () => {
 });
 
 test("worker: domínio semelhante ao ML não autoriza URL de compra", () => {
-  assert.equal(isMercadoLivrePurchaseUrl("https://falsomercadolivre.com.br/produto"), false);
-  assert.equal(isMercadoLivrePurchaseUrl("https://mercadolivre.com.br@evil.example/produto"), false);
-  assert.equal(isMercadoLivrePurchaseUrl(item.productUrl), true);
+  assert.equal(purchaseUrlAllowed("mercadolivre", "https://falsomercadolivre.com.br/produto"), false);
+  assert.equal(purchaseUrlAllowed("mercadolivre", "https://mercadolivre.com.br@evil.example/produto"), false);
+  assert.equal(purchaseUrlAllowed("mercadolivre", item.productUrl), true);
 });
 test("worker: mudança de endereço invalida o hash mesmo com cesta e preço iguais", () => {
   assert.notEqual(purchaseCartHash([item], 8, "2d", { cep: "01310-100" }), purchaseCartHash([item], 8, "2d", { cep: "01229-000" }));
@@ -69,16 +70,6 @@ test("worker: lease expirado vira revisão, nunca uma segunda compra", async () 
   await claimNextPurchaseJob("new");
   assert.equal((await prisma.purchaseJob.findUniqueOrThrow({ where: { id: job.id } })).lastErrorCode, "WORKER_LEASE_EXPIRED");
   await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "canceled" } });
-});
-test("worker: total NaN e aprovação sem validade não passam", async () => {
-  const order = await make(); await paid(order); const job = await ensurePurchaseJobForPaidOrder(order.id); assert.ok(job);
-  await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "claimed", lockedAt: new Date(), browserSessionId: "review", approvalStatus: "approved", approvedAt: new Date(), approvalExpiresAt: new Date(Date.now() + 60000) } });
-  process.env.PURCHASE_AUTOMATION_MODE = "purchase";
-  try {
-    await assert.rejects(validatePurchaseCompletion(job.id, "review", { actualTotal: NaN, cartHash: job.cartHash!, storeOrderNumber: "123" }), /Invalid retailer total/);
-    await prisma.purchaseJob.update({ where: { id: job.id }, data: { approvalExpiresAt: null } });
-    await assert.rejects(validatePurchaseCompletion(job.id, "review", { actualTotal: 28, cartHash: job.cartHash!, storeOrderNumber: "123" }), /expiration/);
-  } finally { delete process.env.PURCHASE_AUTOMATION_MODE; await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "canceled" } }); }
 });
 test("pagamento: confirmação simultânea cria exatamente uma entrada no razão", async () => {
   const order = await make("awaiting_payment");

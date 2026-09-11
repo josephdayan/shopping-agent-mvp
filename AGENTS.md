@@ -1,3 +1,32 @@
+## 11/09/2026 — plano de compra IMPLEMENTADO localmente (Fases 0–7; 597/597; nada publicado)
+
+O que existe agora no código (todos os interruptores desligados por padrão):
+- **Mercado Livre degrau C**: comprador monta o carrinho na conta → botões **Comprei / Não
+  deu** no WhatsApp do dono (assinados `op1.<id>.<escolha>.<hmac>`, HMAC com `OPS_TOKEN`)
+  → número do pedido por mensagem → cliente avisado. Espelho no `/ops`. Nunca clique automático
+  no ML (`automaticPurchaseDecision` com canal `owner_confirm`).
+- **VTEX + Pix da loja pago pela Lia**: `pix-emv.ts` (CRC), `payments/pix-out/` (asaas | mock;
+  Efí depois de E5), `PixPayout` (um por job; timeout = `outcome_unknown`, nunca 2ª chamada),
+  allowlist de recebedor por loja com um toque, conciliação no cron.
+- **Fundações**: `customerName` gravado (perfil do WhatsApp; pergunta só em loja executável),
+  evidência `payment` discriminada, `manual_queue` no `/ops` (estorno automático em 48h),
+  domínios extras (ML → Mercado Pago), destinatário editável no painel.
+- **E-mail → etapa** (`mailbox-policy.ts`, `report_mail`, leitor local a cada 2 min) e
+  **exceções por um toque** (recebedor novo, Pix recusado, loja em silêncio, acima do teto,
+  comprador sem sinal). **Arrependimento**: cliente pago desiste até a compra sair; estorno na hora.
+- **Operação**: `npm run purchase-worker:install-service` (launchd + caffeinate); sondagens
+  `purchase-worker:probe`; caminho da tarefa horária do ChatGPT **removido**
+  (`/api/purchase-worker/claim`, `purchase-worker-client`, `PURCHASE_AUTOMATION_MODE`).
+- Migrations novas: `20260911120000_purchase_receivers_actions`, `20260911150000_pix_payout`
+  (mais as 3 de 06–07/09, todas pendentes de deploy).
+
+**Ordem para ligar (não pular):** (1) deploy zero = aplicar as 5 migrations com o código
+atual; (2) publicar com flags off; (3) E0 OAuth da caixa + E8 sondagem do ML → conta ML no
+`/ops` (saldo MP) + `LIA_AUTO_PURCHASE_STORES=mercadolivre` → degrau C em produção → desligar
+a tarefa do ChatGPT; (4) E2/E3 sondagem VTEX + E5/E6 banco → `LIA_PIX_OUT_PROVIDER=asaas` +
+`ASAAS_API_KEY` + receita da loja no `config.json` + nome na allowlist. Runbook:
+[docs/operador-runbook.md](docs/operador-runbook.md) (seção 11/09).
+
 ## 11/09/2026 — plano de implementação aprovado pelo dono (7 fases, ML degrau C primeiro)
 
 Dono aprovou [docs/plano-implementacao-compra-2026-09-11.md](docs/plano-implementacao-compra-2026-09-11.md)

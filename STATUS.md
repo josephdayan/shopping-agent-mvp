@@ -1,3 +1,12 @@
+## 11/09/2026 — Fase 7 (operação) e fechamento do plano (597/597)
+
+Serviço `launchd` do comprador (`purchase-worker:install-service`, caffeinate, KeepAlive,
+logs em `~/Library/Logs/lia/`), runbook do operador reescrito para o fluxo novo, caminho
+legado da tarefa horária do ChatGPT removido (rota `claim`, rotas `[id]/complete|fail`,
+`purchase-worker-client.mts`, `validatePurchaseCompletion`, `PURCHASE_AUTOMATION_MODE`).
+Resumo consolidado e ordem para ligar no topo do AGENTS.md. Nada publicado; 5 migrations
+pendentes de deploy; gates E0–E11 continuam abertos e são o próximo passo do dono.
+
 ## 11/09/2026 — Fases 3, 4 e 5 implementadas localmente (597/597), desligadas por padrão
 
 **Fase 3 — Pix da loja pago pela Lia (VTEX).** `src/lib/pix-emv.ts` (parser BR Code + CRC16,

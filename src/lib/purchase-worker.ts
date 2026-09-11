@@ -52,14 +52,6 @@ function deliveryPromise(fulfillments: unknown): string | undefined {
   return values.length ? values.join(" · ") : undefined;
 }
 
-export function isMercadoLivrePurchaseUrl(value: string): boolean {
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" && !url.username && !url.password && !url.port &&
-      (url.hostname === "mercadolivre.com.br" || url.hostname.endsWith(".mercadolivre.com.br"));
-  } catch { return false; }
-}
-
 function preparationEligible(storeKey: string, items: OrderItem[], configured = false): boolean {
   return (configured || preparationStores().includes(storeKey)) && items.length > 0 && items.every((item) => item.storeKey === storeKey &&
     Number.isInteger(item.qty) && item.qty > 0 && Number.isFinite(item.unitPrice) && item.unitPrice > 0 &&
@@ -277,6 +269,7 @@ export function workerPayload(job: NonNullable<Awaited<ReturnType<typeof claimNe
     expectedTotal: job.expectedTotal,
     maximumTotal: job.approvalMaxTotal,
     cartHash: job.cartHash,
+    // Sem clique automático fora do comprador local: ML = confirmação do dono; VTEX = Pix.
     mode: "cart_only",
     canSubmitPurchase: false,
     // Frete cotado ao cliente (o ML não expõe frete no carrinho antes do endereço).
@@ -315,33 +308,3 @@ export async function reportPurchaseJobFailure(jobId: string, workerId: string, 
   });
 }
 
-export async function validatePurchaseCompletion(jobId: string, workerId: string, input: { actualTotal: number; cartHash: string; storeOrderNumber: string }) {
-  const job = await prisma.purchaseJob.findUnique({ where: { id: jobId } });
-  if (!job || job.status !== "claimed" || job.browserSessionId !== workerId) throw new Error("Purchase job is not claimed by this worker.");
-  if (!job.lockedAt || job.lockedAt.getTime() + leaseMs() <= Date.now()) throw new Error("Purchase worker lease expired; reconcile the retailer order.");
-  if ((process.env.PURCHASE_AUTOMATION_MODE ?? "cart_only") !== "purchase") throw new Error("Final purchase is disabled (cart_only).");
-  if (job.approvalStatus !== "approved" || !job.approvedAt) throw new Error("Purchase job has no current operator approval.");
-  if (!job.approvalExpiresAt || job.approvalExpiresAt <= new Date()) throw new Error("Purchase approval expired or missing expiration.");
-  if (!job.approvalCartHash || input.cartHash !== job.approvalCartHash) throw new Error("Cart changed after approval.");
-  const actualTotal = money(input.actualTotal);
-  if (!Number.isFinite(input.actualTotal) || actualTotal <= 0) throw new Error("Invalid retailer total.");
-  if (!job.approvalMaxTotal || actualTotal > money(job.approvalMaxTotal)) throw new Error("Retailer total exceeds the approved maximum.");
-  if (!input.storeOrderNumber.trim()) throw new Error("Retailer order number is required.");
-  const order = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: job.deliveryOrderId } });
-  if (!await ensurePurchaseJobForPaidOrder(order.id) || purchaseCartHash(order.items as unknown as OrderItem[], order.deliveryFee, deliveryPromise(order.fulfillments), order) !== input.cartHash) {
-    throw new Error("Order or payment changed after approval; reconcile before completion.");
-  }
-  return { job, actualTotal, completionToken: randomUUID() };
-}
-
-export async function markPurchaseJobCompleted(jobId: string, actualTotal: number, storeOrderNumber: string) {
-  await prisma.purchaseJob.update({
-    where: { id: jobId },
-    data: { status: "completed", actualTotal, storeOrderNumber: storeOrderNumber.trim(), lockedAt: null, nextAttemptAt: null, completedAt: new Date() }
-  });
-  await prisma.purchaseAttempt.upsert({
-    where: { purchaseJobId_idempotencyKey: { purchaseJobId: jobId, idempotencyKey: `retailer-order:${storeOrderNumber.trim()}` } },
-    create: { purchaseJobId: jobId, step: "purchase", status: "completed", idempotencyKey: `retailer-order:${storeOrderNumber.trim()}`, details: { actualTotal }, completedAt: new Date() },
-    update: { status: "completed", details: { actualTotal }, completedAt: new Date() }
-  });
-}
