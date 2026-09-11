@@ -201,6 +201,25 @@ export class GmailCodeMailbox {
     return null;
   }
 
+  // E-mails transacionais da loja (Fase 4): lista os recentes dos domínios da loja e devolve
+  // remetente/assunto/texto/data. O chamador classifica (mailbox-policy) e descarta o corpo.
+  async listStoreMessages(storeKey: string, sinceMs: number, maxResults = 20) {
+    const rule = STORE_MAIL[storeKey];
+    if (!rule) return [];
+    const days = Math.max(1, Math.ceil((Date.now() - sinceMs) / 86_400_000));
+    const query = encodeURIComponent(`newer_than:${days}d (${rule.domains.map((domain) => `from:${domain}`).join(" OR ")})`);
+    const listed = (await this.gmail(`/gmail/v1/users/me/messages?maxResults=${maxResults}&q=${query}`)) as { messages?: { id?: string }[] };
+    const out: { id: string; from: string; subject: string; text: string; receivedAt: number }[] = [];
+    for (const item of listed.messages ?? []) {
+      if (!item.id) continue;
+      const message = (await this.gmail(`/gmail/v1/users/me/messages/${encodeURIComponent(item.id)}?format=full`)) as GmailMessage;
+      const receivedAt = Number(message.internalDate);
+      if (!Number.isFinite(receivedAt) || receivedAt < sinceMs) continue;
+      out.push({ id: item.id, from: header(message, "from"), subject: header(message, "subject"), text: messageText(message.payload).slice(0, 20_000), receivedAt });
+    }
+    return out;
+  }
+
   async waitForCode(request: AccessCodeRequest) {
     const timeoutMs = Math.max(1_000, Math.min(request.timeoutMs ?? 90_000, 180_000));
     const pollMs = Math.max(250, Math.min(request.pollMs ?? 2_000, 10_000));

@@ -16,6 +16,7 @@ import { PURCHASE_DOMAINS, purchaseHostAllowed } from "../../src/lib/purchase-pr
 import { trackingPageAllowed } from "../../src/lib/tracking-policy";
 import { GmailCodeMailbox, registerStoreMail } from "./mailbox";
 import { MercadoLivreBuyer, ML_RECIPE, type MercadoLivreRecipe } from "./mercadolivre";
+import { classifyStoreMail, STORE_MAIL_RULES } from "../../src/lib/mailbox-policy";
 type AnyRecipe = StoreRecipe | MercadoLivreRecipe;
 const isMl = (r: AnyRecipe): r is MercadoLivreRecipe => (r as MercadoLivreRecipe).kind === "mercadolivre";
 
@@ -61,8 +62,8 @@ const config = JSON.parse(await readFile(configPath, "utf8")) as {
   probe?: ProbeAddress;
 };
 for (const [store, recipe] of Object.entries(config.stores)) {
-  if (isMl(recipe)) continue;
-  const mail = recipe.mail ?? VTEX_RECIPES[store]?.mail;
+  const mail = (isMl(recipe) ? undefined : recipe.mail ?? VTEX_RECIPES[store]?.mail) ??
+    (STORE_MAIL_RULES[store] ? { label: store, domains: STORE_MAIL_RULES[store].domains } : undefined);
   if (mail) registerStoreMail(store, mail);
 }
 const base = new URL(config.baseUrl);
@@ -426,7 +427,33 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
         JSON.stringify({ ...fresh, observedAt: "" })
     )
       throw new Error("Checkout mudou antes do clique final.");
+    // Pix da loja (Fase 3): o clique gera o copia-e-cola; o SERVIDOR confere e paga por API.
+    // O navegador segura o modal aberto e pergunta o estado até a loja confirmar.
+    const armed = recipe.payment === "pix" ? buyer.armPixCapture() : null;
     await buyer.submit();
+    if (armed) {
+      let code: string;
+      try {
+        code = await buyer.capturePixCode(armed);
+      } finally {
+        armed.dispose();
+      }
+      const captured = await purchase({ action: "pix_captured", ...identity, submissionId: permit.submissionId, code });
+      console.log(JSON.stringify({ job: job.jobId, store: job.storeKey, status: `pix_${captured.status}` }));
+      if (captured.status === "blocked") throw new Error("Recebedor bloqueado.");
+      if (captured.status === "unknown") throw new Error("Banco sem resposta.");
+      // Aguarda pago (ou recusado). Recebedor novo: o dono aprova por botão e o servidor paga.
+      const waitUntil = Date.now() + Number(process.env.LIA_PIX_WAIT_MS ?? 20 * 60_000);
+      let paid = captured.status === "paid";
+      while (!paid && Date.now() < waitUntil) {
+        await sleep(5_000);
+        const state = await purchase({ action: "pix_status", ...identity, submissionId: permit.submissionId, code });
+        if (state.status === "paid") paid = true;
+        else if (["refused", "failed", "expired", "unknown"].includes(state.status)) throw new Error(`Pix da loja: ${state.status}.`);
+        else if (["needs_review", "canceled"].includes(state.jobStatus)) throw new Error("Compra devolvida para revisão.");
+      }
+      if (!paid) throw new Error("Pix da loja não confirmou no prazo.");
+    }
     const receipt = await buyer.receipt();
     // A finalização no backend é idempotente; nunca repetir o clique financeiro.
     const complete = {
@@ -543,6 +570,37 @@ for (const [store, recipe] of Object.entries(config.stores)) {
 }
 if (!["run", "once"].includes(command))
   throw new Error("Use init, setup LOJA, probe LOJA [SKU], mailbox-check, run ou once.");
+// Leitor de e-mails transacionais (Fase 4): a cada 2 min lista os e-mails recentes das
+// lojas configuradas, classifica localmente e manda só o veredito ao servidor. O corpo
+// nunca sai do processo. Ids já reportados ficam em memória (o servidor deduplica também).
+const reportedMail = new Set<string>();
+async function mailLoop() {
+  if (!mailbox || !trackingToken) return;
+  const stores = Object.keys(config.stores).filter((s) => STORE_MAIL_RULES[s]);
+  const since = Date.now() - 2 * 86_400_000;
+  do {
+    for (const store of stores) {
+      try {
+        const messages = await mailbox.listStoreMessages(store, since);
+        for (const m of messages) {
+          if (reportedMail.has(m.id)) continue;
+          const verdict = classifyStoreMail(store, { from: m.from, subject: m.subject, text: m.text });
+          reportedMail.add(m.id);
+          if (!verdict) continue;
+          await api("/api/tracking-worker", trackingToken, {
+            action: "report_mail", storeKey: store, storeOrderNumber: verdict.storeOrderNumber, kind: verdict.kind,
+            messageId: m.id, receivedAt: new Date(m.receivedAt).toISOString(), ...(verdict.trackingUrl ? { trackingUrl: verdict.trackingUrl } : {}),
+          }).catch(() => {});
+        }
+      } catch {
+        console.error(JSON.stringify({ store, status: "mailbox_unavailable" }));
+      }
+    }
+    if (command === "once") break;
+    await sleep(Number(process.env.LIA_MAIL_POLL_MS ?? 120_000));
+  } while (!stopping);
+}
+void mailLoop();
 // Processos podem rodar em hosts distintos; o banco é a autoridade da reserva por loja.
 await Promise.all(
   Object.entries(config.stores).map(async ([store, recipe]) => {

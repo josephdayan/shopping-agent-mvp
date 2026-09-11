@@ -8,7 +8,9 @@ import * as copy from "./lia-copy";
 export type DeliveryEventKind = "bought" | "out_for_delivery" | "delivered";
 export type DeliveryEvidence = {
   kind: DeliveryEventKind;
-  source: "operator" | "tracking_reader";
+  // mailbox_reader (11/09): e-mail transacional da loja lido na caixa operacional; vale
+  // as mesmas guardas do leitor de página (loja + número exatos, nunca confirma compra).
+  source: "operator" | "tracking_reader" | "mailbox_reader";
   sourceReference: string;
   occurredAt?: Date;
   storeOrderNumber?: string;
@@ -43,7 +45,7 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
       if (job.status === "completed" && job.storeOrderNumber !== evidence.storeOrderNumber?.trim()) throw new Error("Comprovante duplicado com número diferente.");
     }
     // O leitor não pode associar pedidos por nome, telefone ou produto parecido.
-    if (evidence.source === "tracking_reader") {
+    if (evidence.source === "tracking_reader" || evidence.source === "mailbox_reader") {
       if (evidence.kind === "bought") throw new Error("O leitor de rastreio não confirma compras.");
       const stores = new Set((Array.isArray(order.items) ? order.items : []).flatMap((i) =>
         i && typeof i === "object" && !Array.isArray(i) && typeof i.storeKey === "string" ? [i.storeKey] : []));
@@ -71,7 +73,7 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
     if (order.status === TARGET[evidence.kind]) return { order, eventId: null };
     const allowed = evidence.kind === "bought" ? ["paid"] : evidence.kind === "out_for_delivery"
       ? ["retailer_preparing", "operator_buying"]
-      : evidence.source === "tracking_reader" ? ["retailer_preparing", "retailer_out_for_delivery"] : ["retailer_out_for_delivery", "dispatched"];
+      : evidence.source !== "operator" ? ["retailer_preparing", "retailer_out_for_delivery"] : ["retailer_out_for_delivery", "dispatched"];
     if (!allowed.includes(order.status)) throw new Error("Etapa incompatível com o estado atual do pedido.");
     if (order.paidAt && occurredAt < order.paidAt) throw new Error("Evidência anterior ao pagamento do pedido.");
     const last = await tx.deliveryEvent.findFirst({ where: { deliveryOrderId: order.id }, orderBy: { occurredAt: "desc" } });

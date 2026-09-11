@@ -145,6 +145,47 @@ export async function claimTracking(workerId: string, stores: string[]) {
   }
   return null;
 }
+// E-mail transacional da loja (Fase 4): o leitor local já classificou (mailbox-policy) e
+// manda só o veredito. Correlação exclusivamente por loja + número exato; e-mail repetido é
+// inofensivo (dedupe por pedido:etapa). "Criado/pago" fecha a etapa do Pix da loja.
+export async function reportMail(input: {
+  storeKey: string;
+  storeOrderNumber: string;
+  kind: "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled";
+  messageId: string;
+  receivedAt: string;
+  trackingUrl?: string;
+}) {
+  const number = input.storeOrderNumber.trim();
+  const order = await prisma.deliveryOrder.findFirst({
+    where: { storeOrderNumber: number, status: { in: ["retailer_preparing", "retailer_out_for_delivery"] } },
+    orderBy: { updatedAt: "desc" },
+  });
+  const job = order ? null : await prisma.purchaseJob.findFirst({ where: { storeKey: input.storeKey, storeOrderNumber: number } });
+  const receivedAt = new Date(input.receivedAt);
+  if (!Number.isFinite(receivedAt.getTime())) throw new Error("Data do e-mail inválida.");
+  if (input.kind === "out_for_delivery" || input.kind === "delivered") {
+    if (!order) return { matched: false as const, reason: "pedido não encontrado" };
+    const stores = new Set((Array.isArray(order.items) ? order.items : []).flatMap((i) =>
+      i && typeof i === "object" && !Array.isArray(i) && typeof (i as { storeKey?: unknown }).storeKey === "string" ? [(i as { storeKey: string }).storeKey] : []));
+    const actualStore = stores.size === 1 ? [...stores][0] : order.storeKey;
+    if (actualStore !== input.storeKey) return { matched: false as const, reason: "loja não confere" };
+    await recordDeliveryEvent(order.id, {
+      kind: input.kind, source: "mailbox_reader", sourceReference: `mail:${input.messageId}`.slice(0, 300),
+      occurredAt: receivedAt, storeKey: input.storeKey, storeOrderNumber: number, trackingUrl: input.trackingUrl,
+    });
+    return { matched: true as const, orderId: order.id, kind: input.kind };
+  }
+  // Etapas sem aviso ao cliente: fecham o Pix da loja (store_confirmed) ou viram nota.
+  const target = order ?? (job ? await prisma.deliveryOrder.findUnique({ where: { id: job.deliveryOrderId } }) : null);
+  if (!target) return { matched: false as const, reason: "pedido não encontrado" };
+  if (input.kind === "created" || input.kind === "paid") {
+    await prisma.purchaseJob.updateMany({ where: { deliveryOrderId: target.id, status: { in: ["pix_paid"] } }, data: { status: "store_confirmed", storeOrderNumber: number } });
+  }
+  const { appendOrderNote } = await import("./order-flags");
+  await prisma.deliveryOrder.update({ where: { id: target.id }, data: { notes: appendOrderNote(target.notes, `📧 ${input.kind} — e-mail da loja ${number} (${receivedAt.toISOString()}).`) } });
+  return { matched: true as const, orderId: target.id, kind: input.kind };
+}
 export async function reportTracking(
   id: string,
   workerId: string,

@@ -4,6 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { humanEstimate } from "../../src/lib/live-freight";
 import type { CheckoutEvidence } from "../../src/lib/purchase-execution";
+import { findPixCode, PIX_EMV_RE } from "../../src/lib/pix-emv";
 import type { AccessCodeRequest } from "./mailbox";
 
 export type BuyerJob = {
@@ -685,6 +686,39 @@ export class VtexBuyer {
     )
       throw new Error("Botão final não identificado com segurança.");
     await button.click({ timeout: 15_000 });
+  }
+  // Pix da loja (Fase 3): registrar ANTES do clique; captura o copia-e-cola da resposta do
+  // conector (paymentAppData.payload.code) ou do modal do Payment App. Nunca resolve desafio.
+  armPixCapture() {
+    const found: { code?: string } = {};
+    const handler = async (response: import("playwright-core").Response) => {
+      try {
+        const type = response.headers()["content-type"] ?? "";
+        if (!/json/i.test(type)) return;
+        const text = await response.text();
+        if (!/paymentAppData|paymentAuthorizationAppCollection|qrCode|copiaecola|copia-e-cola/i.test(text) && !PIX_EMV_RE.test(text)) return;
+        const code = findPixCode(text);
+        if (code && !found.code) found.code = code;
+      } catch {}
+    };
+    this.page.on("response", handler);
+    return {
+      found,
+      dispose: () => this.page.off("response", handler),
+    };
+  }
+  async capturePixCode(armed: { found: { code?: string } }, timeoutMs = 90_000) {
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      if (armed.found.code) return armed.found.code;
+      const body = (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
+      if (/n[aã]o sou um rob[oô]|verifica[cç][aã]o de seguran[cç]a/i.test(body))
+        throw new Error("A loja pediu verificação humana antes do Pix; compra não finalizada.");
+      const fromDom = findPixCode(body);
+      if (fromDom) return fromDom;
+      await this.page.waitForTimeout(1_500);
+    }
+    throw new Error("Copia-e-cola do Pix não apareceu no prazo.");
   }
   async receipt() {
     const r = this.recipe.receipt;

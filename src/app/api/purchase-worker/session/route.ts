@@ -10,6 +10,9 @@ import {
   finishPurchase,
   executionUnknown,
   requestOwnerConfirm,
+  capturePix,
+  pixPayoutStatus,
+  approveReceiverAndPay,
   checkoutEvidenceSchema,
 } from "@/lib/purchase-execution";
 export const dynamic = "force-dynamic";
@@ -54,6 +57,24 @@ const schema = z.discriminatedUnion("action", [
       action: z.literal("owner_confirm"),
       ...common,
       evidence: checkoutEvidenceSchema,
+    })
+    .strict(),
+  // VTEX + Pix da loja: o navegador entrega o copia-e-cola; o servidor confere e paga.
+  z
+    .object({
+      action: z.literal("pix_captured"),
+      ...common,
+      submissionId: z.string().uuid(),
+      code: z.string().min(40).max(1024),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("pix_status"),
+      ...common,
+      submissionId: z.string().uuid(),
+      // Recebedor aprovado pelo dono no meio do caminho: o navegador reenvia o código para pagar.
+      code: z.string().min(40).max(1024).optional(),
     })
     .strict(),
   z
@@ -109,6 +130,17 @@ export async function POST(request: Request) {
       return NextResponse.json(
         await requestOwnerConfirm(b.jobId, b.workerId, b.claimToken, b.evidence),
       );
+    if (b.action === "pix_captured")
+      return NextResponse.json(await capturePix(b.jobId, b.workerId, b.claimToken, b.submissionId, b.code));
+    if (b.action === "pix_status") {
+      const status = await pixPayoutStatus(b.jobId, b.workerId, b.claimToken, b.submissionId);
+      if (status.jobStatus === "pix_captured" && b.code) {
+        const receiverApproved = await import("@/lib/prisma").then(({ prisma }) => prisma.pixPayout.findUnique({ where: { purchaseJobId: b.jobId } }).then(async (p) =>
+          p && p.status === "created" && Boolean(await prisma.purchaseReceiver.findFirst({ where: { receiverDoc: p.receiverDoc, status: "approved", storeKey: (await prisma.purchaseJob.findUniqueOrThrow({ where: { id: b.jobId } })).storeKey } }))));
+        if (receiverApproved) return NextResponse.json(await approveReceiverAndPay(b.jobId, b.code, "wa"));
+      }
+      return NextResponse.json(status);
+    }
     if (b.action === "complete") {
       await finishPurchase(b.jobId, b.workerId, b.claimToken, b);
       return NextResponse.json({ ok: true });

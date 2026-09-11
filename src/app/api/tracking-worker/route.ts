@@ -4,6 +4,7 @@ import {
   trackingWorkerAuthorized,
   claimTracking,
   reportTracking,
+  reportMail,
 } from "@/lib/tracking-worker";
 export const dynamic = "force-dynamic";
 const schema = z.discriminatedUnion("action", [
@@ -12,6 +13,17 @@ const schema = z.discriminatedUnion("action", [
       action: z.literal("claim"),
       workerId: z.string().min(1).max(120),
       stores: z.array(z.string()).min(1).max(20),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("report_mail"),
+      storeKey: z.string().min(1).max(80),
+      storeOrderNumber: z.string().min(3).max(120),
+      kind: z.enum(["created", "paid", "invoiced", "out_for_delivery", "delivered", "canceled"]),
+      messageId: z.string().min(1).max(200),
+      receivedAt: z.string().datetime(),
+      trackingUrl: z.string().url().optional(),
     })
     .strict(),
   z
@@ -41,6 +53,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   try {
     const x = b.data;
+    if (x.action === "report_mail") return NextResponse.json(await reportMail(x));
     return NextResponse.json(
       x.action === "claim"
         ? { job: await claimTracking(x.workerId, x.stores) }

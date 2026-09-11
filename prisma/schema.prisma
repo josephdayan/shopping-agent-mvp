@@ -517,3 +517,30 @@ model OpsAction {
   @@index([purchaseJobId])
   @@index([deliveryOrderId])
 }
+
+// Pagamento Pix de saída (a Lia paga a loja). UM por job; criado antes da chamada ao
+// banco; o EMV em claro nunca é gravado (só o hash e os campos decodificados).
+model PixPayout {
+  id               String    @id @default(cuid())
+  purchaseJobId    String    @unique
+  deliveryOrderId  String
+  provider         String
+  idempotencyKey   String    @unique
+  status           String    @default("created")
+  amountCents      Int
+  codeHash         String
+  txid             String?
+  receiverDoc      String
+  receiverName     String
+  providerPayoutId String?   @unique
+  endToEndId       String?   @unique
+  expiresAt        DateTime?
+  submittedAt      DateTime?
+  settledAt        DateTime?
+  lastError        String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status, submittedAt])
+  @@index([deliveryOrderId])
+}

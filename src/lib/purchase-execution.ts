@@ -13,6 +13,8 @@ import { Prisma } from "@prisma/client";
 import { automaticPurchaseDecision, automaticPurchaseStores, AUTO_PURCHASE_POLICY, purchaseBudgetDay, MERCADO_LIVRE_STORE_KEY } from "./purchase-policy";
 import { createOpsAction, cancelPendingActions, sendOperatorButtons } from "./ops-actions";
 import * as copy from "./lia-copy";
+import { parsePixEmv, pixCodeHash } from "./pix-emv";
+import { pixOutProvider, PixOutTimeout } from "./payments/pix-out";
 
 export const checkoutEvidenceSchema = z
   .object({
@@ -362,12 +364,22 @@ export async function stageCheckout(
       checkoutHash: digest,
       readyToSubmit: false,
       notify: job.status !== "awaiting_approval" || job.checkoutHash !== digest,
+      reason: automaticReason,
     };
   });
-  if (staged.notify)
-    await notifyOperator(
-      `Carrinho #${base.deliveryOrderId.slice(-6).toUpperCase()} pronto: R$ ${(e.totalCents / 100).toFixed(2).replace(".", ",")}. Confira e autorize em ${(process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "")}/ops. Você pode aprovar quando puder; vamos conferir novamente antes de comprar.`,
+  if (staged.notify) {
+    // Exceção "acima do teto/loja sem liberação" por um toque (11/09): Autorizar = a
+    // mesma aprovação individual do painel; Estornar = compra não realizada.
+    const action = await prisma.$transaction((tx) => createOpsAction(tx, {
+      kind: "over_limit", purchaseJobId: jobId, deliveryOrderId: base.deliveryOrderId,
+      payload: { checkoutHash: staged.checkoutHash, totalCents: e.totalCents },
+    }));
+    await sendOperatorButtons(
+      action,
+      copy.operatorOverLimit(base.deliveryOrderId.slice(-6).toUpperCase(), e.totalCents, staged.reason ?? ""),
+      [{ choice: "approve", title: "Autorizar" }, { choice: "refund", title: "Estornar" }],
     );
+  }
   return {
     checkoutHash: staged.checkoutHash,
     readyToSubmit: staged.readyToSubmit,
@@ -563,7 +575,7 @@ export async function finishPurchase(
     !token ||
     job.claimToken !== token ||
     job.submissionId !== input.submissionId ||
-    !["submitting", "outcome_unknown", "completed"].includes(job.status)
+    !["submitting", "outcome_unknown", "completed", "pix_submitted", "pix_paid", "store_confirmed"].includes(job.status)
   )
     throw new Error("Comprovante não pertence à tentativa.");
   const e = parseStoredEvidence(job.checkoutEvidence);
@@ -681,7 +693,8 @@ export async function ownerStoreNumber(jobId: string, storeOrderNumber: string, 
   if (number.length < 6 || number.length > 20) throw new Error("Número do pedido do Mercado Livre inválido.");
   const job = await prisma.$transaction(async (tx) => {
     const current = await tx.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
-    if (!["awaiting_owner_confirm", "awaiting_store_number"].includes(current.status) || !current.submissionId)
+    // ML (carrinho com o dono) ou VTEX+Pix pago sem comprovante lido: o número vem do dono.
+    if (!["awaiting_owner_confirm", "awaiting_store_number", "pix_paid", "store_confirmed"].includes(current.status) || !current.submissionId)
       throw new Error("Este carrinho não está aguardando o número do pedido.");
     await cancelPendingActions(tx, current.id, ["ml_cart_ready", "await_store_number"]);
     return tx.purchaseJob.update({ where: { id: current.id }, data: { ownerConfirmedAt: current.ownerConfirmedAt ?? new Date() } });
@@ -695,6 +708,184 @@ export async function ownerStoreNumber(jobId: string, storeOrderNumber: string, 
     purchaseExecution: { jobId: job.id, submissionId: job.submissionId!, actualTotal: e.totalCents / 100 },
   });
   return prisma.purchaseJob.findUniqueOrThrow({ where: { id: job.id } });
+}
+
+// ---------- VTEX + Pix da loja pago pela Lia (Fase 3, 11/09) ----------
+// O comprador clicou em finalizar (beginPurchase já reservou o orçamento) e capturou o
+// copia-e-cola. Aqui: CRC, valor exato, cobrança dinâmica, recebedor na allowlist da loja.
+// Recebedor novo pede um toque do dono; aprovado → pagamento ÚNICO por API bancária.
+const PIX_SETTLE_STATUSES = ["pix_submitted", "pix_paid", "store_confirmed"];
+export async function capturePix(jobId: string, workerId: string, token: string, submissionId: string, code: string) {
+  if (process.env.LIA_PURCHASE_SUBMIT_OFF === "true") throw new Error("Finalização de compras pausada.");
+  const provider = pixOutProvider();
+  const emv = parsePixEmv(code);
+  if (!emv.valid) throw new Error(`Copia-e-cola inválido (${emv.reason ?? "formato"}).`);
+  if (!emv.dynamic) throw new Error("Só pagamos cobrança Pix dinâmica gerada pelo checkout.");
+  const decoded = await provider.decode(code.trim());
+  const base = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  const shortId = base.deliveryOrderId.slice(-6).toUpperCase();
+  const outcome = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${base.deliveryOrderId} FOR UPDATE`;
+    const job = await owned(tx, jobId, workerId, token);
+    if (job.status !== "submitting" || job.submissionId !== submissionId) throw new Error("Captura fora da tentativa autorizada.");
+    const e = parseStoredEvidence(job.checkoutEvidence);
+    if (e.payment.kind !== "pix_store") throw new Error("Este checkout não é Pix da loja.");
+    const amount = decoded.amountCents ?? emv.amountCents;
+    if (amount !== e.totalCents || (emv.amountCents != null && emv.amountCents !== e.totalCents) || decoded.canBePaidWithDifferentValue)
+      throw new Error("Valor do Pix não bate com o checkout conferido.");
+    if (decoded.type !== "dynamic") throw new Error("Só pagamos cobrança Pix dinâmica.");
+    if (!/^\d{11}$|^\d{14}$/.test(decoded.receiverDoc)) throw new Error("Recebedor do Pix sem documento legível.");
+    const existing = await tx.pixPayout.findUnique({ where: { purchaseJobId: job.id } });
+    if (existing) throw new Error("Já existe um pagamento para esta compra; nunca pagar duas vezes.");
+    const receiver = await tx.purchaseReceiver.upsert({
+      where: { storeKey_receiverDoc: { storeKey: job.storeKey, receiverDoc: decoded.receiverDoc } },
+      create: { storeKey: job.storeKey, receiverDoc: decoded.receiverDoc, receiverName: decoded.receiverName || emv.merchantName },
+      update: {},
+    });
+    if (receiver.status === "blocked") {
+      await tx.purchaseJob.update({ where: { id: job.id }, data: { status: "needs_review", lastErrorCode: "RECEIVER_BLOCKED", lastErrorMessage: "Recebedor do Pix bloqueado para esta loja." } });
+      return { kind: "blocked" as const };
+    }
+    const payout = await tx.pixPayout.create({ data: {
+      purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, provider: provider.name, idempotencyKey: `payout:${submissionId}`,
+      amountCents: e.totalCents, codeHash: pixCodeHash(code), txid: emv.txid, receiverDoc: decoded.receiverDoc,
+      receiverName: receiver.receiverName, expiresAt: decoded.expiresAt ? new Date(decoded.expiresAt) : null,
+    } });
+    await tx.purchaseJob.update({ where: { id: job.id }, data: { status: "pix_captured", lockedAt: new Date() } });
+    await tx.purchaseAttempt.create({ data: { purchaseJobId: job.id, step: "pix_capture", status: "captured", idempotencyKey: `pix-capture:${submissionId}`, details: { receiverDoc: decoded.receiverDoc, txid: emv.txid } } });
+    if (receiver.status !== "approved") {
+      const action = await createOpsAction(tx, { kind: "receiver_new", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, payload: { receiverName: receiver.receiverName, receiverDoc: decoded.receiverDoc, amountCents: e.totalCents } });
+      return { kind: "receiver_new" as const, action, receiver, payout };
+    }
+    return { kind: "pay" as const, payout };
+  });
+  if (outcome.kind === "blocked") return { status: "blocked" as const };
+  if (outcome.kind === "receiver_new") {
+    await sendOperatorButtons(outcome.action, copy.operatorReceiverNew(shortId, outcome.receiver.receiverName, outcome.receiver.receiverDoc, outcome.payout.amountCents), [{ choice: "pay", title: "Pagar e memorizar" }, { choice: "refuse", title: "Recusar" }]);
+    return { status: "awaiting_receiver" as const, payoutId: outcome.payout.id };
+  }
+  return executePixPayout(outcome.payout.id, code);
+}
+
+// Chamada bancária ÚNICA. O EMV só existe aqui, em memória; timeout = unknown + humano.
+async function executePixPayout(payoutId: string, code: string) {
+  const provider = pixOutProvider();
+  const claimed = await prisma.pixPayout.updateMany({ where: { id: payoutId, status: "created" }, data: { status: "submitting", submittedAt: new Date() } });
+  if (!claimed.count) throw new Error("Pagamento já iniciado; nunca repetir.");
+  const payout = await prisma.pixPayout.findUniqueOrThrow({ where: { id: payoutId } });
+  if (pixCodeHash(code) !== payout.codeHash) throw new Error("Copia-e-cola difere do capturado.");
+  await prisma.purchaseJob.update({ where: { id: payout.purchaseJobId }, data: { status: "pix_submitted", lockedAt: new Date() } });
+  try {
+    const result = await provider.pay({ code, amountCents: payout.amountCents, idempotencyKey: payout.id, description: `Lia #${payout.deliveryOrderId.slice(-6).toUpperCase()}` });
+    const status = result.status === "paid" ? "paid" : result.status === "refused" ? "refused" : "submitted";
+    await prisma.pixPayout.update({ where: { id: payout.id }, data: { status, providerPayoutId: result.providerPayoutId, endToEndId: result.endToEndId ?? undefined, settledAt: status === "paid" ? new Date() : null } });
+    await prisma.purchaseReceiver.updateMany({ where: { storeKey: (await prisma.purchaseJob.findUniqueOrThrow({ where: { id: payout.purchaseJobId } })).storeKey, receiverDoc: payout.receiverDoc }, data: { lastUsedAt: new Date(), timesUsed: { increment: 1 } } });
+    await applyPayoutStatus(payout.id, status, result.endToEndId ?? null);
+    return { status, payoutId: payout.id };
+  } catch (error) {
+    const timeout = error instanceof PixOutTimeout;
+    await prisma.pixPayout.update({ where: { id: payout.id }, data: { status: timeout ? "unknown" : "failed", lastError: (error instanceof Error ? error.message : "falha").slice(0, 300) } });
+    if (timeout) {
+      // Pode ter saído dinheiro. Nunca segunda chamada: humano concilia pelo extrato.
+      await prisma.purchaseJob.update({ where: { id: payout.purchaseJobId }, data: { status: "outcome_unknown", lastErrorCode: "PIX_OUT_TIMEOUT", lastErrorMessage: "Banco não respondeu ao pagamento do Pix; conferir extrato antes de qualquer nova tentativa." } });
+      await notifyOperator(copy.operatorPixTimeout(payout.deliveryOrderId.slice(-6).toUpperCase()));
+      return { status: "unknown" as const, payoutId: payout.id };
+    }
+    await applyPayoutStatus(payout.id, "refused", null, error instanceof Error ? error.message : undefined);
+    return { status: "refused" as const, payoutId: payout.id };
+  }
+}
+
+async function applyPayoutStatus(payoutId: string, status: "submitted" | "paid" | "refused" | "expired", endToEndId: string | null, reason?: string) {
+  const payout = await prisma.pixPayout.findUniqueOrThrow({ where: { id: payoutId } });
+  const job = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: payout.purchaseJobId } });
+  const shortId = payout.deliveryOrderId.slice(-6).toUpperCase();
+  if (status === "paid") {
+    await prisma.pixPayout.update({ where: { id: payoutId }, data: { status: "paid", endToEndId: endToEndId ?? payout.endToEndId, settledAt: payout.settledAt ?? new Date() } });
+    if (["pix_submitted", "pix_captured"].includes(job.status)) await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "pix_paid", lockedAt: new Date() } });
+    return;
+  }
+  if (status === "refused" || status === "expired") {
+    await prisma.pixPayout.update({ where: { id: payoutId }, data: { status, lastError: reason?.slice(0, 300) } });
+    if (!["needs_review", "completed", "canceled"].includes(job.status)) {
+      await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "needs_review", lastErrorCode: status === "expired" ? "PIX_OUT_EXPIRED" : "PIX_OUT_REFUSED", lastErrorMessage: reason?.slice(0, 200) ?? "Pagamento do Pix recusado pelo banco." } });
+      const action = await prisma.$transaction((tx) => createOpsAction(tx, { kind: "pix_failed", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, payload: { reason: reason ?? status } }));
+      await sendOperatorButtons(action, copy.operatorPixFailed(shortId, reason ?? status), [{ choice: "retry", title: "Refazer" }, { choice: "refund", title: "Estornar" }]);
+    }
+  }
+}
+
+// Recebedor novo aprovado pelo dono → memoriza e paga (uma vez). Recusado → revisão.
+export async function approveReceiverAndPay(jobId: string, code: string, by = "ops_session") {
+  const job = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  const payout = await prisma.pixPayout.findUniqueOrThrow({ where: { purchaseJobId: jobId } });
+  if (job.status !== "pix_captured" || payout.status !== "created") throw new Error("Pagamento não está aguardando o recebedor.");
+  await prisma.purchaseReceiver.updateMany({ where: { storeKey: job.storeKey, receiverDoc: payout.receiverDoc, status: "pending" }, data: { status: "approved", approvedBy: by, approvedAt: new Date() } });
+  return executePixPayout(payout.id, code);
+}
+export async function refuseReceiver(jobId: string, by = "ops_session") {
+  const job = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  const payout = await prisma.pixPayout.findUniqueOrThrow({ where: { purchaseJobId: jobId } });
+  if (job.status !== "pix_captured" || payout.status !== "created") throw new Error("Pagamento não está aguardando o recebedor.");
+  await prisma.purchaseReceiver.updateMany({ where: { storeKey: job.storeKey, receiverDoc: payout.receiverDoc }, data: { status: "blocked", approvedBy: by } });
+  await prisma.pixPayout.update({ where: { id: payout.id }, data: { status: "refused", lastError: "recebedor recusado pelo dono" } });
+  return prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "needs_review", lastErrorCode: "RECEIVER_REFUSED", lastErrorMessage: "Recebedor do Pix recusado pelo dono; conferir a loja." } });
+}
+
+// O navegador pergunta o estado do pagamento enquanto segura o modal do Pix aberto.
+export async function pixPayoutStatus(jobId: string, workerId: string, token: string, submissionId: string) {
+  const job = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  if (job.browserSessionId !== workerId || job.claimToken !== token || job.submissionId !== submissionId) throw new Error("Reserva inválida.");
+  const payout = await prisma.pixPayout.findUnique({ where: { purchaseJobId: jobId } });
+  if (!payout) return { status: "none" as const, jobStatus: job.status };
+  if (payout.status === "submitted" && payout.providerPayoutId) await settlePayout(payout.id);
+  const fresh = await prisma.pixPayout.findUniqueOrThrow({ where: { id: payout.id } });
+  await prisma.purchaseJob.updateMany({ where: { id: jobId, status: { in: ["pix_captured", "pix_submitted", "pix_paid"] } }, data: { lockedAt: new Date() } });
+  return { status: fresh.status, jobStatus: (await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } })).status, endToEndId: fresh.endToEndId };
+}
+
+async function settlePayout(payoutId: string) {
+  const payout = await prisma.pixPayout.findUniqueOrThrow({ where: { id: payoutId } });
+  if (payout.status !== "submitted" || !payout.providerPayoutId) return;
+  const status = await pixOutProvider().status(payout.providerPayoutId);
+  if (status.status === "paid") await applyPayoutStatus(payoutId, "paid", status.endToEndId ?? null);
+  else if (status.status === "refused" || status.status === "expired") await applyPayoutStatus(payoutId, status.status, null, status.reason);
+}
+
+// Cron: concilia pagamentos enviados e avisa loja em silêncio depois do Pix pago.
+export async function settlePixPayouts(now = new Date()) {
+  const report = { settled: 0, silent: 0, errors: [] as string[] };
+  if (!process.env.LIA_PIX_OUT_PROVIDER) return report;
+  const pending = await prisma.pixPayout.findMany({ where: { status: "submitted", providerPayoutId: { not: null }, submittedAt: { lt: new Date(now.getTime() - 20_000) } }, take: 50 });
+  for (const payout of pending) {
+    try { await settlePayout(payout.id); report.settled += 1; } catch (error) { report.errors.push(`payout ${payout.id}: ${error instanceof Error ? error.message : String(error)}`); }
+  }
+  const minutes = Number(process.env.LIA_PIX_STORE_CONFIRM_MIN ?? 30);
+  const silent = await prisma.purchaseJob.findMany({ where: { status: "pix_paid", updatedAt: { lt: new Date(now.getTime() - minutes * 60_000) } }, take: 50 });
+  for (const job of silent) {
+    const open = await prisma.opsAction.findFirst({ where: { purchaseJobId: job.id, kind: "store_silent", status: "pending" } });
+    if (open) continue;
+    const action = await prisma.$transaction((tx) => createOpsAction(tx, { kind: "store_silent", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId }));
+    await sendOperatorButtons(action, copy.operatorStoreSilent(job.deliveryOrderId.slice(-6).toUpperCase(), minutes), [{ choice: "confirm", title: "Confirmar" }, { choice: "refund", title: "Estornar" }]);
+    report.silent += 1;
+  }
+  return report;
+}
+
+// "Refazer" após Pix recusado: libera a reserva daquela tentativa e volta à fila.
+export async function retryAfterPixFailure(jobId: string, by = "ops_session") {
+  return prisma.$transaction(async (tx) => {
+    const job = await tx.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+    const payout = await tx.pixPayout.findUnique({ where: { purchaseJobId: jobId } });
+    if (job.status !== "needs_review" || !payout || !["refused", "expired", "failed"].includes(payout.status)) throw new Error("Só é possível refazer depois de um Pix recusado ou vencido.");
+    if (job.submissionId) await tx.purchaseSpend.updateMany({ where: { submissionId: job.submissionId, status: "reserved" }, data: { status: "released", releasedAt: new Date(), releaseNote: `pix ${payout.status}; refazer por ${by}` } });
+    await tx.pixPayout.delete({ where: { id: payout.id } });
+    await tx.purchaseAttempt.create({ data: { purchaseJobId: job.id, step: "pix_retry", status: "requested", idempotencyKey: `pix-retry:${payout.id}`, details: { by, previous: payout.providerPayoutId } } });
+    return tx.purchaseJob.update({ where: { id: job.id }, data: {
+      status: "queued", submissionId: null, submitStartedAt: null, lockedAt: null, claimToken: null, browserSessionId: null,
+      checkoutEvidence: Prisma.JsonNull, checkoutHash: null, approvalStatus: "not_requested", approvalCartHash: null, approvalExpiresAt: null, approvedAt: null, lastErrorCode: null, lastErrorMessage: null,
+    } });
+  });
 }
 
 // A confirmação humana é auditada. Não libera uma sessão ainda ativa no navegador.

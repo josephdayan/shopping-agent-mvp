@@ -95,6 +95,20 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
     take: 50,
     select: { id: true }
   });
+  // 4) Pix de saída: concilia pagamentos enviados e loja em silêncio; comprador sem sinal.
+  try {
+    const { settlePixPayouts } = await import("@/lib/purchase-execution");
+    const settled = await settlePixPayouts(now);
+    report.errors.push(...settled.errors);
+  } catch (error) {
+    report.errors.push(`pix-out: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  try {
+    const { alertSilentBuyer } = await import("@/lib/purchase-worker");
+    await alertSilentBuyer(now);
+  } catch (error) {
+    report.errors.push(`buyer-silent: ${error instanceof Error ? error.message : String(error)}`);
+  }
   for (const order of stuck) {
     try {
       const { watchPaidOrder } = await import("@/lib/ops-lifecycle");

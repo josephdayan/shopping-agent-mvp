@@ -5,7 +5,9 @@ import { prisma } from "./prisma";
 import { isAdminPhone } from "./turn-runtime";
 import { whatsappAdapter } from "./adapters/whatsapp";
 import { parseOpsActionButton, consumeOpsAction, mirrorOpsAction } from "./ops-actions";
-import { ownerConfirmCartBought, ownerDeclineCart, ownerStoreNumber } from "./purchase-execution";
+import { ownerConfirmCartBought, ownerDeclineCart, ownerStoreNumber, approveCheckout, refuseReceiver, retryAfterPixFailure } from "./purchase-execution";
+import { opsPurchaseFailedRefund } from "./ops-lifecycle";
+import { createOpsAction } from "./ops-actions";
 import * as copy from "./lia-copy";
 
 const STORE_NUMBER_RE = /^#?\s*(\d{6,20})\s*$/;
@@ -54,6 +56,49 @@ async function runOperatorButton(phone: string, button: { id: string; choice: st
       if (button.choice === "failed") {
         const job = await ownerDeclineCart(action.purchaseJobId, action.id);
         await reply(phone, copy.operatorCartDeclined(job.deliveryOrderId.slice(-6).toUpperCase()));
+        return;
+      }
+    }
+    if (action.purchaseJobId) {
+      const job = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: action.purchaseJobId } });
+      const shortId = job.deliveryOrderId.slice(-6).toUpperCase();
+      // Recebedor novo: "pagar" precisa do copia-e-cola, que só o navegador tem. O toque
+      // aprova o recebedor; o comprador (que está esperando com o modal aberto) paga.
+      if (action.kind === "receiver_new") {
+        if (button.choice === "pay") {
+          await prisma.purchaseReceiver.updateMany({ where: { storeKey: job.storeKey, status: "pending", receiverDoc: String((action.payload as { receiverDoc?: string } | null)?.receiverDoc ?? "") }, data: { status: "approved", approvedBy: `wa:${phone}`, approvedAt: new Date() } });
+          await reply(phone, copy.operatorReceiverApproved(shortId));
+          return;
+        }
+        await refuseReceiver(job.id, `wa:${phone}`);
+        await reply(phone, copy.operatorCartDeclined(shortId));
+        return;
+      }
+      if (action.kind === "pix_failed") {
+        if (button.choice === "retry") { await retryAfterPixFailure(job.id, `wa:${phone}`); await reply(phone, copy.operatorRetryQueued(shortId)); return; }
+        await opsPurchaseFailedRefund(job.deliveryOrderId, "pagamento à loja não concluído");
+        await reply(phone, copy.operatorRefundDone(shortId));
+        return;
+      }
+      if (action.kind === "store_silent") {
+        if (button.choice === "confirm") {
+          await prisma.$transaction((tx) => createOpsAction(tx, { kind: "await_store_number", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, payload: { from: action.id } }));
+          await reply(phone, copy.operatorAskStoreNumber(shortId));
+          return;
+        }
+        await opsPurchaseFailedRefund(job.deliveryOrderId, "loja não confirmou o pedido");
+        await reply(phone, copy.operatorRefundDone(shortId));
+        return;
+      }
+      if (action.kind === "over_limit") {
+        if (button.choice === "approve") {
+          const hash = String((action.payload as { checkoutHash?: string } | null)?.checkoutHash ?? "");
+          await approveCheckout(job.id, hash);
+          await reply(phone, copy.operatorApproved(shortId));
+          return;
+        }
+        await opsPurchaseFailedRefund(job.deliveryOrderId, "compra não autorizada");
+        await reply(phone, copy.operatorRefundDone(shortId));
         return;
       }
     }

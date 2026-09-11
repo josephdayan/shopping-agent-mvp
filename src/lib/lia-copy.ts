@@ -1518,6 +1518,38 @@ export function operatorStoreNumberSaved(shortId: string, number: string): strin
 export function operatorCartDeclined(shortId: string): string {
   return `Ok, o #${shortId} foi para revisão no painel. Nada foi comprado.`;
 }
+// ---- Pix da loja pago pela Lia e exceções por um toque (Fases 3 e 5, 11/09) ----
+const brlCents = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ",")}`;
+export function operatorReceiverNew(shortId: string, name: string, doc: string, amountCents: number): string {
+  return `Pedido #${shortId}: o Pix da loja vai para *${name}* (doc. ${doc.slice(0, 8)}…), ${brlCents(amountCents)}. É a primeira vez que vejo esse recebedor nesta loja. Pago e memorizo?`;
+}
+export function operatorPixFailed(shortId: string, reason: string): string {
+  return `Pedido #${shortId}: o banco não pagou o Pix da loja (${reason}). Refazer a compra ou estornar o cliente?`;
+}
+export function operatorPixTimeout(shortId: string): string {
+  return `⚠️ Pedido #${shortId}: o banco não respondeu ao Pix da loja. Pode ter saído dinheiro. Confira o extrato antes de qualquer nova tentativa; nada será repetido sozinho.`;
+}
+export function operatorStoreSilent(shortId: string, minutes: number): string {
+  return `Pedido #${shortId}: Pix da loja pago há ${minutes} min e a loja não confirmou o pedido. Confirmar (você manda o número) ou estornar?`;
+}
+export function operatorOverLimit(shortId: string, totalCents: number, reason: string): string {
+  return `Carrinho #${shortId} pronto: ${brlCents(totalCents)}. ${reason} Autorizar esta compra ou estornar o cliente?`;
+}
+export function operatorBuyerSilent(minutes: number, stores: string[]): string {
+  return `⚠️ O comprador local está sem sinal há ${minutes} min e há pedido pago esperando (${stores.join(", ")}). Confira o Mac/serviço.`;
+}
+export function operatorReceiverApproved(shortId: string): string {
+  return `Recebedor memorizado. Pagando o Pix da loja do #${shortId} agora.`;
+}
+export function operatorRetryQueued(shortId: string): string {
+  return `Ok, o #${shortId} voltou para a fila; o comprador refaz o carrinho.`;
+}
+export function operatorRefundDone(shortId: string): string {
+  return `Estornei o #${shortId} pelo provedor e avisei o cliente.`;
+}
+export function operatorApproved(shortId: string): string {
+  return `Autorizado. O comprador confere de novo e finaliza o #${shortId}.`;
+}
 export function operatorActionUnknown(): string {
   return "Não reconheci essa ação. Veja no painel.";
 }

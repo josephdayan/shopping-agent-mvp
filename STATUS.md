@@ -1,3 +1,29 @@
+## 11/09/2026 — Fases 3, 4 e 5 implementadas localmente (597/597), desligadas por padrão
+
+**Fase 3 — Pix da loja pago pela Lia (VTEX).** `src/lib/pix-emv.ts` (parser BR Code + CRC16,
+puro), `src/lib/payments/pix-out/` (interface neutra; adaptadores `asaas` e `mock`; Efí
+fica para depois da resposta escrita de E5, porque exige mTLS e aditivo), modelo
+`PixPayout` (um por job; EMV nunca gravado, só hash) — migration
+`20260911150000_pix_payout`. Fluxo: o comprador clica em finalizar com Pix selecionado,
+captura o copia-e-cola (resposta do conector ou modal) e chama `pix_captured`; o servidor
+confere CRC, valor exato, cobrança dinâmica e recebedor na allowlist da loja
+(`PurchaseReceiver`); recebedor novo → botão **Pagar e memorizar / Recusar** ao dono;
+aprovado → UMA chamada bancária; timeout → `outcome_unknown` + aviso, nunca segunda
+chamada; recusa → botão **Refazer / Estornar** (Refazer libera a reserva e volta à fila).
+Cron concilia pagamentos pendentes e, após `LIA_PIX_STORE_CONFIRM_MIN` (30) sem a loja
+confirmar, manda **Confirmar / Estornar**. Kill-switches: `LIA_PIX_OUT_OFF=true` e
+`LIA_PURCHASE_SUBMIT_OFF=true`; provedor por `LIA_PIX_OUT_PROVIDER` (vazio = desligado;
+`mock` proibido em produção).
+**Fase 4 — e-mail → etapa.** `src/lib/mailbox-policy.ts` classifica e-mails transacionais
+(remetente da loja, assunto explícito, número obrigatório); o comprador local lista a
+caixa a cada 2 min e manda só o veredito (`report_mail`); "saiu"/"entregue" viram
+`DeliveryEvent` (fonte `mailbox_reader`, mesmas guardas do leitor de página);
+"criado/pago" fecham o Pix da loja (`store_confirmed`). Os formatos reais das lojas ainda
+não foram observados: as frases são explícitas e conservadoras.
+**Fase 5 — exceções por um toque.** Além do ML: recebedor novo, Pix recusado, loja em
+silêncio, acima do teto/loja sem liberação (**Autorizar / Estornar** no lugar do texto
+solto), e alerta de comprador sem sinal (`LIA_BUYER_SILENT_MIN`, 1×/hora).
+
 ## 11/09/2026 — Fase 2 (Mercado Livre degrau C) implementada localmente (587/587)
 
 Comprador local ganhou receita do ML (`scripts/retail-buyer/mercadolivre.ts`, DOM com

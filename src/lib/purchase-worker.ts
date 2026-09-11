@@ -164,6 +164,24 @@ export async function manualQueueJobForPaidOrder(orderId: string) {
   }
 }
 
+// Comprador local sem heartbeat há N min com pedido pago esperando: avisa o dono uma vez
+// por hora (OpsAction buyer_silent como marcador, sem botão).
+export async function alertSilentBuyer(now = new Date()) {
+  const minutes = Number(process.env.LIA_BUYER_SILENT_MIN ?? 10);
+  const accounts = await prisma.purchaseAccount.findMany({ where: { enabled: true } });
+  const silent = accounts.filter((a) => !a.lastSeenAt || a.lastSeenAt.getTime() < now.getTime() - minutes * 60_000);
+  if (!silent.length) return "none";
+  const waiting = await prisma.purchaseJob.findMany({ where: { storeKey: { in: silent.map((a) => a.storeKey) }, status: { in: CLAIMABLE } }, select: { storeKey: true } });
+  if (!waiting.length) return "none";
+  const open = await prisma.opsAction.findFirst({ where: { kind: "buyer_silent", status: "pending", expiresAt: { gt: now } } });
+  if (open) return "already";
+  await prisma.opsAction.create({ data: { kind: "buyer_silent", expiresAt: new Date(now.getTime() + 60 * 60_000) } });
+  const { notifyOperator } = await import("./turn-runtime");
+  const copy = await import("./lia-copy");
+  await notifyOperator(copy.operatorBuyerSilent(minutes, [...new Set(waiting.map((w) => w.storeKey))]));
+  return "alerted";
+}
+
 export async function backfillPaidPurchaseJobs(limit = 25) {
   let cursor: string | undefined;
   let created = 0;

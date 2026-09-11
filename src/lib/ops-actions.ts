@@ -16,7 +16,8 @@ export type OpsActionKind =
   | "over_limit"
   | "pix_failed"
   | "store_silent"
-  | "item_missing";
+  | "item_missing"
+  | "buyer_silent";
 export const OPS_ACTION_TTL_MS: Record<OpsActionKind, number> = {
   ml_cart_ready: 24 * 3_600_000,
   await_store_number: 30 * 60_000,
@@ -25,6 +26,7 @@ export const OPS_ACTION_TTL_MS: Record<OpsActionKind, number> = {
   pix_failed: 24 * 3_600_000,
   store_silent: 24 * 3_600_000,
   item_missing: 72 * 3_600_000,
+  buyer_silent: 60 * 60_000,
 };
 export const OPS_ACTION_BUTTON_RE = /^op1\.([a-z0-9]{10,40})\.([a-z_]{1,20})\.([a-f0-9]{32})$/;
 type Tx = Prisma.TransactionClient;
