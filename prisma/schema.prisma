@@ -73,12 +73,40 @@ model DeliveryOrder {
   paymentAttempts     PaymentAttempt[]
   cardEnrollmentSession CardEnrollmentSession?
   payments            Payment[]
+  events              DeliveryEvent[]
+  trackingSubscription TrackingSubscription?
 
   @@index([status])
   @@index([quoteExpiresAt])
   @@index([phone])
   // Revisão 01/09: o cérebro faz findFirst por userId(+status) em quase todo turno.
   @@index([userId, status, createdAt])
+}
+
+// Evidência da etapa e envio ao WhatsApp persistidos na mesma transação do pedido.
+// accepted = Graph recebeu; delivered/read = recibo do WhatsApp. Nunca confundir.
+model DeliveryEvent {
+  id                String   @id @default(cuid())
+  deliveryOrderId   String
+  dedupeKey         String   @unique
+  kind              String
+  source            String
+  sourceReference   String
+  occurredAt        DateTime
+  message           String
+  deliveryStatus    String   @default("pending")
+  providerMessageId String?  @unique
+  attempts          Int      @default(0)
+  lastError         String?
+  nextAttemptAt     DateTime?
+  lockedAt          DateTime?
+  receiptAt         DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  deliveryOrder     DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+
+  @@index([deliveryStatus, nextAttemptAt])
+  @@index([deliveryOrderId, occurredAt])
 }
 
 // A purchase job is deliberately separate from DeliveryOrder.status. The order status
@@ -96,6 +124,12 @@ model PurchaseJob {
   status            String            @default("preflight_queued")
   workflowRunId     String?
   browserSessionId  String?
+  claimToken        String?
+  checkoutHash      String?
+  checkoutEvidence  Json?
+  checkoutExpiresAt DateTime?
+  submissionId      String? @unique
+  submitStartedAt   DateTime?
   cartHash          String?
   cartSnapshot      Json?
   expectedTotal     Float?
@@ -125,6 +159,18 @@ model PurchaseJob {
 
 // Maps the product chosen by the customer to the immutable live SKU used by a retailer.
 // A low-confidence or ambiguous match must be sent to /ops, never purchased.
+// Reserva durável antes do clique. Não apagar com pedido, estorno ou reconciliação.
+model PurchaseSpend {
+  submissionId String @id
+  purchaseJobId String
+  budgetDay String
+  amountCents Int
+  authorization String
+  createdAt DateTime @default(now())
+
+  @@index([budgetDay])
+}
+
 model PurchaseItem {
   id                 String      @id @default(cuid())
   purchaseJobId      String
@@ -386,4 +432,38 @@ model Payment {
   @@unique([provider, providerPaymentId])
   @@index([deliveryOrderId])
   @@index([status, createdAt])
+}
+
+// Somente prontidão operacional. Senhas, cartão e cookies ficam no perfil local.
+model PurchaseAccount {
+  storeKey String @id
+  label String
+  email String?
+  loginReady Boolean @default(false)
+  paymentReady Boolean @default(false)
+  enabled Boolean @default(false)
+  lastSeenAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Um leitor reserva a próxima consulta; falha/ausência de mudança agenda outra leitura.
+model TrackingSubscription {
+  id String @id @default(cuid())
+  deliveryOrderId String @unique
+  storeKey String
+  storeOrderNumber String
+  trackingUrl String?
+  nextCheckAt DateTime @default(now())
+  lockedAt DateTime?
+  workerId String?
+  claimToken String?
+  lastCheckedAt DateTime?
+  lastError String?
+  failures Int @default(0)
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deliveryOrder DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+  @@index([completedAt, nextCheckAt])
 }

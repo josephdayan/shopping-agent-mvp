@@ -43,6 +43,7 @@ jobs:
           npx prisma migrate deploy
           npm run db:check
       - run: npx tsc --noEmit
+      - run: npx tsc -p scripts/retail-buyer/tsconfig.json --noEmit
       - run: npm run lint
       - run: npm run test:unit
       - name: E2E (banco de serviço, sem skip)

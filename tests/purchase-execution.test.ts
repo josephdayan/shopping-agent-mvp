@@ -30,7 +30,7 @@ import { opsCancelRefund } from "../src/lib/ops-lifecycle";
 const users: string[] = [];
 let sequence = 0;
 const store = "kopenhagen";
-async function make() {
+async function make(storeKey = store) {
   const user = await prisma.user.create({
     data: { phone: `+55090688${process.pid}${++sequence}` },
   });
@@ -40,18 +40,18 @@ async function make() {
       userId: user.id,
       phone: user.phone,
       status: "paid",
-      storeKey: store,
-      storeLabel: store,
+      storeKey,
+      storeLabel: storeKey,
       items: [
         {
-          sku: "kopenhagen-123",
+          sku: `${storeKey}-123`,
           name: "Chocolate",
           qty: 2,
           unitPrice: 10,
           lineTotal: 20,
-          storeKey: store,
-          storeLabel: store,
-          productUrl: "https://www.kopenhagen.com.br/chocolate/p",
+          storeKey,
+          storeLabel: storeKey,
+          productUrl: `https://www.${storeKey}.com.br/chocolate/p`,
         },
       ],
       itemsSubtotal: 20,
@@ -75,16 +75,16 @@ async function make() {
   });
   return order;
 }
-async function session() {
-  const order = await make();
+async function session(storeKey = store) {
+  const order = await make(storeKey);
   await ensurePurchaseJobForPaidOrder(order.id);
-  const job = await claimPurchaseSession("execution-tests", [store]);
+  const job = await claimPurchaseSession("execution-tests", [storeKey]);
   assert.ok(job);
   assert.equal(job.orderId, order.id);
   const evidence: CheckoutEvidence = {
     recipientName: order.customerName!,
     accountEmail: "compras@example.test",
-    checkoutUrl: "https://www.kopenhagen.com.br/checkout/",
+    checkoutUrl: `https://www.${storeKey}.com.br/checkout/`,
     cartHash: job.cartHash!,
     destination: order.deliveryAddress!,
     postalCode: order.cep!,
@@ -95,7 +95,7 @@ async function session() {
     observedAt: new Date().toISOString(),
     items: [
       {
-        sku: "kopenhagen-123",
+        sku: `${storeKey}-123`,
         retailerSku: "123",
         seller: "1",
         name: "Chocolate",
@@ -112,7 +112,7 @@ async function session() {
 after(async () => {
   await prisma.deliveryOrder.deleteMany({ where: { userId: { in: users } } });
   await prisma.user.deleteMany({ where: { id: { in: users } } });
-  await prisma.purchaseAccount.deleteMany({ where: { storeKey: store } });
+  await prisma.purchaseAccount.deleteMany({ where: { storeKey: { in: [store, "swift"] } } });
   await prisma.$disconnect();
 });
 test("conta precisa de e-mail, login e cartão para ativar", async () => {
@@ -406,4 +406,52 @@ test("aprovação durante liberação do carrinho não se perde", async () => {
     where: { id: job.jobId },
     data: { status: "canceled" },
   });
+});
+
+
+test("política automática: lojas validadas, teto, revogação e concorrência global", async () => {
+  const { automaticPurchaseDecision, AUTO_PURCHASE_POLICY, purchaseBudgetDay } = await import("../src/lib/purchase-policy");
+  assert.equal(purchaseBudgetDay(new Date("2026-09-08T02:59:59Z")), "2026-09-07");
+  assert.equal(purchaseBudgetDay(new Date("2026-09-08T03:00:00Z")), "2026-09-08");
+  const oldStores = process.env.LIA_AUTO_PURCHASE_STORES;
+  const oldOff = process.env.LIA_AUTO_PURCHASE_OFF;
+  try {
+    process.env.LIA_AUTO_PURCHASE_STORES = `${store},swift`;
+    delete process.env.LIA_AUTO_PURCHASE_OFF;
+    await savePurchaseAccount({ storeKey: "swift", email: "compras@example.test", enabled: true, loginReady: true, paymentReady: true });
+    const decide = (key: string, cents: number) => prisma.$transaction(tx => automaticPurchaseDecision(tx, key, cents));
+    assert.match((await decide("mercadolivre", 1000))!, /Loja/);
+    assert.match((await decide(store, 50001))!, /por pedido/);
+    assert.match((await decide(store, NaN))!, /limite/);
+    // Isola o orçamento dos testes manuais anteriores sem apagar o registro durável.
+    await prisma.purchaseSpend.updateMany({ data: { budgetDay: "2000-01-01" } });
+    assert.equal(await decide(store, 50000), null);
+    const first = await session();
+    const second = await session("swift");
+    const args1 = [first.job.jobId, "execution-tests", first.job.claimToken] as const;
+    const args2 = [second.job.jobId, "execution-tests", second.job.claimToken] as const;
+    assert.equal((await stageCheckout(...args1, first.evidence)).readyToSubmit, true);
+    assert.equal((await prisma.purchaseJob.findUniqueOrThrow({ where: { id: first.job.jobId } })).approvedBy, AUTO_PURCHASE_POLICY);
+    assert.equal((await stageCheckout(...args2, second.evidence)).readyToSubmit, true);
+    // Revogação após stage deve impedir o clique sem ocupar orçamento.
+    process.env.LIA_AUTO_PURCHASE_OFF = "true";
+    assert.equal((await beginPurchase(...args1, first.evidence)).reviewRequired, true);
+    assert.equal(await prisma.purchaseSpend.count({ where: { purchaseJobId: first.job.jobId } }), 0);
+    delete process.env.LIA_AUTO_PURCHASE_OFF;
+    assert.equal((await stageCheckout(...args1, first.evidence)).readyToSubmit, true);
+    await prisma.purchaseSpend.create({ data: { submissionId: "budget-fixture", purchaseJobId: "fixture", budgetDay: purchaseBudgetDay(), amountCents: 45000, authorization: "test" } });
+    const permits = await Promise.all([beginPurchase(...args1, first.evidence), beginPurchase(...args2, second.evidence)]);
+    assert.equal(permits.filter(p => p.submissionId).length, 1, "Somente uma das lojas cabe no orçamento compartilhado");
+    assert.equal(permits.filter(p => p.reviewRequired).length, 1);
+    assert.equal((await prisma.purchaseSpend.aggregate({ where: { budgetDay: purchaseBudgetDay() }, _sum: { amountCents: true } }))._sum.amountCents, 47800);
+    const winner = permits[0].submissionId ? first : second;
+    await executionUnknown(winner.job.jobId, "execution-tests", winner.job.claimToken, "TEST_INTERRUPTED");
+    await assert.rejects(beginPurchase(winner.job.jobId, "execution-tests", winner.job.claimToken, winner.evidence));
+    assert.match((await decide(store, 2800))!, /diário/);
+    assert.equal(await prisma.purchaseSpend.count({ where: { purchaseJobId: winner.job.jobId } }), 1);
+    await prisma.purchaseJob.updateMany({ where: { id: { in: [first.job.jobId, second.job.jobId] } }, data: { status: "canceled" } });
+  } finally {
+    if (oldStores === undefined) delete process.env.LIA_AUTO_PURCHASE_STORES; else process.env.LIA_AUTO_PURCHASE_STORES = oldStores;
+    if (oldOff === undefined) delete process.env.LIA_AUTO_PURCHASE_OFF; else process.env.LIA_AUTO_PURCHASE_OFF = oldOff;
+  }
 });

@@ -18,6 +18,10 @@ Decisões do dono (seção 5 do plano):
 Gates antes de código (semana 1, R$0–75):
 - [ ] E0 consentimento OAuth real da caixa operacional; `purchase-worker:mailbox-check` passa.
 - [ ] E2 sondagem R$0 até a tela de pagamento com Pix: Ri Happy, Drogaria SP, Cobasi, Swift.
+      Comando (Fase 0 pronta em 11/09): `npm run purchase-worker:probe -- LOJA [SKU]` — exige o
+      bloco `probe` no `.retail-buyer/config.json` (nome, cep, texto e endereço estruturado do
+      endereço operacional autorizado pelo dono) e `LIA_PROBE_ACCOUNT_EMAIL` para a conta da loja.
+      Sai JSON + screenshot em `.retail-buyer/probes/`; nunca finaliza nem resolve desafio.
 - [ ] E3 um pedido real (~R$25) na primeira loja aprovada, Pix pago pelo app; capturar o
       copia-e-cola, e-mails no alias, NF/etiqueta.
 - [ ] E4 repetir em 2 sessões > 24h (2/2 sem desafio).

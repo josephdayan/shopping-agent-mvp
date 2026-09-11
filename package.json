@@ -19,7 +19,16 @@
     "db:studio": "prisma studio",
     "db:check": "node scripts/check-migrations.mjs",
     "test:e2e": "LIA_RETAILER_TEST_SEED=true LIA_REQUIRE_DB=1 node --import tsx --test tests/*.test.ts",
-    "test:local": "tsx scripts/test-local-db.mts"
+    "test:local": "tsx scripts/test-local-db.mts",
+    "purchase-worker:run": "tsx scripts/retail-buyer/run.mts run",
+    "purchase-worker:setup": "tsx scripts/retail-buyer/run.mts setup",
+    "purchase-worker:mailbox-check": "tsx scripts/retail-buyer/run.mts mailbox-check",
+    "purchase-worker:mailbox-authorize": "tsx scripts/retail-buyer/authorize-mailbox.mts",
+    "purchase-worker:init": "tsx scripts/retail-buyer/run.mts init",
+    "purchase-worker:verify": "tsx scripts/retail-buyer/verify.mts",
+    "purchase-worker:verify-ui": "tsx scripts/retail-buyer/verify-ui.mts",
+    "purchase-worker:once": "tsx scripts/retail-buyer/run.mts once",
+    "purchase-worker:probe": "tsx scripts/retail-buyer/run.mts probe"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
@@ -39,6 +48,7 @@
     "embedded-postgres": "^18.4.0-beta.17",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.23",
+    "playwright-core": "^1.63.0",
     "postcss": "^8.4.49",
     "prisma": "5.22.0",
     "tailwindcss": "^3.4.17",

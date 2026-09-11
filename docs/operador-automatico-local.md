@@ -1,5 +1,18 @@
 # Operador automático local — monitoramento de todas as lojas
 
+
+> **06/09 — novo runtime local, ainda não ativado:** ver [compra e acompanhamento](compra-e-acompanhamento-2026-09-06.md). Aprovação concreta no /ops e leitor separado foram implementados. O procedimento antigo abaixo continua sendo histórico/alternativa para ML; não ligar ambos na mesma conta. Migrations novas precedem monitores e runtime.
+
+> **06/09/2026 — código local ainda não publicado:** o monitor passa a consultar
+> `DeliveryEvent`; aplicar a migration correspondente antes de executá-lo contra
+> produção. Jobs exigem razão real, domínio e hash válidos; lease expirado exige
+> revisão. Preparação extra depende de `LIA_PURCHASE_PREP_STORES` (default ML), sem
+> checkout final. O prompt atual da automação, inspecionado nesta revisão, já permite
+> preparar outras lojas com cartão corporativo salvo e confirmação final humana;
+> trechos de 02/09 abaixo descrevem a versão histórica. A automação não foi alterada.
+> Rastreio novo guarda eventos e recibos, mas não lê e-mail/site automaticamente.
+> [Relatório e implantação](revisao-completa-2026-09-06.md).
+
 Desde 02/09/2026, a rotina horária consulta `DeliveryOrder` diretamente, sem filtro por
 loja, existência de `PurchaseJob` ou limite dos primeiros N pedidos. Ela acompanha
 todos os pedidos ativos, os encerrados/alterados nas últimas 24 horas e pendências

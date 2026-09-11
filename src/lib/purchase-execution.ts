@@ -10,6 +10,7 @@ import {
 import { notifyOperator } from "./turn-runtime";
 import { recordDeliveryEvent } from "./delivery-events";
 import { Prisma } from "@prisma/client";
+import { automaticPurchaseDecision, automaticPurchaseStores, AUTO_PURCHASE_POLICY, purchaseBudgetDay } from "./purchase-policy";
 
 export const checkoutEvidenceSchema = z
   .object({
@@ -194,9 +195,10 @@ export async function savePurchaseAccount(input: {
   });
 }
 export async function claimPurchaseSession(workerId: string, stores: string[]) {
+  const automaticStores = automaticPurchaseStores();
   const accounts = await prisma.purchaseAccount.findMany({
     where: {
-      storeKey: { in: stores },
+      storeKey: { in: automaticStores.length ? stores.filter(s => automaticStores.includes(s)) : stores },
       enabled: true,
       loginReady: true,
       paymentReady: true,
@@ -268,14 +270,31 @@ export async function stageCheckout(
       where: { storeKey: job.storeKey },
     });
     if (
-      !account?.enabled ||
+      !account?.enabled || !account.loginReady || !account.paymentReady ||
       account.email?.trim().toLowerCase() !==
         e.accountEmail.trim().toLowerCase()
     )
       throw new Error("Checkout não está na conta operacional configurada.");
     const digest = checkoutDigest(e);
+    const automaticReason = await automaticPurchaseDecision(tx, job.storeKey, e.totalCents);
+    if (!automaticReason) {
+      await tx.purchaseJob.update({
+        where: { id: job.id },
+        data: {
+          status: "approved", checkoutEvidence: e, checkoutHash: digest,
+          checkoutExpiresAt: new Date(Date.now() + 120_000),
+          approvalStatus: "approved", approvedBy: AUTO_PURCHASE_POLICY,
+          approvedAt: new Date(), approvalCartHash: digest,
+          approvalMaxTotal: e.totalCents / 100,
+          approvalExpiresAt: new Date(Date.now() + 60_000), lockedAt: new Date(),
+          lastErrorCode: null, lastErrorMessage: null,
+        },
+      });
+      return { checkoutHash: digest, notify: false, readyToSubmit: true };
+    }
     if (
       job.status === "approved" &&
+      job.approvedBy !== AUTO_PURCHASE_POLICY &&
       job.approvalStatus === "approved" &&
       job.approvalCartHash === digest
     ) {
@@ -301,9 +320,11 @@ export async function stageCheckout(
         checkoutExpiresAt: null,
         approvalStatus: "requested",
         approvalCartHash: null,
+        approvedBy: null,
         approvedAt: null,
         approvalExpiresAt: null,
         lockedAt: new Date(),
+        lastErrorMessage: automaticReason,
       },
     });
     return {
@@ -395,7 +416,7 @@ export async function beginPurchase(
   const base = await prisma.purchaseJob.findUniqueOrThrow({
     where: { id: jobId },
   });
-  return prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${base.deliveryOrderId} FOR UPDATE`;
     const job = await owned(tx, jobId, workerId, token);
     const order = await funding(tx, job.deliveryOrderId);
@@ -420,7 +441,27 @@ export async function beginPurchase(
       checkoutDigest(evidence) !== job.approvalCartHash
     )
       throw new Error("Não há autorização atual para este checkout.");
+    // Uma trava GLOBAL serializa a decisão e a reserva entre todas as lojas/processos.
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext('lia-purchase-daily-budget'))::text`;
+    const now = new Date();
+    if (job.approvedBy === AUTO_PURCHASE_POLICY) {
+      const reason = await automaticPurchaseDecision(tx, job.storeKey, evidence.totalCents, now);
+      if (reason) {
+        await tx.purchaseJob.update({ where: { id: job.id }, data: {
+          status: "awaiting_approval", approvalStatus: "requested", approvedBy: null,
+          approvedAt: null, approvalCartHash: null, approvalExpiresAt: null,
+          lastErrorMessage: reason,
+        } });
+        return { submissionId: null, reviewRequired: true, reason };
+      }
+    }
     const submissionId = randomUUID();
+    // Inclusive aprovação individual consome o orçamento. Falha, estorno ou resultado
+    // desconhecido não devolvem limite automaticamente nem apagam esta reserva.
+    await tx.purchaseSpend.create({ data: {
+      submissionId, purchaseJobId: job.id, budgetDay: purchaseBudgetDay(now),
+      amountCents: evidence.totalCents, authorization: job.approvedBy ?? "ops_session",
+    } });
     await tx.purchaseJob.update({
       where: { id: job.id },
       data: {
@@ -440,6 +481,9 @@ export async function beginPurchase(
     });
     return { submissionId };
   });
+  if (result.reviewRequired)
+    await notifyOperator(`Pedido #${base.deliveryOrderId.slice(-6).toUpperCase()}: ${result.reason} Confira no painel de operações.`);
+  return result;
 }
 export async function executionUnknown(
   jobId: string,
@@ -465,6 +509,9 @@ export async function executionUnknown(
     },
   });
   if (!result.count) throw new Error("Reserva inválida.");
+  await notifyOperator(
+    `Compra interrompida (${code.slice(0, 80)}). Confira o histórico e o carrinho da loja antes de tentar novamente: ${(process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "")}/ops. Nenhuma nova tentativa será feita automaticamente.`,
+  );
 }
 export async function finishPurchase(
   jobId: string,

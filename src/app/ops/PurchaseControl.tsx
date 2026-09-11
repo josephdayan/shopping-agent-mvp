@@ -28,6 +28,7 @@ const button = {
 };
 export function PurchaseAccounts() {
   const [open, setOpen] = useState(false),
+    [policy, setPolicy] = useState<{ perOrderCents: number; dailyCents: number; usedCents: number; stores: string[]; paused: boolean } | null>(null),
     [accounts, setAccounts] = useState<Account[]>([]),
     [message, setMessage] = useState("");
   const [store, setStore] = useState("drogariasp"),
@@ -41,7 +42,9 @@ export function PurchaseAccounts() {
     void fetch("/api/ops/purchase-accounts")
       .then(async (r) => {
         if (!r.ok) throw new Error();
-        const loaded: Account[] = (await r.json()).accounts;
+        const body = await r.json();
+        const loaded: Account[] = body.accounts;
+        setPolicy(body.policy ?? null);
         setAccounts(loaded);
         const a = loaded.find((a) => a.storeKey === "drogariasp");
         setStore("drogariasp");
@@ -102,6 +105,14 @@ export function PurchaseAccounts() {
       </button>
       {open && (
         <div style={{ display: "grid", gap: 12, marginTop: 12, maxWidth: 600 }}>
+          {policy && <p style={{ margin: 0 }}>
+            Compra sem aprovação individual: até R$ {(policy.perOrderCents / 100).toFixed(2)} por pedido
+            e R$ {(policy.dailyCents / 100).toFixed(2)} por dia, incluindo frete.
+            Hoje: R$ {(policy.usedCents / 100).toFixed(2)} utilizados ou reservados (horário de São Paulo).
+            {policy.paused ? " Compra automática pausada." : policy.stores.length
+              ? ` Lojas liberadas após validação do checkout: ${policy.stores.map(s => stores[s] ?? s).join(", ")}. A conta também precisa estar conectada e ativa.`
+              : " Nenhuma loja liberada ainda: falta validar checkout e comprovante."}
+          </p>}
           <p style={{ margin: 0 }}>
             Entre na conta da loja e cadastre o cartão da empresa na janela do
             comprador. Depois confirme os dois itens abaixo. Senhas e cartão
@@ -293,7 +304,8 @@ export function PurchaseReview({
             Autorizar compra de {money(e.totalCents)}
           </button>
           <small style={{ display: "block", marginTop: 6 }}>
-            Você pode aprovar quando puder. Vamos conferir o carrinho novamente
+            Esta é uma autorização adicional para este pedido, inclusive quando
+            excede os limites automáticos. Você pode aprovar quando puder. Vamos conferir o carrinho novamente
             antes de comprar. Se algo mudar, pediremos nova conferência.
           </small>
         </>

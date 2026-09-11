@@ -1,5 +1,11 @@
 # Controle de custos da Lia
 
+> **Ressalva de 06/09/2026:** valores abaixo são o registro histórico de junho,
+> não orçamento nem faturas atuais. Twilio foi removido do produto; o WhatsApp usa Meta.
+> Não foi feita conciliação de assinaturas nesta revisão. Antes de decidir rentabilidade,
+> atualizar gastos reais de Meta, PSP, IA, Apify e infraestrutura e medir minutos por
+> pedido. Ver [análise de contribuição](revisao-completa-2026-09-06.md).
+
 Atualizado em: 2026-06-28
 
 Use este arquivo para acompanhar tudo que vira custo do projeto. A ideia e separar:

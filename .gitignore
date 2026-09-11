@@ -30,3 +30,6 @@ docs/obsidian/.obsidian/
 
 # Postgres local embutido dos testes (scripts/test-local-db.mts)
 .local-pg/
+
+# Perfis autenticados e configuração local do comprador
+.retail-buyer/

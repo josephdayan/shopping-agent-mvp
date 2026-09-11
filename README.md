@@ -7,8 +7,8 @@ loja como cliente comum e **a própria loja entrega**.
 
 > Memória canônica: [AGENTS.md](AGENTS.md) (topo = regra vigente). Estado:
 > [STATUS.md](STATUS.md). Pendências: [PENDENCIAS.md](PENDENCIAS.md). Revisão completa de
-> 01–02/09 (código, dívidas, métricas reais, caminhos de produto):
-> [docs/revisao-completa-2026-09-01.md](docs/revisao-completa-2026-09-01.md).
+> 06/09 (código, negócio, compra por IA e acompanhamento):
+> [docs/revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
 
 ## Mapa do código
 
@@ -44,7 +44,7 @@ em deploy de produção). Para conversar sem WhatsApp: `npx tsx scripts/talk-lia
 ```bash
 npm run test:unit    # intents/copy, sem banco, < 1 s
 npm run test:local   # suíte INTEIRA num Postgres embutido (sobe, migra, confere drift, roda) — ~25 s
-npm test             # suíte contra DATABASE_URL/TEST_DATABASE_URL do ambiente
+npm test             # exige TEST_DATABASE_URL para testes com banco; não herda DATABASE_URL
 ```
 
 Regra: nunca rodar a suíte contra o banco de produção; `npm run test:local` é o padrão.
