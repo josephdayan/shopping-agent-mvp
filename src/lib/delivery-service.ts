@@ -2606,9 +2606,16 @@ async function handleCancel(
     await reply(phone, copy.cancelTooLate());
     return;
   }
-  // Paid orders do not offer customer-initiated cancellation for now. Missing items
-  // are refunded; delays are communicated. The operator's exceptional refund action
-  // remains available in /ops, but chat does not create a cancellation request.
+  // Pedido PAGO (11/09, CDC art. 49): enquanto a compra na loja não saiu, o cliente pode
+  // desistir e o estorno é imediato pelo provedor. Se a compra já está em curso (clique,
+  // Pix da loja, carrinho com o dono) ou já tem número na loja, vale a regra antiga.
+  const { customerWithdrawRefund } = await import("./ops-lifecycle");
+  const outcome = await customerWithdrawRefund(order.id);
+  if (outcome.ok) {
+    await writeCtx(convoId, canceledCtx);
+    await reply(phone, copy.withdrawnRefunded(outcome.amount));
+    return;
+  }
   await reply(phone, copy.cancelRequestedPaid());
 }
 

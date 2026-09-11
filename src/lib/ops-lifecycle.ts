@@ -483,6 +483,46 @@ export function autoRefundDecision(
   return { refund: false };
 }
 
+// ---- desistência do cliente antes da compra (11/09, CDC art. 49) ----
+// Só enquanto NENHUM dinheiro pode ter saído para a loja: pedido `paid`, sem número na
+// loja e sem job em estado de compra. Carrinho nas mãos do dono (ML) só desiste se a
+// ação pendente for consumida aqui primeiro (CAS): se o dono já tocou, perde a corrida.
+const WITHDRAW_BLOCKING = ["submitting", "outcome_unknown", "awaiting_store_number", "pix_captured", "pix_submitted", "pix_paid", "store_confirmed"];
+export async function customerWithdrawRefund(orderId: string): Promise<{ ok: true; amount: number } | { ok: false; reason: string }> {
+  const gate = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${orderId} FOR UPDATE`;
+    const order = await tx.deliveryOrder.findUniqueOrThrow({ where: { id: orderId } });
+    if (order.status !== "paid" || order.storeOrderNumber) return { ok: false as const, reason: "compra já registrada" };
+    const jobs = await tx.purchaseJob.findMany({ where: { deliveryOrderId: orderId } });
+    if (jobs.some((j) => WITHDRAW_BLOCKING.includes(j.status))) return { ok: false as const, reason: "compra em andamento" };
+    for (const job of jobs.filter((j) => j.status === "awaiting_owner_confirm")) {
+      const { consumePendingActionForJob, mirrorOpsAction } = await import("./ops-actions");
+      const consumed = await consumePendingActionForJob(tx, job.id, "ml_cart_ready", "customer_withdrew", "customer");
+      if (!consumed) return { ok: false as const, reason: "dono já confirmou" };
+      await mirrorOpsAction(tx, consumed, "customer_withdrew", "customer");
+      await tx.purchaseSpend.updateMany({ where: { purchaseJobId: job.id, status: "reserved" }, data: { status: "released", releasedAt: new Date(), releaseNote: "cliente desistiu antes da confirmação do dono" } });
+    }
+    await tx.purchaseJob.updateMany({ where: { deliveryOrderId: orderId, status: { notIn: ["completed", "canceled"] } }, data: { status: "canceled", lockedAt: null, claimToken: null, browserSessionId: null, lastErrorCode: "CUSTOMER_WITHDREW", lastErrorMessage: "Cliente desistiu antes da compra; pedido estornado." } });
+    await tx.opsAction.updateMany({ where: { deliveryOrderId: orderId, status: "pending" }, data: { status: "canceled" } });
+    return { ok: true as const, notes: order.notes };
+  });
+  if (!gate.ok) return gate;
+  const result = await refundOrderViaProvider(orderId);
+  const current = await prisma.deliveryOrder.findUniqueOrThrow({ where: { id: orderId } });
+  const order = await prisma.deliveryOrder.update({
+    where: { id: orderId },
+    data: {
+      status: "refunded",
+      notes: appendOrderNote(
+        appendOrderNote((current.notes ?? "").split("\n").filter((l) => l !== REFUND_PENDING_FLAG).join("\n"), `↩️ Cliente desistiu antes da compra — estorno pelo provedor em ${new Date().toISOString()}.`),
+        `${REFUND_CONFIRMED_PREFIX} integral — ${result.reference}`
+      )
+    }
+  });
+  await resetConversationForClosedOrder(order, "refund");
+  return { ok: true, amount: result.amount };
+}
+
 // Destinatário do pedido editável pelo operador (a compra automática exige o nome).
 export async function opsSetRecipient(orderId: string, name: string) {
   const clean = name.replace(/\s+/g, " ").trim();

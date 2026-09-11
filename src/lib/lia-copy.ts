@@ -729,17 +729,23 @@ export function canceledUnpaid(): string {
   return "Cancelado. Nada foi cobrado. Quando quiser, é só pedir de novo.";
 }
 
-// Mesma regra em três entradas diferentes (pedido pago, "cancelar" tarde demais e a
-// pergunta "como cancelo?") — o texto é um só, de propósito.
-const NO_CANCEL_AFTER_PAYMENT =
-  "Depois do pagamento não dá pra cancelar. Se faltar item, estorno o valor dele; se atrasar, eu aviso.";
+// Regra de 11/09 (CDC art. 49): antes de a compra na loja sair, o cliente pode desistir e
+// o estorno é na hora. Depois que a compra saiu, não dá — item faltando é estornado e
+// atraso é avisado. O texto é um só nas três entradas, de propósito.
+const NO_CANCEL_AFTER_PURCHASE =
+  "A compra já foi feita na loja, então não dá mais pra cancelar. Se faltar item, estorno o valor dele; se atrasar, eu aviso.";
 
 export function cancelRequestedPaid(): string {
-  return NO_CANCEL_AFTER_PAYMENT;
+  return NO_CANCEL_AFTER_PURCHASE;
 }
 
 export function cancelTooLate(): string {
-  return NO_CANCEL_AFTER_PAYMENT;
+  return NO_CANCEL_AFTER_PURCHASE;
+}
+
+// Desistência aceita: o dinheiro volta pelo mesmo meio, sem esperar ninguém.
+export function withdrawnRefunded(total: number): string {
+  return `Cancelado. Estornei R$ ${total.toFixed(2).replace(".", ",")} pelo mesmo meio que você pagou; o banco leva até 7 dias úteis pra mostrar.`;
 }
 
 export function nothingToCancel(paidActive?: { shortId: string; dateLabel?: string; itemsPreview?: string }): string {
@@ -1293,8 +1299,8 @@ export function complaintAck(): string {
 
 export function cancelHowTo(hasPaidOrder: boolean): string {
   return hasPaidOrder
-    ? NO_CANCEL_AFTER_PAYMENT
-    : "Antes de pagar, você pode limpar a lista quando quiser. Depois do pagamento não dá pra cancelar.";
+    ? "Enquanto eu ainda não comprei na loja, é só dizer *cancelar* que devolvo o valor na hora. Depois que a compra sai, não dá mais."
+    : "Antes de pagar, você pode limpar a lista quando quiser. Depois de pagar, dá pra desistir até eu comprar na loja.";
 }
 
 export function cartExpired(): string {

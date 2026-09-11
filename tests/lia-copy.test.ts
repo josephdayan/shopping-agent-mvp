@@ -166,13 +166,16 @@ test("todas as mensagens simples são não-vazias e sem placeholders", () => {
   }
 });
 
-test("pós-venda: limpa antes do pagamento, sem cancelamento ou substituição depois", () => {
+test("pós-venda: limpa antes do pagamento; pago desiste até a compra (11/09); depois só item faltando", () => {
   const beforePayment = copy.cancelHowTo(false);
   const afterPayment = copy.cancelHowTo(true);
   assert.match(beforePayment, /Antes de pagar/);
-  assert.match(afterPayment, /não dá pra cancelar/);
-  assert.match(afterPayment, /estorno o valor dele/);
-  assert.match(afterPayment, /atras/i);
+  assert.match(afterPayment, /devolvo o valor na hora/);
+  assert.match(afterPayment, /não dá mais/);
+  // Compra já feita na loja: a regra antiga continua nas duas entradas.
+  assert.match(copy.cancelRequestedPaid(), /já foi feita na loja/);
+  assert.match(copy.cancelRequestedPaid(), /estorno o valor dele/);
+  assert.match(copy.cancelTooLate(), /atras/i);
   // A reclamação continua prometendo o estorno do item que faltou — o que saiu foi só a
   // frase "não fazemos substituições" (revisão de copy 17/08): é regra que só cabe quando
   // o cliente PEDE substituição, não em toda reclamação.
