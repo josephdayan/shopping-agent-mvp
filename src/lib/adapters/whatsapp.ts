@@ -608,6 +608,16 @@ export const whatsappAdapter = {
     });
   },
 
+  // Botões assinados do OPERADOR (11/09): o id volta em `text` pelo parseInbound e o webhook
+  // roteia `op1.…` para ops-actions-inbound antes do cérebro. Fora do Meta devolve mock.
+  async sendOperatorButtons(to: string, body: string, buttons: Array<{ id: string; title: string }>) {
+    if (process.env.WHATSAPP_PROVIDER !== "meta") {
+      console.log("[whatsapp:mock:operator-buttons]", { to, body: body.slice(0, 80), buttons });
+      return { provider: "mock", to, body, buttons };
+    }
+    return sendMetaSimpleButtons(to, body, buttons);
+  },
+
   async sendPaymentChoices(to: string, pixTotal: number, cardTotal: number) {
     if (process.env.WHATSAPP_PROVIDER !== "meta") return null;
     // A saída sempre visível (pedido do dono, 11/08): dá pra desistir sem digitar nada.

@@ -10,7 +10,9 @@ import {
 import { notifyOperator } from "./turn-runtime";
 import { recordDeliveryEvent } from "./delivery-events";
 import { Prisma } from "@prisma/client";
-import { automaticPurchaseDecision, automaticPurchaseStores, AUTO_PURCHASE_POLICY, purchaseBudgetDay } from "./purchase-policy";
+import { automaticPurchaseDecision, automaticPurchaseStores, AUTO_PURCHASE_POLICY, purchaseBudgetDay, MERCADO_LIVRE_STORE_KEY } from "./purchase-policy";
+import { createOpsAction, cancelPendingActions, sendOperatorButtons } from "./ops-actions";
+import * as copy from "./lia-copy";
 
 export const checkoutEvidenceSchema = z
   .object({
@@ -263,7 +265,7 @@ export async function purchaseHeartbeat(
   return prisma.$transaction(async (tx) => {
     const job = await owned(tx, jobId, workerId, token);
     if (
-      !["claimed", "awaiting_approval", "approved", "submitting"].includes(
+      !["claimed", "awaiting_approval", "approved", "submitting", "pix_captured"].includes(
         job.status,
       )
     )
@@ -579,6 +581,120 @@ export async function finishPurchase(
       actualTotal: input.actualTotalCents / 100,
     },
   });
+}
+
+// ---------- Mercado Livre, degrau C (11/09) ----------
+// O comprador local monta o carrinho na conta da Lia e para. O dono confirma no app do
+// celular (saldo Mercado Pago) e responde o número do pedido. Nenhum clique de compra é
+// do robô; o teto e a reserva de orçamento valem do mesmo jeito (canal owner_confirm).
+export async function requestOwnerConfirm(
+  jobId: string,
+  workerId: string,
+  token: string,
+  e: CheckoutEvidence,
+) {
+  const base = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+  const shortId = base.deliveryOrderId.slice(-6).toUpperCase();
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${base.deliveryOrderId} FOR UPDATE`;
+    const job = await owned(tx, jobId, workerId, token);
+    if (job.status !== "claimed") throw new Error("Carrinho já encaminhado ou encerrado.");
+    if (job.storeKey !== MERCADO_LIVRE_STORE_KEY || e.payment.kind !== "ml_balance")
+      throw new Error("Confirmação do dono é só para o Mercado Livre com saldo Mercado Pago.");
+    const order = await funding(tx, job.deliveryOrderId);
+    checkCheckout(order, e);
+    const account = await tx.purchaseAccount.findUnique({ where: { storeKey: job.storeKey } });
+    if (
+      !account?.enabled || !account.loginReady || !account.paymentReady || account.paymentKind !== "ml_balance" ||
+      account.email?.trim().toLowerCase() !== e.accountEmail.trim().toLowerCase()
+    )
+      throw new Error("Conta do Mercado Livre não está pronta para saldo Mercado Pago.");
+    const digest = checkoutDigest(e);
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext('lia-purchase-daily-budget'))::text`;
+    const now = new Date();
+    const reason = await automaticPurchaseDecision(tx, job.storeKey, e.totalCents, now, "owner_confirm");
+    if (reason) {
+      await tx.purchaseJob.update({ where: { id: job.id }, data: {
+        status: "needs_review", checkoutEvidence: e, checkoutHash: digest, lastErrorCode: "OWNER_CONFIRM_BLOCKED",
+        lastErrorMessage: reason, lockedAt: null, browserSessionId: null, claimToken: null,
+      } });
+      return { ok: false as const, reason };
+    }
+    const submissionId = randomUUID();
+    await tx.purchaseSpend.create({ data: {
+      submissionId, purchaseJobId: job.id, budgetDay: purchaseBudgetDay(now),
+      amountCents: e.totalCents, authorization: "owner_confirm",
+    } });
+    const action = await createOpsAction(tx, {
+      kind: "ml_cart_ready", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId,
+      payload: { totalCents: e.totalCents, items: e.items.map((i) => `${i.qty}× ${i.name}`), recipientName: e.recipientName, destination: e.destination },
+    }, now);
+    await tx.purchaseJob.update({ where: { id: job.id }, data: {
+      status: "awaiting_owner_confirm", checkoutEvidence: e, checkoutHash: digest, checkoutExpiresAt: null,
+      submissionId, submitStartedAt: now, approvalStatus: "requested", approvalCartHash: digest,
+      approvalMaxTotal: e.totalCents / 100, approvedBy: null, approvedAt: null, approvalExpiresAt: null,
+      lockedAt: null, browserSessionId: null, claimToken: null, lastErrorCode: null, lastErrorMessage: null,
+    } });
+    await tx.purchaseAttempt.create({ data: { purchaseJobId: job.id, step: "owner_confirm", status: "requested", idempotencyKey: submissionId } });
+    return { ok: true as const, action, summary: { items: e.items.map((i) => `${i.qty}× ${i.name}`), recipient: e.recipientName, destination: e.destination, totalCents: e.totalCents } };
+  });
+  if (!result.ok) {
+    await notifyOperator(copy.operatorMlBlocked(shortId, result.reason));
+    return { ok: false as const, reason: result.reason };
+  }
+  const sent = await sendOperatorButtons(
+    result.action,
+    copy.operatorMlCartReady(shortId, result.summary.totalCents, result.summary.items, result.summary.recipient, result.summary.destination),
+    [{ choice: "bought", title: "Comprei" }, { choice: "failed", title: "Não deu" }],
+  );
+  return { ok: true as const, actionId: result.action.id, sent };
+}
+
+// "Comprei": o dono tocou; falta o número do pedido (próxima mensagem numérica ou /ops).
+export async function ownerConfirmCartBought(jobId: string, actionId: string) {
+  return prisma.$transaction(async (tx) => {
+    const job = await tx.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+    if (job.status !== "awaiting_owner_confirm") throw new Error("Este carrinho não está aguardando confirmação.");
+    await createOpsAction(tx, { kind: "await_store_number", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, payload: { from: actionId } });
+    await tx.purchaseAttempt.create({ data: { purchaseJobId: job.id, step: "owner_confirm", status: "confirmed", idempotencyKey: `owner-bought:${actionId}` } });
+    return tx.purchaseJob.update({ where: { id: job.id }, data: { status: "awaiting_store_number", ownerConfirmedAt: new Date() } });
+  });
+}
+
+// "Não deu": vai para revisão. A reserva de orçamento NÃO é liberada sozinha (11/09).
+export async function ownerDeclineCart(jobId: string, actionId: string) {
+  return prisma.$transaction(async (tx) => {
+    const job = await tx.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+    if (!["awaiting_owner_confirm", "awaiting_store_number"].includes(job.status)) throw new Error("Este carrinho não está aguardando confirmação.");
+    await cancelPendingActions(tx, job.id, ["ml_cart_ready", "await_store_number"]);
+    await tx.purchaseAttempt.create({ data: { purchaseJobId: job.id, step: "owner_confirm", status: "declined", idempotencyKey: `owner-declined:${actionId}` } });
+    return tx.purchaseJob.update({ where: { id: job.id }, data: {
+      status: "needs_review", lastErrorCode: "OWNER_DECLINED",
+      lastErrorMessage: "O dono não concluiu a compra no app. Confira o carrinho do Mercado Livre antes de liberar.",
+    } });
+  });
+}
+
+// Número do pedido do ML: registra a compra (evento bought) e fecha o job.
+export async function ownerStoreNumber(jobId: string, storeOrderNumber: string, actionId: string) {
+  const number = storeOrderNumber.replace(/\D/g, "");
+  if (number.length < 6 || number.length > 20) throw new Error("Número do pedido do Mercado Livre inválido.");
+  const job = await prisma.$transaction(async (tx) => {
+    const current = await tx.purchaseJob.findUniqueOrThrow({ where: { id: jobId } });
+    if (!["awaiting_owner_confirm", "awaiting_store_number"].includes(current.status) || !current.submissionId)
+      throw new Error("Este carrinho não está aguardando o número do pedido.");
+    await cancelPendingActions(tx, current.id, ["ml_cart_ready", "await_store_number"]);
+    return tx.purchaseJob.update({ where: { id: current.id }, data: { ownerConfirmedAt: current.ownerConfirmedAt ?? new Date() } });
+  });
+  const e = parseStoredEvidence(job.checkoutEvidence);
+  await recordDeliveryEvent(job.deliveryOrderId, {
+    kind: "bought",
+    source: "operator",
+    sourceReference: `ml-owner:${actionId}`,
+    storeOrderNumber: number,
+    purchaseExecution: { jobId: job.id, submissionId: job.submissionId!, actualTotal: e.totalCents / 100 },
+  });
+  return prisma.purchaseJob.findUniqueOrThrow({ where: { id: job.id } });
 }
 
 // A confirmação humana é auditada. Não libera uma sessão ainda ativa no navegador.

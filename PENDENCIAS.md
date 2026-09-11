@@ -15,7 +15,7 @@ Decisões do dono (seção 5 do plano):
 - [ ] Decidir o plano B se nenhuma loja passar a sondagem (Pix do varejista ao cliente,
       operador contratado, ou uma loja só).
 
-Implementação (plano de 11/09): [x] Fase 0 · [x] Fase 1 · [ ] Fase 2 ML degrau C · [ ] Fase 3 Pix-out · [ ] 4 e-mail · [ ] 5 exceções · [ ] 6 arrependimento · [ ] 7 operação.
+Implementação (plano de 11/09): [x] Fase 0 · [x] Fase 1 · [x] Fase 2 ML degrau C (local; ativar = conta ML no /ops com saldo MP + `LIA_AUTO_PURCHASE_STORES=mercadolivre` + sondagem E8) · [ ] Fase 3 Pix-out · [ ] 4 e-mail · [ ] 5 exceções · [ ] 6 arrependimento · [ ] 7 operação.
 - [ ] Deploy zero: aplicar as 4 migrations pendentes (3 de 06–07/09 + 20260911 receivers/actions) antes do código novo.
 
 Gates antes de código (semana 1, R$0–75):
@@ -31,7 +31,8 @@ Gates antes de código (semana 1, R$0–75):
 - [ ] E5 perguntas por escrito a Efí e Asaas (ação crítica, limites, timeout sem ID).
 - [ ] E6 Pix-out de R$1 a QR de terceiro pelo provedor aprovado, sem tocar no app.
 - [ ] E7 um cancelamento legítimo: devolução volta à conta pagadora com o e2e?
-- [ ] E8 ML: perfil da conta até a tela de pagamento (desafio? saldo MP pede senha?).
+- [ ] E8 ML: `npm run purchase-worker:probe -- mercadolivre <URL de anúncio barato>` no perfil logado (carrinho monta? seletores? desafio?); depois, no app, saldo MP pede senha?
+- [ ] Dono: desligar a tarefa horária do ChatGPT (Luna) assim que o degrau C rodar em produção.
 - [ ] E9 ML: um pedido com saldo MP e um com Pix (~R$40).
 - [ ] E10 ML: 5 compras em dias diferentes, TOTP no Chaves, contar desafios (~R$100).
 - [ ] E11 ML: cadastro no Programa de Afiliados + link de teste (seguro B).

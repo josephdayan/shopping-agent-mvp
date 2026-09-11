@@ -228,8 +228,9 @@ export async function claimNextPurchaseJob(workerId: string, allowedStores?: str
       // Hoje existe uma conta operacional por loja. A trava cobre o carrinho físico,
       // não apenas o pedido: dois clientes jamais montam a mesma sacola em paralelo.
       await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${`purchase-account:${full.storeKey}`}))::text`;
+      // Carrinho nas mãos do dono (ML) ou Pix em curso também ocupam a conta da loja.
       const busy = await tx.purchaseJob.findFirst({ where: { storeKey: full.storeKey, OR: [
-        { status: { in: ["claimed", "submitting", "outcome_unknown"] } }, {status:{in:["awaiting_approval","approved"]},lockedAt:{not:null}}, { status: "needs_review", lockedAt: { not: null } }
+        { status: { in: ["claimed", "submitting", "outcome_unknown", "awaiting_owner_confirm", "awaiting_store_number", "pix_captured", "pix_submitted", "pix_paid"] } }, {status:{in:["awaiting_approval","approved"]},lockedAt:{not:null}}, { status: "needs_review", lockedAt: { not: null } }
       ] }, select: { id: true } });
       const trackingBusy = await tx.trackingSubscription.findFirst({where:{storeKey:full.storeKey,lockedAt:{gt:new Date(Date.now()-5*60_000)}}});
       if (busy || trackingBusy) return { count: 0 };
@@ -260,6 +261,8 @@ export function workerPayload(job: NonNullable<Awaited<ReturnType<typeof claimNe
     cartHash: job.cartHash,
     mode: "cart_only",
     canSubmitPurchase: false,
+    // Frete cotado ao cliente (o ML não expõe frete no carrinho antes do endereço).
+    deliveryFeeCents: Math.round(money(job.deliveryOrder.deliveryFee) * 100),
     customer: {
       name: job.deliveryOrder.customerName,
       phone: job.deliveryOrder.phone,

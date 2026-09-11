@@ -1495,6 +1495,30 @@ export function operatorPlanBAccepted(shortId: string, summary: string): string 
   return `🛒 Pedido #${shortId}: cliente aceitou a troca. Comprar agora: ${summary.slice(0, 400)}`;
 }
 
+// ---- Mercado Livre degrau C (11/09): mensagens ao OPERADOR ----
+export function operatorMlCartReady(shortId: string, totalCents: number, items: string[], recipient: string, destination: string): string {
+  const total = (totalCents / 100).toFixed(2).replace(".", ",");
+  return `🛒 Pedido #${shortId} no Mercado Livre: carrinho pronto na conta da Lia.\n${items.map((i) => `• ${i}`).join("\n")}\nTotal esperado R$ ${total} · saldo Mercado Pago\nEntregar para ${recipient} — ${destination}\nAbra o app do ML, confira endereço e destinatário e toque em Comprar. Depois responda aqui.`;
+}
+export function operatorMlBlocked(shortId: string, reason: string): string {
+  return `Pedido #${shortId} no Mercado Livre precisa de revisão: ${reason} Veja no painel.`;
+}
+export function operatorAskStoreNumber(shortId: string): string {
+  return `Beleza. Manda só o número do pedido do Mercado Livre do #${shortId}.`;
+}
+export function operatorStoreNumberSaved(shortId: string, number: string): string {
+  return `Registrado: pedido #${shortId} comprado no ML (nº ${number}). O cliente já foi avisado.`;
+}
+export function operatorCartDeclined(shortId: string): string {
+  return `Ok, o #${shortId} foi para revisão no painel. Nada foi comprado.`;
+}
+export function operatorActionUnknown(): string {
+  return "Não reconheci essa ação. Veja no painel.";
+}
+export function operatorActionFailed(reason: string): string {
+  return `Não deu: ${reason}`;
+}
+
 export function purchaseFailedRefunded(items: string[], total: number, reason?: string): string {
   const what = items.length === 1 ? `*${items[0]}*` : items.map((i) => `• ${i}`).join("\n");
   const why = reason ? ` (${reason.slice(0, 120)})` : "";

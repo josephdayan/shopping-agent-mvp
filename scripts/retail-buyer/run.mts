@@ -15,6 +15,9 @@ import {
 import { PURCHASE_DOMAINS, purchaseHostAllowed } from "../../src/lib/purchase-preparation";
 import { trackingPageAllowed } from "../../src/lib/tracking-policy";
 import { GmailCodeMailbox, registerStoreMail } from "./mailbox";
+import { MercadoLivreBuyer, ML_RECIPE, type MercadoLivreRecipe } from "./mercadolivre";
+type AnyRecipe = StoreRecipe | MercadoLivreRecipe;
+const isMl = (r: AnyRecipe): r is MercadoLivreRecipe => (r as MercadoLivreRecipe).kind === "mercadolivre";
 
 const root = resolve(process.env.LIA_BUYER_DIR ?? ".retail-buyer");
 const configPath = resolve(root, "config.json");
@@ -27,7 +30,7 @@ if (command === "init") {
       {
         baseUrl: "https://liadelivery.com.br",
         headless: false,
-        stores: { drogariasp: VTEX_RECIPES.drogariasp },
+        stores: { mercadolivre: ML_RECIPE, drogariasp: VTEX_RECIPES.drogariasp },
       },
       null,
       2,
@@ -53,11 +56,12 @@ type ProbeAddress = {
 const config = JSON.parse(await readFile(configPath, "utf8")) as {
   baseUrl: string;
   headless?: boolean;
-  stores: Record<string, StoreRecipe>;
+  stores: Record<string, AnyRecipe>;
   // Endereço operacional autorizado pelo dono para sondagens (nunca o de um cliente).
   probe?: ProbeAddress;
 };
 for (const [store, recipe] of Object.entries(config.stores)) {
+  if (isMl(recipe)) continue;
   const mail = recipe.mail ?? VTEX_RECIPES[store]?.mail;
   if (mail) registerStoreMail(store, mail);
 }
@@ -81,6 +85,10 @@ for (const [store, recipe] of Object.entries(config.stores)) {
     !purchaseHostAllowed(store, u.hostname)
   )
     throw new Error("Origem da loja inválida.");
+  if (isMl(recipe)) {
+    if (store !== "mercadolivre") throw new Error("Receita do Mercado Livre só vale para a loja mercadolivre.");
+    continue;
+  }
   if (
     recipe.tracking &&
     !trackingPageAllowed(
@@ -166,6 +174,44 @@ if (command === "probe") {
     throw new Error(
       "Defina `probe` no config.json (name, cep, text e o endereço estruturado autorizado pelo dono).",
     );
+  if (isMl(recipe)) {
+    // Sondagem do ML (gate E8): precisa da URL de um anúncio barato; monta o carrinho na
+    // conta, fotografa e esvazia. Nunca clica em comprar.
+    if (!skuArg || !/^https:\/\//.test(skuArg)) throw new Error("Passe a URL do anúncio: probe mercadolivre https://...MLB-...");
+    const probesDir = resolve(root, "probes");
+    await mkdir(probesDir, { recursive: true, mode: 0o700 });
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const context = await openProfile(resolve(root, "profiles"), store, config.headless);
+    const page = context.pages()[0] ?? (await context.newPage());
+    const buyer = new MercadoLivreBuyer(page, recipe);
+    const mlJob: BuyerJob = {
+      jobId: `probe-${Date.now()}`, orderId: "probe", storeKey: store, cartHash: "0".repeat(64), claimToken: "probe",
+      maximumTotal: 0, deliveryFeeCents: 0, accountEmail: process.env.LIA_PROBE_ACCOUNT_EMAIL?.trim() || "probe@example.test",
+      customer: { name: config.probe.name, phone: "probe", cep: config.probe.cep, address: config.probe.text },
+      items: [{ sku: "ml-probe", name: "sondagem", quantity: 1, expectedUnitPrice: 0, productUrl: skuArg }],
+    };
+    const report: Record<string, unknown> = { store, productUrl: skuArg, startedAt: new Date().toISOString() };
+    try {
+      try {
+        const lines = await buyer.prepareCart(mlJob);
+        report.prepared = true;
+        report.cart = lines;
+        report.evidence = await buyer.snapshot(mlJob);
+      } catch (error) {
+        report.prepared = false;
+        report.prepareError = error instanceof Error ? error.message : "erro";
+      }
+      await page.screenshot({ path: resolve(probesDir, `${store}-${stamp}.png`), fullPage: true }).catch(() => {});
+      if (report.prepared) {
+        try { await buyer.clearPreparedCart(mlJob); report.cartCleared = true; } catch { report.cartCleared = false; }
+      }
+    } finally {
+      await context.close();
+    }
+    await writeFile(resolve(probesDir, `${store}-${stamp}.json`), JSON.stringify(report, null, 2), { mode: 0o600 });
+    console.log(JSON.stringify(report, null, 2));
+    process.exit(0);
+  }
   const item = await probeItem(store, recipe, skuArg);
   const job: BuyerJob = {
     jobId: `probe-${Date.now()}`,
@@ -274,6 +320,34 @@ async function api(path: string, token: string, body: unknown) {
 }
 const purchase = (body: unknown) =>
   api("/api/purchase-worker/session", purchaseToken!, body);
+// Mercado Livre degrau C: prepara o carrinho na conta e entrega ao dono (owner_confirm).
+async function buyMl(job: BuyerJob, recipe: MercadoLivreRecipe) {
+  const identity = { workerId, jobId: job.jobId, claimToken: job.claimToken };
+  let context: Awaited<ReturnType<typeof openProfile>> | undefined;
+  let buyer: MercadoLivreBuyer | undefined;
+  try {
+    await purchase({ action: "heartbeat", ...identity });
+    context = await openProfile(resolve(root, "profiles"), job.storeKey, config.headless);
+    const page = context.pages()[0] ?? (await context.newPage());
+    buyer = new MercadoLivreBuyer(page, recipe);
+    await buyer.prepareCart(job);
+    const evidence = await buyer.snapshot(job);
+    const result = await purchase({ action: "owner_confirm", ...identity, evidence });
+    if (!result.ok) {
+      await buyer.clearPreparedCart(job).catch(() => {});
+      console.log(JSON.stringify({ job: job.jobId, store: job.storeKey, status: "needs_review", reason: result.reason }));
+      return;
+    }
+    // O carrinho fica na conta (sincroniza para o app do dono); o navegador fecha.
+    console.log(JSON.stringify({ job: job.jobId, store: job.storeKey, status: "awaiting_owner_confirm", sent: result.sent }));
+  } catch (error) {
+    await buyer?.clearPreparedCart(job).catch(() => {});
+    await purchase({ action: "unknown", ...identity, code: "ML_CART_REVIEW_REQUIRED" }).catch(() => {});
+    console.error(JSON.stringify({ job: job.jobId, store: job.storeKey, status: "needs_review", reason: error instanceof Error && error.message.startsWith("Servidor") ? error.message : "Confira a conta e o carrinho do Mercado Livre na janela operacional." }));
+  } finally {
+    await context?.close();
+  }
+}
 async function buy(job: BuyerJob, recipe: StoreRecipe) {
   const identity = { workerId, jobId: job.jobId, claimToken: job.claimToken };
   let alive = true;
@@ -454,6 +528,7 @@ async function track(store: string, recipe: StoreRecipe) {
   }
 }
 for (const [store, recipe] of Object.entries(config.stores)) {
+  if (isMl(recipe)) continue;
   if (!recipe.submitSelector || !recipe.receipt)
     console.warn(
       JSON.stringify({
@@ -473,11 +548,14 @@ await Promise.all(
   Object.entries(config.stores).map(async ([store, recipe]) => {
     do {
       try {
+        const executable = isMl(recipe) || Boolean(recipe.submitSelector && recipe.receipt);
         const { job } =
-          purchaseToken && recipe.submitSelector && recipe.receipt
+          purchaseToken && executable
             ? await purchase({ action: "claim", workerId, stores: [store] })
             : { job: null };
-        if (job) await buy(job, recipe);
+        if (isMl(recipe)) {
+          if (job) await buyMl(job, recipe);
+        } else if (job) await buy(job, recipe);
         else await track(store, recipe);
       } catch {
         console.error(JSON.stringify({ store, status: "worker_unavailable" }));

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { requireMetaSignature, requireWebhookSecret } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { handleDeliveryMessage, recoverFailedCarousel, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
-import { notifyOperator } from "@/lib/turn-runtime";
+import { notifyOperator, isAdminPhone } from "@/lib/turn-runtime";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
@@ -236,6 +236,18 @@ export async function POST(request: Request) {
   // (28/08 S2: "👍" e figurinhas morriam sem nenhuma resposta).
   if (!inbound.text && inbound.provider !== "meta") {
     return NextResponse.json({ error: "Invalid WhatsApp payload" }, { status: 400 });
+  }
+
+  // Botões assinados do OPERADOR (`op1.…`) e o número do pedido do ML que ele responde
+  // (11/09): tratados ANTES do cérebro. Qualquer outra mensagem dele segue como cliente.
+  if (inbound.text && isAdminPhone(inbound.phone)) {
+    try {
+      const { handleOperatorInbound } = await import("@/lib/ops-actions-inbound");
+      if ((await handleOperatorInbound(inbound.phone, inbound.text)) === "handled")
+        return NextResponse.json({ ok: true, provider: inbound.provider, operator: true });
+    } catch (error) {
+      console.error("[ops-action:inbound-error]", error instanceof Error ? error.message : error);
+    }
   }
 
   if (inbound.provider === "meta") {

@@ -139,6 +139,19 @@ export function verifyOpsLoginToken(token: string | null | undefined, now = Date
   return safeEqual(sig, loginSignature(secret, exp, nonce));
 }
 
+// ---------- botões do operador no WhatsApp (11/09) ----------
+// O id do botão é `op1.<opsActionId>.<escolha>.<hmac32>`; a assinatura amarra ação e
+// tipo com o MESMO OPS_TOKEN. Sem OPS_TOKEN não há botão (fail-closed): cai no texto + link.
+export function signOpsAction(actionId: string, kind: string): string | null {
+  const secret = opsToken();
+  if (!secret) return null;
+  return createHmac("sha256", `lia-ops-action:${secret}`).update(`${kind}.${actionId}`).digest("hex").slice(0, 32);
+}
+export function verifyOpsActionSignature(actionId: string, kind: string, sig: string): boolean {
+  const expected = signOpsAction(actionId, kind);
+  return Boolean(expected && sig && safeEqual(sig, expected));
+}
+
 export function opsLoginUrl(token: string): string {
   const base = (process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "");
   return `${base}/api/ops/login?login=${encodeURIComponent(token)}`;

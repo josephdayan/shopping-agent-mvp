@@ -14,6 +14,8 @@ export type BuyerJob = {
   claimToken: string;
   maximumTotal: number;
   deliveryPromise?: string;
+  // Frete cotado ao cliente (o ML só mostra frete depois do endereço, no app).
+  deliveryFeeCents?: number;
   accountEmail?: string;
   customer: { name?: string; phone: string; cep: string; address: string };
   items: {

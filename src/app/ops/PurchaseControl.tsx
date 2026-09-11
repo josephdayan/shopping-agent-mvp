@@ -242,7 +242,8 @@ export function PurchaseReview({
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [reviewed, setReviewed] = useState(false),
-    [note, setNote] = useState("");
+    [note, setNote] = useState(""),
+    [storeNumber, setStoreNumber] = useState("");
   const e = job.checkoutEvidence;
   const labels: Record<string, string> = {
     queued: "Na fila de compra",
@@ -286,6 +287,25 @@ export function PurchaseReview({
       setBusy(false);
     }
   }
+  // ML degrau C: espelho dos botões do WhatsApp (mesma OpsAction, consumida uma vez).
+  async function owner(action: "owner_bought" | "owner_declined") {
+    setBusy(true);
+    setError("");
+    try {
+      const r = await fetch(`/api/ops/purchase-jobs/${job.id}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(action === "owner_bought" ? { action, storeOrderNumber: storeNumber.trim() } : { action }),
+      });
+      const b = await r.json();
+      if (!r.ok) throw new Error(b.error);
+      refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha ao registrar");
+    } finally {
+      setBusy(false);
+    }
+  }
   async function approve() {
     setBusy(true);
     setError("");
@@ -317,6 +337,30 @@ export function PurchaseReview({
       }}
     >
       <strong>{labels[job.status] ?? job.status}</strong>
+      {["awaiting_owner_confirm", "awaiting_store_number"].includes(job.status) && (
+        <div style={{ display: "grid", gap: 8, marginTop: 8 }}>
+          {e && <p style={{ margin: 0 }}>
+            {e.items.map((i) => `${i.qty} × ${i.name}`).join(" · ")} — {money(e.totalCents)}<br />
+            {e.recipientName} · {e.destination}
+          </p>}
+          <p style={{ margin: 0, fontSize: 13 }}>
+            Abra o app do Mercado Livre, confira endereço e destinatário, pague com o saldo
+            Mercado Pago e registre aqui o número do pedido.
+          </p>
+          <label>
+            Nº do pedido no Mercado Livre{" "}
+            <input value={storeNumber} onChange={(ev) => setStoreNumber(ev.target.value)} placeholder="2000012345678901" />
+          </label>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button style={button} disabled={busy || storeNumber.trim().length < 6} onClick={() => owner("owner_bought")}>
+              Comprei — registrar nº
+            </button>
+            <button style={button} disabled={busy} onClick={() => owner("owner_declined")}>
+              Não deu
+            </button>
+          </div>
+        </div>
+      )}
       {e && job.status === "awaiting_approval" && (
         <>
           <ul>

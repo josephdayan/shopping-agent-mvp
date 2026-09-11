@@ -84,7 +84,9 @@ export async function refundOrderViaProvider(deliveryOrderId: string, amount?: n
   // estável desta parcela: se o banco falhar depois do provedor, o retry a reutiliza.
   return prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${deliveryOrderId} FOR UPDATE`;
-    const purchase = await tx.purchaseJob.findFirst({ where: { deliveryOrderId, status: { in: ["submitting", "outcome_unknown"] }, submissionId: { not: null } } });
+    // Depois que a compra foi encaminhada (clique, Pix da loja ou carrinho nas mãos do
+    // dono), o dinheiro pode já ter saído: reconciliar antes de devolver ao cliente.
+    const purchase = await tx.purchaseJob.findFirst({ where: { deliveryOrderId, status: { in: ["submitting", "outcome_unknown", "awaiting_owner_confirm", "awaiting_store_number", "pix_captured", "pix_submitted", "pix_paid", "store_confirmed"] }, submissionId: { not: null } } });
     if (purchase) throw new Error("Compra enviada ou com resultado desconhecido. Reconcilie a loja antes de estornar.");
     await tx.$queryRaw`SELECT id FROM "Payment" WHERE id = ${payment.id} FOR UPDATE`;
     const current = await tx.payment.findUniqueOrThrow({ where: { id: payment.id } });

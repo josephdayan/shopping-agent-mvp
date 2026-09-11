@@ -9,6 +9,7 @@ import {
   beginPurchase,
   finishPurchase,
   executionUnknown,
+  requestOwnerConfirm,
   checkoutEvidenceSchema,
 } from "@/lib/purchase-execution";
 export const dynamic = "force-dynamic";
@@ -43,6 +44,14 @@ const schema = z.discriminatedUnion("action", [
   z
     .object({
       action: z.literal("begin"),
+      ...common,
+      evidence: checkoutEvidenceSchema,
+    })
+    .strict(),
+  // Mercado Livre degrau C: carrinho montado na conta; o dono confirma no app.
+  z
+    .object({
+      action: z.literal("owner_confirm"),
       ...common,
       evidence: checkoutEvidenceSchema,
     })
@@ -95,6 +104,10 @@ export async function POST(request: Request) {
     if (b.action === "begin")
       return NextResponse.json(
         await beginPurchase(b.jobId, b.workerId, b.claimToken, b.evidence),
+      );
+    if (b.action === "owner_confirm")
+      return NextResponse.json(
+        await requestOwnerConfirm(b.jobId, b.workerId, b.claimToken, b.evidence),
       );
     if (b.action === "complete") {
       await finishPurchase(b.jobId, b.workerId, b.claimToken, b);

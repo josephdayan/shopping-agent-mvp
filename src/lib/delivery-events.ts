@@ -39,7 +39,7 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
     if (evidence.purchaseExecution) {
       const proof = evidence.purchaseExecution;
       const job = await tx.purchaseJob.findUniqueOrThrow({ where: { id: proof.jobId } });
-      if (job.deliveryOrderId !== order.id || job.submissionId !== proof.submissionId || !["submitting", "outcome_unknown", "completed"].includes(job.status)) throw new Error("Tentativa de compra incompatível.");
+      if (job.deliveryOrderId !== order.id || job.submissionId !== proof.submissionId || !["submitting", "outcome_unknown", "completed", "awaiting_owner_confirm", "awaiting_store_number", "pix_paid", "store_confirmed"].includes(job.status)) throw new Error("Tentativa de compra incompatível.");
       if (job.status === "completed" && job.storeOrderNumber !== evidence.storeOrderNumber?.trim()) throw new Error("Comprovante duplicado com número diferente.");
     }
     // O leitor não pode associar pedidos por nome, telefone ou produto parecido.
@@ -87,7 +87,7 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
       notes: appendOrderNote(order.notes, `🧾 ${evidence.kind} — ${evidence.source}: ${reference.replace(/[\r\n]/g, " ")} (${occurredAt.toISOString()}).`)
     } });
     if (evidence.kind === "bought") {
-      await tx.purchaseJob.updateMany({ where: { deliveryOrderId: order.id, status: { in: ["queued", "retrying", "claimed", "needs_review", "awaiting_approval", "approved", "submitting", "outcome_unknown", "manual_queue"] } },
+      await tx.purchaseJob.updateMany({ where: { deliveryOrderId: order.id, status: { in: ["queued", "retrying", "claimed", "needs_review", "awaiting_approval", "approved", "submitting", "outcome_unknown", "manual_queue", "awaiting_owner_confirm", "awaiting_store_number", "pix_paid", "store_confirmed"] } },
         data: { status: "completed", storeOrderNumber: number, lockedAt: null, nextAttemptAt: null, completedAt: new Date() } });
     }
     if (evidence.kind === "bought") {

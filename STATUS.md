@@ -1,3 +1,19 @@
+## 11/09/2026 — Fase 2 (Mercado Livre degrau C) implementada localmente (587/587)
+
+Comprador local ganhou receita do ML (`scripts/retail-buyer/mercadolivre.ts`, DOM com
+seletores configuráveis, nunca clica em comprar): monta o carrinho na conta da Lia, tira a
+evidência (`payment: ml_balance`) e chama `owner_confirm`. O servidor
+(`requestOwnerConfirm`) confere pagamento/cesta/conta, aplica o teto pelo canal
+`owner_confirm`, reserva `PurchaseSpend`, cria `OpsAction ml_cart_ready` e manda ao dono
+os botões assinados **Comprei / Não deu** (`op1.<id>.<escolha>.<hmac>`, HMAC com
+`OPS_TOKEN`; sem Meta ou sem token cai em texto + link do painel). "Comprei" → pede o
+número do pedido; a próxima mensagem numérica do operador registra a compra
+(`recordDeliveryEvent bought`) e avisa o cliente; "Não deu" → revisão sem liberar a reserva.
+Espelho no `/ops` (`owner_bought`/`owner_declined`) consome a mesma ação. Webhook roteia
+`op1.…` do telefone do operador antes do cérebro. Estorno bloqueado enquanto o carrinho está
+com o dono. Sondagem: `npm run purchase-worker:probe -- mercadolivre <URL do anúncio>`.
+Pendente do dono: desligar a tarefa horária do ChatGPT quando o degrau C estiver em produção.
+
 ## 11/09/2026 — Fases 0 e 1 do plano de compra implementadas (local, 583/583)
 
 Fase 0: leitor de e-mail por loja (`registerStoreMail`), `selectPix`/`selectSavedCard`/
