@@ -310,3 +310,88 @@ Banco: inconclusivo, nenhuma conta aberta. Leitor: escrito, sem consentimento OA
 **Há um único passo que destrava tudo e é do dono: criar o cliente OAuth no Google Cloud
 (escopo Gmail somente leitura) para a caixa operacional e rodar
 `npm run purchase-worker:mailbox-authorize`.** Depois disso, a sondagem da Swift custa R$0.
+
+---
+
+## 13. Mercado Livre fica — decisão do dono em 11/09/2026
+
+Dono: "eu não posso ter Mercado Livre fora, é meu principal, preciso ter isso pra dar
+certo". A exclusão do ML nas seções 5 e 10 era uma avaliação de risco contratual, não uma
+impossibilidade técnica. Fica revogada. O que segue é o que vale para o ML.
+
+### O que a API do ML permite e não permite (verificado em 11/09)
+
+- **Não existe endpoint para criar um pedido/compra.** A documentação de "Orders" é do
+  lado do vendedor; o comprador só pode **ler** as próprias orders e envios
+  (`/orders/search` com token do comprador, `/orders/{id}/shipments`). Fonte:
+  [developers.mercadolivre.com.br — Orders](https://developers.mercadolivre.com.br/pt_br/gerenciamento-de-vendas).
+- A conta operacional da Lia **não consegue criar aplicação** no DevCenter (erro OPT02,
+  17/08), então nem a leitura de pedidos por API está disponível hoje.
+- Conclusão: **compra no ML é só pela interface**, por decisão do próprio ML.
+
+### O que os Termos dizem, literalmente (11/05/2026, [ajuda/991](https://www.mercadolivre.com.br/ajuda/991))
+
+- Cl. 4: "É vedado utilizar a conta do Mercado Livre para intermediar, facilitar ou
+  viabilizar atividades de terceiros, inclusive mediante remuneração".
+- Cl. 7 (Sanções): é infração "a utilização da conta para intermediar, facilitar ou
+  viabilizar atividades, anúncios ou operações de terceiros, com ou sem remuneração".
+  Sanção: suspensão ou desativação; conta desativada não pode se registrar de novo.
+- Cl. 12: proibido "uso de sistemas automatizados (bots, spiders, scrapers…)" para acessar
+  conteúdo, "especialmente… informações ou funcionalidades disponíveis apenas mediante
+  autenticação" e "tentativa de contornar medidas técnicas de proteção".
+
+Isto não muda com Pix, conta PJ ou navegador local. É um risco de negócio que o dono
+assume conscientemente: **a conta da Lia no ML pode ser desativada, e com ela pedidos e
+devoluções em andamento.** As mitigações abaixo reduzem a probabilidade; não a regra.
+
+### Por que, tecnicamente, o ML é a melhor loja para automatizar
+
+1. **Um checkout para a cauda longa inteira** (o que hoje exige 9 adaptadores VTEX).
+2. **Dinheiro nunca sai do Mercado Pago**: o Pix do cliente já cai na conta MP da Lia; o
+   checkout do ML aceita "dinheiro em conta" com aprovação imediata, sem CVV, sem QR, sem
+   API bancária, sem float. É o único trilho em que entrada e saída são a mesma conta.
+   Alternativa: Pix do ML (QR após "Confirmar compra", pagável por qualquer banco).
+3. **Melhor rastreio de todas as lojas**: e-mails do Mercado Envios e "Minhas compras".
+4. **Destinatário diferente é padrão** (campo "quem vai receber"); NF-e sai no CPF/CNPJ
+   da conta compradora (modelo revenda, coerente com a seção 5.1).
+
+### O que ainda não se sabe (só a sondagem responde)
+
+- Se "Confirmar compra" apresenta desafio no perfil Chrome envelhecido da conta.
+- Se pagar com saldo MP no site pede senha/biometria (fontes públicas não dizem).
+- **A verificação em duas etapas do ML não vai por e-mail**: SMS, WhatsApp, ligação,
+  app autenticador ou reconhecimento facial. O leitor de e-mail não ajuda aqui. Opções:
+  dispositivo habitual (perfil persistente + IP fixo) reduz a frequência; app
+  autenticador com o segredo TOTP guardado no Chaves do Mac permite ao comprador do
+  próprio dono responder ao código sem humano (é o dono usando a própria conta na
+  própria máquina, não compartilhamento com terceiro).
+- Frequência real de desafio em 10–20 compras seguidas no mesmo perfil.
+
+### A escada para o ML (do que dá para fazer hoje ao mais automático)
+
+| Degrau | O que é | Toque humano | Risco ToS |
+|---|---|---|---|
+| **C — Preparar + confirmar no celular** | O comprador local monta o carrinho na conta da Lia (o carrinho do ML sincroniza entre dispositivos); o dono abre o app do ML no celular, confere e toca "Comprar" pagando com saldo MP. Substitui a tarefa horária do ChatGPT hoje. | 1 toque por pedido, de qualquer lugar, ~20 s | baixo: o clique de compra é humano |
+| **A — Automático** | Mesmo comprador clica "Confirmar compra", paga com saldo MP (ou captura o Pix e o servidor paga), lê "Minhas compras" e os e-mails. | 0 no caminho feliz; exceções por um toque | médio-alto: cl. 4/7/12 |
+| **B — Afiliados** | Lia manda o link do anúncio (Programa de Afiliados, comissão de 2% a 16% conforme categoria, paga no MP em até 60 dias); o cliente compra na própria conta do ML. | 0 | zero (programa oficial) |
+
+**Recomendação:** ligar **C** já (reaproveita a fila de jobs do ML que existe, tira o
+ChatGPT e o Mac da frente do dono), rodar a sondagem de **A** em paralelo e manter **B**
+como seguro para ticket alto e para o dia em que a conta for bloqueada. B contradiz "paga
+no chat", por isso é seguro, não caminho principal.
+
+### Gates específicos do ML (somam-se aos da seção 4)
+
+| # | Experimento | Custo | Sucesso |
+|---|---|---|---|
+| E8 | No perfil Chrome da conta do ML: item Full barato, destinatário diferente, até a tela de pagamento. Desafio? Saldo MP pede senha? | R$0 | tela de pagamento sem desafio |
+| E9 | Um pedido real com saldo MP e um com Pix; medir código Pix, expiração, e-mails, "Minhas compras" | ~R$40 | pedido pago sem toque além do teste |
+| E10 | 5 compras em dias diferentes no mesmo perfil, com o TOTP no Chaves; contar desafios | ~R$100 | ≤ 1 desafio em 5 |
+| E11 | Cadastro no Programa de Afiliados e um link de teste (seguro B) | R$0 | link gera comissão rastreável |
+
+### Mitigações para a conta
+
+Conta PJ da Lia no Mercado Livre Negócios (não a pessoal do dono); um só dispositivo e
+IP; ritmo humano; volume baixo no início (≤ 3 pedidos/dia); nunca HTTP puro, nunca
+mascarar o navegador; saldo MP em vez de cartão; e o seguro B pronto. Se a conta cair,
+o produto continua pelo degrau B enquanto se decide o resto.

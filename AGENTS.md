@@ -1,3 +1,20 @@
+## 11/09/2026 — dono: Mercado Livre FICA (é o canal principal)
+
+"Eu não posso ter Mercado Livre fora, é meu principal." Revoga a exclusão do ML nos planos
+de 10/09. Registrado na seção 13 de [plano-compra-viavel](docs/plano-compra-viavel-2026-09-10.md).
+Fatos verificados em 11/09: **não existe API de compra** no ML (a API de Orders é do
+vendedor; comprador só lê as próprias orders/envios, e a conta da Lia nem cria app —
+OPT02); os Termos (11/05/2026, cl. 4, 7 e 12) vedam usar a conta para "intermediar…
+operações de terceiros" e o acesso automatizado a áreas autenticadas — risco de
+desativação da conta, assumido pelo dono. Tecnicamente o ML é a melhor loja: um checkout
+para a cauda longa, **pagamento com saldo Mercado Pago** (o Pix do cliente já cai lá: sem
+CVV, sem QR, sem banco, sem float), melhor rastreio. A 2FA do ML **não vai por e-mail**
+(SMS/WhatsApp/ligação/autenticador/rosto): perfil persistente + TOTP no Chaves. Escada:
+**C** preparar carrinho + dono confirma no app do celular com 1 toque (ligar já; substitui
+a tarefa do ChatGPT) → **A** automático após sondagem (E8–E10) → **B** Afiliados como seguro
+(oficial, 2–16% de comissão, cliente compra na própria conta; não é "paga no chat").
+Conta PJ no Mercado Livre Negócios, ≤ 3 pedidos/dia no início, nunca HTTP puro.
+
 ## 11/09/2026 — cruzamento dos dois planos de compra (Claude × Codex)
 
 Os planos [plano-compra-viavel](docs/plano-compra-viavel-2026-09-10.md) e

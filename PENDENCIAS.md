@@ -9,8 +9,8 @@ Decisões do dono (seção 5 do plano):
 - [ ] Provedor de Pix-out (Efí × Asaas) pela resposta escrita; quem paga o float; fase 2
       receber o Pix do cliente na mesma conta PJ que paga a loja.
 - [ ] Confirmar se o Mercado Pago de entrada é PJ; sem isso, piloto só com o dono como cliente.
-- [ ] Aceitar por escrito: Pague Menos e Oba fora; Mercado Livre fora do automático; nada de
-      resolver CAPTCHA por serviço/proxy.
+- [x] Dono (11/09): **Mercado Livre FICA, é o canal principal** (seção 13 do plano: escada
+      C→A→B). Pague Menos e Oba fora; nada de resolver CAPTCHA por serviço/proxy.
 - [ ] Definir quem cobre a fila de exceções e o pós-venda, e em que horário.
 - [ ] Decidir o plano B se nenhuma loja passar a sondagem (Pix do varejista ao cliente,
       operador contratado, ou uma loja só).
@@ -24,6 +24,11 @@ Gates antes de código (semana 1, R$0–75):
 - [ ] E5 perguntas por escrito a Efí e Asaas (ação crítica, limites, timeout sem ID).
 - [ ] E6 Pix-out de R$1 a QR de terceiro pelo provedor aprovado, sem tocar no app.
 - [ ] E7 um cancelamento legítimo: devolução volta à conta pagadora com o e2e?
+- [ ] E8 ML: perfil da conta até a tela de pagamento (desafio? saldo MP pede senha?).
+- [ ] E9 ML: um pedido com saldo MP e um com Pix (~R$40).
+- [ ] E10 ML: 5 compras em dias diferentes, TOTP no Chaves, contar desafios (~R$100).
+- [ ] E11 ML: cadastro no Programa de Afiliados + link de teste (seguro B).
+- [ ] Ligar o degrau C do ML: comprador monta o carrinho, dono confirma no app do celular.
 
 ## 09/09/2026 — decidir se Pague Menos pode operar com intervenção de CVV
 
