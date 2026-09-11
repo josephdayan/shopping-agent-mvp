@@ -16,7 +16,7 @@ Decisões do dono (seção 5 do plano):
       operador contratado, ou uma loja só).
 
 Implementação (plano de 11/09): [x] Fase 0 · [x] Fase 1 · [x] Fase 2 ML degrau C (local; ativar = conta ML no /ops com saldo MP + `LIA_AUTO_PURCHASE_STORES=mercadolivre` + sondagem E8) · [x] Fase 3 Pix-out (local; liga com LIA_PIX_OUT_PROVIDER=asaas + ASAAS_API_KEY após E5/E6) · [x] 4 e-mail (frases a homologar em E3) · [x] 5 exceções · [x] 6 arrependimento (cliente desiste até a compra sair; estorno imediato; corrida com o botão do dono) · [x] 7 operação (launchd, runbook, legado removido). **Código pronto localmente; falta deploy + gates.**
-- [ ] Deploy zero: aplicar as 5 migrations pendentes (3 de 06–07/09 + 20260911120000 receivers/actions + 20260911150000 pix_payout) antes do código novo.
+- [x] Deploy zero (11/09, 398217b): 23/23 migrations em produção (as 3 de 06–07/09 já estavam; as 2 de 11/09 aplicadas no build), código das fases 0–7 no ar com todas as flags novas ausentes = desligadas. Sobra apagar a env `PURCHASE_AUTOMATION_MODE` na Vercel (morta).
 
 Gates antes de código (semana 1, R$0–75):
 - [ ] E0 consentimento OAuth real da caixa operacional; `purchase-worker:mailbox-check` passa.

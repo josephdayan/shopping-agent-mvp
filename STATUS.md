@@ -1,3 +1,17 @@
+## 11/09/2026 — Deploy zero publicado (398217b), tudo desligado
+
+Push de `main` (27 commits, fases 0–7) disparou o build de produção na Vercel
+(`shopping-agent-sxbi3pr1v`, Ready em 1 min). `migrate-on-build` aplicou
+`20260911120000_purchase_receivers_actions` e `20260911150000_pix_payout`; as três de
+06–07/09 já constavam em `_prisma_migrations` (aplicadas em 07–08/09). Conferido direto no
+banco: 23/23 migrations, tabelas `OpsAction`, `PurchaseReceiver`, `PixPayout` presentes,
+sem drift. Smoke: `liadelivery.com.br/ops` 200, webhook do WhatsApp 403 com token errado
+(esperado), zero logs de erro no deploy novo. Nenhuma env nova existe em produção, logo
+`LIA_AUTO_PURCHASE_STORES` vazio (compra automática off, ML idem), `LIA_PIX_OUT_PROVIDER`
+vazio (Pix de saída off) e botões do dono ligados só quando houver ação (não há). A env
+`PURCHASE_AUTOMATION_MODE` ainda está na Vercel, mas nada mais a lê — pode ser apagada.
+Próximo: gates do dono (E0, E8) e só então `LIA_AUTO_PURCHASE_STORES=mercadolivre`.
+
 ## 11/09/2026 — Fase 7 (operação) e fechamento do plano (597/597)
 
 Serviço `launchd` do comprador (`purchase-worker:install-service`, caffeinate, KeepAlive,
