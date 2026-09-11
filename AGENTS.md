@@ -1,3 +1,16 @@
+## 11/09/2026 — plano de implementação aprovado pelo dono (7 fases, ML degrau C primeiro)
+
+Dono aprovou [docs/plano-implementacao-compra-2026-09-11.md](docs/plano-implementacao-compra-2026-09-11.md)
+e respondeu: começar pelo **ML degrau C**; destinatário = **nome do WhatsApp, perguntar só se
+faltar** (sem CPF); **mudar a regra de arrependimento** (estorno imediato enquanto a compra na
+loja não saiu); Pix-out com **interface neutra, Efí e Asaas em paralelo**. Fases: 0 sondagens
+(mailbox genérico, `selectPix`, `probe LOJA`) → 1 fundações (`customerName` nunca era gravado —
+bloqueio real; evidência de pagamento generalizada; allowlist com ML; `manual_queue`) → 2 ML
+degrau C (`MercadoLivreBuyer` DOM, `cart_ready → awaiting_owner_confirm`, `OpsAction` + botões
+assinados `op1.<id>.<hmac>`) → 3 Pix-out + captura VTEX → 4 e-mail → DeliveryEvent → 5 exceções
+por um toque → 6 arrependimento → 7 operação. Deploy zero = commitar e aplicar as 3 migrations
+pendentes. Cada fase fecha com `tsc` + `npm run test:local` verde e commit.
+
 ## 11/09/2026 — dono: Mercado Livre FICA (é o canal principal)
 
 "Eu não posso ter Mercado Livre fora, é meu principal." Revoga a exclusão do ML nos planos
