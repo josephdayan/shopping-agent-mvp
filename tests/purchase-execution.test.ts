@@ -90,8 +90,7 @@ async function session(storeKey = store) {
     postalCode: order.cep!,
     deliveryOption: "NORMAL",
     deliveryPromise: "prazo da loja: 1 dia útil",
-    paymentLabel: "Cartão corporativo salvo",
-    paymentReference: "a".repeat(64),
+    payment: { kind: "card_saved", reference: "a".repeat(64) },
     observedAt: new Date().toISOString(),
     items: [
       {
@@ -156,7 +155,7 @@ test("aprovação exata permite um único envio; estorno e cancelamento aguardam
   await approveCheckout(job.jobId, staged.checkoutHash);
   assert.equal((await stageCheckout(...args, evidence)).readyToSubmit, true);
   await assert.rejects(
-    beginPurchase(...args, { ...evidence, paymentReference: "c".repeat(64) }),
+    beginPurchase(...args, { ...evidence, payment: { kind: "card_saved", reference: "c".repeat(64) } }),
   );
   const results = await Promise.allSettled([
     beginPurchase(...args, evidence),

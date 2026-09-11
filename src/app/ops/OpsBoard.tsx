@@ -206,6 +206,7 @@ export default function OpsBoard() {
       storeOrderNumber?: string;
       text?: string;
       trackingUrl?: string;
+      recipientName?: string;
       refundReference?: string;
       refundAmount?: number;
       itemsSubtotal?: number;
@@ -308,8 +309,24 @@ export default function OpsBoard() {
                 <span style={payBadge}>{isCard ? "💳 cartão" : "⚡ Pix"}</span>
               </span>
             </div>
+            {o.purchaseJobs?.some(j => j.status === "manual_queue") && (
+              <div style={manualBanner}>🛒 COMPRA MANUAL — esta loja/cesta não tem execução automática: compre no site e registre o número abaixo.</div>
+            )}
             <div style={{ color: "#475467", fontSize: 14, marginTop: 6 }}>
               {o.customerName ?? o.phone}{" "}
+              {!o.customerName && paymentReceived && (
+                <button
+                  style={{ ...smallBtn, marginLeft: 6 }}
+                  disabled={busy === `${o.id}:set_recipient`}
+                  onClick={() => {
+                    const recipientName = window.prompt("Nome de quem recebe (vai na etiqueta da loja):", "") ?? "";
+                    if (recipientName.trim()) void act(o.id, "set_recipient", { recipientName });
+                  }}
+                  title="A compra automática exige o nome do destinatário"
+                >
+                  ✏️ definir destinatário
+                </button>
+              )}
               <a
                 href={`https://wa.me/${o.phone.replace(/\D/g, "")}`}
                 target="_blank"
@@ -702,6 +719,8 @@ const cancelBanner: React.CSSProperties = {
   marginBottom: 10,
   fontWeight: 600
 };
+const smallBtn: React.CSSProperties = { fontSize: 11, padding: "2px 8px", border: "1px solid #d0d5dd", borderRadius: 6, background: "#fff", cursor: "pointer" };
+const manualBanner: React.CSSProperties = { background: "#fff7e6", border: "1px solid #f0c36d", color: "#7a4b00", padding: "6px 10px", borderRadius: 8, fontSize: 12, marginBottom: 8 };
 const refundBanner: React.CSSProperties = {
   background: "#fff4e5",
   color: "#93370d",

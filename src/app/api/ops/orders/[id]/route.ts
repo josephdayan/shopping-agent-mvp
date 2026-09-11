@@ -10,7 +10,8 @@ import {
   opsNotifyCustomer,
   opsPublishManualQuote,
   opsRefundViaProvider,
-  opsPurchaseFailedRefund
+  opsPurchaseFailedRefund,
+  opsSetRecipient
 } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +29,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     storeOrderNumber?: string;
     text?: string;
     trackingUrl?: string;
+    recipientName?: string;
     refundReference?: string;
     refundAmount?: number | string;
     itemsSubtotal?: number | string;
@@ -61,6 +63,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
       }
       case "bought":
         await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl);
+        break;
+      case "set_recipient":
+        await opsSetRecipient(id, String(body.recipientName ?? ""));
         break;
       case "retailer_out_for_delivery":
         await opsMarkRetailerOutForDelivery(id, body.trackingUrl);

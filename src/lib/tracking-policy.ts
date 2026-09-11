@@ -1,4 +1,4 @@
-import { PURCHASE_DOMAINS } from "./purchase-preparation";
+import { PURCHASE_DOMAINS, purchaseHostAllowed } from "./purchase-preparation";
 export function trackingPageAllowed(
   store: string,
   url: string,
@@ -17,11 +17,9 @@ export function trackingPageAllowed(
       /\.(local|localhost|internal)$/.test(u.hostname)
     )
       return false;
-    const domain = PURCHASE_DOMAINS[store];
     return (
-      Boolean(
-        domain && (u.hostname === domain || u.hostname.endsWith(`.${domain}`)),
-      ) || Boolean(registered && u.href === new URL(registered).href)
+      Boolean(PURCHASE_DOMAINS[store] && purchaseHostAllowed(store, u.hostname)) ||
+      Boolean(registered && u.href === new URL(registered).href)
     );
   } catch {
     return false;

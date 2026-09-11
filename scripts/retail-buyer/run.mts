@@ -12,7 +12,7 @@ import {
   type BuyerJob,
   type StoreRecipe,
 } from "./browser";
-import { PURCHASE_DOMAINS } from "../../src/lib/purchase-preparation";
+import { PURCHASE_DOMAINS, purchaseHostAllowed } from "../../src/lib/purchase-preparation";
 import { trackingPageAllowed } from "../../src/lib/tracking-policy";
 import { GmailCodeMailbox, registerStoreMail } from "./mailbox";
 
@@ -71,15 +71,14 @@ if (
 )
   throw new Error("Servidor precisa de HTTPS.");
 for (const [store, recipe] of Object.entries(config.stores)) {
-  const u = new URL(recipe.origin),
-    domain = PURCHASE_DOMAINS[store];
+  const u = new URL(recipe.origin);
   if (
-    !domain ||
+    !PURCHASE_DOMAINS[store] ||
     u.protocol !== "https:" ||
     u.username ||
     u.password ||
     u.port ||
-    !(u.hostname === domain || u.hostname.endsWith(`.${domain}`))
+    !purchaseHostAllowed(store, u.hostname)
   )
     throw new Error("Origem da loja inválida.");
   if (

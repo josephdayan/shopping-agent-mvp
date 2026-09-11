@@ -68,6 +68,8 @@ export type Intent =
   | { kind: "switch_payment" }
   // "quero falar com um atendente/humano".
   | { kind: "human" }
+  // "é pra outra pessoa", "entrega pra minha mãe", "é presente": pedir o nome de quem recebe.
+  | { kind: "recipient_other" }
   // "pera"/"espera aí"/"já volto" — o cliente pediu PAUSA; nada de busca (28/08 S10/S20).
   | { kind: "hold" }
   // "voltei, onde a gente tava?" — retomar com um resumo do estado (28/08 S20).
@@ -800,6 +802,11 @@ const CODE_EXPIRED_RE = /\b(pix|codigo|link|qr ?code|cobranca)\s+(expirou|venceu
 const SWITCH_PAYMENT_RE =
   /\b(muda\w*|troca\w*|altera\w*) (a |de |o )?(forma|meio|metodo|jeito) de pag\w+\b|\bpagar de outro jeito\b|\boutra forma de pag\w+\b/;
 
+// "é pra outra pessoa", "entrega pra minha mãe", "vai ser presente", "quem recebe é o
+// João": o destinatário não é quem fala — pedir o nome (11/09).
+const RECIPIENT_OTHER_RE =
+  /\b((e|eh|vai ser|sera) (pra|para) (outra pessoa|outro|outra|presente|um presente)|(entrega|entregar|manda|mandar|envia|enviar) (pra|para) (outra pessoa|minha|meu|meus|minhas|a |o )|quem (vai )?recebe(r)? (e|eh|nao sou eu|vai ser)|(nao|n) sou eu (que|quem) (vai )?receb\w*|(em|no) nome de outra pessoa)\b/;
+
 // "quero falar com um atendente/humano/pessoa de verdade".
 const HUMAN_RE =
   /\b(atendente|humano|falar com (alguem|uma pessoa|um humano|um atendente|o dono|o responsavel)|pessoa (de verdade|real)|sac\b|suporte|ouvidoria)\b/;
@@ -899,6 +906,7 @@ export function detectIntent(text: string): Intent {
   // com o sku preservado, nunca busca de produto nem "não entendi" (27/08 S1).
   const staleTap = n.match(/^optsku:(.+)$/);
   if (staleTap) return { kind: "stale_option_tap", sku: staleTap[1].trim() };
+  if (RECIPIENT_OTHER_RE.test(n)) return { kind: "recipient_other" };
   // Botão "Ver detalhes" do card (id por sku): a Lia responde com o link real do
   // anúncio/página do produto — reviews, fotos, specs (pedido do dono, 01/09).
   const infoTap = n.match(/^optinfo:(.+)$/);

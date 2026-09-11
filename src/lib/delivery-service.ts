@@ -17,6 +17,7 @@ import { checkCandidatesLive, liveKey } from "@/lib/live-availability";
 import { mlBasketFreight } from "@/lib/ml-freight";
 import { detectIntent, extractCep, isQuestion, asksRunningTotal, looksLikeMedicine, hasUrgencySignal, isNarrativeSegment, isRequestModifier, sharesProductNoun, stripMedicineNegation, narrowChoiceByName, normalizeMsg, parseBasketLines, parsePriceCap, splitPriceCap, mergeShoppingLines, parseChoiceReply, splitCommandClauses, stripListNumbering, parseRefinement, wantsMoreOptions, looksLikeTobacco, looksLikeSymptomAsk, type Intent, type ParsedLine } from "@/lib/lia-intents";
 import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LABEL, PAID_OR_IN_FULFILLMENT_STATUSES, REPEATABLE_DELIVERY_ORDER_STATUSES, appendOrderNote, isCardCharge, isOrderOutForDelivery } from "@/lib/order-flags";
+import { automaticPurchaseStores } from "@/lib/purchase-policy";
 import { isSaoPauloState } from "@/lib/coverage";
 import * as copy from "@/lib/lia-copy";
 
@@ -36,7 +37,7 @@ import { opsPublishManualQuote, recordWaitlistLead, sendFreightChoice } from "./
 export { runTurnScoped, TurnSupersededError, normalizePhone } from "./turn-runtime";
 export { markDeliveryOrderPaid, issueValidatedRetailerQuotePayment, markPixExpired, flagCardOutcomeUnknown } from "./order-payments";
 export type { PaymentEvidence } from "./order-payments";
-export { opsRefundViaProvider, opsPurchaseFailedRefund, watchPaidOrder, opsPublishManualQuote, opsMarkBought, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
+export { opsRefundViaProvider, opsPurchaseFailedRefund, watchPaidOrder, opsPublishManualQuote, opsMarkBought, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, opsSetRecipient, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
 
 // Costura de TESTE do CAS: os E2E provam que uma escrita de turno velho morre depois
 // de outra escrita (cancelar) — sem exportar nada disso pro fluxo normal.
@@ -1633,6 +1634,32 @@ async function handleDeliveryTurn(
   // ---- CEP (onboarding, requested change, or spontaneously sent) ----
   if (intent.kind === "cep") {
     await handleNewCep(phone, user.id, convo.id, ctx, intent.cep, Boolean(savedCep), intent.rest, text);
+    return;
+  }
+
+  // ---- destinatário (11/09): "é pra outra pessoa" ou perfil sem nome ----
+  if (intent.kind === "recipient_other") {
+    ctx.step = "need_recipient_name";
+    ctx.recipientName = undefined;
+    await writeCtx(convo.id, ctx);
+    await reply(phone, copy.askRecipientName());
+    return;
+  }
+  if (ctx.step === "need_recipient_name") {
+    const name = parseRecipientName(text);
+    if (!name) {
+      await reply(phone, copy.recipientNameInvalid());
+      return;
+    }
+    ctx.recipientName = name;
+    ctx.step = "collecting";
+    if (!user.name?.trim()) await prisma.user.update({ where: { id: user.id }, data: { name } });
+    await writeCtx(convo.id, ctx);
+    if ((ctx.basket?.length ?? 0) > 0) {
+      await continueAfterBasket(phone, convo.id, ctx, user.cep, copy.recipientNameSaved(name));
+    } else {
+      await reply(phone, copy.recipientNameSaved(name));
+    }
     return;
   }
 
@@ -4240,6 +4267,15 @@ function mergeBaskets(existing: BasketItem[], incoming: BasketItem[]): BasketIte
   return out;
 }
 
+// Nome de quem recebe: 2 a 60 letras/espaços; nada de número, link ou frase inteira.
+export function parseRecipientName(text: string): string | null {
+  const clean = text.replace(/\s+/g, " ").trim().replace(/^(é|eh|e|o nome é|nome:|pra|para|entrega pra|entregar pra)\s+/i, "");
+  if (!/^[\p{L}][\p{L}\s.'-]{1,59}$/u.test(clean) || clean.split(" ").length > 6) return null;
+  return clean
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
 async function continueAfterBasket(
   phone: string,
   convoId: string,
@@ -4283,6 +4319,21 @@ async function continueAfterBasket(
       await offerMinimumSwap(phone, convoId, ctx, belowStore);
       return;
     }
+    // Destinatário (11/09): só pergunta quando o perfil do WhatsApp não tem nome E a cesta
+    // é de uma loja com compra automática — é só aí que o checkout exige o nome (a loja
+    // imprime na etiqueta e checkCheckout compara). Nas demais, o operador preenche no /ops.
+    const basketStores = [...new Set((ctx.basket ?? []).map((i) => i.storeKey).filter(Boolean))];
+    const executableBasket = basketStores.length === 1 && automaticPurchaseStores().includes(basketStores[0] as string);
+    if (executableBasket && !ctx.recipientName?.trim()) {
+      const profile = await prisma.user.findFirst({ where: { phone }, select: { name: true } });
+      if (!profile?.name?.trim()) {
+        ctx.step = "need_recipient_name";
+        await writeCtx(convoId, ctx);
+        if (prefix) await reply(phone, prefix);
+        await reply(phone, copy.askRecipientName());
+        return;
+      }
+    }
     await createOperatorQuoteRequest(phone, convoId, ctx, prefix);
     return;
   }
@@ -4302,6 +4353,11 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   if (!convo) throw new Error("Conversation not found while creating concierge quote request.");
   const basket = (ctx.basket ?? []) as unknown as object;
   const itemNames = (ctx.basket ?? []).map((item) => `${item.qty}x ${item.name}`);
+  // Destinatário (11/09): nome do perfil do WhatsApp, ou o nome que o cliente informou
+  // quando o perfil não tinha nome ou a entrega é para outra pessoa. A compra na loja
+  // exige esse campo (checkCheckout compara com o receiverName do checkout).
+  const recipientName = ctx.recipientName?.trim() ||
+    (await prisma.user.findUnique({ where: { id: convo.userId }, select: { name: true } }))?.name?.trim() || null;
 
   // Tag de urgência (pedido do dono, 17/08): o cliente disse "urgente"/"pra hoje" em
   // algum momento da conversa — o operador decide o canal por isso (Rappi/retirada
@@ -4321,6 +4377,7 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
         items: basket,
         cep: ctx.cep,
         deliveryAddress: ctx.deliveryAddress,
+        ...(recipientName && !existing.customerName ? { customerName: recipientName } : {}),
         ...(addUrgent ? { notes: appendOrderNote(existing.notes, URGENT_NOTE) } : {})
       }
     });
@@ -4330,6 +4387,7 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
         userId: convo.userId,
         conversationId: convoId,
         phone,
+        customerName: recipientName,
         cep: ctx.cep,
         deliveryAddress: ctx.deliveryAddress,
         storeKey: CONCIERGE_STORE_KEY,

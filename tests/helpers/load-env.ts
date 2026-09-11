@@ -49,6 +49,8 @@ process.env.LIA_CHARGE_ONLY_VERIFIED ??= "false";
 // Mercado Livre é vitrine AO VIVO (rede + custo por busca): fica desligado nos testes,
 // como em produção por padrão. Seus próprios testes vivem em mercadolivre-store.test.ts.
 process.env.LIA_ENABLE_MERCADOLIVRE = "false";
+// Compra automática: nenhuma loja liberada por padrão nos testes (cada teste liga a sua).
+process.env.LIA_AUTO_PURCHASE_STORES ??= "";
 // The conversation evals assert NLU/choice/payment behavior, not the store roster, and
 // were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
 // Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba

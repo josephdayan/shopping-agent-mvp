@@ -6,16 +6,28 @@ export const PURCHASE_DOMAINS: Record<string, string> = {
   swift: "swift.com.br", divvino: "divvino.com.br", kopenhagen: "kopenhagen.com.br",
   rihappy: "rihappy.com.br", naturaldaterra: "naturaldaterra.com.br"
 };
+// Domínios adicionais por onde o checkout da loja passa (redirect de pagamento etc.).
+// O Mercado Livre paga no Mercado Pago e usa o domínio .com para alguns fluxos.
+export const PURCHASE_EXTRA_DOMAINS: Record<string, string[]> = {
+  mercadolivre: ["mercadopago.com.br", "mercadolibre.com"]
+};
+export function purchaseDomains(storeKey: string): string[] {
+  const primary = PURCHASE_DOMAINS[storeKey];
+  return primary ? [primary, ...(PURCHASE_EXTRA_DOMAINS[storeKey] ?? [])] : [];
+}
+export function purchaseHostAllowed(storeKey: string, hostname: string): boolean {
+  const host = hostname.toLowerCase();
+  return purchaseDomains(storeKey).some((domain) => host === domain || host.endsWith(`.${domain}`));
+}
 
 export function preparationStores(): string[] {
   return [...new Set((process.env.LIA_PURCHASE_PREP_STORES ?? "mercadolivre").split(",").map(s => s.trim()).filter(s => Boolean(PURCHASE_DOMAINS[s])))];
 }
 export function purchaseUrlAllowed(storeKey: string, value: string): boolean {
-  const domain = PURCHASE_DOMAINS[storeKey];
-  if (!domain) return false;
+  if (!PURCHASE_DOMAINS[storeKey]) return false;
   try {
     const url = new URL(value);
     return url.protocol === "https:" && !url.username && !url.password && !url.port &&
-      (url.hostname === domain || url.hostname.endsWith(`.${domain}`)) && url.pathname !== "/";
+      purchaseHostAllowed(storeKey, url.hostname) && url.pathname !== "/";
   } catch { return false; }
 }

@@ -6,9 +6,24 @@ type Account = {
   loginReady: boolean;
   paymentReady: boolean;
   enabled: boolean;
+  authKind?: string;
+  paymentKind?: string;
   lastSeenAt?: string;
 };
+// Como a Lia paga nessa loja (11/09): Pix da loja pago via API bancária (VTEX), saldo
+// Mercado Pago confirmado pelo dono no app (Mercado Livre) ou cartão salvo (legado).
+const PAYMENT_KINDS: Record<string, string> = {
+  pix_out: "Pix da loja pago pela Lia (API bancária)",
+  ml_balance: "Saldo Mercado Pago, confirmado pelo dono no app",
+  card: "Cartão corporativo salvo (legado, em aposentadoria)",
+};
+const PAYMENT_LABEL: Record<string, string> = {
+  pix_store: "Pix da loja pago pela Lia",
+  ml_balance: "Saldo Mercado Pago (confirmação no app)",
+  card_saved: "Cartão corporativo salvo",
+};
 const stores: Record<string, string> = {
+  mercadolivre: "Mercado Livre",
   drogariasp: "Drogaria São Paulo",
   paguemenos: "Pague Menos",
   cobasi: "Cobasi",
@@ -35,6 +50,7 @@ export function PurchaseAccounts() {
     [email, setEmail] = useState(""),
     [login, setLogin] = useState(false),
     [card, setCard] = useState(false),
+    [paymentKind, setPaymentKind] = useState("pix_out"),
     [enabled, setEnabled] = useState(false),
     [busy, setBusy] = useState(false);
   useEffect(() => {
@@ -51,6 +67,7 @@ export function PurchaseAccounts() {
         setEmail(a?.email ?? "");
         setLogin(a?.loginReady ?? false);
         setCard(a?.paymentReady ?? false);
+        setPaymentKind(a?.paymentKind ?? "pix_out");
         setEnabled(a?.enabled ?? false);
       })
       .catch(() => setMessage("Não consegui carregar as contas."));
@@ -61,6 +78,7 @@ export function PurchaseAccounts() {
     setEmail(a?.email ?? "");
     setLogin(a?.loginReady ?? false);
     setCard(a?.paymentReady ?? false);
+    setPaymentKind(a?.paymentKind ?? (key === "mercadolivre" ? "ml_balance" : "pix_out"));
     setEnabled(a?.enabled ?? false);
     setMessage("");
   }
@@ -75,6 +93,7 @@ export function PurchaseAccounts() {
           ...(email ? { email } : {}),
           loginReady: login,
           paymentReady: card,
+          paymentKind: store === "mercadolivre" ? "ml_balance" : paymentKind,
           enabled,
         }),
       });
@@ -114,9 +133,9 @@ export function PurchaseAccounts() {
               : " Nenhuma loja liberada ainda: falta validar checkout e comprovante."}
           </p>}
           <p style={{ margin: 0 }}>
-            Entre na conta da loja e cadastre o cartão da empresa na janela do
-            comprador. Depois confirme os dois itens abaixo. Senhas e cartão
-            ficam na própria loja.
+            Entre na conta da loja na janela do comprador e escolha como a Lia
+            paga nessa loja. Depois confirme os dois itens abaixo. Senhas,
+            cartões e cookies ficam na própria loja, nunca no painel.
           </p>
           <label>
             Loja{" "}
@@ -146,12 +165,26 @@ export function PurchaseAccounts() {
             Conta conectada na janela do comprador
           </label>
           <label>
+            Como a Lia paga nessa loja{" "}
+            <select
+              value={store === "mercadolivre" ? "ml_balance" : paymentKind}
+              disabled={store === "mercadolivre"}
+              onChange={(e) => setPaymentKind(e.target.value)}
+            >
+              {Object.entries(PAYMENT_KINDS).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
             <input
               type="checkbox"
               checked={card}
               onChange={(e) => setCard(e.target.checked)}
             />{" "}
-            Cartão corporativo salvo e conferido nessa conta
+            Meio de pagamento pronto nessa conta
           </label>
           <label>
             <input
@@ -193,7 +226,7 @@ export type PurchaseReviewJob = {
     destination: string;
     deliveryOption: string;
     deliveryPromise: string;
-    paymentLabel: string;
+    payment: { kind: string };
     totalCents: number;
     freightCents: number;
     items: { sku: string; name: string; qty: number; lineTotalCents: number }[];
@@ -220,6 +253,14 @@ export function PurchaseReview({
     outcome_unknown: "Confira o histórico da loja antes de tentar novamente",
     needs_review: "Compra precisa de revisão",
     completed: "Compra registrada",
+    manual_queue: "Compra manual: esta loja não tem execução automática",
+    cart_ready: "Carrinho montado no Mercado Livre",
+    awaiting_owner_confirm: "Aguardando o dono confirmar no app do Mercado Livre",
+    awaiting_store_number: "Confirmada no app; falta o número do pedido",
+    store_confirmed: "Loja confirmou o pedido",
+    pix_captured: "Pix da loja capturado; conferindo",
+    pix_submitted: "Pix da loja enviado ao banco",
+    pix_paid: "Pix da loja pago; aguardando a loja",
   };
   const money = (v: number) =>
     (v / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -294,7 +335,7 @@ export function PurchaseReview({
             <br />
             {e.accountEmail}
             <br />
-            {e.paymentLabel} · frete {money(e.freightCents)}
+            {PAYMENT_LABEL[e.payment?.kind] ?? e.payment?.kind} · frete {money(e.freightCents)}
           </p>
           <button
             style={button}

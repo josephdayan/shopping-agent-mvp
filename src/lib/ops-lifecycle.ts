@@ -441,6 +441,11 @@ function autoRefundSince(): number {
 function autoRefundStaleHours(): number {
   return Number(process.env.LIA_AUTO_REFUND_STALE_HOURS ?? 24);
 }
+// Fila manual (loja sem execução automática): o humano compra quando puder, então o
+// prazo de "sem compra" é mais longo antes de devolver o dinheiro sozinho (11/09).
+function autoRefundManualHours(): number {
+  return Number(process.env.LIA_AUTO_REFUND_MANUAL_HOURS ?? 48);
+}
 
 // O bloqueio é escrito em jargão de operação; o cliente recebe uma frase simples.
 export function customerReasonFromBlock(block: string): string {
@@ -452,7 +457,7 @@ export function customerReasonFromBlock(block: string): string {
 }
 
 export function autoRefundDecision(
-  input: { status: string; storeOrderNumber?: string | null; paidAt?: Date | null; notes?: string | null },
+  input: { status: string; storeOrderNumber?: string | null; paidAt?: Date | null; notes?: string | null; manualQueue?: boolean },
   now = new Date()
 ): AutoRefundDecision {
   if (process.env.LIA_AUTO_REFUND_OFF === "true") return { refund: false };
@@ -472,10 +477,17 @@ export function autoRefundDecision(
   if (blocked && hours >= autoRefundBlockedHours()) {
     return { refund: true, kind: "blocked", reason: blocked, customerReason: customerReasonFromBlock(blocked) };
   }
-  if (hours >= autoRefundStaleHours()) {
+  if (hours >= (input.manualQueue ? autoRefundManualHours() : autoRefundStaleHours())) {
     return { refund: true, kind: "stale", reason: `sem compra confirmada ${Math.floor(hours)}h depois do pagamento`, customerReason: "não consegui confirmar a compra a tempo" };
   }
   return { refund: false };
+}
+
+// Destinatário do pedido editável pelo operador (a compra automática exige o nome).
+export async function opsSetRecipient(orderId: string, name: string) {
+  const clean = name.replace(/\s+/g, " ").trim();
+  if (clean.length < 2 || clean.length > 120) throw new Error("Nome do destinatário inválido.");
+  return prisma.deliveryOrder.update({ where: { id: orderId }, data: { customerName: clean } });
 }
 
 const AUTO_REFUND_FAILED_MARKER = "⚠️ ESTORNO AUTOMÁTICO FALHOU";
@@ -499,7 +511,8 @@ export async function watchPaidOrder(
 
   // Estorno automático vem ANTES de qualquer alerta: não faz sentido avisar "pendente 6h"
   // e devolver o dinheiro no mesmo tick.
-  const decision = autoRefundDecision(order, now);
+  const manualQueue = Boolean(await prisma.purchaseJob.findFirst({ where: { deliveryOrderId: orderId, status: "manual_queue" }, select: { id: true } }));
+  const decision = autoRefundDecision({ ...order, manualQueue }, now);
   if (decision.refund) {
     const shortId = order.id.slice(-6).toUpperCase();
     try {

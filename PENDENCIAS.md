@@ -15,6 +15,9 @@ Decisões do dono (seção 5 do plano):
 - [ ] Decidir o plano B se nenhuma loja passar a sondagem (Pix do varejista ao cliente,
       operador contratado, ou uma loja só).
 
+Implementação (plano de 11/09): [x] Fase 0 · [x] Fase 1 · [ ] Fase 2 ML degrau C · [ ] Fase 3 Pix-out · [ ] 4 e-mail · [ ] 5 exceções · [ ] 6 arrependimento · [ ] 7 operação.
+- [ ] Deploy zero: aplicar as 4 migrations pendentes (3 de 06–07/09 + 20260911 receivers/actions) antes do código novo.
+
 Gates antes de código (semana 1, R$0–75):
 - [ ] E0 consentimento OAuth real da caixa operacional; `purchase-worker:mailbox-check` passa.
 - [ ] E2 sondagem R$0 até a tela de pagamento com Pix: Ri Happy, Drogaria SP, Cobasi, Swift.

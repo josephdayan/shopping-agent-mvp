@@ -775,8 +775,9 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   // best-effort: a queue outage must not undo a real payment; claim() backfills paid
   // orders that missed this hook.
   try {
-    const { ensurePurchaseJobForPaidOrder } = await import("@/lib/purchase-worker");
-    await ensurePurchaseJobForPaidOrder(order.id);
+    const { ensurePurchaseJobForPaidOrder, manualQueueJobForPaidOrder } = await import("@/lib/purchase-worker");
+    // Sem executor para esta loja/cesta: fila manual explícita no /ops (11/09).
+    if (!(await ensurePurchaseJobForPaidOrder(order.id))) await manualQueueJobForPaidOrder(order.id);
   } catch (error) {
     console.error("[purchase-worker:enqueue-failed]", error instanceof Error ? error.message : error);
   }

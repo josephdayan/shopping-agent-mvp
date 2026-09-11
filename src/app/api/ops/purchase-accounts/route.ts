@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireOpsKey } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { savePurchaseAccount } from "@/lib/purchase-execution";
+import { savePurchaseAccount, PURCHASE_AUTH_KINDS, PURCHASE_PAYMENT_KINDS } from "@/lib/purchase-execution";
 import { AUTO_PURCHASE_LIMIT_CENTS, automaticPurchaseStores, purchaseBudgetDay } from "@/lib/purchase-policy";
 export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
@@ -30,6 +30,8 @@ const schema = z
     loginReady: z.boolean(),
     paymentReady: z.boolean(),
     enabled: z.boolean(),
+    authKind: z.enum(PURCHASE_AUTH_KINDS).optional(),
+    paymentKind: z.enum(PURCHASE_PAYMENT_KINDS).optional(),
   })
   .strict();
 export async function POST(request: Request) {

@@ -123,6 +123,47 @@ export async function ensurePurchaseJobForPaidOrder(orderId: string) {
   }
 }
 
+// Pedido pago cuja loja NÃO tem execução automática (cesta mista, linha livre, loja sem
+// conta/allowlist): cria um job `manual_queue` para o /ops mostrar explicitamente "compra
+// manual", em vez de deixar o pedido `paid` sem sinal (decisão 11/09). Nunca é reivindicado
+// por nenhum comprador (CLAIMABLE não o inclui); fecha quando o operador registra a compra.
+export const MANUAL_QUEUE_STATUS = "manual_queue";
+export async function manualQueueJobForPaidOrder(orderId: string) {
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true } });
+  if (!order || order.status !== "paid" || order.storeOrderNumber) return null;
+  if (order.purchaseJobs.length) return order.purchaseJobs[0];
+  const items = ((order.items as unknown as OrderItem[]) ?? []).filter(Boolean);
+  const storeKeys = [...new Set(items.map((i) => i.storeKey).filter(Boolean))];
+  const storeKey = storeKeys.length === 1 ? storeKeys[0] : order.storeKey;
+  const storeLabel = storeKeys.length === 1 ? items[0].storeLabel ?? storeKey : order.storeLabel;
+  try {
+    return await prisma.purchaseJob.create({
+      data: {
+        deliveryOrderId: order.id,
+        fulfillmentKey: storeKey,
+        storeKey,
+        storeLabel,
+        status: MANUAL_QUEUE_STATUS,
+        expectedTotal: money(order.itemsSubtotal + order.deliveryFee),
+        lastErrorMessage: storeKeys.length > 1 ? "Cesta com mais de uma loja: compra manual." : "Loja sem compra automática: compra manual no /ops.",
+        items: {
+          create: items.map((item) => ({
+            requestedSku: item.sku,
+            requestedName: item.name,
+            requestedQty: Math.max(1, Math.round(item.qty)),
+            requestedUnitPrice: money(item.unitPrice),
+            productUrl: item.productUrl,
+            expectedUnitPrice: money(item.unitPrice),
+            status: "manual"
+          }))
+        }
+      }
+    });
+  } catch {
+    return prisma.purchaseJob.findFirst({ where: { deliveryOrderId: order.id } });
+  }
+}
+
 export async function backfillPaidPurchaseJobs(limit = 25) {
   let cursor: string | undefined;
   let created = 0;
@@ -139,6 +180,7 @@ export async function backfillPaidPurchaseJobs(limit = 25) {
     if (!orders.length) break;
     for (const order of orders) {
       if (await ensurePurchaseJobForPaidOrder(order.id)) created += 1;
+      else if (await manualQueueJobForPaidOrder(order.id)) created += 1;
       if (created >= max) return created;
     }
     cursor = orders[orders.length - 1].id;

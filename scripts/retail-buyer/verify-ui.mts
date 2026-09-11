@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { openProfile } from "./browser";
 const script = await build({
   stdin: {
-    contents: `import React from 'react';import{createRoot}from'react-dom/client';import{PurchaseAccounts,PurchaseReview}from'./src/app/ops/PurchaseControl';const job={id:'fixture',status:'awaiting_approval',checkoutHash:'a'.repeat(64),checkoutExpiresAt:new Date(Date.now()-3600000).toISOString(),checkoutEvidence:{recipientName:'Cliente Teste',accountEmail:'compras@example.test',destination:'Rua Teste, 10, apto 2',deliveryOption:'NORMAL',deliveryPromise:'prazo da loja: 1 dia útil',paymentLabel:'Cartão corporativo salvo',totalCents:2800,freightCents:800,items:[{sku:'123',name:'Chocolate',qty:2,lineTotalCents:2000}]}};createRoot(document.getElementById('root')).render(<main style={{fontFamily:'sans-serif',maxWidth:800,margin:'32px auto'}}><h1>Compras da Lia</h1><PurchaseAccounts/><PurchaseReview job={job} refresh={()=>{document.title='Aprovado'}}/></main>);`,
+    contents: `import React from 'react';import{createRoot}from'react-dom/client';import{PurchaseAccounts,PurchaseReview}from'./src/app/ops/PurchaseControl';const job={id:'fixture',status:'awaiting_approval',checkoutHash:'a'.repeat(64),checkoutExpiresAt:new Date(Date.now()-3600000).toISOString(),checkoutEvidence:{recipientName:'Cliente Teste',accountEmail:'compras@example.test',destination:'Rua Teste, 10, apto 2',deliveryOption:'NORMAL',deliveryPromise:'prazo da loja: 1 dia útil',payment:{kind:'pix_store',paymentSystem:125},totalCents:2800,freightCents:800,items:[{sku:'123',name:'Chocolate',qty:2,lineTotalCents:2000}]}};createRoot(document.getElementById('root')).render(<main style={{fontFamily:'sans-serif',maxWidth:800,margin:'32px auto'}}><h1>Compras da Lia</h1><PurchaseAccounts/><PurchaseReview job={job} refresh={()=>{document.title='Aprovado'}}/></main>);`,
     resolveDir: process.cwd(),
     loader: "tsx",
   },
@@ -69,11 +69,10 @@ try {
     true,
   );
   assert.equal(
-    await page
-      .getByLabel("Cartão corporativo salvo e conferido nessa conta")
-      .isChecked(),
+    await page.getByLabel("Meio de pagamento pronto nessa conta").isChecked(),
     true,
   );
+  assert.match(await page.locator("body").innerText(), /Pix da loja pago pela Lia/);
   await page.screenshot({
     path: "/tmp/lia-purchase-panel.png",
     fullPage: true,

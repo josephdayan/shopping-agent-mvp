@@ -1,3 +1,21 @@
+## 11/09/2026 — Fases 0 e 1 do plano de compra implementadas (local, 583/583)
+
+Fase 0: leitor de e-mail por loja (`registerStoreMail`), `selectPix`/`selectSavedCard`/
+`probeReport` no `VtexBuyer`, comando `npm run purchase-worker:probe -- LOJA [SKU]` (gate
+E2: para antes de finalizar, nunca resolve desafio; exige bloco `probe` no config privado).
+Fase 1: `customerName` passa a ser gravado no pedido (perfil do WhatsApp; pergunta só
+quando falta E a cesta é de loja com compra automática; intent "é pra outra pessoa");
+evidência de checkout com `payment` discriminado (`pix_store` | `ml_balance` |
+`card_saved`) no lugar do literal de cartão; allowlist aceita Mercado Livre só pelo canal
+`owner_confirm` (nunca clique automático); `PURCHASE_EXTRA_DOMAINS` (ML → Mercado Pago);
+job `manual_queue` para pedido pago sem execução automática (banner no /ops, estorno
+automático em 48 h via `LIA_AUTO_REFUND_MANUAL_HOURS`); botão "definir destinatário" e
+seletor "como a Lia paga nessa loja" no painel; migration aditiva
+`20260911120000_purchase_receivers_actions` (PurchaseReceiver, OpsAction,
+PurchaseSpend.status, PurchaseAccount.authKind/paymentKind, PurchaseJob.ownerConfirmedAt);
+rota `/api/purchase-worker/claim` e `purchase-worker-client` marcados como deprecados.
+Nada publicado; 4 migrations pendentes de deploy (3 de 06–07/09 + esta).
+
 ## 10/09/2026 — plano de compra viável entregue (proposta)
 
 O dono pediu "pensar, só pensar" num jeito realmente viável de executar a compra na loja.

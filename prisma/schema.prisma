@@ -10,16 +10,16 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  name           String?
-  phone          String          @unique
-  email          String?
-  defaultAddress String?
-  cep            String?
-  createdAt      DateTime        @default(now())
-  conversations  Conversation[]
-  deliveryOrders DeliveryOrder[]
-  paymentCredentials PaymentCredential[]
+  id                     String                  @id @default(cuid())
+  name                   String?
+  phone                  String                  @unique
+  email                  String?
+  defaultAddress         String?
+  cep                    String?
+  createdAt              DateTime                @default(now())
+  conversations          Conversation[]
+  deliveryOrders         DeliveryOrder[]
+  paymentCredentials     PaymentCredential[]
   cardEnrollmentSessions CardEnrollmentSession[]
 }
 
@@ -28,53 +28,53 @@ model User {
 // is retained only for formally-authorized partners. Quote, payment, purchase and
 // delivery are coordinated from this row and the operator dashboard.
 model DeliveryOrder {
-  id                  String        @id @default(cuid())
-  userId              String
-  conversationId      String?
-  phone               String
-  customerName        String?
-  cep                 String?
-  deliveryAddress     String?
+  id                    String                 @id @default(cuid())
+  userId                String
+  conversationId        String?
+  phone                 String
+  customerName          String?
+  cep                   String?
+  deliveryAddress       String?
   // Pluggable supply: storeKey resolves to a StoreConnector in the registry.
-  storeKey            String        @default("oba")
-  storeLabel          String        @default("Oba Hortifruti")
-  storeUnit           String?
-  storeAddress        String?
-  storeOrderNumber    String?
-  items               Json
+  storeKey              String                 @default("oba")
+  storeLabel            String                 @default("Oba Hortifruti")
+  storeUnit             String?
+  storeAddress          String?
+  storeOrderNumber      String?
+  items                 Json
   // One entry per store fulfillment, including delivery mode and live promise.
-  fulfillments        Json?
-  itemsSubtotal       Float         @default(0)
+  fulfillments          Json?
+  itemsSubtotal         Float                  @default(0)
   // "retailer_delivery" is the default; courier keys require an authorized partner.
-  courierKey          String        @default("retailer_delivery")
-  courierQuoteId      String?
-  deliveryFee         Float         @default(0)
-  serviceFee          Float         @default(0)
-  total               Float         @default(0)
+  courierKey            String                 @default("retailer_delivery")
+  courierQuoteId        String?
+  deliveryFee           Float                  @default(0)
+  serviceFee            Float                  @default(0)
+  total                 Float                  @default(0)
   // Direct lifecycle: awaiting_payment -> paid -> retailer_preparing
   //                   -> retailer_out_for_delivery -> delivered.
   // Legacy/partner courier: paid -> operator_buying -> ready_for_pickup
   //                         -> dispatched -> delivered.
   // Paid cancellation: refund_pending -> refunded. Unpaid cancellation -> canceled.
-  status              String        @default("awaiting_payment")
-  pixId               String?
-  pixCopiaECola       String?
-  paidAt              DateTime?
-  quoteExpiresAt      DateTime?
+  status                String                 @default("awaiting_payment")
+  pixId                 String?
+  pixCopiaECola         String?
+  paidAt                DateTime?
+  quoteExpiresAt        DateTime?
   // Generic tracking URL. The historic column name is kept to avoid a risky pilot migration.
-  courierTrackingUrl  String?
-  courierDispatchedAt DateTime?
-  deliveredAt         DateTime?
-  notes               String?
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
-  user                User          @relation(fields: [userId], references: [id])
-  purchaseJobs        PurchaseJob[]
-  paymentAttempts     PaymentAttempt[]
+  courierTrackingUrl    String?
+  courierDispatchedAt   DateTime?
+  deliveredAt           DateTime?
+  notes                 String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  user                  User                   @relation(fields: [userId], references: [id])
+  purchaseJobs          PurchaseJob[]
+  paymentAttempts       PaymentAttempt[]
   cardEnrollmentSession CardEnrollmentSession?
-  payments            Payment[]
-  events              DeliveryEvent[]
-  trackingSubscription TrackingSubscription?
+  payments              Payment[]
+  events                DeliveryEvent[]
+  trackingSubscription  TrackingSubscription?
 
   @@index([status])
   @@index([quoteExpiresAt])
@@ -86,23 +86,23 @@ model DeliveryOrder {
 // Evidência da etapa e envio ao WhatsApp persistidos na mesma transação do pedido.
 // accepted = Graph recebeu; delivered/read = recibo do WhatsApp. Nunca confundir.
 model DeliveryEvent {
-  id                String   @id @default(cuid())
+  id                String        @id @default(cuid())
   deliveryOrderId   String
-  dedupeKey         String   @unique
+  dedupeKey         String        @unique
   kind              String
   source            String
   sourceReference   String
   occurredAt        DateTime
   message           String
-  deliveryStatus    String   @default("pending")
-  providerMessageId String?  @unique
-  attempts          Int      @default(0)
+  deliveryStatus    String        @default("pending")
+  providerMessageId String?       @unique
+  attempts          Int           @default(0)
   lastError         String?
   nextAttemptAt     DateTime?
   lockedAt          DateTime?
   receiptAt         DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
   deliveryOrder     DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
 
   @@index([deliveryStatus, nextAttemptAt])
@@ -128,7 +128,7 @@ model PurchaseJob {
   checkoutHash      String?
   checkoutEvidence  Json?
   checkoutExpiresAt DateTime?
-  submissionId      String? @unique
+  submissionId      String?           @unique
   submitStartedAt   DateTime?
   cartHash          String?
   cartSnapshot      Json?
@@ -146,6 +146,8 @@ model PurchaseJob {
   nextAttemptAt     DateTime?
   lockedAt          DateTime?
   completedAt       DateTime?
+  // Mercado Livre degrau C: instante em que o dono confirmou a compra no app.
+  ownerConfirmedAt  DateTime?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   deliveryOrder     DeliveryOrder     @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
@@ -161,12 +163,16 @@ model PurchaseJob {
 // A low-confidence or ambiguous match must be sent to /ops, never purchased.
 // Reserva durável antes do clique. Não apagar com pedido, estorno ou reconciliação.
 model PurchaseSpend {
-  submissionId String @id
+  submissionId  String    @id
   purchaseJobId String
-  budgetDay String
-  amountCents Int
+  budgetDay     String
+  amountCents   Int
   authorization String
-  createdAt DateTime @default(now())
+  // reserved: conta no teto do dia; released: liberada por decisão auditada no /ops.
+  status        String    @default("reserved")
+  releasedAt    DateTime?
+  releaseNote   String?
+  createdAt     DateTime  @default(now())
 
   @@index([budgetDay])
 }
@@ -213,11 +219,11 @@ model PurchaseAttempt {
   completedAt      DateTime?
   purchaseJob      PurchaseJob @relation(fields: [purchaseJobId], references: [id], onDelete: Cascade)
 
-  @@index([purchaseJobId, createdAt])
-  @@index([status])
   // The same durable workflow step must never submit a second retailer order.
   // PostgreSQL permits multiple NULL values, so non-idempotent audit attempts stay valid.
   @@unique([purchaseJobId, idempotencyKey])
+  @@index([purchaseJobId, createdAt])
+  @@index([status])
 }
 
 // One authenticated retailer context represents one physical shopping cart. Jobs may
@@ -237,9 +243,9 @@ model PurchaseWorkerLease {
 // A Pagar.me card-on-file. Meta receives this row's opaque id as credential_id;
 // the provider card id never leaves the backend.
 model PaymentCredential {
-  id                 String   @id @default(cuid())
+  id                 String           @id @default(cuid())
   userId             String
-  provider           String   @default("pagarme")
+  provider           String           @default("pagarme")
   providerCustomerId String
   providerCardId     String
   last4              String
@@ -247,13 +253,13 @@ model PaymentCredential {
   consentAt          DateTime?
   consentVersion     String?
   // active | disabled (customer removed it or the provider started declining it)
-  status             String   @default("active")
-  createdAt          DateTime @default(now())
-  user               User     @relation(fields: [userId], references: [id])
+  status             String           @default("active")
+  createdAt          DateTime         @default(now())
+  user               User             @relation(fields: [userId], references: [id])
   paymentAttempts    PaymentAttempt[]
 
-  @@index([userId, status])
   @@unique([provider, providerCardId])
+  @@index([userId, status])
 }
 
 // One row per one-click charge PRESENTED to the customer. Its id doubles as the
@@ -261,12 +267,12 @@ model PaymentCredential {
 // to the same row and can never double-charge; the PSP call reuses it as the
 // idempotency key. A resent order_details is a NEW attempt (stale ones expire).
 model PaymentAttempt {
-  id                String    @id @default(cuid())
+  id                String            @id @default(cuid())
   deliveryOrderId   String
   credentialId      String
   amountCents       Int
   // pending -> confirmed (customer tapped pay) -> charged | failed ; expired
-  status            String    @default("pending")
+  status            String            @default("pending")
   expiresAt         DateTime
   confirmedAt       DateTime?
   providerPaymentId String?
@@ -274,8 +280,8 @@ model PaymentAttempt {
   providerChargeId  String?
   workflowRunId     String?
   error             String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
   deliveryOrder     DeliveryOrder     @relation(fields: [deliveryOrderId], references: [id])
   credential        PaymentCredential @relation(fields: [credentialId], references: [id])
 
@@ -302,11 +308,11 @@ model CardEnrollmentSession {
 }
 
 model Conversation {
-  id          String          @id @default(cuid())
+  id          String    @id @default(cuid())
   userId      String
-  status      String          @default("active")
+  status      String    @default("active")
   intent      String?
-  currentStep String          @default("collecting_request")
+  currentStep String    @default("collecting_request")
   context     String?
   // Lock cooperativo de TURNO (2ª revisão, 11/08): um turno por vez por conversa.
   // Duas mensagens simultâneas liam a mesma cesta e a última gravação apagava o item
@@ -314,9 +320,9 @@ model Conversation {
   // turno travado prenda a conversa pra sempre. Funciona entre instâncias serverless.
   turnLock    String?
   turnLockAt  DateTime?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  user        User            @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
   messages    Message[]
 
   @@index([userId, status, updatedAt])
@@ -362,14 +368,14 @@ model SearchCache {
 // env, logs ou browser: ficam cifrados no banco com uma chave derivada do Client
 // Secret, que só existe no runtime da Vercel.
 model MercadoLivreOAuthCredential {
-  id                   String   @id
-  mercadoLivreUserId   String?
-  accessTokenEncrypted String
+  id                    String   @id
+  mercadoLivreUserId    String?
+  accessTokenEncrypted  String
   refreshTokenEncrypted String
-  expiresAt            DateTime
-  scope                String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  expiresAt             DateTime
+  scope                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@index([expiresAt])
 }
@@ -436,34 +442,78 @@ model Payment {
 
 // Somente prontidão operacional. Senhas, cartão e cookies ficam no perfil local.
 model PurchaseAccount {
-  storeKey String @id
-  label String
-  email String?
-  loginReady Boolean @default(false)
-  paymentReady Boolean @default(false)
-  enabled Boolean @default(false)
-  lastSeenAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  storeKey     String    @id
+  label        String
+  email        String?
+  loginReady   Boolean   @default(false)
+  paymentReady Boolean   @default(false)
+  enabled      Boolean   @default(false)
+  // Como a loja autentica o comprador (none | email_code | totp) e como paga
+  // (card | pix_out | ml_balance). Nunca guarda credencial.
+  authKind     String    @default("none")
+  paymentKind  String    @default("card")
+  lastSeenAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 // Um leitor reserva a próxima consulta; falha/ausência de mudança agenda outra leitura.
 model TrackingSubscription {
-  id String @id @default(cuid())
-  deliveryOrderId String @unique
-  storeKey String
+  id               String        @id @default(cuid())
+  deliveryOrderId  String        @unique
+  storeKey         String
   storeOrderNumber String
-  trackingUrl String?
-  nextCheckAt DateTime @default(now())
-  lockedAt DateTime?
-  workerId String?
-  claimToken String?
-  lastCheckedAt DateTime?
-  lastError String?
-  failures Int @default(0)
-  completedAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deliveryOrder DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+  trackingUrl      String?
+  nextCheckAt      DateTime      @default(now())
+  lockedAt         DateTime?
+  workerId         String?
+  claimToken       String?
+  lastCheckedAt    DateTime?
+  lastError        String?
+  failures         Int           @default(0)
+  completedAt      DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  deliveryOrder    DeliveryOrder @relation(fields: [deliveryOrderId], references: [id], onDelete: Cascade)
+
   @@index([completedAt, nextCheckAt])
+}
+
+// Recebedor Pix aprovado por loja (o CNPJ do QR costuma ser do PSP, não da loja).
+// pending: visto pela 1ª vez, aguarda um toque do dono; approved: pode pagar; blocked: nunca.
+model PurchaseReceiver {
+  id           String    @id @default(cuid())
+  storeKey     String
+  receiverDoc  String
+  receiverName String
+  status       String    @default("pending")
+  approvedBy   String?
+  approvedAt   DateTime?
+  firstSeenAt  DateTime  @default(now())
+  lastUsedAt   DateTime?
+  timesUsed    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([storeKey, receiverDoc])
+}
+
+// Ação pendente do operador (botão assinado no WhatsApp ou espelho no /ops).
+// O consumo é um único UPDATE condicional: só quem virar pending→consumed executa.
+model OpsAction {
+  id              String    @id @default(cuid())
+  kind            String
+  purchaseJobId   String?
+  deliveryOrderId String?
+  payload         Json?
+  status          String    @default("pending")
+  expiresAt       DateTime
+  consumedAt      DateTime?
+  consumedBy      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, expiresAt])
+  @@index([purchaseJobId])
+  @@index([deliveryOrderId])
 }

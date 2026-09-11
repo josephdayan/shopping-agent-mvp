@@ -145,6 +145,18 @@ export function askNewCep(): string {
   return "Manda o *endereço novo com CEP* — rua, número, complemento, bairro, cidade e CEP 📍";
 }
 
+// Destinatário (11/09): a loja imprime o nome na etiqueta; só perguntamos quando o perfil
+// do WhatsApp não tem nome ou quando o cliente diz que é para outra pessoa.
+export function askRecipientName(): string {
+  return "Qual o *nome de quem vai receber*? Vai na etiqueta da entrega.";
+}
+export function recipientNameInvalid(): string {
+  return "Manda só o nome de quem recebe (nome e sobrenome).";
+}
+export function recipientNameSaved(name: string): string {
+  return `Entrega em nome de *${name}*.`;
+}
+
 export function askCepForQuote(items: string[]): string {
   return `Anotei:\n${items.map((i) => `• ${i}`).join("\n")}\n\nQual seu *CEP*? 📍`;
 }

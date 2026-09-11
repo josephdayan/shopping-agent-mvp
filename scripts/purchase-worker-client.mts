@@ -1,6 +1,8 @@
 import os from "node:os";
 import { execFileSync } from "node:child_process";
 
+// DEPRECADO (11/09): cliente da tarefa horária do ChatGPT. Use `npm run purchase-worker:run`.
+console.warn("[purchase-worker-client] deprecado; o comprador local substitui este caminho.");
 const command = process.argv[2] ?? "claim";
 const baseUrl = (process.env.LIA_APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://liadelivery.com.br").replace(/\/$/, "");
 function localWorkerToken(): string | undefined {

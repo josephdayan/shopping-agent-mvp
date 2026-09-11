@@ -98,6 +98,9 @@ export type DeliveryContext = {
     | "collecting"
     | "need_cep"
     | "need_address"
+    // Perfil do WhatsApp sem nome, ou entrega para outra pessoa: a loja precisa do
+    // nome de quem recebe (11/09).
+    | "need_recipient_name"
     | "choosing"
     | "choosing_freight"
     | "awaiting_operator_quote"
@@ -108,6 +111,8 @@ export type DeliveryContext = {
     | "awaiting_merge_decision"
     | "awaiting_plan_b";
   basket?: BasketItem[];
+  // Nome de quem recebe este pedido quando difere do perfil do WhatsApp (11/09).
+  recipientName?: string;
   // Pedido não-pago parado + item novo pedido do nada (01/09): a Lia pergunta "juntar
   // ou pedido novo?" e guarda aqui o pedido antigo e o texto do item até a resposta.
   mergeDecision?: { orderId: string; request: string; total: number };

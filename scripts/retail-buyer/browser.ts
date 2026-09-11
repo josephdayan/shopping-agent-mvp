@@ -575,16 +575,27 @@ export class VtexBuyer {
     const payments = form.paymentData?.payments ?? [];
     if (
       payments.length !== 1 ||
-      !payments[0].accountId ||
       payments[0].value !== form.value ||
       payments[0].installments !== 1
     )
-      throw new Error("Pagamento corporativo não selecionado.");
-    const cards = form.paymentData.availableAccounts ?? [];
-    const card = cards.find(
-      (c: { accountId: string }) => c.accountId === payments[0].accountId,
-    );
-    if (!card) throw new Error("Cartão salvo mudou.");
+      throw new Error("Pagamento não selecionado.");
+    let payment: CheckoutEvidence["payment"];
+    if (this.recipe.payment === "pix") {
+      if (String(payments[0].paymentSystem) !== VtexBuyer.PIX_PAYMENT_SYSTEM)
+        throw new Error("Pix não está selecionado no checkout.");
+      payment = { kind: "pix_store", paymentSystem: 125 };
+    } else {
+      if (!payments[0].accountId) throw new Error("Pagamento corporativo não selecionado.");
+      const cards = form.paymentData.availableAccounts ?? [];
+      const card = cards.find(
+        (c: { accountId: string }) => c.accountId === payments[0].accountId,
+      );
+      if (!card) throw new Error("Cartão salvo mudou.");
+      payment = {
+        kind: "card_saved",
+        reference: createHash("sha256").update(String(card.accountId)).digest("hex"),
+      };
+    }
     return {
       recipientName: dest.receiverName,
       accountEmail: form.clientProfileData.email,
@@ -594,10 +605,7 @@ export class VtexBuyer {
       postalCode: dest.postalCode,
       deliveryOption: selected.map((s: { id: string }) => s.id).join(" · "),
       deliveryPromise: String(promises[0]),
-      paymentLabel: "Cartão corporativo salvo",
-      paymentReference: createHash("sha256")
-        .update(String(card.accountId))
-        .digest("hex"),
+      payment,
       observedAt: new Date().toISOString(),
       items: (form.items ?? []).map(
         (i: {

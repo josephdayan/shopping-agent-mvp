@@ -22,8 +22,14 @@ export const checkoutEvidenceSchema = z
     postalCode: z.string().min(8).max(10),
     deliveryOption: z.string().min(1).max(300),
     deliveryPromise: z.string().max(300),
-    paymentLabel: z.literal("Cartão corporativo salvo"),
-    paymentReference: z.string().length(64),
+    // Meio de pagamento observado no checkout. pix_store: a loja gera o Pix e o servidor
+    // paga por API bancária (Fase 3); ml_balance: saldo Mercado Pago confirmado pelo dono
+    // no app (ML degrau C); card_saved: cartão corporativo salvo (legado, em aposentadoria).
+    payment: z.discriminatedUnion("kind", [
+      z.object({ kind: z.literal("pix_store"), paymentSystem: z.literal(125) }).strict(),
+      z.object({ kind: z.literal("ml_balance") }).strict(),
+      z.object({ kind: z.literal("card_saved"), reference: z.string().length(64) }).strict(),
+    ]),
     observedAt: z.string().datetime(),
     items: z
       .array(
@@ -46,6 +52,19 @@ export const checkoutEvidenceSchema = z
   })
   .strict();
 export type CheckoutEvidence = z.infer<typeof checkoutEvidenceSchema>;
+export type CheckoutPayment = CheckoutEvidence["payment"];
+export const PAYMENT_KIND_LABEL: Record<CheckoutPayment["kind"], string> = {
+  pix_store: "Pix da loja pago pela Lia",
+  ml_balance: "Saldo Mercado Pago (confirmação no app)",
+  card_saved: "Cartão corporativo salvo",
+};
+// Evidência gravada antes de 11/09 (paymentLabel literal) não é mais válida: o job vai
+// para revisão com motivo legível em vez de derrubar a rota.
+export function parseStoredEvidence(value: unknown): CheckoutEvidence {
+  const parsed = checkoutEvidenceSchema.safeParse(value);
+  if (!parsed.success) throw new Error("Conferência antiga; refaça o carrinho na loja.");
+  return parsed.data;
+}
 export const norm = (s: string) =>
   s
     .normalize("NFD")
@@ -174,12 +193,16 @@ async function owned(
     throw new Error("Reserva do comprador vencida ou inválida.");
   return job;
 }
+export const PURCHASE_AUTH_KINDS = ["none", "email_code", "totp"] as const;
+export const PURCHASE_PAYMENT_KINDS = ["card", "pix_out", "ml_balance"] as const;
 export async function savePurchaseAccount(input: {
   storeKey: string;
   email?: string;
   loginReady: boolean;
   paymentReady: boolean;
   enabled: boolean;
+  authKind?: (typeof PURCHASE_AUTH_KINDS)[number];
+  paymentKind?: (typeof PURCHASE_PAYMENT_KINDS)[number];
 }) {
   if (!PURCHASE_DOMAINS[input.storeKey])
     throw new Error("Loja ainda não suportada pelo comprador.");
@@ -188,10 +211,16 @@ export async function savePurchaseAccount(input: {
     (!input.loginReady || !input.paymentReady || !input.email?.trim())
   )
     throw new Error("Conclua login e pagamento da empresa antes de ativar.");
+  // O Mercado Livre paga com saldo Mercado Pago; nas VTEX o cartão salvo está em
+  // aposentadoria — o meio novo é o Pix da loja pago pela Lia.
+  const paymentKind = input.paymentKind ?? (input.storeKey === "mercadolivre" ? "ml_balance" : "card");
+  if (input.storeKey === "mercadolivre" && paymentKind !== "ml_balance")
+    throw new Error("Mercado Livre só paga com saldo Mercado Pago.");
+  const data = { ...input, paymentKind, authKind: input.authKind ?? "none" };
   return prisma.purchaseAccount.upsert({
     where: { storeKey: input.storeKey },
-    create: { ...input, label: input.storeKey },
-    update: input,
+    create: { ...data, label: input.storeKey },
+    update: data,
   });
 }
 export async function claimPurchaseSession(workerId: string, stores: string[]) {
@@ -359,7 +388,7 @@ export async function approveCheckout(jobId: string, hash: string) {
     )
       throw new Error("O carrinho mudou. Confira o resumo atualizado.");
     const order = await funding(tx, job.deliveryOrderId);
-    const evidence = checkoutEvidenceSchema.parse(job.checkoutEvidence);
+    const evidence = parseStoredEvidence(job.checkoutEvidence);
     checkCheckout(order, { ...evidence, observedAt: new Date().toISOString() });
     return tx.purchaseJob.update({
       where: { id: jobId },
@@ -535,7 +564,7 @@ export async function finishPurchase(
     !["submitting", "outcome_unknown", "completed"].includes(job.status)
   )
     throw new Error("Comprovante não pertence à tentativa.");
-  const e = checkoutEvidenceSchema.parse(job.checkoutEvidence);
+  const e = parseStoredEvidence(job.checkoutEvidence);
   if (input.actualTotalCents !== e.totalCents)
     throw new Error("Valor do comprovante diverge do checkout aprovado.");
   return recordDeliveryEvent(job.deliveryOrderId, {

@@ -87,7 +87,7 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
       notes: appendOrderNote(order.notes, `🧾 ${evidence.kind} — ${evidence.source}: ${reference.replace(/[\r\n]/g, " ")} (${occurredAt.toISOString()}).`)
     } });
     if (evidence.kind === "bought") {
-      await tx.purchaseJob.updateMany({ where: { deliveryOrderId: order.id, status: { in: ["queued", "retrying", "claimed", "needs_review", "awaiting_approval", "approved", "submitting", "outcome_unknown"] } },
+      await tx.purchaseJob.updateMany({ where: { deliveryOrderId: order.id, status: { in: ["queued", "retrying", "claimed", "needs_review", "awaiting_approval", "approved", "submitting", "outcome_unknown", "manual_queue"] } },
         data: { status: "completed", storeOrderNumber: number, lockedAt: null, nextAttemptAt: null, completedAt: new Date() } });
     }
     if (evidence.kind === "bought") {

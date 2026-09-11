@@ -150,7 +150,7 @@ try {
   const evidence = await buyer.prepare(job, address);
   assert.equal(evidence.totalCents, 2800);
   assert.equal(evidence.items[0].qty, 2);
-  assert.equal(evidence.paymentLabel, "Cartão corporativo salvo");
+  assert.equal(evidence.payment.kind, "card_saved");
   assert.equal(clicks, 0, "Preparar nunca compra");
   assert.equal(mutations, 4);
   await assert.rejects(buyer.prepare(job, address), /carrinho/);
@@ -185,6 +185,8 @@ try {
   await pixBuyer.prepareCart(job, address);
   assert.equal(form.paymentData.payments[0].paymentSystem, "125");
   assert.equal(form.paymentData.payments[0].value, 2800);
+  const pixEvidence = await pixBuyer.snapshot(job, address);
+  assert.deepEqual(pixEvidence.payment, { kind: "pix_store", paymentSystem: 125 });
   const probe = await pixBuyer.probeReport();
   assert.equal(probe.pixAvailable, true);
   assert.equal(probe.pixSelected, true);
