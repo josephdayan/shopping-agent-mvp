@@ -1,4 +1,49 @@
+## 10/09/2026 — plano de compra viável entregue (proposta)
+
+O dono pediu "pensar, só pensar" num jeito realmente viável de executar a compra na loja.
+Plano em [docs/plano-compra-viavel-2026-09-10.md](docs/plano-compra-viavel-2026-09-10.md):
+Pix da loja pago por API bancária no lugar de cartão salvo; caixa de e-mail operacional
+legível por máquina (código de login + rastreio); conta própria por loja no Chrome local
+como serviço; exceções por um toque no WhatsApp do operador; gates de R$0–75 antes de
+qualquer código (sondagem de Ri Happy, Drogaria SP, Cobasi e Swift com Pix; 1 pedido real;
+Pix-out de R$1 a terceiro). Placar real de hoje: 0 de 4 lojas passaram o gate autônomo,
+2 por motivo resolvível (código por e-mail). Estimativa de código após os gates: ~13 dias.
+Nenhum código, conta, compra ou deploy. Aguarda as decisões da seção 5 do plano.
+
+## 09/09/2026 — Pague Menos testada em compra real; recompra exige CVV
+
+Pedido real `#1660399032770` concluído com autorização explícita, total R$24,39. A conta manteve os dados cadastrais, o cartão ficou salvo e aparece mascarado na recompra. A primeira compra exigiu verificação manual de robô. O segundo checkout chegou diretamente a entrega/pagamento, mas o cartão salvo exige novamente o código de segurança; nenhuma segunda compra foi concluída. Isso impede operação totalmente autônoma sem intervenção e o CAPTCHA recorrente ainda não foi medido. Pague Menos permanece fora da lista automática e sem seletores de finalização, recibo e rastreio homologados. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — dados e senha fornecidos; acesso ainda não confirmado
+
+Dono forneceu nome/e-mail, CPF, celular e senha para os sites. Drogaria São Paulo preenchida integralmente, mas cadastro, login e envio de código não confirmaram sucesso. Não pedir senha nem autorização para gerar outra: usar a fornecida, sem transcrever em arquivos. Chaves não foi utilizado. Pague Menos em tentativa como alternativa. Nenhum cartão salvo, conta habilitada ou compra. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — autorização permanente de compra até R$ 500
+
+Dono: “sim isso sim. eu atorizo ate 500 reais. queroo mais automatico que der mesmo se isso significar menos lojas.” Autorizada compra sem aprovação individual. Interpretação conservadora comunicada: teto R$500 por pedido e R$500 total por dia de São Paulo, frete incluso; não interpretar como orçamento diário ilimitado. Priorizar poucas lojas com checkout real validado; interromper expansão de cadastros até concluir a primeira. Não exige loja parceira. Autorização não significa conta/cartão prontos.
+
+Implementado localmente: `purchase-policy.ts`, lista explícita `LIA_AUTO_PURCHASE_STORES` (vazia por padrão, ML assistido), `LIA_AUTO_PURCHASE_OFF`, aprovação por política após pagamento real/carrinho/endereço/conta verificados, nova conferência antes do envio. `PurchaseSpend` registra a reserva em centavos antes do clique, dentro da mesma transação da tentativa e de uma trava global entre lojas. Compras com aprovação individual também consomem orçamento; autorização individual é exceção explícita aos limites, indicada no painel. Resultado incerto, cancelamento e estorno não liberam saldo automaticamente. Revogação ou disputa pelo saldo antes de begin devolve para revisão sem clicar. Falha do comprador avisa o operador.
+
+Painel mostra limites, gasto/reserva do dia e lojas explicitamente liberadas. Quando há lista automática, o comprador restringe novas reservas a ela; não altera a pesquisa automática do ML nem substitui produto escolhido pelo cliente. Cesta multiloja continua assistida. Lista de lojas liberadas vazia: nenhuma conta real homologada. Não preencher allowlist por inferência de cadastro/login.
+
+Validação: 567/567 testes em Postgres local, migration sem drift; TypeScript do app/runtime, lint, build e painel no Chrome simulado aprovados. Migration aditiva `20260907120000_purchase_spend` precisa preceder publicação. Nenhum deploy, cartão salvo, compra real ou processo de compra iniciado nesta alteração. Falta concluir primeira conta/cartão, observar botão/comprovante/status, configurar processo e publicar. Detalhes: [política de compra](docs/compra-automatica-500-2026-09-08.md).
+
+## 07/09/2026 — contas no Chrome em preparação
+
+Por pedido do dono, preparar todas as lojas nos perfis persistentes do comprador. Cadastros incompletos; faltam dados, autenticação e verificação de cartão/checkout. Não considerar lojas habilitadas. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
 # Lia — Status do Projeto
+
+
+## 07/09/2026 — início da configuração real da primeira loja
+
+Dono autorizou começar a configuração. Foi aberta a Drogaria São Paulo no Chrome com
+perfil exclusivo `.retail-buyer/profiles/drogariasp`, usando o comando setup do comprador.
+A navegação inicial concluiu. Aguardando o dono entrar/criar sua conta diretamente nessa
+janela e fechá-la ao concluir. Login, cartão salvo e dados reais ainda NÃO foram
+confirmados; nenhuma conta foi marcada pronta no painel. Nenhuma compra, cobrança ou
+mensagem enviada. Próximo passo: reabrir o perfil salvo e validar o checkout antes de
+orientar o cadastro do cartão ou ampliar para outras lojas.
 
 
 ## 06/09/2026 — esforço de autenticação e identidade na entrega

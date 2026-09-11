@@ -1,3 +1,62 @@
+## 10/09/2026 — plano de compra viável (proposta; aguarda decisão do dono)
+
+Dono: "está muito difícil de operar… não está dando pra implementar a compra automatizada
+que bolamos… impossível que não exista forma melhor que tarefa agendada do meu GPT". Resposta
+em [docs/plano-compra-viavel-2026-09-10.md](docs/plano-compra-viavel-2026-09-10.md)
+(6 pesquisas na web, 5 propostas, 15 críticas adversariais, síntese, verificação direta nos
+checkouts e as evidências reais de hoje). Verdade estrutural: não existe API de compra do lado
+do comprador no Brasil; todo caminho é automatizar o site de cada loja; a meta correta é
+"humano só em exceção, por um toque", não "zero humano". Caminho recomendado, nesta ordem:
+(A) pagar a loja por **Pix via API bancária** (Efí `idEnvio` idempotente ou Asaas com tentativa
+única) em vez de cartão salvo; (B) **caixa de e-mail operacional legível por máquina** (leitor
+OAuth já escrito) para códigos de login e rastreio; (C) **conta própria envelhecida por loja no
+Chrome local** como `launchd` (não convidado com e-mail novo, não nuvem); (D) **exceções por um
+toque no WhatsApp do operador**. Gates antes de código (R$0–75): sondar Ri Happy, Drogaria SP,
+Cobasi e Swift até a tela de pagamento com Pix; 1 pedido real pago pelo app; perguntas por
+escrito a Efí/Asaas; R$1 de Pix-out a terceiro. Fatos verificados hoje: Pix em 6/9 VTEX; Oba
+sem Pix; Pague Menos com CAPTCHA mesmo em Pix; captura do copia-e-cola só documentada no modal
+(navegador continua necessário); teto R$500/dia limita a 4–8 pedidos/dia; mandato não cabe no
+MEI; ML fora por Termos. Decisões pendentes do dono na seção 5 do plano (revenda × mandato,
+teto diário, provedor/float, MP PJ, cobertura de exceções). Nenhum código, conta ou compra.
+
+## 10/09/2026 — leitor local de códigos implementado; OAuth real ainda pendente
+
+Foi implementado `scripts/retail-buyer/mailbox.ts`: Gmail OAuth somente leitura, refresh local, busca restrita a mensagens recentes de domínios permitidos, corte pelo instante da solicitação e recusa de código ambíguo. Conteúdo e código não são gravados, enviados ao backend nem exibidos em logs. O acesso rápido da Swift usa esse leitor somente se a sessão persistente não corresponder à conta operacional. Segredos ficam no Chaves sob `lia-purchase-worker`; `npm run purchase-worker:mailbox-check` só retorna ready/erro. Testes de parser/OAuth simulados, verificador do navegador, TypeScript, lint e suíte Postgres aprovados (**577/577**). Não há client OAuth, consentimento nem refresh token reais; Swift continua desativada e fora da allowlist até a prova real de login, Pix, recibo e rastreio.
+
+## 10/09/2026 — Cobasi e Swift: Pix anunciado, mas login depende do e-mail
+
+Cobasi e Swift foram testadas com os menores carrinhos legítimos disponíveis, sem criar pedido. Cobasi: uma unidade de R$2,80; o cadastro enviou código ao e-mail operacional, cuja caixa não estava autenticada no perfil. Swift: uma unidade de R$4,50, total de R$22,40 com frete; o acesso rápido também enviou chave por e-mail antes do pagamento. Os carrinhos foram esvaziados e nenhum pedido, Pix, pagamento ou cobrança foi criado. Ambas permanecem fora da allowlist. Próximo gate: acesso programático e auditável ao e-mail operacional ou sessão homologada sem código por compra; não montar outra cesta antes disso. O teto autorizado nunca é meta de gasto.
+
+## 10/09/2026 — Oba reprovada: checkout online sem Pix
+
+Depois da reprovação da Pague Menos, a Oba foi testada até a tela real de pagamento. O dono autorizou aderir ao Programa Cliente Bem Querer e ampliou o orçamento disponível, mas esclareceu que isso é teto, não meta: nunca comprar ou montar item caro desnecessário. Cadastro concluído uma vez, marketing desmarcado. Usou-se cesta temporária de itens úteis no menor total prático acima do pedido mínimo de R$89,90: R$97,76. O endereço operacional autorizado foi salvo, embora o site tenha apresentado inconsistência na unidade de entrega. Para isolar o gate sem criar pedido, avançou-se com retirada em loja. As únicas formas de pagamento exibidas foram cartão de crédito e Google Pay; Pix não estava disponível. Nenhum pedido, pagamento ou cobrança foi criado; a cesta foi esvaziada. Oba continua fora da allowlist e está reprovada para a arquitetura de pagamento automatizado por QR Pix.
+
+## 10/09/2026 — Pague Menos reprovada para automação também por Pix
+
+Na cesta real já preparada, trocar cartão por Pix não retirou a etapa humana: o checkout informou que o QR só seria gerado após “Finalizar compra”, continuou exibindo “Não sou um robô” e manteve o botão final desabilitado. Nenhum CAPTCHA foi resolvido, pedido criado, pagamento ou compra feita. A regra geral documentada da VTEX para pagamentos sem cartão não correspondeu ao comportamento real desta loja. Não implementar adaptador Pix da Pague Menos nem colocá-la na allowlist. Plano em execução e evidências em [plano de validação Pix](docs/plano-validacao-compra-pix-2026-09-10.md) e [registro da prova](docs/evidencias-validacao-compra-pix-2026-09-10.md). Próximo gate: uma única loja alternativa deve emitir QR sem desafio antes de retomar integração bancária.
+
+## 09/09/2026 — Pague Menos: compra real concluída, mas recompra exige CVV
+
+Conta e perfil persistente `paguemenos` estão autenticados; os dados obrigatórios ficaram salvos. Checkout real autorizado pelo dono concluiu o pedido `#1660399032770`, total R$24,39, e o cartão passou a aparecer salvo na conta. A primeira finalização exigiu verificação de robô, concluída manualmente pelo dono. Na segunda preparação, o checkout pulou direto para entrega/pagamento e reconheceu o cartão salvo, mas exige novamente o código de segurança. Não guardar CVV nem marcar a loja como totalmente automática. A segunda cesta está preparada, sem nova compra: para testar a recorrência do CAPTCHA seria necessário preencher o CVV e obter autorização explícita para uma segunda cobrança. Pague Menos continua fora da allowlist e sem seletores homologados de envio, recibo e rastreio. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — dados e senha fornecidos; acesso ainda não confirmado
+
+Dono forneceu nome/e-mail, CPF, celular e senha para os sites. Drogaria São Paulo preenchida integralmente, mas cadastro, login e envio de código não confirmaram sucesso. Não pedir senha nem autorização para gerar outra: usar a fornecida, sem transcrever em arquivos. Chaves não foi utilizado. Pague Menos em tentativa como alternativa. Nenhum cartão salvo, conta habilitada ou compra. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — autorização permanente de compra até R$ 500
+
+Dono: “sim isso sim. eu atorizo ate 500 reais. queroo mais automatico que der mesmo se isso significar menos lojas.” Autorizada compra sem aprovação individual. Interpretação conservadora comunicada: teto R$500 por pedido e R$500 total por dia de São Paulo, frete incluso; não interpretar como orçamento diário ilimitado. Priorizar poucas lojas com checkout real validado; interromper expansão de cadastros até concluir a primeira. Não exige loja parceira. Autorização não significa conta/cartão prontos.
+
+Implementado localmente: `purchase-policy.ts`, lista explícita `LIA_AUTO_PURCHASE_STORES` (vazia por padrão, ML assistido), `LIA_AUTO_PURCHASE_OFF`, aprovação por política após pagamento real/carrinho/endereço/conta verificados, nova conferência antes do envio. `PurchaseSpend` registra a reserva em centavos antes do clique, dentro da mesma transação da tentativa e de uma trava global entre lojas. Compras com aprovação individual também consomem orçamento; autorização individual é exceção explícita aos limites, indicada no painel. Resultado incerto, cancelamento e estorno não liberam saldo automaticamente. Revogação ou disputa pelo saldo antes de begin devolve para revisão sem clicar. Falha do comprador avisa o operador.
+
+Painel mostra limites, gasto/reserva do dia e lojas explicitamente liberadas. Quando há lista automática, o comprador restringe novas reservas a ela; não altera a pesquisa automática do ML nem substitui produto escolhido pelo cliente. Cesta multiloja continua assistida. Lista de lojas liberadas vazia: nenhuma conta real homologada. Não preencher allowlist por inferência de cadastro/login.
+
+Validação: 567/567 testes em Postgres local, migration sem drift; TypeScript do app/runtime, lint, build e painel no Chrome simulado aprovados. Migration aditiva `20260907120000_purchase_spend` precisa preceder publicação. Nenhum deploy, cartão salvo, compra real ou processo de compra iniciado nesta alteração. Falta concluir primeira conta/cartão, observar botão/comprovante/status, configurar processo e publicar. Detalhes: [política de compra](docs/compra-automatica-500-2026-09-08.md).
+
+## 07/09/2026 — contas no Chrome em preparação
+
+Por pedido do dono, preparar todas as lojas nos perfis persistentes do comprador. Cadastros incompletos; faltam dados, autenticação e verificação de cartão/checkout. Não considerar lojas habilitadas. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
 # Lia — contexto obrigatório para agentes
 
 ## 10/09/2026 — vitrine de 5 no carrossel, 3 nos cards soltos
@@ -120,6 +179,17 @@ a IA julgar melhor." Reverte o opt-in da revisão de 02/09.
 - Testes: `tests/lighter-longtail.test.ts` ganhou o caso padrão ("queria um isqueiro pra
   charuto" → maçaricos do ML sem pergunta) e o do `longTailQuery`. `.env.example` atualizado.
 
+
+
+## 07/09/2026 — início da configuração real da primeira loja
+
+Dono autorizou começar a configuração. Foi aberta a Drogaria São Paulo no Chrome com
+perfil exclusivo `.retail-buyer/profiles/drogariasp`, usando o comando setup do comprador.
+A navegação inicial concluiu. Aguardando o dono entrar/criar sua conta diretamente nessa
+janela e fechá-la ao concluir. Login, cartão salvo e dados reais ainda NÃO foram
+confirmados; nenhuma conta foi marcada pronta no painel. Nenhuma compra, cobrança ou
+mensagem enviada. Próximo passo: reabrir o perfil salvo e validar o checkout antes de
+orientar o cadastro do cartão ou ampliar para outras lojas.
 
 
 ## 06/09/2026 — esforço de autenticação e identidade na entrega

@@ -1,6 +1,195 @@
+## 10/09/2026 — decisões e gates do plano de compra viável
+
+Plano: [docs/plano-compra-viavel-2026-09-10.md](docs/plano-compra-viavel-2026-09-10.md).
+
+Decisões do dono (seção 5 do plano):
+- [ ] Modelo comercial do piloto: revenda (recomendado, sem mudar produto) × mandato (taxa
+      visível, CPF do cliente, não cabe no MEI). Confirmar com contador antes de escalar.
+- [ ] Elevar o teto diário (R$500/dia limita a 4–8 pedidos); manter R$500/pedido.
+- [ ] Provedor de Pix-out (Efí × Asaas) pela resposta escrita; quem paga o float; fase 2
+      receber o Pix do cliente na mesma conta PJ que paga a loja.
+- [ ] Confirmar se o Mercado Pago de entrada é PJ; sem isso, piloto só com o dono como cliente.
+- [ ] Aceitar por escrito: Pague Menos e Oba fora; Mercado Livre fora do automático; nada de
+      resolver CAPTCHA por serviço/proxy.
+- [ ] Definir quem cobre a fila de exceções e o pós-venda, e em que horário.
+- [ ] Decidir o plano B se nenhuma loja passar a sondagem (Pix do varejista ao cliente,
+      operador contratado, ou uma loja só).
+
+Gates antes de código (semana 1, R$0–75):
+- [ ] E0 consentimento OAuth real da caixa operacional; `purchase-worker:mailbox-check` passa.
+- [ ] E2 sondagem R$0 até a tela de pagamento com Pix: Ri Happy, Drogaria SP, Cobasi, Swift.
+- [ ] E3 um pedido real (~R$25) na primeira loja aprovada, Pix pago pelo app; capturar o
+      copia-e-cola, e-mails no alias, NF/etiqueta.
+- [ ] E4 repetir em 2 sessões > 24h (2/2 sem desafio).
+- [ ] E5 perguntas por escrito a Efí e Asaas (ação crítica, limites, timeout sem ID).
+- [ ] E6 Pix-out de R$1 a QR de terceiro pelo provedor aprovado, sem tocar no app.
+- [ ] E7 um cancelamento legítimo: devolução volta à conta pagadora com o e2e?
+
+## 09/09/2026 — decidir se Pague Menos pode operar com intervenção de CVV
+
+Conta, dados e cartão foram validados em uma compra real autorizada (`#1660399032770`, R$24,39). A primeira finalização exigiu verificação manual de robô. Na recompra, os dados persistiram e o cartão salvo apareceu, mas o checkout exige o código de segurança outra vez. A segunda cesta está parada antes de uma nova cobrança. Falta decidir se a operação aceita CVV manual por pedido; sem isso, reprovar Pague Menos para compra automática. Se o dono autorizar uma segunda compra de teste após preencher o CVV, observar se o CAPTCHA reaparece. Mesmo sem recorrência de CAPTCHA, não liberar a loja antes de homologar seletor final, comprovante, número/total e rastreio. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — dados e senha fornecidos; acesso ainda não confirmado
+
+Dono forneceu nome/e-mail, CPF, celular e senha para os sites. Drogaria São Paulo preenchida integralmente, mas cadastro, login e envio de código não confirmaram sucesso. Não pedir senha nem autorização para gerar outra: usar a fornecida, sem transcrever em arquivos. Chaves não foi utilizado. Pague Menos em tentativa como alternativa. Nenhum cartão salvo, conta habilitada ou compra. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
+## 08/09/2026 — autorização permanente de compra até R$ 500
+
+Dono: “sim isso sim. eu atorizo ate 500 reais. queroo mais automatico que der mesmo se isso significar menos lojas.” Autorizada compra sem aprovação individual. Interpretação conservadora comunicada: teto R$500 por pedido e R$500 total por dia de São Paulo, frete incluso; não interpretar como orçamento diário ilimitado. Priorizar poucas lojas com checkout real validado; interromper expansão de cadastros até concluir a primeira. Não exige loja parceira. Autorização não significa conta/cartão prontos.
+
+Implementado localmente: `purchase-policy.ts`, lista explícita `LIA_AUTO_PURCHASE_STORES` (vazia por padrão, ML assistido), `LIA_AUTO_PURCHASE_OFF`, aprovação por política após pagamento real/carrinho/endereço/conta verificados, nova conferência antes do envio. `PurchaseSpend` registra a reserva em centavos antes do clique, dentro da mesma transação da tentativa e de uma trava global entre lojas. Compras com aprovação individual também consomem orçamento; autorização individual é exceção explícita aos limites, indicada no painel. Resultado incerto, cancelamento e estorno não liberam saldo automaticamente. Revogação ou disputa pelo saldo antes de begin devolve para revisão sem clicar. Falha do comprador avisa o operador.
+
+Painel mostra limites, gasto/reserva do dia e lojas explicitamente liberadas. Quando há lista automática, o comprador restringe novas reservas a ela; não altera a pesquisa automática do ML nem substitui produto escolhido pelo cliente. Cesta multiloja continua assistida. Lista de lojas liberadas vazia: nenhuma conta real homologada. Não preencher allowlist por inferência de cadastro/login.
+
+Validação: 567/567 testes em Postgres local, migration sem drift; TypeScript do app/runtime, lint, build e painel no Chrome simulado aprovados. Migration aditiva `20260907120000_purchase_spend` precisa preceder publicação. Nenhum deploy, cartão salvo, compra real ou processo de compra iniciado nesta alteração. Falta concluir primeira conta/cartão, observar botão/comprovante/status, configurar processo e publicar. Detalhes: [política de compra](docs/compra-automatica-500-2026-09-08.md).
+
+## 07/09/2026 — contas no Chrome em preparação
+
+Por pedido do dono, preparar todas as lojas nos perfis persistentes do comprador. Cadastros incompletos; faltam dados, autenticação e verificação de cartão/checkout. Não considerar lojas habilitadas. Estado em [configuração das lojas](docs/configuracao-lojas-2026-09-07.md).
+
 # Lia — checklist de lançamento
 
-_Última atualização: 2026-09-04 (6ª — conversa real do desodorante)._
+
+## 07/09/2026 — início da configuração real da primeira loja
+
+Dono autorizou começar a configuração. Foi aberta a Drogaria São Paulo no Chrome com
+perfil exclusivo `.retail-buyer/profiles/drogariasp`, usando o comando setup do comprador.
+A navegação inicial concluiu. Aguardando o dono entrar/criar sua conta diretamente nessa
+janela e fechá-la ao concluir. Login, cartão salvo e dados reais ainda NÃO foram
+confirmados; nenhuma conta foi marcada pronta no painel. Nenhuma compra, cobrança ou
+mensagem enviada. Próximo passo: reabrir o perfil salvo e validar o checkout antes de
+orientar o cadastro do cartão ou ampliar para outras lojas.
+
+
+## 06/09/2026 — esforço de autenticação e identidade na entrega
+
+Dono considera autenticação/CAPTCHA recorrentes um gargalo inaceitável e perguntou sobre
+cadastro de cartão e nome no pacote. Esclarecimento de escopo: há um cadastro operacional
+por loja ativada; a configuração local inicial contém só Drogaria SP, enquanto o
+preparador comum possui nove origens. Não pedir cadastro em nove lojas antes de homologar
+uma. Login persistente está implementado, mas não garante ausência de verificações da
+loja. A frequência real ainda não foi medida; operação com desafios frequentes não atende
+a expectativa do dono e deve reprovar a homologação para execução automática.
+
+Verificação do código: clientProfileData permanece da conta operacional; receiverName,
+CEP e endereço de entrega recebem os dados do cliente em cada pedido e são reconferidos.
+Isso não comprova o nome que cada loja imprime na etiqueta/nota/comprovante. Antes de
+ativar uma loja, validar também destinatário no pacote e quais dados do comprador ficam
+visíveis ao cliente. Não prometer que cadastrar dados pessoais do dono é invisível nem
+alterar dados fiscais para tentar ocultá-los. Nenhum cadastro ou compra real feito.
+
+
+## 06/09/2026 — aprovação sem janela de cinco minutos
+
+Dono pediu poder aprovar quando olhar o WhatsApp. Implementado localmente: o resumo e a
+aprovação ficam persistidos sem expirar após 5 minutos. Após preparar, o comprador remove
+somente os itens conferidos da própria cesta, confirma carrinho vazio, fecha o perfil e
+libera a conta. Outros pedidos/rastreios podem usar a conta durante a espera. A aprovação
+pode chegar antes ou depois dessa liberação; não se perde na corrida nem exige navegador
+aberto. Pedidos aprovados são retomados pelo comprador com token novo.
+
+Ao reconstruir o carrinho, só condições idênticas ao resumo aprovado habilitam a execução
+por 60 s. Mudança gera nova conferência/aprovação; violações do teto, endereço, estoque ou
+prazo do cliente exigem revisão. O botão não expira por idade do resumo. Pedido cancelado,
+estornado ou com pagamento inválido continua bloqueado: as regras de estorno do vigia
+não foram removidas. Interrupção durante uma ação de navegador continua exigindo
+reconciliação; resultado financeiro incerto nunca é repetido automaticamente.
+
+Validação desta alteração: **560/560 testes**, sem skips, schema/migrations coerentes,
+TypeScript do app e do runtime, lint e build aprovados; comprador e painel testados no
+Chrome com todas as requisições simuladas.
+
+**Não basta login em todas as lojas para funcionar perfeitamente.** É necessário cartão
+corporativo configurado e homologação do checkout/comprovante/status por loja. O aviso
+chega pelo WhatsApp; a aprovação continua no painel aberto pelo link. Exceções como
+CAPTCHA, autenticação, indisponibilidade e site alterado continuam possíveis. Mudança
+local, não publicada, sem compras/mensagens reais. Não requer nova migration além das
+já pendentes. Documento operacional: [compra e acompanhamento](docs/compra-e-acompanhamento-2026-09-06.md).
+
+
+## 06/09/2026 — comprador e leitor implementados, ativação real pendente
+
+Pedido do dono: “faça isso acontecer e implemente”. Entrega local:
+contas operacionais por loja, comprador contínuo com perfil Chrome próprio, preparação
+VTEX, conferência de carrinho e aprovação única no /ops (5 min para conferir, 60 s para
+executar), tentativa durável sem repetir clique incerto, recuperação auditada, trava
+compra/estorno/cancelamento e agenda de acompanhamento com leitor de credencial separada.
+Status explícito do pedido inteiro gera avisos; previsões e pacotes isolados não geram.
+Pedidos já comprados antes da migration são incluídos por número/loja.
+
+**Não implantado nem homologado em conta real.** Nove origens VTEX têm preparador comum;
+botão final, comprovante e página de status precisam de seletores observados em cada
+loja. Sem configuração final homologada, o runtime não reserva compras. ML permanece
+no caminho assistido anterior. E-mail operacional ainda não informado; cartão/login
+não cadastrados; leitor de e-mail não implementado. Não prometer zero aprovação humana.
+Não há parceria/API por acordo, nem subagentes acessando o mesmo carrinho simultaneamente.
+
+Novas tabelas PurchaseAccount/TrackingSubscription e campos de PurchaseJob estão na
+migration aditiva `20260906150000_purchase_execution`, após DeliveryEvent. Dois tokens
+separam comprador e leitor; aprovação requer sessão /ops. Chrome não herda chaves do
+processo. `LIA_PURCHASE_SUBMIT_OFF=true` pausa novas finalizações. A tarefa horária não
+foi modificada e nenhum processo foi deixado comprando.
+
+Validação final: **558/558**, zero skips, migrations sem drift, TypeScript do app e
+do runtime, lint e build aprovados. Chrome com loja e painel simulados aprovados.
+Teste antigo de adulteração do token corrigido para não depender do caractere sorteado.
+
+Implementação, validações e ativação: [compra-e-acompanhamento-2026-09-06.md](docs/compra-e-acompanhamento-2026-09-06.md).
+
+- [x] Implementar comprador/contas/aprovação/recuperação e leitor com agenda persistente.
+- [x] Verificar backend, concorrência, comprador e painel em ambientes locais simulados.
+- [ ] Publicar código e migrations; configurar credenciais separadas.
+- [ ] Definir e-mail, entrar nas contas da Lia e cadastrar cartão corporativo na loja.
+- [ ] Homologar botão final, comprovante e status atual em uma primeira loja real.
+- [ ] Confirmar avisos reais e manter o computador operacional ligado antes de ampliar.
+- [ ] Adaptadores para ML/outros checkouts e acompanhamento por pacote/e-mail.
+
+## Restrição vigente de 06/09/2026 — sem lojas parceiras
+
+- [x] Retirar parceria comercial com varejistas da arquitetura e da estratégia.
+- [ ] Desenvolver a compra usando contas da Lia e checkout dos sites existentes,
+  pagamento corporativo, fila por conta e reconciliação de pedido.
+- [ ] Acompanhamento por e-mail de compra, link de rastreio e área Meus pedidos.
+
+O dono descartou parceria explicitamente. Sugestões históricas abaixo para obter loja
+parceira/API por acordo estão canceladas; não são dependências nem próximos passos.
+A redução de aprovações deve respeitar o canal de execução, sem prometer que mais
+agentes eliminam as confirmações financeiras.
+
+
+## Prioridades de 06/09/2026 — revisão atual
+
+Este bloco governa o estado desta revisão; os blocos datados abaixo são histórico.
+Relatório e critérios de aceite: [revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
+
+- [x] Corrigir corridas de pagamento/razão/estorno, worker, preservação do rastreio,
+  cálculo do plano B e isolamento de testes; implementar eventos/recibos de entrega.
+- [x] Validar localmente: 551/551, zero skips, migration/drift, tsc/lint/build.
+- [ ] Publicar correções com migration DeliveryEvent; homologar painel e recibos reais.
+  Monitor local novo depende da migration — não usar em produção antes disso.
+- [ ] Atualizar Next14/React/ESLint e transitivas Workflow; 25 alertas de audit.
+  Não seguir sugestão automática de downgrade de Workflow para 2.0.6.
+- [ ] Fechar snapshot de checkout (quantidade, preço, seller, frete, mínimo, modalidade,
+  validade) e revalidação antes de cobrança/compra.
+- [ ] Plano B: simular cesta inteira e serializar troca/compra/estorno; reconstituir
+  frete, fulfillments e jobs. As correções locais não homologam autonomia desse fluxo.
+- [ ] Persistir intenção de compra e tentativa de estorno/reconciliação de resultado
+  desconhecido; reservar conta, não só pedido; acordar worker por evento de pagamento.
+- [ ] Homologar conta/cartão corporativo em 2–3 lojas; habilitar preparação extra só
+  depois. Nenhum cartão foi cadastrado e nenhum executor novo foi ligado nesta revisão.
+- [ ] Conectar fonte real de rastreio (API, e-mail operacional ou leitura autenticada),
+  com credencial exclusiva; modelar pacotes antes de acompanhar cestas múltiplas.
+- [ ] Cron financeiro com fila justa; inbox durável de mensagens WhatsApp; orçamento
+  total Apify; corrigir “pra hoje” na virada de dia; reenvio reconciliado de avisos falhos.
+- [ ] Medir contribuição/minutos/tempo pago→compra/recompra em piloto externo; decidir
+  recorte de lojas e proposta de taxa. Recomendações ainda não são mudanças comerciais.
+
+Não houve deploy nem mudança da automação local. Checkout final não foi autorizado nesta
+revisão. A recomendação histórica de “autorizar o Codex e pronto” é insuficiente: cumprir
+as confirmações financeiras do canal. Parceria foi descartada pelo dono.
+
+
+_Última atualização: 2026-09-06 (revisão técnica e operacional; correções locais)._
 
 > **04/09 (6ª) — conversa real do desodorante.** 5 correções em produção (AGENTS.md 04/09 6ª).
 > **Dono:** pedido #OG9F4M (R$ 20,68, Drogaria SP) está PAGO e sem compra — a compra ainda é
