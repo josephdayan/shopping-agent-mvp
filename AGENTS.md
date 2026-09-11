@@ -1,3 +1,19 @@
+## 11/09/2026 — cruzamento dos dois planos de compra (Claude × Codex)
+
+Os planos [plano-compra-viavel](docs/plano-compra-viavel-2026-09-10.md) e
+[plano-validacao-compra-pix](docs/plano-validacao-compra-pix-2026-09-10.md) convergiram sem
+combinação: Pix no lugar de cartão, gates antes de código, Chrome local, provedor por condição
+comprovada, Pague Menos/Oba/ML fora. Conclusões registradas na seção 12 do primeiro:
+(1) **cliente paga primeiro**; não criar pedido na loja antes do dinheiro (o Codex propunha o
+inverso na Etapa 4); (2) **Swift é a primeira loja** (leitor OAuth já conectado ao Acesso
+Rápido), Cobasi depois, Ri Happy e Drogaria SP como sondagens a R$0; (3) 5 compras no Mac
+atual como `launchd`, host dedicado só para o piloto de 30; (4) **teto continua R$500/dia até
+o fim do piloto** (corrige a sugestão de subir cedo); (5) perguntar a Efí e Asaas em paralelo;
+(6) 29/30 é o gate da loja, "<10% de toques" é a métrica operacional. Passo único que destrava
+tudo, do dono: criar o cliente OAuth do Google (Gmail somente leitura) e rodar
+`npm run purchase-worker:mailbox-authorize`. Higiene: "Decisão proposta" do plano do Codex
+ainda cita Pague Menos como candidata inicial; `config.json` lista Oba e Pague Menos.
+
 ## 10/09/2026 — plano de compra viável (proposta; aguarda decisão do dono)
 
 Dono: "está muito difícil de operar… não está dando pra implementar a compra automatizada

@@ -239,3 +239,74 @@ Cacau Show, Decathlon, Imigrantes, Giuliana) e Oba continuam manuais ou saem da 
 executável. CAPTCHA onde aparece. Pós-venda (troca, SAC) continua humano. Enquadramento
 fiscal. Prazo de entrega (é o do checkout da loja). E não valida demanda: com 3 pedidos e
 R$63 de razão, isto torna a compra executável, não prova mercado.
+
+---
+
+## 12. Cruzamento com o plano do Codex — 11/09/2026
+
+Cruzado com [plano de validação Pix](plano-validacao-compra-pix-2026-09-10.md) e
+[evidências](evidencias-validacao-compra-pix-2026-09-10.md), escritos pelo Codex no mesmo dia,
+sem combinação prévia.
+
+**Convergência independente (sinal forte).** Os dois chegaram ao mesmo desenho: Pix da loja
+no lugar de cartão salvo; gates baratos antes de código; comprador no Chrome local; provedor
+bancário escolhido por condição comprovada (ação crítica, limites, timeout), não por cadastro;
+Pague Menos, Oba e Mercado Livre fora; nada de burlar desafio; uma loja por cesta; teto
+R$500. O Codex está uma etapa à frente na execução (4 lojas sondadas, leitor Gmail OAuth
+somente leitura escrito e testado, 577/577) e uma etapa atrás na estratégia (sem
+enquadramento fiscal, sem desenho de exceções, sem tesouraria, sem plano B).
+
+**Discordâncias reais e a conclusão de cada uma:**
+
+1. **Ordem comercial.** O Codex (Etapa 4) cria o pedido Pix na loja *antes* de cobrar o
+   cliente. Isso gera pedido não pago na loja a cada cotação abandonada (o próprio texto diz
+   que "um pedido não pago ainda altera o estado da loja"), é sinal ruim para antifraude e
+   corre contra o QR de 15–60 min. **Conclusão: cliente paga primeiro; preço e frete exatos
+   pela `simulation` na cotação; pedido na loja só com dinheiro em caixa, em segundos. Hash
+   da cesta e plano B já cobrem a deriva de preço.**
+2. **Primeira loja.** Codex: Cobasi ou Swift. Este plano: Ri Happy e Drogaria SP. **Conclusão:
+   Swift é a primeira candidata de fato** (leitor já conectado ao "Acesso Rápido", Pix
+   verificado, cesta mínima R$22,40 com frete), Cobasi em seguida (item de R$2,80, mas
+   reCAPTCHA invisível na página de acesso e código de cadastro ainda não conectado ao
+   leitor). Ri Happy e Drogaria SP entram como sondagens paralelas a R$0. Drogaria SP tem um
+   problema que o leitor não resolve: em 08/09 o código **não chegava**.
+3. **Host.** Codex exige máquina dedicada para aprovar a Etapa 3 (5 compras). **Conclusão:
+   as 5 compras podem rodar no Mac atual como serviço `launchd` (diagnóstico); o piloto de
+   30 exige o host dedicado.** Mac mini antes do piloto, não antes dos gates.
+4. **Teto diário.** Este plano propunha subir para R$2.000/dia após 5 compras; o Codex mantém
+   R$500/dia e até 3 pedidos/dia no piloto. **Conclusão: o Codex está certo; subir só depois
+   dos 30 pedidos.** A seção 5.2 fica corrigida por esta.
+5. **Provedor bancário.** Codex: Asaas primeiro, Efí só se falhar. Este plano: Efí primeiro
+   por `idEnvio` idempotente. A própria evidência do Codex registra que o Asaas não tem chave
+   de idempotência. **Conclusão: perguntar aos dois em paralelo (custo zero) e decidir pela
+   resposta escrita; não sequencial.**
+6. **Critério de sucesso.** Codex: 29 de 30 sem intervenção e ≤ 5 min pago→confirmado. Este
+   plano: < 10% de exceções por um toque. **Conclusão: os dois, em níveis diferentes**: 29/30
+   é o gate da loja homologada (só pedidos admitidos); "< 10% de toques" é a métrica
+   operacional sobre todos os pedidos, porque cobertura e sucesso são coisas distintas, como
+   o próprio Codex separa.
+
+**Adotado do Codex neste plano:** a tabela de casos simulados antes de dinheiro real (Pix
+vencido, resposta bancária perdida, notificação duplicada, pago sem confirmação da loja,
+divergência, queda e reinício, cancelamento disputando pagamento); "uma loja, um vendedor,
+uma conta, uma compra por vez"; teto R$500 total para a prova, compartilhado com o diário;
+nunca usar cliente não informado como teste; cobertura medida separada do sucesso.
+
+**Adotado deste plano no fluxo do Codex:** decisão fiscal (revenda no piloto; mandato exige
+ME/SLU; documento fiscal para PF em 2027); conta MP pessoal (cl. 1.3.2) → piloto só com o
+dono como cliente até a conta PJ; CDC art. 49 → estorno ao cliente não espera a devolução da
+loja; exceções por um toque no WhatsApp do operador; tesouraria (float = teto × dias até
+repor; fase 2 receber o Pix do cliente na mesma conta PJ que paga a loja); Mercado Livre fora
+por Termos; plano B se nenhuma loja passar.
+
+**Higiene pendente no material do Codex:** a seção "Decisão proposta" ainda diz "a candidata
+inicial é a Pague Menos", contradizendo a execução registrada acima dela; `config.json`
+do comprador ainda lista Oba e Pague Menos; o leitor só conhece domínios de Cobasi e Swift e
+só o "Acesso Rápido" da Swift está conectado; a Etapa 4 diz "recebimento pelo Pagar.me",
+mas o Pix de entrada é Mercado Pago.
+
+**Placar real e próximo passo físico.** Lojas: 0 de 4 passaram, 2 por motivo resolvível.
+Banco: inconclusivo, nenhuma conta aberta. Leitor: escrito, sem consentimento OAuth real.
+**Há um único passo que destrava tudo e é do dono: criar o cliente OAuth no Google Cloud
+(escopo Gmail somente leitura) para a caixa operacional e rodar
+`npm run purchase-worker:mailbox-authorize`.** Depois disso, a sondagem da Swift custa R$0.
