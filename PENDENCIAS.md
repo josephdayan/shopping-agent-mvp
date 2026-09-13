@@ -1,3 +1,88 @@
+## 13/09/2026 — E8 bloqueado pelo limite de tentativas do Mercado Livre
+
+Captura enviada pelo dono mostra: “Você alcançou o limite de tentativas. Por favor,
+tente novamente mais tarde.” A página não informa prazo, causa nem alcance do bloqueio.
+Não interpretar como senha incorreta ou desativação permanente da conta. Setup local
+interrompido para encerrar a janela de configuração; perfil preservado. Não repetir login,
+sondagem ou trocar perfil/rede para contornar a restrição. Retomar pelo fluxo normal após
+liberação do ML; se persistir, usar recuperação/suporte oficial. E8 continua não homologado,
+sem carrinho preparado ou compra nesta sessão. Gmail E0 validado permanece concluído.
+
+## 13/09/2026 — E8 iniciado: perfil ML reaberto
+
+Primeira abertura falhou porque o processo setup anterior ainda mantinha o perfil ML.
+Processo anterior encerrado; `purchase-worker:setup -- mercadolivre` reabriu o perfil
+persistente com sucesso. Leitura da janela Chrome pela ferramenta de UI falhou por timeout
+em duas tentativas. Solicitado ao dono confirmar login/2FA e fechar a janela para liberar
+perfil à sondagem. Autenticação ainda não homologada; nenhum item adicionado ou compra.
+Gmail E0 continua validado. Seletores/limpeza/frete/endereço ML ainda sem prova real.
+
+## 13/09/2026 — E0 concluído: Gmail readonly validado ao vivo
+
+Consentimento Google concluído para a caixa operacional confirmada. Script retornou
+`{"mailbox":"gmail","authorization":"stored"}` e gravou refresh token no Chaves.
+`npm run purchase-worker:mailbox-check` terminou com exit code 0 e
+`{"mailbox":"gmail","status":"ready"}`. Client ID, Secret e Refresh Token ficam no
+Chaves; valores não registrados em Markdown. A leitura via `security` foi liberada pelo
+dono. Isso valida autenticação/API, não uma mensagem real de login/rastreio de loja.
+App continua externo/Testando. Próximo: E8, sessão do ML e sondagem; não ativar serviço
+ou allowlist por inferência deste teste. Nenhuma compra ou mensagem enviada.
+
+## 13/09/2026 — Chaves liberado; autorização chegou ao login Google
+
+**Avanço:** login Google concluído; tela final do app pede somente “Ver suas configurações e mensagens de e-mail” (`gmail.readonly`). Aguardando o dono clicar Permitir, por ser concessão nova de acesso à caixa. Refresh token ainda pendente.
+
+
+`mailbox-authorize` leu as credenciais e emitiu URL OAuth com escopo único
+`gmail.readonly`, PKCE e callback local. URL aberta no navegador interno; conta operacional
+selecionada, Google solicitou senha novamente. Aguarda login do dono e consentimento.
+Refresh token ainda não confirmado; processo tem prazo de cinco minutos após emitir URL.
+
+## 13/09/2026 — leitura das duas credenciais confirmada
+
+Checagens isoladas com `security find-generic-password -w` leram Client ID e Client
+Secret com exit code 0, sem exibir valores. Logo não há evidência de senha incorreta;
+as tentativas anteriores de autorização falharam na leitura, com erro genérico do script.
+Fluxo `purchase-worker:mailbox-authorize` reiniciado; nova leitura aguarda o Chaves.
+Permitir uma vez nas checagens não autoriza automaticamente o processo seguinte.
+OAuth/refresh token e `mailbox-check: ready` ainda não concluídos.
+
+## 13/09/2026 — OAuth continua pendente
+
+Dono esclareceu que a janela reaparece sem mensagem explícita de senha incorreta.
+Processo identificado aguardando `Lia Gmail Client Secret`; leitor solicita ID e Secret
+em sequência, portanto repetição visual pode ser o segundo item. Isso ainda não comprova
+sucesso na leitura do primeiro. Orientado liberar o item Secret e acompanhar resultado.
+
+
+- [ ] Identificar mensagem do Chaves na nova tentativa de autorização; credenciais presentes, refresh token ausente.
+
+## 11/09/2026 — próximos passos E0/E8 (estado conferido no Mac)
+**Diagnóstico seguinte (11/09):** dono relatou que a senha do Mac não liberou o acesso.
+A autorização encerrou sem URL/refresh token. Itens Gmail existem no chaveiro login;
+controle de acesso inspecionado sem alteração: confirmar acesso, aplicativo confiável
+`swift-frontend` (gravador), enquanto leitor usa `security`. Motivo exato da recusa ainda
+não confirmado; solicitar texto do diálogo antes de nova tentativa. Não redefinir
+chaveiro nem ampliar acesso para todos os aplicativos.
+
+
+
+- [x] Google Cloud autenticado; dono confirmou a caixa operacional.
+- [x] Aceite confirmado; branding OAuth e cliente Desktop criados; Gmail API ativa.
+- [x] Client ID e Client Secret salvos no Chaves; conta adicionada como teste.
+- [ ] Liberar leitura do Chaves pelo comando `security` no macOS; autorização iniciada.
+- [x] Consentimento Gmail readonly, refresh token no Chaves e `mailbox-check: ready` em 13/09.
+- [ ] Concluir login/2FA na janela ML aberta pelo setup; sessão ainda não homologada.
+- [x] Endereço operacional fornecido e salvo no `probe` privado (0600).
+- [ ] Escolher anúncio barato para E8 após confirmar login do perfil ML.
+- [ ] Configurar `Lia Tracking Worker` no Chaves; `Lia Purchase Worker` já existe,
+      mas ainda não foi validado contra o servidor. Não usar sufixo “Token”.
+- [ ] Homologar itens/preços/limpeza; a sondagem atual não verifica frete/endereço/conta
+      reais. Conferência no app continua necessária no degrau C.
+- [ ] Após gates: conta no /ops, allowlist ML e instalação do serviço local.
+- Deploy zero já registrado no commit `001593c`/STATUS; não é pendência de publicação
+  segundo esse registro. Não houve nova verificação de produção nesta conferência.
+
 ## 10/09/2026 — decisões e gates do plano de compra viável
 
 Plano: [docs/plano-compra-viavel-2026-09-10.md](docs/plano-compra-viavel-2026-09-10.md).

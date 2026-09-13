@@ -1,5 +1,11 @@
 # Runbook do Operador da Lia
 
+> **Conferência local 11/09:** serviços do Chaves: `Lia Purchase Worker` e
+> `Lia Tracking Worker` (conta `lia-purchase-worker`, sem sufixo “Token”). O primeiro
+> existe; o segundo falta neste Mac. OAuth Gmail concluído em 13/09, `mailbox-check` ready. Setup ML iniciado, login ainda não homologado.
+> A sondagem ML lê itens/preços; frete/endereço/conta no relatório vêm do job e não
+> comprovam o checkout real. Conferir esses dados no app antes de pagar.
+
 > **Atualização de 11/09/2026 — como a compra funciona agora.** O plano de
 > [docs/plano-implementacao-compra-2026-09-11.md](plano-implementacao-compra-2026-09-11.md)
 > está implementado localmente (Fases 0–7). Resumo do que muda para quem opera:
