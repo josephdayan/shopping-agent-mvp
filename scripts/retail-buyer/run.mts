@@ -251,8 +251,12 @@ if (command === "probe") {
       report.prepared = false;
       report.prepareError = error instanceof Error ? error.message : "erro";
     }
-    await page.goto(`${recipe.origin}/checkout/#/payment`, { waitUntil: "domcontentloaded", timeout: 30_000 }).catch(() => {});
-    await page.waitForTimeout(4_000);
+    // Leva a tela até o passo do clique final (clássico: #/payment; Cobasi: até a Revisão).
+    try {
+      await buyer.reachPaymentScreen();
+    } catch (error) {
+      report.paymentScreenError = error instanceof Error ? error.message : "erro";
+    }
     Object.assign(report, await buyer.probeReport());
     await page.screenshot({ path: resolve(probesDir, `${store}-${stamp}.png`), fullPage: true }).catch(() => {});
     if (report.prepared) {

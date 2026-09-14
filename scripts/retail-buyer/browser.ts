@@ -33,6 +33,10 @@ export type StoreRecipe = {
   auth?: "swift_email_code" | "cobasi_email_code";
   // Chave do localStorage com o orderForm que a TELA usa (checkout próprio); ver read().
   cartIdStorageKey?: string;
+  // Como chegar à tela do clique final. Padrão: checkout clássico da VTEX (/checkout/#/payment).
+  // "cobasi": carrinho → Fazer pedido → Ir para entrega → Ir para pagamento → Pix → Ir para
+  // revisão (mapeado ao vivo em 14/09); o botão final é "Concluir pedido" na Revisão.
+  checkoutFlow?: "cobasi";
   // Regra de e-mail da loja para o leitor de códigos (registrada pelo run.mts).
   mail?: { label: string; domains: string[]; senders?: { domain: string; name: string }[] };
   // Meio de pagamento que o comprador seleciona no checkout (default: cartão salvo até a Fase 1).
@@ -57,6 +61,8 @@ export type ProbeReport = {
   pixAvailable: boolean;
   pixSelected: boolean;
   challengeVisible: boolean;
+  // Selo de reCAPTCHA invisível na página (só age no clique final; não é desafio visível).
+  captchaBadge: boolean;
   finalizeButtons: number;
   finalizeEnabled: boolean | null;
   totalCents: number | null;
@@ -76,6 +82,7 @@ export const VTEX_RECIPES: Record<string, StoreRecipe> = {
     skuPrefix: "cobasi-",
     auth: "cobasi_email_code",
     cartIdStorageKey: "cartID",
+    checkoutFlow: "cobasi",
     // Conferido em 14/09: a chave chega de "no reply <noreply@vtexcommerce.com.br>"; o texto
     // precisa citar "cobasi" e o e-mail tem de chegar depois do pedido (regra do leitor).
     mail: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }] },
@@ -373,8 +380,75 @@ export class VtexBuyer {
     mailbox?: { waitForCode(request: AccessCodeRequest): Promise<string> },
   ) {
     await this.prepareCart(job, address, mailbox);
-    await this.page.reload({ waitUntil: "domcontentloaded" });
+    if (this.recipe.checkoutFlow) await this.reachPaymentScreen();
+    else await this.page.reload({ waitUntil: "domcontentloaded" });
     return this.snapshot(job, address);
+  }
+  // Leva a TELA até o passo do clique final, sem clicar em nada que finalize/pague.
+  async reachPaymentScreen() {
+    if (this.recipe.checkoutFlow !== "cobasi") {
+      await this.page.goto(`${this.recipe.origin}/checkout/#/payment`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+      await this.page.waitForTimeout(4_000);
+      return;
+    }
+    const forbidden = /finalizar|pagar|concluir|comprar|fechar pedido|confirmar (pedido|compra|pagamento)/i;
+    // Um clique por tela. Sem waitForURL: o checkout da Cobasi não chega ao evento "load"
+    // (recursos em aberto) e o Playwright ficaria preso mesmo com a URL certa.
+    const press = async (name: RegExp) => {
+      const button = this.page.getByRole("button", { name }).first();
+      await button.waitFor({ state: "visible", timeout: 20_000 });
+      const label = (await button.innerText().catch(() => "")).trim();
+      if (forbidden.test(label)) throw new Error(`Botão de avanço inesperado: ${label}`);
+      await button.click({ timeout: 15_000 });
+      await this.page.waitForTimeout(3_000);
+    };
+    const bodyText = async () => (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
+    const atReview = async () => /Revisao da compra/i.test(await bodyText());
+    // Rádio do Pix não tem nome: escolhe pelo texto da opção e confirma no orderForm (125).
+    const choosePix = async () => {
+      const pix = this.page.getByText(/Pague na hora com Pix/i).first();
+      await pix.waitFor({ state: "visible", timeout: 20_000 });
+      // O clique precisa cair no cartão da opção (label/botão), não no texto descritivo.
+      const card = pix.locator("xpath=ancestor::*[self::label or self::button or @role='radio' or @role='button'][1]");
+      const targets = [
+        (await card.count()) ? card.first() : pix,
+        this.page.locator("input[type=radio]").first(),
+        pix,
+      ];
+      // A Cobasi só grava o meio de pagamento no orderForm depois; a prova aqui é o rádio da
+      // opção Pix marcado (a Revisão confirma de novo pelo texto).
+      const pixChecked = async () => {
+        const radio = (await card.count()) ? card.first().locator("input[type=radio]").first() : this.page.locator("input[type=radio]").first();
+        return (await radio.count()) > 0 && (await radio.isChecked().catch(() => false));
+      };
+      for (let attempt = 0; ; attempt += 1) {
+        if (await pixChecked()) return;
+        if (attempt >= targets.length) throw new Error("A tela da loja não aceitou a escolha do Pix.");
+        await targets[attempt].click({ timeout: 15_000, force: attempt === 1 });
+        await this.page.waitForTimeout(3_000);
+      }
+    };
+    await this.page.goto(`${this.recipe.origin}/checkout/#/cart`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+    await this.page.waitForTimeout(5_000);
+    // O checkout lembra a última etapa: a máquina de estados olha a URL a cada volta e faz
+    // só o passo daquela tela, até a Revisão aparecer.
+    for (let turn = 0; turn < 8; turn += 1) {
+      if (await atReview()) break;
+      const path = new URL(this.page.url()).pathname + new URL(this.page.url()).hash;
+      if (/\/checkout\/review/.test(path)) {
+        await this.page.getByText(/Revis[aã]o da compra/i).first().waitFor({ state: "visible", timeout: 20_000 });
+        break;
+      }
+      if (/\/checkout\/?#\/cart|\/checkout\/?$/.test(path)) await press(/^Fazer pedido$/i);
+      else if (/\/checkout\/profile/.test(path)) await press(/^Ir para entrega$/i);
+      else if (/\/checkout\/shipping/.test(path)) await press(/^Ir para pagamento$/i);
+      else if (/\/checkout\/payment/.test(path)) {
+        await choosePix();
+        await press(/^Ir para revis/i);
+      } else throw new Error(`Tela desconhecida no checkout da loja: ${path}`);
+      if (turn === 7 && !(await atReview())) throw new Error("A loja não chegou à tela de revisão.");
+    }
+    if (!/Forma de pagamento\s+Pix\b/i.test(await bodyText())) throw new Error("A tela de revisão da loja não mostra o Pix escolhido.");
   }
   // Monta itens, endereço, entrega e meio de pagamento no orderForm. Não finaliza nem fotografa.
   async prepareCart(
@@ -563,13 +637,16 @@ export class VtexBuyer {
     const form = await this.read();
     const payments = form.paymentData?.payments ?? [];
     const body = (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
+    // Desafio de verdade: o iframe do desafio (bframe) ou o widget de caixa visíveis, ou o
+    // texto. O selo do reCAPTCHA invisível (anchor no canto) não é desafio — vai em captchaBadge.
     const challengeVisible =
       (await this.page
-        .locator('iframe[src*="recaptcha"], iframe[src*="hcaptcha"], .g-recaptcha, [data-sitekey]')
+        .locator('iframe[src*="recaptcha"][src*="bframe"], iframe[src*="hcaptcha"], .g-recaptcha, [data-sitekey]')
         .filter({ visible: true })
         .count()) > 0 || /n[aã]o sou um rob[oô]|verifica[cç][aã]o de seguran[cç]a/i.test(body);
+    const captchaBadge = (await this.page.locator(".grecaptcha-badge, iframe[src*='recaptcha']").count()) > 0;
     const finalize = this.page.getByRole("button", {
-      name: /finalizar compra|finalizar pedido|comprar agora|pagar agora|confirmar compra/i,
+      name: /finalizar compra|finalizar pedido|comprar agora|pagar agora|confirmar compra|concluir pedido/i,
     });
     const finalizeCount = await finalize.count();
     let finalizeEnabled: boolean | null = null;
@@ -581,9 +658,12 @@ export class VtexBuyer {
       accountEmail: String(form.clientProfileData?.email ?? "") || null,
       pixAvailable: VtexBuyer.pixAvailable(form),
       pixSelected:
-        payments.length === 1 &&
-        String(payments[0].paymentSystem) === VtexBuyer.PIX_PAYMENT_SYSTEM,
+        (payments.length === 1 &&
+          String(payments[0].paymentSystem) === VtexBuyer.PIX_PAYMENT_SYSTEM) ||
+        // Checkout próprio (Cobasi): a Revisão mostra a forma escolhida antes de gravá-la.
+        (this.recipe.checkoutFlow === "cobasi" && /Forma de pagamento\s+Pix\b/i.test(body)),
       challengeVisible,
+      captchaBadge,
       finalizeButtons: finalizeCount,
       finalizeEnabled,
       totalCents: typeof form.value === "number" ? form.value : null,

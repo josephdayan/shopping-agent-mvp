@@ -1,3 +1,21 @@
+## 14/09/2026 — E2 Cobasi fechado ao vivo: comprador chega à Revisão com Pix, sem desafio
+
+Com o dono em modo manual de permissões, o checkout próprio da Cobasi foi mapeado e
+codificado (`checkoutFlow: "cobasi"` em `scripts/retail-buyer/browser.ts`): carrinho →
+"Fazer pedido" → Identificação (pré-preenchida da conta) → "Ir para entrega" (endereço do
+dono, Econômica R$7,90) → "Ir para pagamento" → opção Pix (clique no cartão da opção; a
+loja só grava o meio no orderForm depois) → "Ir para revisão" → `/checkout/review`:
+"Forma de pagamento Pix", botão final único **"Concluir pedido"**. Máquina de estados por
+URL (o checkout lembra a última etapa), sem `waitForURL` (a página nunca dispara "load").
+Relatório da sondagem: `prepared`, `pixSelected`, `challengeVisible=false`,
+`captchaBadge=true` (reCAPTCHA invisível, só age no clique final), `finalizeButtons=1`,
+`finalizeEnabled=true`, total R$10,70, `cartCleared=true`. O código Pix só aparece
+**depois** de "Concluir pedido" (pedido criado na loja) — como o plano previa.
+Falta para ligar a Cobasi: E3 (um pedido real: prova o clique final sob reCAPTCHA
+invisível, a página do Pix e o comprovante para `receipt`), `submitSelector`
+(`button:has-text("Concluir pedido")`) + `receipt` no `config.json`, E5/E6 (banco) para
+`LIA_PIX_OUT_PROVIDER`. Gates: verify, verify-ui, lint, tsc, suíte 597/597.
+
 ## 14/09/2026 — E2 ao vivo: Cobasi chega ao carrinho com Pix e entrega; Swift não entrega no CEP do dono
 
 Contas da Lia criadas pelo dono na Swift e na Cobasi (e-mail da caixa de E0). Sondagens
