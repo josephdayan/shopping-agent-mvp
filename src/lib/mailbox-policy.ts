@@ -4,7 +4,8 @@
 export type StoreMailKind = "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled";
 export type StoreMailVerdict = { kind: StoreMailKind; storeOrderNumber: string; trackingUrl?: string };
 
-type Rule = { domains: string[]; number: RegExp; kinds: { kind: StoreMailKind; subject: RegExp }[] };
+// `senders`: domínio de plataforma compartilhada (VTEX) aceito só com o nome de exibição exato da loja.
+type Rule = { domains: string[]; senders?: { domain: string; name: string }[]; number: RegExp; kinds: { kind: StoreMailKind; subject: RegExp }[] };
 const VTEX_KINDS: Rule["kinds"] = [
   { kind: "delivered", subject: /(pedido|compra) (foi )?entregu[eo]|entrega (conclu[ií]da|realizada)/i },
   { kind: "out_for_delivery", subject: /saiu para entrega|a caminho|em rota de entrega/i },
@@ -15,7 +16,7 @@ const VTEX_KINDS: Rule["kinds"] = [
 ];
 const VTEX_NUMBER = /\b(\d{9,13}-\d{2})\b/;
 export const STORE_MAIL_RULES: Record<string, Rule> = {
-  swift: { domains: ["swift.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
+  swift: { domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   cobasi: { domains: ["cobasi.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   rihappy: { domains: ["rihappy.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   drogariasp: { domains: ["drogariasaopaulo.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
@@ -33,13 +34,16 @@ export const STORE_MAIL_RULES: Record<string, Rule> = {
     ],
   },
 };
-function senderMatches(from: string, domains: string[]) {
-  const addresses = from.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9.-]+/g) ?? [];
-  return addresses.some((a) => { const d = a.split("@")[1]; return domains.some((x) => d === x || d.endsWith(`.${x}`)); });
+function senderMatches(from: string, rule: Rule) {
+  const hit = (d: string, x: string) => d === x || d.endsWith(`.${x}`);
+  const domains = (from.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9.-]+/g) ?? []).map((a) => a.split("@")[1]);
+  if (domains.some((d) => rule.domains.some((x) => hit(d, x)))) return true;
+  const name = from.split("<")[0].replace(/^["'\s]+|["'\s]+$/g, "").replace(/\s+/g, " ").toLowerCase();
+  return (rule.senders ?? []).some((s) => name === s.name.toLowerCase() && domains.some((d) => hit(d, s.domain)));
 }
 export function classifyStoreMail(storeKey: string, mail: { from: string; subject: string; text: string }): StoreMailVerdict | null {
   const rule = STORE_MAIL_RULES[storeKey];
-  if (!rule || !senderMatches(mail.from, rule.domains)) return null;
+  if (!rule || !senderMatches(mail.from, rule)) return null;
   const subject = mail.subject.normalize("NFD").replace(/[̀-ͯ]/g, "");
   const match = rule.kinds.find((k) => k.subject.test(subject));
   if (!match) return null;

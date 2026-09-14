@@ -1,3 +1,22 @@
+## 14/09/2026 — E2 Swift ao vivo: leitor de e-mail corrigido (2 defeitos), conta da Lia não existe na loja
+
+Reprodução observável do login por código no perfil da Swift, com a caixa de E0 (a mesma
+que o dono confirmou como caixa das lojas). Achados, todos conferidos ao vivo:
+1. A chave de acesso chega em ~5 s, mas de `Loja Online Swift <noreply@vtexcommerce.com.br>`,
+   não de `swift.com.br`. Regra nova nas duas camadas (`scripts/retail-buyer/mailbox.ts` e
+   `src/lib/mailbox-policy.ts`): `senders` = domínio de plataforma compartilhada aceito
+   **só** com o nome de exibição exato da loja; outro nome no mesmo domínio é recusado.
+2. O texto "Sua chave de acesso **é** 773684" não casava com o padrão principal (o "é" vira
+   "e" e é letra); o fallback via vários números de 4 dígitos no rodapé (0800, 2892) e,
+   por segurança, devolvia nada. Padrão ganhou o conector verbal; teste com o texto real.
+3. Com o código válido a Swift redireciona para `/register` (cadastro: nome, CPF, telefone,
+   senha): **não existe conta da Lia na Swift com esse e-mail**. O comprador tratava isso
+   como login feito e falhava depois ("loja não confirmou a conta"); agora o erro é explícito.
+   O cadastro é do dono (CPF/senha), pelo `purchase-worker:setup -- swift`. Cobasi
+   provavelmente está na mesma situação (o "cadastro" de 07/09 enviou código).
+Testes: leitor 5/5, suíte 597/597, `purchase-worker:verify` ok. Nenhum pedido, item ou
+pagamento criado; carrinhos vazios. Sondagens E2 seguem pendentes até o cadastro.
+
 ## 13/09/2026 — tokens do comprador conferidos; E2 Swift parou no e-mail da conta
 
 Tokens locais testados contra a produção (corpo vazio, sem efeito): o de compra já batia;

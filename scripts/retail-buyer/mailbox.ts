@@ -13,7 +13,10 @@ export type AccessCodeRequest = {
   pollMs?: number;
 };
 // Regra de e-mail por loja: nome que precisa aparecer no texto e domínios remetentes aceitos.
-export type StoreMailRule = { label: string; domains: readonly string[] };
+// `senders`: remetente de plataforma compartilhada (a VTEX manda de vtexcommerce.com.br para
+// todas as lojas) — só vale com o nome de exibição EXATO da loja, nunca o domínio sozinho.
+export type StoreMailSender = { domain: string; name: string };
+export type StoreMailRule = { label: string; domains: readonly string[]; senders?: readonly StoreMailSender[] };
 
 type GmailPart = {
   body?: { data?: string };
@@ -30,7 +33,8 @@ type GmailMessage = {
 // Padrões conhecidos; o config.json do comprador pode registrar outras lojas (registerStoreMail).
 const STORE_MAIL: Record<string, StoreMailRule> = {
   cobasi: { label: "cobasi", domains: ["cobasi.com.br"] },
-  swift: { label: "swift", domains: ["swift.com.br"] },
+  // Conferido ao vivo em 13/09: a chave de acesso da Swift chega de noreply@vtexcommerce.com.br.
+  swift: { label: "swift", domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }] },
 };
 const MAIL_KEY = /^[a-z0-9_-]+$/;
 const MAIL_DOMAIN = /^[a-z0-9.-]+\.[a-z]{2,}$/;
@@ -38,9 +42,13 @@ export function registerStoreMail(storeKey: string, rule: StoreMailRule) {
   if (!MAIL_KEY.test(storeKey)) throw new Error("Chave de loja inválida.");
   const label = rule.label.trim();
   const domains = rule.domains.map((d) => d.trim().toLowerCase());
-  if (!/^[a-z0-9 ]{2,40}$/i.test(label) || !domains.length || !domains.every((d) => MAIL_DOMAIN.test(d)))
+  const senders = (rule.senders ?? []).map((s) => ({ domain: s.domain.trim().toLowerCase(), name: s.name.trim() }));
+  if (
+    !/^[a-z0-9 ]{2,40}$/i.test(label) || !domains.length || !domains.every((d) => MAIL_DOMAIN.test(d)) ||
+    !senders.every((s) => MAIL_DOMAIN.test(s.domain) && /^[a-z0-9 .&'-]{2,60}$/i.test(s.name))
+  )
     throw new Error("Regra de e-mail da loja inválida.");
-  STORE_MAIL[storeKey] = { label, domains };
+  STORE_MAIL[storeKey] = { label, domains, senders };
 }
 export function storeMailRule(storeKey: string): StoreMailRule | undefined {
   return STORE_MAIL[storeKey];
@@ -75,14 +83,22 @@ function header(message: GmailMessage, name: string) {
   );
 }
 
-function senderAllowed(from: string, domains: readonly string[]) {
-  const addresses = from.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9.-]+/g) ?? [];
-  return addresses.some((address) => {
-    const domain = address.split("@")[1];
-    return domains.some(
-      (allowed) => domain === allowed || domain.endsWith(`.${allowed}`),
-    );
-  });
+const domainHit = (domain: string, allowed: string) => domain === allowed || domain.endsWith(`.${allowed}`);
+function senderDomains(from: string) {
+  return (from.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9.-]+/g) ?? []).map((a) => a.split("@")[1]);
+}
+function senderDisplayName(from: string) {
+  return from.split("<")[0].replace(/^["'\s]+|["'\s]+$/g, "").replace(/\s+/g, " ").toLowerCase();
+}
+function senderAllowed(from: string, rule: StoreMailRule) {
+  const domains = senderDomains(from);
+  if (domains.some((d) => rule.domains.some((allowed) => domainHit(d, allowed)))) return true;
+  const name = senderDisplayName(from);
+  return (rule.senders ?? []).some((s) => name === s.name.toLowerCase() && domains.some((d) => domainHit(d, s.domain)));
+}
+function ruleQuery(rule: StoreMailRule) {
+  const all = new Set([...rule.domains, ...(rule.senders ?? []).map((s) => s.domain)]);
+  return `(${[...all].map((domain) => `from:${domain}`).join(" OR ")})`;
 }
 
 export function extractStoreAccessCode(
@@ -90,7 +106,7 @@ export function extractStoreAccessCode(
   message: GmailMessage,
 ) {
   const rule = STORE_MAIL[storeKey];
-  if (!rule || !senderAllowed(header(message, "from"), rule.domains)) return null;
+  if (!rule || !senderAllowed(header(message, "from"), rule)) return null;
   const text = `${header(message, "subject")} ${message.snippet ?? ""} ${messageText(message.payload)}`;
   const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const label = rule.label
@@ -101,8 +117,10 @@ export function extractStoreAccessCode(
   if (!/\b(codigo|chave|acesso|validacao|verificacao|verification|access)\b/i.test(normalized))
     return null;
   const candidates = new Set<string>();
+  // "chave de acesso é 773684" (Swift/VTEX, conferido em 13/09): o "é" vira "e" após tirar o
+  // acento e é uma letra, por isso o conector verbal entra explícito antes do código.
   for (const match of normalized.matchAll(
-    /\b(?:codigo|chave)(?:\s+(?:de|para))?(?:\s+(?:acesso|validacao|verificacao))?[^A-Z0-9]{0,24}((?=[A-Z0-9]{4,8}\b)(?=[A-Z0-9]*\d)[A-Z0-9]+)\b/gi,
+    /\b(?:codigo|chave)(?:\s+(?:de|para))?(?:\s+(?:acesso|validacao|verificacao))?(?:\s+(?:e|eh|is|sera))?[^A-Z0-9]{0,24}((?=[A-Z0-9]{4,8}\b)(?=[A-Z0-9]*\d)[A-Z0-9]+)\b/gi,
   ))
     candidates.add(match[1].toUpperCase());
   if (!candidates.size) {
@@ -177,9 +195,7 @@ export class GmailCodeMailbox {
   private async newestCode(request: AccessCodeRequest) {
     const rule = STORE_MAIL[request.storeKey];
     if (!rule) throw new Error("Loja sem regra de e-mail configurada.");
-    const query = encodeURIComponent(
-      `newer_than:1d (${rule.domains.map((domain) => `from:${domain}`).join(" OR ")})`,
-    );
+    const query = encodeURIComponent(`newer_than:1d ${ruleQuery(rule)}`);
     const listed = (await this.gmail(
       `/gmail/v1/users/me/messages?maxResults=10&q=${query}`,
     )) as { messages?: { id?: string }[] };
@@ -207,14 +223,14 @@ export class GmailCodeMailbox {
     const rule = STORE_MAIL[storeKey];
     if (!rule) return [];
     const days = Math.max(1, Math.ceil((Date.now() - sinceMs) / 86_400_000));
-    const query = encodeURIComponent(`newer_than:${days}d (${rule.domains.map((domain) => `from:${domain}`).join(" OR ")})`);
+    const query = encodeURIComponent(`newer_than:${days}d ${ruleQuery(rule)}`);
     const listed = (await this.gmail(`/gmail/v1/users/me/messages?maxResults=${maxResults}&q=${query}`)) as { messages?: { id?: string }[] };
     const out: { id: string; from: string; subject: string; text: string; receivedAt: number }[] = [];
     for (const item of listed.messages ?? []) {
       if (!item.id) continue;
       const message = (await this.gmail(`/gmail/v1/users/me/messages/${encodeURIComponent(item.id)}?format=full`)) as GmailMessage;
       const receivedAt = Number(message.internalDate);
-      if (!Number.isFinite(receivedAt) || receivedAt < sinceMs) continue;
+      if (!Number.isFinite(receivedAt) || receivedAt < sinceMs || !senderAllowed(header(message, "from"), rule)) continue;
       out.push({ id: item.id, from: header(message, "from"), subject: header(message, "subject"), text: messageText(message.payload).slice(0, 20_000), receivedAt });
     }
     return out;

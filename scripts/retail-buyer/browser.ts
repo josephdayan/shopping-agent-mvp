@@ -32,7 +32,7 @@ export type StoreRecipe = {
   skuPrefix: string;
   auth?: "swift_email_code";
   // Regra de e-mail da loja para o leitor de códigos (registrada pelo run.mts).
-  mail?: { label: string; domains: string[] };
+  mail?: { label: string; domains: string[]; senders?: { domain: string; name: string }[] };
   // Meio de pagamento que o comprador seleciona no checkout (default: cartão salvo até a Fase 1).
   payment?: "saved_card" | "pix";
   submitSelector?: string;
@@ -79,7 +79,7 @@ export const VTEX_RECIPES: Record<string, StoreRecipe> = {
     origin: "https://www.swift.com.br",
     skuPrefix: "swift-",
     auth: "swift_email_code",
-    mail: { label: "swift", domains: ["swift.com.br"] },
+    mail: { label: "swift", domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }] },
   },
   divvino: { origin: "https://www.divvino.com.br", skuPrefix: "divvino-" },
   kopenhagen: {
@@ -306,6 +306,10 @@ export class VtexBuyer {
       (url) => !url.pathname.toLowerCase().includes("quickaccess"),
       { timeout: 20_000 },
     );
+    // Conferido em 13/09: com e-mail sem conta, a VTEX aceita o código e cai em /register
+    // (cadastro com CPF/senha). Isso não é login; o cadastro é do dono, pelo setup.
+    if (/\/register\b/i.test(new URL(this.page.url()).pathname))
+      throw new Error("A loja pediu cadastro: não existe conta da Lia neste e-mail. Faça o cadastro pelo setup da loja.");
   }
   async prepare(
     job: BuyerJob,

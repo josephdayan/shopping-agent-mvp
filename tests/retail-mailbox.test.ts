@@ -107,6 +107,29 @@ test("loja registrada pelo config ganha regra de e-mail; loja desconhecida nunca
   assert.throws(() => registerStoreMail("loja", { label: "loja", domains: ["semdominio"] }), /inválida/);
 });
 
+test("remetente de plataforma (vtexcommerce) só vale com o nome de exibição exato da loja", () => {
+  const vtex = (from: string) =>
+    extractStoreAccessCode("swift", message({ from, subject: "Sua chave de acesso é 377843", body: "Swift: sua chave de acesso é 377843" }));
+  assert.equal(vtex("Loja Online Swift <noreply@vtexcommerce.com.br>"), "377843");
+  assert.equal(vtex('"Loja Online Swift" <noreply@vtexcommerce.com.br>'), "377843");
+  assert.equal(vtex("Loja Online Outra <noreply@vtexcommerce.com.br>"), null);
+  assert.equal(vtex("noreply@vtexcommerce.com.br"), null);
+  assert.equal(vtex("Loja Online Swift <noreply@golpe.example.test>"), null);
+  // Texto real da Swift (13/09): "é" entre a palavra-chave e o código, telefones de 4 dígitos no rodapé.
+  assert.equal(
+    extractStoreAccessCode("swift", message({
+      from: "Loja Online Swift <noreply@vtexcommerce.com.br>",
+      subject: "Sua chave de acesso é 773684",
+      body: "<p>O seu código de acesso é 773684</p><p>Olá joseph, retorne à página de login e insira o código acima. Abraços, Equipe SWIFT</p><p>Telefone do SAC: 0800 400 2892 De Segunda a Sábado das 8h às 20h</p>",
+    })),
+    "773684",
+  );
+  assert.throws(
+    () => registerStoreMail("loja", { label: "loja", domains: ["loja.com"], senders: [{ domain: "semdominio", name: "Loja" }] }),
+    /inválida/,
+  );
+});
+
 test("credenciais incompletas são recusadas antes de acessar a rede", () => {
   assert.throws(
     () =>

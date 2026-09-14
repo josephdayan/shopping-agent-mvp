@@ -17,6 +17,8 @@ test("classificação: remetente da loja, assunto explícito e número obrigató
   assert.deepEqual(classifyStoreMail("swift", { from: "Swift <pedidos@swift.com.br>", subject: "Seu pedido saiu para entrega", text }),
     { kind: "out_for_delivery", storeOrderNumber: "1234567890-01", trackingUrl: "https://www.swift.com.br/rastreio/abc" });
   assert.equal(classifyStoreMail("swift", { from: "golpe@example.test", subject: "Seu pedido saiu para entrega", text }), null);
+  assert.equal(classifyStoreMail("swift", { from: "Loja Online Swift <noreply@vtexcommerce.com.br>", subject: "Seu pedido saiu para entrega", text })?.kind, "out_for_delivery");
+  assert.equal(classifyStoreMail("swift", { from: "Outra Loja <noreply@vtexcommerce.com.br>", subject: "Seu pedido saiu para entrega", text }), null);
   assert.equal(classifyStoreMail("swift", { from: "pedidos@swift.com.br", subject: "Promoção da semana", text }), null);
   assert.equal(classifyStoreMail("swift", { from: "pedidos@swift.com.br", subject: "Pedido entregue", text: "sem número" }), null);
   assert.equal(classifyStoreMail("mercadolivre", { from: "Mercado Livre <info@mercadolivre.com.br>", subject: "Sua compra chegou!", text: "Compra #2000012345678901" })?.kind, "delivered");
