@@ -1,3 +1,19 @@
+## 13/09/2026 — tokens do comprador conferidos; E2 Swift parou no e-mail da conta
+
+Tokens locais testados contra a produção (corpo vazio, sem efeito): o de compra já batia;
+o de rastreio divergia (401) e foi rotacionado com autorização do dono — valor novo na
+Vercel (`LIA_TRACKING_WORKER_TOKEN`) e no Chaves (`Lia Tracking Worker`), redeploy feito,
+os dois agora respondem 400 (autenticados, corpo inválido) e `/ops` 200. Endereço
+operacional de sondagem gravado no bloco `probe` do `config.json` privado; `mercadolivre`
+cadastrado nas lojas do comprador. Sondagem E2 da Swift rodou duas vezes sem criar pedido:
+o comprador pediu a chave do "Acesso Rápido" para a caixa autorizada em E0, e nenhum e-mail
+da Swift chegou em 90 s. Busca somente leitura na caixa (inclusive spam, sem limite de data)
+não encontrou NENHUMA mensagem de `swift.com.br` ou `cobasi.com.br`, embora as sondagens de
+07/09 tenham recebido códigos "no e-mail operacional". Conclusão: a caixa autorizada em E0
+não é a caixa das contas Swift/Cobasi. Decisão pendente do dono: autorizar a caixa certa
+(refazer `mailbox-authorize` nela) ou migrar as contas das lojas para a caixa autorizada.
+Mercado Livre segue bloqueado por limite de tentativas (aguardar, uma tentativa só).
+
 ## 13/09/2026 — E8 bloqueado pelo limite de tentativas do Mercado Livre
 
 Captura enviada pelo dono mostra: “Você alcançou o limite de tentativas. Por favor,
