@@ -62,6 +62,6 @@ export const asaasPixOut: PixOutProvider = {
   },
   async status(providerPayoutId): Promise<PixPayStatus> {
     const r = await call(`/pix/transactions/${encodeURIComponent(providerPayoutId)}`);
-    return { status: mapStatus(r.status), endToEndId: (r.endToEndIdentifier as string | undefined) ?? null, reason: typeof r.refusalReason === "string" ? r.refusalReason : undefined };
+    return { status: mapStatus(r.status), endToEndId: (r.endToEndIdentifier as string | undefined) ?? null, reason: typeof r.refusalReason === "string" ? r.refusalReason : String(r.status ?? "") };
   },
 };
