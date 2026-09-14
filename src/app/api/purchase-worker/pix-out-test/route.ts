@@ -24,7 +24,8 @@ export async function POST(request: Request) {
     const charge = await pixAdapter.createPix({ orderId, amount: AMOUNT_CENTS / 100, description: "Lia E6 Pix de saida", payerEmail: "lia@liadelivery.com.br" });
     const emv = parsePixEmv(charge.copiaECola);
     report.charge = { pixId: charge.pixId, valid: emv.valid, dynamic: emv.dynamic, merchant: emv.merchantName };
-    if (!emv.valid || !emv.dynamic) throw new Error("Cobrança do Mercado Pago não é um Pix dinâmico válido.");
+    // O MP emite copia-e-cola por chave (estático com txid); a regra "só dinâmica" vale para a loja.
+    if (!emv.valid) throw new Error("Cobrança do Mercado Pago não é um Pix válido.");
     const decoded = await asaasPixOut.decode(charge.copiaECola);
     report.decoded = { ...decoded, receiverDoc: decoded.receiverDoc.replace(/^(\d{3})\d+(\d{2})$/, "$1…$2") };
     if (decoded.amountCents !== AMOUNT_CENTS) throw new Error(`Valor decodificado ${decoded.amountCents} ≠ ${AMOUNT_CENTS}.`);
