@@ -51,3 +51,20 @@ export async function POST(request: Request) {
     return NextResponse.json(report, { status: 502 });
   }
 }
+
+// Consulta posterior do mesmo teste: ?payoutId=<Asaas>&pixId=<Mercado Pago>. Nunca paga de novo.
+export async function GET(request: Request) {
+  if (!purchaseWorkerAuthorized(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const url = new URL(request.url);
+  const payoutId = url.searchParams.get("payoutId")?.trim();
+  const pixId = url.searchParams.get("pixId")?.trim();
+  const out: Record<string, unknown> = { checkedAt: new Date().toISOString() };
+  try {
+    if (payoutId) out.asaasStatus = await asaasPixOut.status(payoutId);
+    if (pixId) out.mercadoPagoStatus = await pixAdapter.getStatus(pixId);
+    return NextResponse.json(out);
+  } catch (error) {
+    out.error = error instanceof Error ? error.message : "erro";
+    return NextResponse.json(out, { status: 502 });
+  }
+}
