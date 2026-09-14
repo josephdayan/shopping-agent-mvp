@@ -820,7 +820,7 @@ export class VtexBuyer {
   async submit() {
     if (new URL(this.page.url()).origin !== this.recipe.origin)
       throw new Error("Página final fora da loja.");
-    if (!this.recipe.submitSelector || !this.recipe.receipt)
+    if (!this.recipe.submitSelector || !(this.recipe.receipt || this.recipe.checkoutFlow))
       throw new Error("Finalização ainda não homologada nesta loja.");
     const button = this.page.locator(this.recipe.submitSelector);
     if (
@@ -865,6 +865,7 @@ export class VtexBuyer {
     throw new Error("Copia-e-cola do Pix não apareceu no prazo.");
   }
   async receipt() {
+    if (this.recipe.checkoutFlow === "cobasi") return this.receiptFromOrdersPage();
     const r = this.recipe.receipt;
     if (!r) throw new Error("Comprovante não configurado.");
     await this.page
@@ -884,6 +885,31 @@ export class VtexBuyer {
         Number(raw.replace(/[^\d,]/g, "").replace(",", ".")) * 100,
       ),
     };
+  }
+  // Cobasi (E3 real em 13/09, pedido v146373290cbs-01): após "Concluir pedido" a tela fica na
+  // Revisão com o modal do Pix e NÃO mostra o número. O comprovante é a primeira linha de
+  // "Minhas compras" (/minha-conta/pedidos): "#v…cbs-01  R$ 10,70  01 item", criada agora.
+  private async receiptFromOrdersPage() {
+    const deadline = Date.now() + 60_000;
+    for (;;) {
+      await this.page.goto(`${this.recipe.origin}/minha-conta/pedidos`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+      await this.page.waitForTimeout(5_000);
+      if (new URL(this.page.url()).origin !== this.recipe.origin) throw new Error("Comprovante fora da loja.");
+      const text = (await this.page.locator("body").innerText().catch(() => "")).replace(/\s+/g, " ");
+      const first = text.match(/(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}) #(v?\d{6,13}[a-z]{0,4}-\d{2}) R\$\s*([\d.]+,\d{2})/i);
+      if (first) {
+        const [, when, storeOrderNumber, raw] = first;
+        const [d, m, rest] = when.split("/");
+        const created = new Date(`${rest.slice(0, 4)}-${m}-${d}T${rest.slice(5)}:00-03:00`).getTime();
+        if (Number.isFinite(created) && Math.abs(Date.now() - created) > 6 * 3_600_000)
+          throw new Error("Último pedido em Minhas compras não é de agora.");
+        return {
+          storeOrderNumber,
+          actualTotalCents: Math.round(Number(raw.replace(/\./g, "").replace(",", ".")) * 100),
+        };
+      }
+      if (Date.now() > deadline) throw new Error("Minhas compras não mostrou o pedido no prazo.");
+    }
   }
 }
 export async function closeProfile(context: BrowserContext) {

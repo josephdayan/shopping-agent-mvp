@@ -17,6 +17,7 @@ import { trackingPageAllowed } from "../../src/lib/tracking-policy";
 import { GmailCodeMailbox, registerStoreMail } from "./mailbox";
 import { MercadoLivreBuyer, ML_RECIPE, type MercadoLivreRecipe } from "./mercadolivre";
 import { classifyStoreMail, STORE_MAIL_RULES } from "../../src/lib/mailbox-policy";
+import { parsePixEmv } from "../../src/lib/pix-emv";
 type AnyRecipe = StoreRecipe | MercadoLivreRecipe;
 const isMl = (r: AnyRecipe): r is MercadoLivreRecipe => (r as MercadoLivreRecipe).kind === "mercadolivre";
 
@@ -165,8 +166,12 @@ if (command === "mailbox-check") {
   console.log(JSON.stringify({ mailbox: "gmail", status: "ready" }));
   process.exit(0);
 }
-if (command === "probe") {
-  // Gate E2: até a tela de pagamento com Pix selecionado, sem finalizar, sem servidor.
+if (command === "probe" || command === "e3") {
+  // Gate E2 (probe): até a tela de pagamento com Pix selecionado, sem finalizar, sem servidor.
+  // Gate E3 (e3): o MESMO caminho e, só com LIA_E3_CONFIRM=sim e o dono aprovando o comando,
+  // UM clique no botão final, captura do copia-e-cola e foto do comprovante. O Pix é pago
+  // pelo dono no app do banco; o carrinho não é esvaziado (o pedido existe na loja).
+  const e3 = command === "e3";
   const store = process.argv[3];
   const skuArg = process.argv[4];
   const recipe = config.stores[store];
@@ -259,7 +264,40 @@ if (command === "probe") {
     }
     Object.assign(report, await buyer.probeReport());
     await page.screenshot({ path: resolve(probesDir, `${store}-${stamp}.png`), fullPage: true }).catch(() => {});
-    if (report.prepared) {
+    const ready =
+      report.prepared === true && !report.paymentScreenError && report.pixSelected === true &&
+      report.challengeVisible === false && report.finalizeButtons === 1 && report.finalizeEnabled === true;
+    if (e3 && ready && process.env.LIA_E3_CONFIRM === "sim") {
+      // Clique único e supervisionado. Captura primeiro (resposta do conector), DOM depois.
+      const armed = buyer.armPixCapture();
+      try {
+        const button = page.getByRole("button", { name: /concluir pedido|finalizar compra|finalizar pedido/i });
+        if ((await button.count()) !== 1) throw new Error("Botão final não identificado com segurança.");
+        await button.click({ timeout: 15_000 });
+        report.submittedAt = new Date().toISOString();
+        try {
+          const code = await buyer.capturePixCode(armed, 120_000);
+          report.pixCaptured = true;
+          report.pixAmountCents = parsePixEmv(code).amountCents;
+          report.pixMerchant = parsePixEmv(code).merchantName;
+          // O copia-e-cola vai só para a saída (o dono paga); nunca para o JSON em disco.
+          console.log(`PIX_COPIA_E_COLA ${code}`);
+        } catch (error) {
+          report.pixCaptured = false;
+          report.pixError = error instanceof Error ? error.message : "erro";
+        }
+      } finally {
+        armed.dispose();
+      }
+      await page.waitForTimeout(8_000);
+      report.afterUrl = page.url();
+      const text = (await page.locator("body").innerText().catch(() => "")).replace(/\s+/g, " ");
+      report.afterText = text.slice(0, 1_500);
+      report.orderNumberCandidates = [...new Set(text.match(/\b\d{6,13}-\d{2}\b|#\s?\d{6,}/g) ?? [])].slice(0, 5);
+      await page.screenshot({ path: resolve(probesDir, `${store}-${stamp}-e3.png`), fullPage: true }).catch(() => {});
+      report.cartCleared = false;
+    } else if (report.prepared) {
+      if (e3) report.e3Skipped = !ready ? "tela final não confirmada" : "LIA_E3_CONFIRM ausente";
       try {
         await buyer.clearPreparedCart(job);
         report.cartCleared = true;
@@ -403,7 +441,7 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       );
       return;
     }
-    if (!recipe.submitSelector || !recipe.receipt)
+    if (!recipe.submitSelector || !(recipe.receipt || recipe.checkoutFlow))
       throw new Error(
         "Finalização/comprovante precisam ser homologados nesta loja.",
       );
@@ -611,7 +649,7 @@ await Promise.all(
   Object.entries(config.stores).map(async ([store, recipe]) => {
     do {
       try {
-        const executable = isMl(recipe) || Boolean(recipe.submitSelector && recipe.receipt);
+        const executable = isMl(recipe) || Boolean(recipe.submitSelector && (recipe.receipt || recipe.checkoutFlow));
         const { job } =
           purchaseToken && executable
             ? await purchase({ action: "claim", workerId, stores: [store] })

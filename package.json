@@ -28,6 +28,7 @@
     "purchase-worker:verify-ui": "tsx scripts/retail-buyer/verify-ui.mts",
     "purchase-worker:once": "tsx scripts/retail-buyer/run.mts once",
     "purchase-worker:probe": "tsx scripts/retail-buyer/run.mts probe",
+    "purchase-worker:e3": "tsx scripts/retail-buyer/run.mts e3",
     "purchase-worker:install-service": "bash scripts/retail-buyer/install-launchd.sh"
   },
   "dependencies": {

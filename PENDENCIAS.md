@@ -1,3 +1,24 @@
+## 14/09/2026 — E3 Cobasi concluído: pedido real v146373290cbs-01 (R$10,70), clique automático, Pix capturado, pago pelo dono
+
+Comando novo `npm run purchase-worker:e3 -- cobasi` (só com `LIA_E3_CONFIRM=sim` e o dono
+aprovando o comando no app): mesmo caminho da sondagem até a Revisão, um clique em
+"Concluir pedido" (13/09 22:56, sem desafio do reCAPTCHA invisível), copia-e-cola capturado
+na própria tela (modal "Pagar com Pix", 60 min, QR **dinâmico do Itaú sem valor embutido**,
+recebedor "UNIAO PET PARTICIPACOES S"), impresso só na saída (nunca em disco). O dono pagou
+no app do banco; "Minhas compras" da conta mostra **Pagamento aprovado, #v146373290cbs-01,
+R$ 10,70, 13/09 23:00**, entrega Econômica em até 1 dia útil no endereço do dono.
+Aprendizados codificados: (1) a tela após o clique NÃO mostra o número — `receipt()` da
+Cobasi lê a primeira linha de `/minha-conta/pedidos` (número + valor, criada há < 6 h);
+(2) numeração `v…cbs-01` no classificador de e-mail; (3) `submitSelector`
+(`button:has-text("Concluir pedido")`) no `config.json` privado; lojas com `checkoutFlow`
+dispensam seletores de comprovante. Regra do servidor conferida: valor de QR dinâmico vem
+do `decode` do banco (`decoded.amountCents ?? emv.amountCents`), então a Cobasi passa.
+Falta para a Cobasi comprar sozinha de ponta a ponta: banco (Asaas, decidido pelo dono em
+14/09; conta é do dono — abrir conta é ação que o assistente não executa), chave
+`ASAAS_API_KEY` na Vercel, E6 com R$1, `LIA_PIX_OUT_PROVIDER=asaas`, conta Cobasi no /ops
+(pix_out, pronta) e `LIA_AUTO_PURCHASE_STORES=cobasi`. E-mail de confirmação da Cobasi ainda
+não tinha chegado à caixa às 23:05; observar remetente/assunto quando chegar (rastreio).
+
 ## 14/09/2026 — E2 Cobasi fechado ao vivo: comprador chega à Revisão com Pix, sem desafio
 
 Com o dono em modo manual de permissões, o checkout próprio da Cobasi foi mapeado e
