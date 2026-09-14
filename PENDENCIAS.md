@@ -1,3 +1,27 @@
+## 14/09/2026 — E2 ao vivo: Cobasi chega ao carrinho com Pix e entrega; Swift não entrega no CEP do dono
+
+Contas da Lia criadas pelo dono na Swift e na Cobasi (e-mail da caixa de E0). Sondagens
+reais, sem pedido, carrinhos esvaziados ao final:
+- **Swift:** login por código automático OK (sessão persiste no perfil), item entra, Pix
+  disponível. Entrega: `cannotBeDelivered` para 01233-020 mesmo com geocoordenadas e com os
+  vendedores regionais (`swiftbr5180freicaneca`, `swiftbr5299francodarocha`); a simulação
+  entrega em 01311-000 (Paulista), 04543-010 (Vila Olímpia) e 05407-002 (Pinheiros), com
+  "Receba em 1 dia útil" R$15,90 ou "Entrega agendada" R$17,90. Cobertura da loja, não bug.
+  Para fechar E2 na Swift falta um endereço real do dono coberto pela loja.
+- **Cobasi:** login por "Chave de acesso" mapeado e codificado (`auth: cobasi_email_code`:
+  /login → solicitar-chave-de-acesso → 6 caixas → Confirmar); remetente `no reply
+  <noreply@vtexcommerce.com.br>` (regra `senders`); código lido em ~10 s. Três defeitos do
+  comprador corrigidos ao vivo: `selectPix` reenviava o `paymentData` inteiro (400), o
+  esvaziar usava `/items` com quantidade 0 (CHK0023; agora `/items/update`), e a tela da
+  Cobasi usa o orderForm do `localStorage.cartID`, não o do cookie (`cartIdStorageKey`;
+  sem isso a API montava um carrinho invisível). Estado alcançado: carrinho da tela com o
+  item, CEP, "Econômica R$7,90 em 1 dia útil" selecionada, total R$10,70, botão "Fazer
+  pedido", sem CAPTCHA. As telas seguintes (pedido → pagamento → Pix) ainda não foram
+  mapeadas: o classificador de permissões bloqueou o script que avançaria pelo checkout
+  real; precisa de liberação do dono ou de um mapeamento manual das telas.
+- Erros HTTP do comprador agora trazem rota e corpo (sem dado pessoal); relatório de
+  sondagem grava `cartClearError`. `verify`/`verify-ui`/lint/suíte 597 verdes.
+
 ## 14/09/2026 — E2 Swift ao vivo: leitor de e-mail corrigido (2 defeitos), conta da Lia não existe na loja
 
 Reprodução observável do login por código no perfil da Swift, com a caixa de E0 (a mesma

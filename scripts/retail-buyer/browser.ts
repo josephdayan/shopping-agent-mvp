@@ -30,7 +30,9 @@ export type BuyerJob = {
 export type StoreRecipe = {
   origin: string;
   skuPrefix: string;
-  auth?: "swift_email_code";
+  auth?: "swift_email_code" | "cobasi_email_code";
+  // Chave do localStorage com o orderForm que a TELA usa (checkout próprio); ver read().
+  cartIdStorageKey?: string;
   // Regra de e-mail da loja para o leitor de códigos (registrada pelo run.mts).
   mail?: { label: string; domains: string[]; senders?: { domain: string; name: string }[] };
   // Meio de pagamento que o comprador seleciona no checkout (default: cartão salvo até a Fase 1).
@@ -72,7 +74,11 @@ export const VTEX_RECIPES: Record<string, StoreRecipe> = {
   cobasi: {
     origin: "https://www.cobasi.com.br",
     skuPrefix: "cobasi-",
-    mail: { label: "cobasi", domains: ["cobasi.com.br"] },
+    auth: "cobasi_email_code",
+    cartIdStorageKey: "cartID",
+    // Conferido em 14/09: a chave chega de "no reply <noreply@vtexcommerce.com.br>"; o texto
+    // precisa citar "cobasi" e o e-mail tem de chegar depois do pedido (regra do leitor).
+    mail: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }] },
   },
   oba: { origin: "https://secure.obahortifruti.com.br", skuPrefix: "oba-" },
   swift: {
@@ -257,13 +263,27 @@ export class VtexBuyer {
           body: body === undefined ? undefined : JSON.stringify(body),
           signal: AbortSignal.timeout(15_000),
         });
-        if (!response.ok) throw new Error(`checkout HTTP ${response.status}`);
+        if (!response.ok) {
+          // Diagnóstico: a VTEX explica o 400 no corpo (ex.: campo de endereço). Sem dado pessoal.
+          const detail = (await response.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 200);
+          throw new Error(`checkout HTTP ${response.status} em ${path.split("?")[0].replace(/\/[0-9a-f]{20,}\//i, "/…/")}${detail ? `: ${detail}` : ""}`);
+        }
         return response.json();
       },
       { path, body },
     );
   }
   async read() {
+    // Lojas com checkout próprio (Cobasi, 14/09) guardam o id do carrinho da tela no
+    // localStorage e ignoram o orderForm do cookie. Sem isso, a API monta um carrinho que a
+    // tela nunca mostra e o botão de finalizar não existe.
+    const key = this.recipe.cartIdStorageKey;
+    if (key) {
+      const id = await this.page
+        .evaluate((k: string) => window.localStorage.getItem(k), key)
+        .catch(() => null);
+      if (id && /^[0-9a-f]{32}$/i.test(id)) return this.api(`/api/checkout/pub/orderForm/${id}`);
+    }
     return this.api("/api/checkout/pub/orderForm");
   }
   private accountMatches(form: any, accountEmail?: string) {
@@ -278,8 +298,12 @@ export class VtexBuyer {
     job: BuyerJob,
     mailbox: { waitForCode(request: AccessCodeRequest): Promise<string> },
   ) {
-    if (this.recipe.auth !== "swift_email_code" || !job.accountEmail)
+    if (!this.recipe.auth || !job.accountEmail)
       throw new Error("Entre na conta de compras da Lia nesta loja.");
+    if (this.recipe.auth === "cobasi_email_code") {
+      await this.authenticateCobasi(job.accountEmail, mailbox);
+      return;
+    }
     const loginUrl = `${this.recipe.origin}/access?ReturnUrl=%2Fcheckout%2Faccount`;
     await this.page.goto(loginUrl, {
       waitUntil: "domcontentloaded",
@@ -308,8 +332,40 @@ export class VtexBuyer {
     );
     // Conferido em 13/09: com e-mail sem conta, a VTEX aceita o código e cai em /register
     // (cadastro com CPF/senha). Isso não é login; o cadastro é do dono, pelo setup.
-    if (/\/register\b/i.test(new URL(this.page.url()).pathname))
+    this.rejectRegisterPage();
+  }
+  private rejectRegisterPage() {
+    if (/\/(register|cadastr)/i.test(new URL(this.page.url()).pathname))
       throw new Error("A loja pediu cadastro: não existe conta da Lia neste e-mail. Faça o cadastro pelo setup da loja.");
+  }
+  // Cobasi (VTEX IO), mapeado ao vivo em 14/09: /login → "Chave de acesso" →
+  // /login/solicitar-chave-de-acesso (e-mail + "Enviar código", modal "Código enviado"/Fechar)
+  // → /login/chave-de-acesso (6 caixas key-0..key-5 + Confirmar) → home logada.
+  private async authenticateCobasi(
+    accountEmail: string,
+    mailbox: { waitForCode(request: AccessCodeRequest): Promise<string> },
+  ) {
+    await this.page.goto(`${this.recipe.origin}/login`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+    await this.page.getByRole("button", { name: /Chave de acesso/i }).first().click();
+    await this.page.waitForURL(/solicitar-chave-de-acesso/, { timeout: 15_000 });
+    await this.page.locator("input[type=email]:visible, input[name=email]:visible").first().fill(accountEmail);
+    const requestedAt = Date.now();
+    await this.page.getByRole("button", { name: /Enviar código/i }).first().click();
+    const close = this.page.getByRole("button", { name: /^Fechar$/i });
+    await close.first().waitFor({ state: "visible", timeout: 10_000 }).catch(() => undefined);
+    if (await close.count()) await close.first().click();
+    await this.page.waitForURL(/\/login\/chave-de-acesso/, { timeout: 15_000 });
+    const code = await mailbox.waitForCode({ storeKey: "cobasi", requestedAt });
+    const boxes = this.page.locator('input[name^="key-"]:visible');
+    const n = await boxes.count();
+    if (n >= code.length) {
+      for (let i = 0; i < code.length; i += 1) await boxes.nth(i).fill(code[i]);
+    } else {
+      await this.page.locator("input:visible").first().fill(code);
+    }
+    await this.page.getByRole("button", { name: /^Confirmar$/i }).first().click();
+    await this.page.waitForURL((url) => !url.pathname.toLowerCase().startsWith("/login"), { timeout: 20_000 });
+    this.rejectRegisterPage();
   }
   async prepare(
     job: BuyerJob,
@@ -487,8 +543,9 @@ export class VtexBuyer {
     if (!system) throw new Error("A loja não oferece Pix neste checkout.");
     await this.api(
       `/api/checkout/pub/orderForm/${form.orderFormId}/attachments/paymentData`,
+      // Só o que o attachment aceita (14/09: a Cobasi devolve 400 se o paymentData inteiro
+      // do orderForm — bandeiras, parcelas, contas — for reenviado no corpo).
       {
-        ...form.paymentData,
         payments: [
           {
             paymentSystem: String(system.id),
@@ -497,6 +554,7 @@ export class VtexBuyer {
             referenceValue: form.value,
           },
         ],
+        giftCards: form.paymentData?.giftCards ?? [],
       },
     );
   }
@@ -668,7 +726,9 @@ export class VtexBuyer {
       )
     )
       throw new Error("Carrinho mudou; não remover itens sem conferência.");
-    await this.api(`/api/checkout/pub/orderForm/${form.orderFormId}/items`, {
+    // 14/09: a Cobasi recusa quantidade 0 em /items (CHK0023); /items/update é a rota de
+    // alteração da VTEX e funciona na Swift e na Cobasi.
+    await this.api(`/api/checkout/pub/orderForm/${form.orderFormId}/items/update`, {
       orderItems: items.map((_i: unknown, index: number) => ({
         index,
         quantity: 0,

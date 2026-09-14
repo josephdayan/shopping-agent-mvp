@@ -124,6 +124,15 @@ test("remetente de plataforma (vtexcommerce) só vale com o nome de exibição e
     })),
     "773684",
   );
+  // Cobasi (14/09): "no reply" no domínio da VTEX; o texto ainda precisa citar a loja.
+  assert.equal(
+    extractStoreAccessCode("cobasi", message({ from: "no reply <noreply@vtexcommerce.com.br>", subject: "Sua chave de acesso: 417226", body: "Cobasi: use a chave 417226 para entrar." })),
+    "417226",
+  );
+  assert.equal(
+    extractStoreAccessCode("cobasi", message({ from: "no reply <noreply@vtexcommerce.com.br>", subject: "Sua chave de acesso: 417226", body: "Outra loja: use a chave 417226 para entrar." })),
+    null,
+  );
   assert.throws(
     () => registerStoreMail("loja", { label: "loja", domains: ["loja.com"], senders: [{ domain: "semdominio", name: "Loja" }] }),
     /inválida/,

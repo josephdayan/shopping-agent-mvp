@@ -104,7 +104,8 @@ try {
       if (request.method() === "POST") {
         mutations++;
         const body = request.postDataJSON();
-        if (path.endsWith("/items"))
+        // /items adiciona; /items/update altera quantidade (0 remove) — as duas rotas da VTEX.
+        if (path.endsWith("/items") || path.endsWith("/items/update"))
           form.items = body.orderItems
             .filter((i: any) => i.quantity > 0)
             .map((i: any) => ({
@@ -134,7 +135,8 @@ try {
               },
             ],
           };
-        else if (path.endsWith("/paymentData")) form.paymentData = body;
+        // Como a VTEX: o attachment troca payments/giftCards e preserva o resto (paymentSystems…).
+        else if (path.endsWith("/paymentData")) form.paymentData = { ...form.paymentData, ...(body as object) };
         else throw new Error("Mutação inesperada");
       }
       return route.fulfill({ json: form });

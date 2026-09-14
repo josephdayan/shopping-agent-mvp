@@ -17,7 +17,7 @@ const VTEX_KINDS: Rule["kinds"] = [
 const VTEX_NUMBER = /\b(\d{9,13}-\d{2})\b/;
 export const STORE_MAIL_RULES: Record<string, Rule> = {
   swift: { domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }], number: VTEX_NUMBER, kinds: VTEX_KINDS },
-  cobasi: { domains: ["cobasi.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
+  cobasi: { domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   rihappy: { domains: ["rihappy.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   drogariasp: { domains: ["drogariasaopaulo.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   naturaldaterra: { domains: ["naturaldaterra.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },

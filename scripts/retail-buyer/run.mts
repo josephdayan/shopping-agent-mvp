@@ -204,7 +204,7 @@ if (command === "probe") {
       }
       await page.screenshot({ path: resolve(probesDir, `${store}-${stamp}.png`), fullPage: true }).catch(() => {});
       if (report.prepared) {
-        try { await buyer.clearPreparedCart(mlJob); report.cartCleared = true; } catch { report.cartCleared = false; }
+        try { await buyer.clearPreparedCart(mlJob); report.cartCleared = true; } catch (error) { report.cartCleared = false; report.cartClearError = error instanceof Error ? error.message : "erro"; }
       }
     } finally {
       await context.close();
@@ -259,8 +259,9 @@ if (command === "probe") {
       try {
         await buyer.clearPreparedCart(job);
         report.cartCleared = true;
-      } catch {
+      } catch (error) {
         report.cartCleared = false;
+        report.cartClearError = error instanceof Error ? error.message : "erro";
       }
     }
   } finally {
