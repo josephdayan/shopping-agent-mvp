@@ -1,3 +1,21 @@
+## 14/09/2026 — Asaas aberto e aprovado; E6 (R$1) parado em AWAITING_CRITICAL_ACTION_AUTHORIZATION
+
+Conta Asaas PJ (MEI) criada e aprovada pelo dono; chave de API gravada por ele na Vercel
+(`ASAAS_API_KEY`, sensível) e `ASAAS_ENV=production`. Como as credenciais de produção são
+sensíveis (não saem da Vercel), o E6 roda no servidor: `POST /api/purchase-worker/pix-out-test`
+(token do comprador) cria uma cobrança Pix de R$1 no Mercado Pago da Lia, decodifica e paga
+pelo adaptador Asaas; `GET ?payoutId&pixId` consulta os dois lados sem pagar de novo.
+Resultados reais: o Mercado Pago emite copia-e-cola por chave (parser: estático, txid) —
+a regra "só dinâmica" continua valendo só para a loja; `decode` do Asaas OK (recebedor
+67.742.955 Joseph Carlos Dayan, R$1,00, tipo static); 1ª tentativa recusada por saldo
+(dono depositou); 2ª: `pay` aceito em 0,9 s (id 3135e78f…), mas fica em
+**AWAITING_CRITICAL_ACTION_AUTHORIZATION** — o Asaas exige autorização do dono para
+transferência via API (risco previsto no plano). Providências do dono: autorizar o R$1 e
+desligar a exigência para a API (Integrações → Segurança / Minha Conta → Segurança →
+Ações críticas). Só depois: `LIA_PIX_OUT_PROVIDER=asaas` + `LIA_AUTO_PURCHASE_STORES=cobasi`.
+Conta Cobasi cadastrada no /ops pelo dono (pix_out, pronta). `status()` do adaptador agora
+devolve o status bruto em `reason`. Suíte 597/597.
+
 ## 14/09/2026 — E3 Cobasi concluído: pedido real v146373290cbs-01 (R$10,70), clique automático, Pix capturado, pago pelo dono
 
 Comando novo `npm run purchase-worker:e3 -- cobasi` (só com `LIA_E3_CONFIRM=sim` e o dono
