@@ -340,6 +340,25 @@ Por pedido do dono, preparar todas as lojas nos perfis persistentes do comprador
 
 # Lia — contexto obrigatório para agentes
 
+## 15/09/2026 — botão do card: "Adicionar ao carrinho"
+
+Dono: "muda o escolher esse pra adicionar ao carrinho no card". Limites da Meta mandam no
+texto: botão de template (carrossel) aceita 25 caracteres, botão de mensagem interativa
+aceita 20 e a Meta RECUSA a mensagem inteira se passar. "Adicionar ao carrinho" tem 21.
+- Carrossel: `CAROUSEL_ADD_BUTTON = "Adicionar ao carrinho"` (meta-setup.ts).
+- Card interativo do fallback: `CARD_ADD_BUTTON = "Adicionar"` (adapters/whatsapp.ts), com
+  teste garantindo ≤ 20 em todo botão de card.
+- Copies alinhadas (`productDetailsLink`, `productDetailsList`, `demonstrativeNeedsChoice`,
+  corpo do carrossel).
+- Texto de botão é parte do template → **templates v3** (`vitrine_carrossel_v3_2..5`,
+  prefixo `CAROUSEL_TEMPLATE_PREFIX`). Enquanto os v3 não são criados/aprovados, o envio
+  do carrossel falha no Graph ("template name does not exist"), é capturado e a vitrine
+  sai nos cards soltos já com "Adicionar" — sem apagão.
+- Ambiente: o `git` do sistema aponta pro Xcode sem licença aceita; usei
+  `/Library/Developer/CommandLineTools/usr/bin/git`. Pro dono resolver de vez:
+  `sudo xcodebuild -license` (precisa da senha dele).
+
+
 ## 10/09/2026 — vitrine de 5 no carrossel, 3 nos cards soltos
 
 Dono: "agora que tem carrossel fica suave colocar umas 5 … um pouco mais de variação, mas

@@ -615,6 +615,13 @@ compra por evento e acompanhar por evidência/pacote. Métricas do razão são u
 recente e incompleta, sem comprovação de retenção ou rentabilidade.
 
 
+## 15/09/2026 — botão "Adicionar ao carrinho"
+
+O botão do card virou "Adicionar ao carrinho" (carrossel) / "Adicionar" (card solto, teto de
+20 da Meta). Código publicado; **falta criar e aprovar os templates `vitrine_carrossel_v3_2..5`**
+(precisa de uma sessão do /ops). Até lá a vitrine cai nos cards soltos, já com o texto novo.
+Detalhe em AGENTS.md (15/09).
+
 ## 10/09/2026 — vitrine de 5 no carrossel
 
 Com o carrossel ligado a vitrine mostra até 5 opções (3 nos cards soltos e no fallback); a IA
