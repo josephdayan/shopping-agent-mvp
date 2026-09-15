@@ -1,3 +1,16 @@
+## 15/09/2026 — Áudio e foto: falta o teste ao vivo
+
+A Lia já lê áudio e foto (transcrição + visão, entrando no mesmo NLU do texto; ver AGENTS).
+O que ainda NÃO foi provado:
+
+- **1 áudio real + 1 foto real no número de produção**, com leitura do runtime log. A suíte
+  é mockada: ela não prova o download de mídia da Graph (a URL assinada exige o mesmo Bearer,
+  e um 401 ali só aparece ao vivo — mesma lição dos cards que a Meta aceitava e descartava).
+  Sugestão de sondagem: áudio ditando dois itens, e foto do rótulo de algo que acabou.
+- **Custo por mensagem** medido de verdade (estimativa: áudio de 30 s ≈ R$0,02; foto ≈
+  R$0,01–0,03). Se pesar, `LIA_MEDIA_IMAGE=false` desliga só a foto.
+- Decidir se **figurinha** merece resposta melhor que o aviso de texto (hoje: aviso).
+
 ## 15/09/2026 — Cobasi LIGADA de ponta a ponta: E6 pago, provedor Asaas, allowlist, serviço local
 
 E6 fechado após o dono habilitar a validação de saque via webhook no Asaas: R$1 pago

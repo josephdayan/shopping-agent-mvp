@@ -29,6 +29,7 @@ import * as copy from "@/lib/lia-copy";
 // every customer-facing string lives in lia-copy.
 import { ACTIVE_ORDER_STATUSES, BasketItem, CANCELABLE_FALLBACK_STATUSES, ChoiceOption, ChoicesResult, DeliveryContext, ExtractedLines, PendingChoice, STORE_SEARCH_URL, basketForCopy, cardTotal, conciergeStoresBelowMinimum, display, orderDateLabel, orderItemsPreview, orderStore, roundMoney, storeMinReal } from "./conversation-types";
 import { createOpsLoginToken, opsLoginUrl } from "./auth";
+import { derivedMessageLabel, understandMedia, type InboundMedia } from "./media-understanding";
 import { TurnSupersededError, acquireTurnLock, addressOnlyCtx, getOrCreateConvo, isFreightChoicePayload, lastActivityAt, markTurnReplied, normalizePhone, notifyOperator, quoteAbandonTtlMs, readCtx, releaseTurnLock, rememberCtxSnapshot, reply, replyQuoteNotice, searchNoticeTimer, sleep, turnMeta, writeCtx, isAdminPhone } from "./turn-runtime";
 import { cancelPendingRetailerQuote, closeUnpaidOrder, createCardAttempt, flagLatestOrder, handleSavedCardOther, handleSavedCardPay, issueValidatedRetailerQuotePayment, markDeliveryOrderPaid, markPixExpired, methodFromIntent, reopenOrderForEdit, resendCharge, switchPaymentMethod } from "./order-payments";
 import { opsPublishManualQuote, recordWaitlistLead, sendFreightChoice } from "./ops-lifecycle";
@@ -760,10 +761,18 @@ async function offerMinimumSwap(
 
 // ---------- the WhatsApp conversation state machine ----------
 
-export async function handleDeliveryMessage(input: { phone?: string; text: string; name?: string; messageId?: string }) {
+export async function handleDeliveryMessage(input: {
+  phone?: string;
+  text: string;
+  name?: string;
+  messageId?: string;
+  // Áudio ou foto que o cliente mandou (14/09): só o id da Meta — vira texto depois do
+  // dedupe, em `understandMedia`.
+  media?: InboundMedia;
+}) {
   const phone = normalizePhone(input.phone);
   turnStartedAt.set(phone, Date.now());
-  const text = (input.text ?? "").trim();
+  let text = (input.text ?? "").trim();
   const { user, convo } = await getOrCreateConvo(phone, input.name);
 
   // Twilio/Meta retry the webhook when a turn is slow — never process the same inbound
@@ -781,7 +790,30 @@ export async function handleDeliveryMessage(input: { phone?: string; text: strin
     throw error;
   }
 
-  // Mensagem sem texto legível (áudio, imagem, figurinha, tipo desconhecido): resposta
+  // Áudio e foto viram texto AQUI, depois do dedupe (14/09): transcrever custa segundos,
+  // e turno lento é exatamente quando a Meta re-entrega o mesmo wamid — do outro lado do
+  // dedupe cada áudio é baixado, transcrito e ecoado UMA vez. O texto derivado segue pelo
+  // mesmo NLU de quem digitou; o eco ("🎧 Ouvi: …") vai antes da busca porque
+  // transcrição erra e o cliente precisa ver o que ela entendeu enquanto ainda dá pra
+  // corrigir.
+  if (!text && input.media) {
+    const understood = await understandMedia(input.media);
+    if (!understood) {
+      await reply(phone, copy.mediaNotUnderstood(input.media.kind));
+      return;
+    }
+    text = understood.text;
+    if (inboundMessageId) {
+      // A conversa gravada tem que dizer que aquilo veio de áudio/foto: transcrição
+      // errada não pode parecer coisa que o cliente digitou.
+      await prisma.message
+        .update({ where: { id: inboundMessageId }, data: { text: derivedMessageLabel(understood.kind, text) } })
+        .catch(() => undefined);
+    }
+    await reply(phone, copy.mediaUnderstood(understood.kind, text));
+  }
+
+  // Mensagem sem texto legível (figurinha, vídeo, contato, tipo desconhecido): resposta
   // honesta em vez de silêncio — antes caía num 400 mudo no webhook (28/08). Fica
   // DEPOIS do dedupe pra retry da Meta não repetir o aviso.
   if (!text) {

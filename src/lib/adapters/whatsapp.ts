@@ -19,6 +19,11 @@ type RawInbound = {
           };
           // Botão "Enviar localização" (04/09): coordenadas + endereço se o cliente quis.
           location?: { latitude?: number; longitude?: number; name?: string; address?: string };
+          // Mídia (14/09): a Meta NÃO manda o arquivo no webhook, só o id — os bytes
+          // saem de `downloadMetaMedia`. Áudio de voz vem como type "audio" com
+          // `voice: true`; foto como "image" (com legenda opcional).
+          audio?: { id?: string; mime_type?: string; voice?: boolean };
+          image?: { id?: string; mime_type?: string; caption?: string };
           type?: string;
         }>;
       };
@@ -518,6 +523,20 @@ export const whatsappAdapter = {
           : undefined,
       // Resposta de Flow (formulário): objeto já parseado, ou undefined.
       flowResponse: parseFlowResponse(metaMessage?.interactive?.nfm_reply?.response_json),
+      // Áudio/foto (14/09): só o id + o mime; os bytes vêm depois, por `downloadMetaMedia`
+      // (a URL da Graph expira em ~5 min, então nada de guardar pra depois). A legenda da
+      // foto entra aqui em vez de virar `text`, senão o cérebro trataria "quero 2 desse"
+      // como pedido sem produto — o entendimento da imagem é que fecha a frase.
+      media: metaMessage?.audio?.id
+        ? { kind: "audio" as const, id: metaMessage.audio.id, mimeType: metaMessage.audio.mime_type }
+        : metaMessage?.image?.id
+          ? {
+              kind: "image" as const,
+              id: metaMessage.image.id,
+              mimeType: metaMessage.image.mime_type,
+              caption: stringFromPayload(metaMessage.image.caption)
+            }
+          : undefined,
       // Tipo do conteúdo Meta ("text", "reaction", "audio", "image", "sticker"…) — o
       // webhook decide o que ignorar (reação) e o que avisar ("só leio texto").
       messageType: (metaMessage as { type?: string } | undefined)?.type,
@@ -772,6 +791,56 @@ export const whatsappAdapter = {
       });
     } catch (error) {
       console.warn("[whatsapp:meta:typing-failed]", error instanceof Error ? error.message : error);
+      return null;
+    }
+  },
+
+  // Baixa a mídia que o cliente mandou (áudio/foto). A Meta manda só o id no webhook:
+  // são DOIS passos na Graph — o id devolve uma URL assinada de vida curta (~5 min) e a
+  // URL devolve os bytes, e as duas chamadas precisam do Bearer. Nunca lança: falha vira
+  // null e a Lia avisa que não entendeu, em vez de silêncio.
+  // `LIA_MEDIA_MAX_BYTES` (12 MB) é o teto: transcrever um arquivo gigante estouraria o
+  // turno antes de responder qualquer coisa.
+  async downloadMedia(mediaId: string): Promise<{ bytes: Uint8Array; mimeType: string } | null> {
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    if (!mediaId || !token) return null;
+    const version = process.env.WHATSAPP_GRAPH_API_VERSION ?? "v21.0";
+    const timeout = Number(process.env.LIA_MEDIA_TIMEOUT_MS ?? 15000);
+    const maxBytes = Number(process.env.LIA_MEDIA_MAX_BYTES ?? 12_000_000);
+    try {
+      const metaResponse = await fetch(`https://graph.facebook.com/${version}/${encodeURIComponent(mediaId)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: AbortSignal.timeout(timeout),
+        cache: "no-store"
+      });
+      if (!metaResponse.ok) {
+        console.warn("[whatsapp:meta:media-meta-failed]", metaResponse.status, await metaResponse.text().catch(() => ""));
+        return null;
+      }
+      const info = (await metaResponse.json()) as { url?: string; mime_type?: string; file_size?: number };
+      if (!info.url) return null;
+      if (info.file_size && info.file_size > maxBytes) {
+        console.warn("[whatsapp:meta:media-too-big]", info.file_size);
+        return null;
+      }
+      // O download exige o MESMO Bearer: a URL assinada sozinha devolve 401.
+      const fileResponse = await fetch(info.url, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: AbortSignal.timeout(timeout),
+        cache: "no-store"
+      });
+      if (!fileResponse.ok) {
+        console.warn("[whatsapp:meta:media-download-failed]", fileResponse.status);
+        return null;
+      }
+      const bytes = new Uint8Array(await fileResponse.arrayBuffer());
+      if (!bytes.length || bytes.length > maxBytes) {
+        console.warn("[whatsapp:meta:media-size]", bytes.length);
+        return null;
+      }
+      return { bytes, mimeType: info.mime_type ?? fileResponse.headers.get("content-type") ?? "application/octet-stream" };
+    } catch (error) {
+      console.warn("[whatsapp:meta:media-error]", error instanceof Error ? error.message : error);
       return null;
     }
   },

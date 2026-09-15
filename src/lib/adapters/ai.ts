@@ -306,3 +306,115 @@ export function interpretCustomerMessage(input: RouterInput): Promise<RouterVerd
 export function __setRouterInterpreterForTests(fn: ((input: RouterInput) => Promise<RouterVerdict | null>) | null) {
   routerImpl = fn ?? interpretCustomerMessageReal;
 }
+
+// ---------- áudio e foto do cliente (14/09) ----------
+// O WhatsApp é um canal de VOZ e FOTO: muita gente dita o pedido em vez de digitar, e
+// mandar a foto do rótulo do que acabou é mais rápido que escrever a marca. Antes a Lia
+// respondia "só leio texto" e o cliente tinha que refazer o pedido na mão. As duas
+// funções abaixo devolvem TEXTO, e o resto do cérebro segue igual — quem manda áudio cai
+// no mesmo NLU de quem digitou. Nunca lançam: null = não entendi (a Lia pede por texto).
+
+// Áudio de voz → frase. WhatsApp manda OGG/Opus, que a API de transcrição aceita direto
+// (sem converter). `language: pt` corta a chance de a IA "ouvir" espanhol num áudio curto.
+export async function transcribeCustomerAudio(bytes: Uint8Array, mimeType: string): Promise<string | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+  try {
+    const form = new FormData();
+    form.append("file", new Blob([bytes as unknown as BlobPart], { type: mimeType || "audio/ogg" }), audioFileName(mimeType));
+    form.append("model", process.env.OPENAI_TRANSCRIBE_MODEL ?? "gpt-4o-mini-transcribe");
+    form.append("language", "pt");
+    // Vocabulário do domínio: sem isso "Boticário" e "Cobasi" saem fonéticos e a busca
+    // perde a marca que o cliente falou.
+    form.append(
+      "prompt",
+      "Pedido de compras no WhatsApp, português do Brasil. Marcas e lojas comuns: Carrefour, Petz, Cobasi, Boticário, Pague Menos, Drogasil, Oba Hortifruti, Kalunga, Decathlon, Ri Happy."
+    );
+    const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      signal: AbortSignal.timeout(Number(process.env.LIA_AUDIO_TIMEOUT_MS ?? 20000)),
+      body: form
+    });
+    if (!response.ok) {
+      console.warn("[ai:transcribe:failed]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
+    const payload = (await response.json()) as { text?: string };
+    const text = payload.text?.trim();
+    return text ? text : null;
+  } catch (error) {
+    console.warn("[ai:transcribe:error]", error instanceof Error ? error.message : error);
+    return null;
+  }
+}
+
+// A API de transcrição escolhe o decoder pela EXTENSÃO do arquivo enviado, não pelo
+// content-type — um .bin com áudio Opus dentro é rejeitado. O mime da Meta vem como
+// "audio/ogg; codecs=opus", então o parâmetro é cortado antes do mapa.
+function audioFileName(mimeType: string): string {
+  const base = (mimeType || "").split(";")[0].trim().toLowerCase();
+  const ext =
+    base === "audio/ogg" || base === "audio/opus"
+      ? "ogg"
+      : base === "audio/mpeg" || base === "audio/mp3"
+        ? "mp3"
+        : base === "audio/mp4" || base === "audio/m4a" || base === "audio/x-m4a"
+          ? "m4a"
+          : base === "audio/amr"
+            ? "amr"
+            : base === "audio/wav" || base === "audio/x-wav"
+              ? "wav"
+              : base === "audio/webm"
+                ? "webm"
+                : "ogg";
+  return `audio.${ext}`;
+}
+
+// Foto → pedido em palavras. Casos reais que isso resolve: foto do rótulo do que acabou,
+// foto da lista de compras no papel, print de um produto em outro site. `NAO_PRODUTO`
+// (selfie, meme, print sem produto) volta como null e a Lia pede por texto — chutar
+// produto a partir de foto ambígua é pior que perguntar.
+export async function describeProductImage(bytes: Uint8Array, mimeType: string, caption?: string): Promise<string | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+  try {
+    const base = (mimeType || "image/jpeg").split(";")[0].trim().toLowerCase();
+    const dataUrl = `data:${base};base64,${Buffer.from(bytes).toString("base64")}`;
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      signal: AbortSignal.timeout(Number(process.env.LIA_VISION_TIMEOUT_MS ?? 20000)),
+      body: JSON.stringify({
+        model: process.env.OPENAI_VISION_MODEL ?? process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
+        input: [
+          {
+            role: "system",
+            content:
+              "Você recebe uma FOTO que um cliente mandou no WhatsApp de uma concierge de compras, e às vezes a legenda dele. Escreva o PEDIDO em uma linha, do jeito que o cliente falaria com um atendente: nome do produto + marca + tamanho/variante quando aparecerem na foto, e a quantidade se a legenda pedir. Se a foto é uma LISTA escrita (papel, bloco de notas, print de conversa), transcreva os itens separados por vírgula, sem numeração. Regras: (1) só escreva o que dá pra LER ou reconhecer com certeza na foto — nunca invente marca, sabor ou tamanho; (2) se a foto não tem nenhum produto comprável (selfie, pessoa, animal de estimação, paisagem, meme, documento, print sem produto), responda exatamente NAO_PRODUTO; (3) se a foto é de um remédio/medicamento, responda exatamente NAO_PRODUTO; (4) não escreva frase de apresentação, explicação ou observação — só o pedido. Exemplos de resposta: 'shampoo Pantene Restauração 400ml'; 'ração Golden Formula adulto frango 15kg'; 'arroz, feijão, óleo de soja, papel higiênico'; '2 latas de leite ninho 380g'."
+          },
+          {
+            role: "user",
+            content: [
+              ...(caption?.trim() ? [{ type: "input_text", text: `Legenda do cliente: ${caption.trim()}` }] : []),
+              { type: "input_image", image_url: dataUrl }
+            ]
+          }
+        ]
+      })
+    });
+    if (!response.ok) {
+      console.warn("[ai:vision:failed]", response.status, await response.text().catch(() => ""));
+      return null;
+    }
+    const payload = (await response.json()) as { output_text?: string; output?: Array<{ content?: Array<{ text?: string }> }> };
+    const raw = (payload.output_text ?? payload.output?.flatMap((item) => item.content ?? []).find((content) => content.text)?.text ?? "").trim();
+    if (!raw || /^n[ãa]o[_ ]?produto$/i.test(raw)) return null;
+    // Teto defensivo: a linha vai virar mensagem do cliente no cérebro, não um texto.
+    return raw.replace(/\s+/g, " ").slice(0, 300);
+  } catch (error) {
+    console.warn("[ai:vision:error]", error instanceof Error ? error.message : error);
+    return null;
+  }
+}

@@ -1,3 +1,46 @@
+## 15/09/2026 — A Lia passou a LER áudio e foto do cliente
+
+Até aqui só texto entrava: áudio, foto e figurinha caíam em "só consigo ler texto" e o
+cliente refazia o pedido na mão. Agora áudio e foto viram TEXTO e seguem pelo mesmo NLU de
+quem digitou — um caminho só, nenhuma regra de produto duplicada.
+
+- **Mídia da Meta são dois passos na Graph**, não um: o webhook recebe só o `media.id`; o id
+  devolve uma URL assinada de vida curta (~5 min) e a URL devolve os bytes — e as DUAS
+  chamadas precisam do `Bearer WHATSAPP_ACCESS_TOKEN` (a URL sozinha dá 401).
+  `whatsappAdapter.downloadMedia` faz isso e nunca lança.
+- **Áudio** → `/v1/audio/transcriptions` (`gpt-4o-mini-transcribe`, `language: pt`). O OGG/Opus
+  do WhatsApp vai direto, sem conversão, mas o arquivo precisa ir com **extensão** certa
+  (`audio.ogg`): a API escolhe o decoder pela extensão, não pelo content-type. O prompt leva
+  o vocabulário das lojas, senão "Boticário"/"Cobasi" saem fonéticos e a busca perde a marca.
+- **Foto** → Responses API com `input_image` (data URL). Resolve rótulo do que acabou, lista
+  escrita no papel e print de produto. `NAO_PRODUTO` (selfie, meme, remédio) vira null: **não
+  se chuta produto a partir de foto ambígua**. A legenda entra junto e, se a foto não der
+  produto mas a legenda já for um pedido, vale a legenda.
+- **A conversão fica DEPOIS do dedupe**, dentro de `handleDeliveryMessage`. Transcrever custa
+  segundos e turno lento é exatamente quando a Meta re-entrega o mesmo wamid — do outro lado
+  do dedupe cada áudio é baixado, transcrito e ecoado UMA vez (senão: custo dobrado e dois
+  ecos).
+- **Eco antes da busca** ("🎧 Ouvi: …" / "📷 Na foto eu vi: …"): transcrição erra, e o cliente
+  tem que ver o que ela entendeu enquanto ainda dá pra corrigir. Zero espera: sai na hora,
+  antes da cotação.
+- **A conversa gravada diz a origem** (`[áudio] …` / `[foto] …`): transcrição errada não pode
+  parecer coisa que o cliente digitou.
+- Flags: `LIA_MEDIA_AUDIO=false` / `LIA_MEDIA_IMAGE=false` desligam separado (custo e latência
+  são diferentes); `LIA_MEDIA_MAX_BYTES` (12 MB), `LIA_MEDIA_TIMEOUT_MS`, `LIA_AUDIO_TIMEOUT_MS`,
+  `LIA_VISION_TIMEOUT_MS`, `OPENAI_TRANSCRIBE_MODEL`, `OPENAI_VISION_MODEL`. Falha fechada:
+  qualquer erro vira "não consegui entender o áudio/a foto", nunca silêncio.
+- Figurinha, vídeo, contato e documento continuam no aviso — que agora diz a verdade:
+  "texto, áudio e foto".
+
+Código: `src/lib/media-understanding.ts` (orquestração, deps injetáveis),
+`downloadMedia` em `adapters/whatsapp.ts`, `transcribeCustomerAudio` +
+`describeProductImage` em `adapters/ai.ts`, encaixe em `delivery-service.ts`.
+Testes: `tests/media-understanding.test.ts` (16) + `tests/media-inbound.db.test.ts` (5,
+inclui o retry da Meta não transcrevendo duas vezes). Build e guarda de emoji passam.
+
+**Não homologado ao vivo**: suíte mockada não prova o download da Graph (mesma lição dos
+cards de 08/08). Falta 1 áudio + 1 foto reais no número de produção com leitura do log.
+
 ## 15/09/2026 — Cobasi LIGADA de ponta a ponta: E6 pago, provedor Asaas, allowlist, serviço local
 
 E6 fechado após o dono habilitar a validação de saque via webhook no Asaas: R$1 pago

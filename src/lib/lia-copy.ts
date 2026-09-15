@@ -987,9 +987,24 @@ export function categoryRemoveUnknown(category: string): string {
 }
 
 // "n" na pergunta de quantidade: 1 unidade + a saída honesta (28/08 S16).
-// Cliente mandou áudio/imagem/figurinha: por enquanto a Lia só lê texto.
+// Cliente mandou figurinha, vídeo, contato, documento: tipos que a Lia não lê.
 export function nonTextMessage(): string {
-  return "Por enquanto eu só consigo ler texto 🙂 Me escreve o que você precisa?";
+  return "Por enquanto eu só consigo ler texto, áudio e foto 🙂 Me escreve o que você precisa?";
+}
+
+// Áudio/foto que a Lia não conseguiu entender (transcrição vazia, foto sem produto,
+// download falhou). Diz o que aconteceu e o caminho de saída — nunca "erro".
+export function mediaNotUnderstood(kind: "audio" | "image"): string {
+  return kind === "audio"
+    ? "Não consegui entender o áudio 😕 Manda de novo ou me escreve o que você precisa?"
+    : "Olhei a foto mas não identifiquei um produto 😕 Me escreve o que você precisa?";
+}
+
+// Eco do que a Lia ouviu/viu, ANTES de buscar: mandar áudio e receber a busca direto deixa
+// o cliente sem saber se ela entendeu certo — e transcrição erra. Com o eco, o erro
+// aparece na hora e ele corrige antes de a cesta encher.
+export function mediaUnderstood(kind: "audio" | "image", text: string): string {
+  return kind === "audio" ? `🎧 Ouvi: *${text}*` : `📷 Na foto eu vi: *${text}*`;
 }
 
 // Rede de segurança: o turno terminou sem NENHUMA resposta — melhor um pedido de
