@@ -2,7 +2,7 @@ import { chromium, type BrowserContext, type Page } from "playwright-core";
 import { createHash } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
-import { humanEstimate } from "../../src/lib/live-freight";
+import { humanEstimate, estimateMinutes, promisedMinutes } from "../../src/lib/live-freight";
 import type { CheckoutEvidence } from "../../src/lib/purchase-execution";
 import { findPixCode, PIX_EMV_RE } from "../../src/lib/pix-emv";
 import type { AccessCodeRequest } from "./mailbox";
@@ -542,16 +542,21 @@ export class VtexBuyer {
           price: number;
         }[];
       }) => {
+        // Entrega da loja com prazo igual ou MENOR que o prometido ao cliente, a mais barata.
+        // (15/09: igualdade de texto quebrava com "pela própria loja · prazo da loja: 7 dias
+        // úteis" × "prazo da loja: 7 dias úteis"; e um prazo melhor nunca é problema.)
+        const budget = promisedMinutes(job.deliveryPromise);
         const options = (line.slas ?? []).filter(
           (s) =>
             s.deliveryChannel === "delivery" &&
             Number.isFinite(s.price) &&
             s.price >= 0 &&
-            (!job.deliveryPromise ||
-              normalize(humanEstimate(s.shippingEstimate) ?? "") ===
-                normalize(job.deliveryPromise)),
+            (budget == null
+              ? !job.deliveryPromise ||
+                normalize(humanEstimate(s.shippingEstimate) ?? "") === normalize(job.deliveryPromise)
+              : estimateMinutes(s.shippingEstimate) >= 0 && estimateMinutes(s.shippingEstimate) <= budget),
         );
-        options.sort((a, b) => a.price - b.price);
+        options.sort((a, b) => a.price - b.price || estimateMinutes(a.shippingEstimate) - estimateMinutes(b.shippingEstimate));
         if (!options.length)
           throw new Error("Entrega escolhida não está mais disponível.");
         return {

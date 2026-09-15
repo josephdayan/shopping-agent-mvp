@@ -97,7 +97,7 @@ export function humanEstimate(estimate?: string): string | undefined {
 // "3bd" (dias úteis), "2d", "6h", "45m" → minutos, para comparar prazos entre itens.
 // Dia útil vale 1 dia aqui: a comparação só serve para dizer QUAL item chega por
 // último; a promessa exibida continua sendo a string original da loja.
-function estimateMinutes(estimate?: string): number {
+export function estimateMinutes(estimate?: string): number {
   const m = /^(\d+)\s*(bd|d|h|m)$/i.exec((estimate ?? "").trim());
   if (!m) return -1;
   const value = Number(m[1]);
@@ -353,4 +353,20 @@ export async function preflightBasket(items: { sku: string; qty: number; storeKe
     })
   );
   return results.find((r): r is PreflightFailure => r !== null) ?? null;
+}
+
+// Prazo PROMETIDO ao cliente ("pela própria loja · prazo da loja: 7 dias úteis", "prazo da
+// loja: 16h", "hoje") → minutos, para o comprador aceitar qualquer entrega da loja igual ou
+// mais rápida (15/09: a comparação por texto exato quebrava com o prefixo "pela própria loja").
+export function promisedMinutes(promise?: string): number | null {
+  const t = (promise ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  if (!t) return null;
+  if (/\bhoje\b/.test(t)) return 24 * 60;
+  const m = /(\d+)\s*(dias? uteis|dias?|h\b|horas?|min)/.exec(t);
+  if (!m) return null;
+  const value = Number(m[1]);
+  const unit = m[2];
+  if (unit.startsWith("min")) return value;
+  if (unit.startsWith("h")) return value * 60;
+  return value * 24 * 60;
 }
