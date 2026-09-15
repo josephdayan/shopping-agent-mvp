@@ -1,3 +1,21 @@
+## 15/09/2026 — Cobasi LIGADA de ponta a ponta: E6 pago, provedor Asaas, allowlist, serviço local
+
+E6 fechado após o dono habilitar a validação de saque via webhook no Asaas: R$1 pago
+(`DONE`, endToEnd E195405502026091500572ZC6XO0OHXJ) e aprovado no Mercado Pago em segundos,
+sem token de ação crítica — o suporte do Asaas não precisou ser acionado. Dono gravou
+`LIA_PIX_OUT_PROVIDER=asaas` e `LIA_AUTO_PURCHASE_STORES=cobasi` na Vercel (redeploy Ready) e
+salvou a conta Cobasi no /ops (e-mail operacional, login por código, pix_out, pronta,
+habilitada). Comprador instalado como serviço launchd no Mac do dono
+(`purchase-worker:install-service`, pid ativo, logs em ~/Library/Logs/lia/); a checagem de
+loja executável e o aviso de inicialização passaram a usar a receita mesclada
+(padrão + config), senão a Cobasi aparecia como "não configurada". `claimNextPurchaseJob`
+agora marca `lastSeenAt` das contas atendidas a cada consulta (sinal de vida no /ops).
+Fluxo vivo: pedido pago com item Cobasi ≤ R$500 → job → comprador (login por código,
+carrinho da tela, Concluir pedido, captura do Pix) → servidor confere e paga pelo Asaas →
+webhook aprova → conciliação → e-mails da loja (faturado, código de recebimento → cliente).
+Pendências: saldo no Asaas (dono), primeiro pedido real de cliente supervisionado, E8 do
+Mercado Livre (janela do Chrome do perfil precisa estar fechada), Swift fora por cobertura.
+
 ## 15/09/2026 — Webhook de validação de saque do Asaas; código de recebimento da Cobasi vai ao cliente
 
 **Asaas.** O R$1 do E6 foi autorizado pelo dono só horas depois e acabou recusado pela

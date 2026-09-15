@@ -202,6 +202,10 @@ export async function backfillPaidPurchaseJobs(limit = 25) {
 export async function claimNextPurchaseJob(workerId: string, allowedStores?: string[]) {
   await backfillPaidPurchaseJobs();
   const now = new Date();
+  // Cada consulta do comprador é sinal de vida das contas que ele atende (o /ops mostra
+  // "visto há X min" e o alarme de silêncio só dispara com job esperando e sem sinal).
+  if (allowedStores?.length)
+    await prisma.purchaseAccount.updateMany({ where: { storeKey: { in: allowedStores }, enabled: true }, data: { lastSeenAt: now } });
   const stale = new Date(now.getTime() - leaseMs());
   // Lease vencido é resultado desconhecido: nunca entregar o mesmo checkout a outro robô.
   await prisma.purchaseJob.updateMany({
