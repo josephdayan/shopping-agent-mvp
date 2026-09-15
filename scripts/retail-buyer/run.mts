@@ -113,6 +113,19 @@ if (command === "setup") {
   await new Promise<void>((r) => context.once("close", () => r()));
   process.exit(0);
 }
+// Log privado de erros do comprador (Mac do dono, modo 0600): motivo completo, que pode conter
+// endereço de cliente e URLs da loja — por isso nunca vai ao stderr nem ao servidor.
+async function privateErrorLog(jobId: string, store: string, error: unknown) {
+  try {
+    const { homedir } = await import("node:os");
+    const { appendFile } = await import("node:fs/promises");
+    const dir = resolve(homedir(), "Library", "Logs", "lia");
+    await mkdir(dir, { recursive: true, mode: 0o700 });
+    const message = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    const line = `${new Date().toISOString()} job=${jobId} store=${store} ${message.replace(/\s+/g, " ").slice(0, 2000)}\n`;
+    await appendFile(resolve(dir, "purchase-errors.log"), line, { mode: 0o600 });
+  } catch {}
+}
 function secret(name: string, service?: string) {
   if (process.env[name]?.trim()) return process.env[name]!.trim();
   if (service && process.platform === "darwin")
@@ -131,6 +144,20 @@ function secret(name: string, service?: string) {
       ).trim();
     } catch {}
   return undefined;
+}
+// Chave da IA que lê o endereço LIVRE do cliente (extractAddress). O serviço launchd não
+// herda o .env (15/09: primeiro pedido real caiu em 9 s por "Configure a chave da IA");
+// ordem: ambiente → Chaves ("Lia OpenAI Key") → OPENAI_API_KEY do .env do repositório.
+if (!process.env.OPENAI_API_KEY?.trim()) {
+  const fromKeychain = secret("OPENAI_API_KEY", "Lia OpenAI Key");
+  if (fromKeychain) process.env.OPENAI_API_KEY = fromKeychain;
+  else {
+    try {
+      const line = (await readFile(resolve(root, "..", ".env"), "utf8")).split("\n").find((l) => /^OPENAI_API_KEY=/.test(l));
+      const value = line?.slice("OPENAI_API_KEY=".length).trim().replace(/^["']|["']$/g, "");
+      if (value) process.env.OPENAI_API_KEY = value;
+    } catch {}
+  }
 }
 const purchaseToken = secret(
   "LIA_PURCHASE_WORKER_TOKEN",
@@ -523,7 +550,8 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       ...identity,
       code: "BROWSER_REVIEW_REQUIRED",
     }).catch(() => {});
-    // Erros do navegador podem conter endereço/URLs; não despejar o objeto bruto.
+    // Erros do navegador podem conter endereço/URLs; não despejar o objeto bruto no stderr.
+    // O motivo completo vai para um log privado do dono (só ele lê; nunca sobe ao servidor).
     console.error(
       JSON.stringify({
         job: job.jobId,
@@ -532,9 +560,10 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
         reason:
           error instanceof Error && error.message.startsWith("Servidor")
             ? error.message
-            : "Confira a conta e o carrinho no site; detalhes visíveis na janela operacional.",
+            : "Confira a conta e o carrinho no site; detalhes no log privado (~/Library/Logs/lia/purchase-errors.log).",
       }),
     );
+    await privateErrorLog(job.jobId, job.storeKey, error);
   } finally {
     clearInterval(heartbeat);
     await context?.close();
