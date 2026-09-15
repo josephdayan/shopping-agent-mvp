@@ -174,6 +174,9 @@ export function rememberCtxSnapshot(convoId: string, context: string | null) {
 }
 
 export async function writeCtx(convoId: string, ctx: DeliveryContext) {
+  // Carimbo único da escolha pendente (ver DeliveryContext.pendingSince).
+  if (ctx.pending?.length) ctx.pendingSince ??= Date.now();
+  else delete ctx.pendingSince;
   const next = JSON.stringify(ctx);
   const snapshots = turnStore.getStore();
   const snapshot = snapshots?.get(convoId);

@@ -880,7 +880,11 @@ async function handleDeliveryTurn(
   // com o relógio parado e podia ser expirado no meio de uma conversa viva.
   const idleSince = await lastActivityAt(convo.id, inboundMessageId);
   const idleMs = idleSince ? Date.now() - idleSince.getTime() : 0;
-  const stale = Boolean((ctx.basket?.length || ctx.pending?.length) && idleSince && idleMs > CART_TTL_MS);
+  // Escolha pendente também vence por idade absoluta (LIA_PENDING_TTL_MS, 6 h): a inatividade
+  // não basta, porque mensagens que não tocam no contexto ("ops" do dono) renovam o relógio.
+  const PENDING_TTL_MS = Number(process.env.LIA_PENDING_TTL_MS ?? 6 * 60 * 60 * 1000);
+  const pendingTooOld = Boolean(ctx.pending?.length && ctx.pendingSince && Date.now() - ctx.pendingSince > PENDING_TTL_MS);
+  const stale = Boolean((ctx.basket?.length || ctx.pending?.length) && idleSince && idleMs > CART_TTL_MS) || pendingTooOld;
   if (stale) {
     const hadBasket = (ctx.basket?.length ?? 0) > 0;
     const keptCep = ctx.cep;

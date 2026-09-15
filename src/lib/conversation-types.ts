@@ -121,6 +121,11 @@ export type DeliveryContext = {
   // (reclamação, atendimento humano, troca de método) renova (revisão 01/09).
   paymentIssuedAt?: number;
   pending?: PendingChoice[];
+  // Quando a escolha pendente atual nasceu (writeCtx carimba). Validade ABSOLUTA: uma lista
+  // de opções de dias atrás nunca é reenviada (caso real 15/09: "relógio" de 09/09 voltou
+  // no lugar da ração, porque "ops" do dono renovava o relógio de inatividade sem tocar no
+  // contexto).
+  pendingSince?: number;
   // Cotação instantânea PARADA esperando o cliente escolher a entrega (barata/lenta ×
   // rápida/cara do anúncio). Nada é cobrado antes do toque; os dois totais já estão
   // calculados, então a resposta publica a cotação na hora.
