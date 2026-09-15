@@ -10,6 +10,10 @@
 > **removidos** em 03/08; a entrega é do varejista (sem motoboy); as 107 unidades
 > geocodadas e as guardas de cobertura/km são legado do modelo de julho.
 
+> **Decisão vigente — 15/09/2026:** contratar um operador humano e suspender a compra
+> automática. O fluxo operacional é a fila/manual do `/ops`; os planos do comprador local,
+> allowlist automática e tarefa horária ficam históricos até nova decisão.
+
 Lia é uma **concierge de compras do dia a dia no WhatsApp**: o cliente pede itens em
 linguagem natural, recebe uma cotação do checkout real, paga por Pix/cartão, e a Lia compra
 para o varejista entregar diretamente. Este doc registra **por que** o produto é assim

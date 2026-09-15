@@ -1,5 +1,10 @@
 # Operador automático local — monitoramento de todas as lojas
 
+> **Decisão posterior — 15/09/2026:** além da tarefa horária do ChatGPT já aposentada, o
+> caminho inteiro de compra automática foi retirado da operação. O dono decidiu contratar
+> um operador humano; este arquivo é histórico e não deve ser usado para ativar ou executar
+> checkout automático. A fila/manual do `/ops` é a rota vigente.
+
 > **APOSENTADO em 11/09/2026.** O caminho da tarefa horária do ChatGPT (`cart_only`,
 > `/api/purchase-worker/claim`, `purchase-worker-client`) foi removido do código. O que
 > vale agora está em [operador-runbook.md](operador-runbook.md) (seção de 11/09) e no

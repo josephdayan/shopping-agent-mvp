@@ -10,6 +10,11 @@ loja como cliente comum e **a própria loja entrega**.
 > 06/09 (código, negócio, compra por IA e acompanhamento):
 > [docs/revisao-completa-2026-09-06.md](docs/revisao-completa-2026-09-06.md).
 
+> **Decisão vigente — 15/09/2026:** a operação vai contratar um operador humano e parou de
+> perseguir compra automática. O operador usa a fila/manual do `/ops` para cotar, comprar e
+> acompanhar os pedidos; o comprador local, a allowlist automática e a tarefa horária ficam
+> fora da operação até decisão posterior.
+
 ## Mapa do código
 
 | Peça | Onde |

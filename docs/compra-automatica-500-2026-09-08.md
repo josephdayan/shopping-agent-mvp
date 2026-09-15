@@ -1,5 +1,9 @@
 # Compra automática autorizada
 
+> **SUPERADO por decisão de 15/09/2026.** A autorização anterior de compra automática até
+> R$500 foi substituída pela decisão de contratar um operador humano e suspender checkout
+> automático. Não usar este documento para ativar lojas ou executar compras; ele é histórico.
+
 ## 08/09/2026 — autorização permanente de compra até R$ 500
 
 Dono: “sim isso sim. eu atorizo ate 500 reais. queroo mais automatico que der mesmo se isso significar menos lojas.” Autorizada compra sem aprovação individual. Interpretação conservadora comunicada: teto R$500 por pedido e R$500 total por dia de São Paulo, frete incluso; não interpretar como orçamento diário ilimitado. Priorizar poucas lojas com checkout real validado; interromper expansão de cadastros até concluir a primeira. Não exige loja parceira. Autorização não significa conta/cartão prontos.

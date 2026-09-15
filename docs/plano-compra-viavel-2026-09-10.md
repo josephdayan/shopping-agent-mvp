@@ -2,6 +2,10 @@
 
 **Estado: proposta para decisão do dono. Nenhum código, conta, compra ou deploy nesta entrega.**
 
+> **Decisão posterior — 15/09/2026:** a proposta foi encerrada operacionalmente. A decisão é
+> contratar um operador humano e suspender a compra automática; o conteúdo abaixo permanece
+> como análise histórica e não como plano ativo.
+
 Pergunta do dono (10/09): "está muito difícil de operar; não é realista comprar manualmente
 pra todos os clientes nem escalável; não está dando pra implementar a compra automatizada
 que bolamos; impossível que não exista forma melhor que uma tarefa agendada do meu GPT.

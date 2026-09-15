@@ -1,3 +1,16 @@
+## 15/09/2026 — Decisão vigente: contratar operador humano e parar a compra automática
+
+O dono decidiu contratar um operador humano para cotar, comprar e acompanhar os pedidos da
+Lia. A compra automatizada deixa de ser a estratégia operacional: não ativar novas lojas,
+não ampliar a allowlist, não usar o comprador local para checkout automático e não retomar
+a tarefa horária do ChatGPT. O fluxo de produção deve permanecer na fila/manual do `/ops`,
+com as exceções e confirmações feitas por uma pessoa.
+
+A vaga foi publicada no 99Freelas (projeto 784519); o Workana ainda não foi publicado porque
+a conta não foi reconhecida nessa sessão. Esta anotação registra a decisão e o estado de
+recrutamento; não altera flags, deploy ou contas de produção. Até o kill-switch operacional
+ser aplicado, tratar a automação existente como desligada por decisão e não executá-la.
+
 ## 15/09/2026 — Foto provada ao vivo; carrossel recusado em toda busca; demonstrativo virava busca
 
 Primeira rodada de teste real da leitura de mídia (agente testador, número do dono). Uma

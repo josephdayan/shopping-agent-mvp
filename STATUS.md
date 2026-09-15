@@ -1,3 +1,15 @@
+## 15/09/2026 — Decisão operacional: operador humano substitui compra automática
+
+Foi decidido contratar um operador humano para cotar, comprar e acompanhar os pedidos da
+Lia. A compra automática deixa de ser o caminho operacional: não ativar novas lojas, não
+ampliar `LIA_AUTO_PURCHASE_STORES`, não executar checkout automático pelo comprador local e
+não reativar a tarefa horária do ChatGPT. Pedidos devem seguir pela fila/manual do `/ops` e
+serem executados por uma pessoa, com as confirmações e exceções registradas.
+
+Recrutamento: vaga publicada no 99Freelas, projeto 784519. Workana não foi publicado porque
+a conta não foi reconhecida na sessão disponível. Esta entrada é documental; flags, deploy e
+contas de produção ainda não foram alterados nesta atualização.
+
 ## 15/09/2026 — Foto provada ao vivo; carrossel recusado em toda busca; demonstrativo virava busca
 
 Primeira rodada de teste real da leitura de mídia (agente testador, número do dono). Uma

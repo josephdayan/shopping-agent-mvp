@@ -1,3 +1,14 @@
+## 15/09/2026 — Nova decisão: contratar operador e suspender compra automática
+
+- [ ] **Aplicar o kill-switch operacional da compra automática** (`LIA_AUTO_PURCHASE_OFF=true`
+  e, por segurança, `LIA_PURCHASE_SUBMIT_OFF=true`), removendo/neutralizando a allowlist de
+  lojas automáticas. Não executar o comprador local nem qualquer tarefa horária enquanto isso
+  não estiver conferido; esta entrada apenas registra a decisão e ainda não alterou produção.
+- [ ] **Contratar e fazer onboarding do operador humano.** A vaga já está publicada no
+  99Freelas (projeto 784519). O Workana continua pendente porque a conta não foi reconhecida.
+- [ ] Atualizar o runbook para que a fila manual do `/ops` seja a única rota operacional e
+  marcar os planos de compra automática como históricos/superados.
+
 ## 15/09/2026 — Rodada 2 da mídia: o que falta pra ela valer
 
 A rodada 1 (agente testador) provou a FOTO ao vivo e derrubou dois bugs (carrossel 160 e

@@ -1,5 +1,10 @@
 # Plano de implementação — compra na loja, rastreio e pós-venda (11/09/2026)
 
+> **SUPERADO por decisão de 15/09/2026.** O dono decidiu contratar um operador humano e
+> parar com a compra automática. Este plano fica como histórico de implementação e não deve
+> ser retomado, nem usado para ativar allowlist, comprador local, Pix-out automático ou
+> checkout de Mercado Livre, sem nova decisão explícita.
+
 ## Contexto
 
 O dono opera a compra à mão e a única automação é uma tarefa horária do ChatGPT que ainda exige o clique dele. Nesta sessão fechamos o desenho (`docs/plano-compra-viavel-2026-09-10.md`, seções 3, 12 e 13) e as decisões: **Mercado Livre fica e é o canal principal** (sem API de compra; risco de Termos assumido), lojas VTEX executáveis **pagam a loja por Pix via API bancária**, **caixa de e-mail operacional legível por máquina** (leitor OAuth já escrito), **conta própria envelhecida por loja no Chrome local**, **exceções por um toque no WhatsApp do operador**, **modelo revenda** (sem CPF do cliente), **cliente paga primeiro**, teto R$500/pedido e /dia mantido, **fila manual explícita** para lojas não executáveis, **arrependimento com estorno imediato antes da compra** (decidido agora), e aposentar a tarefa do ChatGPT e o caminho de cartão salvo.

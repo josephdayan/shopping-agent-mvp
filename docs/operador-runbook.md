@@ -1,5 +1,12 @@
 # Runbook do Operador da Lia
 
+> **Decisão vigente de 15/09/2026 — operador humano.** A operação decidiu contratar uma
+> pessoa para cotar, comprar e acompanhar os pedidos. A compra automática está suspensa:
+> não ativar lojas na allowlist, não executar checkout pelo comprador local e não reativar a
+> tarefa horária do ChatGPT. A fila/manual do `/ops` é a rota operacional; os blocos abaixo
+> que descrevem o comprador automático ficam preservados como histórico até serem reescritos.
+> Esta atualização documental não alterou flags, deploy ou contas de produção.
+
 > **Conferência local 11/09:** serviços do Chaves: `Lia Purchase Worker` e
 > `Lia Tracking Worker` (conta `lia-purchase-worker`, sem sufixo “Token”). O primeiro
 > existe; o segundo falta neste Mac. OAuth Gmail concluído em 13/09, `mailbox-check` ready. Setup ML iniciado, login ainda não homologado.
