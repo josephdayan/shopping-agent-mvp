@@ -1,3 +1,27 @@
+## 15/09/2026 — Primeiro pedido real de cliente na Cobasi: 11 tentativas, 9 defeitos corrigidos, parou no reCAPTCHA visível
+
+Pedido #5GUY4Z (dono como cliente, lata Whiskas 290 g, R$21,50 pago por Pix; custo na loja
+R$19,29). Cada tentativa parou num defeito que só o pedido real revelava, todos corrigidos e
+commitados na hora: (1) serviço launchd sem a chave da IA do endereço; (2) endereço do pedido
+sem bairro/cidade/UF (servidor completa com a localidade do CEP); (3) entrega comparada por
+texto exato da promessa (agora prazo ≤ prometido, mais barata); (4) carrinho da loja deixado
+pela tentativa anterior (esvaziado à mão; regra do comprador de não mexer continua);
+(5) compra real ia ao cartão salvo (meio de pagamento agora vem da conta do /ops);
+(6) grafia oficial do CEP na loja ("Sousa" × "Souza"; aceita via base de CEP da própria
+loja); (7) clique "Ir para revisão" coberto por carregamento (45 s + networkidle);
+(8) servidor: endereço completado e prazo menor rejeitados na conferência (aceitos);
+(9) trava de homologação/captura do Pix liam a receita crua do config (mesclada).
+Na 10ª e 11ª o comprador clicou "Concluir pedido" de verdade e o **reCAPTCHA da Cobasi
+abriu o desafio de imagens** ("selecione as faixas de pedestres") — nenhum pedido criado,
+carrinho esvaziado, nada pago. Regra do projeto: nunca resolver CAPTCHA. Próximo passo
+(a implementar): detectar o desafio na hora (iframe bframe visível) e entregar ao dono por
+WhatsApp — a janela do comprador é headed no Mac dele, ele resolve o desafio como humano e
+o fluxo segue; sem resposta em N min, fila manual. O E3 passou uma vez sem desafio; a
+sequência de 11 tentativas no mesmo perfil provavelmente elevou o risco. Mercado Livre:
+login humano só vale na janela do comprador (cookies do Chrome normal são cifrados com outra
+chave), e a janela do comprador tomou "limite de tentativas" de novo — parado; alternativa
+técnica: comprador usar a chave de cookies do sistema para o perfil do ML.
+
 ## 15/09/2026 — A Lia passou a LER áudio e foto do cliente
 
 Até aqui só texto entrava: áudio, foto e figurinha caíam em "só consigo ler texto" e o
