@@ -11,7 +11,7 @@ import { prisma } from "@/lib/prisma";
 import * as copy from "@/lib/lia-copy";
 import { PURCHASE_BLOCKED_PREFIX } from "@/lib/order-monitor";
 import { BasketItem, FreightChoiceState, cardTotal, display, orderDateLabel, quoteTtlMinutes, roundMoney } from "./conversation-types";
-import { TurnSupersededError, addressOnlyCtx, deliverNotice, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { TurnSupersededError, addressOnlyCtx, deliverNotice, markTurnReplied, normalizePhone, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx, notifyOwner, operatorIsHired } from "./turn-runtime";
 import { humanEstimate } from "./live-freight";
 import { PLAN_B_ACCEPTED_PREFIX, PLAN_B_NONE_PREFIX, PLAN_B_OFFERED_PREFIX, blockedReasonOf, planBMarkerAt } from "./plan-b";
 import { issueValidatedRetailerQuotePayment } from "./order-payments";
@@ -557,7 +557,7 @@ export async function watchPaidOrder(
     const shortId = order.id.slice(-6).toUpperCase();
     try {
       await opsPurchaseFailedRefund(orderId, decision.customerReason, { origin: "auto", internalReason: decision.reason });
-      await notifyOperator(copy.operatorAutoRefundAlert(shortId, Number(order.total), decision.reason), order.phone);
+      await notifyOwner(copy.operatorAutoRefundAlert(shortId, Number(order.total), decision.reason), order.phone);
       return "auto_refunded";
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -573,7 +573,7 @@ export async function watchPaidOrder(
             )
           }
         });
-        await notifyOperator(copy.operatorAutoRefundFailedAlert(shortId, message), order.phone);
+        await notifyOwner(copy.operatorAutoRefundFailedAlert(shortId, message), order.phone);
       }
       return "auto_refund_failed";
     }
@@ -591,6 +591,11 @@ export async function watchPaidOrder(
   });
   const shortId = order.id.slice(-6).toUpperCase();
   await notifyOperator(copy.operatorPaidStuckAlert(shortId, bucketLabel(minutes), blockedReason), order.phone);
+  // Passou de 6h com o dinheiro parado: o dono também precisa saber. Antes de 6h o alerta
+  // é só de quem compra — cobrar o operador a cada 30 min não é assunto do dono.
+  if (bucket >= 360 && operatorIsHired()) {
+    await notifyOwner(copy.operatorPaidStuckAlert(shortId, bucketLabel(minutes), blockedReason), order.phone);
+  }
   // Cliente: bloqueio SEM plano B avisa já no 1º alerta ("estou tentando outra loja");
   // com plano B oferecido ele já tem a pergunta na tela. Sem bloqueio, só a partir de 6h
   // e depois em 24h/48h/72h — nunca a cada 10 min.

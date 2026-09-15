@@ -58,18 +58,62 @@ export async function deliverNotice(to: string, text: string, opts: { shortId?: 
   return "template";
 }
 
-// Telefones com poder de operador: LIA_OPERATOR_PHONE (alertas) + LIA_ADMIN_PHONES
-// (lista separada por vírgula). Só eles recebem o link de login do /ops.
-export function isAdminPhone(phone: string): boolean {
-  const list = [process.env.LIA_OPERATOR_PHONE ?? "", ...(process.env.LIA_ADMIN_PHONES ?? "").split(",")]
+// ---------- dois papéis (15/09/2026) ----------
+// Até aqui operador = dono: um número recebia "pedido pago, compre" e "pagamento fora do
+// esperado, confira no provedor". Com um operador CONTRATADO os dois assuntos se separam.
+// `LIA_OWNER_PHONE` é o dono; sem ele o dono continua sendo `LIA_OPERATOR_PHONE`, então
+// nada muda enquanto o Joseph operar sozinho.
+export type OperatorRole = "owner" | "operator";
+
+function phoneList(...values: (string | undefined)[]): string[] {
+  return values
+    .flatMap((value) => (value ?? "").split(","))
     .map((p) => p.trim())
     .filter(Boolean)
     .map((p) => normalizePhone(p));
-  return list.includes(normalizePhone(phone));
 }
 
+export function ownerPhones(): string[] {
+  const owner = process.env.LIA_OWNER_PHONE?.trim();
+  return phoneList(owner || process.env.LIA_OPERATOR_PHONE, process.env.LIA_ADMIN_PHONES);
+}
+
+// Papel do remetente, ou `null` para cliente comum. O dono ganha a disputa quando os dois
+// envs apontam para o mesmo número.
+export function phoneRole(phone: string): OperatorRole | null {
+  const normalized = normalizePhone(phone);
+  if (ownerPhones().includes(normalized)) return "owner";
+  const operator = process.env.LIA_OPERATOR_PHONE?.trim();
+  if (operator && normalizePhone(operator) === normalized) return "operator";
+  return null;
+}
+
+// Telefones com poder de operador: LIA_OPERATOR_PHONE (alertas) + LIA_OWNER_PHONE +
+// LIA_ADMIN_PHONES (lista separada por vírgula). Só eles recebem o link de login do /ops.
+export function isAdminPhone(phone: string): boolean {
+  return phoneRole(phone) !== null;
+}
+
+// Existe um operador CONTRATADO? (número de compra diferente do número do dono). É o que
+// decide alertas que só fazem sentido quando quem compra não é quem olha o painel.
+export function operatorIsHired(): boolean {
+  const operator = process.env.LIA_OPERATOR_PHONE?.trim();
+  return Boolean(operator) && phoneRole(operator!) === "operator";
+}
+
+// Quem COMPRA: pedido pago, pedido parado, item somado, botões de compra.
 export async function notifyOperator(text: string, customerPhone?: string) {
-  const to = process.env.LIA_OPERATOR_PHONE?.trim();
+  return notifyRole(process.env.LIA_OPERATOR_PHONE?.trim(), text, customerPhone);
+}
+
+// Quem responde pelo DINHEIRO e pelos incidentes: cobrança falhada, pagamento fora do
+// esperado, estorno automático, reclamação de cobrança indevida. Sem `LIA_OWNER_PHONE`
+// cai no mesmo número de sempre.
+export async function notifyOwner(text: string, customerPhone?: string) {
+  return notifyRole(ownerPhones()[0], text, customerPhone);
+}
+
+async function notifyRole(to: string | undefined, text: string, customerPhone?: string) {
   if (!to) return;
   // Operador comprando/testando como cliente: o alerta interno iria pro MESMO chat da
   // conversa (26/08 P1.9 — "[operador] Pedido #..." apareceu no meio do teste). Loga e

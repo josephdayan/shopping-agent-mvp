@@ -12,7 +12,7 @@ import { prisma } from "@/lib/prisma";
 import { preflightBasket } from "./live-freight";
 import * as copy from "@/lib/lia-copy";
 import { BasketItem, DeliveryContext, cardTotal, roundMoney } from "./conversation-types";
-import { addressOnlyCtx, markTurnReplied, mergeDecisionRequestFor, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx } from "./turn-runtime";
+import { addressOnlyCtx, markTurnReplied, mergeDecisionRequestFor, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx, notifyOwner, operatorIsHired } from "./turn-runtime";
 
 // createCardAttempt envia os botões do cartão salvo DIRETO pelo adapter (fora do
 // reply()) — sem esta marca a rede anti-silêncio achava o turno mudo e mandava
@@ -137,7 +137,7 @@ export async function reportChargeIssueFailure(
     console.error("[payment:issue:failed:note]", err);
   }
   await reply(phone, copy.paymentIssueFailed());
-  await notifyOperator(copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), detail), phone);
+  await notifyOwner(copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), detail), phone);
 }
 
 // Emite a cobrança de um pedido JÁ criado e aguardando pagamento (Pix copia-e-cola ou
@@ -530,7 +530,7 @@ export async function issueValidatedRetailerQuotePayment(
     // devolveria 500 pro webhook do WhatsApp e o cliente ficaria sem resposta nenhuma.
     if (error instanceof PaymentProviderError) {
       await reply(order.phone, copy.paymentIssueFailed());
-      await notifyOperator(
+      await notifyOwner(
         copy.operatorPaymentFailedAlert(order.id.slice(-6).toUpperCase(), error.message.slice(0, 180)),
         order.phone
       );
@@ -705,7 +705,7 @@ export async function recordUnexpectedPayment(
     status: order.status,
     reason
   });
-  await notifyOperator(copy.operatorUnexpectedPaymentAlert(order.id.slice(-6).toUpperCase(), detail), order.phone);
+  await notifyOwner(copy.operatorUnexpectedPaymentAlert(order.id.slice(-6).toUpperCase(), detail), order.phone);
   if (evidence.amount != null) await reply(order.phone, copy.unexpectedPaymentReceived(order.id.slice(-6).toUpperCase(), evidence.amount));
 }
 
@@ -737,7 +737,7 @@ export async function flagCardOutcomeUnknown(orderId: string, attemptId: string,
       data: { notes: appendOrderNote(order.notes, `${marker}: ${detail.slice(0, 160)}. Conferir no Pagar.me antes de cobrar/comprar.`) }
     });
   }
-  await notifyOperator(copy.operatorCardOutcomeUnknownAlert(order.id.slice(-6).toUpperCase(), detail.slice(0, 120)), order.phone);
+  await notifyOwner(copy.operatorCardOutcomeUnknownAlert(order.id.slice(-6).toUpperCase(), detail.slice(0, 120)), order.phone);
 }
 
 export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentEvidence, opts: { notifyCustomer?: boolean } = {}) {
@@ -795,10 +795,13 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   // novo que o cliente pediu não pode sumir em silêncio (revisão 01/09).
   if (pendingNewItem) await reply(order.phone, copy.newItemAfterPayment(pendingNewItem));
   // Pedido pago é o alerta mais urgente de todos: dinheiro na mão e ninguém comprando.
-  // Alerta de PAGO desligado por padrão (pedido do dono, 20/08 — ele é o operador e o
-  // /ops já mostra). Religar com LIA_OPERATOR_PAID_ALERT=true quando entrar gente de
-  // fora: foi este alerta que matou o pedido-zumbi de 2 dias em 11/08.
-  if (process.env.LIA_OPERATOR_PAID_ALERT === "true") {
+  // Ficou desligado enquanto o dono era o operador (20/08 — o /ops já mostra). Com um
+  // operador CONTRATADO ele volta sozinho: quem compra não fica olhando o painel o dia
+  // inteiro, e foi este alerta que matou o pedido-zumbi de 2 dias em 11/08.
+  // `LIA_OPERATOR_PAID_ALERT=false` desliga à força; `=true` liga mesmo sem operador.
+  const hiredOperator = operatorIsHired();
+  const paidAlert = process.env.LIA_OPERATOR_PAID_ALERT === "true" || (hiredOperator && process.env.LIA_OPERATOR_PAID_ALERT !== "false");
+  if (paidAlert) {
     await notifyOperator(copy.operatorPaidAlert(order.id.slice(-6).toUpperCase(), order.total), order.phone);
   }
   return order;

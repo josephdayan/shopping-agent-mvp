@@ -69,6 +69,49 @@ function opsToken(): string | null {
   return process.env.OPS_TOKEN || null;
 }
 
+// ---------- dois papéis no /ops (15/09/2026) ----------
+// A operação passou a ter um operador CONTRATADO, que não é o dono. Ele precisa da fila
+// de pedidos para comprar, mas não das contas/senhas das lojas, do Pix de saída nem do
+// setup da Meta. `OPS_OPERATOR_TOKEN` é um segundo segredo com acesso reduzido; sem ele
+// nada muda (só existe o dono). Trocar o token do operador derruba só a sessão dele,
+// porque o cookie é o HMAC do token que abriu a sessão.
+export type OpsRole = "owner" | "operator";
+
+function opsCredentials(): { role: OpsRole; token: string }[] {
+  const owner = opsToken();
+  const operator = process.env.OPS_OPERATOR_TOKEN || null;
+  const list: { role: OpsRole; token: string }[] = [];
+  if (owner) list.push({ role: "owner", token: owner });
+  // Token de operador igual ao do dono não rebaixa ninguém: o dono é avaliado primeiro.
+  if (operator && operator !== owner) list.push({ role: "operator", token: operator });
+  return list;
+}
+
+function presentedSecrets(request: Request, allowQuery: boolean): { headers: string[]; cookie: string | null } {
+  const header = request.headers.get("x-ops-key");
+  const query = allowQuery ? new URL(request.url).searchParams.get("key") : null;
+  const rawCookie = (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
+  let cookie: string | null = null;
+  if (rawCookie) {
+    try {
+      cookie = decodeURIComponent(rawCookie);
+    } catch {
+      cookie = rawCookie;
+    }
+  }
+  return { headers: [header, query].filter((v): v is string => v != null), cookie };
+}
+
+// Papel de quem está chamando, ou `null` quando nenhum segredo bate.
+export function opsRole(request: Request, options: { allowQuery?: boolean } = {}): OpsRole | null {
+  const { headers, cookie } = presentedSecrets(request, Boolean(options.allowQuery));
+  for (const { role, token } of opsCredentials()) {
+    if (headers.some((value) => safeEqual(value, token))) return role;
+    if (cookie != null && safeEqual(cookie, opsSessionCookieValue(token))) return role;
+  }
+  return null;
+}
+
 function safeEqual(a: string, b: string): boolean {
   const x = Buffer.from(a);
   const y = Buffer.from(b);
@@ -84,28 +127,36 @@ export function opsSessionCookieValue(token: string): string {
 export function opsKeyMatches(value: string | null | undefined): boolean {
   const expected = opsToken();
   if (!expected) return !process.env.VERCEL;
-  return value != null && safeEqual(value, expected);
+  return opsKeyRole(value) !== null;
+}
+
+// Chave crua do DONO (rotas que nunca foram do operador). Mantém a regra local de
+// `opsKeyMatches`: sem OPS_TOKEN, libera fora da Vercel.
+export function ownerKeyMatches(value: string | null | undefined): boolean {
+  if (!opsToken()) return !process.env.VERCEL;
+  return opsKeyRole(value) === "owner";
+}
+
+// Papel de uma chave crua (?key=…), para o login saber qual cookie gravar.
+export function opsKeyRole(value: string | null | undefined): OpsRole | null {
+  if (value == null) return null;
+  return opsCredentials().find((c) => safeEqual(value, c.token))?.role ?? null;
 }
 
 export function requireOpsKey(request: Request, options: { allowQuery?: boolean } = {}) {
   const expected = opsToken();
   if (!expected) return missingSecret("OPS_TOKEN");
-  const header = request.headers.get("x-ops-key");
-  const query = options.allowQuery ? new URL(request.url).searchParams.get("key") : null;
-  const rawCookie = (request.headers.get("cookie") ?? "").match(/(?:^|;\s*)ops_session=([^;]+)/)?.[1];
-  let cookie: string | null = null;
-  if (rawCookie) {
-    try {
-      cookie = decodeURIComponent(rawCookie);
-    } catch {
-      cookie = rawCookie;
-    }
-  }
-  const ok =
-    (header != null && safeEqual(header, expected)) ||
-    (query != null && safeEqual(query, expected)) ||
-    (cookie != null && safeEqual(cookie, opsSessionCookieValue(expected)));
-  if (!ok) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!opsRole(request, options)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  return null;
+}
+
+// Rotas que mexem em credencial de loja, dinheiro de saída ou configuração do canal: o
+// operador contratado é barrado no SERVIDOR, não só escondido na tela.
+export function requireOpsOwner(request: Request, options: { allowQuery?: boolean } = {}) {
+  const denied = requireOpsKey(request, options);
+  if (denied) return denied;
+  if (opsRole(request, options) !== "owner")
+    return NextResponse.json({ error: "owner_only" }, { status: 403 });
   return null;
 }
 
@@ -123,20 +174,33 @@ function loginSignature(secret: string, exp: string, nonce: string): string {
   return createHmac("sha256", `lia-ops-login:${secret}`).update(`${exp}.${nonce}`).digest("hex");
 }
 
-export function createOpsLoginToken(now = Date.now()): string | null {
-  const secret = opsToken();
+// O papel viaja no PRÓPRIO segredo que assina o link: quem entra pelo token do operador
+// abre uma sessão de operador. O formato (exp.nonce.hmac) não mudou.
+export function createOpsLoginToken(now = Date.now(), role: OpsRole = "owner"): string | null {
+  const secret = opsCredentials().find((c) => c.role === role)?.token ?? opsToken();
   if (!secret) return null;
   const exp = String(now + OPS_LOGIN_TTL_MS);
   const nonce = randomBytes(8).toString("hex");
   return `${exp}.${nonce}.${loginSignature(secret, exp, nonce)}`;
 }
 
-export function verifyOpsLoginToken(token: string | null | undefined, now = Date.now()): boolean {
-  const secret = opsToken();
-  if (!secret || !token) return false;
+export function opsLoginRole(token: string | null | undefined, now = Date.now()): OpsRole | null {
+  if (!token) return null;
   const [exp, nonce, sig] = token.split(".");
-  if (!exp || !nonce || !sig || !/^\d+$/.test(exp) || Number(exp) < now) return false;
-  return safeEqual(sig, loginSignature(secret, exp, nonce));
+  if (!exp || !nonce || !sig || !/^\d+$/.test(exp) || Number(exp) < now) return null;
+  for (const { role, token: secret } of opsCredentials()) {
+    if (safeEqual(sig, loginSignature(secret, exp, nonce))) return role;
+  }
+  return null;
+}
+
+export function verifyOpsLoginToken(token: string | null | undefined, now = Date.now()): boolean {
+  return opsLoginRole(token, now) !== null;
+}
+
+// Segredo que abriu a sessão, para o cookie sair com o HMAC do papel certo.
+export function opsTokenForRole(role: OpsRole): string | null {
+  return opsCredentials().find((c) => c.role === role)?.token ?? null;
 }
 
 // ---------- botões do operador no WhatsApp (11/09) ----------

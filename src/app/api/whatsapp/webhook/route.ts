@@ -5,7 +5,7 @@ import { z } from "zod";
 import { requireMetaSignature, requireWebhookSecret } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { handleDeliveryMessage, recoverFailedCarousel, runTurnScoped, TurnSupersededError } from "@/lib/delivery-service";
-import { notifyOperator, isAdminPhone } from "@/lib/turn-runtime";
+import { notifyOperator, isAdminPhone, notifyOwner } from "@/lib/turn-runtime";
 import { startWhatsAppCardChargeWorkflow } from "@/lib/payments/whatsapp-pay-dispatch";
 import { genericError, turnStillWorking } from "@/lib/lia-copy";
 import { whatsappAdapter } from "@/lib/adapters/whatsapp";
@@ -197,7 +197,7 @@ export async function POST(request: Request) {
               if (digits && (await recoverFailedCarousel(String(status.id ?? ""), digits, failure))) {
                 console.warn("[carousel:recovered-as-cards]", status.id);
                 if (errors.some((e) => e.code === 131042)) {
-                  await notifyOperator(`⚠️ Carrossel recusado pela Meta (131042: conta WhatsApp Business sem moeda/cobrança). Reenviei como cards soltos. Configure a moeda no Business Manager (billing_hub) ou deixe LIA_CAROUSEL=false.`, `+${digits}`);
+                  await notifyOwner(`⚠️ Carrossel recusado pela Meta (131042: conta WhatsApp Business sem moeda/cobrança). Reenviei como cards soltos. Configure a moeda no Business Manager (billing_hub) ou deixe LIA_CAROUSEL=false.`, `+${digits}`);
                 }
               }
               if (digits) {

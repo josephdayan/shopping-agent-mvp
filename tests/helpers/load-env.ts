@@ -51,6 +51,11 @@ process.env.LIA_CHARGE_ONLY_VERIFIED ??= "false";
 process.env.LIA_ENABLE_MERCADOLIVRE = "false";
 // Compra automática: nenhuma loja liberada por padrão nos testes (cada teste liga a sua).
 process.env.LIA_AUTO_PURCHASE_STORES ??= "";
+// Preparação de carrinho: desde 15/09 o default do produto é VAZIO (operador humano
+// compra; nenhuma loja monta carrinho sozinha). A suíte do comprador automático precisa
+// do mundo antigo para exercitar lease, aprovação e Pix, então fixa o ML aqui. O default
+// novo tem teste próprio: tests/operador-humano.test.ts.
+process.env.LIA_PURCHASE_PREP_STORES ??= "mercadolivre";
 // The conversation evals assert NLU/choice/payment behavior, not the store roster, and
 // were written for the world that passed 210/210: Carrefour (mercado, min R$30, arroz),
 // Petz (pet), Boticário (beleza), Decathlon (creatina), plus Oba (the catalog-gaps Oba

@@ -59,6 +59,12 @@ function preparationEligible(storeKey: string, items: OrderItem[], configured = 
 }
 
 export async function ensurePurchaseJobForPaidOrder(orderId: string) {
+  // 15/09/2026 — operador humano contratado. Antes, `LIA_AUTO_PURCHASE_OFF` só barrava o
+  // clique final: o job nascia assim mesmo e o pedido saía da fila manual, então o
+  // operador não via "COMPRA MANUAL" e ninguém comprava. Com o kill-switch ligado nenhum
+  // job automático nasce e todo pedido pago cai na fila do /ops, que é a rota decidida.
+  // A conta salva da loja (a Cobasi está pronta) deixa de puxar o pedido sozinha.
+  if (process.env.LIA_AUTO_PURCHASE_OFF === "true") return null;
   const order = await prisma.deliveryOrder.findUnique({ where: { id: orderId }, include: { purchaseJobs: true, payments: true, paymentAttempts: { select: { status: true } } } });
   if (!order || order.status !== "paid" || !isRetailerDeliveryOrder(order)) return null;
   if (order.storeOrderNumber || hasCancelRequest(order.notes) || hasPendingRefund(order.notes) || (order.notes ?? "").includes("🛑 COMPRA BLOQUEADA:")) return null;
@@ -168,9 +174,9 @@ export async function alertSilentBuyer(now = new Date()) {
   const open = await prisma.opsAction.findFirst({ where: { kind: "buyer_silent", status: "pending", expiresAt: { gt: now } } });
   if (open) return "already";
   await prisma.opsAction.create({ data: { kind: "buyer_silent", expiresAt: new Date(now.getTime() + 60 * 60_000) } });
-  const { notifyOperator } = await import("./turn-runtime");
+  const { notifyOwner } = await import("./turn-runtime");
   const copy = await import("./lia-copy");
-  await notifyOperator(copy.operatorBuyerSilent(minutes, [...new Set(waiting.map((w) => w.storeKey))]));
+  await notifyOwner(copy.operatorBuyerSilent(minutes, [...new Set(waiting.map((w) => w.storeKey))]));
   return "alerted";
 }
 

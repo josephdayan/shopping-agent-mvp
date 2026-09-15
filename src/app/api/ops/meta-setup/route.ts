@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireOpsKey } from "@/lib/auth";
+import { requireOpsOwner } from "@/lib/auth";
 import { runMetaSetup, type MetaSetupAction } from "@/lib/meta-setup";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ const ACTIONS: MetaSetupAction[] = ["status", "profile", "picture", "welcome", "
 // estado por GET de propósito: o operador (ou o Codex) roda tudo abrindo URLs no navegador
 // logado no /ops, sem precisar de JS/POST. Idempotente; auth igual às outras rotas.
 export async function GET(request: Request) {
-  const unauthorized = requireOpsKey(request, { allowQuery: true });
+  const unauthorized = requireOpsOwner(request, { allowQuery: true });
   if (unauthorized) return unauthorized;
   const requested = new URL(request.url).searchParams.get("action") ?? "status";
   if (!ACTIONS.includes(requested as MetaSetupAction)) return NextResponse.json({ error: "unknown action" }, { status: 400 });
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const unauthorized = requireOpsKey(request, { allowQuery: true });
+  const unauthorized = requireOpsOwner(request, { allowQuery: true });
   if (unauthorized) return unauthorized;
   const body = (await request.json().catch(() => ({}))) as { action?: string; flow_id?: string };
   const action = body.action as MetaSetupAction | undefined;

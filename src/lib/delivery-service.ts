@@ -30,7 +30,7 @@ import * as copy from "@/lib/lia-copy";
 import { ACTIVE_ORDER_STATUSES, BasketItem, CANCELABLE_FALLBACK_STATUSES, ChoiceOption, ChoicesResult, DeliveryContext, ExtractedLines, PendingChoice, STORE_SEARCH_URL, basketForCopy, cardTotal, conciergeStoresBelowMinimum, display, orderDateLabel, orderItemsPreview, orderStore, roundMoney, storeMinReal } from "./conversation-types";
 import { createOpsLoginToken, opsLoginUrl } from "./auth";
 import { derivedMessageLabel, understandMedia, type InboundMedia } from "./media-understanding";
-import { TurnSupersededError, acquireTurnLock, addressOnlyCtx, getOrCreateConvo, isFreightChoicePayload, lastActivityAt, markTurnReplied, normalizePhone, notifyOperator, quoteAbandonTtlMs, readCtx, releaseTurnLock, rememberCtxSnapshot, reply, replyQuoteNotice, searchNoticeTimer, sleep, turnMeta, writeCtx, isAdminPhone } from "./turn-runtime";
+import { TurnSupersededError, acquireTurnLock, addressOnlyCtx, getOrCreateConvo, isFreightChoicePayload, lastActivityAt, markTurnReplied, normalizePhone, notifyOperator, quoteAbandonTtlMs, readCtx, releaseTurnLock, rememberCtxSnapshot, reply, replyQuoteNotice, searchNoticeTimer, sleep, turnMeta, writeCtx, isAdminPhone, notifyOwner, phoneRole } from "./turn-runtime";
 import { cancelPendingRetailerQuote, closeUnpaidOrder, createCardAttempt, flagLatestOrder, handleSavedCardOther, handleSavedCardPay, issueValidatedRetailerQuotePayment, markDeliveryOrderPaid, markPixExpired, methodFromIntent, reopenOrderForEdit, resendCharge, switchPaymentMethod } from "./order-payments";
 import { opsPublishManualQuote, recordWaitlistLead, sendFreightChoice } from "./ops-lifecycle";
 
@@ -824,7 +824,9 @@ export async function handleDeliveryMessage(input: {
   // Login do painel pelo WhatsApp (04/09): operador manda "ops" e recebe link de 10 min.
   // Fica ANTES do lock porque não toca no contexto da conversa.
   if (/^(ops|painel|login|entrar)$/i.test(text) && isAdminPhone(phone)) {
-    const token = createOpsLoginToken();
+    // O link carrega o PAPEL de quem pediu: o operador contratado abre um painel sem as
+    // contas das lojas nem as ações de dinheiro (ver src/lib/auth.ts).
+    const token = createOpsLoginToken(Date.now(), phoneRole(phone) ?? "owner");
     await reply(phone, token ? copy.opsLoginLink(opsLoginUrl(token)) : copy.opsLoginUnavailable());
     return;
   }
@@ -1154,7 +1156,7 @@ async function handleDeliveryTurn(
     // "me fala que eu te envio" não pode ser beco: sem a env, o operador é acionado
     // pra mandar os dados de verdade (29/08 S7).
     if (intent.topic === "cnpj" && !businessInfo) {
-      await notifyOperator(`📇 Cliente pediu o CNPJ/dados da empresa — enviar manualmente (configure LIA_BUSINESS_INFO).`, phone);
+      await notifyOwner(`📇 Cliente pediu o CNPJ/dados da empresa — enviar manualmente (configure LIA_BUSINESS_INFO).`, phone);
     }
     await rePresentStep();
     return;
@@ -1176,7 +1178,7 @@ async function handleDeliveryTurn(
   }
   if (intent.kind === "charge_complaint") {
     await flagLatestOrder(user.id, `💳 RECLAMAÇÃO DE COBRANÇA: "${text.slice(0, 140)}"`);
-    await notifyOperator(`💳 URGENTE — cliente relata cobrança indevida/duplicada: "${text.slice(0, 140)}"`, phone);
+    await notifyOwner(`💳 URGENTE — cliente relata cobrança indevida/duplicada: "${text.slice(0, 140)}"`, phone);
     await reply(phone, copy.chargeComplaintAck());
     return;
   }
@@ -3597,7 +3599,7 @@ async function tryLlmInterpret(
     await reply(phone, verdict.reply ?? fallbackByAction[verdict.action]);
     if (verdict.action === "support" && userId) {
       await flagLatestOrder(userId, `🆘 SUPORTE (via IA): "${text.slice(0, 140)}"`);
-      await notifyOperator(`🆘 Cliente com problema (classificado pela IA): "${text.slice(0, 140)}"`, phone);
+      await notifyOwner(`🆘 Cliente com problema (classificado pela IA): "${text.slice(0, 140)}"`, phone);
     }
     await rePresent();
     return true;

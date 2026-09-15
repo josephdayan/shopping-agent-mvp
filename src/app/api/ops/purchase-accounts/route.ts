@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireOpsKey } from "@/lib/auth";
+import { requireOpsOwner } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { savePurchaseAccount, PURCHASE_AUTH_KINDS, PURCHASE_PAYMENT_KINDS } from "@/lib/purchase-execution";
 import { AUTO_PURCHASE_LIMIT_CENTS, automaticPurchaseStores, purchaseBudgetDay } from "@/lib/purchase-policy";
 export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
-  const denied = requireOpsKey(request);
+  const denied = requireOpsOwner(request);
   if (denied) return denied;
   return NextResponse.json({
     policy: {
@@ -35,7 +35,7 @@ const schema = z
   })
   .strict();
 export async function POST(request: Request) {
-  const denied = requireOpsKey(request);
+  const denied = requireOpsOwner(request);
   if (denied) return denied;
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success)

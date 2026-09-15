@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireOpsKey } from "@/lib/auth";
+import { requireOpsOwner } from "@/lib/auth";
 import { buildPixOrderDetailsPayload } from "@/lib/adapters/whatsapp";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 // Guarda compartilhada (src/lib/auth.ts): fail-closed em deploy, tempo constante,
 // cookie HMAC. `?key=` continua aceito só por compatibilidade com scripts do operador.
 function authed(request: Request) {
-  return requireOpsKey(request, { allowQuery: true }) === null;
+  return requireOpsOwner(request, { allowQuery: true }) === null;
 }
 
 const PROBE_BODY =

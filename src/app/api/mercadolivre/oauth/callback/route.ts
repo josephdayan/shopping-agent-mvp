@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { exchangeMercadoLivreAuthorizationCode } from "@/lib/mercadolivre-oauth";
-import { requireOpsKey } from "@/lib/auth";
+import { requireOpsOwner } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const denied = requireOpsKey(request, { allowQuery: true });
+  const denied = requireOpsOwner(request, { allowQuery: true });
   if (denied) return denied;
   const url = new URL(request.url);
   const code = url.searchParams.get("code");

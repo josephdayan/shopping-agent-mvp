@@ -20,8 +20,11 @@ export function purchaseHostAllowed(storeKey: string, hostname: string): boolean
   return purchaseDomains(storeKey).some((domain) => host === domain || host.endsWith(`.${domain}`));
 }
 
+// 15/09/2026 — operador humano: NENHUMA loja prepara carrinho sozinha por padrão. O
+// default era "mercadolivre", então todo pedido pago de ML virava job do comprador local
+// sem ninguém pedir. Quem quiser de volta lista em LIA_PURCHASE_PREP_STORES.
 export function preparationStores(): string[] {
-  return [...new Set((process.env.LIA_PURCHASE_PREP_STORES ?? "mercadolivre").split(",").map(s => s.trim()).filter(s => Boolean(PURCHASE_DOMAINS[s])))];
+  return [...new Set((process.env.LIA_PURCHASE_PREP_STORES ?? "").split(",").map(s => s.trim()).filter(s => Boolean(PURCHASE_DOMAINS[s])))];
 }
 export function purchaseUrlAllowed(storeKey: string, value: string): boolean {
   if (!PURCHASE_DOMAINS[storeKey]) return false;

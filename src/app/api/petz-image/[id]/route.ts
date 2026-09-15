@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { opsKeyMatches } from "@/lib/auth";
+import { ownerKeyMatches } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -39,7 +39,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   } catch {
     return new Response("bad json", { status: 400 });
   }
-  if (!opsKeyMatches(payload.key)) return new Response("unauthorized", { status: 401 });
+  if (!ownerKeyMatches(payload.key)) return new Response("unauthorized", { status: 401 });
   if (!/^[\w.-]{1,64}$/.test(params.id)) return new Response("bad id", { status: 400 });
   const match = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/i.exec(payload.dataUrl ?? "");
   if (!match) return new Response("bad dataUrl", { status: 400 });

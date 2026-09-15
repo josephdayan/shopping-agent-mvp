@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireOpsKey } from "@/lib/auth";
+import { opsRole, requireOpsKey } from "@/lib/auth";
 import { parseMoneyInput } from "@/lib/pricing";
 import {
   opsCancelRefund,
@@ -22,6 +22,13 @@ function authed(request: Request) {
   return requireOpsKey(request, { allowQuery: true }) === null;
 }
 
+// 15/09/2026 — operador contratado: ele compra, avisa e fecha o pedido. O que move
+// dinheiro por decisão (cancelar um pedido pago, estornar à mão, registrar referência de
+// estorno) continua sendo do dono. "Não consegui comprar → estornar" fica com ele de
+// propósito: é a saída honesta quando a loja falha, e o valor volta para o CLIENTE — não
+// há para onde desviar. Sem OPS_OPERATOR_TOKEN não existe operador e nada muda.
+const OWNER_ONLY_ACTIONS = new Set(["cancel", "refund_provider", "confirm_refund"]);
+
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   if (!authed(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const body = (await request.json().catch(() => ({}))) as {
@@ -39,6 +46,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
     etaMinutes?: number | string;
   };
   const id = params.id;
+  if (body.action && OWNER_ONLY_ACTIONS.has(body.action) && opsRole(request, { allowQuery: true }) === "operator") {
+    return NextResponse.json({ error: "Essa ação é do dono da operação. Avise pelo WhatsApp." }, { status: 403 });
+  }
   try {
     switch (body.action) {
       case "publish_quote": {

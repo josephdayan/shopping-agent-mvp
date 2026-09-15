@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireOpsKey } from "@/lib/auth";
+import { requireOpsOwner } from "@/lib/auth";
 import {
   approveCheckout,
   reconcileEmptyPurchase,
@@ -15,7 +15,7 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  const denied = requireOpsKey(request);
+  const denied = requireOpsOwner(request);
   if (denied) return denied;
   const b = z
     .discriminatedUnion("action", [
