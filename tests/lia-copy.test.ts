@@ -245,3 +245,18 @@ test("cesta otimizada não diz '2 entregas em vez de 2' quando só redistribui l
   assert.match(reduced, /Juntei entregas/);
   assert.match(reduced, /1 entrega em vez de 2/);
 });
+
+// Caso real 15/09 (#5GUY4Z, Cobasi): a pergunta do número do pedido dizia "Mercado Livre"
+// fixo, para QUALQUER loja. O nome da loja agora vem do job.
+test("operador: pergunta do número do pedido nomeia a loja certa, nunca ML fixo", () => {
+  const cobasi = copy.operatorAskStoreNumber("5GUY4Z", "Cobasi");
+  assert.match(cobasi, /#5GUY4Z/);
+  assert.match(cobasi, /Cobasi/);
+  assert.doesNotMatch(cobasi, /Mercado Livre/i);
+  assert.match(copy.operatorAskStoreNumber("ABC123", "Mercado Livre"), /Mercado Livre/);
+  // Sem loja conhecida: nunca inventa um nome.
+  assert.doesNotMatch(copy.operatorAskStoreNumber("ABC123"), /Mercado Livre|Cobasi/i);
+  const saved = copy.operatorStoreNumberSaved("5GUY4Z", "4321567890", "Cobasi");
+  assert.match(saved, /Cobasi/);
+  assert.doesNotMatch(saved, /\bML\b|Mercado Livre/i);
+});

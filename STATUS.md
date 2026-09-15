@@ -618,8 +618,9 @@ recente e incompleta, sem comprovação de retenção ou rentabilidade.
 ## 15/09/2026 — botão "Adicionar ao carrinho"
 
 O botão do card virou "Adicionar ao carrinho" (carrossel) / "Adicionar" (card solto, teto de
-20 da Meta). Código publicado; **falta criar e aprovar os templates `vitrine_carrossel_v3_2..5`**
-(precisa de uma sessão do /ops). Até lá a vitrine cai nos cards soltos, já com o texto novo.
+20 da Meta). Templates `vitrine_carrossel_v3_2..5` criados e **APROVADOS** em 15/09; carrossel
+no ar com o texto novo. No mesmo dia: a pergunta do número do pedido ao operador dizia
+"Mercado Livre" para qualquer loja (pedido da Cobasi) — corrigido, a loja vem do job.
 Detalhe em AGENTS.md (15/09).
 
 ## 10/09/2026 — vitrine de 5 no carrossel

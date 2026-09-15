@@ -340,6 +340,28 @@ Por pedido do dono, preparar todas as lojas nos perfis persistentes do comprador
 
 # Lia — contexto obrigatório para agentes
 
+## 15/09/2026 (2ª) — "manda o número do pedido do Mercado Livre" num pedido da Cobasi
+
+Dono tocou em **Confirmar** no alerta `store_silent` do #5GUY4Z (Pix da loja pago às 01:45,
+loja sem confirmar por 30 min; ação criada 15:10, consumida 15:46 por `wa:…6065:confirm`) e
+recebeu "Beleza. Manda só o número do pedido do **Mercado Livre** do #5GUY4Z". O pedido é da
+**Cobasi** (Ração Úmida Whiskas 290 g, R$ 11,39): `operatorAskStoreNumber`/
+`operatorStoreNumberSaved` tinham a loja FIXA no texto, herdada do degrau C do ML.
+- Agora a loja vem do `PurchaseJob` (`storeLabelOf` em ops-actions-inbound; `listStores()`
+  e NÃO `getStore`, que cai numa loja padrão quando a chave é desconhecida — nome errado é
+  pior que nenhum). Texto em posição neutra ("— loja: Cobasi") pra não errar artigo.
+- Teste em `tests/lia-copy.test.ts`.
+
+**Risco ainda ABERTO (decisão do dono):** enquanto existe `await_store_number` pendente (30
+min), QUALQUER mensagem só-números de 6–20 dígitos do telefone do operador é consumida como
+número do pedido — e o dono usa o mesmo número como cliente. Um CEP (8 dígitos) digitado
+nesse intervalo vira "número do pedido" e não chega no fluxo de cliente.
+
+**Estado do #5GUY4Z:** job `pix_paid` na Cobasi, `storeOrderNumber` nulo, ação
+`await_store_number` pendente até 16:16 de 15/09. O dono precisa mandar o número do pedido
+da Cobasi ou deixar expirar (nada é estornado sozinho por expirar).
+
+
 ## 15/09/2026 — botão do card: "Adicionar ao carrinho"
 
 Dono: "muda o escolher esse pra adicionar ao carrinho no card". Limites da Meta mandam no

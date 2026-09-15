@@ -9,6 +9,13 @@ import { ownerConfirmCartBought, ownerDeclineCart, ownerStoreNumber, approveChec
 import { opsPurchaseFailedRefund } from "./ops-lifecycle";
 import { createOpsAction } from "./ops-actions";
 import * as copy from "./lia-copy";
+import { listStores } from "./stores";
+
+// Rótulo da loja do job. Sem `getStore` de propósito: ele cai numa loja PADRÃO quando a
+// chave é desconhecida, e um nome errado é pior que nenhum numa mensagem de operação.
+function storeLabelOf(storeKey: string | null | undefined): string {
+  return listStores().find((store) => store.key === storeKey)?.label ?? String(storeKey ?? "");
+}
 
 const STORE_NUMBER_RE = /^#?\s*(\d{6,20})\s*$/;
 
@@ -33,7 +40,7 @@ export async function handleOperatorInbound(phone: string, text: string): Promis
       return consumed;
     });
     const job = await ownerStoreNumber(pending.purchaseJobId, number[1], action.id);
-    await reply(phone, copy.operatorStoreNumberSaved(job.deliveryOrderId.slice(-6).toUpperCase(), number[1]));
+    await reply(phone, copy.operatorStoreNumberSaved(job.deliveryOrderId.slice(-6).toUpperCase(), number[1], storeLabelOf(job.storeKey)));
   } catch (error) {
     await reply(phone, copy.operatorActionFailed(error instanceof Error ? error.message : "falha"));
   }
@@ -50,7 +57,7 @@ async function runOperatorButton(phone: string, button: { id: string; choice: st
     if (action.kind === "ml_cart_ready" && action.purchaseJobId) {
       if (button.choice === "bought") {
         const job = await ownerConfirmCartBought(action.purchaseJobId, action.id);
-        await reply(phone, copy.operatorAskStoreNumber(job.deliveryOrderId.slice(-6).toUpperCase()));
+        await reply(phone, copy.operatorAskStoreNumber(job.deliveryOrderId.slice(-6).toUpperCase(), storeLabelOf(job.storeKey)));
         return;
       }
       if (button.choice === "failed") {
@@ -83,7 +90,7 @@ async function runOperatorButton(phone: string, button: { id: string; choice: st
       if (action.kind === "store_silent") {
         if (button.choice === "confirm") {
           await prisma.$transaction((tx) => createOpsAction(tx, { kind: "await_store_number", purchaseJobId: job.id, deliveryOrderId: job.deliveryOrderId, payload: { from: action.id } }));
-          await reply(phone, copy.operatorAskStoreNumber(shortId));
+          await reply(phone, copy.operatorAskStoreNumber(shortId, storeLabelOf(job.storeKey)));
           return;
         }
         await opsPurchaseFailedRefund(job.deliveryOrderId, "loja não confirmou o pedido");

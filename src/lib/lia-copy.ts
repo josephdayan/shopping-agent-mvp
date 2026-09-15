@@ -1540,11 +1540,14 @@ export function operatorMlCartReady(shortId: string, totalCents: number, items: 
 export function operatorMlBlocked(shortId: string, reason: string): string {
   return `Pedido #${shortId} no Mercado Livre precisa de revisão: ${reason} Veja no painel.`;
 }
-export function operatorAskStoreNumber(shortId: string): string {
-  return `Beleza. Manda só o número do pedido do Mercado Livre do #${shortId}.`;
+// A loja vem do job: o texto tinha "Mercado Livre" FIXO e um pedido da Cobasi pediu
+// "o número do pedido do Mercado Livre" (caso real 15/09, dono: "nada a ver"). Nome da
+// loja em posição neutra evita errar o artigo ("a Cobasi" x "o Mercado Livre").
+export function operatorAskStoreNumber(shortId: string, store?: string): string {
+  return `Beleza. Manda só o número do pedido do #${shortId} — loja: ${store || "a do pedido"}.`;
 }
-export function operatorStoreNumberSaved(shortId: string, number: string): string {
-  return `Registrado: pedido #${shortId} comprado no ML (nº ${number}). O cliente já foi avisado.`;
+export function operatorStoreNumberSaved(shortId: string, number: string, store?: string): string {
+  return `Registrado: #${shortId} comprado${store ? ` (${store})` : ""}, nº ${number}. O cliente já foi avisado.`;
 }
 export function operatorCartDeclined(shortId: string): string {
   return `Ok, o #${shortId} foi para revisão no painel. Nada foi comprado.`;
