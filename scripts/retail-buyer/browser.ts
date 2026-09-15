@@ -255,7 +255,9 @@ export class VtexBuyer {
   private async api(path: string, body?: unknown) {
     if (
       !path.startsWith("/api/checkout/pub/orderForm") &&
-      !path.startsWith("/api/catalog_system/pub/products/search")
+      !path.startsWith("/api/catalog_system/pub/products/search") &&
+      // Consulta pública e só de leitura: grafia oficial do logradouro/bairro do CEP.
+      !(body === undefined && /^\/api\/checkout\/pub\/postal-code\/BRA\/\d{8}$/.test(path))
     )
       throw new Error("Operação fora do preparador.");
     if (/transaction|payment-notification|process|order-group/.test(path))
@@ -688,6 +690,15 @@ export class VtexBuyer {
     if (form.messages?.some((m: { status: string }) => m.status === "error"))
       throw new Error("A loja mostra um erro de checkout.");
     const dest = form.shippingData?.selectedAddresses?.[0];
+    // 15/09 (primeiro pedido real): a loja troca rua/bairro/cidade pela grafia OFICIAL do CEP
+    // ("Egídio de Sousa" × "Souza" do cliente). Aceita-se só o que a base de CEP da própria
+    // loja devolve; número e complemento continuam exatos.
+    const official = (await this.api(`/api/checkout/pub/postal-code/BRA/${job.customer.cep.replace(/\D/g, "")}`).catch(() => null)) as
+      | { street?: string; neighborhood?: string; city?: string; state?: string }
+      | null;
+    const fieldOk = (k: "street" | "neighborhood" | "city" | "state") =>
+      normalize(dest?.[k] ?? "") === normalize(address[k]) ||
+      (Boolean(official?.[k]) && normalize(dest?.[k] ?? "") === normalize(official![k] ?? ""));
     if (
       form.shippingData.selectedAddresses.length !== 1 ||
       !dest ||
@@ -695,10 +706,9 @@ export class VtexBuyer {
       normalize(dest.receiverName ?? "") !==
         normalize(job.customer.name ?? "") ||
       normalize(dest.postalCode ?? "") !== normalize(job.customer.cep) ||
-      ["street", "number", "complement", "neighborhood", "city", "state"].some(
-        (k) =>
-          normalize(dest[k] ?? "") !== normalize(address[k as keyof Address]),
-      )
+      normalize(dest.number ?? "") !== normalize(address.number) ||
+      normalize(dest.complement ?? "") !== normalize(address.complement) ||
+      !fieldOk("street") || !fieldOk("neighborhood") || !fieldOk("city") || !fieldOk("state")
     )
       throw new Error("Endereço real do checkout difere do pedido.");
     const selected =
