@@ -272,7 +272,7 @@ export function buildTemplatePayload(to: string, input: WhatsAppTemplateInput) {
 }
 
 // Carrossel da vitrine (dono, 07/09): UMA mensagem de template de marketing com 2–3 cards
-// (foto + nome/preço/prazo + "Escolher este"/"Ver detalhes"). O template é fixo em número
+// (foto + nome/preço/prazo + "Adicionar ao carrinho"/"Outras opções"). O template é fixo em número
 // de cards (vitrine_carrossel_2/_3, criados em /api/ops/meta-setup?action=carousel); só o
 // conteúdo é variável. Cobrado por envio (~R$0,33): liga com LIA_CAROUSEL=true.
 export function carouselEnabled(): boolean {
@@ -587,7 +587,7 @@ export const whatsappAdapter = {
   },
 
   // Product choices used by the current delivery flow. On Meta each option becomes
-  // its own card with a "Escolher este" reply button, so the button is visually tied
+  // its own card with an "Adicionar" reply button, so the button is visually tied
   // to the right photo/product. Other providers return null and keep the numbered
   // text fallback owned by delivery-service.
   async sendDeliveryChoices(to: string, options: WhatsAppDeliveryChoice[]) {
@@ -969,6 +969,10 @@ async function sendMetaSimpleButtons(
 // "WebP image uploads are not currently supported" — caso real 16/08 com as fotos do
 // Mercado Livre, que o CDN serve em .webp).
 const META_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+// Rótulo do botão do card interativo. A Meta corta em 20 caracteres e RECUSA a mensagem
+// inteira se passar, então aqui fica a forma curta de "Adicionar ao carrinho" (21), que
+// o carrossel usa por inteiro (teto 25). Pedido do dono, 15/09.
+export const CARD_ADD_BUTTON = "Adicionar";
 
 // Pré-flight da imagem do card (caso real 09/08: foto 404 no CDN; 16/08: foto WebP).
 // Verifica DUAS coisas, porque só "a URL responde" não basta: status e CONTENT-TYPE.
@@ -1011,10 +1015,10 @@ async function sendMetaDeliveryChoices(to: string, options: WhatsAppDeliveryChoi
   const messages = [];
   // Each option is its own interactive card. The image header, product details and
   // reply button live in the SAME WhatsApp message, so there is no ambiguity about
-  // which product "Escolher esse" selects.
+  // which product "Adicionar" selects.
   for (const [index, option] of options.entries()) {
     const buttons: Array<{ type: "reply"; reply: { id: string; title: string } }> = [
-      { type: "reply", reply: { id: option.id.slice(0, 256), title: "Escolher esse" } }
+      { type: "reply", reply: { id: option.id.slice(0, 256), title: CARD_ADD_BUTTON } }
     ];
     // "Ver detalhes" quando o produto tem página real: o toque volta como
     // `optinfo:<sku>` e a Lia manda o link do anúncio (reviews, fotos, specs — tudo

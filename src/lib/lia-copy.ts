@@ -311,7 +311,7 @@ export function noMoreOptionsAskReword(query: string): string {
   return `De *${query}* eu já mostrei tudo que tenho. Me diz uma marca, tipo ou faixa de preço que eu procuro diferente.`;
 }
 
-// Toque num botão "Escolher esse" de uma mensagem antiga: dizer ISSO, em vez do
+// Toque num botão de card de uma mensagem antiga: dizer ISSO, em vez do
 // genérico "não peguei qual você quer" (rodada 27/08 S1).
 export function staleButtonTap(hasCurrentOptions: boolean): string {
   return hasCurrentOptions
@@ -344,12 +344,12 @@ export function choiceConfirmedAssumedOne(name: string, query: string): string {
 // Botão "Ver detalhes" / "detalhes 2" digitado: link real do anúncio/página, onde o
 // cliente vê reviews, fotos e specs. Mensagem de TEXTO puro (link clicável garantido).
 export function productDetailsLink(name: string, url: string): string {
-  return `🔎 *${name}*\n${url}\nQuando decidir, é só tocar em *Escolher esse* no card.`;
+  return `🔎 *${name}*\n${url}\nQuando decidir, é só tocar em *Adicionar ao carrinho* no card.`;
 }
 
 export function productDetailsList(items: Array<{ name: string; url: string }>): string {
   const lines = items.map((item, index) => `${index + 1}) ${item.name}\n${item.url}`);
-  return [`🔎 As páginas dos produtos:`, ...lines, `Quando decidir, é só tocar em *Escolher esse* no card.`].join("\n");
+  return [`🔎 As páginas dos produtos:`, ...lines, `Quando decidir, é só tocar em *Adicionar ao carrinho* no card.`].join("\n");
 }
 
 export function productDetailsUnavailable(): string {
@@ -990,7 +990,7 @@ export function categoryRemoveUnknown(category: string): string {
 // Demonstrativo sem substantivo ("quero 2 desse") COM opções na mesa: a resposta é
 // perguntar qual, não buscar a palavra "desse" (caso real 15/09, depois de uma foto).
 export function demonstrativeNeedsChoice(): string {
-  return "De qual deles? 🙂 Toca em *Escolher este* no card que você quer — ou me diz o número.";
+  return "De qual deles? 🙂 Toca em *Adicionar ao carrinho* no card que você quer — ou me diz o número.";
 }
 
 // O mesmo, sem nada na mesa pra apontar.

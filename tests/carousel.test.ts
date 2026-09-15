@@ -1,5 +1,5 @@
 // Carrossel da vitrine (dono, 07/09): template de marketing com 2–3 cards, conteúdo
-// variável, botão "Escolher este" voltando como optsku:<sku>. Fallback pros cards soltos
+// variável, botão "Adicionar ao carrinho" voltando como optsku:<sku>. Fallback pros cards soltos
 // quando não dá (desligado, 1 opção, foto ruim, template recusado pela Meta).
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -38,16 +38,16 @@ test("template do carrossel respeita os limites da Meta (2 e 3 cards)", () => {
       const buttons = card.components.find((c: any) => c.type === "buttons").buttons;
       assert.ok(buttons.length <= 2);
       for (const b of buttons) assert.ok(b.text.length <= 25, b.text);
-      assert.deepEqual(buttons.map((b: any) => b.text), ["Escolher este", "Outras opções"]);
+      assert.deepEqual(buttons.map((b: any) => b.text), ["Adicionar ao carrinho", "Outras opções"]);
       assert.equal(card.components.find((c: any) => c.type === "header").format, "image");
     }
   }
 });
 
 test("payload do envio: header por link, 3 variáveis por card e botões com sku", () => {
-  const p = buildCarouselPayload("+5511999999999", "vitrine_carrossel_3", "Opções de *ração*:", OPTIONS) as any;
+  const p = buildCarouselPayload("+5511999999999", "vitrine_carrossel_v3_3", "Opções de *ração*:", OPTIONS) as any;
   assert.equal(p.type, "template");
-  assert.equal(p.template.name, "vitrine_carrossel_3");
+  assert.equal(p.template.name, "vitrine_carrossel_v3_3");
   assert.equal(p.template.components[0].parameters[0].text, "Opções de *ração*:");
   const cards = p.template.components[1].cards;
   assert.equal(cards.length, 3);
@@ -90,21 +90,21 @@ async function withMeta(fn: (bodies: any[], fail?: { current: boolean }) => Prom
   }
 }
 
-test("Meta: 2 opções viram UMA mensagem de template vitrine_carrossel_v2_2", async () => {
+test("Meta: 2 opções viram UMA mensagem de template vitrine_carrossel_v3_2", async () => {
   await withMeta(async (bodies) => {
     const result = await whatsappAdapter.sendDeliveryCarousel("+5511999999999", "Opções de *ração*:", OPTIONS.slice(0, 2));
     assert.equal(result?.mode, "delivery_choice_carousel");
     assert.equal(bodies.length, 1);
-    assert.equal(bodies[0].template.name, "vitrine_carrossel_v2_2");
+    assert.equal(bodies[0].template.name, "vitrine_carrossel_v3_2");
     assert.equal(bodies[0].template.components[1].cards.length, 2);
   });
 });
 
-test("Meta: 5 opções viram vitrine_carrossel_v2_5 com 5 cards; 6 cortam em 5; fallback solto fica em 3", async () => {
+test("Meta: 5 opções viram vitrine_carrossel_v3_5 com 5 cards; 6 cortam em 5; fallback solto fica em 3", async () => {
   await withMeta(async (bodies) => {
     const five = await whatsappAdapter.sendDeliveryCarousel("+5511999999999", "Opções:", FIVE(6));
     assert.equal(five?.mode, "delivery_choice_carousel");
-    assert.equal(bodies[0].template.name, "vitrine_carrossel_v2_5");
+    assert.equal(bodies[0].template.name, "vitrine_carrossel_v3_5");
     assert.equal(bodies[0].template.components[1].cards.length, 5);
     const before = bodies.length;
     await whatsappAdapter.sendDeliveryChoices("+5511999999999", FIVE(5));

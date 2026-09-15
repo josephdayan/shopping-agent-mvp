@@ -81,21 +81,26 @@ export const ADDRESS_FLOW_JSON = {
 // é cobrado (~R$0,33 no Brasil) e o número de cards é FIXO por template — por isso um
 // template por tamanho (2 e 3 cards; 1 opção continua no card simples). O texto do card
 // e o payload do botão são variáveis: nome, preço, prazo e `optsku:<sku>` entram na hora
-// do envio; a foto vem por link. O toque em "Escolher este" volta como `button.payload`,
+// do envio; a foto vem por link. O toque em "Adicionar ao carrinho" volta como `button.payload`,
 // que o parseInbound já lê. Limites: body do card ≤ 160, botão ≤ 25, corpo ≤ 1024, e o
 // corpo não pode terminar em variável.
 // v2 (07/09, dono: "precisa ter o botão outras opções"): 2 botões por card e iguais em
-// todos → "Escolher este" + "Outras opções"; a página do produto fica por texto
+// todos → "Adicionar ao carrinho" + "Outras opções"; a página do produto fica por texto
 // ("detalhes 2"). Nome novo porque template editado volta pra revisão.
-export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel_v2";
+export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim() || "vitrine_carrossel_v3";
+// v3 (15/09, dono): o botão do card virou "Adicionar ao carrinho" (21 chars — cabe no
+// carrossel, teto 25). O card interativo do fallback tem teto 20 e usa "Adicionar"
+// (CARD_ADD_BUTTON em adapters/whatsapp.ts). Texto de botão é parte do template, então
+// mudança = template novo (nome novo; editar aprovado volta pra revisão do mesmo jeito).
+export const CAROUSEL_ADD_BUTTON = "Adicionar ao carrinho";
 export const CAROUSEL_CARD_COUNTS = [2, 3, 4, 5] as const;
 // Variável não pode abrir nem fechar o texto (2ª recusa da Meta, 07/09).
-export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados e toca em *Escolher este* no card que preferir. Pra ver a página de um produto, escreva *detalhes* e o número dele.";
+export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados e toca em *Adicionar ao carrinho* no card que preferir. Pra ver a página de um produto, escreva *detalhes* e o número dele.";
 // O texto do card e o ajuste dos parâmetros ao limite de 160 hidratados vivem num módulo
 // folha, porque `adapters/whatsapp` precisa do mesmo texto para caber nele (15/09).
 export { CAROUSEL_CARD_BODY } from "./meta-carousel-card";
 export const CAROUSEL_BUTTONS = [
-  { type: "quick_reply", text: "Escolher este" },
+  { type: "quick_reply", text: CAROUSEL_ADD_BUTTON },
   { type: "quick_reply", text: "Outras opções" }
 ] as const;
 

@@ -15,7 +15,7 @@ test("Meta: botão de opção volta como número entendido pelo fluxo", () => {
   assert.equal(inbound.provider, "meta");
 });
 
-test("Meta: cada produto vira uma mensagem com foto e botão Escolher esse", async () => {
+test("Meta: cada produto vira uma mensagem com foto e botão Adicionar", async () => {
   const previous = {
     provider: process.env.WHATSAPP_PROVIDER,
     token: process.env.WHATSAPP_ACCESS_TOKEN,
@@ -39,12 +39,14 @@ test("Meta: cada produto vira uma mensagem com foto e botão Escolher esse", asy
     assert.equal(bodies.length, 2);
     assert.equal(bodies[0].interactive.header.type, "image");
     assert.equal(bodies[0].interactive.action.buttons[0].reply.id, "1");
-    assert.equal(bodies[0].interactive.action.buttons[0].reply.title, "Escolher esse");
+    assert.equal(bodies[0].interactive.action.buttons[0].reply.title, "Adicionar");
     assert.match(bodies[0].interactive.body.text, /R\$ 4,83/);
     assert.match(bodies[0].interactive.body.text, /Entrega: chega hoje/);
     assert.equal(bodies[0].interactive.action.buttons.length, 1);
     assert.equal(bodies[1].interactive.header.type, "image");
-    assert.equal(bodies[1].interactive.action.buttons[0].reply.title, "Escolher esse");
+    assert.equal(bodies[1].interactive.action.buttons[0].reply.title, "Adicionar");
+    // A Meta RECUSA a mensagem inteira se o rótulo passar de 20 caracteres.
+    for (const body of bodies) for (const b of body.interactive.action.buttons) assert.ok(b.reply.title.length <= 20, b.reply.title);
     // O ÚLTIMO card leva a saída "nenhuma dessas": botão extra que volta como opt:outras.
     assert.equal(bodies[1].interactive.action.buttons.length, 2);
     assert.equal(bodies[1].interactive.action.buttons[1].reply.id, "opt:outras");
