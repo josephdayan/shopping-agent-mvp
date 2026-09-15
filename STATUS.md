@@ -1,3 +1,18 @@
+## 15/09/2026 — Operador humano implementado (falta deploy)
+
+Código pronto e commitado (`31e6a21`, `f999032`): kill-switch da compra automática valendo
+antes do job nascer, `/ops` com dois papéis (`OPS_OPERATOR_TOKEN`), alertas separados entre
+dono e operador (`LIA_OWNER_PHONE`), promessa honesta fora de `LIA_OPERATOR_HOURS` e runbook
+reescrito para o contratado. Detalhe técnico em AGENTS.
+
+Estado de produção: as três envs de kill-switch estão gravadas na Vercel mas **ainda não
+valem** — só entram no próximo deploy. Até lá o deployment em execução mantém a compra
+automática habilitada para a Cobasi. O comprador local (launchd) foi parado e desabilitado
+neste Mac, então nada executa checkout no momento.
+
+Ainda não existe operador contratado: `OPS_OPERATOR_TOKEN` e `LIA_OWNER_PHONE` não estão
+configurados, e sem eles tudo se comporta como antes (um papel só, um telefone só).
+
 ## 15/09/2026 — Decisão operacional: operador humano substitui compra automática
 
 Foi decidido contratar um operador humano para cotar, comprar e acompanhar os pedidos da

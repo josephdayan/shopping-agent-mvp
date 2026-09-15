@@ -1,3 +1,45 @@
+## 15/09/2026 — Operador humano no código: automação travada, /ops com dois papéis
+
+A decisão de contratar operador virou código. O que o repositório assumia até aqui é que
+**operador = dono**: um `OPS_TOKEN` abria contas de loja, Pix de saída e setup da Meta, e um
+`LIA_OPERATOR_PHONE` recebia tanto "pedido pago, compre" quanto "pagamento fora do esperado,
+confira no provedor". Com gente de fora isso é risco de credencial e furo operacional.
+
+**1. O kill-switch passou a valer ANTES do job nascer.** `LIA_AUTO_PURCHASE_OFF` só barrava o
+clique final: o job nascia igual, o pedido saía da fila manual e ninguém via "COMPRA MANUAL"
+no `/ops`. Pior, `preparationEligible` aceita a loja por **conta salva** — e a Cobasi está
+salva com `enabled/loginReady/paymentReady` —, então um pedido pago dela era puxado sozinho
+mesmo com a allowlist vazia. Agora `ensurePurchaseJobForPaidOrder` devolve `null` na primeira
+linha quando o switch está ligado, e o pedido cai na fila manual. `LIA_PURCHASE_PREP_STORES`
+perdeu o default `"mercadolivre"` (era opt-out; virou opt-in).
+
+**2. `OPS_OPERATOR_TOKEN`: segundo segredo, acesso reduzido.** `opsRole()` diz o papel
+(`owner`/`operator`) por header, `?key=` ou cookie; `requireOpsOwner()` responde 403 ao
+operador em contas de compra, jobs automáticos, setup da Meta, sonda de Pix nativo, catálogo,
+lista de espera, OAuth do ML e re-host de imagem. As ações de dinheiro por decisão (cancelar
+pedido pago, estornar pelo provedor, confirmar estorno) são negadas por ação dentro de
+`/api/ops/orders/[id]`. "Não consegui comprar → estornar" **fica** com o operador: é a saída
+honesta quando a loja falha e o valor volta pro cliente. O cookie é o HMAC do segredo do
+papel, então trocar o token do operador derruba só a sessão dele; o link "ops" do WhatsApp é
+assinado com o segredo de quem pediu. A tela esconde, o servidor nega.
+
+**3. `LIA_OWNER_PHONE` + `notifyOwner()`.** Dinheiro e incidente (cobrança falhada, pagamento
+fora do esperado, cartão sem desfecho, estorno automático, reclamação de cobrança, comprador
+em silêncio, carrossel recusado) vão pro dono; pedido pago, pedido parado e item somado vão
+pra quem compra. Sem a env o dono continua sendo o `LIA_OPERATOR_PHONE` — operando sozinho
+nada muda. O alerta de PAGO, desligado desde 20/08, volta sozinho quando existe operador
+contratado, e o alerta de pedido parado escala pro dono a partir de 6h.
+
+**4. Promessa honesta fora do horário.** Pix às 23h respondia "já estou separando", mentira
+por dez horas. Fora de `LIA_OPERATOR_HOURS` (`9-20`, São Paulo) a Lia diz que compra logo
+cedo. Só muda a promessa, e só quando há operador contratado; o prazo da loja é o mesmo.
+
+Produção: `LIA_AUTO_PURCHASE_OFF`, `LIA_PURCHASE_SUBMIT_OFF` e `LIA_PIX_OUT_OFF` gravados na
+Vercel (**só valem no próximo deploy**). O serviço launchd do comprador local estava RODANDO
+no Mac (pid 28797): parado e desabilitado (`launchctl disable`), não volta no login.
+`docs/operador-runbook.md` reescrito para alguém de fora. Testes: +6 em
+`tests/operador-humano.test.ts`; 641/641 em `test:local`, build e guarda de emoji ok.
+
 ## 15/09/2026 — Decisão vigente: contratar operador humano e parar a compra automática
 
 O dono decidiu contratar um operador humano para cotar, comprar e acompanhar os pedidos da

@@ -1,3 +1,20 @@
+## 15/09/2026 — Para ligar o operador contratado
+
+- [ ] **Deploy.** As envs `LIA_AUTO_PURCHASE_OFF` / `LIA_PURCHASE_SUBMIT_OFF` /
+  `LIA_PIX_OUT_OFF` já estão na Vercel, mas só valem no próximo deploy; o deployment atual
+  ainda compra Cobasi sozinho se o comprador local voltar a rodar.
+- [ ] **`OPS_OPERATOR_TOKEN`** forte na Vercel (segredo diferente do `OPS_TOKEN`). Sem ele o
+  painel continua de um papel só. Trocar esse token derruba só a sessão do operador.
+- [ ] **`LIA_OWNER_PHONE`** = número do Joseph, e `LIA_OPERATOR_PHONE` = número do
+  contratado. Enquanto `LIA_OWNER_PHONE` não existir, os dois papéis ficam no mesmo número.
+- [ ] **Cartão virtual com limite** para a pessoa comprar (nunca o cartão físico), e senha
+  das contas de loja trocada quando ela sair.
+- [ ] Conferir ao vivo depois do deploy: "ops" do número do operador abre painel sem contas
+  de loja; `curl /api/ops/purchase-accounts` com o token dele responde 403; pedido de teste
+  pago dispara o 💰 no operador e não no dono.
+- [ ] O serviço launchd do comprador local está **desabilitado** neste Mac. Para reativar um
+  dia: `launchctl enable gui/$(id -u)/com.liadelivery.purchase-worker` + `bootstrap`.
+
 ## 15/09/2026 — Nova decisão: contratar operador e suspender compra automática
 
 - [ ] **Aplicar o kill-switch operacional da compra automática** (`LIA_AUTO_PURCHASE_OFF=true`
