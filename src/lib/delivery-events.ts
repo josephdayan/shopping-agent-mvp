@@ -16,6 +16,9 @@ export type DeliveryEvidence = {
   storeOrderNumber?: string;
   storeKey?: string;
   trackingUrl?: string;
+  // Código que o entregador pede na porta (Cobasi, 14/09: e-mail "Código de segurança para
+  // recebimento"). Vai junto do aviso "saiu pra entrega"; nunca fica nas notas do pedido.
+  deliveryCode?: string;
   purchaseExecution?: { jobId: string; submissionId: string; actualTotal: number };
 };
 const TARGET: Record<DeliveryEventKind, string> = {
@@ -105,7 +108,9 @@ export async function recordDeliveryEvent(orderId: string, evidence: DeliveryEvi
     if (evidence.kind === "delivered") await tx.trackingSubscription.updateMany({ where: { deliveryOrderId: order.id }, data: { completedAt: new Date(), lockedAt: null } });
     const shortId = order.id.slice(-6).toUpperCase();
     const text = evidence.kind === "bought" ? copy.orderStatusLine({ shortId, status: updated.status, trackingUrl: updated.courierTrackingUrl })
-      : evidence.kind === "out_for_delivery" ? copy.retailerOutForDelivery(updated.courierTrackingUrl) : copy.delivered();
+      : evidence.kind === "out_for_delivery"
+        ? `${copy.retailerOutForDelivery(updated.courierTrackingUrl)}${evidence.deliveryCode ? `\n${copy.deliveryCode(evidence.deliveryCode)}` : ""}`
+        : copy.delivered();
     const event = await tx.deliveryEvent.create({ data: {
       deliveryOrderId: order.id, dedupeKey: key, kind: evidence.kind, source: evidence.source,
       sourceReference: reference, occurredAt, message: evidence.kind === "bought" ? text : `Pedido #${shortId}: ${text}`

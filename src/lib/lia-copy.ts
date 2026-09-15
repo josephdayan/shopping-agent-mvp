@@ -1022,6 +1022,11 @@ export function retailerOutForDelivery(trackingUrl?: string | null): string {
   return `🚚 Seu pedido saiu pra entrega. Te aviso quando chegar.${trackingUrl ? `\nAcompanha: ${trackingUrl}` : ""}`;
 }
 
+// Cobasi (14/09): o entregador pede um código na porta; a loja manda por e-mail para a conta da Lia.
+export function deliveryCode(code: string): string {
+  return `🔐 Código de recebimento: *${code}*. Fale ele pro entregador só depois de receber o pedido.`;
+}
+
 export function delivered(): string {
   return "Entregue ✅ Da próxima, é só mandar *repete o de sempre*.";
 }

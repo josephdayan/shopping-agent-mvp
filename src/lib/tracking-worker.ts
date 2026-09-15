@@ -151,12 +151,57 @@ export async function claimTracking(workerId: string, stores: string[]) {
 export async function reportMail(input: {
   storeKey: string;
   storeOrderNumber: string;
-  kind: "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled";
+  kind: "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled" | "delivery_code";
   messageId: string;
   receivedAt: string;
   trackingUrl?: string;
+  deliveryCode?: string;
 }) {
   const number = input.storeOrderNumber.trim();
+  const receivedAtCode = new Date(input.receivedAt);
+  if (!Number.isFinite(receivedAtCode.getTime())) throw new Error("Data do e-mail inválida.");
+  // Código de recebimento (Cobasi, 14/09): o e-mail não traz número. Só entrega ao cliente
+  // quando há exatamente UM pedido da loja em andamento nos últimos 7 dias; senão, o operador
+  // decide. O código nunca vai para as notas do pedido.
+  if (input.kind === "delivery_code") {
+    const code = input.deliveryCode?.trim();
+    if (!code) return { matched: false as const, reason: "sem código" };
+    const candidates = await prisma.deliveryOrder.findMany({
+      where: {
+        status: { in: ["retailer_preparing", "retailer_out_for_delivery"] },
+        updatedAt: { gte: new Date(Date.now() - 7 * 86_400_000) },
+        ...(number ? { storeOrderNumber: number } : {}),
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+    });
+    const ofStore = candidates.filter((o) => {
+      const stores = new Set((Array.isArray(o.items) ? o.items : []).flatMap((i) =>
+        i && typeof i === "object" && !Array.isArray(i) && typeof (i as { storeKey?: unknown }).storeKey === "string" ? [(i as { storeKey: string }).storeKey] : []));
+      return (stores.size === 1 ? [...stores][0] : o.storeKey) === input.storeKey;
+    });
+    const { notifyOperator } = await import("./turn-runtime");
+    if (ofStore.length !== 1) {
+      await notifyOperator(`🔐 ${input.storeKey}: chegou um código de recebimento (${code}) por e-mail e ${ofStore.length === 0 ? "não achei pedido em andamento dessa loja" : `há ${ofStore.length} pedidos em andamento dessa loja`}. Mande o código pro cliente certo pelo /ops.`);
+      return { matched: false as const, reason: ofStore.length === 0 ? "pedido não encontrado" : "pedidos ambíguos" };
+    }
+    const order = ofStore[0];
+    if (!order.storeOrderNumber) return { matched: false as const, reason: "pedido sem número da loja" };
+    if (order.status === "retailer_preparing") {
+      // O pedido foi escolhido por exclusão (único da loja em andamento); a guarda do evento
+      // continua exigindo loja + número exatos, então passamos os do próprio pedido.
+      await recordDeliveryEvent(order.id, {
+        kind: "out_for_delivery", source: "mailbox_reader", sourceReference: `mail:${input.messageId}`.slice(0, 300),
+        occurredAt: receivedAtCode, storeKey: input.storeKey, storeOrderNumber: order.storeOrderNumber, deliveryCode: code,
+      });
+    } else {
+      // Já estava "saiu pra entrega": manda só o código, sem evento novo.
+      const { whatsappAdapter } = await import("./adapters/whatsapp");
+      const { deliveryCode } = await import("./lia-copy");
+      await whatsappAdapter.sendMessage(order.phone, `Pedido #${order.id.slice(-6).toUpperCase()}: ${deliveryCode(code)}`);
+    }
+    return { matched: true as const, orderId: order.id, kind: input.kind };
+  }
   const order = await prisma.deliveryOrder.findFirst({
     where: { storeOrderNumber: number, status: { in: ["retailer_preparing", "retailer_out_for_delivery"] } },
     orderBy: { updatedAt: "desc" },

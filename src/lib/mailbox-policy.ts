@@ -1,11 +1,20 @@
 // Classificação PURA dos e-mails transacionais das lojas (Fase 4, 11/09). Mesmo espírito de
 // explicitTrackingStatus: frases explícitas por remetente, número do pedido obrigatório,
 // nada de inferência. O corpo do e-mail nunca é gravado; só o veredito.
-export type StoreMailKind = "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled";
-export type StoreMailVerdict = { kind: StoreMailKind; storeOrderNumber: string; trackingUrl?: string };
+// delivery_code (14/09): a Cobasi manda o código que o entregador pede na porta num e-mail
+// SEM número do pedido ("Seu pedido já está a caminho … 6065 … Informe apenas após receber").
+export type StoreMailKind = "created" | "paid" | "invoiced" | "out_for_delivery" | "delivered" | "canceled" | "delivery_code";
+export type StoreMailVerdict = { kind: StoreMailKind; storeOrderNumber: string; trackingUrl?: string; deliveryCode?: string };
 
 // `senders`: domínio de plataforma compartilhada (VTEX) aceito só com o nome de exibição exato da loja.
-type Rule = { domains: string[]; senders?: { domain: string; name: string }[]; number: RegExp; kinds: { kind: StoreMailKind; subject: RegExp }[] };
+type Rule = {
+  domains: string[];
+  senders?: { domain: string; name: string }[];
+  number: RegExp;
+  kinds: { kind: StoreMailKind; subject: RegExp }[];
+  // E-mail do código de recebimento: assunto literal + onde o código está no texto.
+  codeMail?: { subject: RegExp; code: RegExp };
+};
 const VTEX_KINDS: Rule["kinds"] = [
   { kind: "delivered", subject: /(pedido|compra) (foi )?entregu[eo]|entrega (conclu[ií]da|realizada)/i },
   { kind: "out_for_delivery", subject: /saiu para entrega|a caminho|em rota de entrega/i },
@@ -18,7 +27,16 @@ const VTEX_NUMBER = /\b(\d{9,13}-\d{2})\b/;
 export const STORE_MAIL_RULES: Record<string, Rule> = {
   swift: { domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   // Cobasi numera como v146373290cbs-01 (E3 real, 13/09).
-  cobasi: { domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }], number: /\b(v?\d{9,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
+  // Remetentes reais (E3, 14/09): chave de acesso "no reply <…@vtexcommerce.com.br>"; pedido
+  // "Cobasi <…@ct.vtex.com.br>" (pagamento aprovado, faturado, encaminhado à transportadora);
+  // código de recebimento "Cobasi <noreply@cobasi.com.br>".
+  cobasi: {
+    domains: ["cobasi.com.br"],
+    senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }, { domain: "ct.vtex.com.br", name: "Cobasi" }],
+    number: /\b(v?\d{9,13}[a-z]{0,4}-\d{2})\b/i,
+    kinds: VTEX_KINDS,
+    codeMail: { subject: /c[oó]digo de seguran[cç]a para recebimento/i, code: /\b(\d{4,8})\s+Informe apenas ap[oó]s receber/i },
+  },
   rihappy: { domains: ["rihappy.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   drogariasp: { domains: ["drogariasaopaulo.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   naturaldaterra: { domains: ["naturaldaterra.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
@@ -45,6 +63,12 @@ function senderMatches(from: string, rule: Rule) {
 export function classifyStoreMail(storeKey: string, mail: { from: string; subject: string; text: string }): StoreMailVerdict | null {
   const rule = STORE_MAIL_RULES[storeKey];
   if (!rule || !senderMatches(mail.from, rule)) return null;
+  if (rule.codeMail?.subject.test(mail.subject)) {
+    const code = `${mail.subject}\n${mail.text}`.replace(/\s+/g, " ").match(rule.codeMail.code)?.[1];
+    if (!code) return null;
+    const number = `${mail.subject}\n${mail.text}`.match(rule.number)?.[1] ?? "";
+    return { kind: "delivery_code", storeOrderNumber: number, deliveryCode: code };
+  }
   const subject = mail.subject.normalize("NFD").replace(/[̀-ͯ]/g, "");
   const match = rule.kinds.find((k) => k.subject.test(subject));
   if (!match) return null;

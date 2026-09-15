@@ -85,7 +85,7 @@ export const VTEX_RECIPES: Record<string, StoreRecipe> = {
     checkoutFlow: "cobasi",
     // Conferido em 14/09: a chave chega de "no reply <noreply@vtexcommerce.com.br>"; o texto
     // precisa citar "cobasi" e o e-mail tem de chegar depois do pedido (regra do leitor).
-    mail: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }] },
+    mail: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }, { domain: "ct.vtex.com.br", name: "Cobasi" }] },
   },
   oba: { origin: "https://secure.obahortifruti.com.br", skuPrefix: "oba-" },
   swift: {

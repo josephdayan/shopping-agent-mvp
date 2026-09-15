@@ -32,7 +32,7 @@ type GmailMessage = {
 
 // Padrões conhecidos; o config.json do comprador pode registrar outras lojas (registerStoreMail).
 const STORE_MAIL: Record<string, StoreMailRule> = {
-  cobasi: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }] },
+  cobasi: { label: "cobasi", domains: ["cobasi.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "no reply" }, { domain: "ct.vtex.com.br", name: "Cobasi" }] },
   // Conferido ao vivo em 13/09: a chave de acesso da Swift chega de noreply@vtexcommerce.com.br.
   swift: { label: "swift", domains: ["swift.com.br"], senders: [{ domain: "vtexcommerce.com.br", name: "Loja Online Swift" }] },
 };

@@ -1,3 +1,24 @@
+## 15/09/2026 — Webhook de validação de saque do Asaas; código de recebimento da Cobasi vai ao cliente
+
+**Asaas.** O R$1 do E6 foi autorizado pelo dono só horas depois e acabou recusado pela
+instituição de destino (a cobrança do Mercado Pago expira em 60 min); saldo segue no Asaas.
+Caminho definitivo, em vez do token SMS/app por operação: **Validação de saque via Webhook**
+(Integrações → Segurança). Rota `POST /api/asaas/withdrawal-validation` (header
+`asaas-access-token` = `ASAAS_WEBHOOK_TOKEN`, gerado e gravado na Vercel): aprova SÓ
+`PIX_QR_CODE` com `PixPayout` em curso de mesmo valor (e id) nas últimas 2 h, ou o E6 de R$1
+com descrição "Lia E6"; recusa transferências, boletos, recargas, estornos e qualquer valor
+sem correspondência. Falta o dono habilitar no painel (URL, e-mail, token) e pedir ao
+suporte do Asaas para dispensar o token de ação crítica na API. Depois: repetir o E6.
+**Cobasi, pedido v146373290cbs-01 entregue em 14/09 (1 dia útil).** E-mails reais:
+`Cobasi <…@ct.vtex.com.br>` (pagamento aprovado, faturado, "produtos encaminhados para a
+transportadora" — sem mapeamento de etapa, de propósito) e `Cobasi <noreply@cobasi.com.br>`
+"Código de segurança para recebimento do seu pedido": "seu pedido já está a caminho … 6065 …
+Informe apenas após receber", **sem número do pedido**. Novo `kind: delivery_code` no
+classificador (assunto literal + regex do código), `reportMail`: só entrega ao cliente quando
+há exatamente UM pedido da loja em andamento (7 dias) — vira "saiu pra entrega" com a linha
+"🔐 Código de recebimento: *6065*"; ambíguo/nenhum → aviso ao operador; o código nunca vai
+para as notas. Remetente `ct.vtex.com.br` + nome "Cobasi" nas regras. Suíte 598/598.
+
 ## 14/09/2026 — Asaas aberto e aprovado; E6 (R$1) parado em AWAITING_CRITICAL_ACTION_AUTHORIZATION
 
 Conta Asaas PJ (MEI) criada e aprovada pelo dono; chave de API gravada por ele na Vercel

@@ -632,7 +632,7 @@ async function mailLoop() {
           if (!verdict) continue;
           await api("/api/tracking-worker", trackingToken, {
             action: "report_mail", storeKey: store, storeOrderNumber: verdict.storeOrderNumber, kind: verdict.kind,
-            messageId: m.id, receivedAt: new Date(m.receivedAt).toISOString(), ...(verdict.trackingUrl ? { trackingUrl: verdict.trackingUrl } : {}),
+            messageId: m.id, receivedAt: new Date(m.receivedAt).toISOString(), ...(verdict.trackingUrl ? { trackingUrl: verdict.trackingUrl } : {}), ...(verdict.deliveryCode ? { deliveryCode: verdict.deliveryCode } : {}),
           }).catch(() => {});
         }
       } catch {
