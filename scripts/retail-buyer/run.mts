@@ -506,6 +506,18 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       let code: string;
       try {
         code = await buyer.capturePixCode(armed);
+      } catch (error) {
+        // Diagnóstico privado (Mac do dono): a tela e o texto após o clique final, para
+        // saber o que a loja mostrou quando o Pix não veio (15/09, 10ª tentativa real).
+        try {
+          const dir = resolve(root, "probes");
+          await mkdir(dir, { recursive: true, mode: 0o700 });
+          const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+          await page.screenshot({ path: resolve(dir, `${job.storeKey}-${stamp}-after-submit.png`), fullPage: true }).catch(() => {});
+          const text = (await page.locator("body").innerText().catch(() => "")).replace(/\s+/g, " ").slice(0, 1500);
+          await privateErrorLog(job.jobId, job.storeKey, new Error(`após o clique final: url=${page.url()} texto=${text}`));
+        } catch {}
+        throw error;
       } finally {
         armed.dispose();
       }
