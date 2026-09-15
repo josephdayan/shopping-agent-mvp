@@ -445,14 +445,10 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
     const page = context.pages()[0] ?? (await context.newPage());
     // Meio de pagamento vem da conta no /ops (pix_out → Pix da loja; card → cartão salvo).
     // 15/09: sem isso o comprador ia ao cartão salvo e caía em "cadastre o cartão".
+    const merged: StoreRecipe = { ...VTEX_RECIPES[job.storeKey], ...recipe, auth: VTEX_RECIPES[job.storeKey]?.auth };
     const payment: StoreRecipe["payment"] =
-      job.paymentKind === "pix_out" ? "pix" : job.paymentKind === "card" ? "saved_card" : recipe.payment ?? VTEX_RECIPES[job.storeKey]?.payment;
-    const buyer = new VtexBuyer(page, {
-      ...VTEX_RECIPES[job.storeKey],
-      ...recipe,
-      auth: VTEX_RECIPES[job.storeKey]?.auth,
-      ...(payment ? { payment } : {}),
-    });
+      job.paymentKind === "pix_out" ? "pix" : job.paymentKind === "card" ? "saved_card" : merged.payment;
+    const buyer = new VtexBuyer(page, { ...merged, ...(payment ? { payment } : {}) });
     const address = await extractAddress(job.customer.address);
     const evidence = await buyer.prepare(job, address, mailbox);
     if (!alive) throw new Error("Reserva interrompida.");
@@ -473,7 +469,7 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       );
       return;
     }
-    if (!recipe.submitSelector || !(recipe.receipt || recipe.checkoutFlow))
+    if (!merged.submitSelector || !(merged.receipt || merged.checkoutFlow))
       throw new Error(
         "Finalização/comprovante precisam ser homologados nesta loja.",
       );
@@ -504,7 +500,7 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       throw new Error("Checkout mudou antes do clique final.");
     // Pix da loja (Fase 3): o clique gera o copia-e-cola; o SERVIDOR confere e paga por API.
     // O navegador segura o modal aberto e pergunta o estado até a loja confirmar.
-    const armed = recipe.payment === "pix" ? buyer.armPixCapture() : null;
+    const armed = payment === "pix" ? buyer.armPixCapture() : null;
     await buyer.submit();
     if (armed) {
       let code: string;
