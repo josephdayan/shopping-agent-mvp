@@ -133,6 +133,10 @@ test("conta precisa de e-mail, login e cartão para ativar", async () => {
 });
 test("conferência rejeita mudança de endereço, quantidade, valor e prazo vencido", async () => {
   const { order, job, evidence } = await session();
+  // 15/09: o job leva o endereço do pedido completado com a localidade oficial do CEP; o
+  // texto do pedido inteiro no início passa, prefixo diferente ou rua trocada não.
+  assert.doesNotThrow(() => checkCheckout(order, { ...evidence, destination: `${order.deliveryAddress}, Santa Cecília, São Paulo, SP, CEP 01233-020` }));
+  assert.throws(() => checkCheckout(order, { ...evidence, destination: `Rua Outra 9, ${order.deliveryAddress}` }));
   for (const e of [
     { ...evidence, recipientName: "Outra pessoa" },
     { ...evidence, destination: "Outro endereço" },

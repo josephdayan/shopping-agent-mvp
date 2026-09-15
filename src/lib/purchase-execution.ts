@@ -131,9 +131,17 @@ export function checkCheckout(
   );
   if (!order.customerName || norm(e.recipientName) !== norm(order.customerName))
     throw new Error("Destinatário mudou.");
+  // O job leva o endereço do pedido COMPLETADO com a localidade oficial do CEP (bairro,
+  // cidade, UF, CEP anexados ao fim — cep-lookup.ts). O texto do pedido tem de estar
+  // inteiro no início; qualquer outra diferença é "mudou".
+  const destinationOk = (() => {
+    const got = norm(e.destination);
+    const want = norm(order.deliveryAddress ?? "");
+    return Boolean(want) && (got === want || got.startsWith(want));
+  })();
   if (
     e.cartHash !== hash ||
-    norm(e.destination) !== norm(order.deliveryAddress ?? "") ||
+    !destinationOk ||
     norm(e.postalCode) !== norm(order.cep ?? "")
   )
     throw new Error("Endereço ou cesta mudou.");
