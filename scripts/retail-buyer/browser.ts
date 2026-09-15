@@ -18,6 +18,8 @@ export type BuyerJob = {
   // Frete cotado ao cliente (o ML só mostra frete depois do endereço, no app).
   deliveryFeeCents?: number;
   accountEmail?: string;
+  // Como a Lia paga nesta loja (conta no /ops): pix_out | card | ml_balance.
+  paymentKind?: string;
   customer: { name?: string; phone: string; cep: string; address: string };
   items: {
     sku: string;

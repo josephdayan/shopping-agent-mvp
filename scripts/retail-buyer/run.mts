@@ -443,10 +443,15 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
       config.headless,
     );
     const page = context.pages()[0] ?? (await context.newPage());
+    // Meio de pagamento vem da conta no /ops (pix_out → Pix da loja; card → cartão salvo).
+    // 15/09: sem isso o comprador ia ao cartão salvo e caía em "cadastre o cartão".
+    const payment: StoreRecipe["payment"] =
+      job.paymentKind === "pix_out" ? "pix" : job.paymentKind === "card" ? "saved_card" : recipe.payment ?? VTEX_RECIPES[job.storeKey]?.payment;
     const buyer = new VtexBuyer(page, {
       ...VTEX_RECIPES[job.storeKey],
       ...recipe,
       auth: VTEX_RECIPES[job.storeKey]?.auth,
+      ...(payment ? { payment } : {}),
     });
     const address = await extractAddress(job.customer.address);
     const evidence = await buyer.prepare(job, address, mailbox);

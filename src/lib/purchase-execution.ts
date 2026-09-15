@@ -258,11 +258,14 @@ export async function claimPurchaseSession(workerId: string, stores: string[]) {
   const { lookupCepLocality, completeAddressWithLocality } = await import("./cep-lookup");
   const locality = await lookupCepLocality(payload.customer.cep ?? "");
   payload.customer.address = completeAddressWithLocality(payload.customer.address ?? "", payload.customer.cep, locality);
+  const account = accounts.find((a) => a.storeKey === job.storeKey);
   return {
     ...payload,
     status: job.status,
     claimToken: token,
-    accountEmail: accounts.find((a) => a.storeKey === job.storeKey)?.email,
+    accountEmail: account?.email,
+    // O comprador escolhe Pix da loja × cartão salvo por aqui (15/09).
+    paymentKind: account?.paymentKind,
   };
 }
 export async function purchaseHeartbeat(
