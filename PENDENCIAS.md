@@ -1,3 +1,25 @@
+## 15/09/2026 — Rodada 2 da mídia: o que falta pra ela valer
+
+A rodada 1 (agente testador) provou a FOTO ao vivo e derrubou dois bugs (carrossel 160 e
+demonstrativo virando busca — ver AGENTS). Para a rodada 2 valer algo:
+
+- [ ] **Número que NÃO seja o do dono.** A rodada 1 rodou no `LIA_OPERATOR_PHONE`, então o
+  canal do operador (pedido Cobasi real, "Pago e memorizo?") entrou no meio do teste e
+  contaminou 4 das 5 observações. Sem um número de teste separado, qualquer rodada volta
+  assim.
+- [ ] **Áudio ainda sem NENHUM teste real.** Mensagem de voz exige microfone; anexo de
+  arquivo chega como documento e é ignorado de propósito. Caminho automatizável: o dono
+  grava 4–5 áudios num chat próprio (A1–A8 do protocolo) e o testador ENCAMINHA — áudio
+  encaminhado continua sendo áudio de voz.
+- [ ] **Turno passando de 45 s** dispara o aviso anti-silêncio, que chega depois do
+  cancelar e parece bug de cancelamento. Com o carrossel consertado sobra uma ida à Graph
+  por busca; medir de novo antes de mexer no `LIA_TURN_DEADLINE_MS`.
+- [ ] **Custo real por mensagem** de áudio e foto (estimado: R$0,02 e R$0,01–0,03).
+- [ ] Dono: `sudo xcodebuild -license accept` (ou `sudo xcode-select -s
+  /Library/Developer/CommandLineTools`) — o git do Xcode parou de rodar nesta máquina em
+  15/09 pedindo a licença; contornei com `DEVELOPER_DIR` no commit, mas toda sessão vai
+  bater nisso.
+
 ## 15/09/2026 — Primeiro pedido real de cliente na Cobasi: 11 tentativas, 9 defeitos corrigidos, parou no reCAPTCHA visível
 
 Pedido #5GUY4Z (dono como cliente, lata Whiskas 290 g, R$21,50 pago por Pix; custo na loja

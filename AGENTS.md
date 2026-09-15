@@ -1,3 +1,47 @@
+## 15/09/2026 — Foto provada ao vivo; carrossel recusado em toda busca; demonstrativo virava busca
+
+Primeira rodada de teste real da leitura de mídia (agente testador, número do dono). Uma
+foto passou, o resto da rodada caiu — e os três motivos são independentes da mídia.
+
+**1. Foto: provada em produção.** 14:19 UTC, foto de ração → eco literal
+"📷 Na foto eu vi: ração Golden Fórmula para cães adultos de porte pequeno sabor carne e
+arroz 1kg". No runtime log: zero `[whatsapp:meta:media-*]`, zero `[ai:vision:*]`. Ou seja o
+que a suíte mockada não provava está provado: `GET /{media-id}`, download com o MESMO Bearer
+na URL assinada, e a visão devolvendo o produto. **Áudio continua sem teste** (o testador não
+conseguiu enviar mensagem de voz; anexo de arquivo chega como documento e é ignorado de
+propósito).
+
+**2. Carrossel era recusado pela Meta em TODA busca.** `(#132018) Hydrated body length (174)
+is greater than the limit (160) (for card_index=0)` às 14:22 e 14:27, caindo no
+`[whatsapp:meta:carousel:fallback-cards]`. A Meta mede o corpo do card **já hidratado**
+(texto fixo + variáveis) contra 160; os tetos por variável (nome 90 + prazo 60) somavam 150
+num orçamento real de **86** — o texto fixo do template come 74. Bug desde 07/09: cada busca
+pagava uma ida à Graph jogada fora. Agora `src/lib/meta-carousel-card.ts` (módulo folha,
+porque `meta-setup` CRIA o template e `adapters/whatsapp` ENVIA nele) divide o orçamento
+real entre nome e prazo — prazo cede espaço primeiro, nome fica com o resto, **preço nunca é
+truncado**, corte visível com "…". O teste hidrata o template de verdade e mede o que a Meta
+mede; era o teste que faltava em 07/09.
+
+**3. Demonstrativo sozinho virava termo de busca.** "quero 2 desse" depois da foto (o
+WhatsApp Web não deixa legendar encaminhamento, então a legenda vira mensagem separada) →
+`[llm-router] basket_edit "quero 2 desse"` → a palavra "desse" foi BUSCADA: "*2x desse* eu
+não achei em nenhuma loja agora". O caminho determinístico já estava certo ("não peguei qual
+você quer" + opções); quem sequestrava era o **roteador de IA, que é o último recurso da
+escolha, ANTES** do `choiceNotUnderstood` (delivery-service:3207). Agora `isDemonstrativeOnly`
+barra no funil único de busca (`handleSearch`): com opções na mesa a Lia pergunta *de qual
+deles* e devolve os cards; sem opções, pede o nome do produto. Demonstrativo nunca chega à
+busca. Regressão cobre os dois estados, com o veredicto do roteador injetado (sem
+`OPENAI_API_KEY` o caso não reproduz).
+
+**O que NÃO era bug:** o "Ainda procurando — já te respondo" depois do cancelar é o watchdog
+(`[turn:deadline] passou de 45000ms` às 14:27:22 e 14:27:36) chegando atrasado, não o
+cancelar quebrado. E o pedido #5GUY4Z com o "Pago e memorizo?" apareceu porque o teste rodou
+no **`LIA_OPERATOR_PHONE`** — o canal do operador, com um pedido Cobasi real em curso. A nota
+2/10 da rodada mede essa mistura, não a leitura de mídia.
+
+Testes: +10 (7 do limite do card, 3 do demonstrativo) e +2 no E2E de mídia; afetados
+307/307; build e guarda de emoji ok.
+
 ## 15/09/2026 — A Lia passou a LER áudio e foto do cliente
 
 Até aqui só texto entrava: áudio, foto e figurinha caíam em "só consigo ler texto" e o

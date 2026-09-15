@@ -8,6 +8,7 @@ import { prisma } from "../src/lib/prisma";
 import { whatsappAdapter } from "../src/lib/adapters/whatsapp";
 import { handleDeliveryMessage } from "../src/lib/delivery-service";
 import { __setMediaDepsForTests } from "../src/lib/media-understanding";
+import { __setRouterInterpreterForTests } from "../src/lib/adapters/ai";
 
 const RUN = `${Date.now().toString(36)}${process.pid}`;
 const PREFIX = `+5501${String(Date.now()).slice(-6)}${String(process.pid).slice(-2)}`;
@@ -69,6 +70,7 @@ before(async () => {
 
 after(async () => {
   __setMediaDepsForTests(null);
+  __setRouterInterpreterForTests(null);
   if (!dbOk) return;
   await wipe();
   await prisma.$disconnect();
@@ -157,6 +159,56 @@ test("foto: pedido lido na etiqueta entra na cesta", async (t) => {
   const reply = said(phone, from);
   assert.match(reply, /📷 Na foto eu vi:.*sabonete/i);
   assert.match(reply, /sabonete/i);
+});
+
+test("foto e depois '2 desse': pergunta qual, não busca a palavra (F2 de 15/09)", async (t) => {
+  if (!dbOk) return t.skip();
+  __setMediaDepsForTests({
+    download: async () => ({ bytes: new Uint8Array([1]), mimeType: "image/jpeg" }),
+    describe: async () => "sabonete"
+  });
+  // Em produção o ROTEADOR de IA é o último recurso da escolha, ANTES do "não peguei qual
+  // você quer" — e foi ele que classificou "quero 2 desse" como basket_edit e mandou a
+  // palavra "desse" pra busca. Sem OPENAI_API_KEY o roteador devolve null e o caso não
+  // reproduz, então o veredicto é injetado exatamente como a IA respondeu no dia.
+  __setRouterInterpreterForTests(async ({ text }) =>
+    /desse/i.test(text) ? { action: "basket_edit", editCommand: "quero 2 desse" } : null
+  );
+  try {
+    const phone = await returningCustomer();
+    await handleDeliveryMessage({
+      phone,
+      text: "",
+      messageId: `media_${RUN}_desse_foto`,
+      media: { kind: "image", id: "m-img-2", mimeType: "image/jpeg" }
+    });
+    const from = outbox.length;
+    await handleDeliveryMessage({ phone, text: "quero 2 desse", messageId: `media_${RUN}_desse_txt` });
+    const reply = said(phone, from);
+    // O bug: "desse" ia pra busca e voltava "*2x desse* eu não achei em nenhuma loja".
+    assert.doesNotMatch(reply, /não achei em nenhuma loja/i);
+    assert.match(reply, /de qual deles/i);
+    // E as opções voltam pra mesa, pra escolha ser um toque.
+    assert.match(reply, /sabonete/i);
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
+});
+
+test("sem opções na mesa, demonstrativo pede o nome do produto em vez de buscar", async (t) => {
+  if (!dbOk) return t.skip();
+  __setMediaDepsForTests(null);
+  __setRouterInterpreterForTests(async () => ({ action: "basket_edit", editCommand: "quero 2 desse" }));
+  try {
+    const phone = await returningCustomer();
+    const from = outbox.length;
+    await handleDeliveryMessage({ phone, text: "quero 2 desse", messageId: `media_${RUN}_desse_vazio` });
+    const reply = said(phone, from);
+    assert.doesNotMatch(reply, /não achei em nenhuma loja/i);
+    assert.match(reply, /a qual produto/i);
+  } finally {
+    __setRouterInterpreterForTests(null);
+  }
 });
 
 test("figurinha (mídia que a Lia não lê) continua avisando o que ela aceita", async (t) => {

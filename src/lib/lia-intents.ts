@@ -1346,6 +1346,40 @@ const REFINE_FILLER = new Set(
   "tem essa esse dessa desse de da do dela dele em uma um umas uns a o as os quero queria prefiro pode ser mas e na no pra para pro cor tamanho versao opcao so que seja por favor pfv vcs voces voce vc ai dai ne la ja tb tambem alguma algum outra outro mesmo mesma tipo dessa vez ele ela eles elas meu minha nosso nossa eh".split(" ")
 );
 
+// Demonstrativo SEM substantivo ("desse", "2 desse", "quero esse aí", "daquele mesmo"):
+// aponta para algo que já está na mesa, então NUNCA é termo de busca. Caso real de 15/09:
+// a legenda "quero 2 desse" chegou como mensagem separada da foto (o WhatsApp Web não
+// deixa legendar encaminhamento), virou edição de cesta e a palavra "desse" foi buscada
+// como se fosse produto — "*2x desse* eu não achei em nenhuma loja". Com opções na mesa a
+// resposta certa é perguntar QUAL; sem elas, perguntar o nome do produto.
+const DEMONSTRATIVES = new Set(
+  "esse essa esses essas este esta estes estas desse dessa desses dessas deste desta aquele aquela aqueles aquelas daquele daquela daqueles daquelas isso isto aquilo dele dela".split(" ")
+);
+
+// Palavras de quantidade/ênfase que acompanham o demonstrativo sem dar conteúdo a ele
+// ("mais um desse"). Local de propósito: mexer no REFINE_FILLER mudaria o parser de
+// refinamento, que é outro caminho.
+const DEMONSTRATIVE_FILLER = new Set("mais menos ainda so somente apenas leva coloca poe bota adiciona manda aquele".split(" "));
+
+export function isDemonstrativeOnly(text: string): boolean {
+  const words = normalizeMsg(text)
+    // quantidade e multiplicador ("2", "2x", "x2") não são conteúdo
+    .replace(/\b\d+\s*x\b|\bx\s*\d+\b|\d+/g, " ")
+    .split(/[^a-z]+/)
+    .filter(Boolean);
+  if (!words.length) return false;
+  let sawDemonstrative = false;
+  for (const word of words) {
+    if (DEMONSTRATIVES.has(word)) {
+      sawDemonstrative = true;
+      continue;
+    }
+    // Sobrou palavra com conteúdo (um substantivo, uma marca): é busca de verdade.
+    if (!REFINE_FILLER.has(word) && !DEMONSTRATIVE_FILLER.has(word)) return false;
+  }
+  return sawDemonstrative;
+}
+
 // "acha outras", "tem mais?", "mostra outras opções" — the customer wants to SEE MORE
 // options for the SAME item (not pick, not skip). The tail after "mais/outras" must be
 // empty or pure filler: "manda mais 2 cocas" is ADDING an item, "tem mais barato?" is

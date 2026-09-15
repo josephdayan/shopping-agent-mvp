@@ -15,7 +15,7 @@ import { computeStoreFreights, freightBreakdownLabel, instantQuoteEligible, PER_
 import { humanEstimate, liveFreightEnabled, liveStoreFreight, type LiveItemCheck, slowestEstimate } from "@/lib/live-freight";
 import { checkCandidatesLive, liveKey } from "@/lib/live-availability";
 import { mlBasketFreight } from "@/lib/ml-freight";
-import { detectIntent, extractCep, isQuestion, asksRunningTotal, looksLikeMedicine, hasUrgencySignal, isNarrativeSegment, isRequestModifier, sharesProductNoun, stripMedicineNegation, narrowChoiceByName, normalizeMsg, parseBasketLines, parsePriceCap, splitPriceCap, mergeShoppingLines, parseChoiceReply, splitCommandClauses, stripListNumbering, parseRefinement, wantsMoreOptions, looksLikeTobacco, looksLikeSymptomAsk, type Intent, type ParsedLine } from "@/lib/lia-intents";
+import { detectIntent, extractCep, isDemonstrativeOnly, isQuestion, asksRunningTotal, looksLikeMedicine, hasUrgencySignal, isNarrativeSegment, isRequestModifier, sharesProductNoun, stripMedicineNegation, narrowChoiceByName, normalizeMsg, parseBasketLines, parsePriceCap, splitPriceCap, mergeShoppingLines, parseChoiceReply, splitCommandClauses, stripListNumbering, parseRefinement, wantsMoreOptions, looksLikeTobacco, looksLikeSymptomAsk, type Intent, type ParsedLine } from "@/lib/lia-intents";
 import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LABEL, PAID_OR_IN_FULFILLMENT_STATUSES, REPEATABLE_DELIVERY_ORDER_STATUSES, appendOrderNote, isCardCharge, isOrderOutForDelivery } from "@/lib/order-flags";
 import { automaticPurchaseStores } from "@/lib/purchase-policy";
 import { isSaoPauloState } from "@/lib/coverage";
@@ -4267,6 +4267,15 @@ async function handleSearch(
   text: string,
   userId?: string
 ) {
+  // Demonstrativo SEM substantivo ("quero 2 desse") aponta pro que já está na mesa: nunca
+  // é termo de busca. Caso real 15/09: a legenda da foto chegou como mensagem separada, o
+  // roteador classificou basket_edit e a palavra "desse" foi buscada — "*2x desse* eu não
+  // achei em nenhuma loja". Com opções abertas, pergunta QUAL; sem elas, pede o nome.
+  if (isDemonstrativeOnly(text)) {
+    if (ctx.pending?.length) await sendChoices(phone, ctx.pending[0], copy.demonstrativeNeedsChoice());
+    else await reply(phone, copy.demonstrativeNeedsItem());
+    return;
+  }
   // Concierge mode: no catalog gate. Whatever the customer asks for becomes a free-form
   // line the operator will source and price. Breadth — "anything from anywhere" — is the
   // moat, and a human buyer needs zero integration to honor it.

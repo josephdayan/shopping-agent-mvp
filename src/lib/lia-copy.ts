@@ -987,6 +987,17 @@ export function categoryRemoveUnknown(category: string): string {
 }
 
 // "n" na pergunta de quantidade: 1 unidade + a saída honesta (28/08 S16).
+// Demonstrativo sem substantivo ("quero 2 desse") COM opções na mesa: a resposta é
+// perguntar qual, não buscar a palavra "desse" (caso real 15/09, depois de uma foto).
+export function demonstrativeNeedsChoice(): string {
+  return "De qual deles? 🙂 Toca em *Escolher este* no card que você quer — ou me diz o número.";
+}
+
+// O mesmo, sem nada na mesa pra apontar.
+export function demonstrativeNeedsItem(): string {
+  return "Não sei a qual produto você se refere 🙂 Me diz o nome dele que eu procuro.";
+}
+
 // Cliente mandou figurinha, vídeo, contato, documento: tipos que a Lia não lê.
 export function nonTextMessage(): string {
   return "Por enquanto eu só consigo ler texto, áudio e foto 🙂 Me escreve o que você precisa?";

@@ -3,6 +3,7 @@
 // da Vercel (rota /api/ops/meta-setup, protegida pela sessão do /ops) porque o token da
 // Meta é sensível e não sai da Vercel. Cada ação é idempotente: repetir só regrava.
 import { readFile } from "node:fs/promises";
+import { CAROUSEL_CARD_BODY } from "./meta-carousel-card";
 import path from "node:path";
 
 const GRAPH = "https://graph.facebook.com/v22.0";
@@ -90,9 +91,9 @@ export const CAROUSEL_TEMPLATE_PREFIX = process.env.LIA_CAROUSEL_TEMPLATE?.trim(
 export const CAROUSEL_CARD_COUNTS = [2, 3, 4, 5] as const;
 // Variável não pode abrir nem fechar o texto (2ª recusa da Meta, 07/09).
 export const CAROUSEL_BODY = "Olha o que achei 👇 {{1}} Desliza pros lados e toca em *Escolher este* no card que preferir. Pra ver a página de um produto, escreva *detalhes* e o número dele.";
-// A Meta exige proporção de palavras fixas por variável ("Params Words Ratio Exceeds
-// Limit", 1ª tentativa 07/09): o card precisa de rótulos, não só as 3 variáveis.
-export const CAROUSEL_CARD_BODY = "Produto: {{1}}\nPreço do item: *{{2}}*\nPrazo de entrega da loja: {{3}} (contado da compra)";
+// O texto do card e o ajuste dos parâmetros ao limite de 160 hidratados vivem num módulo
+// folha, porque `adapters/whatsapp` precisa do mesmo texto para caber nele (15/09).
+export { CAROUSEL_CARD_BODY } from "./meta-carousel-card";
 export const CAROUSEL_BUTTONS = [
   { type: "quick_reply", text: "Escolher este" },
   { type: "quick_reply", text: "Outras opções" }
