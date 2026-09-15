@@ -7,9 +7,10 @@
 
 > **APOSENTADO em 11/09/2026.** O caminho da tarefa horária do ChatGPT (`cart_only`,
 > `/api/purchase-worker/claim`, `purchase-worker-client`) foi removido do código. O que
-> vale agora está em [operador-runbook.md](operador-runbook.md) (seção de 11/09) e no
-> [plano de implementação](plano-implementacao-compra-2026-09-11.md). Os comandos de
-> leitura `purchase-worker:monitor` e `purchase-worker:inspect` continuam existindo.
+> vale agora está em [operador-runbook.md](operador-runbook.md), reescrito em 15/09 para o
+> operador contratado. O [plano de implementação](plano-implementacao-compra-2026-09-11.md)
+> virou histórico junto com este arquivo. Os comandos de leitura
+> `purchase-worker:monitor` e `purchase-worker:inspect` continuam existindo.
 > O texto abaixo é histórico.
 
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireOpsKey } from "@/lib/auth";
+import { opsRole, requireOpsKey } from "@/lib/auth";
 import { getOperatorQueue } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -13,5 +13,8 @@ function authed(request: Request) {
 export async function GET(request: Request) {
   if (!authed(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const orders = await getOperatorQueue();
-  return NextResponse.json({ orders });
+  // O painel desenha por papel (15/09): o operador contratado vê a fila e as ações de
+  // comprar/entregar; contas de loja e dinheiro ficam com o dono. A tela só esconde — a
+  // negativa de verdade está em cada rota.
+  return NextResponse.json({ orders, role: opsRole(request, { allowQuery: true }) ?? "owner" });
 }

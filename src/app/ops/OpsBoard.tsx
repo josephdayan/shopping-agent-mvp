@@ -142,6 +142,10 @@ export default function OpsBoard() {
   const [refundAmounts, setRefundAmounts] = useState<Record<string, string>>({});
   const [notify, setNotify] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
+  // "owner" enquanto o servidor não responde: o dono nunca perde botão por um piscar de
+  // carregamento, e o operador perde os botões no primeiro load (a rota nega de todo jeito).
+  const [role, setRole] = useState<"owner" | "operator">("owner");
+  const isOwner = role === "owner";
   const [copied, setCopied] = useState<string | null>(null);
 
   async function copyWithFeedback(key: string, text: string) {
@@ -176,8 +180,9 @@ export default function OpsBoard() {
         return;
       }
       if (res.ok) {
-        const data = (await res.json()) as { orders?: DeliveryOrder[] };
+        const data = (await res.json()) as { orders?: DeliveryOrder[]; role?: "owner" | "operator" };
         setOrders(data.orders ?? []);
+        if (data.role) setRole(data.role);
         setDenied(false);
       }
       // Waitlist is best-effort: a failure here must never blank the order queue.
@@ -273,9 +278,14 @@ export default function OpsBoard() {
 
   return (
     <div style={{ marginTop: 20, display: "grid", gap: 14 }}>
-      <PurchaseAccounts />
+      {isOwner && <PurchaseAccounts />}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ fontSize: 12, color: "#667085" }}>Compras e entregas: confira os pedidos que precisam de ação.</span>
+        {isOwner && (
+          <a href="/ops/catalogo" style={{ color: "#e4002b", fontSize: 13, textDecoration: "none" }}>
+            📚 catálogo
+          </a>
+        )}
       </div>
       {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
       {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
@@ -388,7 +398,7 @@ export default function OpsBoard() {
                 {e.lastError ? <span style={{ color: "#b54708" }}> · {e.lastError}</span> : null}
               </div>)}
             </div> : null}
-            {o.purchaseJobs?.map(job => <PurchaseReview key={job.id} job={job} refresh={() => { void load(); }} />)}
+            {isOwner && o.purchaseJobs?.map(job => <PurchaseReview key={job.id} job={job} refresh={() => { void load(); }} />)}
             {o.notes && <div style={{ fontSize: 12, color: "#98a2b3", marginTop: 4, whiteSpace: "pre-wrap" }}>{o.notes}</div>}
 
             {o.status === "awaiting_operator_quote" && (
@@ -555,7 +565,19 @@ export default function OpsBoard() {
                   </button>
                 </>
               )}
-              {o.status === "refund_pending" ? (
+              {!isOwner ? (
+                // Operador contratado: dinheiro que SAI (cancelar pedido, concluir
+                // estorno) é decisão do dono. "Não consegui comprar → estornar" fica com
+                // ele logo acima: é a saída honesta quando a loja falha e o valor volta
+                // pro cliente. A rota nega de novo no servidor.
+                (o.status === "refund_pending" || paymentReceived) && (
+                  <span style={{ fontSize: 13, color: "#667085" }}>
+                    {o.status === "refund_pending"
+                      ? "↩️ Estorno em aberto — quem conclui é o responsável pela operação."
+                      : "Precisa cancelar este pedido pago? Chame o responsável pela operação."}
+                  </span>
+                )
+              ) : o.status === "refund_pending" ? (
                 <>
                   <input
                     placeholder="referência do estorno no provedor"
@@ -658,7 +680,7 @@ export default function OpsBoard() {
         );
       })}
 
-      {waitlist && waitlist.total > 0 && (
+      {isOwner && waitlist && waitlist.total > 0 && (
         <div style={waitCard}>
           <button style={waitHeader} onClick={() => setShowWaitlist((v) => !v)}>
             <span>

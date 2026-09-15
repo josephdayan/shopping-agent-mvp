@@ -608,6 +608,12 @@ export function paymentConfirmed(): string {
   return "✅ Pagamento confirmado. Já estou separando — te aviso quando sair pra entrega.";
 }
 
+// Pix cai às 23h e quem compra é gente: "já estou separando" vira mentira por 10 horas.
+// Honesto e sem inventar hora exata — o prazo real continua sendo o da loja.
+export function paymentConfirmedOutsideHours(): string {
+  return "✅ Pagamento confirmado. As lojas já fecharam por hoje: faço sua compra logo cedo e te aviso por aqui.";
+}
+
 export function supplierValidationPending(): string {
   return "Ainda confirmando na loja. Não precisa pagar nada agora — te aviso quando estiver pronto.";
 }

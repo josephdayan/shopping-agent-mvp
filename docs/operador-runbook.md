@@ -1,117 +1,73 @@
 # Runbook do Operador da Lia
 
-> **Decisão vigente de 15/09/2026 — operador humano.** A operação decidiu contratar uma
-> pessoa para cotar, comprar e acompanhar os pedidos. A compra automática está suspensa:
-> não ativar lojas na allowlist, não executar checkout pelo comprador local e não reativar a
-> tarefa horária do ChatGPT. A fila/manual do `/ops` é a rota operacional; os blocos abaixo
-> que descrevem o comprador automático ficam preservados como histórico até serem reescritos.
-> Esta atualização documental não alterou flags, deploy ou contas de produção.
+_Guia de quem compra os pedidos. Reescrito em 15/09/2026 para o operador contratado._
 
-> **Conferência local 11/09:** serviços do Chaves: `Lia Purchase Worker` e
-> `Lia Tracking Worker` (conta `lia-purchase-worker`, sem sufixo “Token”). O primeiro
-> existe; o segundo falta neste Mac. OAuth Gmail concluído em 13/09, `mailbox-check` ready. Setup ML iniciado, login ainda não homologado.
-> A sondagem ML lê itens/preços; frete/endereço/conta no relatório vêm do job e não
-> comprovam o checkout real. Conferir esses dados no app antes de pagar.
+> A compra automática está **suspensa** por decisão de 15/09/2026. A fila do `/ops` é a
+> única rota. O que existia de comprador automático (janela do Chrome no Mac do dono,
+> Pix de saída, allowlist de lojas) está descrito em
+> [operador-automatico-local.md](operador-automatico-local.md) e não deve ser ligado.
 
-> **Atualização de 11/09/2026 — como a compra funciona agora.** O plano de
-> [docs/plano-implementacao-compra-2026-09-11.md](plano-implementacao-compra-2026-09-11.md)
-> está implementado localmente (Fases 0–7). Resumo do que muda para quem opera:
->
-> 1. **Comprador local sempre ligado.** `npm run purchase-worker:install-service` instala o
->    processo como serviço do macOS (launchd + caffeinate, reinicia sozinho; logs em
->    `~/Library/Logs/lia/`). Segredos no Chaves (`lia-purchase-worker`). Acesso remoto ao
->    Mac pelo Tailscale para olhar a janela quando uma loja pedir algo.
-> 2. **Mercado Livre (canal principal) — degrau C.** O comprador monta o carrinho na conta
->    da Lia e você recebe no WhatsApp **"carrinho pronto"** com os botões **Comprei / Não
->    deu**. Abra o app do ML no celular (o carrinho já está lá), confira endereço e
->    destinatário, pague com o **saldo Mercado Pago** e toque **Comprei**; a Lia pede o
->    número do pedido — responda só o número. O cliente é avisado na hora. O mesmo pode ser
->    feito no `/ops` (Comprei — registrar nº / Não deu).
-> 3. **Lojas VTEX homologadas — Pix da loja pago pela Lia.** O comprador finaliza com Pix,
->    captura o copia-e-cola e o servidor paga por API bancária. Você só entra por botão:
->    **recebedor novo** (Pagar e memorizar / Recusar, uma vez por loja), **Pix recusado**
->    (Refazer / Estornar), **loja em silêncio** (Confirmar / Estornar), **acima do teto**
->    (Autorizar / Estornar). Nenhum toque = nada acontece; expira e fica no `/ops`.
-> 4. **Fila manual.** Pedido pago de loja sem execução automática aparece com a faixa
->    **COMPRA MANUAL**: compre no site e registre o número em "Confirmar compra na loja".
-> 5. **Cliente pode desistir até a compra sair**: "cancelar" com pedido pago e ainda não
->    comprado estorna na hora, sozinho. Depois da compra, vale a regra antiga.
-> 6. **Ligar uma loja** exige três chaves independentes: conta salva no `/ops` (e-mail,
->    login, "meio de pagamento pronto", como a Lia paga) + nome em `LIA_AUTO_PURCHASE_STORES`
->    + receita com `submitSelector`/`receipt` no `config.json` do comprador (VTEX). Mercado
->    Livre: conta no `/ops` com saldo MP + `LIA_AUTO_PURCHASE_STORES=mercadolivre`.
-> 7. **Kill-switches** (Vercel): `LIA_PURCHASE_SUBMIT_OFF=true` (nenhum clique final),
->    `LIA_PIX_OUT_OFF=true` (nenhum Pix de saída), `LIA_AUTO_PURCHASE_OFF=true` (tudo vira
->    aprovação individual), `LIA_OPS_BUTTONS_OFF=true` (só texto + link do painel).
-> 8. **Sondagens antes de ligar** (gates): `npm run purchase-worker:probe -- LOJA` (VTEX,
->    até a tela de pagamento com Pix, sem finalizar) e
->    `npm run purchase-worker:probe -- mercadolivre <URL do anúncio>`.
-> 9. **A tarefa horária do ChatGPT foi aposentada** (rota `/api/purchase-worker/claim` e o
->    cliente removidos em 11/09). Desligue a tarefa no ChatGPT.
+## O que é a Lia e onde você entra
 
+A Lia é uma assistente de compras no WhatsApp. O cliente pede o que quer em linguagem
+normal, a Lia mostra preço, frete e prazo, e ele paga por Pix ou cartão na própria
+conversa. **A partir daí é com você**: comprar aqueles itens no site da loja e mandar
+entregar no endereço do cliente.
 
-_Guia de 1 página pra quem opera os pedidos. Criado em 2026-07-20._
-
-> **Nota de 02/09/2026.** Este runbook descreve o fluxo de julho (motoboy saindo da base).
-> Hoje só existe **entrega pela própria loja**: a Lia cota na hora com preço da vitrine, o
-> cliente paga, você compra no site da loja/ML como cliente comum e marca "Confirmar
-> compra na loja", depois "Loja saiu para entrega" e "Marcar entregue". O motoboy da base
-> saiu do produto (09/08) e do código (02/09). Estorno de pedido pago: "Cancelar e
-> solicitar estorno" e depois "Estornar pelo provedor" (automático) ou "Confirmar estorno"
-> (manual, com referência). Frete e custo aceitam vírgula ("12,90"). **Não conseguiu comprar**
-> (sem estoque, loja não entrega no CEP, mínimo): botão "Não consegui comprar → estornar" no
-> card do pedido pago — estorna pelo provedor e explica ao cliente com o motivo que você digitar.
-
-Você é a pessoa que **compra os pedidos e manda entregar**. O cliente pede pela Lia no
-WhatsApp; a Lia mostra o pedido pra você no painel; **você cota, compra e despacha**. A Lia
-cuida da conversa e da cobrança — você não fala com o cliente nem cobra à mão.
+Você **não** fala com o cliente, **não** cobra nada e **não** usa dinheiro seu. A Lia
+cuida da conversa e da cobrança; o dinheiro do cliente já está na conta da operação.
 
 ## Entrar no painel
 
-Abra **uma vez** o link `https://liadelivery.com.br/ops?key=SEU_TOKEN`. Depois disso, é só
-`liadelivery.com.br/ops`. Deixe aberto — pedidos novos aparecem sozinhos.
+Mande **ops** para a Lia no WhatsApp, do seu número cadastrado. Ela responde com um link
+que vale 10 minutos. Ao abrir, o painel fica logado por 1 ano naquele aparelho.
 
-## O ciclo de um pedido (4 passos)
+O painel se atualiza sozinho a cada 10 segundos. Deixe aberto.
 
-1. **Chega um pedido "🧮 Cotar (concierge)".** Ele mostra o que o cliente pediu.
-   - Ache o preço real de cada item (o link **🔎 ver** abre a busca na loja).
-   - Preencha: **custo dos produtos** (o que VOCÊ vai pagar), **frete** (o do motoboy),
-     **modalidade** e **prazo**. Clique **Enviar cotação ao cliente**.
-   - A Lia soma os 10% de margem sozinha e manda o total pro cliente. **Nada é cobrado ainda.**
+## O ciclo de um pedido
 
-2. **Cliente paga → o card vira "💳 Pago — comprar".**
-   - Compre os itens de verdade. Use **🛒 Abrir itens na loja** e **📋 Copiar lista** pra ir rápido.
-   - Pague com o **cartão da operação** (o dinheiro do cliente já caiu na conta da Lia).
+1. **"🧮 Cotar"** — o cliente pediu algo que a Lia não conseguiu precificar sozinha.
+   Ache o preço real de cada item (o link **🔎 ver** abre a busca na loja) e preencha
+   **custo dos produtos**, **frete** e **prazo**. Clique **Enviar cotação ao cliente**.
+   A margem entra sozinha; nada é cobrado ainda.
+2. **"💳 Pago — comprar"** — o cliente pagou. Use **🛒 Abrir itens na loja** e
+   **📋 Copiar lista**. Compre com o **cartão da operação**, escolhendo a **entrega da
+   própria loja** para o endereço do cliente que está no card.
+3. **Registre a compra** — cole o número do pedido da loja em **Confirmar compra na
+   loja** (e o link do pedido, se a loja tiver). O cliente é avisado na hora.
+4. **"🚚 Loja saiu para entrega"** quando a loja despachar, e **Marcar entregue** quando
+   o cliente receber. Fim.
 
-3. **Com as compras na mão, na base → clique "🛵 Comprei — despachar motoboy".**
-   - O motoboy é chamado sozinho e **sai da sua base** (não de uma loja). Só clique quando
-     já estiver com os produtos em mãos.
-
-4. **Quando o cliente receber → clique "Marcar entregue".** Fim.
-
-## Modalidade: motoboy na hora × entrega da loja
-
-- **🛵 motoboy na hora** (padrão): você compra e o motoboy leva. É a entrega rápida.
-- **🚚 entrega do varejista**: use quando a própria loja já entrega no dia. Aí **não tem
-  motoboy** — a loja entrega e você só acompanha.
+**Prazo combinado:** comprar em até 2 horas depois que o pedido aparece, entre 9h e 20h.
+Pedido que cai fora desse horário fica para a manhã seguinte — a Lia já avisa o cliente.
 
 ## Quando algo dá errado
 
-- **Faltou um item ou o preço subiu muito:** use o campo **avisar cliente** ("o X acabou,
-  troco pelo Y?"). Nunca troque por conta própria nem invente preço.
-- **Cliente quer cancelar / precisa estornar:** clique **Cancelar e solicitar estorno**. Isso
-  marca **ESTORNO PENDENTE**. O estorno de verdade é feito no Mercado Pago; só depois você
-  informa o valor (vazio = total) e confirma com a referência (botão **Confirmar estorno**).
-  O campo aceita estorno parcial do item faltante. Detalhes:
-  [operacao-piloto-needs-human-estorno.md](operacao-piloto-needs-human-estorno.md).
-- **Faixa vermelha "⚠️ CLIENTE PEDIU CANCELAMENTO":** o cliente pediu no WhatsApp. **Fale com
-  o responsável antes de comprar ou despachar** esse pedido.
+- **Faltou o item, ou o preço subiu muito:** não troque por conta própria e não invente
+  preço. Use o campo **avisar cliente** ("o X acabou, troco pelo Y?") e espere.
+- **Não deu para comprar** (sem estoque, loja não entrega no CEP, pedido mínimo): clique
+  **↩️ Não consegui comprar → estornar** e escreva o motivo em uma linha. O valor volta
+  para o cliente sozinho e ele recebe a explicação.
+- **Faixa vermelha "⚠️ CLIENTE PEDIU CANCELAMENTO":** pare. Não compre nem despache.
+  Avise o responsável pela operação.
+- **Estorno, cancelamento de pedido pago, qualquer dúvida com dinheiro:** é decisão do
+  responsável pela operação. Esses botões não aparecem para você de propósito.
+- **Pedido parado:** depois de 30 min, 2h e 6h sem compra a Lia cobra você por WhatsApp.
+  Sem compra por 24h (ou 48h na fila manual), o sistema estorna o cliente sozinho.
+
+## O que NUNCA fazer
+
+- Usar cartão, conta ou dinheiro seus. Só o cartão da operação.
+- Resolver CAPTCHA ou qualquer verificação de robô em nome da operação.
+- Falar com o cliente fora do painel, ou passar seu contato pessoal.
+- Comprar remédio, mesmo sem receita. É proibido por lei para a operação.
+- Trocar um item por outro sem o cliente confirmar.
+- Repetir um clique de compra ou pagamento na dúvida se deu certo. Confira antes.
 
 ## Onde comprar rápido (mapa de sourcing)
 
 A amplitude é o diferencial da Lia: o cliente pode pedir **qualquer coisa** e a resposta
-nunca é "não temos". Este mapa é o ponto de partida — complete com o que funcionar na
-sua região e anote os achados.
+nunca é "não temos". Complete com o que funcionar na sua região.
 
 | Categoria | Primeira opção | Alternativa |
 | --- | --- | --- |
@@ -119,65 +75,60 @@ sua região e anote os achados.
 | Hortifruti / mercearia premium | Oba | Mercado de bairro |
 | Carnes / churrasco | Swift (entrega própria) | Açougue local / hipermercado |
 | Pet | Petz | Cobasi |
-| Beleza / presente | O Boticário | Farmácia grande (área de dermocosméticos) |
+| Beleza / presente | O Boticário | Farmácia grande (dermocosméticos) |
 | Farmácia (sem remédio!) | **Droga Raia** / Drogasil | Farmácia de bairro |
 | Papelaria / escritório | Kalunga | Papelaria de bairro |
 | Eletrônicos / acessórios | Fast Shop / Casas Bahia | Loja de shopping próximo |
-| Casa / manutenção | Leroy Merlin | Telhanorte / loja de material local |
+| Casa / manutenção | Leroy Merlin | Telhanorte / material local |
 | Utilidades / variedades | Americanas / loja de R$1,99 | Shopping popular |
-| Presente / flores | Floricultura local | Chocolateria (Kopenhagen/Cacau Show) |
+| Presente / flores | Floricultura local | Kopenhagen / Cacau Show |
 | Bebê (fralda, lenço, fórmula*) | Droga Raia / Drogasil | Hipermercado |
-| Festa / bebidas / gelo | Adega local | Hipermercado / distribuidora de bebidas |
+| Festa / bebidas / gelo | Adega local | Distribuidora de bebidas |
 | Esporte | Decathlon | Centauro |
-| Brinquedo (presente de última hora) | Ri Happy | Americanas / hipermercado |
+| Brinquedo | Ri Happy | Americanas / hipermercado |
 
-*Fórmula infantil é venda livre em farmácia — mas suplemento/medicamento infantil não; na
+*Fórmula infantil é venda livre em farmácia; suplemento ou medicamento infantil não. Na
 dúvida sobre um item de farmácia, trate como remédio e recuse.
 
-- **Remédio nunca** (nem OTC) — é lei, e a Lia já recusa na conversa.
-- Compare o preço na hora de cotar; o preço que você digita é o custo real.
-- Item muito específico (marca rara, importado): confirme a disponibilidade ANTES de
-  enviar a cotação, para não prometer o que não tem.
+Item muito específico (marca rara, importado): confirme a disponibilidade **antes** de
+enviar a cotação, para não prometer o que não tem.
 
-## Regras de ouro
+---
 
-- **Nunca cobre o cliente à mão.** A Lia cobra. Você só cota e compra.
-- **Nunca prometa um prazo que não consegue cumprir.** Na dúvida, coloque um prazo folgado.
-- **Só clique "despachar motoboy" com os produtos já em mãos.**
-- **Se o despacho já foi confirmado, repetir o clique não cria outro courier**; confira o
-  rastreio existente no card.
-- **Dúvida financeira ou algo estranho → pare e chame o responsável.** Não repita um clique
-  de compra/pagamento se ficou em dúvida se deu certo.
+## Para o responsável pela operação
 
-## Metas do piloto (internas, não são promessa ao cliente)
+O painel tem dois acessos. O **seu** (`OPS_TOKEN`) abre tudo. O do **operador**
+(`OPS_OPERATOR_TOKEN`) abre só a fila e as ações de comprar, avisar e entregar; contas
+das lojas, catálogo, mapa de demanda, configuração da Meta e as ações de dinheiro
+(cancelar pedido pago, estornar, confirmar estorno) respondem 403 para ele. Trocar o
+token do operador derruba só a sessão dele.
 
-- Cotar um pedido novo em até ~15 min.
-- Reconhecer uma exceção (faltou item, cliente pediu cancelamento) em até ~10 min.
-- Anotar por pedido: quanto tempo levou e quanto sobrou de margem depois do frete.
+Telefones: `LIA_OWNER_PHONE` é você (recebe cobrança falhada, pagamento fora do esperado,
+estorno automático, reclamação de cobrança). `LIA_OPERATOR_PHONE` é quem compra (recebe
+pedido pago e pedido parado; a partir de 6h parado você também recebe). Sem
+`LIA_OWNER_PHONE` os dois papéis continuam no mesmo número, como antes.
 
+Horário prometido ao cliente: `LIA_OPERATOR_HOURS` (padrão `9-20`, horário de São Paulo).
 
-## Estorno automático (04/09/2026)
+### Estorno automático
 
-Você não precisa mais estornar à mão quando a compra não dá certo. O sistema estorna sozinho:
+- Pedido pago com nota "🛑 COMPRA BLOQUEADA" há **6 horas** → estorno integral, cliente
+  avisado com o motivo.
+- Pedido pago **sem compra registrada há 24 horas** (48h na fila manual) → idem.
+- Pedido já em "comprando" ou com número da loja registrado nunca é tocado.
+- "⚠️ ESTORNO AUTOMÁTICO FALHOU" na nota: o provedor recusou; o sistema tenta a cada 10
+  min. Se persistir, use "Estornar pelo provedor". Desligar tudo: `LIA_AUTO_REFUND_OFF=true`.
 
-- Pedido pago com nota "🛑 COMPRA BLOQUEADA" (sem estoque, sem entrega no CEP, mínimo da
-  loja, preço acima do teto) há **6 horas** → estorno integral, cliente avisado com o motivo,
-  você recebe "🤖 Estorno automático do pedido #…".
-- Pedido pago **sem compra registrada há 24 horas** → idem.
-- Se você já está comprando, mova o pedido para "comprando" ou registre o número da compra:
-  aí o automático nunca mexe.
-- Se aparecer "⚠️ ESTORNO AUTOMÁTICO FALHOU" na nota, o provedor recusou; o sistema tenta de
-  novo a cada 10 min. Se persistir, use "Estornar pelo provedor" no /ops.
-- Para desligar tudo: `LIA_AUTO_REFUND_OFF=true` na Vercel.
-
-
-## Plano B automático e pré-voo (04/09/2026)
+### Plano B automático e pré-voo
 
 - **Pré-voo:** quando o cliente escolhe Pix/cartão, a loja é consultada de novo. Se o item
-  sumiu, nada é cobrado e o cliente já recebe outras opções. Você não faz nada.
-- **Plano B:** ao registrar "🛑 COMPRA BLOQUEADA: …" na nota de um pedido pago, em até 10
-  minutos a Lia oferece ao cliente um substituto confirmado em outra loja. Se ele aceitar,
-  você recebe "🛒 Pedido #…: cliente aceitou a troca. Comprar agora: <item> — <loja> <link>".
-  Compre exatamente isso. Se recusar, o estorno já saiu sozinho.
-- **Lembretes:** 30 min, 2h, 6h, 12h, 24h sem compra. Bloqueio sem substituto → estorno
-  automático em 6h; sem compra e sem bloqueio → 24h.
+  sumiu, nada é cobrado e o cliente já recebe outras opções.
+- **Plano B:** com "🛑 COMPRA BLOQUEADA" na nota de um pedido pago, em até 10 minutos a
+  Lia oferece um substituto confirmado em outra loja. Se o cliente aceitar, o operador
+  recebe "🛒 Pedido #…: cliente aceitou a troca. Comprar agora: <item> — <loja> <link>".
+
+### Metas do piloto (internas, não são promessa ao cliente)
+
+- Cotar um pedido novo em até ~15 min.
+- Comprar um pedido pago em até 2h, dentro do horário.
+- Anotar por pedido: quanto tempo levou e quanto sobrou de margem depois do frete.

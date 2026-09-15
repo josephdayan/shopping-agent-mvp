@@ -94,6 +94,19 @@ export function isAdminPhone(phone: string): boolean {
   return phoneRole(phone) !== null;
 }
 
+// Janela em que existe alguém para comprar (`LIA_OPERATOR_HOURS`, "9-20" por padrão,
+// horário de São Paulo). Só muda o que a Lia PROMETE ao cliente; não bloqueia nada.
+export function withinOperatorHours(now = new Date(), range = process.env.LIA_OPERATOR_HOURS): boolean {
+  const [rawStart, rawEnd] = (range ?? "9-20").split("-");
+  const start = Number(rawStart);
+  const end = Number(rawEnd);
+  if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end > 24 || start >= end) return true;
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", { timeZone: "America/Sao_Paulo", hour: "2-digit", hour12: false }).format(now)
+  );
+  return hour >= start && hour < end;
+}
+
 // Existe um operador CONTRATADO? (número de compra diferente do número do dono). É o que
 // decide alertas que só fazem sentido quando quem compra não é quem olha o painel.
 export function operatorIsHired(): boolean {

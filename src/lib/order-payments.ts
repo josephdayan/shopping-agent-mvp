@@ -12,7 +12,7 @@ import { prisma } from "@/lib/prisma";
 import { preflightBasket } from "./live-freight";
 import * as copy from "@/lib/lia-copy";
 import { BasketItem, DeliveryContext, cardTotal, roundMoney } from "./conversation-types";
-import { addressOnlyCtx, markTurnReplied, mergeDecisionRequestFor, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx, notifyOwner, operatorIsHired } from "./turn-runtime";
+import { addressOnlyCtx, markTurnReplied, mergeDecisionRequestFor, notifyOperator, readCtx, reply, resetConversationForClosedOrder, writeCtx, notifyOwner, operatorIsHired, withinOperatorHours } from "./turn-runtime";
 
 // createCardAttempt envia os botões do cartão salvo DIRETO pelo adapter (fora do
 // reply()) — sem esta marca a rede anti-silêncio achava o turno mudo e mandava
@@ -789,8 +789,13 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   const pendingNewItem = await mergeDecisionRequestFor(order);
   await resetConversationForClosedOrder(order, "paid");
   // Não existe mais carrinho reservado por robô: quem compra é o operador, depois do
-  // pagamento confirmado. O aviso ao cliente é sempre o mesmo.
-  if (opts.notifyCustomer !== false) await reply(order.phone, copy.paymentConfirmed());
+  // pagamento confirmado. Fora do horário de quem compra (operador contratado), a Lia diz
+  // a verdade em vez de "já estou separando" — o prazo da loja não muda.
+  if (opts.notifyCustomer !== false)
+    await reply(
+      order.phone,
+      operatorIsHired() && !withinOperatorHours() ? copy.paymentConfirmedOutsideHours() : copy.paymentConfirmed()
+    );
   // Pix pago com "juntar ou pedido novo?" aberta: o reset apaga o passo, mas o item
   // novo que o cliente pediu não pode sumir em silêncio (revisão 01/09).
   if (pendingNewItem) await reply(order.phone, copy.newItemAfterPayment(pendingNewItem));

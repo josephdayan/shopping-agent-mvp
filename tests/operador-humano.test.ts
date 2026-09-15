@@ -7,7 +7,7 @@ import { ensurePurchaseJobForPaidOrder, manualQueueJobForPaidOrder, MANUAL_QUEUE
 import { savePurchaseAccount } from "../src/lib/purchase-execution";
 import { preparationStores } from "../src/lib/purchase-preparation";
 import { createOpsLoginToken, opsLoginRole, opsRole, opsSessionCookieValue, ownerKeyMatches, requireOpsKey, requireOpsOwner } from "../src/lib/auth";
-import { operatorIsHired, ownerPhones, phoneRole } from "../src/lib/turn-runtime";
+import { operatorIsHired, ownerPhones, phoneRole, withinOperatorHours } from "../src/lib/turn-runtime";
 
 // Decisão de 15/09/2026: quem cota, compra e acompanha é um operador CONTRATADO, não o
 // dono. Estes testes prendem as três consequências: nenhuma compra nasce automática, o
@@ -128,4 +128,16 @@ test("telefones: dono e operador se separam sem quebrar quem opera sozinho", () 
       if (value === undefined) delete process.env[key]; else process.env[key] = value;
     }
   }
+});
+
+test("horário de quem compra: fora da janela a Lia promete a manhã, não 'já estou separando'", () => {
+  const at = (iso: string) => new Date(iso);
+  // 14h e 9h em São Paulo (UTC-3) estão dentro; 23h e 7h não.
+  assert.equal(withinOperatorHours(at("2026-09-15T17:00:00Z"), "9-20"), true);
+  assert.equal(withinOperatorHours(at("2026-09-15T12:00:00Z"), "9-20"), true);
+  assert.equal(withinOperatorHours(at("2026-09-16T02:00:00Z"), "9-20"), false, "23h de SP");
+  assert.equal(withinOperatorHours(at("2026-09-15T10:00:00Z"), "9-20"), false, "7h de SP");
+  // Janela inválida nunca cala a Lia: na dúvida, promete o de sempre.
+  assert.equal(withinOperatorHours(at("2026-09-16T02:00:00Z"), "20-9"), true);
+  assert.equal(withinOperatorHours(at("2026-09-16T02:00:00Z"), "lixo"), true);
 });
