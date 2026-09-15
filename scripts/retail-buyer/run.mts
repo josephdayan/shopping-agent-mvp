@@ -597,9 +597,10 @@ async function track(store: string, recipe: StoreRecipe) {
     await context?.close();
   }
 }
-for (const [store, recipe] of Object.entries(config.stores)) {
-  if (isMl(recipe)) continue;
-  if (!recipe.submitSelector || !recipe.receipt)
+for (const [store, raw] of Object.entries(config.stores)) {
+  if (isMl(raw)) continue;
+  const recipe = { ...VTEX_RECIPES[store], ...raw };
+  if (!recipe.submitSelector || !(recipe.receipt || recipe.checkoutFlow))
     console.warn(
       JSON.stringify({
         store,
