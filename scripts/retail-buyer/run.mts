@@ -649,7 +649,9 @@ await Promise.all(
   Object.entries(config.stores).map(async ([store, recipe]) => {
     do {
       try {
-        const executable = isMl(recipe) || Boolean(recipe.submitSelector && (recipe.receipt || recipe.checkoutFlow));
+        // Receita = padrão da loja (VTEX_RECIPES: checkoutFlow, auth…) + config privado (submitSelector).
+        const merged = isMl(recipe) ? recipe : { ...VTEX_RECIPES[store], ...recipe };
+        const executable = isMl(merged) || Boolean(merged.submitSelector && (merged.receipt || merged.checkoutFlow));
         const { job } =
           purchaseToken && executable
             ? await purchase({ action: "claim", workerId, stores: [store] })
