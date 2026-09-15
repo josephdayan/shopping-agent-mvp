@@ -403,7 +403,10 @@ export class VtexBuyer {
       await button.waitFor({ state: "visible", timeout: 20_000 });
       const label = (await button.innerText().catch(() => "")).trim();
       if (forbidden.test(label)) throw new Error(`Botão de avanço inesperado: ${label}`);
-      await button.click({ timeout: 15_000 });
+      // A loja põe um carregamento por cima do botão depois de escolher o Pix (15/09, 6ª
+      // tentativa real: 15 s não bastaram). Espera a rede sossegar e dá 45 s ao clique.
+      await this.page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => undefined);
+      await button.click({ timeout: 45_000 });
       await this.page.waitForTimeout(3_000);
     };
     const bodyText = async () => (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
