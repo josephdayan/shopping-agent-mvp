@@ -436,7 +436,15 @@ export class VtexBuyer {
       }
     };
     await this.page.goto(`${this.recipe.origin}/checkout/#/cart`, { waitUntil: "domcontentloaded", timeout: 30_000 });
-    await this.page.waitForTimeout(5_000);
+    // A tela é uma SPA: carregada ANTES de o carrinho ser montado pela API, ela fica vazia e
+    // o botão "Fazer pedido" nunca aparece (15/09, 12ª tentativa real). Recarrega até a tela
+    // mostrar o carrinho ou já estar numa etapa adiante.
+    for (let load = 0; load < 3; load += 1) {
+      await this.page.waitForTimeout(5_000);
+      if (/\/checkout\/(profile|shipping|payment|review)/.test(new URL(this.page.url()).pathname)) break;
+      if (await this.page.getByRole("button", { name: /^Fazer pedido$/i }).first().isVisible().catch(() => false)) break;
+      await this.page.reload({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+    }
     // O checkout lembra a última etapa: a máquina de estados olha a URL a cada volta e faz
     // só o passo daquela tela, até a Revisão aparecer.
     for (let turn = 0; turn < 8; turn += 1) {
