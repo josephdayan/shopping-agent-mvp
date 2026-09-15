@@ -252,8 +252,14 @@ export async function claimPurchaseSession(workerId: string, stores: string[]) {
     where: { storeKey: job.storeKey },
     data: { lastSeenAt: new Date() },
   });
+  const payload = workerPayload(job);
+  // 15/09: o cliente digita "Rua X 221 ap 13" e o comprador exige bairro/cidade/UF no texto.
+  // Completa só com a localidade oficial do CEP do pedido (ViaCEP); nada de rua/número.
+  const { lookupCepLocality, completeAddressWithLocality } = await import("./cep-lookup");
+  const locality = await lookupCepLocality(payload.customer.cep ?? "");
+  payload.customer.address = completeAddressWithLocality(payload.customer.address ?? "", payload.customer.cep, locality);
   return {
-    ...workerPayload(job),
+    ...payload,
     status: job.status,
     claimToken: token,
     accountEmail: accounts.find((a) => a.storeKey === job.storeKey)?.email,
