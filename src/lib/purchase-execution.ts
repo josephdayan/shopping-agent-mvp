@@ -14,6 +14,7 @@ import { automaticPurchaseDecision, automaticPurchaseStores, AUTO_PURCHASE_POLIC
 import { createOpsAction, cancelPendingActions, sendOperatorButtons } from "./ops-actions";
 import * as copy from "./lia-copy";
 import { parsePixEmv, pixCodeHash } from "./pix-emv";
+import { promisedMinutes } from "./live-freight";
 import { pixOutProvider, PixOutTimeout } from "./payments/pix-out";
 
 export const checkoutEvidenceSchema = z
@@ -160,9 +161,16 @@ export function checkCheckout(
     throw new Error("Total do checkout não fecha.");
   if (e.totalCents > dollars(order.itemsSubtotal + order.deliveryFee))
     throw new Error("Total da loja acima do teto do pedido.");
+  // Prazo da loja igual ou MENOR que o prometido ao cliente serve (15/09: o comprador escolhe
+  // a entrega mais barata dentro do prazo; "Econômica 1 dia útil" × promessa "7 dias úteis").
+  // Sem prazo legível dos dois lados, vale a igualdade de texto de antes.
   const expectedPromise = promiseOf(order.fulfillments);
-  if (expectedPromise && norm(e.deliveryPromise) !== norm(expectedPromise))
-    throw new Error("Modalidade/prazo diferente do escolhido.");
+  const promisedBudget = promisedMinutes(expectedPromise);
+  const actualMinutes = promisedMinutes(e.deliveryPromise);
+  const promiseOk = !expectedPromise
+    || norm(e.deliveryPromise) === norm(expectedPromise)
+    || (promisedBudget != null && actualMinutes != null && actualMinutes <= promisedBudget);
+  if (!promiseOk) throw new Error("Modalidade/prazo diferente do escolhido.");
   const age = Date.now() - Date.parse(e.observedAt);
   if (!Number.isFinite(age) || age < -60_000 || age > 120_000)
     throw new Error("Conferência do checkout vencida.");

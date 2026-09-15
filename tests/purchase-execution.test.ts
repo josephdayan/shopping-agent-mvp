@@ -6,7 +6,7 @@ import {
   recordPayment,
   refundOrderViaProvider,
 } from "../src/lib/payments/ledger";
-import { ensurePurchaseJobForPaidOrder } from "../src/lib/purchase-worker";
+import { ensurePurchaseJobForPaidOrder, purchaseCartHash } from "../src/lib/purchase-worker";
 import {
   savePurchaseAccount,
   claimPurchaseSession,
@@ -137,6 +137,16 @@ test("conferência rejeita mudança de endereço, quantidade, valor e prazo venc
   // texto do pedido inteiro no início passa, prefixo diferente ou rua trocada não.
   assert.doesNotThrow(() => checkCheckout(order, { ...evidence, destination: `${order.deliveryAddress}, Santa Cecília, São Paulo, SP, CEP 01233-020` }));
   assert.throws(() => checkCheckout(order, { ...evidence, destination: `Rua Outra 9, ${order.deliveryAddress}` }));
+  // 15/09: prazo da loja igual ou menor que o prometido serve; maior, não.
+  {
+    const promise = "pela própria loja · prazo da loja: 7 dias úteis";
+    const items = order.items as { sku: string; qty: number; unitPrice: number; storeKey: string; productUrl?: string }[];
+    const withPromise = { ...order, fulfillments: [{ deliveryPromise: promise }] };
+    const cartHash = purchaseCartHash(items.map((i) => ({ ...i, name: "", storeLabel: "" })), order.deliveryFee, promise, order);
+    assert.doesNotThrow(() => checkCheckout(withPromise, { ...evidence, cartHash, deliveryPromise: "prazo da loja: 1 dia útil" }));
+    assert.doesNotThrow(() => checkCheckout(withPromise, { ...evidence, cartHash, deliveryPromise: "prazo da loja: 7 dias úteis" }));
+    assert.throws(() => checkCheckout(withPromise, { ...evidence, cartHash, deliveryPromise: "prazo da loja: 8 dias úteis" }), /prazo/);
+  }
   for (const e of [
     { ...evidence, recipientName: "Outra pessoa" },
     { ...evidence, destination: "Outro endereço" },
