@@ -18,6 +18,7 @@ import {
   executionUnknown,
   reconcileEmptyPurchase,
   checkCheckout,
+  reportHumanChallenge,
   type CheckoutEvidence,
 } from "../src/lib/purchase-execution";
 import {
@@ -159,6 +160,20 @@ test("conferência rejeita mudança de endereço, quantidade, valor e prazo venc
     where: { id: job.jobId },
     data: { status: "canceled" },
   });
+});
+test("desafio humano da loja avisa o dono uma vez e não mexe no estado da compra", async () => {
+  const { job } = await session();
+  const args = [job.jobId, "execution-tests", job.claimToken] as const;
+  const first = await reportHumanChallenge(...args, 5);
+  assert.deepEqual(first, { ok: true, notified: true });
+  // Segundo aviso na mesma tentativa não repete a mensagem ao dono.
+  assert.deepEqual(await reportHumanChallenge(...args, 5), { ok: true, notified: false });
+  const after = await prisma.purchaseJob.findUniqueOrThrow({ where: { id: job.jobId } });
+  assert.equal(after.status, "claimed");
+  assert.equal(await prisma.purchaseAttempt.count({ where: { purchaseJobId: job.jobId, step: "human_challenge" } }), 1);
+  // Comprador sem posse do job não consegue avisar.
+  await assert.rejects(reportHumanChallenge(job.jobId, "outro-worker", job.claimToken, 5));
+  await prisma.purchaseJob.update({ where: { id: job.jobId }, data: { status: "canceled" } });
 });
 test("aprovação exata permite um único envio; estorno e cancelamento aguardam resultado", async () => {
   const { job, evidence } = await session();

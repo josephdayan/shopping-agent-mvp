@@ -284,6 +284,40 @@ export async function claimPurchaseSession(workerId: string, stores: string[]) {
     paymentKind: account?.paymentKind,
   };
 }
+// Desafio humano da loja no clique final (15/09, primeiro pedido real da Cobasi): o comprador
+// NUNCA resolve. Avisa o dono uma vez por tentativa; ele resolve na janela do Mac e o mesmo
+// fluxo segue. Não mexe no estado do job: a compra continua em `submitting` até o Pix ou o
+// vencimento normal, que já vira `outcome_unknown` com revisão.
+export async function reportHumanChallenge(
+  jobId: string,
+  workerId: string,
+  token: string,
+  waitMinutes: number,
+) {
+  const job = await prisma.$transaction(async (tx) => {
+    const current = await owned(tx, jobId, workerId, token);
+    if (!["claimed", "submitting", "pix_captured"].includes(current.status))
+      throw new Error("Compra pausada ou encerrada.");
+    return tx.purchaseJob.update({ where: { id: current.id }, data: { lockedAt: new Date() } });
+  });
+  const already = await prisma.purchaseAttempt.findFirst({
+    where: { purchaseJobId: jobId, step: "human_challenge", createdAt: { gte: new Date(Date.now() - 30 * 60_000) } },
+  });
+  if (already) return { ok: true as const, notified: false as const };
+  await prisma.purchaseAttempt.create({
+    data: {
+      purchaseJobId: jobId,
+      step: "human_challenge",
+      status: "completed",
+      idempotencyKey: randomUUID(),
+      details: { workerId, waitMinutes },
+    },
+  });
+  await notifyOperator(
+    copy.operatorHumanChallenge(job.deliveryOrderId.slice(-6).toUpperCase(), job.storeLabel, waitMinutes),
+  );
+  return { ok: true as const, notified: true as const };
+}
 export async function purchaseHeartbeat(
   jobId: string,
   workerId: string,

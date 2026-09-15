@@ -504,8 +504,16 @@ async function buy(job: BuyerJob, recipe: StoreRecipe) {
     await buyer.submit();
     if (armed) {
       let code: string;
+      // Desafio humano da loja: avisa o dono e espera ele resolver na janela (nunca resolve).
+      const challengeWaitMs = Number(process.env.LIA_CHALLENGE_WAIT_MS ?? 5 * 60_000);
       try {
-        code = await buyer.capturePixCode(armed);
+        code = await buyer.capturePixCode(armed, 90_000, {
+          challengeWaitMs,
+          onChallenge: async () => {
+            console.log(JSON.stringify({ job: job.jobId, store: job.storeKey, status: "human_challenge" }));
+            await purchase({ action: "human_challenge", ...identity, waitMinutes: Math.max(1, Math.round(challengeWaitMs / 60_000)) }).catch(() => {});
+          },
+        });
       } catch (error) {
         // Diagnóstico privado (Mac do dono): a tela e o texto após o clique final, para
         // saber o que a loja mostrou quando o Pix não veio (15/09, 10ª tentativa real).

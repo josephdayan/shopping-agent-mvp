@@ -1584,3 +1584,9 @@ export function purchaseFailedRefunded(items: string[], total: number, reason?: 
 }
 
 export const planBNotVerified = () => "Não consegui confirmar a disponibilidade da troca agora. Responda ‘trocar’ novamente em instantes.";
+
+// Desafio humano da loja no clique final (15/09). A janela do comprador roda no Mac do dono:
+// ele resolve como pessoa e a compra segue sozinha. O robô nunca resolve CAPTCHA.
+export function operatorHumanChallenge(shortId: string, storeLabel: string, minutes: number): string {
+  return `🧩 A ${storeLabel} pediu verificação humana pra fechar o pedido #${shortId}. Abra a janela do comprador no Mac e resolva o desafio nos próximos ${minutes} min — a compra continua sozinha depois. Sem isso, o pedido volta pra fila e o cliente é estornado.`;
+}

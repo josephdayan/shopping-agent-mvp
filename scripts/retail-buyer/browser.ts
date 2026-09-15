@@ -651,11 +651,7 @@ export class VtexBuyer {
     const body = (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
     // Desafio de verdade: o iframe do desafio (bframe) ou o widget de caixa visíveis, ou o
     // texto. O selo do reCAPTCHA invisível (anchor no canto) não é desafio — vai em captchaBadge.
-    const challengeVisible =
-      (await this.page
-        .locator('iframe[src*="recaptcha"][src*="bframe"], iframe[src*="hcaptcha"], .g-recaptcha, [data-sitekey]')
-        .filter({ visible: true })
-        .count()) > 0 || /n[aã]o sou um rob[oô]|verifica[cç][aã]o de seguran[cç]a/i.test(body);
+    const challengeVisible = await this.humanChallengeVisible(body);
     const captchaBadge = (await this.page.locator(".grecaptcha-badge, iframe[src*='recaptcha']").count()) > 0;
     const finalize = this.page.getByRole("button", {
       name: /finalizar compra|finalizar pedido|comprar agora|pagar agora|confirmar compra|concluir pedido/i,
@@ -871,18 +867,46 @@ export class VtexBuyer {
       dispose: () => this.page.off("response", handler),
     };
   }
-  async capturePixCode(armed: { found: { code?: string } }, timeoutMs = 90_000) {
-    const deadline = Date.now() + timeoutMs;
+  // Desafio humano VISÍVEL (imagens do reCAPTCHA, hCaptcha, "não sou um robô"). O selo do
+  // reCAPTCHA invisível não conta. Nunca é resolvido pelo robô — só reportado.
+  async humanChallengeVisible(bodyText?: string) {
+    const body = bodyText ?? (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
+    if (/n[aã]o sou um rob[oô]|verifica[cç][aã]o de seguran[cç]a/i.test(body)) return true;
+    return (
+      (await this.page
+        .locator('iframe[src*="recaptcha"][src*="bframe"], iframe[src*="hcaptcha"], .g-recaptcha, [data-sitekey]')
+        .filter({ visible: true })
+        .count()
+        .catch(() => 0)) > 0
+    );
+  }
+  // 15/09 (primeiro pedido real): a loja abriu o desafio de imagens DEPOIS do clique final.
+  // Regra do projeto: o robô nunca resolve. Ele avisa o dono (onChallenge) e segue esperando
+  // o copia-e-cola — a janela é do Mac do dono, que resolve como humano e o fluxo continua.
+  async capturePixCode(
+    armed: { found: { code?: string } },
+    timeoutMs = 90_000,
+    opts?: { onChallenge?: () => Promise<void> | void; challengeWaitMs?: number },
+  ) {
+    let deadline = Date.now() + timeoutMs;
+    let challengeSeen = false;
     while (Date.now() < deadline) {
       if (armed.found.code) return armed.found.code;
       const body = (await this.page.locator("body").innerText().catch(() => "")).normalize("NFD");
-      if (/n[aã]o sou um rob[oô]|verifica[cç][aã]o de seguran[cç]a/i.test(body))
-        throw new Error("A loja pediu verificação humana antes do Pix; compra não finalizada.");
       const fromDom = findPixCode(body);
       if (fromDom) return fromDom;
+      if (!challengeSeen && (await this.humanChallengeVisible(body))) {
+        challengeSeen = true;
+        deadline = Date.now() + (opts?.challengeWaitMs ?? 300_000);
+        await opts?.onChallenge?.();
+      }
       await this.page.waitForTimeout(1_500);
     }
-    throw new Error("Copia-e-cola do Pix não apareceu no prazo.");
+    throw new Error(
+      challengeSeen
+        ? "Desafio humano da loja não foi resolvido a tempo; compra não finalizada."
+        : "Copia-e-cola do Pix não apareceu no prazo.",
+    );
   }
   async receipt() {
     if (this.recipe.checkoutFlow === "cobasi") return this.receiptFromOrdersPage();

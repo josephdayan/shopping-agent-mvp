@@ -4,6 +4,7 @@ import { purchaseWorkerAuthorized } from "@/lib/purchase-worker-auth";
 import {
   claimPurchaseSession,
   purchaseHeartbeat,
+  reportHumanChallenge,
   stageCheckout,
   parkCheckout,
   beginPurchase,
@@ -77,6 +78,14 @@ const schema = z.discriminatedUnion("action", [
       code: z.string().min(40).max(1024).optional(),
     })
     .strict(),
+  // Desafio humano visível na loja: o robô avisa o dono e continua esperando (nunca resolve).
+  z
+    .object({
+      action: z.literal("human_challenge"),
+      ...common,
+      waitMinutes: z.number().int().min(1).max(30),
+    })
+    .strict(),
   z
     .object({
       action: z.literal("unknown"),
@@ -141,6 +150,10 @@ export async function POST(request: Request) {
       }
       return NextResponse.json(status);
     }
+    if (b.action === "human_challenge")
+      return NextResponse.json(
+        await reportHumanChallenge(b.jobId, b.workerId, b.claimToken, b.waitMinutes),
+      );
     if (b.action === "complete") {
       await finishPurchase(b.jobId, b.workerId, b.claimToken, b);
       return NextResponse.json({ ok: true });
