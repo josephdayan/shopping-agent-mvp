@@ -32,6 +32,19 @@ o candidato confira produto, preço, frete e prazo numa loja real, escolha se co
 escalaria a divergência e copie o resumo para o responsável. O acesso real `/ops` e o
 `OPS_OPERATOR_TOKEN` só são entregues depois da aprovação do teste.
 
+### Treinamento escrito antes do primeiro pedido real
+
+Depois do teste, o operador recebe `/ops/treinamento?key=...`, protegido pelo mesmo
+`OPS_TEST_TOKEN`. O material descreve as ações que existem de verdade no painel, termina
+com cinco cenários obrigatórios e gera uma confirmação para o operador devolver por
+WhatsApp. O primeiro pedido real é supervisionado: ele monta o carrinho, envia produto,
+quantidade, total, frete e prazo ao responsável e só finaliza após autorização escrita.
+
+No piloto, o acordo é R$ 400 por mês trabalhado, pagos depois do período. O volume de 5 a
+15 pedidos é estimativa, não teto, e não existe adicional automático de R$ 20 por pedido;
+um crescimento relevante é renegociado antes. O cartão virtual é fornecido fora do painel,
+somente quando necessário, e nunca deve ser salvo na conta da loja ou no navegador.
+
 ## O ciclo de um pedido
 
 1. **"🧮 Cotar"** — o cliente pediu algo que a Lia não conseguiu precificar sozinha.
