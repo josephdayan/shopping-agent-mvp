@@ -31,6 +31,12 @@ function waLink(text: string) {
 
 const WA_CTA = waLink("oi Lia! quero fazer um pedido");
 
+/* Redes sociais: links opcionais por env (sem env, o rodapé não mostra nada). */
+const SOCIAL_LINKS = [
+  { label: "Instagram", href: process.env.NEXT_PUBLIC_LIA_INSTAGRAM_URL },
+  { label: "LinkedIn", href: process.env.NEXT_PUBLIC_LIA_LINKEDIN_URL }
+].filter((s): s is { label: string; href: string } => Boolean(s.href));
+
 function WhatsAppIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 448 512" aria-hidden="true" className={className} fill="currentColor">
@@ -445,14 +451,27 @@ export default function Home() {
               <LiaWhatsAppAvatar className="h-6 w-6" />
               <span className="font-display text-[16px] font-bold text-white">Lia</span>
             </span>
-            <a
-              href={WA_CTA}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[14px] font-semibold text-white/70 underline decoration-acento decoration-2 underline-offset-4 hover:text-white sm:justify-self-center"
-            >
-              falar com a Lia no WhatsApp
-            </a>
+            <span className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:justify-self-center">
+              <a
+                href={WA_CTA}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[14px] font-semibold text-white/70 underline decoration-acento decoration-2 underline-offset-4 hover:text-white"
+              >
+                falar com a Lia no WhatsApp
+              </a>
+              {SOCIAL_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[14px] font-semibold text-white/70 underline decoration-acento decoration-2 underline-offset-4 hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </span>
             <span className="text-[14px] text-white/50 sm:justify-self-end">
               © 2026 Lia Delivery · operação de 67.742.955 JOSEPH CARLOS DAYAN · CNPJ 67.742.955/0001-95
             </span>

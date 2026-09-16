@@ -1,3 +1,23 @@
+## 16/09/2026 — Site conferido no ar; rodapé pronto pra Instagram/LinkedIn; marketing decidido
+
+Conferência ao vivo: `liadelivery.com.br` 200, `/ops` 200, botão do WhatsApp aponta pro
+número oficial (`5511978444813`), e o deployment de produção em execução é o CLI das 19:36
+(actor codex), já com o código do operador humano. Os 9 commits locais de 15/09 estavam só
+no Mac: enviados ao GitHub neste commit (o deploy por git da Vercel republica o mesmo código).
+Gate: `test:local` 641/641, `tsc` e lint limpos.
+
+Landing: o rodapé passa a mostrar links de Instagram e LinkedIn quando
+`NEXT_PUBLIC_LIA_INSTAGRAM_URL` / `NEXT_PUBLIC_LIA_LINKEDIN_URL` existirem (sem env, nada
+aparece). As contas ainda não existem: o dono cria as duas (Instagram profissional ligado à
+Página do portfólio Meta "Lia"; LinkedIn como página de empresa), depois grava as duas envs
+na Vercel e redeploya.
+
+Decisão de marketing (dono, 16/09): canal principal de aquisição é anúncio Meta
+**click-to-WhatsApp** (objetivo Mensagens, Advantage+, bairros de SP, orçamento pequeno), que
+cai direto no número da Lia. Instagram e LinkedIn existem por credibilidade, com presença
+mínima: criativo = gravação de tela de conversas reais anonimizadas (serve de Reel, de post
+e de anúncio); LinkedIn só texto do fundador, sem ferramenta. Sem contratar ninguém pra isso.
+
 ## 15/09/2026 — Operador humano implementado (falta deploy)
 
 Código pronto e commitado (`31e6a21`, `f999032`): kill-switch da compra automática valendo
