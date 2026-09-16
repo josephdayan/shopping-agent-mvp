@@ -24,6 +24,14 @@ que vale 10 minutos. Ao abrir, o painel fica logado por 1 ano naquele aparelho.
 
 O painel se atualiza sozinho a cada 10 segundos. Deixe aberto.
 
+### Teste antes de liberar a fila real
+
+O candidato recebe `/ops/teste?key=...`, protegido por `OPS_TEST_TOKEN`. Essa tela usa
+somente um pedido fictício, não consulta o banco e nunca executa uma compra. Ela pede que
+o candidato confira produto, preço, frete e prazo numa loja real, escolha se compraria ou
+escalaria a divergência e copie o resumo para o responsável. O acesso real `/ops` e o
+`OPS_OPERATOR_TOKEN` só são entregues depois da aprovação do teste.
+
 ## O ciclo de um pedido
 
 1. **"🧮 Cotar"** — o cliente pediu algo que a Lia não conseguiu precificar sozinha.
