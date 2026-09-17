@@ -97,8 +97,22 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+// A lista copiada é o que o operador confere contra o carrinho da loja. Só "2x Arroz" não
+// permite checar valor nem loja — ele teria que voltar ao card item a item. Espelha
+// exatamente o que o card mostra (lineTotal), para não existir dois preços diferentes.
 function shoppingListText(order: DeliveryOrder): string {
-  return (order.items ?? []).map((it) => `${it.qty}x ${it.name}`).join("\n");
+  return (order.items ?? [])
+    .map((it) => `${it.qty}x ${it.name} — ${brl(it.lineTotal)}${it.storeKey ? ` (${it.storeKey})` : ""}`)
+    .join("\n");
+}
+
+// Endereço copiado = o que o checkout da loja pede: quem recebe, onde e um telefone de
+// contato para a entrega. Sem o nome e o telefone o operador refazia isso à mão.
+function deliveryAddressText(order: DeliveryOrder): string {
+  return [order.customerName, order.deliveryAddress, order.cep, order.phone]
+    .map((v) => (v ?? "").toString().trim())
+    .filter(Boolean)
+    .join(" — ");
 }
 
 const brl = (v: number) => `R$ ${Number(v ?? 0).toFixed(2).replace(".", ",")}`;
@@ -138,7 +152,9 @@ export default function OpsBoard() {
   const [busy, setBusy] = useState<string | null>(null);
   // "owner" enquanto o servidor não responde: o dono nunca perde botão por um piscar de
   // carregamento, e o operador perde os botões no primeiro load (a rota nega de todo jeito).
-  const [role, setRole] = useState<"owner" | "operator">("owner");
+  // Desconhecido até o servidor responder: o operador chegava a ver a UI de dono por um
+  // instante. Enquanto não sabemos, mostramos o painel reduzido — o erro seguro.
+  const [role, setRole] = useState<"owner" | "operator" | null>(null);
   const isOwner = role === "owner";
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -318,28 +334,30 @@ export default function OpsBoard() {
             )}
             <div style={{ color: "#475467", fontSize: 14, marginTop: 6 }}>
               {o.customerName ?? o.phone}{" "}
-              {!o.customerName && paymentReceived && (
+              {paymentReceived && (
                 <button
                   style={{ ...smallBtn, marginLeft: 6 }}
                   disabled={busy === `${o.id}:set_recipient`}
                   onClick={() => {
-                    const recipientName = window.prompt("Nome de quem recebe (vai na etiqueta da loja):", "") ?? "";
-                    if (recipientName.trim()) void act(o.id, "set_recipient", { recipientName });
+                    const recipientName = window.prompt("Nome de quem recebe (vai na etiqueta da loja):", o.customerName ?? "") ?? "";
+                    if (recipientName.trim() && recipientName.trim() !== o.customerName) void act(o.id, "set_recipient", { recipientName });
                   }}
-                  title="A compra automática exige o nome do destinatário"
+                  title="Nome que vai na etiqueta da loja — corrija se o cliente mandou errado"
                 >
-                  ✏️ definir destinatário
+                  {o.customerName ? "✏️ corrigir destinatário" : "✏️ definir destinatário"}
                 </button>
               )}
-              <a
-                href={`https://wa.me/${o.phone.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: 12, color: "#0f3d3a" }}
-                title="Abrir conversa no WhatsApp"
-              >
-                💬 WhatsApp
-              </a>{" "}
+              {isOwner && (
+                <a
+                  href={`https://wa.me/${o.phone.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, color: "#0f3d3a" }}
+                  title="Abrir conversa no WhatsApp"
+                >
+                  💬 WhatsApp
+                </a>
+              )}{" "}
               · {o.deliveryAddress ?? o.cep ?? "endereço pendente"}
             </div>
             <ul style={{ margin: "10px 0", paddingLeft: 18 }}>
@@ -473,9 +491,9 @@ export default function OpsBoard() {
                     <button
                       style={secondary}
                       onClick={() =>
-                        void copyWithFeedback(`${o.id}:addr`, [o.deliveryAddress, o.cep].filter(Boolean).join(" — "))
+                        void copyWithFeedback(`${o.id}:addr`, deliveryAddressText(o))
                       }
-                      title="Endereço do cliente (para lojas que entregam direto, ex.: Petz)"
+                      title="Quem recebe, endereço, CEP e telefone — o que o checkout da loja pede"
                     >
                       {copied === `${o.id}:addr` ? "✅ copiado" : "📍 Copiar endereço"}
                     </button>

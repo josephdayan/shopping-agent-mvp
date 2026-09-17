@@ -186,7 +186,7 @@ export default function OperatorTestBoard() {
       {finished && (
         <section style={{ ...panel, marginTop: 16, borderColor: "#79a94b" }}>
           <h2 style={{ margin: "0 0 6px", color: "#315b22" }}>Teste concluído</h2>
-          <p style={{ margin: "0 0 14px", color: "#52644a" }}>Copie o resumo e envie ao Joseph pelo WhatsApp.</p>
+          <p style={{ margin: "0 0 14px", color: "#52644a" }}>Copie o resumo e envie ao responsável pela operação no WhatsApp.</p>
           <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", borderRadius: 12, background: "#f7f7f4", padding: 14, color: "#221633", fontSize: 13, lineHeight: 1.55 }}>{summary}</pre>
           <button type="button" onClick={copySummary} style={{ border: 0, borderRadius: 10, background: "#3a225e", color: "#fff", padding: "11px 15px", fontWeight: 800, cursor: "pointer" }}>
             {copied ? "Resumo copiado" : "Copiar resumo"}
