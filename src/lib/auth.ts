@@ -177,7 +177,10 @@ function loginSignature(secret: string, exp: string, nonce: string): string {
 // O papel viaja no PRÓPRIO segredo que assina o link: quem entra pelo token do operador
 // abre uma sessão de operador. O formato (exp.nonce.hmac) não mudou.
 export function createOpsLoginToken(now = Date.now(), role: OpsRole = "owner"): string | null {
-  const secret = opsCredentials().find((c) => c.role === role)?.token ?? opsToken();
+  // Nunca promover o operador por falha de configuração. Se o segundo segredo estiver
+  // ausente (ou igual ao do dono, portanto descartado por opsCredentials), o login do
+  // operador falha fechado em vez de assinar silenciosamente uma sessão de owner.
+  const secret = opsCredentials().find((c) => c.role === role)?.token ?? null;
   if (!secret) return null;
   const exp = String(now + OPS_LOGIN_TTL_MS);
   const nonce = randomBytes(8).toString("hex");

@@ -8,6 +8,8 @@ import { savePurchaseAccount } from "../src/lib/purchase-execution";
 import { preparationStores } from "../src/lib/purchase-preparation";
 import { createOpsLoginToken, opsLoginRole, opsRole, opsSessionCookieValue, ownerKeyMatches, requireOpsKey, requireOpsOwner } from "../src/lib/auth";
 import { operatorIsHired, ownerPhones, phoneRole, withinOperatorHours } from "../src/lib/turn-runtime";
+import { ordersForOpsRole } from "../src/lib/operator-queue-view";
+import { operatorStoreItemUrl } from "../src/lib/operator-store-links";
 
 // Decisão de 15/09/2026: quem cota, compra e acompanha é um operador CONTRATADO, não o
 // dono. Estes testes prendem as três consequências: nenhuma compra nasce automática, o
@@ -103,6 +105,46 @@ test("painel: token do operador entra na fila e é barrado nas rotas do dono", (
     if (env.ops === undefined) delete process.env.OPS_TOKEN; else process.env.OPS_TOKEN = env.ops;
     if (env.op === undefined) delete process.env.OPS_OPERATOR_TOKEN; else process.env.OPS_OPERATOR_TOKEN = env.op;
   }
+});
+
+test("login do operador falha fechado sem um segredo separado", () => {
+  const env = { ops: process.env.OPS_TOKEN, op: process.env.OPS_OPERATOR_TOKEN };
+  try {
+    process.env.OPS_TOKEN = "segredo-do-dono";
+    delete process.env.OPS_OPERATOR_TOKEN;
+    assert.equal(createOpsLoginToken(Date.now(), "operator"), null);
+    process.env.OPS_OPERATOR_TOKEN = "segredo-do-dono";
+    assert.equal(createOpsLoginToken(Date.now(), "operator"), null);
+  } finally {
+    if (env.ops === undefined) delete process.env.OPS_TOKEN; else process.env.OPS_TOKEN = env.ops;
+    if (env.op === undefined) delete process.env.OPS_OPERATOR_TOKEN; else process.env.OPS_OPERATOR_TOKEN = env.op;
+  }
+});
+
+test("fila do operador omite Pix, ids internos e evidência de compra automática", () => {
+  const raw = [{
+    id: "order-1", userId: "user-1", conversationId: "convo-1", pixId: "pix-1",
+    pixCopiaECola: "000201-segredo", courierQuoteId: "quote-1", phone: "+5511999999999",
+    purchaseJobs: [{ status: "manual_queue", checkoutEvidence: { segredo: true } }],
+    events: [{ id: "event-1", kind: "bought", deliveryStatus: "delivered", lastError: null, occurredAt: new Date(), message: "interno" }],
+  }];
+  assert.equal(ordersForOpsRole(raw, "owner"), raw);
+  const [view] = ordersForOpsRole(raw, "operator") as Array<Record<string, unknown>>;
+  assert.equal(view.userId, undefined);
+  assert.equal(view.conversationId, undefined);
+  assert.equal(view.pixId, undefined);
+  assert.equal(view.pixCopiaECola, undefined);
+  assert.equal(view.courierQuoteId, undefined);
+  assert.equal(view.purchaseJobs, undefined);
+  assert.equal(view.manualPurchase, true);
+  assert.deepEqual(Object.keys((view.events as Array<Record<string, unknown>>)[0]).sort(), ["deliveryStatus", "id", "kind", "lastError", "occurredAt"]);
+});
+
+test("link do operador nunca manda outra loja para o Oba", () => {
+  assert.equal(operatorStoreItemUrl({ name: "Ração", storeKey: "cobasi", productUrl: "https://www.cobasi.com.br/racao/p" }), "https://www.cobasi.com.br/racao/p");
+  assert.match(operatorStoreItemUrl({ name: "Ração premium", storeKey: "cobasi" }), /site%3Acobasi\.com\.br/);
+  assert.match(operatorStoreItemUrl({ name: "Carne", storeKey: "swift" }), /site%3Aswift\.com\.br/);
+  assert.match(operatorStoreItemUrl({ name: "Ração", storeKey: "petz" }), /^https:\/\/www\.petz\.com\.br\/busca/);
 });
 
 test("telefones: dono e operador se separam sem quebrar quem opera sozinho", () => {

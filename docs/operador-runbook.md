@@ -64,8 +64,8 @@ Pedido que cai fora desse horário fica para a manhã seguinte — a Lia já avi
 
 ## Quando algo dá errado
 
-- **Faltou o item, ou o preço subiu muito:** não troque por conta própria e não invente
-  preço. Use o campo **avisar cliente** ("o X acabou, troco pelo Y?") e espere.
+- **Faltou o item, ou o preço subiu muito:** não troque por conta própria, não invente
+  preço e não fale com o cliente. Avise o responsável pelo WhatsApp e espere a decisão.
 - **Não deu para comprar** (sem estoque, loja não entrega no CEP, pedido mínimo): clique
   **↩️ Não consegui comprar → estornar** e escreva o motivo em uma linha. O valor volta
   para o cliente sozinho e ele recebe a explicação.
@@ -81,6 +81,7 @@ Pedido que cai fora desse horário fica para a manhã seguinte — a Lia já avi
 - Usar cartão, conta ou dinheiro seus. Só o cartão da operação.
 - Resolver CAPTCHA ou qualquer verificação de robô em nome da operação.
 - Falar com o cliente fora do painel, ou passar seu contato pessoal.
+- Usar **avisar cliente** sem uma instrução do responsável.
 - Comprar remédio, mesmo sem receita. É proibido por lei para a operação.
 - Trocar um item por outro sem o cliente confirmar.
 - Repetir um clique de compra ou pagamento na dúvida se deu certo. Confira antes.

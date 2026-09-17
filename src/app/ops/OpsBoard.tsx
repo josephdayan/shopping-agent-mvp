@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PurchaseAccounts, PurchaseReview, type PurchaseReviewJob } from "./PurchaseControl";
 import { hasCancelRequest, hasPendingRefund, isCardCharge, isRetailerDeliveryOrder } from "@/lib/order-flags";
 import { parseMoneyInput } from "@/lib/pricing";
+import { operatorStoreItemUrl } from "@/lib/operator-store-links";
 
 type BasketItem = { qty: number; name: string; lineTotal: number; storeKey?: string; productUrl?: string };
 type Fulfillment = {
@@ -19,6 +20,7 @@ type Fulfillment = {
 
 type DeliveryOrder = {
   purchaseJobs?: PurchaseReviewJob[];
+  manualPurchase?: boolean;
   events?: { id: string; kind: string; deliveryStatus: string; lastError?: string | null; occurredAt: string }[];
   id: string;
   phone: string;
@@ -76,21 +78,13 @@ const STATUS_LABEL: Record<string, string> = {
 
 // Where the operator double-checks the live price/stock before buying, per store.
 // Prefer a real deep link to the exact product (Boticário has these); otherwise search.
-function storeItemUrl(it: BasketItem, orderStoreKey?: string | null): string {
-  if (it.productUrl) return it.productUrl;
-  const storeKey = it.storeKey ?? orderStoreKey ?? undefined;
-  if (storeKey === "petz") return `https://www.petz.com.br/busca?q=${encodeURIComponent(it.name)}`;
-  if (storeKey === "boticario") return `https://www.boticario.com.br/busca/?q=${encodeURIComponent(it.name)}`;
-  return `https://secure.obahortifruti.com.br/busca?ft=${encodeURIComponent(it.name)}`;
-}
-
 // One-click purchase prep: open every item of the order on the store's search page
 // (one tab each — the operator only clicks "adicionar" per tab). A true pre-filled
 // cart link is blocked by both stores' anti-bot edge (tested live 2026-07-01), so
 // tabs + clipboard is the fastest SAFE path today.
 function openAllItems(order: DeliveryOrder) {
   for (const it of order.items ?? []) {
-    window.open(storeItemUrl(it, order.storeKey), "_blank", "noopener");
+    window.open(operatorStoreItemUrl(it, order.storeKey), "_blank", "noopener");
   }
 }
 
@@ -319,7 +313,7 @@ export default function OpsBoard() {
                 <span style={payBadge}>{isCard ? "💳 cartão" : "⚡ Pix"}</span>
               </span>
             </div>
-            {o.purchaseJobs?.some(j => j.status === "manual_queue") && (
+            {(o.manualPurchase || o.purchaseJobs?.some(j => j.status === "manual_queue")) && (
               <div style={manualBanner}>🛒 COMPRA MANUAL — esta loja/cesta não tem execução automática: compre no site e registre o número abaixo.</div>
             )}
             <div style={{ color: "#475467", fontSize: 14, marginTop: 6 }}>
@@ -353,7 +347,7 @@ export default function OpsBoard() {
                 <li key={i} style={{ fontSize: 14 }}>
                   {it.qty}x {it.name} — {brl(it.lineTotal)}{" "}
                   <a
-                    href={storeItemUrl(it, o.storeKey)}
+                    href={operatorStoreItemUrl(it, o.storeKey)}
                     target="_blank"
                     rel="noreferrer"
                     style={{ fontSize: 12, color: "#0f3d3a" }}

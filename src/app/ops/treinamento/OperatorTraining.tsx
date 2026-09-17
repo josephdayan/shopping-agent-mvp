@@ -145,8 +145,8 @@ export default function OperatorTraining() {
         <section style={panel}>
           <h2 style={{ marginTop: 0, color: "#3a225e" }}>5. Exceções</h2>
           <div style={{ display: "grid", gap: 12, lineHeight: 1.6 }}>
-            <div><strong>Item diferente ou sem estoque:</strong> nunca substitua sozinho. Use “avisar cliente” para explicar objetivamente e aguarde a escolha.</div>
-            <div><strong>Preço ou frete aumentou:</strong> não use a margem da Lia para cobrir. Pare e peça nova decisão.</div>
+            <div><strong>Item diferente ou sem estoque:</strong> nunca substitua sozinho e não fale com o cliente. Pare, avise o responsável pelo WhatsApp e aguarde a decisão.</div>
+            <div><strong>Preço ou frete aumentou:</strong> não use a margem da Lia para cobrir. Pare, avise o responsável e aguarde.</div>
             <div><strong>Endereço rejeitado ou loja não entrega:</strong> confira uma vez o que foi copiado. Se persistir, pare e avise.</div>
             <div><strong>Resultado incerto depois do clique final:</strong> não clique novamente. Confira “Meus pedidos”, e-mail e cobrança; chame o responsável.</div>
             <div><strong>“Não consegui comprar → estornar”:</strong> essa ação devolve dinheiro real ao cliente. Use apenas quando a impossibilidade estiver confirmada (sem estoque, sem entrega no CEP ou mínimo da loja) e escreva o motivo verdadeiro.</div>
@@ -159,7 +159,7 @@ export default function OperatorTraining() {
           <ul style={{ lineHeight: 1.7 }}>
             <li>Use nome, telefone e endereço do cliente somente para executar aquele pedido.</li>
             <li>Não faça prints, não salve contatos, não copie dados para planilhas e não compartilhe o link do painel.</li>
-            <li>Não clique no atalho “WhatsApp” do cliente e não fale com ele pelo seu número. Use somente o campo “avisar cliente” do painel.</li>
+            <li>Não clique no atalho “WhatsApp” do cliente, não fale com ele pelo seu número e não use “avisar cliente” sem instrução do responsável.</li>
             <li>Mensagens devem ser factuais: diga o que ocorreu e qual decisão precisa. Não prometa prazo, desconto, reembolso ou substituição por conta própria.</li>
             <li>Ao encerrar a função, apague dados temporários e avise para o acesso ser revogado.</li>
           </ul>
