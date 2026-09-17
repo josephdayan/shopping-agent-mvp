@@ -1,3 +1,23 @@
+## 17/09/2026 — Carlos contratado e treinado; falta acertar os telefones e publicar
+
+Operador contratado: **Carlos José Bratz** (+55 27 99774-2494), vindo do 99Freelas. Combinado
+por WhatsApp em 16/09: R$ 400 fixos ao fim do período mensal (5–15 pedidos é estimativa, não
+teto; sem adicional por pedido; crescimento grande se renegocia antes), pedido concluído em
+até 2h entre 9h e 20h, **inclusive fins de semana**. Teste pago de R$ 30 aprovado (ele conferiu
+ração Pedigree 900 g numa loja real e devolveu o resumo no formato pedido) e treinamento
+escrito confirmado. O dono pediu que, nos pedidos reais, o resumo traga também o link exato do
+produto. Primeiro pedido real será supervisionado, com autorização escrita antes de finalizar.
+
+Checagem de prontidão feita hoje. Corrigido e commitado: `OPS_TEST_TOKEN` criado em Production
+(só existia em Preview, por isso os links do Carlos eram de deploy de preview); `.env.example`
+com as quatro envs novas e sem os dois defaults que contradiziam a decisão; painel entregando
+ao operador o que ele precisa para comprar e nada além (lista copiada com valor e loja,
+endereço copiado com destinatário e telefone, atalho de WhatsApp do cliente só para o dono,
+papel sem piscar interface de dono, destinatário editável). 644/644 em `test:local`, build ok.
+
+Pendente e **urgente**: conferir se `LIA_OWNER_PHONE` recebeu o número do Carlos em vez do
+número do dono (ver PENDENCIAS), acertar os dois telefones e publicar os commits.
+
 ## 16/09/2026 — Site conferido no ar; rodapé pronto pra Instagram/LinkedIn; marketing decidido
 
 Conferência ao vivo: `liadelivery.com.br` 200, `/ops` 200, botão do WhatsApp aponta pro

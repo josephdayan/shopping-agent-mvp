@@ -1,3 +1,23 @@
+## 17/09/2026 — URGENTE: conferir qual papel o Carlos recebeu no painel
+
+O operador contratado (Carlos José Bratz, +55 27 99774-2494) entrou no `/ops` em 16/09 às
+19h41. **Mas a configuração de produção não explica esse acesso como operador:**
+`LIA_OPERATOR_PHONE` tem 37 dias (ainda é o número do dono) e `LIA_ADMIN_PHONES` não existe.
+A única env mexida no minuto do "acesso ativado" foi `LIA_OWNER_PHONE`, gravada 15h antes
+desta checagem. Se ela recebeu o número do Carlos, `phoneRole` devolveu **owner** e ele abriu
+sessão de DONO: contas/logins das lojas, Pix de saída, botões de estorno, catálogo com custo
+e mapa de demanda — e todos os `notifyOwner` passaram a ir para ele, com o dono rebaixado a
+operador. Ler o valor da env e removê-la estão bloqueados pelo classificador desta sessão.
+
+- [ ] **Conferir:** mandar `ops` do número do dono e abrir o link. Painel SEM o botão
+  "Contas de compra da Lia" = `LIA_OWNER_PHONE` está com o número do Carlos.
+- [ ] **Se estiver:** trocar a env NÃO desconecta o Carlos. O cookie vale 1 ano e é o HMAC do
+  `OPS_TOKEN`; só a troca do `OPS_TOKEN` encerra a sessão dele (e a do dono junto).
+- [ ] **Acertar os dois telefones** (dono = `+5511976366065`, operador = `+5527997742494`):
+  `vercel env rm LIA_OWNER_PHONE production --yes` + `add`, idem `LIA_OPERATOR_PHONE`.
+- [ ] **Publicar** os commits pendentes (`git push && vercel --prod`). Sem isso o Carlos não
+  recebe alerta de pedido pago nem de pedido parado, e `operatorIsHired()` continua falso.
+
 ## 15/09/2026 — Para ligar o operador contratado
 
 - [ ] **Deploy.** As envs `LIA_AUTO_PURCHASE_OFF` / `LIA_PURCHASE_SUBMIT_OFF` /
