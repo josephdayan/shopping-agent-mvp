@@ -1,3 +1,16 @@
+## 23/09/2026 — Publicar o financeiro por pedido
+
+- [ ] **Deploy** (`git push && vercel --prod`): a migration `20260923130000_order_pnl` entra
+  no build de produção. Antes disso `/ops/financeiro` não existe em produção.
+- [ ] Depois do deploy: abrir `/ops/financeiro` como dono; na primeira rodada do cron
+  (`/api/cron/reconcile-payments`, a cada 10 min) conferir `feesFilled` > 0 no log e que a
+  taxa dos pedidos antigos deixa de aparecer com ≈. Se continuar ≈, o corpo do MP não trouxe
+  `fee_details`/`net_received_amount` como esperado — ler o log e ajustar `mercadoPagoFees`.
+- [ ] Combinar com o Carlos: ao confirmar a compra, digitar o **total do comprovante**
+  (produtos + frete) no campo novo do card. Sem isso o custo fica ≈ (cotação).
+- [ ] Opcional: `LIA_MP_PIX_FEE_RATE` / `LIA_MP_CARD_FEE_RATE` na Vercel se a tarifa
+  negociada for outra (só afetam a estimativa, nunca a taxa lida).
+
 ## 17/09/2026 — URGENTE: conferir qual papel o Carlos recebeu no painel
 
 O operador contratado (Carlos José Bratz, +55 27 99774-2494) entrou no `/ops` em 16/09 às

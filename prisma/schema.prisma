@@ -55,6 +55,10 @@ model DeliveryOrder {
   deliveryFee           Float                  @default(0)
   serviceFee            Float                  @default(0)
   total                 Float                  @default(0)
+  // Financeiro por pedido (23/09): o que foi pago DE VERDADE na loja (produtos + frete,
+  // tudo), digitado pelo operador na compra ou preenchido pela compra automática. Nulo =
+  // ainda não conferido; o P&L usa itemsSubtotal + deliveryFee como estimativa.
+  storePaidTotal        Float?
   // Direct lifecycle: awaiting_payment -> paid -> retailer_preparing
   //                   -> retailer_out_for_delivery -> delivered.
   // Legacy/partner courier: paid -> operator_buying -> ready_for_pickup
@@ -79,16 +83,16 @@ model DeliveryOrder {
   payments              Payment[]
   events                DeliveryEvent[]
   trackingSubscription  TrackingSubscription?
+  acquisitionTouch      AcquisitionTouch?      @relation(fields: [acquisitionTouchId], references: [id], onDelete: SetNull)
 
   @@index([status])
   @@index([quoteExpiresAt])
   @@index([phone])
-  acquisitionTouch      AcquisitionTouch?      @relation(fields: [acquisitionTouchId], references: [id], onDelete: SetNull)
+  @@index([acquisitionTouchId])
   // Revisão 01/09: o cérebro faz findFirst por userId(+status) em quase todo turno.
   @@index([userId, status, createdAt])
 }
 
-  @@index([acquisitionTouchId])
 // Evidência da etapa e envio ao WhatsApp persistidos na mesma transação do pedido.
 // accepted = Graph recebeu; delivered/read = recibo do WhatsApp. Nunca confundir.
 model DeliveryEvent {
@@ -335,10 +339,6 @@ model Conversation {
   @@index([userId, status, updatedAt])
 }
 
-model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  sender         String
 // A click-to-WhatsApp ad puts a `referral` object on the first inbound message.
 // Keep that evidence separate from the conversation text: it is untrusted metadata,
 // must not become a product query, and one conversation can be re-opened by more than
@@ -367,6 +367,10 @@ model AcquisitionTouch {
   @@index([campaignCode])
 }
 
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  sender         String
   text           String
   metadata       String?
   createdAt      DateTime     @default(now())
@@ -463,6 +467,11 @@ model Payment {
   // approved | unexpected | partially_refunded | refunded
   status            String
   refundedCents     Int           @default(0)
+  // Taxa do provedor e líquido recebido (23/09): lidos do próprio MP (fee_details /
+  // transaction_details.net_received_amount) no webhook, na reconciliação ou no backfill
+  // do cron. Nulo = ainda não lido; o P&L estima pela alíquota configurada.
+  feeCents          Int?
+  netCents          Int?
   refundReference   String?
   rawStatus         String?
   createdAt         DateTime      @default(now())

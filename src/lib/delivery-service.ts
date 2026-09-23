@@ -39,7 +39,7 @@ import { opsPublishManualQuote, recordWaitlistLead, sendFreightChoice } from "./
 export { runTurnScoped, TurnSupersededError, normalizePhone } from "./turn-runtime";
 export { markDeliveryOrderPaid, issueValidatedRetailerQuotePayment, markPixExpired, flagCardOutcomeUnknown } from "./order-payments";
 export type { PaymentEvidence } from "./order-payments";
-export { opsRefundViaProvider, opsPurchaseFailedRefund, watchPaidOrder, opsPublishManualQuote, opsMarkBought, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, opsSetRecipient, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
+export { opsRefundViaProvider, opsPurchaseFailedRefund, watchPaidOrder, opsPublishManualQuote, opsMarkBought, opsSetStoreCost, opsMarkRetailerOutForDelivery, opsMarkDelivered, opsCancelRefund, opsConfirmRefund, opsNotifyCustomer, opsSetRecipient, getOperatorQueue, recordWaitlistLead, getWaitlist } from "./ops-lifecycle";
 
 // Costura de TESTE do CAS: os E2E provam que uma escrita de turno velho morre depois
 // de outra escrita (cancelar) — sem exportar nada disso pro fluxo normal.
@@ -2551,7 +2551,9 @@ async function handlePaidClaim(phone: string, convoId: string, userId: string, c
     const details = await getMercadoPagoPayment(order.pixId ?? "");
     await markDeliveryOrderPaid(
       order.id,
-      details ? { provider: "mercadopago", paymentId: details.id, amount: details.amount } : undefined
+      details
+        ? { provider: "mercadopago", paymentId: details.id, amount: details.amount, feeAmount: details.feeAmount, netAmount: details.netAmount }
+        : undefined
     );
     await writeCtx(convoId, addressOnlyCtx(ctx));
     return;
@@ -4431,9 +4433,9 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
   // exige esse campo (checkCheckout compara com o receiverName do checkout).
   const recipientName = ctx.recipientName?.trim() ||
     (await prisma.user.findUnique({ where: { id: convo.userId }, select: { name: true } }))?.name?.trim() || null;
+  const acquisitionTouchId = await latestAcquisitionTouchId(convoId);
 
   // Tag de urgência (pedido do dono, 17/08): o cliente disse "urgente"/"pra hoje" em
-  const acquisitionTouchId = await latestAcquisitionTouchId(convoId);
   // algum momento da conversa — o operador decide o canal por isso (Rappi/retirada
   // agora vs. ML/dia seguinte). Só marca o pedido; nada muda para o cliente.
   const URGENT_NOTE = "⚡ URGENTE: cliente quer receber hoje.";
@@ -4462,9 +4464,9 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
         conversationId: convoId,
         phone,
         customerName: recipientName,
+        acquisitionTouchId,
         cep: ctx.cep,
         deliveryAddress: ctx.deliveryAddress,
-        acquisitionTouchId,
         storeKey: CONCIERGE_STORE_KEY,
         storeLabel: CONCIERGE_STORE_LABEL,
         items: basket,

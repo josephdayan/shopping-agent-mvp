@@ -16,6 +16,8 @@ export type ReconcileReport = {
   paidStuckAlerts: number;
   autoRefunds: number;
   planBOffers: number;
+  // Financeiro (23/09): taxas do MP preenchidas nesta rodada (backfill).
+  feesFilled: number;
   errors: string[];
 };
 
@@ -25,7 +27,7 @@ const PIX_LOOKBACK_MS = 48 * 60 * 60_000;
 export const PIX_EXPIRED_MARKER = "⏰ PIX EXPIROU";
 
 export async function reconcilePayments(now = new Date()): Promise<ReconcileReport> {
-  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, paidStuckAlerts: 0, autoRefunds: 0, planBOffers: 0, errors: [] };
+  const report: ReconcileReport = { attemptsChecked: 0, attemptsUnknown: 0, pixApproved: 0, pixExpired: 0, paidStuckAlerts: 0, autoRefunds: 0, planBOffers: 0, feesFilled: 0, errors: [] };
   const brain = await import("@/lib/delivery-service");
 
   // 1) Cartão salvo: tentativa confirmada há mais de 5 min sem desfecho.
@@ -71,7 +73,9 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
           report.errors.push(`order ${order.id}: referência divergente ou pagamento já estornado; revisão necessária`);
           continue;
         }
-        await brain.markDeliveryOrderPaid(order.id, { provider: "mercadopago", paymentId: details.id, amount: details.amount });
+        await brain.markDeliveryOrderPaid(order.id, {
+          provider: "mercadopago", paymentId: details.id, amount: details.amount, feeAmount: details.feeAmount, netAmount: details.netAmount
+        });
         report.pixApproved += 1;
       } else if (details.status === "cancelled" || details.status === "expired" || details.status === "rejected") {
         await brain.markPixExpired(order.id, pixId);
@@ -108,6 +112,16 @@ export async function reconcilePayments(now = new Date()): Promise<ReconcileRepo
     await alertSilentBuyer(now);
   } catch (error) {
     report.errors.push(`buyer-silent: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  // 5) Financeiro (23/09): taxa/líquido do MP que ainda não foram lidos (pagamentos
+  // anteriores à coluna, ou webhook sem fee_details). Poucos por rodada; nunca derruba o cron.
+  try {
+    const { backfillPaymentFees } = await import("./ledger");
+    const fees = await backfillPaymentFees(20);
+    report.feesFilled = fees.filled;
+    report.errors.push(...fees.errors);
+  } catch (error) {
+    report.errors.push(`fees: ${error instanceof Error ? error.message : String(error)}`);
   }
   for (const order of stuck) {
     try {

@@ -1,3 +1,40 @@
+## 23/09/2026 — Financeiro por pedido (P&L automático) em /ops/financeiro
+
+O dono pediu "uma planilha de P&L por pedido: pagou isso, custou isso, taxa, frete, sobrou".
+Decisão: gerar do banco, não digitar. Implementado e verde localmente (`test:local` focado,
+`tsc`, lint, tela conferida no preview com banco local), **ainda sem deploy** — depende da
+migration `20260923130000_order_pnl` (três colunas opcionais, aplica sozinha no build de
+produção da Vercel).
+
+- `src/lib/pnl.ts`: `computeOrderPnl` (puro), `loadPnl` (banco), `summarizePnl` (mês no fuso
+  de São Paulo) e `pnlCsv` (`;` + vírgula decimal + BOM: abre no Excel, Numbers e Sheets).
+  Regra: **sobrou = cliente pagou − estorno − taxa do provedor − custo na loja (produtos +
+  frete do comprovante)**. Estimativa nunca vira zero calado: `providerFeeEstimated` (MP ainda
+  não informou), `storeCostEstimated` (comprovante não registrado / pago sem compra ainda) e
+  `refundEstimated` (estorno pedido e não executado) vêm marcados; a tela mostra "≈" e o
+  resumo do mês conta quantos pedidos ainda têm valor estimado. Custos fixos (Carlos, Vercel,
+  Meta, anúncios) ficam fora do por-pedido de propósito.
+- Taxa do Mercado Pago: colunas novas `Payment.feeCents` / `netCents`. `mercadoPagoFees()`
+  lê `fee_details` (só `fee_payer: collector`) ou `transaction_amount −
+  transaction_details.net_received_amount` do corpo de `/v1/payments/{id}`; gravado pelo
+  webhook, pela reconciliação e pelo "paguei". **Backfill no cron** (`backfillPaymentFees`,
+  20 por rodada, `feesFilled` no relatório) cobre os pagamentos anteriores; sem credencial é
+  no-op; replay do webhook sem taxa não apaga a lida. Alíquotas SÓ para estimar enquanto isso:
+  `LIA_MP_PIX_FEE_RATE` (0,99%) e `LIA_MP_CARD_FEE_RATE` (default = MDR repassado). Estorno
+  total devolve a tarifa; parcial, proporcional. Os nomes dos campos do MP não puderam ser
+  conferidos na doc (site devolve 404 a fetch) — a primeira rodada real do cron confirma.
+- Custo real na loja: coluna `DeliveryOrder.storePaidTotal`. O operador digita o **total do
+  comprovante** no card "Confirmar compra na loja" (campo opcional `paidTotal`) ou depois pela
+  ação `set_store_cost`; o dono corrige inline no /ops/financeiro. Compra automática usa
+  `PurchaseJob.actualTotal`. Recusa antes da compra e valor negativo; anota `💰 Custo real`.
+- Rota `/api/ops/pnl` (JSON; `?format=csv&months=12` baixa a planilha): só papel `owner`; o
+  operador contratado recebe 403 mesmo logado. Página `/ops/financeiro` (link 💰 no /ops só
+  pro dono): cards por mês + período todo, tabela por pedido, custo real inline, CSV.
+- Preview local: `.claude/launch.json` ganhou `lia-financeiro-localdb` (Next em :3111 contra
+  o Postgres embutido de `.local-pg/`, nunca produção; `OPS_TOKEN=preview-owner`).
+- Testes: `tests/pnl.test.ts` (14: puro + banco: custo real, backfill com fetch mockado,
+  replay do razão, leitura consolidada).
+
 ## 23/09/2026 — Relato do fluxo de suporte quebrado
 
 Às 13:10 (São Paulo), o Direct Support 28122639484102795 continuava `Closed`,

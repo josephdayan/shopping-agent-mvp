@@ -1,3 +1,13 @@
+## 23/09/2026 — Financeiro por pedido pronto localmente (falta deploy)
+
+P&L automático por pedido em `/ops/financeiro` (só o dono): cliente pagou, taxa do Mercado
+Pago lida do próprio MP (backfill no cron pros pagamentos antigos), custo real da loja que o
+operador digita ao confirmar a compra, frete, margem e "sobrou"; resumo por mês e CSV pra
+planilha. Tudo que ainda não foi confirmado aparece com ≈ (taxa, comprovante, pedido pago sem
+compra, estorno pendente). Gate local: `tsc` e lint limpos, `test:local` focado verde (pnl,
+razão, reconciliação, concierge, operador, login, pricing), tela conferida no preview com banco
+local. Depende de deploy (migration nova). Detalhe em AGENTS; passos em PENDENCIAS.
+
 ## 17/09/2026 — Carlos contratado e treinado; falta acertar os telefones e publicar
 
 Operador contratado: **Carlos José Bratz** (+55 27 99774-2494), vindo do 99Freelas. Combinado

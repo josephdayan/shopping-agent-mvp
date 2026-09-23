@@ -311,7 +311,37 @@ export type MercadoPagoPaymentDetails = {
   amount: number | null;
   externalReference: string | null;
   refundedAmount: number;
+  // Financeiro (23/09): taxa que o MP tirou de nós e líquido creditado. null = o corpo do
+  // pagamento não trouxe (o cron tenta de novo mais tarde; o P&L estima enquanto isso).
+  feeAmount: number | null;
+  netAmount: number | null;
 };
+
+// Pedaço do corpo de /v1/payments/{id} que interessa ao financeiro. O MP lista as taxas em
+// `fee_details` (fee_payer "collector" = saiu do NOSSO lado) e o líquido em
+// `transaction_details.net_received_amount`. Qualquer um dos dois fecha a conta; sem
+// nenhum, fica desconhecido — nunca chutamos zero.
+export type MercadoPagoPaymentBody = {
+  transaction_amount?: number;
+  fee_details?: { type?: string; amount?: number; fee_payer?: string }[];
+  transaction_details?: { net_received_amount?: number };
+};
+
+function round2(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+export function mercadoPagoFees(data: MercadoPagoPaymentBody): { feeAmount: number | null; netAmount: number | null } {
+  const amount = typeof data.transaction_amount === "number" ? data.transaction_amount : null;
+  const fees = Array.isArray(data.fee_details)
+    ? data.fee_details.filter((f) => typeof f?.amount === "number" && Number.isFinite(f.amount) && (f.fee_payer ?? "collector") === "collector")
+    : [];
+  const net = typeof data.transaction_details?.net_received_amount === "number" ? data.transaction_details.net_received_amount : null;
+  let feeAmount: number | null = fees.length ? round2(fees.reduce((sum, f) => sum + (f.amount as number), 0)) : null;
+  if (feeAmount == null && amount != null && net != null) feeAmount = round2(amount - net);
+  const netAmount = net ?? (amount != null && feeAmount != null ? round2(amount - feeAmount) : null);
+  return { feeAmount, netAmount };
+}
 
 // Leitura completa de um pagamento (status + valor) — base da reconciliação por cron e
 // da evidência que o cérebro exige pra marcar "pago". Nunca lança: null = não deu pra ler.
@@ -325,10 +355,9 @@ export async function getMercadoPagoPayment(paymentId: string): Promise<MercadoP
       signal: AbortSignal.timeout(Number(process.env.LIA_MP_TIMEOUT_MS ?? 10000))
     });
     if (!res.ok) return null;
-    const data = (await res.json()) as {
+    const data = (await res.json()) as MercadoPagoPaymentBody & {
       id?: number | string;
       status?: string;
-      transaction_amount?: number;
       external_reference?: string;
       transaction_amount_refunded?: number;
     };
@@ -337,7 +366,8 @@ export async function getMercadoPagoPayment(paymentId: string): Promise<MercadoP
       status: data.status ?? "unknown",
       amount: typeof data.transaction_amount === "number" ? data.transaction_amount : null,
       externalReference: data.external_reference ?? null,
-      refundedAmount: typeof data.transaction_amount_refunded === "number" ? data.transaction_amount_refunded : 0
+      refundedAmount: typeof data.transaction_amount_refunded === "number" ? data.transaction_amount_refunded : 0,
+      ...mercadoPagoFees(data)
     };
   } catch (error) {
     console.warn("[mercadopago:get-payment:failed]", paymentId, error instanceof Error ? error.message : error);

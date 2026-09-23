@@ -11,7 +11,8 @@ import {
   opsPublishManualQuote,
   opsRefundViaProvider,
   opsPurchaseFailedRefund,
-  opsSetRecipient
+  opsSetRecipient,
+  opsSetStoreCost
 } from "@/lib/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +40,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
     recipientName?: string;
     refundReference?: string;
     refundAmount?: number | string;
+    // Financeiro (23/09): valor real pago na loja (produtos + frete), do comprovante.
+    paidTotal?: number | string;
     itemsSubtotal?: number | string;
     deliveryFee?: number | string;
     deliveryMode?: "operator_courier" | "retailer_delivery";
@@ -71,9 +74,22 @@ export async function POST(request: Request, { params }: { params: { id: string 
         });
         break;
       }
-      case "bought":
-        await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl);
+      case "bought": {
+        const paidTotal = body.paidTotal == null || body.paidTotal === "" ? undefined : parseMoneyInput(body.paidTotal);
+        if (paidTotal === null || (paidTotal != null && paidTotal < 0)) {
+          return NextResponse.json({ error: "Valor pago na loja inválido (ex.: 87,90)." }, { status: 400 });
+        }
+        await opsMarkBought(id, String(body.storeOrderNumber ?? "").trim(), body.trackingUrl, paidTotal);
         break;
+      }
+      case "set_store_cost": {
+        const paidTotal = parseMoneyInput(body.paidTotal);
+        if (paidTotal == null || paidTotal < 0) {
+          return NextResponse.json({ error: "Valor pago na loja inválido (ex.: 87,90)." }, { status: 400 });
+        }
+        await opsSetStoreCost(id, paidTotal);
+        break;
+      }
       case "set_recipient":
         await opsSetRecipient(id, String(body.recipientName ?? ""));
         break;

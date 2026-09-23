@@ -649,6 +649,9 @@ export type PaymentEvidence = {
   provider: "mercadopago" | "pagarme" | "mock";
   paymentId?: string | null;
   amount?: number | null;
+  // Financeiro (23/09): taxa do provedor e líquido, quando a leitura do MP já os trouxe.
+  feeAmount?: number | null;
+  netAmount?: number | null;
 };
 
 // Dinheiro e razão precisam confirmar juntos; falha no banco pede retry do webhook.
@@ -659,7 +662,9 @@ export async function ledgerRecord(order: { id: string; notes: string | null }, 
   await recordPayment({
     deliveryOrderId: order.id, provider: evidence.provider, providerPaymentId: evidence.paymentId,
     method: evidence.provider === "pagarme" || isCardCharge(order) ? "card" : "pix",
-    amountCents: Math.round(evidence.amount * 100), status
+    amountCents: Math.round(evidence.amount * 100), status,
+    feeCents: evidence.feeAmount != null && Number.isFinite(evidence.feeAmount) ? Math.round(evidence.feeAmount * 100) : null,
+    netCents: evidence.netAmount != null && Number.isFinite(evidence.netAmount) ? Math.round(evidence.netAmount * 100) : null
   }, db);
 }
 

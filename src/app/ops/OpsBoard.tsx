@@ -168,6 +168,8 @@ export default function OpsBoard() {
   const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [numbers, setNumbers] = useState<Record<string, string>>({});
+  // Financeiro (23/09): valor real pago na loja, lido do comprovante na hora da compra.
+  const [paidTotals, setPaidTotals] = useState<Record<string, string>>({});
   const [quotes, setQuotes] = useState<
     Record<string, { itemsSubtotal: string; deliveryFee: string; deliveryMode: string; deliveryPromise: string; etaMinutes: string }>
   >({});
@@ -218,9 +220,9 @@ export default function OpsBoard() {
       if (res.ok) {
         const data = (await res.json()) as { orders?: DeliveryOrder[]; role?: "owner" | "operator"; acquisition?: AcquisitionSummary };
         setOrders(data.orders ?? []);
+        setAcquisition(data.acquisition ?? null);
         if (data.role) setRole(data.role);
         setDenied(false);
-        setAcquisition(data.acquisition ?? null);
       }
       // Waitlist is best-effort: a failure here must never blank the order queue.
       try {
@@ -251,6 +253,7 @@ export default function OpsBoard() {
       recipientName?: string;
       refundReference?: string;
       refundAmount?: number;
+      paidTotal?: string;
       itemsSubtotal?: number;
       deliveryFee?: number;
       deliveryMode?: string;
@@ -323,15 +326,12 @@ export default function OpsBoard() {
             📚 catálogo
           </a>
         )}
+        {isOwner && (
+          <a href="/ops/financeiro" style={{ color: "#e4002b", fontSize: 13, textDecoration: "none" }} title="P&L por pedido: cliente pagou, taxa, custo na loja, sobrou — e CSV pra planilha">
+            💰 financeiro
+          </a>
+        )}
       </div>
-      {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
-      {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
-      {orders.map((o) => {
-        const cancelRequested = hasCancelRequest(o.notes);
-        const refundPending = hasPendingRefund(o.notes) || o.status === "refund_pending";
-        const urgent = (o.notes ?? "").includes("⚡ URGENTE");
-        const isCard = isCardCharge(o);
-        const retailerDelivery = isRetailerDeliveryOrder(o);
       {isOwner && acquisition && (
         <div style={{ ...card, borderColor: "#b7d838", background: "#fbffe9" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#0f3d3a" }}>
@@ -355,6 +355,14 @@ export default function OpsBoard() {
           )}
         </div>
       )}
+      {loading && <p style={{ color: "#667085" }}>Carregando…</p>}
+      {!loading && orders.length === 0 && <p style={{ color: "#667085" }}>Nenhum pedido na fila. 🎉</p>}
+      {orders.map((o) => {
+        const cancelRequested = hasCancelRequest(o.notes);
+        const refundPending = hasPendingRefund(o.notes) || o.status === "refund_pending";
+        const urgent = (o.notes ?? "").includes("⚡ URGENTE");
+        const isCard = isCardCharge(o);
+        const retailerDelivery = isRetailerDeliveryOrder(o);
         const primaryFulfillment = o.fulfillments?.[0];
         const paymentReceived =
           Boolean(o.paidAt) ||
@@ -377,6 +385,11 @@ export default function OpsBoard() {
                 {urgent && <span style={urgentBadge}>⚡ quer HOJE</span>}{" "}
                 <span style={badge}>{STATUS_LABEL[o.status] ?? o.status}</span>{" "}
                 <span style={payBadge}>{isCard ? "💳 cartão" : "⚡ Pix"}</span>
+                {o.acquisitionTouch && (
+                  <span style={sourceBadge} title={o.acquisitionTouch.headline ?? "Origem do anúncio"}>
+                    anúncio · {o.acquisitionTouch.campaignCode ?? o.acquisitionTouch.sourceId?.slice(-10) ?? "Meta"}
+                  </span>
+                )}
               </span>
             </div>
             {(o.manualPurchase || o.purchaseJobs?.some(j => j.status === "manual_queue")) && (
@@ -385,11 +398,6 @@ export default function OpsBoard() {
             <div style={{ color: "#475467", fontSize: 14, marginTop: 6 }}>
               {o.customerName ?? o.phone}{" "}
               {paymentReceived && (
-                {o.acquisitionTouch && (
-                  <span style={sourceBadge} title={o.acquisitionTouch.headline ?? "Origem do anúncio"}>
-                    anúncio · {o.acquisitionTouch.campaignCode ?? o.acquisitionTouch.sourceId?.slice(-10) ?? "Meta"}
-                  </span>
-                )}
                 <button
                   style={{ ...smallBtn, marginLeft: 6 }}
                   disabled={busy === `${o.id}:set_recipient`}
@@ -573,11 +581,26 @@ export default function OpsBoard() {
                     style={{ ...input, minWidth: 240 }}
                     title="Cole aqui a página do pedido na loja (ex.: Mercado Livre). A Lia manda esse link pro cliente ao avisar da compra."
                   />
+                  {/* Financeiro (23/09): o total do comprovante (produtos + frete) entra aqui,
+                      na hora em que está na tela. Opcional: sem ele o P&L usa a cotação e
+                      marca "custo estimado" até alguém registrar. */}
+                  <input
+                    placeholder="total pago na loja R$ (opcional)"
+                    inputMode="decimal"
+                    value={paidTotals[o.id] ?? ""}
+                    onChange={(e) => setPaidTotals((current) => ({ ...current, [o.id]: e.target.value }))}
+                    style={{ ...input, minWidth: 200 }}
+                    title="Quanto saiu de verdade no checkout da loja, produtos + frete. Vai pro financeiro do pedido."
+                  />
                   <button
                     style={primary}
-                    disabled={busy === `${o.id}:bought`}
+                    disabled={busy === `${o.id}:bought` || (paidTotals[o.id]?.trim() !== "" && paidTotals[o.id] != null && parseMoneyInput(paidTotals[o.id]) == null)}
                     onClick={() =>
-                      act(o.id, "bought", { storeOrderNumber: numbers[o.id] ?? "", trackingUrl: tracking[o.id] ?? "" })
+                      act(o.id, "bought", {
+                        storeOrderNumber: numbers[o.id] ?? "",
+                        trackingUrl: tracking[o.id] ?? "",
+                        paidTotal: paidTotals[o.id]?.trim() || undefined
+                      })
                     }
                   >
                     Confirmar compra na loja
@@ -824,6 +847,7 @@ const badge: React.CSSProperties = { fontSize: 12, color: "#0f3d3a", background:
 // retirada agora vs. ML/dia seguinte). Laranja para saltar aos olhos na fila.
 const urgentBadge: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#93370d", background: "#ffead5", borderRadius: 999, padding: "2px 10px" };
 const payBadge: React.CSSProperties = { fontSize: 12, color: "#475467", background: "#f2f4f7", borderRadius: 999, padding: "2px 10px" };
+const sourceBadge: React.CSSProperties = { fontSize: 12, color: "#175cd3", background: "#eff8ff", borderRadius: 999, padding: "2px 10px", marginLeft: 4 };
 const input: React.CSSProperties = { padding: "8px 10px", border: "1px solid #d0d5dd", borderRadius: 8, fontSize: 14, minWidth: 180 };
 const primary: React.CSSProperties = { padding: "8px 14px", background: "#0f3d3a", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, cursor: "pointer" };
 const secondary: React.CSSProperties = { padding: "8px 14px", background: "#eef2f1", color: "#0f3d3a", border: "1px solid #d0d5dd", borderRadius: 8, fontSize: 14, cursor: "pointer" };
@@ -835,4 +859,3 @@ const reasonOut: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "
 const reasonFar: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#5925dc", background: "#ebe9fe", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
 const ghost: React.CSSProperties = { padding: "8px 12px", background: "transparent", color: "#b42318", border: "1px solid #fda29b", borderRadius: 8, fontSize: 13, cursor: "pointer" };
 const quoteBox: React.CSSProperties = { marginTop: 10, padding: 10, border: "1px dashed #0f3d3a", borderRadius: 8, background: "#f2fbf9", display: "grid", gap: 8 };
-const sourceBadge: React.CSSProperties = { fontSize: 12, color: "#175cd3", background: "#eff8ff", borderRadius: 999, padding: "2px 10px", marginLeft: 4 };

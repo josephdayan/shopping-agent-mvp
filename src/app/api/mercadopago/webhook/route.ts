@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { markDeliveryOrderPaid } from "@/lib/delivery-service";
+import { mercadoPagoFees, type MercadoPagoPaymentBody } from "@/lib/payments/mercadopago";
 
 export const dynamic = "force-dynamic";
 
@@ -91,17 +92,20 @@ export async function POST(request: Request) {
       console.error("[mercadopago:webhook:fetch-status]", paymentId, res.status);
       return NextResponse.json({ ok: false, retry: res.status >= 500 }, { status: res.status >= 500 ? 503 : 200 });
     }
-    const data = (await res.json()) as {
+    const data = (await res.json()) as MercadoPagoPaymentBody & {
       id?: number | string;
       status?: string;
       external_reference?: string;
-      transaction_amount?: number;
     };
     if (data.status === "approved" && data.external_reference) {
+      // Taxa e líquido vêm no mesmo corpo (financeiro, 23/09): o razão nasce completo.
+      const fees = mercadoPagoFees(data);
       await markDeliveryOrderPaid(data.external_reference, {
         provider: "mercadopago",
         paymentId: String(data.id ?? paymentId),
-        amount: typeof data.transaction_amount === "number" ? data.transaction_amount : null
+        amount: typeof data.transaction_amount === "number" ? data.transaction_amount : null,
+        feeAmount: fees.feeAmount,
+        netAmount: fees.netAmount
       });
     }
     return NextResponse.json({ ok: true });

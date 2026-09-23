@@ -251,10 +251,37 @@ export async function opsPublishManualQuote(
   return prisma.deliveryOrder.findUnique({ where: { id: order.id } });
 }
 
-export async function opsMarkBought(orderId: string, storeOrderNumber: string, trackingUrl?: string) {
-  return recordDeliveryEvent(orderId, {
+// `paidTotal` (financeiro, 23/09): quanto saiu de verdade na loja, produtos + frete, lido
+// do comprovante na hora da compra. Opcional — sem ele o P&L usa a cotação como estimativa
+// e marca o pedido como "custo estimado" até alguém registrar.
+export async function opsMarkBought(orderId: string, storeOrderNumber: string, trackingUrl?: string, paidTotal?: number | null) {
+  const order = await recordDeliveryEvent(orderId, {
     kind: "bought", source: "operator", sourceReference: "Compra confirmada no /ops",
     storeOrderNumber, trackingUrl
+  });
+  if (paidTotal != null) return opsSetStoreCost(orderId, paidTotal);
+  return order;
+}
+
+// Custo real na loja, registrado ou corrigido depois da compra (pelo operador no card ou
+// pelo dono no /ops/financeiro). Só vale em pedido que já tem compra — antes disso não
+// existe comprovante — e nunca aceita valor negativo. Fica na nota para auditoria.
+export async function opsSetStoreCost(orderId: string, paidTotal: number) {
+  const amount = roundMoney(Number(paidTotal));
+  if (!Number.isFinite(amount) || amount < 0) throw new Error("Valor pago na loja inválido (ex.: 87,90).");
+  return prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM "DeliveryOrder" WHERE id = ${orderId} FOR UPDATE`;
+    const order = await tx.deliveryOrder.findUniqueOrThrow({ where: { id: orderId } });
+    const purchased = Boolean(order.storeOrderNumber) || ["retailer_preparing", "retailer_out_for_delivery", "delivered", "operator_buying", "ready_for_pickup", "dispatched"].includes(order.status);
+    if (!purchased) throw new Error("Registre o custo real depois de confirmar a compra na loja.");
+    if (order.storePaidTotal != null && Math.abs(order.storePaidTotal - amount) < 0.005) return order;
+    return tx.deliveryOrder.update({
+      where: { id: orderId },
+      data: {
+        storePaidTotal: amount,
+        notes: appendOrderNote(order.notes, `💰 Custo real na loja: R$ ${amount.toFixed(2).replace(".", ",")}${order.storePaidTotal != null ? ` (antes R$ ${order.storePaidTotal.toFixed(2).replace(".", ",")})` : ""} (${new Date().toISOString()}).`)
+      }
+    });
   });
 }
 

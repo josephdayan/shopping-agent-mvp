@@ -4,7 +4,7 @@
 // cérebro (delivery-service), que chama estas funções.
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { PaymentProviderError, refundMercadoPagoPayment } from "./mercadopago";
+import { PaymentProviderError, getMercadoPagoPayment, refundMercadoPagoPayment } from "./mercadopago";
 import { pagarmeAdapter } from "./pagarme";
 
 export type LedgerProvider = "mercadopago" | "pagarme" | "mock";
@@ -17,6 +17,10 @@ export type RecordPaymentInput = {
   amountCents: number;
   status: "approved" | "unexpected";
   rawStatus?: string | null;
+  // Financeiro (23/09): taxa do provedor e líquido, em centavos. Só gravam quando vêm
+  // preenchidos — um replay sem eles nunca apaga o que já foi lido.
+  feeCents?: number | null;
+  netCents?: number | null;
 };
 
 function toCents(value: number) {
@@ -34,11 +38,17 @@ export async function recordPayment(input: RecordPaymentInput, db: Prisma.Transa
       method: input.method,
       amountCents: input.amountCents,
       status: input.status,
-      rawStatus: input.rawStatus ?? null
+      rawStatus: input.rawStatus ?? null,
+      feeCents: input.feeCents ?? null,
+      netCents: input.netCents ?? null
     },
     // Um "unexpected" que depois se confirma como o pagamento certo pode virar approved;
     // o contrário nunca (approved não regride).
-    update: { rawStatus: input.rawStatus ?? null }
+    update: {
+      rawStatus: input.rawStatus ?? null,
+      ...(input.feeCents != null ? { feeCents: input.feeCents } : {}),
+      ...(input.netCents != null ? { netCents: input.netCents } : {})
+    }
   });
   if (payment.deliveryOrderId !== input.deliveryOrderId || payment.amountCents !== input.amountCents) {
     throw new Error("Pagamento já vinculado a outro pedido ou valor.");
@@ -51,6 +61,33 @@ export async function recordPayment(input: RecordPaymentInput, db: Prisma.Transa
 
 export async function paymentsForOrder(deliveryOrderId: string) {
   return prisma.payment.findMany({ where: { deliveryOrderId }, orderBy: { createdAt: "desc" } });
+}
+
+// Backfill das taxas (23/09): pagamentos do MP gravados antes da coluna existir, ou cujo
+// webhook chegou sem `fee_details`, ganham taxa/líquido lidos do provedor. Roda no cron
+// de reconciliação, poucos por vez, e nunca lança — sem credencial é um no-op.
+export async function backfillPaymentFees(limit = 20): Promise<{ checked: number; filled: number; errors: string[] }> {
+  const report = { checked: 0, filled: 0, errors: [] as string[] };
+  const pending = await prisma.payment.findMany({
+    where: { provider: "mercadopago", feeCents: null, status: { in: ["approved", "partially_refunded", "refunded"] } },
+    orderBy: { createdAt: "asc" },
+    take: Math.max(1, Math.min(100, limit))
+  });
+  for (const payment of pending) {
+    report.checked += 1;
+    try {
+      const details = await getMercadoPagoPayment(payment.providerPaymentId);
+      if (!details || details.feeAmount == null) continue;
+      await prisma.payment.update({
+        where: { id: payment.id },
+        data: { feeCents: toCents(details.feeAmount), netCents: details.netAmount != null ? toCents(details.netAmount) : null }
+      });
+      report.filled += 1;
+    } catch (error) {
+      report.errors.push(`fee ${payment.providerPaymentId}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  return report;
 }
 
 export type RefundResult = {
