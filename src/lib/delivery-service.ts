@@ -20,6 +20,7 @@ import { AWAITING_OPERATOR_QUOTE_STATUS, CONCIERGE_STORE_KEY, CONCIERGE_STORE_LA
 import { automaticPurchaseStores } from "@/lib/purchase-policy";
 import { isSaoPauloState } from "@/lib/coverage";
 import * as copy from "@/lib/lia-copy";
+import { latestAcquisitionTouchId, mergeAcquisition, recordAcquisitionTouch, stripAcquisitionTag, type InboundAcquisition } from "@/lib/acquisition";
 
 // The operational brain of the remodelled Lia. One conversation = one basket of
 // everyday items, fulfilled by a pluggable store. Retailer delivery is the default;
@@ -769,10 +770,13 @@ export async function handleDeliveryMessage(input: {
   // Áudio ou foto que o cliente mandou (14/09): só o id da Meta — vira texto depois do
   // dedupe, em `understandMedia`.
   media?: InboundMedia;
+  acquisition?: InboundAcquisition;
 }) {
   const phone = normalizePhone(input.phone);
   turnStartedAt.set(phone, Date.now());
-  let text = (input.text ?? "").trim();
+  const tagged = stripAcquisitionTag((input.text ?? "").trim());
+  let text = tagged.text;
+  const acquisition = mergeAcquisition(input.acquisition, tagged.campaignCode);
   const { user, convo } = await getOrCreateConvo(phone, input.name);
 
   // Twilio/Meta retry the webhook when a turn is slow — never process the same inbound
@@ -788,6 +792,21 @@ export async function handleDeliveryMessage(input: {
   } catch (error) {
     if (input.messageId && (error as { code?: string })?.code === "P2002") return;
     throw error;
+  }
+
+  // Attribution is deliberately best-effort: an analytics write can never make the
+  // customer retry a purchase turn. Message dedupe runs first, so a Meta webhook retry
+  // cannot create a second acquisition touch.
+  if (acquisition && inboundMessageId) {
+    try {
+      await recordAcquisitionTouch({
+        conversationId: convo.id,
+        providerMessageId: input.messageId ?? `message:${inboundMessageId}`,
+        acquisition
+      });
+    } catch (error) {
+      console.error("[acquisition:record-failed]", error instanceof Error ? error.message : error);
+    }
   }
 
   // Áudio e foto viram texto AQUI, depois do dedupe (14/09): transcrever custa segundos,
@@ -4414,6 +4433,7 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
     (await prisma.user.findUnique({ where: { id: convo.userId }, select: { name: true } }))?.name?.trim() || null;
 
   // Tag de urgência (pedido do dono, 17/08): o cliente disse "urgente"/"pra hoje" em
+  const acquisitionTouchId = await latestAcquisitionTouchId(convoId);
   // algum momento da conversa — o operador decide o canal por isso (Rappi/retirada
   // agora vs. ML/dia seguinte). Só marca o pedido; nada muda para o cliente.
   const URGENT_NOTE = "⚡ URGENTE: cliente quer receber hoje.";
@@ -4444,6 +4464,7 @@ async function createOperatorQuoteRequest(phone: string, convoId: string, ctx: D
         customerName: recipientName,
         cep: ctx.cep,
         deliveryAddress: ctx.deliveryAddress,
+        acquisitionTouchId,
         storeKey: CONCIERGE_STORE_KEY,
         storeLabel: CONCIERGE_STORE_LABEL,
         items: basket,

@@ -1,3 +1,254 @@
+## 23/09/2026 — Relato do fluxo de suporte quebrado
+
+Às 13:10 (São Paulo), o Direct Support 28122639484102795 continuava `Closed`,
+sem resposta humana. Pela opção `Report a problem` do próprio Business Manager,
+foi enviado um relato à Meta com passos reproduzíveis do erro `Select issue` →
+`No matching results` no fluxo Help → Contact support, a classificação incorreta
+do caso 28122639484102795 como `Dev: Onboarding`, os três fechamentos por IA e
+o nome antigo ainda exposto. Informados WABA/Phone ID e o e-mail correto. A
+interface confirmou `Thanks for providing feedback on your Meta ads experience`,
+mas avisou que não garante investigar nem responder; isso não equivale a chamado
+de suporte ou revisão do nome. A captura de tela opcional ficou em `Loading...`
+e o relato foi enviado sem ela. Nova consulta ao WhatsApp Manager ainda mostra o
+nome antigo como `Name visible to customers`.
+
+Graph API Explorer com app Lia selecionado não apresentou token existente. A
+consulta de leitura exigiria gerar um token temporário com permissão
+`whatsapp_business_management`, que dá acesso de gerenciamento à WABA. A tela foi
+preparada com apenas essa permissão; solicitação de autorização específica ao
+dono enviada antes de gerar o token. Nenhum token novo nem Graph query até aqui.
+Consulta preparada no Explorer em `GET /v26.0/1228651533663944?fields=new_display_name,new_name_status,verified_name,name_status`.
+A coleção oficial da Meta no Postman documenta `name_status` por Phone ID e
+`new_name_status` em consultas aos números da WABA; se a consulta direta rejeitar
+algum campo, limitar aos campos documentados em vez de inferir o estado.
+
+## 23/09/2026 — Fórum publicado e WhatsApp contatado
+
+Com autorização específica do dono, as normas do fórum de desenvolvedores da Meta
+foram aceitas e a pergunta foi publicada em `WhatsApp Business API > Cloud Hosted
+API`, sem nome completo, CNPJ, telefone, e-mail ou IDs da conta no texto. Tópico:
+https://developers.facebook.com/community/threads/1389805853133081/ . Pede
+canal privado/especialista para conferir a decisão real do pedido de 20/09 e
+relata o fechamento automático dos três casos e o erro `No matching results`.
+O tópico apareceu como `Unresolved`; publicação não é atendimento humano.
+
+O dono também autorizou transmitir o número comercial +55 11 97844-4813 e
+`Joseph.Dayan@beityaacov.com.br` pelo formulário oficial
+https://www.whatsapp.com/contact/?subject=messenger . Pedido enviado em 23/09,
+com WABA/Phone ID e os três protocolos Meta. A página confirmou `Sua pergunta
+foi enviada.` E-mail do `support@support.whatsapp.com` chegou em seguida com
+protocolo **1476013821028439**: resposta explicitamente gerada por IA, diz que
+não consegue consultar o estado nem escalar a humano e devolve para Business
+Help/Direct Support, já tentados. Follow-up enviado no mesmo fio ao endereço
+`1476013821028439@support.whatsapp.com`, apontando esses bloqueios e pedindo
+encaminhamento concreto à equipe Cloud API ou canal humano funcional; Gmail
+confirmou o envio. Nenhuma decisão de nome foi comunicada por esse canal.
+
+Rechecagem às 11:57 São Paulo: chegou outra resposta no protocolo
+1476013821028439. Continua marcada como gerada por IA; declara expressamente que
+não pode encaminhar à equipe responsável nem fornecer canal humano privado. Repete
+Business Help/Direct Support e sugere procurar BSP/parceiro gerenciado. A Lia usa
+Cloud API diretamente com a Meta; a rota Infobip foi avaliada em julho/agosto e
+encerrada sem onboarding, e migrar/adicionar BSP poderia mexer no sender, portanto
+essa sugestão não é um passo aplicável sem nova autorização e requisitos claros.
+Nenhuma resposta humana da Meta/WhatsApp nem do fórum foi observada nesta rechecagem.
+
+Automação de acompanhamento atualizada para frequência **horária**, ativa e
+silenciosa sem mudança relevante. Verificar respostas no tópico e no Gmail,
+especialmente os protocolos 1476013821028439 e 28122639484102795.
+
+Nova conferência no WhatsApp Manager, após esses contatos: a lista de números
+continua mostrando `Lia Delivery by 67.742.955 Joseph Carlos Dayan` como
+`Name visible to customers`; o Activity log ainda tem `Name verification
+requested` de 20/09 às 11:52 (São Paulo) como evento mais recente. Portanto,
+nenhuma aprovação/aplicação foi observada. O caso Meta 28122639484102795
+continua `Closed` na página do Direct Support.
+
+## 23/09/2026 — Canais alternativos de suporte examinados
+
+Checagem adicional às 10:45 (São Paulo): Meta Business Suite → Help → Contact support
+classificou o relato como `Manage WhatsApp phone number or display name`, aceitou os
+três protocolos anteriores e mostrou o ativo Lia Delivery correto (`Other Asset ID
+1254333097762399`). A etapa `Select issue` voltou a mostrar `No matching results`,
+sem opção de chat/e-mail humano; nenhum novo chamado foi criado. A página
+Business Settings → Meta Verified mostra `Grow with Meta Verified`/`Get started`,
+portanto não há assinatura ativa nessa página. Ela anuncia `Email and chat agent
+support`, mas avisa que benefícios dependem da assinatura e podem não estar
+disponíveis para todos; não é prova de cobertura do caso Cloud API. Verificação
+empresarial `Verified` não equivale a Meta Verified pago.
+
+Às 10:34 (São Paulo), Gmail do contato correto não tinha resposta nova ao follow-up do
+caso **28122639484102795**; o fio contém a resposta do Meta AI Agent e a contestação
+enviada em 23/09. O WhatsApp Manager continuava mostrando o nome antigo visível ao
+cliente na última conferência desta manhã, sem decisão posterior à solicitação de 20/09.
+
+No Business Support Home, o fluxo alternativo de contato continuou sem opções em
+`Select issue` para o ativo Lia Delivery; não foi criado chamado por esse caminho.
+No portal Meta for Developers, o formulário `Report a bug` permitiu selecionar o app
+Lia (`1363776745853579`) e `WhatsApp Business API > Business Profiles`, mas deixou
+`Next` desabilitado. A categoria `Developer Tools > Developer Support Home` informou
+que suporte técnico avançado não está disponível ali e remeteu ao fórum comunitário;
+nenhum bug foi submetido. O fórum exigiu criação de perfil com aceite de novas normas,
+portanto nenhuma publicação foi feita. Não tratar essas tentativas como atendimento.
+
+No site oficial do WhatsApp, a página `https://www.whatsapp.com/contact/` oferece
+formulário geral com número, e-mail e mensagem livre em
+`https://www.whatsapp.com/contact/?subject=messenger`. O formulário de dúvidas sobre
+privacidade em `https://www.whatsapp.com/contact/forms/915483389072145/` tem opção de
+direitos de privacidade, mas só distingue Messenger de Business App, não Cloud API, e
+não oferece texto livre antes do envio. Nenhum dos dois foi enviado nesta checagem;
+aguarda autorização específica para informar os dados de contato pelo navegador.
+
+## 23/09/2026 — Contato Meta corrigido; terceiro chamado com assinante certo
+
+O dono forneceu `Joseph.Dayan@beityaacov.com.br` como endereço correto. Business Suite →
+Business info → Profile contact info foi atualizado; a Meta enviou um código a essa caixa,
+e o dono autorizou explicitamente inseri-lo no formulário da Meta. A interface confirmou
+`Email address confirmed.`. Direct Support Settings agora mostra `Lia Contact Email:
+Joseph.Dayan@beityaacov.com.br`. Os dois chamados antigos mantêm o assinante DOG CITY;
+a troca do contato do portfólio não altera retroativamente seus assinantes.
+
+Novo Direct Support **28122639484102795**, `Dev: Phone Number & Registration` →
+`Change Display Name (non Official Business Account)`, WABA `1336161451961509`, criado
+em 23/09. Assinante verificado **Joseph.Dayan@beityaacov.com.br**. O relato pede especialista humano, estado real da revisão de
+`Lia Delivery`, decisão/justificativa, aplicação do nome e orientação sobre eventual
+re-registro Cloud API; cita os dois chamados fechados pelo bot e o contato antigo
+errado. O chat automático informou `Your case has been switched to email support` e
+encerrou. Às 00:53 o Meta AI Agent enviou resposta genérica por e-mail para o endereço
+correto, alegando `PENDING_REVIEW` sem evidência de consulta ao número e admitindo não
+ter acesso interno nem poder escalar a um humano. O caso passou a `Closed` (a página
+inclusive o rotula como `Dev: Onboarding`, apesar do formulário enviado ser
+`Dev: Phone Number & Registration`). Resposta enviada no mesmo fio, pedindo origem
+verificável desse status, especialista humano, decisão ou correção específica e
+orientação para aplicação após aprovação; envio confirmado pelo Gmail. Resposta a
+esse follow-up ainda pendente. URL:
+https://business.facebook.com/direct-support/case-detail/28122639484102795/?business_id=1802515380110705
+
+Consulta Graph ainda não feita: `vercel env pull --environment=production` traz
+`WHATSAPP_PHONE_NUMBER_ID` preenchido, mas `WHATSAPP_ACCESS_TOKEN` vazio, embora o
+nome da variável esteja listado como Encrypted. Arquivo temporário do pull removido.
+Não inferir `PENDING_REVIEW` a partir do texto do bot. Monitoramento automático da
+resposta/caso/WhatsApp Manager criado para este fio, a cada 2 horas, silencioso sem
+novidade; automação `resolver-nome-p-blico-da-lia-no-whatsapp`.
+
+Checagem 23/09 às 04:57 (São Paulo): nenhum e-mail de resposta ao follow-up; chegou
+apenas pesquisa de satisfação da Meta. Caso continua `Closed`, e o WhatsApp Manager
+continua exibindo o nome antigo. Marcado `Negative feedback` na resposta automática
+do chat; interface confirmou `Thanks for your feedback.` Nenhuma decisão nova.
+
+Rechecagem do WhatsApp Manager: o nome antigo ainda está `Name visible to customers`.
+O Activity log segue com `Name verification requested` de 20/09 11:52 como evento mais
+recente ligado ao nome, sem aprovação/rejeição posterior. Não reenviar mudança de nome
+por inferência. Nenhum Graph query, re-registro, deploy ou campanha executado.
+
+## 23/09/2026 — Nome antigo visível; primeiro chamado fechado, novo escalonamento aberto
+
+Conferência ao vivo no WhatsApp Manager: o número ainda mostra **“Lia Delivery by
+67.742.955 Joseph Carlos Dayan”** como `Name visible to customers`; no perfil, esse
+nome antigo segue `Approved`. O Activity log tem `Name verification requested` em
+20/09 às 11:52 (São Paulo), sem registro posterior de aprovação/rejeição. Ao abrir
+`Edit`, o formulário agora aceita novo nome, mas isso **não comprova** o status do
+pedido de 20/09; não reenviar sem esclarecer esse estado.
+
+O caso Meta **28490582747289644** agora consta `Closed`. A única resposta exibida
+no caso é do `Meta AI Agent` (20/09, 13:46), com instruções genéricas para pedir a
+troca pelo WhatsApp Manager/API; não decidiu a revisão nem explicou por que o nome
+antigo persiste. O chat informa transferência para suporte por e-mail, mas a caixa
+assinante do caso não está conectada ao Gmail consultável nesta sessão; nenhuma
+resposta humana por e-mail foi verificada. O bloqueio para distribuição continua.
+
+Novo chamado de escalonamento enviado ao Direct Support em 23/09: **28315695101392221**,
+`Dev: Phone Number & Registration` → `Change Display Name (non Official Business
+Account)`, WABA correta `1336161451961509`, status confirmado `Open`. Refere o caso
+anterior, o pedido de 20/09 e o nome ainda exposto; pede revisão humana, status real
+da solicitação e ação específica, inclusive esclarecer eventual re-registro da Cloud
+API se aprovado. URL:
+https://business.facebook.com/direct-support/case-detail/28315695101392221/?business_id=1802515380110705
+Rechecagem ainda em 23/09: esse segundo caso também foi **fechado** automaticamente,
+com duas respostas do Meta AI Agent sugerindo consultar a API/repetir o formulário,
+sem confirmar o estado real do novo nome. A indicação de transferência para e-mail
+não é prova de atendimento humano. `Switch to comment` no caso fechado respondeu
+que não pode ser reaberto. Nenhuma decisão sobre o nome foi observada.
+
+Erro de contato descoberto: Direct Support Settings mostra `Lia Contact Email:
+dogcitystore@gmail.com`. Business Suite → Business info → Profile contact info também
+mostra esse e-mail para Joseph Dayan; é a origem provável dos assinantes dos casos.
+O dono informou que DOG CITY está errado. Correção depende de confirmar qual e-mail
+deve receber as respostas; pergunta enviada ao dono. O perfil público do WhatsApp
+exibe `contato@liadelivery.com.br`, mas não assumir que seja a caixa operacional de
+suporte sem resposta. O botão Edit do Direct Support abre Business info em nova aba;
+lá há modal `Update your email address`. Nenhuma alteração enviada ainda.
+
+Tentativa de consultar Graph com env de produção via `vercel env run`/`env pull`:
+`WHATSAPP_ACCESS_TOKEN` é listado no projeto Vercel, mas retorna vazio nesses
+comandos; nenhuma consulta Graph foi executada e nenhum token exibido. O suporte
+alternativo via Business Support Home → Help → Contact support chega a `Next Step`,
+que aceita Beta product testing terms/AI terms; relato para revisão humana preparado
+no formulário. Dono autorizou explicitamente avançar e aceitar esses termos em 23/09;
+`Next Step` foi clicado. A IA pediu ID/URL do ativo; WABA, Phone ID, URL do WhatsApp
+Manager e URLs dos dois casos foram fornecidos. O fluxo encontrou um ativo separado
+`Lia Delivery by ...` (`Other Asset ID 1254333097762399`; DogCity apareceu como
+outra página), mas o seletor seguinte `Select issue` não ofereceu nenhuma opção,
+inclusive ao buscar `display name`. A busca por WABA/Phone ID no seletor de ativos
+também devolveu `No matching results`. Portanto, nenhum terceiro chamado foi criado
+por esse fluxo; não tratar o aceite dos termos como encaminhamento ao agente.
+
+## 20/09/2026 — Nome público da Lia reenviado e levado ao suporte
+
+Dono quer retirar nome pessoal/CNPJ da conversa antes de distribuir. Conferência ao vivo
+no WhatsApp Manager: nome antigo ainda `Approved` e visível aos clientes; Activity log
+registra `Name verification requested` em 01/09, sem decisão exibida. Formulário permitiu
+novo envio de **Lia Delivery**, realizado nesta sessão; estado confirmado **In Review**,
+com edição desabilitada. Não considerar resolvido: o nome antigo continua visível até a
+aprovação/aplicação. Nenhum registro/desregistro do número, alteração de Pix ou deploy.
+
+Diretriz oficial consultada: https://www.facebook.com/business/help/757569725593362 —
+nome de marca deve ter relação clara com a empresa e identidade pública consistente;
+“by [company name]” é indicado quando esse vínculo não é evidente. A documentação da
+coleção oficial Meta no Postman descreve registro após aprovação do nome na Cloud API:
+https://www.postman.com/meta/whatsapp-business-platform/folder/zuoeksl/registration .
+Isso é próximo diagnóstico se o novo nome for aprovado e não aparecer, não prova da
+causa atual. Consulta Graph não foi executada: credenciais necessárias ausentes no `.env`.
+Não reenviar enquanto este pedido estiver em análise.
+
+Chamado aberto no **Direct Support** da Meta, tipo `Dev: Phone Number & Registration` →
+`Change Display Name (non Official Business Account)`, vinculado à WABA
+`1336161451961509`. Caso **28490582747289644**, título “Remove personal name and
+registration number from WhatsApp display name”, status confirmado **Open**. O relato inclui
+o número/Phone ID, histórico das solicitações, marca desejada, site público e pedido de
+confirmação sobre re-registro na Cloud API após aprovação. O atendimento automático informou:
+“Your case has been switched to email support”; a equipe responderá por e-mail para o
+assinante exibido no caso. O nome antigo continua visível e o pedido de `Lia Delivery`
+continua `In Review`; abertura do chamado não equivale a aprovação.
+
+## 18/09/2026 — Piloto de Meta Ads preparado; OAuth aguarda consentimento
+
+Preview com atribuição e criativo final publicado em
+`shopping-agent-55abx8g0o-josephdayans-projects.vercel.app`; como é preview, a migration
+`20260917120000_ads_acquisition_attribution` não foi aplicada. Produção não mudou.
+Criativo estático 4:5 em `public/ads/lia-acabou-em-casa-sp01-4x5.png` e plano em
+`docs/piloto-meta-ads-2026-09-18.md`. O único vídeo recente encontrado no Mac era uma gravação
+de Gmail com dados pessoais, não o Reel da Lia; não foi copiado nem enviado.
+
+AdPlane: login Google concluído; conexão Meta está parada na tela de consentimento
+"Continue as Joseph Dayan?", antes de conceder acesso persistente. Nenhuma conta de anúncios
+foi conectada, nenhum ativo foi enviado à Meta, nenhuma campanha foi criada e nenhum gasto
+foi ativado.
+
+## 17/09/2026 — Atribuição anúncio → conversa → pedido pago implementada localmente
+
+Antes de comprar tráfego, o webhook da Meta agora preserva o `referral` do primeiro WhatsApp
+(`source_id` do anúncio e `ctwa_clid`) em `AcquisitionTouch`, separado do texto do cliente e
+idempotente pelo id da mensagem. A mensagem pré-escrita pode levar `[AD:SP01]` como fallback;
+a tag é removida antes do NLU e nunca vira item da lista. Ao criar o pedido manual, a Lia liga o
+toque mais recente da conversa dentro de 7 dias (`LIA_AD_ATTRIBUTION_DAYS`, 1–90). O `/ops` do dono
+mostra conversas, pedidos, pagos, estornos e receita retida por campanha; o operador vê somente
+o rótulo necessário no pedido, sem `ctwa_clid` nem URL de origem.
+
+Migration nova: `20260917120000_ads_acquisition_attribution`. Ainda não publicada; nenhuma
+campanha foi criada ou ativada. Testes locais: 648/648, TypeScript, lint, build e guarda de emoji
+verificados.
+
 ## 15/09/2026 — Operador humano no código: automação travada, /ops com dois papéis
 
 A decisão de contratar operador virou código. O que o repositório assumia até aqui é que

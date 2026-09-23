@@ -942,7 +942,10 @@ export class VtexBuyer {
   // Revisão com o modal do Pix e NÃO mostra o número. O comprovante é a primeira linha de
   // "Minhas compras" (/minha-conta/pedidos): "#v…cbs-01  R$ 10,70  01 item", criada agora.
   private async receiptFromOrdersPage() {
-    const deadline = Date.now() + 60_000;
+    // 15/09 (compra real paga): a loja leva minutos para listar o pedido novo. Enquanto a
+    // primeira linha for um pedido ANTIGO, continua consultando até o prazo — desistir na
+    // primeira leitura deixava o Pix pago sem número de pedido.
+    const deadline = Date.now() + Number(process.env.LIA_RECEIPT_WAIT_MS ?? 5 * 60_000);
     for (;;) {
       await this.page.goto(`${this.recipe.origin}/minha-conta/pedidos`, { waitUntil: "domcontentloaded", timeout: 30_000 });
       await this.page.waitForTimeout(5_000);
@@ -953,14 +956,16 @@ export class VtexBuyer {
         const [, when, storeOrderNumber, raw] = first;
         const [d, m, rest] = when.split("/");
         const created = new Date(`${rest.slice(0, 4)}-${m}-${d}T${rest.slice(5)}:00-03:00`).getTime();
-        if (Number.isFinite(created) && Math.abs(Date.now() - created) > 6 * 3_600_000)
-          throw new Error("Último pedido em Minhas compras não é de agora.");
-        return {
-          storeOrderNumber,
-          actualTotalCents: Math.round(Number(raw.replace(/\./g, "").replace(",", ".")) * 100),
-        };
+        const recent = !Number.isFinite(created) || Math.abs(Date.now() - created) <= 30 * 60_000;
+        if (recent)
+          return {
+            storeOrderNumber,
+            actualTotalCents: Math.round(Number(raw.replace(/\./g, "").replace(",", ".")) * 100),
+          };
       }
-      if (Date.now() > deadline) throw new Error("Minhas compras não mostrou o pedido no prazo.");
+      if (Date.now() > deadline)
+        throw new Error("Minhas compras não mostrou o pedido novo no prazo; o Pix pode já ter sido pago.");
+      await this.page.waitForTimeout(15_000);
     }
   }
 }

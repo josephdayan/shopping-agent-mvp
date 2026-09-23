@@ -364,7 +364,11 @@ export async function getOperatorQueue() {
   const orders = await prisma.deliveryOrder.findMany({
     where: { OR: [{ status: { in: OPS_QUEUE_STATUSES } }, { events: { some: { deliveryStatus: { in: ["pending", "unknown", "failed"] } } } }] },
     orderBy: { createdAt: "desc" },
-    include: { purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } }, events: { orderBy: { occurredAt: "desc" }, take: 5 } }
+    include: {
+      purchaseJobs: { include: { items: true }, orderBy: { createdAt: "asc" } },
+      events: { orderBy: { occurredAt: "desc" }, take: 5 },
+      acquisitionTouch: { select: { source: true, campaignCode: true, sourceType: true, sourceId: true, headline: true } }
+    }
   });
   return orders.sort((a, b) => (OPS_QUEUE_PRIORITY[a.status] ?? 9) - (OPS_QUEUE_PRIORITY[b.status] ?? 9) || b.createdAt.getTime() - a.createdAt.getTime());
 }

@@ -176,6 +176,45 @@ test("fechar a lista com escolha pendente pede pra ESCOLHER — e aí o total sa
   assert.match(done, /Total/i, `fechamento: ${done.slice(0, 200)}`);
 });
 
+test("anúncio Meta fica ligado ao pedido e a tag nunca entra no texto da conversa", async (t) => {
+  if (!dbOk) return t.skip();
+  const c = await returningCustomer();
+  process.env.LIA_INSTANT_QUOTE = "false";
+  try {
+    await handleDeliveryMessage({
+      phone: c.phone,
+      text: "quero 10 coca cola [AD:SP01]",
+      messageId: `mc_${RUN}_ad_${++msgSeq}`,
+      acquisition: {
+        source: "meta_ads",
+        sourceType: "ad",
+        sourceId: "120210000000001",
+        ctwaClid: `click-${RUN}`
+      }
+    });
+    const afterChoice = await c.send("1");
+    if (/quantas unidades/i.test(afterChoice)) await c.send("10");
+    await c.send("só isso");
+  } finally {
+    delete process.env.LIA_INSTANT_QUOTE;
+  }
+
+  const order = await prisma.deliveryOrder.findFirst({
+    where: { userId: c.userId },
+    orderBy: { createdAt: "desc" },
+    include: { acquisitionTouch: true }
+  });
+  assert.ok(order);
+  assert.equal(order.acquisitionTouch?.campaignCode, "SP01");
+  assert.equal(order.acquisitionTouch?.sourceId, "120210000000001");
+  assert.equal(order.acquisitionTouch?.ctwaClid, `click-${RUN}`);
+  const firstMessage = await prisma.message.findFirst({
+    where: { conversationId: order.conversationId!, sender: "user" },
+    orderBy: { createdAt: "asc" }
+  });
+  assert.equal(firstMessage?.text, "quero 10 coca cola");
+});
+
 // ---------- onboarding: o endereço não pode virar lista de compras (06/08) ----------
 // Achados ao validar a busca numa conversa real: o jeito mais natural de responder
 // ("Av. Paulista 1000, apto 5, Bela Vista, São Paulo, 01310-100") caía no parser de

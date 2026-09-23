@@ -2,6 +2,11 @@
   <title id="title">Lia</title>
   <!-- Mesmas cores da foto de perfil do WhatsApp: lima + roxo (Berinjela & lima). -->
   <rect width="1024" height="1024" rx="246" fill="#3A225E"/>
-  <polyline points="389,256 389,737 727,737" fill="none" stroke="#D9FF5B" stroke-width="164" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M758 164 Q758 307 901 307 Q758 307 758 451 Q758 307 614 307 Q758 307 758 164 Z" fill="#D9FF5B"/>
+  <!-- A composição do símbolo replica a foto oficial do WhatsApp; o conjunto L + estrela fica centralizado. -->
+  <g transform="translate(512 512) scale(1.5) translate(-512 -512)">
+    <g transform="translate(242.25 289) scale(4.95)" fill="#D9FF5B">
+      <polyline points="38,25 38,72 71,72" fill="none" stroke="#D9FF5B" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M74 16 Q74 30 88 30 Q74 30 74 44 Q74 30 60 30 Q74 30 74 16 Z"/>
+    </g>
+  </g>
 </svg>

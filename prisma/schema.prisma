@@ -33,6 +33,10 @@ model DeliveryOrder {
   conversationId        String?
   phone                 String
   customerName          String?
+  // Last acquisition touch present when this order was created. The click id stays
+  // on AcquisitionTouch; orders keep a stable attribution snapshot even if the
+  // customer later returns through another campaign.
+  acquisitionTouchId    String?
   cep                   String?
   deliveryAddress       String?
   // Pluggable supply: storeKey resolves to a StoreConnector in the registry.
@@ -79,10 +83,12 @@ model DeliveryOrder {
   @@index([status])
   @@index([quoteExpiresAt])
   @@index([phone])
+  acquisitionTouch      AcquisitionTouch?      @relation(fields: [acquisitionTouchId], references: [id], onDelete: SetNull)
   // Revisão 01/09: o cérebro faz findFirst por userId(+status) em quase todo turno.
   @@index([userId, status, createdAt])
 }
 
+  @@index([acquisitionTouchId])
 // Evidência da etapa e envio ao WhatsApp persistidos na mesma transação do pedido.
 // accepted = Graph recebeu; delivered/read = recibo do WhatsApp. Nunca confundir.
 model DeliveryEvent {
@@ -308,22 +314,23 @@ model CardEnrollmentSession {
 }
 
 model Conversation {
-  id          String    @id @default(cuid())
-  userId      String
-  status      String    @default("active")
-  intent      String?
-  currentStep String    @default("collecting_request")
-  context     String?
+  id                 String             @id @default(cuid())
+  userId             String
+  status             String             @default("active")
+  intent             String?
+  currentStep        String             @default("collecting_request")
+  context            String?
   // Lock cooperativo de TURNO (2ª revisão, 11/08): um turno por vez por conversa.
   // Duas mensagens simultâneas liam a mesma cesta e a última gravação apagava o item
   // da primeira. Claim atômico via updateMany; TTL no código (turnLockAt) evita que um
   // turno travado prenda a conversa pra sempre. Funciona entre instâncias serverless.
-  turnLock    String?
-  turnLockAt  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  user        User      @relation(fields: [userId], references: [id])
-  messages    Message[]
+  turnLock           String?
+  turnLockAt         DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  user               User               @relation(fields: [userId], references: [id])
+  messages           Message[]
+  acquisitionTouches AcquisitionTouch[]
 
   @@index([userId, status, updatedAt])
 }
@@ -332,6 +339,34 @@ model Message {
   id             String       @id @default(cuid())
   conversationId String
   sender         String
+// A click-to-WhatsApp ad puts a `referral` object on the first inbound message.
+// Keep that evidence separate from the conversation text: it is untrusted metadata,
+// must not become a product query, and one conversation can be re-opened by more than
+// one campaign. `providerMessageId` makes webhook retries idempotent.
+model AcquisitionTouch {
+  id                String          @id @default(cuid())
+  conversationId    String
+  providerMessageId String          @unique
+  source            String
+  campaignCode      String?
+  sourceType        String?
+  sourceId          String?
+  sourceUrl         String?
+  headline          String?
+  body              String?
+  mediaType         String?
+  mediaUrl          String?
+  ctwaClid          String?
+  createdAt         DateTime        @default(now())
+  conversation      Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  orders            DeliveryOrder[]
+
+  @@index([conversationId, createdAt])
+  @@index([source, createdAt])
+  @@index([sourceId])
+  @@index([campaignCode])
+}
+
   text           String
   metadata       String?
   createdAt      DateTime     @default(now())

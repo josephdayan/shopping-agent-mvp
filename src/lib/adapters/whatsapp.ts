@@ -1,4 +1,5 @@
 import { fitCarouselCardParams } from "@/lib/meta-carousel-card";
+import { metaReferralAcquisition } from "@/lib/acquisition";
 
 
 type RawInbound = {
@@ -26,6 +27,20 @@ type RawInbound = {
           // `voice: true`; foto como "image" (com legenda opcional).
           audio?: { id?: string; mime_type?: string; voice?: boolean };
           image?: { id?: string; mime_type?: string; caption?: string };
+          // Present on the first message opened from a click-to-WhatsApp ad.
+          // `source_id` identifies the Meta source/ad and `ctwa_clid` identifies the click.
+          referral?: {
+            source_url?: string;
+            source_type?: string;
+            source_id?: string;
+            headline?: string;
+            body?: string;
+            media_type?: string;
+            image_url?: string;
+            video_url?: string;
+            thumbnail_url?: string;
+            ctwa_clid?: string;
+          };
           type?: string;
         }>;
       };
@@ -529,6 +544,7 @@ export const whatsappAdapter = {
         extractNestedString(payload, ["profile", "name"]) ??
         undefined,
       messageId: metaMessage?.id ?? stringFromPayload(payload.messageId),
+      acquisition: metaReferralAcquisition(metaMessage?.referral),
       // Localização compartilhada (tipo "location") — o webhook converte em CEP.
       location:
         metaMessage?.type === "location" && typeof metaMessage.location?.latitude === "number" && typeof metaMessage.location?.longitude === "number"

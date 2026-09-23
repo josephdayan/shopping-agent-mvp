@@ -46,6 +46,31 @@ type DeliveryOrder = {
   createdAt: string;
   paidAt?: string | null;
   quoteExpiresAt?: string | null;
+  acquisitionTouch?: {
+    source: string;
+    campaignCode?: string | null;
+    sourceType?: string | null;
+    sourceId?: string | null;
+    headline?: string | null;
+  } | null;
+};
+
+type AcquisitionSummary = {
+  windowDays: number;
+  touches: number;
+  conversations: number;
+  orders: number;
+  paidOrders: number;
+  refundedOrders: number;
+  retainedRevenue: number;
+  groups: Array<{
+    key: string;
+    conversations: number;
+    orders: number;
+    paidOrders: number;
+    refundedOrders: number;
+    retainedRevenue: number;
+  }>;
 };
 
 type WaitlistRegion = { city: string; uf?: string | null; leads: number; hits: number; lastAt: string };
@@ -136,6 +161,7 @@ function absLabel(iso?: string | null): string {
 
 export default function OpsBoard() {
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
+  const [acquisition, setAcquisition] = useState<AcquisitionSummary | null>(null);
   const [waitlist, setWaitlist] = useState<WaitlistData | null>(null);
   const [showWaitlist, setShowWaitlist] = useState(false);
   const [ready, setReady] = useState(false);
@@ -190,10 +216,11 @@ export default function OpsBoard() {
         return;
       }
       if (res.ok) {
-        const data = (await res.json()) as { orders?: DeliveryOrder[]; role?: "owner" | "operator" };
+        const data = (await res.json()) as { orders?: DeliveryOrder[]; role?: "owner" | "operator"; acquisition?: AcquisitionSummary };
         setOrders(data.orders ?? []);
         if (data.role) setRole(data.role);
         setDenied(false);
+        setAcquisition(data.acquisition ?? null);
       }
       // Waitlist is best-effort: a failure here must never blank the order queue.
       try {
@@ -305,6 +332,29 @@ export default function OpsBoard() {
         const urgent = (o.notes ?? "").includes("⚡ URGENTE");
         const isCard = isCardCharge(o);
         const retailerDelivery = isRetailerDeliveryOrder(o);
+      {isOwner && acquisition && (
+        <div style={{ ...card, borderColor: "#b7d838", background: "#fbffe9" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#0f3d3a" }}>
+            Aquisição · últimos {acquisition.windowDays} dias
+          </div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 6, fontSize: 13, color: "#475467" }}>
+            <span><strong>{acquisition.conversations}</strong> conversas</span>
+            <span><strong>{acquisition.orders}</strong> pedidos</span>
+            <span><strong>{acquisition.paidOrders}</strong> pagos</span>
+            <span><strong>{acquisition.refundedOrders}</strong> estornados/pendentes</span>
+            <span><strong>{brl(acquisition.retainedRevenue)}</strong> recebido e não estornado</span>
+          </div>
+          {acquisition.groups.length > 0 && (
+            <div style={{ marginTop: 8, display: "grid", gap: 3, fontSize: 12, color: "#667085" }}>
+              {acquisition.groups.slice(0, 8).map((group) => (
+                <div key={group.key}>
+                  <strong>{group.key}</strong>: {group.conversations} conversas · {group.orders} pedidos · {group.paidOrders} pagos · {brl(group.retainedRevenue)}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
         const primaryFulfillment = o.fulfillments?.[0];
         const paymentReceived =
           Boolean(o.paidAt) ||
@@ -335,6 +385,11 @@ export default function OpsBoard() {
             <div style={{ color: "#475467", fontSize: 14, marginTop: 6 }}>
               {o.customerName ?? o.phone}{" "}
               {paymentReceived && (
+                {o.acquisitionTouch && (
+                  <span style={sourceBadge} title={o.acquisitionTouch.headline ?? "Origem do anúncio"}>
+                    anúncio · {o.acquisitionTouch.campaignCode ?? o.acquisitionTouch.sourceId?.slice(-10) ?? "Meta"}
+                  </span>
+                )}
                 <button
                   style={{ ...smallBtn, marginLeft: 6 }}
                   disabled={busy === `${o.id}:set_recipient`}
@@ -780,3 +835,4 @@ const reasonOut: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "
 const reasonFar: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#5925dc", background: "#ebe9fe", borderRadius: 4, padding: "1px 5px", textTransform: "uppercase" };
 const ghost: React.CSSProperties = { padding: "8px 12px", background: "transparent", color: "#b42318", border: "1px solid #fda29b", borderRadius: 8, fontSize: 13, cursor: "pointer" };
 const quoteBox: React.CSSProperties = { marginTop: 10, padding: 10, border: "1px dashed #0f3d3a", borderRadius: 8, background: "#f2fbf9", display: "grid", gap: 8 };
+const sourceBadge: React.CSSProperties = { fontSize: 12, color: "#175cd3", background: "#eff8ff", borderRadius: 999, padding: "2px 10px", marginLeft: 4 };

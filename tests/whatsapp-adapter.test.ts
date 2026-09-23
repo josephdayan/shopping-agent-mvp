@@ -15,6 +15,39 @@ test("Meta: botão de opção volta como número entendido pelo fluxo", () => {
   assert.equal(inbound.provider, "meta");
 });
 
+test("Meta: click-to-WhatsApp preserva referral e ctwa_clid fora do texto", () => {
+  const inbound = whatsappAdapter.parseInbound({
+    entry: [{ changes: [{ value: { messages: [{
+      from: "5511999999999",
+      id: "wamid.ad.1",
+      type: "text",
+      text: { body: "Oi Lia! Quero fazer um pedido. [AD:SP01]" },
+      referral: {
+        source_type: "ad",
+        source_id: "120210000000001",
+        source_url: "https://www.facebook.com/ads/example",
+        headline: "Acabou em casa?",
+        body: "Manda um zap pra Lia",
+        media_type: "video",
+        video_url: "https://cdn.example.com/reel.mp4",
+        ctwa_clid: "AR_TEST_CLICK"
+      }
+    }] } }] }]
+  });
+  assert.equal(inbound.text, "Oi Lia! Quero fazer um pedido. [AD:SP01]");
+  assert.deepEqual(inbound.acquisition, {
+    source: "meta_ads",
+    sourceType: "ad",
+    sourceId: "120210000000001",
+    sourceUrl: "https://www.facebook.com/ads/example",
+    headline: "Acabou em casa?",
+    body: "Manda um zap pra Lia",
+    mediaType: "video",
+    mediaUrl: "https://cdn.example.com/reel.mp4",
+    ctwaClid: "AR_TEST_CLICK"
+  });
+});
+
 test("Meta: cada produto vira uma mensagem com foto e botão Adicionar", async () => {
   const previous = {
     provider: process.env.WHATSAPP_PROVIDER,

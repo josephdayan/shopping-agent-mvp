@@ -13,6 +13,7 @@ type QueuePurchaseJob = { status: string };
 type QueueOrder = Record<string, unknown> & {
   purchaseJobs?: QueuePurchaseJob[];
   events?: QueueEvent[];
+  acquisitionTouch?: Record<string, unknown> | null;
 };
 
 // A consulta do dono continua completa. O operador recebe somente o necessário para
@@ -27,10 +28,18 @@ export function ordersForOpsRole<T extends QueueOrder>(orders: T[], role: OpsRol
       pixId: _pixId,
       pixCopiaECola: _pixCopiaECola,
       courierQuoteId: _courierQuoteId,
+      acquisitionTouch,
       ...safe
     } = order;
     return {
       ...safe,
+      acquisitionTouch: acquisitionTouch ? {
+        source: acquisitionTouch.source,
+        campaignCode: acquisitionTouch.campaignCode,
+        sourceType: acquisitionTouch.sourceType,
+        sourceId: acquisitionTouch.sourceId,
+        headline: acquisitionTouch.headline
+      } : null,
       manualPurchase: purchaseJobs?.some((job) => job.status === "manual_queue") ?? false,
       events: (order.events ?? []).map(({ id, kind, deliveryStatus, lastError, occurredAt }) => ({
         id,
