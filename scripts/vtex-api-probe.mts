@@ -1,0 +1,311 @@
+// Sondagem da API pública de checkout da VTEX, por HTTP puro (sem navegador, sem perfil
+// Chrome). Responde à pergunta "dá pra comprar por API, sem operador?" loja a loja:
+//
+//   npx tsx scripts/vtex-api-probe.mts drogariasp            # seco: cesta → perfil → endereço → frete → Pix, e esvazia
+//   npx tsx scripts/vtex-api-probe.mts cobasi --term "areia" # escolhe o 1º item disponível da busca
+//   npx tsx scripts/vtex-api-probe.mts paguemenos --sku 52253 --sla "Econômica"
+//
+// Modo seco NÃO cria pedido: para antes de `POST .../transaction`. O modo `--buy` cria um
+// pedido REAL na loja (Pix, vence sozinho se não for pago) e exige, de propósito, três
+// coisas explícitas: a flag, `LIA_PROBE_CONFIRM=sim` e `LIA_PROBE_DOCUMENT` (CPF/CNPJ do
+// comprador; a VTEX exige documento no fechamento). O documento nunca é impresso nem gravado.
+//
+// Endereço: SEMPRE o bloco `probe` do `.retail-buyer/config.json` (decisão do dono, 14/09).
+// Resultado: resumo no stdout; JSON completo em `.retail-buyer/probes/vtex-api-<loja>-<ts>.json`.
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { resolve } from "node:path";
+import { findPixCode } from "../src/lib/pix-emv";
+
+const STORES: Record<string, string> = {
+  cobasi: "www.cobasi.com.br",
+  drogariasp: "www.drogariasaopaulo.com.br",
+  paguemenos: "www.paguemenos.com.br",
+  oba: "secure.obahortifruti.com.br",
+  swift: "loja.swift.com.br",
+  naturaldaterra: "www.naturaldaterra.com.br",
+  divvino: "www.divvino.com.br",
+  rihappy: "www.rihappy.com.br",
+  kopenhagen: "www.kopenhagen.com.br",
+  carrefour: "mercado.carrefour.com.br",
+  petz: "www.petz.com.br",
+};
+const PIX_SYSTEM = 125;
+const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36";
+
+type Json = Record<string, unknown>;
+const args = process.argv.slice(2);
+const storeKey = args[0];
+const flag = (name: string) => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
+const has = (name: string) => args.includes(name);
+if (!storeKey || !STORES[storeKey]) {
+  console.error(`Uso: npx tsx scripts/vtex-api-probe.mts <${Object.keys(STORES).join("|")}> [--term txt] [--sku id --seller 1] [--qty n] [--sla nome] [--buy]`);
+  process.exit(2);
+}
+const domain = STORES[storeKey];
+const root = resolve(process.cwd(), ".retail-buyer");
+const config = JSON.parse(readFileSync(resolve(root, "config.json"), "utf8")) as { probe?: Record<string, string> };
+const probe = config.probe;
+if (!probe?.cep || !probe.street || !probe.name) {
+  console.error("Defina `probe` no .retail-buyer/config.json (name, cep, street, number, neighborhood, city, state).");
+  process.exit(2);
+}
+const email = process.env.LIA_PROBE_EMAIL?.trim() || "contato+probe@liadelivery.com.br";
+const buy = has("--buy");
+const document = process.env.LIA_PROBE_DOCUMENT?.replace(/\D/g, "");
+if (buy && (process.env.LIA_PROBE_CONFIRM !== "sim" || !document)) {
+  console.error("--buy cria um pedido REAL. Exige LIA_PROBE_CONFIRM=sim e LIA_PROBE_DOCUMENT (CPF/CNPJ do comprador).");
+  process.exit(2);
+}
+
+// Jar de cookies mínimo: a VTEX devolve `checkout.vtex.com` e `CheckoutOrderFormOwnership`
+// (sem este, o perfil volta mascarado e o pedido não pode ser lido depois).
+const jar = new Map<string, string>();
+async function call(url: string, body?: unknown, init: { method?: string; accept?: string } = {}) {
+  const headers: Record<string, string> = { "User-Agent": UA, Accept: init.accept ?? "application/json", "Content-Type": "application/json" };
+  if (jar.size) headers.Cookie = [...jar].map(([k, v]) => `${k}=${v}`).join("; ");
+  const response = await fetch(url, {
+    method: init.method ?? (body === undefined ? "GET" : "POST"),
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+    signal: AbortSignal.timeout(30_000),
+  });
+  for (const c of response.headers.getSetCookie?.() ?? []) {
+    const [pair] = c.split(";");
+    const eq = pair.indexOf("=");
+    if (eq > 0) jar.set(pair.slice(0, eq).trim(), pair.slice(eq + 1).trim());
+  }
+  const text = await response.text();
+  let json: unknown = text;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    /* html/texto */
+  }
+  return { status: response.status, json, text };
+}
+const dump: Json = { store: storeKey, domain, startedAt: new Date().toISOString(), steps: [] as Json[] };
+const steps = dump.steps as Json[];
+function step(name: string, status: number, detail: unknown) {
+  steps.push({ name, status, detail });
+  console.log(`[${name}] HTTP ${status} ${typeof detail === "string" ? detail : JSON.stringify(detail)}`);
+}
+function fail(msg: string): never {
+  save();
+  console.error(`✗ ${msg}`);
+  process.exit(1);
+}
+// Nunca deixar cesta com endereço pendurada na loja quando a sondagem para no meio.
+let cartToClear: string | null = null;
+async function clearCart(): Promise<number> {
+  if (!cartToClear) return 0;
+  const r = await call(`${base}/orderForm/${cartToClear}/items/removeAll`, {}).catch(() => ({ status: -1 }));
+  cartToClear = null;
+  return r.status;
+}
+function save() {
+  mkdirSync(resolve(root, "probes"), { recursive: true });
+  const file = resolve(root, "probes", `vtex-api-${storeKey}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+  writeFileSync(file, JSON.stringify(dump, null, 1));
+  console.log(`→ ${file}`);
+}
+const base = `https://${domain}/api/checkout/pub`;
+const orderFormSummary = (of: Json) => {
+  const items = (of.items as Json[]) ?? [];
+  const li = (((of.shippingData as Json)?.logisticsInfo as Json[]) ?? [])[0];
+  const pay = (of.paymentData as Json) ?? {};
+  return {
+    loggedIn: of.loggedIn,
+    canEditData: of.canEditData,
+    items: items.map((i) => [i.name, i.quantity, i.availability, i.sellingPrice]),
+    email: (of.clientProfileData as Json)?.email,
+    postalCode: (((of.shippingData as Json)?.selectedAddresses as Json[]) ?? [])[0]?.postalCode,
+    selectedSla: li?.selectedSla,
+    deliverySlas: ((li?.slas as Json[]) ?? []).filter((s) => s.deliveryChannel === "delivery").map((s) => [s.id, s.price, s.shippingEstimate]),
+    totalizers: ((of.totalizers as Json[]) ?? []).map((t) => [t.id, t.value]),
+    value: of.value,
+    payments: ((pay.payments as Json[]) ?? []).map((p) => [p.paymentSystem, p.value]),
+    pixOffered: ((pay.paymentSystems as Json[]) ?? []).some((p) => p.id === PIX_SYSTEM),
+    messages: ((of.messages as Json[]) ?? []).map((m) => m.text),
+  };
+};
+
+// 1. Item: --sku ou 1º disponível da busca
+let sku = flag("--sku");
+let seller = flag("--seller") ?? "1";
+const qty = Number(flag("--qty") ?? 1);
+if (!sku) {
+  const term = flag("--term") ?? "sabonete";
+  const r = await call(`https://${domain}/api/catalog_system/pub/products/search?ft=${encodeURIComponent(term)}&_from=0&_to=9`);
+  if (!Array.isArray(r.json)) fail(`busca ${r.status}: catálogo bloqueado ou vazio (${r.text.slice(0, 120)})`);
+  for (const p of r.json as Json[]) {
+    for (const it of (p.items as Json[]) ?? []) {
+      const s = ((it.sellers as Json[]) ?? []).find((x) => Number((x.commertialOffer as Json)?.AvailableQuantity) > 0);
+      if (s) {
+        sku = String(it.itemId);
+        seller = String(s.sellerId);
+        step("busca", r.status, { term, product: p.productName, sku, seller, price: (s.commertialOffer as Json).Price });
+        break;
+      }
+    }
+    if (sku) break;
+  }
+  if (!sku) fail("busca sem item disponível");
+}
+
+// 2. Carrinho anônimo + item
+const created = await call(`${base}/orderForm`, {});
+const orderFormId = (created.json as Json)?.orderFormId as string | undefined;
+step("orderForm", created.status, orderFormId ?? created.text.slice(0, 120));
+if (!orderFormId) fail("sem orderForm (WAF/anti-bot barrou o servidor)");
+cartToClear = orderFormId;
+const added = await call(`${base}/orderForm/${orderFormId}/items`, { orderItems: [{ id: sku, quantity: qty, seller }] });
+step("items", added.status, orderFormSummary(added.json as Json));
+
+// 3. Perfil de convidado (sem login). O documento só entra em --buy.
+const profile = await call(`${base}/orderForm/${orderFormId}/attachments/clientProfileData`, {
+  email,
+  firstName: "Lia",
+  lastName: "Delivery",
+  documentType: "cpf",
+  isCorporate: false,
+  ...(buy ? { document } : {}),
+});
+step("clientProfileData", profile.status, orderFormSummary(profile.json as Json));
+
+// 4. Endereço com geocoordenadas (Cobasi só oferece entrega com lat/lng)
+let geo: number[] = [];
+try {
+  const b = (await call(`https://brasilapi.com.br/api/cep/v2/${probe.cep}`)).json as Json;
+  const c = ((b.location as Json)?.coordinates as Json) ?? {};
+  if (c.longitude && c.latitude) geo = [Number(c.longitude), Number(c.latitude)];
+} catch {
+  /* segue sem */
+}
+if (!geo.length) {
+  try {
+    const q = encodeURIComponent(`${probe.street} ${probe.number}, ${probe.city}, Brasil`);
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`, { headers: { "User-Agent": "lia-probe/1.0" } });
+    const j = (await r.json()) as Json[];
+    if (j[0]) geo = [Number(j[0].lon), Number(j[0].lat)];
+  } catch {
+    /* segue sem */
+  }
+}
+const address = {
+  addressType: "residential",
+  receiverName: probe.name,
+  postalCode: `${probe.cep.slice(0, 5)}-${probe.cep.slice(5)}`,
+  city: probe.city,
+  state: probe.state,
+  country: "BRA",
+  street: probe.street,
+  number: probe.number,
+  neighborhood: probe.neighborhood,
+  complement: probe.complement ?? "",
+  geoCoordinates: geo,
+};
+let shipping = await call(`${base}/orderForm/${orderFormId}/attachments/shippingData`, { selectedAddresses: [address], clearAddressIfPostalCodeNotFound: false });
+let summary = orderFormSummary(shipping.json as Json);
+step("shippingData", shipping.status, { ...summary, geo: geo.length > 0 });
+const wanted = flag("--sla");
+const options = summary.deliverySlas as [string, number, string][];
+if (!options.length) {
+  await clearCart();
+  fail("loja não oferece ENTREGA nesse endereço (só retirada ou item indisponível)");
+}
+const chosen = wanted ? options.find((o) => o[0] === wanted)?.[0] : [...options].sort((a, b) => a[1] - b[1])[0][0];
+if (!chosen) {
+  await clearCart();
+  fail(`SLA "${wanted}" não está entre ${options.map((o) => o[0]).join(", ")}`);
+}
+shipping = await call(`${base}/orderForm/${orderFormId}/attachments/shippingData`, {
+  selectedAddresses: [address],
+  logisticsInfo: [{ itemIndex: 0, selectedDeliveryChannel: "delivery", selectedSla: chosen }],
+  clearAddressIfPostalCodeNotFound: false,
+});
+summary = orderFormSummary(shipping.json as Json);
+step("selectedSla", shipping.status, { selectedSla: summary.selectedSla, totalizers: summary.totalizers, value: summary.value });
+if (summary.selectedSla !== chosen) {
+  await clearCart();
+  fail(`a loja não aceitou a opção "${chosen}"`);
+}
+
+// 5. Pix como meio de pagamento
+const value = Number(summary.value);
+const payment = await call(`${base}/orderForm/${orderFormId}/attachments/paymentData`, {
+  payments: [{ paymentSystem: String(PIX_SYSTEM), referenceValue: value, value, installments: 1 }],
+});
+summary = orderFormSummary(payment.json as Json);
+step("paymentData(Pix)", payment.status, { payments: summary.payments, pixOffered: summary.pixOffered, value });
+if (!summary.pixOffered) {
+  await clearCart();
+  fail("a loja não oferece Pix (só cartão) — fora da arquitetura sem operador");
+}
+
+if (!buy) {
+  step("removeAll", await clearCart(), "cesta esvaziada; nenhum pedido criado");
+  dump.verdict = `API aberta: cesta, perfil de convidado, entrega "${chosen}" e Pix aceitos por HTTP. Falta só o fechamento (--buy).`;
+  save();
+  console.log(`\n✓ ${dump.verdict}`);
+  process.exit(0);
+}
+
+// 6. Fechamento REAL: transaction → gateway (Pix) → gatewayCallback → ler pedido e Pix
+const tx = await call(`${base}/orderForm/${orderFormId}/transaction`, {
+  referenceId: orderFormId,
+  savePersonalData: false,
+  optinNewsLetter: false,
+  value,
+  referenceValue: value,
+  interestValue: 0,
+});
+const txJson = tx.json as Json;
+step("transaction", tx.status, tx.status === 200 ? { orderGroup: txJson.orderGroup, receiverUri: txJson.receiverUri, merchantTransactions: txJson.merchantTransactions } : tx.text.slice(0, 400));
+if (tx.status !== 200) fail("fechamento recusado (403 CHK0082 = reCAPTCHA exigido no fechamento; outro código = ver JSON)");
+const orderGroup = String(txJson.orderGroup);
+const receiverUri = String(txJson.receiverUri);
+const merchant = (txJson.merchantTransactions as Json[])?.[0] ?? {};
+const tid = String(merchant.transactionId);
+const account = new URL(receiverUri).hostname.split(".")[0];
+const gw = await call(receiverUri, [
+  {
+    paymentSystem: PIX_SYSTEM,
+    paymentSystemName: "Pix",
+    group: "instantPaymentPaymentGroup",
+    installments: 1,
+    currencyCode: "BRL",
+    value,
+    installmentsInterestRate: 0,
+    installmentsValue: value,
+    referenceValue: value,
+    fields: {},
+    transaction: { id: tid, merchantName: account },
+  },
+]);
+step("gateway payments", gw.status, gw.text.slice(0, 300));
+const cb = await call(`${base}/gatewayCallback/${orderGroup}`, {});
+step("gatewayCallback", cb.status, cb.text.slice(0, 300));
+
+// O código Pix chega ao Payment App da loja; aqui tentamos ler pelos dois lugares públicos
+// (pedido do grupo e transação no gateway) e procuramos o EMV (000201…6304xxxx) no JSON.
+let pix: string | null = null;
+let orderIds: unknown = null;
+for (let i = 0; i < 12 && !pix; i++) {
+  await new Promise((r) => setTimeout(r, 5000));
+  const og = await call(`${base}/orders/order-group/${orderGroup}`);
+  const gwPay = await call(`https://${account}.vtexpayments.com.br/api/pub/transactions/${tid}/payments?orderId=${orderGroup}`);
+  if (Array.isArray(og.json)) orderIds = (og.json as Json[]).map((o) => [o.orderId, o.status, o.statusDescription]);
+  pix = findPixCode(og.text) ?? findPixCode(gwPay.text);
+  step(`leitura ${i + 1}`, og.status, { orders: orderIds, gatewayPayments: gwPay.status, pixFound: Boolean(pix) });
+  dump.lastOrderGroup = og.json;
+  dump.lastGatewayPayments = gwPay.json;
+}
+dump.verdict = pix
+  ? `PEDIDO CRIADO por API sem CAPTCHA: grupo ${orderGroup}; Pix copia-e-cola obtido (${pix.length} chars).`
+  : `Pedido criado (grupo ${orderGroup}), mas o código Pix não apareceu nas leituras públicas — ver JSON e o e-mail da loja.`;
+dump.pixCode = pix;
+save();
+console.log(`\n${pix ? "✓" : "△"} ${dump.verdict}`);

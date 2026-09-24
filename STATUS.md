@@ -1,3 +1,17 @@
+## 23/09/2026 — API de compra sem operador: testada ao vivo, aberta em 3 lojas até o Pix
+
+O dono perguntou se existe API de loja que faça o fluxo inteiro sem operador. Pesquisa:
+não há API oficial de compra pelo comprador no Brasil (ML, Magalu, iFood, Rappi, Carrefour
+só têm API de vendedor; ACP/UCP/Shopify não chegaram ao BR). O que funciona é a API pública
+de checkout da VTEX, testada por HTTP puro, sem navegador: **Drogaria São Paulo, Cobasi e
+Pague Menos** aceitaram do servidor busca → cesta → perfil de convidado sem login → endereço
+→ entrega com preço/prazo (Drogaria SP 90 min R$8,90; Cobasi 16 h R$9,90; Pague Menos 2 h
+R$6,90) → Pix escolhido, sem CAPTCHA. Carrefour (503) e Petz (403) barram servidor; Oba só
+cartão. Falta o fechamento real (`transaction`), que cria pedido e é onde a VTEX documenta
+reCAPTCHA (cartão) e Payment App (leitura do Pix). Script `scripts/vtex-api-probe.mts`
+(seco por padrão; `--buy` exige confirmação + documento). Não muda a decisão de 15/09.
+Detalhe: [docs/api-compra-lojas-2026-09-23.md](docs/api-compra-lojas-2026-09-23.md).
+
 ## 23/09/2026 — Financeiro por pedido pronto localmente (falta deploy)
 
 P&L automático por pedido em `/ops/financeiro` (só o dono): cliente pagou, taxa do Mercado

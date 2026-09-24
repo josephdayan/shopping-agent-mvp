@@ -1,3 +1,38 @@
+## 23/09/2026 — Sondagem: compra por API sem operador (VTEX aberta em 3 lojas até o Pix)
+
+O dono perguntou se existe API de loja individual que faça o fluxo completo da Lia sem
+operador. Respondido com pesquisa + teste ao vivo; registro completo em
+[docs/api-compra-lojas-2026-09-23.md](docs/api-compra-lojas-2026-09-23.md).
+
+- **Não existe API oficial de compra pelo comprador no Brasil** (set/2026): ML, Magalu,
+  Amazon BR, Americanas, Shopee, iFood, Rappi, Zé, Carrefour (Mirakl) só têm API de vendedor.
+  ACP (OpenAI), UCP/AP2 (Google) e Shopify agentic não têm checkout BR; VTEX anunciou conector
+  UCP só para EUA. Zinc é EUA; Rye compra "qualquer URL" sem opt-in do lojista (botting
+  terceirizado). Mastercard Agent Pay chegou ao BR, mas é camada de pagamento, não de pedido.
+- **O que funciona hoje**: a API pública de checkout da VTEX, por HTTP puro do servidor (sem
+  navegador, sem perfil Chrome, sem CAPTCHA pedido). Testado no CEP de sondagem:
+  **Drogaria São Paulo** (SUPER EXPRESSA 90 min R$8,90; NORMAL R$6,90), **Cobasi** (Cobasi Já
+  16 h R$9,90; entrega só aparece com `geoCoordinates` no endereço) e **Pague Menos** (Expressa
+  2 h R$6,90; Econômica R$4,90): busca → orderForm → item → `clientProfileData` de convidado
+  (`loggedIn:false`, `canEditData:true`) → `shippingData` → SLA escolhido → `paymentData` Pix
+  (125, `requiresAuthentication:false`), tudo 200. Cestas esvaziadas; nenhum pedido criado.
+  Carrefour devolve 503 e Petz 403/404 ao servidor (Akamai); Oba só cartão/Google Pay; Swift
+  só retirada no CEP; Natural da Terra sem estoque no CEP; Divvino 5 dias; Kopenhagen catálogo 403.
+- **Não provado — o fechamento.** `POST .../transaction` cria pedido real e é onde a VTEX
+  documenta reCAPTCHA (`recaptchaValidation` never/always/vtexCriteria; `403 CHK0082` sem
+  token; a doc diz que vale para cartão, Pix não listado, mas Pague Menos mostrou desafio na UI
+  em 10/09) e exige documento do comprador. O código Pix chega ao Payment App (a VTEX escreve
+  que IO apps não rodam headless); o script tenta `orders/order-group/{og}` e
+  `vtexpayments.com.br/api/pub/transactions/{tid}/payments` e procura o EMV. Janela de 5 min até
+  `gatewayCallback`. Pix-out Asaas já está codificado (sem chave).
+- **Ferramenta**: `scripts/vtex-api-probe.mts` (`npx tsx scripts/vtex-api-probe.mts <loja>
+  [--term|--sku] [--sla] [--buy]`). Seco por padrão e esvazia a cesta em qualquer saída;
+  `--buy` exige `LIA_PROBE_CONFIRM=sim` + `LIA_PROBE_DOCUMENT` (nunca impresso/gravado). JSON
+  em `.retail-buyer/probes/vtex-api-*.json`. Endereço sempre do bloco `probe` privado.
+- **Decisão**: nenhuma mudança; a decisão de 15/09 (operador humano) segue. Pendência aberta
+  em PENDENCIAS (o dono decide se roda o pedido real de ~R$15–20 na Drogaria SP). Não colocar
+  loja na allowlist nem religar compra automática por inferência desta sondagem.
+
 ## 23/09/2026 — Financeiro por pedido (P&L automático) em /ops/financeiro
 
 O dono pediu "uma planilha de P&L por pedido: pagou isso, custou isso, taxa, frete, sobrou".

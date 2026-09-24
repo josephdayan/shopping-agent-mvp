@@ -1,3 +1,18 @@
+## 23/09/2026 — Decidir se prova o fechamento por API (1 pedido real, ~R$15–20)
+
+Sondagem em [docs/api-compra-lojas-2026-09-23.md](docs/api-compra-lojas-2026-09-23.md):
+a API VTEX está aberta até o Pix em Drogaria SP, Cobasi e Pague Menos. Só o dono decide o
+passo que cria pedido real.
+
+- [ ] **Dono:** autorizar (ou não) um pedido de teste na Drogaria SP e informar o documento
+  do comprador por env, nunca em arquivo versionado:
+  `LIA_PROBE_CONFIRM=sim LIA_PROBE_DOCUMENT=<CPF/CNPJ> npx tsx scripts/vtex-api-probe.mts drogariasp --term sabonete --sla NORMAL --buy`
+- [ ] Ler o resultado: `403 CHK0082` = reCAPTCHA no fechamento, loja sai da lista (não
+  contornar). Pedido criado + Pix impresso = pagar pelo celular e esperar a entrega.
+  Pedido criado sem Pix no JSON = abrir o e-mail da loja (leitor Gmail já existe).
+- [ ] Se provar: repetir em Cobasi e Pague Menos; só então discutir reabrir a compra
+  automática com escopo de 3 lojas + Pix-out Asaas (`LIA_PIX_OUT_PROVIDER=asaas`).
+
 ## 23/09/2026 — Publicar o financeiro por pedido
 
 - [ ] **Deploy** (`git push && vercel --prod`): a migration `20260923130000_order_pnl` entra
