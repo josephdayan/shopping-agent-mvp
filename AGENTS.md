@@ -1,3 +1,15 @@
+## 25/09/2026 — Cobasi e Pague Menos fecharam por API: 3 de 3 lojas VTEX provadas
+
+Mesmo fluxo da Drogaria SP (transaction → api.vtexvault.com → gatewayCallback 428 → EMV no
+`appPayload`) funcionou em Cobasi (`v147466794cbs`, R$12,80) e Pague Menos (`1664230196474`,
+R$10,89), sem CAPTCHA. **Corrige a conclusão de 10/09:** o "Não sou um robô" da Pague Menos era
+da interface; o fechamento por API não o exige. Regras práticas: escolher o SLA rápido pelo
+nome ("Cobasi Já", "Expressa", "SUPER EXPRESSA"), porque o padrão da cesta é o lento; e a
+entrega é decidida por item + coordenadas (itens sem entrega no CEP devolvem mensagem na
+`shippingData`). O classificador de permissões do Claude barrou a execução da compra na Pague
+Menos; o dono rodou o comando. Decisão de religar a compra automática nessas três lojas:
+pendente, do dono.
+
 ## 25/09/2026 — Fechamento VTEX por API provado na Drogaria SP (Pix emitido e pago)
 
 Regra técnica nova, provada ao vivo: na VTEX o envio do pagamento **não** vai ao `receiverUri`

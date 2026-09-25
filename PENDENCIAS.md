@@ -1,3 +1,18 @@
+## 25/09/2026 — 3 de 3 fecharam; decisão do dono e trabalho para ligar
+
+- [x] Cobasi `--buy`: pedido `v147466794cbs` criado sem CAPTCHA, Pix pago pelo dono.
+- [x] Pague Menos `--buy`: pedido `1664230196474` criado sem CAPTCHA, Pix pago pelo dono.
+- [ ] Confirmar pelos e-mails: Cobasi e Pague Menos "pagamento aprovado" + entregas das três
+  (Drogaria SP SUPER EXPRESSA, Cobasi Já 4h, Pague Menos Expressa 2h).
+- [ ] **Decisão datada do dono:** religar compra automática só em Drogaria SP, Cobasi e Pague
+  Menos, por API (sem navegador), com Asaas pagando o Pix e o operador nas exceções.
+- [ ] Se sim, trabalho de engenharia: adaptador VTEX no servidor (transaction → vault → callback
+  → EMV do `appPayload` → `capturePix`/Asaas), seleção explícita do SLA rápido por loja, item
+  sem entrega no CEP vira substituição/recusa, regra de e-mail "Pagamento foi aprovado" em
+  `mailbox-policy.ts`, cookies do fechamento guardados para ler o pedido depois. Depois: saldo na
+  Asaas, `LIA_PIX_OUT_OFF` desligado, `LIA_AUTO_PURCHASE_STORES=drogariasp,cobasi,paguemenos`,
+  `LIA_AUTO_PURCHASE_OFF` desligado, deploy.
+
 ## 25/09/2026 — Drogaria SP fechou por API; próximos gates
 
 - [x] `--buy` na Drogaria São Paulo: pedido `v79835708dgsp-01` criado sem CAPTCHA, Pix
@@ -8,8 +23,7 @@
   (faturado / saiu para entrega / entregue).
 - [ ] `mailbox-policy.ts`: a regra `drogariasp` não reconheceu "Pagamento foi aprovado";
   ajustar antes de o adaptador depender do e-mail para confirmar pagamento.
-- [ ] Repetir o `--buy` em **Cobasi** e **Pague Menos** (mesmo script; Pague Menos é a que
-  mostrou CAPTCHA na UI em 10/09).
+- [x] Repetir o `--buy` em **Cobasi** e **Pague Menos** (feito 25/09; ver entrada acima).
 - [ ] Se 2 de 3 passarem: decisão datada do dono para religar compra automática só nessas
   lojas, por API. Trabalho: adaptador VTEX no servidor (transaction → vault → callback →
   EMV do `appPayload`), Asaas já configurada (falta saldo e desligar `LIA_PIX_OUT_OFF`),

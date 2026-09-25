@@ -1,3 +1,27 @@
+## 25/09/2026 — 3 de 3: Cobasi e Pague Menos também fecharam por API (Pix emitido e pago)
+
+Na sequência da Drogaria SP, o mesmo script (`vtex-api-probe.mts --buy`, convidado, CNPJ do MEI
+como pessoa jurídica) fechou:
+
+- **Cobasi** 11:40 — pedido `v147466794cbs`, sachê Whiskas R$2,90 + "Cobasi Já" 4h R$9,90 =
+  R$12,80. Sem CAPTCHA; gateway 201; callback 428 com `vtex.pix-payment`; Pix Itaú (União Pet
+  Participações), validade ~55 min. Dono pagou.
+- **Pague Menos** 11:43 (dono rodou o comando; o classificador de permissões barrou o Claude
+  nessa execução) — pedido `1664230196474`, hastes Topz R$3,99 + Expressa 2h R$6,90 = R$10,89.
+  **Sem CAPTCHA no `transaction`**, ao contrário do que a UI mostrou em 10/09: o "Não sou um
+  robô" era da tela, não do fechamento por API. Pix Itaú (Farmácia Pague Menos), validade 10 min.
+  Dono pagou.
+- Detalhe de cobertura: na Pague Menos, dois algodões (Cremer 25g, Apolo 50g) voltaram "não pode
+  ser entregue para as coordenadas"; o item define a entrega, não só o CEP. Na Cobasi o SLA
+  padrão vem "Econômica4" (7 dias úteis); é preciso escolher "Cobasi Já" explicitamente.
+
+Confirmação por e-mail: Drogaria SP às 11:33:17; Cobasi e Pague Menos pendentes na hora deste
+registro (o e-mail de convidado vai para `contato+probe@` → caixa operacional).
+
+**Resultado do gate de 24/09: as três lojas VTEX abertas fecham por API sem operador e sem
+navegador, com o EMV do Pix vindo no `gatewayCallback`.** A decisão de religar a compra
+automática nessas três lojas é do dono (decisão datada), com Asaas pagando o Pix.
+
 ## 25/09/2026 — PROVADO: pedido criado por API na Drogaria SP, sem CAPTCHA, Pix emitido e pago
 
 Teste autorizado em 24/09 executado hoje. Três rodadas reais, todas por HTTP puro do Mac
