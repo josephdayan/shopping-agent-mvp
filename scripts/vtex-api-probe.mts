@@ -253,6 +253,9 @@ const payment = await call(`${base}/orderForm/${orderFormId}/attachments/payment
 });
 summary = orderFormSummary(payment.json as Json);
 step("paymentData(Pix)", payment.status, { payments: summary.payments, pixOffered: summary.pixOffered, value });
+// Objeto de pagamento completo da cesta: é o que o checkout-ui copia (com `merchantSellerPayments`)
+// para montar o envio ao gateway. Guardado no JSON para inspeção.
+dump.paymentDataPayments = ((payment.json as Json).paymentData as Json | undefined)?.payments ?? null;
 if (!summary.pixOffered) {
   await clearCart();
   fail("a loja não oferece Pix (só cartão) — fora da arquitetura sem operador");
@@ -286,42 +289,82 @@ if (tx.status !== 200) {
   );
 }
 const orderGroup = String(txJson.orderGroup);
-const receiverUri = String(txJson.receiverUri);
 const merchant = (txJson.merchantTransactions as Json[])?.[0] ?? {};
-const tid = String(merchant.transactionId);
-const account = new URL(receiverUri).hostname.split(".")[0];
-const gw = await call(receiverUri, [
-  {
-    paymentSystem: PIX_SYSTEM,
-    paymentSystemName: "Pix",
-    group: "instantPaymentPaymentGroup",
-    installments: 1,
-    currencyCode: "BRL",
-    value,
-    installmentsInterestRate: 0,
-    installmentsValue: value,
-    referenceValue: value,
-    fields: {},
-    transaction: { id: tid, merchantName: account },
-  },
-]);
-step("gateway payments", gw.status, gw.text.slice(0, 300));
+const tid = String(txJson.id ?? merchant.transactionId);
+const account = new URL(String(txJson.receiverUri)).hostname.split(".")[0];
+// 25/09: o checkout-ui (v6.152.3, `sendPayment` + `getTransactionURL`) NÃO usa o `receiverUri`
+// (`/split/{og}/payments` devolveu 500). Ele copia cada `paymentData.payments[]` da cesta,
+// funde o `merchantSellerPayments[]` correspondente, anexa `transaction {id, merchantName}`,
+// `installmentsValue`, `installmentsInterestRate`, `currencyCode`, `originalPaymentIndex`, e
+// posta em api.vtexvault.com (padrão) ou em {account}.vtexpayments.com.br/api/payments/pub
+// (flag "Janus"), sempre com `orderId`, `redirect=false`, `callbackUrl`, `deviceInfo` e `an`.
+const templatePath = String(
+  txJson.gatewayCallbackTemplatePath ??
+    (txJson.transactionData as Json | undefined)?.gatewayCallbackTemplatePath ??
+    `/checkout/gatewayCallback/${orderGroup}/{messageCode}`,
+);
+const cartPayments = (((txJson.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? (dump.paymentDataPayments as Json[] | null) ?? []) as Json[];
+const merchants = (txJson.merchantTransactions as Json[]) ?? [];
+const payments = cartPayments.flatMap((p, i) =>
+  ((p.merchantSellerPayments as Json[] | undefined) ?? [{ id: merchant.id, installments: 1, referenceValue: value, value, interestRate: 0, installmentValue: value }]).map((m) => {
+    const t = merchants.find((x) => String(x.id).toLowerCase() === String(m.id).toLowerCase()) ?? merchant;
+    return {
+      ...p,
+      ...m,
+      paymentSystemName: "Pix",
+      group: "instantPaymentPaymentGroup",
+      fields: {},
+      transaction: { id: t.transactionId, merchantName: t.merchantName },
+      installmentsValue: m.installmentValue ?? value,
+      installmentsInterestRate: m.interestRate ?? 0,
+      currencyCode: "BRL",
+      originalPaymentIndex: i,
+    };
+  }),
+);
+const deviceInfo = Buffer.from(
+  `sw=1728&sh=1117&cd=30&tz=180&lang=pt-BR&java=false&sourceApplication=vcs.checkout-ui@6.152.3&installedApplications=[]`,
+).toString("base64");
+const callbackUrl = `https://${domain}${templatePath}`;
+const gatewayUrls = [
+  `https://api.vtexvault.com/api/payments/transactions/${tid}/payments?&orderId=${orderGroup}&redirect=false&callbackUrl=${encodeURIComponent(callbackUrl)}&deviceInfo=${deviceInfo}&an=${account}`,
+  `https://${account}.vtexpayments.com.br/api/payments/pub/transactions/${tid}/payments?&orderId=${orderGroup}&redirect=false&callbackUrl=${callbackUrl}&deviceInfo=${deviceInfo}&an=${account}`,
+];
+dump.gatewayPayload = payments;
+let gw: Awaited<ReturnType<typeof call>> | null = null;
+for (const url of gatewayUrls) {
+  gw = await call(url, payments);
+  step(`gateway payments (${new URL(url).hostname})`, gw.status, gw.text.slice(0, 400));
+  if (gw.status >= 200 && gw.status < 300) break;
+}
+if (!gw || gw.status < 200 || gw.status >= 300) {
+  save();
+  fail(`gateway recusou o pagamento (HTTP ${gw?.status}); pedido ${orderGroup} fica sem pagamento e a loja cancela sozinha. Ver JSON.`);
+}
+dump.gatewayResponse = gw.json ?? gw.text;
+let pix: string | null = findPixCode(gw.text);
+step("pix no retorno do gateway", gw.status, { pixFound: Boolean(pix) });
 const cb = await call(`${base}/gatewayCallback/${orderGroup}`, {});
 step("gatewayCallback", cb.status, cb.text.slice(0, 300));
+dump.gatewayCallbackResponse = cb.json ?? cb.text;
+pix = pix ?? findPixCode(cb.text);
 
-// O código Pix chega ao Payment App da loja; aqui tentamos ler pelos dois lugares públicos
-// (pedido do grupo e transação no gateway) e procuramos o EMV (000201…6304xxxx) no JSON.
-let pix: string | null = null;
+// O Payment App (Pix) recebe `paymentAppData.payload` via Checkout UI durante o checkout; em
+// headless procuramos o EMV em todo lugar público: retorno do gateway, callback, pedido do
+// grupo (com os cookies do fechamento) e a transação no gateway.
 let orderIds: unknown = null;
 for (let i = 0; i < 12 && !pix; i++) {
   await new Promise((r) => setTimeout(r, 5000));
   const og = await call(`${base}/orders/order-group/${orderGroup}`);
-  const gwPay = await call(`https://${account}.vtexpayments.com.br/api/pub/transactions/${tid}/payments?orderId=${orderGroup}`);
-  if (Array.isArray(og.json)) orderIds = (og.json as Json[]).map((o) => [o.orderId, o.status, o.statusDescription]);
-  pix = findPixCode(og.text) ?? findPixCode(gwPay.text);
-  step(`leitura ${i + 1}`, og.status, { orders: orderIds, gatewayPayments: gwPay.status, pixFound: Boolean(pix) });
+  const gwTx = await call(`https://${account}.vtexpayments.com.br/api/pub/transactions/${tid}`);
+  const gwTxPay = await call(`https://${account}.vtexpayments.com.br/api/pub/transactions/${tid}/payments?orderId=${orderGroup}`);
+  if (Array.isArray(og.json)) orderIds = (og.json as Json[]).map((o) => [o.orderId, o.status ?? o.state, o.statusDescription]);
+  pix = findPixCode(og.text) ?? findPixCode(gwTx.text) ?? findPixCode(gwTxPay.text);
+  const appData = (og.text.match(/"paymentAppData":\s*(\{[^}]{0,400}\})/) ?? [])[1];
+  step(`leitura ${i + 1}`, og.status, { orders: orderIds, gwTx: gwTx.status, gwTxPay: gwTxPay.status, pixFound: Boolean(pix), appData: appData?.slice(0, 200) });
   dump.lastOrderGroup = og.json;
-  dump.lastGatewayPayments = gwPay.json;
+  dump.lastGatewayTransaction = gwTx.json ?? gwTx.text.slice(0, 500);
+  dump.lastGatewayPayments = gwTxPay.json ?? gwTxPay.text.slice(0, 500);
 }
 dump.verdict = pix
   ? `PEDIDO CRIADO por API sem CAPTCHA: grupo ${orderGroup}; Pix copia-e-cola obtido (${pix.length} chars).`
