@@ -47,6 +47,7 @@ export class GmailStoreMailReader {
     const body = (await r.json().catch(() => ({}))) as { access_token?: string; expires_in?: number; scope?: string; error?: string; error_description?: string };
     if (!r.ok || !body.access_token) throw new Error(`Gmail: refresh token recusado (${r.status} ${body.error ?? ""} ${body.error_description ?? ""}).`.replace(/\s+/g, " "));
     if (body.scope && !/gmail/i.test(body.scope)) console.warn("[store-mail] token sem escopo Gmail:", body.scope);
+    this.token = { value: body.access_token, expiresAt: Date.now() + (body.expires_in ?? 3600) * 1000 };
     return this.token.value;
   }
   private async gmail<T>(path: string): Promise<T> {
