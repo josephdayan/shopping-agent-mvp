@@ -237,3 +237,18 @@ test("ao vivo: loja com SUPER EXPRESSA devolve `faster` (mais rápida, extra den
   const single = await liveStoreFreight("paguemenos", ITEMS, "01229-000");
   assert.equal(single.kind === "ok" && single.faster, undefined);
 });
+
+test("cotação: entrega agendada custa SLA + janela e o prazo vai até o fim da janela mais cedo", async () => {
+  const { effectiveSla } = await import("../src/lib/live-freight");
+  const now = new Date("2026-09-25T20:30:00Z");
+  const sla = { name: "Entrega Agendada", price: 1290, shippingEstimate: "2h", availableDeliveryWindows: [
+    { startDateUtc: "2026-09-26T11:00:00+00:00", endDateUtc: "2026-09-26T14:00:59+00:00", price: 300 },
+    { startDateUtc: "2026-09-26T10:00:00+00:00", endDateUtc: "2026-09-26T13:00:59+00:00", price: 300 },
+  ] };
+  const eff = effectiveSla(sla, now);
+  assert.equal(eff.price, 1590);
+  assert.equal(eff.shippingEstimate, "17h");
+  assert.equal(eff.deliveryWindow?.startDateUtc, "2026-09-26T10:00:00+00:00");
+  assert.equal(effectiveSla({ ...sla, availableDeliveryWindows: [{ startDateUtc: "2026-09-25T10:00:00Z", endDateUtc: "2026-09-25T13:00:00Z", price: 300 }] }, now).price, undefined, "só janelas passadas: sem entrega");
+  assert.equal(effectiveSla({ name: "Normal", price: 690, shippingEstimate: "1bd" }, now).price, 690, "SLA sem janela não muda");
+});

@@ -11,7 +11,7 @@
 //     `callbackUrl`, `deviceInfo` e `an`. O `gatewayCallback` responde 428 com
 //     `paymentAuthorizationAppCollection[].appPayload` (vtex.pix-payment) = copia-e-cola.
 // Nada aqui toca o banco; a máquina de estados fica em purchase-execution.ts.
-import { estimateMinutes, humanEstimate, promisedMinutes } from "../live-freight";
+import { effectiveSla, estimateMinutes, humanEstimate, promisedMinutes } from "../live-freight";
 import { findPixCode } from "../pix-emv";
 import type { CheckoutEvidence } from "../purchase-execution";
 
@@ -176,7 +176,8 @@ export class VtexCheckoutSession {
     if (!logistics.length) throw new VtexCheckoutRejected("shippingData", 200, messages[0] ?? "loja não devolveu logística");
     const budget = promisedMinutes(input.deliveryPromise);
     const selection = logistics.map((line) => {
-      const slas = ((line.slas as Json[] | undefined) ?? []).filter((s) =>
+      // Entrega agendada: preço + janela mais cedo, prazo até o fim dela (mesma regra da cotação).
+      const slas = ((line.slas as Json[] | undefined) ?? []).map((s) => effectiveSla(s as never) as unknown as Json).filter((s) =>
         s.deliveryChannel === "delivery" && typeof s.price === "number" && Number.isFinite(s.price) && (s.price as number) >= 0 && !/retir/i.test(String(s.name ?? s.id ?? "")));
       // Mesma regra do comprador do Mac (15/09): entrega com prazo igual ou MENOR que o
       // prometido ao cliente, a mais barata; empate → a mais rápida. Sem promessa legível,
@@ -184,7 +185,8 @@ export class VtexCheckoutSession {
       const fits = slas.filter((s) => budget == null || (estimateMinutes(String(s.shippingEstimate)) >= 0 && estimateMinutes(String(s.shippingEstimate)) <= budget));
       fits.sort((x, y) => (x.price as number) - (y.price as number) || estimateMinutes(String(x.shippingEstimate)) - estimateMinutes(String(y.shippingEstimate)));
       if (!fits.length) throw new VtexCheckoutRejected("sla", 200, messages[0] ?? (slas.length ? `nenhuma entrega dentro do prazo prometido (${input.deliveryPromise ?? "?"})` : "loja não entrega esse item nesse endereço"));
-      return { itemIndex: Number(line.itemIndex ?? 0), selectedSla: String(fits[0].id), selectedDeliveryChannel: "delivery" };
+      const window = (fits[0] as { deliveryWindow?: Json }).deliveryWindow;
+      return { itemIndex: Number(line.itemIndex ?? 0), selectedSla: String(fits[0].id), selectedDeliveryChannel: "delivery", ...(window ? { deliveryWindow: window } : {}) };
     });
     await this.orderFormCall("selectedSla", `/orderForm/${orderFormId}/attachments/shippingData`, { ...(shipped.shippingData as Json), logisticsInfo: selection });
     const value = Number(this.form!.value);
@@ -208,9 +210,13 @@ export class VtexCheckoutSession {
     const logistics = (shipping.logisticsInfo as Json[] | undefined) ?? [];
     const selected = logistics.map((l) => {
       if (l.selectedDeliveryChannel !== "delivery") throw new Error("Retirada não é entrega.");
-      const s = ((l.slas as Json[] | undefined) ?? []).find((v) => v.id === l.selectedSla);
-      if (!s) throw new Error("Entrega não selecionada.");
-      return s;
+      const raw = ((l.slas as Json[] | undefined) ?? []).find((v) => v.id === l.selectedSla);
+      if (!raw) throw new Error("Entrega não selecionada.");
+      const chosen = l.deliveryWindow as { startDateUtc?: string; endDateUtc?: string } | undefined;
+      if ((raw.availableDeliveryWindows as unknown[] | undefined)?.length && !chosen?.endDateUtc) throw new Error("Janela de entrega não selecionada.");
+      if (!chosen?.endDateUtc) return raw;
+      const hours = Math.max(1, Math.ceil((Date.parse(chosen.endDateUtc) - Date.now()) / 3_600_000));
+      return { ...raw, shippingEstimate: `${hours}h`, windowLabel: `${chosen.startDateUtc}→${chosen.endDateUtc}` };
     });
     const promises = [...new Set(selected.map((s) => humanEstimate(String(s.shippingEstimate))))];
     if (!selected.length || promises.length !== 1 || !promises[0]) throw new Error("Prazo do checkout precisa de conferência.");
@@ -236,7 +242,7 @@ export class VtexCheckoutSession {
       cartHash: job.cartHash,
       destination: job.customerAddress,
       postalCode: String(dest.postalCode ?? ""),
-      deliveryOption: selected.map((s) => String(s.id)).join(" · "),
+      deliveryOption: selected.map((s) => (s.windowLabel ? `${String(s.id)} [${String(s.windowLabel)}]` : String(s.id))).join(" · ").slice(0, 300),
       deliveryPromise: String(promises[0]),
       payment: { kind: "pix_store", paymentSystem: 125 },
       observedAt: new Date().toISOString(),

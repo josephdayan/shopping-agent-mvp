@@ -6,7 +6,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 import { signOpsAction, verifyOpsActionSignature } from "./auth";
 import { whatsappAdapter } from "./adapters/whatsapp";
-import { notifyOperator } from "./turn-runtime";
+import { notifyOwner, ownerPhones } from "./turn-runtime";
 import { appendOrderNote } from "./order-flags";
 
 export type OpsActionKind =
@@ -112,18 +112,21 @@ export async function mirrorOpsAction(tx: Tx, action: { id: string; kind: string
   }).catch(() => undefined);
 }
 
-// Envia os botões ao operador. Sem Meta (mock/dev) ou sem OPS_TOKEN, cai em texto + link.
+// Envia os botões de DINHEIRO (pagar recebedor novo, compra acima do teto, Pix recusado, loja
+// calada, carrinho do ML) ao DONO. 25/09: iam para LIA_OPERATOR_PHONE — o operador contratado
+// recebia "Pagar e memorizar" de uma compra automática. Sem LIA_OWNER_PHONE, ownerPhones() cai
+// no operador (quem opera sozinho não muda nada). Sem Meta (mock/dev), cai em texto + link.
 export async function sendOperatorButtons(
   action: { id: string; kind: string },
   body: string,
   buttons: { choice: string; title: string }[],
 ) {
-  const to = process.env.LIA_OPERATOR_PHONE?.trim();
+  const to = ownerPhones()[0];
   if (!to) return "skipped" as const;
   const ids = buttons.map((b) => ({ id: opsActionButtonId(action, b.choice), title: b.title }));
   const opsLink = `${(process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "")}/ops`;
   if (process.env.LIA_OPS_BUTTONS_OFF === "true" || process.env.WHATSAPP_PROVIDER !== "meta" || ids.some((b) => !b.id)) {
-    await notifyOperator(`${body}\nResponda no painel: ${opsLink}`);
+    await notifyOwner(`${body}\nResponda no painel: ${opsLink}`);
     return "text" as const;
   }
   try {
@@ -131,7 +134,7 @@ export async function sendOperatorButtons(
     return "buttons" as const;
   } catch (error) {
     console.warn("[ops-action:buttons-failed]", error instanceof Error ? error.message : error);
-    await notifyOperator(`${body}\nResponda no painel: ${opsLink}`);
+    await notifyOwner(`${body}\nResponda no painel: ${opsLink}`);
     return "text" as const;
   }
 }

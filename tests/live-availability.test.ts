@@ -46,3 +46,26 @@ test("sem CEP nada é consultado; loja que não responde mantém os candidatos (
   const throwing = await checkCandidatesLive(cands, "01229-000", async () => { throw new Error("boom"); }, supported);
   assert.deepEqual(throwing.kept, cands);
 });
+
+test("ordem das opções: confirmado > cabe no mínimo da loja > chega antes > mais barato posto em casa", async () => {
+  const { byVerifiedThenEta } = await import("../src/lib/delivery-service");
+  const base = { name: "Água de coco", sku: "x" };
+  const lento = { ...base, sku: "a", unitPrice: 5, storeKey: "cobasi", verified: true, etaMinutes: 24 * 60, freightFee: 7 };
+  const rapidoCaro = { ...base, sku: "b", unitPrice: 5, storeKey: "drogariasp", verified: true, etaMinutes: 90, freightFee: 8.9 };
+  const rapidoBarato = { ...base, sku: "c", unitPrice: 5, storeKey: "paguemenos", verified: true, etaMinutes: 90, freightFee: 6.9 };
+  const semConfirmar = { ...base, sku: "d", unitPrice: 1, storeKey: "drogal" };
+  const sorted = [lento, semConfirmar, rapidoCaro, rapidoBarato].sort(byVerifiedThenEta).map((o) => o.sku);
+  assert.deepEqual(sorted, ["c", "b", "a", "d"]);
+  // Loja com mínimo alto: item de R$5 lá vai depois, mesmo chegando antes.
+  const { getStore } = await import("../src/lib/stores");
+  const dsp = getStore("drogariasp") as { key: string; minOrder?: number };
+  assert.equal(dsp.key, "drogariasp");
+  const oldMin = dsp.minOrder;
+  dsp.minOrder = 30;
+  try {
+    const noMinimo = { ...base, sku: "e", unitPrice: 5, storeKey: "drogariasp", verified: true, etaMinutes: 30, freightFee: 5 };
+    assert.deepEqual([noMinimo, lento].sort(byVerifiedThenEta).map((o) => o.sku), ["a", "e"]);
+  } finally {
+    dsp.minOrder = oldMin;
+  }
+});

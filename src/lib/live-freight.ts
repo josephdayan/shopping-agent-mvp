@@ -65,7 +65,26 @@ function maxLiveFee(): number {
   return Number.isFinite(value) && value > 0 ? value : 150;
 }
 
-type Sla = { name?: string; price?: number; shippingEstimate?: string; pickupStoreInfo?: { isPickupStore?: boolean } };
+type Sla = { name?: string; price?: number; shippingEstimate?: string; pickupStoreInfo?: { isPickupStore?: boolean }; availableDeliveryWindows?: DeliveryWindow[] };
+export type DeliveryWindow = { startDateUtc: string; endDateUtc: string; price?: number; lisPrice?: number; tax?: number };
+
+// Entrega AGENDADA (25/09, Mambo): a SLA diz "2h" e R$12,90, mas a loja exige escolher uma janela,
+// que custa à parte (R$3) e começa amanhã cedo. Cotar pela SLA crua prometia 2h e cobrava menos do
+// que a loja cobra — o comprador era recusado (`ORD006 janela obrigatória`) e, com janela, estouraria
+// o teto. Aqui a SLA vira o que ela realmente é: preço + janela mais cedo, prazo até o FIM dela.
+export function earliestWindow(windows: DeliveryWindow[] | undefined, now = new Date()): DeliveryWindow | null {
+  const valid = (windows ?? []).filter((w) => Date.parse(w.endDateUtc) > now.getTime());
+  valid.sort((a, b) => Date.parse(a.startDateUtc) - Date.parse(b.startDateUtc));
+  return valid[0] ?? null;
+}
+export function effectiveSla<T extends Sla>(sla: T, now = new Date()): T & { deliveryWindow?: DeliveryWindow } {
+  if (!sla.availableDeliveryWindows?.length) return sla;
+  const w = earliestWindow(sla.availableDeliveryWindows, now);
+  // Janelas todas no passado: sem entrega possível por essa SLA.
+  if (!w) return { ...sla, price: undefined };
+  const hours = Math.max(1, Math.ceil((Date.parse(w.endDateUtc) - now.getTime()) / 3_600_000));
+  return { ...sla, price: (sla.price ?? 0) + (w.price ?? 0), shippingEstimate: `${hours}h`, deliveryWindow: w };
+}
 type SimItem = { id?: string | number; quantity?: number; availability?: string };
 type LogisticsInfo = { itemIndex?: number; slas?: Sla[] };
 
@@ -199,7 +218,7 @@ export async function liveStoreFreight(
     const fastEstimates: (string | undefined)[] = [];
     const fastNames: string[] = [];
     for (const info of infoByItem.values()) {
-      const deliveries = (info.slas ?? []).filter(
+      const deliveries = (info.slas ?? []).map((sla) => effectiveSla(sla)).filter(
         (sla) =>
           !sla.pickupStoreInfo?.isPickupStore &&
           !/retir/i.test(sla.name ?? "") &&
@@ -288,7 +307,7 @@ export async function liveItemAvailability(storeKey: string, skus: string[], cep
         result.set(entry.sku, { sku: entry.sku, available: false });
         return;
       }
-      const deliveries = (infoByIndex.get(i)?.slas ?? []).filter(
+      const deliveries = (infoByIndex.get(i)?.slas ?? []).map((sla) => effectiveSla(sla)).filter(
         (sla) =>
           !sla.pickupStoreInfo?.isPickupStore &&
           !/retir/i.test(sla.name ?? "") &&

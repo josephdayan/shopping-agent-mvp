@@ -15,7 +15,7 @@ export type FakeVtexOptions = {
   skuId?: string;
   priceCents?: number;
   available?: boolean;
-  slas?: { id: string; price: number; shippingEstimate: string; deliveryChannel?: string }[];
+  slas?: { id: string; price: number; shippingEstimate: string; deliveryChannel?: string; availableDeliveryWindows?: { startDateUtc: string; endDateUtc: string; price: number }[] }[];
   transactionStatus?: number;
   vaultStatus?: number;
   callbackHasPix?: boolean;
@@ -43,8 +43,8 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
   const recompute = () => {
     const items = form.items as { quantity: number; sellingPrice: number }[];
     const itemsTotal = items.reduce((a, i) => a + i.quantity * i.sellingPrice, 0);
-    const li = ((form.shippingData as { logisticsInfo?: { selectedSla?: string; slas: { id: string; price: number }[] }[] } | undefined)?.logisticsInfo ?? []);
-    const shipping = li.reduce((a, l) => a + (l.slas.find((s) => s.id === l.selectedSla)?.price ?? 0), 0);
+    const li = ((form.shippingData as { logisticsInfo?: { selectedSla?: string; deliveryWindow?: { price?: number }; slas: { id: string; price: number }[] }[] } | undefined)?.logisticsInfo ?? []);
+    const shipping = li.reduce((a, l) => a + (l.slas.find((s) => s.id === l.selectedSla)?.price ?? 0) + (l.deliveryWindow?.price ?? 0), 0);
     form.totalizers = [{ id: "Items", value: itemsTotal }, ...(li.length ? [{ id: "Shipping", value: shipping }] : [])];
     form.value = itemsTotal + shipping;
   };
@@ -76,7 +76,7 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
       // inteiro), então a seleção tem precedência sobre recriar a logística.
       if (body.logisticsInfo && form.shippingData) {
         const li = (form.shippingData as { logisticsInfo: { itemIndex: number; selectedSla: string | null; selectedDeliveryChannel: string | null; slas: unknown[] }[] }).logisticsInfo;
-        for (const sel of body.logisticsInfo as { itemIndex: number; selectedSla: string; selectedDeliveryChannel: string }[]) { li[sel.itemIndex].selectedSla = sel.selectedSla; li[sel.itemIndex].selectedDeliveryChannel = sel.selectedDeliveryChannel; }
+        for (const sel of body.logisticsInfo as { itemIndex: number; selectedSla: string; selectedDeliveryChannel: string; deliveryWindow?: unknown }[]) { li[sel.itemIndex].selectedSla = sel.selectedSla; li[sel.itemIndex].selectedDeliveryChannel = sel.selectedDeliveryChannel; (li[sel.itemIndex] as { deliveryWindow?: unknown }).deliveryWindow = sel.deliveryWindow; }
       } else if (body.selectedAddresses) {
         const items = form.items as unknown[];
         form.shippingData = { selectedAddresses: body.selectedAddresses, logisticsInfo: items.map((_, i) => ({ itemIndex: i, selectedSla: null, selectedDeliveryChannel: null, slas: slas.map((s) => ({ name: s.id, deliveryChannel: "delivery", ...s })) })) };
@@ -90,6 +90,9 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
     }
     if (p.endsWith("/transaction")) {
       const status = opts.transactionStatus ?? 200;
+      const needsWindow = ((form.shippingData as { logisticsInfo?: { selectedSla?: string; deliveryWindow?: unknown; slas: { id: string; availableDeliveryWindows?: unknown[] }[] }[] } | undefined)?.logisticsInfo ?? [])
+        .some((l) => (l.slas.find((x) => x.id === l.selectedSla)?.availableDeliveryWindows?.length ?? 0) > 0 && !l.deliveryWindow);
+      if (needsWindow) return json(400, { error: { code: "ORD006", message: "A janela de entrega é obrigatória" } });
       if (status !== 200) return json(status, { error: { code: status === 403 ? "CHK0082" : "ORD007", message: "recusado" } });
       return json(200, { orderGroup, id: "TID1", receiverUri: `https://drogariasp.vtexpayments.com.br/split/${orderGroup}/payments`, gatewayCallbackTemplatePath: `/checkout/gatewayCallback/${orderGroup}/{messageCode}`, merchantTransactions: [{ id: "DROGARIASP", transactionId: "TID1", merchantName: "DROGARIASP", payments: [{ paymentSystem: "125", value: form.value, referenceValue: form.value }] }], paymentData: form.paymentData });
     }

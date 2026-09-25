@@ -1340,9 +1340,6 @@ export function cancelHowTo(hasPaidOrder: boolean): string {
     : "Antes de pagar, você pode limpar a lista quando quiser. Depois de pagar, dá pra desistir até eu comprar na loja.";
 }
 
-export function cartExpired(): string {
-  return "_Sua lista anterior expirou — comecei uma nova. Seu endereço continua salvo._";
-}
 
 export function orderReopened(): string {
   return "Atualizei seu pedido. O total anterior não vale mais — segue o novo 👇";

@@ -139,3 +139,22 @@ test("seller do SKU na hora: própria loja preferida; marketplace único aceito;
   await assert.rejects(new VtexCheckoutSession("drogariasp", fakeVtex({ sellers: [{ sellerId: "a", available: 3 }, { sellerId: "b", available: 3 }] }).fetchImpl).prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address }), /ambíguo/);
   await assert.rejects(new VtexCheckoutSession("drogariasp", fakeVtex({ sellers: [{ sellerId: "1", available: 1 }] }).fetchImpl).prepare({ items: [{ sku: "dsp-354260", qty: 2 }], profile, address }), /sem seller/);
 });
+
+test("entrega agendada (Mambo): escolhe a janela mais cedo, soma o preço dela e o prazo vai até o fim da janela", async () => {
+  const start = new Date(Date.now() + 10 * 3_600_000), end = new Date(Date.now() + 13 * 3_600_000);
+  const later = { startDateUtc: new Date(Date.now() + 20 * 3_600_000).toISOString(), endDateUtc: new Date(Date.now() + 23 * 3_600_000).toISOString(), price: 300 };
+  const fake = fakeVtex({ slas: [{ id: "Entrega Agendada", price: 1290, shippingEstimate: "2h", availableDeliveryWindows: [later, { startDateUtc: start.toISOString(), endDateUtc: end.toISOString(), price: 300 }] }] });
+  const session = new VtexCheckoutSession("drogariasp", fake.fetchImpl);
+  await session.prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address, deliveryPromise: "prazo da loja: 18h" });
+  const sel = (fake.calls.filter((c) => c.url.endsWith("/attachments/shippingData")).at(-1)!.body as { logisticsInfo: { deliveryWindow?: { startDateUtc: string } }[] }).logisticsInfo[0];
+  assert.equal(sel.deliveryWindow?.startDateUtc, start.toISOString(), "janela mais cedo");
+  const e = session.snapshot(job);
+  assert.equal(e.freightCents, 1590, "SLA 12,90 + janela 3,00");
+  assert.equal(e.deliveryPromise, "prazo da loja: 13h");
+  assert.match(e.deliveryOption, /Entrega Agendada \[/);
+  const pix = await session.placeOrder();
+  assert.equal(parsePixEmv(pix.code).amountCents, 539 + 1590);
+  // Promessa curta demais (2h) não cabe: recusa antes de criar pedido.
+  await assert.rejects(new VtexCheckoutSession("drogariasp", fakeVtex({ slas: [{ id: "Entrega Agendada", price: 1290, shippingEstimate: "2h", availableDeliveryWindows: [{ startDateUtc: start.toISOString(), endDateUtc: end.toISOString(), price: 300 }] }] }).fetchImpl)
+    .prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address, deliveryPromise: "prazo da loja: 2h" }), /prazo prometido/);
+});

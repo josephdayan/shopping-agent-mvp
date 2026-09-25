@@ -330,13 +330,28 @@ async function buildChoicesWithSearchNotice(
   ).finally(() => notice?.cancel());
 }
 
-// Confirmado pela loja antes do não-verificável; entre confirmados, o que chega antes.
-// Estável: quem empata mantém a ordem de relevância do rerank.
-function byVerifiedThenEta(a: ChoiceOption, b: ChoiceOption): number {
+// Ordem das opções (25/09, dono): confirmado pela loja antes do não-verificável; depois, o item
+// que a loja aceita SOZINHO (preço ≥ pedido mínimo dela) antes do que esbarra no mínimo — item
+// barato em loja de mínimo alto obriga o cliente a completar a cesta; depois o que chega ANTES;
+// depois o mais barato posto na casa (produto + frete da loja para o CEP). Estável: quem empata
+// em tudo mantém a ordem de relevância do rerank.
+export function fitsStoreMinimum(o: Pick<ChoiceOption, "storeKey" | "unitPrice">): boolean {
+  // getStore cai na loja padrão quando a chave está desligada: só vale o mínimo da PRÓPRIA loja.
+  const store = o.storeKey ? getStore(o.storeKey) : undefined;
+  const min = store?.key === o.storeKey ? store?.minOrder ?? 0 : 0;
+  return !(min > 0) || o.unitPrice >= min;
+}
+export function byVerifiedThenEta(a: ChoiceOption, b: ChoiceOption): number {
   const va = a.verified ? 1 : 0;
   const vb = b.verified ? 1 : 0;
   if (va !== vb) return vb - va;
-  return (a.etaMinutes ?? Number.MAX_SAFE_INTEGER) - (b.etaMinutes ?? Number.MAX_SAFE_INTEGER);
+  const ma = fitsStoreMinimum(a) ? 1 : 0;
+  const mb = fitsStoreMinimum(b) ? 1 : 0;
+  if (ma !== mb) return mb - ma;
+  const eta = (a.etaMinutes ?? Number.MAX_SAFE_INTEGER) - (b.etaMinutes ?? Number.MAX_SAFE_INTEGER);
+  if (eta !== 0) return eta;
+  if (a.freightFee == null || b.freightFee == null) return 0;
+  return a.unitPrice + a.freightFee - (b.unitPrice + b.freightFee);
 }
 
 // Já comprado vem antes de tudo; entre iguais, confirmado ao vivo e depois o prazo.
@@ -408,6 +423,7 @@ function toChoiceOption(
   const useFast = urgent && live?.available && Boolean(live.fastEstimate);
   const delivery = live?.available ? humanEstimate(useFast ? live.fastEstimate : live.estimate) : undefined;
   const eta = useFast ? live!.fastEtaMinutes : live?.etaMinutes;
+  const fee = useFast ? live!.fastFee : live?.fee;
   return {
     sku: o.sku,
     name: o.name,
@@ -418,7 +434,7 @@ function toChoiceOption(
     ...storeRef,
     ...(delivery ? { delivery } : {}),
     ...(o.freeShipping ? { freeShipping: true } : {}),
-    ...(live?.available ? { verified: true, ...(eta != null ? { etaMinutes: eta } : {}) } : {})
+    ...(live?.available ? { verified: true, ...(eta != null ? { etaMinutes: eta } : {}), ...(fee != null ? { freightFee: fee } : {}) } : {})
   };
 }
 
@@ -907,7 +923,7 @@ async function handleDeliveryTurn(
   const pendingTooOld = Boolean(ctx.pending?.length && ctx.pendingSince && Date.now() - ctx.pendingSince > PENDING_TTL_MS);
   const stale = Boolean((ctx.basket?.length || ctx.pending?.length) && idleSince && idleMs > CART_TTL_MS) || pendingTooOld;
   if (stale) {
-    const hadBasket = (ctx.basket?.length ?? 0) > 0;
+    // (hadBasket removido 25/09: a lista vencida some em silêncio.)
     const keptCep = ctx.cep;
     const keptAddr = ctx.deliveryAddress;
     const keptAddrVerified = ctx.deliveryAddressVerified;
@@ -919,10 +935,9 @@ async function handleDeliveryTurn(
     // Persist before any early return (especially greeting). Previously the clear
     // lived only in memory, so the same stale warning repeated on every new message.
     await writeCtx(convo.id, ctx);
-    // A stale product search is not a "cart" and should disappear silently. A real
-    // basket gets context only when the customer is trying to continue, never before
-    // a fresh greeting.
-    if (hadBasket && intent.kind !== "greeting") await reply(phone, copy.cartExpired());
+    // A lista vencida some em silêncio (25/09, dono: "tira isso"): o aviso "sua lista anterior
+    // expirou" aparecia no meio de uma compra nova e só confundia. O endereço continua salvo.
+
   }
   // "Foi embora no meio" (pedido do dono, 11/08): cotação parada + cliente sumido por
   // LIA_QUOTE_ABANDON_TTL_MS (60 min) = ele não quer mais aquilo. Na volta, o pedido
