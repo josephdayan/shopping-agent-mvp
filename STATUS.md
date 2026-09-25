@@ -1,3 +1,19 @@
+## 25/09/2026 — Comprador VTEX no servidor: código pronto e testado (falta ligar)
+
+Em resposta à decisão de religar a compra automática, o fluxo inteiro passou a existir no
+servidor, sem Mac: pedido pago → job → checkout VTEX por HTTP (cesta com os SKUs do catálogo,
+perfil PJ com o CNPJ, endereço do cliente com coordenadas do CEP, entrega mais barata dentro
+do prazo prometido, Pix) → conferência e teto de sempre (`stageCheckout`/`beginPurchase`) →
+`transaction` → vault → callback 428 com o EMV → `capturePix` → Asaas paga → compra registrada
+com o número da loja (`orderGroup-01`) e cliente avisado. Cron a cada 2 min + disparo na hora
+do pagamento. Leitor de e-mails das lojas no servidor (cron 3 min) confirma pagamento/
+faturamento/entrega sem humano; tabela `StoreMailSeen` evita repetição. Recebedor novo: o
+código Pix fica guardado e o toque "Pagar e memorizar" paga sozinho. Recusa da loja antes do
+pedido (reCAPTCHA/documento) libera o orçamento e vai para revisão; falha depois do pedido é
+`outcome_unknown`. Testes com uma loja VTEX de mentira feita das respostas reais de hoje:
+53/53 focados, suíte completa 668/669 (o 1 é interação de dados do `order-monitor`, passa
+sozinho). Build local ok. Checklist para ligar em PENDENCIAS 25/09.
+
 ## 25/09/2026 — Decisão: religar a compra automática; meta é zero operador
 
 O dono decidiu religar a compra automática nas três lojas provadas hoje e reorientar o negócio

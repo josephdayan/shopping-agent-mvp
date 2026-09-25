@@ -1,3 +1,29 @@
+## 25/09/2026 — Comprador no servidor PRONTO no código; o que falta para ligar
+
+Código commitado (ver STATUS 25/09, "Comprador VTEX no servidor"). Para a Lia comprar sozinha
+nas três lojas, na ordem:
+
+- [ ] **Deploy** (push para `main`; a Vercel aplica a migration `StoreMailSeen` no build).
+- [ ] **Envs na Vercel (dono, credenciais):** `LIA_GMAIL_CLIENT_ID`, `LIA_GMAIL_CLIENT_SECRET`,
+  `LIA_GMAIL_REFRESH_TOKEN` (estão no Chaves do Mac: `security find-generic-password -a
+  lia-purchase-worker -s "Lia Gmail Client ID" -w`, idem "Client Secret" e "Refresh Token").
+- [ ] **Envs na Vercel (não-segredo):** `LIA_BUYER_DOCUMENT=<CNPJ do MEI>`,
+  `LIA_AUTO_PURCHASE_STORES=drogariasp,cobasi,paguemenos`; remover/`false` em
+  `LIA_AUTO_PURCHASE_OFF`, `LIA_PURCHASE_SUBMIT_OFF`, `LIA_PIX_OUT_OFF`. Redeploy depois.
+- [ ] **Contas de compra no /ops (dono):** `drogariasp` e `paguemenos` com e-mail
+  `contato@liadelivery.com.br` (cai na caixa operacional via ImprovMX), login/pagamento
+  prontos, `pix_out`, ativas. Cobasi já existe; conferir `paymentKind=pix_out`.
+- [ ] **Saldo na Asaas** (dono) para os Pix de saída.
+- [ ] **Primeiro pedido real do dono pelo WhatsApp**, uma loja por vez. No primeiro pedido de
+  cada loja o recebedor do Pix é novo: chega o botão "Pagar e memorizar" no WhatsApp do
+  dono; a partir do segundo, zero toque. Conferir: job `completed`, cliente avisado, e-mail
+  "pagamento aprovado" lido pelo cron (`store_confirmed`), entrega.
+- [ ] Depois de 3 pedidos limpos: abrir para clientes; Carlos só nas exceções e nas outras lojas.
+
+Limites conhecidos (não bloqueiam o piloto): item sem entrega no CEP ou sem estoque vira
+`needs_review` (ainda humano; próximo passo é substituir/estornar sozinho); teto de R$500 por
+pedido/dia da política de 07/09 continua; pedido de cliente com mais de uma loja segue manual.
+
 ## 25/09/2026 — Religar compra automática (decisão do dono) — plano de trabalho
 
 - [ ] **Adaptador VTEX no servidor** (`src/lib/purchase/vtex-api.ts` + executor no job de
