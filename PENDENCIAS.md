@@ -3,7 +3,10 @@
 Código commitado (ver STATUS 25/09, "Comprador VTEX no servidor"). Para a Lia comprar sozinha
 nas três lojas, na ordem:
 
-- [ ] **Deploy** (push para `main`; a Vercel aplica a migration `StoreMailSeen` no build).
+- [x] **Deploy**: `main` empurrado em 25/09 (9eabfc2 + 5834db3); produção **Ready** (build 59 s),
+  migration `StoreMailSeen` aplicada. Kill-switches seguem ligados: nada compra ainda.
+- [ ] Envs `LIA_BUYER_DOCUMENT` e `LIA_AUTO_PURCHASE_STORES` na Vercel: o classificador da sessão
+  do Claude barrou o `vercel env add`; o dono grava (comandos passados no chat de 25/09).
 - [ ] **Envs na Vercel (dono, credenciais):** `LIA_GMAIL_CLIENT_ID`, `LIA_GMAIL_CLIENT_SECRET`,
   `LIA_GMAIL_REFRESH_TOKEN` (estão no Chaves do Mac: `security find-generic-password -a
   lia-purchase-worker -s "Lia Gmail Client ID" -w`, idem "Client Secret" e "Refresh Token").

@@ -1,3 +1,12 @@
+## 25/09/2026 — Deploy do comprador no servidor em produção (Ready); ligar fica com o dono
+
+`git push origin main` feito (9eabfc2, 5834db3); produção Ready em 59 s com a migration
+`StoreMailSeen`. Kill-switches (`LIA_AUTO_PURCHASE_OFF`, `LIA_PURCHASE_SUBMIT_OFF`,
+`LIA_PIX_OUT_OFF`) continuam ligados, então o deploy é seguro. O classificador da sessão
+barrou o Claude de gravar envs na Vercel e de ler contas em produção; os passos que faltam
+(envs do Gmail vindas do Chaves, CNPJ, allowlist, contas no /ops, saldo Asaas, desligar os
+switches, redeploy) estão no checklist de PENDENCIAS 25/09 e foram passados ao dono no chat.
+
 ## 25/09/2026 — Comprador VTEX no servidor: código pronto e testado (falta ligar)
 
 Em resposta à decisão de religar a compra automática, o fluxo inteiro passou a existir no
