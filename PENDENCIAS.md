@@ -1,6 +1,22 @@
+## 25/09/2026 — Drogaria SP fechou por API; próximos gates
+
+- [x] `--buy` na Drogaria São Paulo: pedido `v79835708dgsp-01` criado sem CAPTCHA, Pix
+  obtido no `gatewayCallback` (428 + `vtex.pix-payment`), pago pelo dono às 11:33.
+- [ ] Confirmar pelo e-mail da loja que o pedido `v79835708dgsp-01` foi faturado e entregue
+  (SUPER EXPRESSA 90 min). Se não chegar e-mail em `contato+probe@`, conferir para onde o
+  ImprovMX encaminha `contato@liadelivery.com.br`.
+- [ ] Repetir o `--buy` em **Cobasi** e **Pague Menos** (mesmo script; Pague Menos é a que
+  mostrou CAPTCHA na UI em 10/09).
+- [ ] Se 2 de 3 passarem: decisão datada do dono para religar compra automática só nessas
+  lojas, por API. Trabalho: adaptador VTEX no servidor (transaction → vault → callback →
+  EMV do `appPayload`), Asaas já configurada (falta saldo e desligar `LIA_PIX_OUT_OFF`),
+  `LIA_AUTO_PURCHASE_STORES`, deploy.
+- [ ] O pedido `v79834803dgsp-01` (rodada 2, sem pagamento) deve aparecer cancelado pela loja;
+  conferir no e-mail e não pagar nada referente a ele.
+
 ## 24/09/2026 — Fechamento VTEX na Drogaria SP (autorizado) e o que vem depois
 
-- [ ] **Rodar o `--buy` na Drogaria São Paulo** (dono executa no terminal com
+- [x] **Rodar o `--buy` na Drogaria São Paulo** (feito 25/09; ver entrada acima) (dono executa no terminal com
   `LIA_PROBE_CONFIRM=sim` e `LIA_PROBE_DOCUMENT=<CNPJ do MEI>`; paga o Pix pelo celular).
   Registrar: status do `transaction`, se o EMV apareceu nas leituras públicas, número do
   pedido, e-mail da loja e entrega. Se voltar `403 CHK0082`, a loja sai da lista; sem contornar.

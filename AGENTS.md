@@ -1,3 +1,19 @@
+## 25/09/2026 — Fechamento VTEX por API provado na Drogaria SP (Pix emitido e pago)
+
+Regra técnica nova, provada ao vivo: na VTEX o envio do pagamento **não** vai ao `receiverUri`
+(`/split/{og}/payments` → 500). O checkout-ui posta o pagamento copiado da cesta em
+`api.vtexvault.com/api/payments/transactions/{tid}/payments` com `orderId`, `redirect=false`,
+`callbackUrl` (template do `transaction`), `deviceInfo` e `an`; o `gatewayCallback` responde
+**428** com `paymentAuthorizationAppCollection[].appPayload` contendo `code` (EMV),
+`qrCodeBase64Image`, `expiresAt` (10 min), `paymentId`. O EMV **não** aparece em leituras
+públicas; sai do callback. Pessoa jurídica: `documentType: "cnpj"` + `isCorporate` +
+`corporateDocument` (CNPJ em `documentType: "cpf"` dá `400 ORD007`). Leitura posterior do
+pedido exige os cookies do fechamento; o script grava `checkoutCookies` no JSON.
+
+Pedidos reais criados hoje: `v79834803dgsp-01` (sem pagamento, cancela sozinho) e
+`v79835708dgsp-01` (R$14,29, Pix pago 11:33). Documento do comprador só em env; nunca no repo.
+Decisão de 15/09 (operador) continua até nova decisão datada após Cobasi e Pague Menos.
+
 ## 24/09/2026 — Claude revisou o Muse: descartar; fechamento VTEX autorizado
 
 Parecer na §11 de [docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md).

@@ -342,6 +342,9 @@ if (!gw || gw.status < 200 || gw.status >= 300) {
   fail(`gateway recusou o pagamento (HTTP ${gw?.status}); pedido ${orderGroup} fica sem pagamento e a loja cancela sozinha. Ver JSON.`);
 }
 dump.gatewayResponse = gw.json ?? gw.text;
+// Cookies do fechamento (`CheckoutDataAccess`, `Vtex_CHKO_Auth`): sem eles a leitura pública do
+// pedido devolve 403 depois. Ficam no JSON (0600) para conferir o pedido mais tarde.
+dump.checkoutCookies = Object.fromEntries(jar);
 let pix: string | null = findPixCode(gw.text);
 step("pix no retorno do gateway", gw.status, { pixFound: Boolean(pix) });
 const cb = await call(`${base}/gatewayCallback/${orderGroup}`, {});

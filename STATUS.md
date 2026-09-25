@@ -1,3 +1,29 @@
+## 25/09/2026 — PROVADO: pedido criado por API na Drogaria SP, sem CAPTCHA, Pix emitido e pago
+
+Teste autorizado em 24/09 executado hoje. Três rodadas reais, todas por HTTP puro do Mac
+(`scripts/vtex-api-probe.mts --buy`, perfil de convidado, CNPJ do MEI em variável de ambiente):
+
+1. 11:17 — `transaction` 400 `ORD007`: o script mandava o CNPJ como `documentType: "cpf"`.
+   Sem pedido, sem cobrança. Corrigido: 14 dígitos vira pessoa jurídica (`isCorporate`,
+   `corporateDocument`), como a VTEX documenta.
+2. 11:22 (dono) — **`transaction` 200, pedido `v79834803dgsp-01` criado sem CAPTCHA**, mas o
+   envio do Pix ao `receiverUri` (`/split/{og}/payments`) devolveu 500 e o `gatewayCallback`
+   `CHK0223`. Pedido ficou sem pagamento; a loja cancela sozinha.
+3. 11:31 (Claude) — lendo o `checkout.min.js` v6.152.3 da própria loja: o navegador NÃO usa o
+   `receiverUri`; copia `paymentData.payments[]` da cesta com `merchantSellerPayments`, anexa
+   `transaction`, `currencyCode`, `installments*`, e posta em `api.vtexvault.com/api/payments/
+   transactions/{tid}/payments?orderId&redirect=false&callbackUrl&deviceInfo&an`. Resultado:
+   gateway **201**, `gatewayCallback` **428** com `paymentAuthorizationAppCollection`
+   (`vtex.pix-payment`) e o **copia-e-cola no `appPayload`** (Adyen, dinâmico, vence em 10 min).
+   **Pedido `v79835708dgsp-01`, Sabonete Dove 90g R$5,39 + SUPER EXPRESSA 90 min R$8,90 =
+   R$14,29. Dono pagou o Pix às 11:33.** Confirmação da loja (e-mail) pendente na hora do registro.
+
+Conclusão: para esta loja, **o fechamento por API sem operador e sem navegador está provado até
+o Pix**. O gate documentado em 23/09 (reCAPTCHA no `transaction`, Payment App headless) não
+barrou: o EMV vem no callback. Ficam abertos: confirmação/entrega do pedido, repetir em Cobasi e
+Pague Menos, e a leitura posterior do pedido (a leitura pública exige os cookies
+`CheckoutDataAccess`/`Vtex_CHKO_Auth` do fechamento; o script passou a gravá-los no JSON).
+
 ## 24/09/2026 — Parecer do Claude sobre o Muse: descartar; teste de fechamento VTEX autorizado
 
 Sessão nova no projeto Lia (Fable 5.1, esforço extra) revisou
