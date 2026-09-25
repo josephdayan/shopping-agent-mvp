@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   if (!authorized(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const report = await runVtexApiPurchases({ maxJobs: 3 });
   const settled = process.env.LIA_PIX_OUT_PROVIDER ? await settlePixPayouts().catch((error) => ({ error: error instanceof Error ? error.message : String(error) })) : null;
-  console.log("[cron:purchase-runner]", { enabled: report.enabled, runs: report.runs.map((r) => `${r.storeKey}:${r.status}`), finishedPending: report.finishedPending, errors: report.errors.length });
+  console.log("[cron:purchase-runner]", { enabled: report.enabled, runs: report.runs.map((r) => `${r.storeKey}:${r.status}`), finishedPending: report.finishedPending, refunded: (report as { refunded?: number }).refunded ?? 0, errors: report.errors.length });
   if (report.errors.length) console.warn("[cron:purchase-runner:errors]", report.errors);
   return NextResponse.json({ ...report, settled });
 }

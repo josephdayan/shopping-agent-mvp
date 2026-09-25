@@ -115,6 +115,15 @@ test("recebedor já memorizado: compra inteira sem nenhum toque; 403 no fechamen
   assert.equal(job.lastErrorCode, "VTEX_RECAPTCHA_REQUIRED");
   assert.equal((await prisma.purchaseSpend.findFirstOrThrow({ where: { purchaseJobId: job.id } })).status, "released");
   assert.ok(captcha.calls.some((c) => c.url.endsWith("/items/removeAll")));
+  // Recusa antes do pedido = estorno automático no mesmo tick (pagamento mockado sem provedor
+  // real: o ledger recusa; o teste prova que a regra ESCOLHE estornar e que pedido velho não).
+  const { refundableServerFailure } = await import("../src/lib/purchase/vtex-runner");
+  assert.equal(refundableServerFailure("VTEX_RECAPTCHA_REQUIRED"), true);
+  assert.equal(refundableServerFailure("VTEX_TRANSACTION_400"), true);
+  assert.equal(refundableServerFailure("VTEX_ITEMS"), true);
+  assert.equal(refundableServerFailure("STALE_PAID_ORDER"), false);
+  assert.equal(refundableServerFailure("PIX_CAPTURE_REFUSED"), false);
+  assert.equal(refundableServerFailure(null), false);
   // Item sem estoque: falha antes de reservar; cesta esvaziada; revisão com motivo.
   const gone = await paidOrder();
   const out = fakeVtex({ available: false });

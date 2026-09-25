@@ -18,6 +18,53 @@ import { resolveVtexAddress } from "./vtex-address";
 import { VTEX_API_STORE_KEYS, VtexCheckoutRejected, VtexCheckoutSession, vtexOrderId, type FetchLike, type VtexBuyerProfile } from "./vtex-checkout";
 
 export const SERVER_BUYER_ID = "server-vtex-api";
+
+// Recusa da loja ANTES de existir pedido nela (25/09, dono: "nesses casos tem que estornar
+// direto"): item sem estoque/entrega, janela, conferência, fechamento 4xx. O cliente recebe o
+// dinheiro de volta na hora e o dono um aviso. Fora desta lista, nunca: pedido velho
+// (STALE_PAID_ORDER, pode ter sido comprado à mão), queda depois do pedido (outcome_unknown) e
+// falha passageira (retrying) não estornam sozinhos.
+export function refundableServerFailure(code: string | null | undefined): boolean {
+  if (!code) return false;
+  if (code === "STALE_PAID_ORDER") return false;
+  return /^VTEX_/.test(code) || ["CHECKOUT_MISMATCH", "BEGIN_REFUSED", "ADDRESS_MISSING", "ACCOUNT_EMAIL_MISSING", "BUYER_DOCUMENT"].includes(code);
+}
+function customerReason(code: string): string {
+  if (/^VTEX_(ITEMS|SLA|SHIPPINGDATA|SELLER)/.test(code)) return "a loja não tem esse item para entrega no seu endereço agora";
+  return "a loja não confirmou a compra agora";
+}
+export async function refundServerFailure(orderId: string, code: string, detail: string) {
+  const { opsPurchaseFailedRefund } = await import("../ops-lifecycle");
+  const { notifyOwner } = await import("../turn-runtime");
+  const copy = await import("../lia-copy");
+  const order = await opsPurchaseFailedRefund(orderId, customerReason(code), { origin: "auto", internalReason: `${code}: ${detail}`.slice(0, 200) });
+  await notifyOwner(copy.operatorAutoRefundAlert(order.id.slice(-6).toUpperCase(), Number(order.total), `${code} — ${detail}`), order.phone).catch(() => undefined);
+  return order;
+}
+// Varre jobs do comprador do servidor que ficaram em revisão por recusa ANTES do pedido e
+// estorna (cobre também quem caiu em revisão antes desta regra existir).
+export async function refundRejectedServerJobs(limit = 10) {
+  const jobs = await prisma.purchaseJob.findMany({
+    where: { status: "needs_review", storeKey: { in: VTEX_API_STORE_KEYS }, updatedAt: { gte: new Date(Date.now() - 48 * 3_600_000) }, deliveryOrder: { status: "paid", storeOrderNumber: null } },
+    select: { id: true, deliveryOrderId: true, lastErrorCode: true, lastErrorMessage: true }, take: limit,
+  });
+  let refunded = 0;
+  const errors: string[] = [];
+  for (const job of jobs) {
+    if (!refundableServerFailure(job.lastErrorCode)) continue;
+    // Tentativa de pedido que chegou a existir na loja nunca estorna sozinha.
+    const placed = await prisma.purchaseAttempt.findFirst({ where: { purchaseJobId: job.id, step: "vtex_order" }, select: { id: true } });
+    if (placed) continue;
+    try {
+      await refundServerFailure(job.deliveryOrderId, job.lastErrorCode!, job.lastErrorMessage ?? "");
+      await prisma.purchaseJob.update({ where: { id: job.id }, data: { status: "canceled", lastErrorMessage: `${job.lastErrorMessage ?? ""} — estornado automaticamente.`.slice(0, 500) } });
+      refunded += 1;
+    } catch (error) {
+      errors.push(`${job.deliveryOrderId}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  return { refunded, errors };
+}
 export type RunResult = { jobId: string; storeKey: string; status: string; detail?: string };
 
 export function maxPaidAgeHours() {
@@ -181,6 +228,13 @@ export async function runVtexApiPurchases(input: { maxJobs?: number; fetchImpl?:
       report.errors.push(`job ${payload.jobId}: ${error instanceof Error ? error.message : String(error)}`);
       await executionUnknown(payload.jobId, SERVER_BUYER_ID, payload.claimToken, "SERVER_BUYER_CRASH").catch(() => undefined);
     }
+  }
+  try {
+    const r = await refundRejectedServerJobs();
+    (report as { refunded?: number }).refunded = r.refunded;
+    report.errors.push(...r.errors.map((e) => `refund ${e}`));
+  } catch (error) {
+    report.errors.push(`refund: ${error instanceof Error ? error.message : String(error)}`);
   }
   try { report.finishedPending = await finishPendingVtexOrders(); } catch (error) {
     report.errors.push(`finish: ${error instanceof Error ? error.message : String(error)}`);
