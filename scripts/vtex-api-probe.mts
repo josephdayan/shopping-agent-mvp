@@ -28,6 +28,15 @@ const STORES: Record<string, string> = {
   kopenhagen: "www.kopenhagen.com.br",
   carrefour: "mercado.carrefour.com.br",
   petz: "www.petz.com.br",
+  // Candidatos da varredura de 25/09 (catálogo + orderForm abertos ao servidor); sem catálogo na Lia ainda.
+  mambo: "www.mambo.com.br",
+  sonda: "www.sondadelivery.com.br",
+  hortifruti: "www.hortifruti.com.br",
+  mundoverde: "www.mundoverde.com.br",
+  drogal: "www.drogal.com.br",
+  epocacosmeticos: "www.epocacosmeticos.com.br",
+  livup: "www.livup.com.br",
+  tokstok: "www.tokstok.com.br",
 };
 const PIX_SYSTEM = 125;
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36";

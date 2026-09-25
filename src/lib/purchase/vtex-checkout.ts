@@ -19,6 +19,10 @@ export const VTEX_API_STORES: Record<string, { domain: string; skuPrefix: string
   drogariasp: { domain: "www.drogariasaopaulo.com.br", skuPrefix: "dsp-", label: "Drogaria São Paulo" },
   cobasi: { domain: "www.cobasi.com.br", skuPrefix: "cobasi-", label: "Cobasi" },
   paguemenos: { domain: "www.paguemenos.com.br", skuPrefix: "paguemenos-", label: "Pague Menos" },
+  // 25/09 (sondagem a seco no endereço do dono): abertas até o Pix.
+  swift: { domain: "loja.swift.com.br", skuPrefix: "swift-", label: "Swift" },
+  kopenhagen: { domain: "www.kopenhagen.com.br", skuPrefix: "kopenhagen-", label: "Kopenhagen" },
+  rihappy: { domain: "www.rihappy.com.br", skuPrefix: "rihappy-", label: "Ri Happy" },
 };
 export const VTEX_API_STORE_KEYS = Object.keys(VTEX_API_STORES);
 export const PIX_PAYMENT_SYSTEM = "125";
@@ -166,7 +170,9 @@ export class VtexCheckoutSession {
       payments: [{ paymentSystem: PIX_PAYMENT_SYSTEM, referenceValue: value, value, installments: 1 }],
     });
     const payments = ((paid.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? [];
-    if (payments.length !== 1 || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM || Number(payments[0].value) !== value)
+    const payValue = Number(payments[0]?.value);
+    // Desconto no Pix (Kopenhagen 3%, Ri Happy ~2%): o pagamento fica MENOR que a cesta; nunca maior.
+    if (payments.length !== 1 || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM || !Number.isFinite(payValue) || payValue > value || payValue <= 0)
       throw new VtexCheckoutRejected("paymentData", 200, "Pix não ficou selecionado na cesta");
     return this.form!;
   }
@@ -187,7 +193,8 @@ export class VtexCheckoutSession {
     const promises = [...new Set(selected.map((s) => humanEstimate(String(s.shippingEstimate))))];
     if (!selected.length || promises.length !== 1 || !promises[0]) throw new Error("Prazo do checkout precisa de conferência.");
     const payments = ((form.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? [];
-    if (payments.length !== 1 || Number(payments[0].value) !== Number(form.value) || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM)
+    const payValue = Number(payments[0]?.value);
+    if (payments.length !== 1 || !Number.isFinite(payValue) || payValue > Number(form.value) || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM)
       throw new Error("Pix não está selecionado no checkout.");
     const { skuPrefix } = this.store;
     const items = ((form.items as Json[] | undefined) ?? []).map((i) => {
@@ -198,6 +205,8 @@ export class VtexCheckoutSession {
       return { sku, retailerSku: String(i.id), seller: String(i.seller), name: String(i.name).slice(0, 300), qty: Number(i.quantity), unitPriceCents: unit, lineTotalCents: total };
     });
     const freight = ((form.totalizers as Json[] | undefined) ?? []).find((t) => t.id === "Shipping");
+    const itemsAndFreight = items.reduce((a, i) => a + i.lineTotalCents, 0) + Number(freight?.value ?? 0);
+    const discountCents = Math.max(0, itemsAndFreight - payValue);
     return {
       recipientName: String(dest.receiverName ?? ""),
       accountEmail: String((form.clientProfileData as Json).email ?? ""),
@@ -211,7 +220,8 @@ export class VtexCheckoutSession {
       observedAt: new Date().toISOString(),
       items,
       freightCents: Number(freight?.value ?? 0),
-      totalCents: Number(form.value),
+      ...(discountCents ? { discountCents } : {}),
+      totalCents: payValue,
     };
   }
 
@@ -228,9 +238,11 @@ export class VtexCheckoutSession {
     const form = this.form;
     if (!form) throw new Error("Cesta ainda não preparada.");
     const orderFormId = String(form.orderFormId);
-    const value = Number(form.value);
+    const cartValue = Number(form.value);
+    const payments0 = ((form.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? [];
+    const value = Number(payments0[0]?.value ?? cartValue);
     const tx = await this.call(`${this.base}/orderForm/${orderFormId}/transaction`, {
-      referenceId: orderFormId, savePersonalData: false, optinNewsLetter: false, value, referenceValue: value, interestValue: 0,
+      referenceId: orderFormId, savePersonalData: false, optinNewsLetter: false, value, referenceValue: cartValue, interestValue: 0,
     });
     const txJson = (tx.json ?? {}) as Json;
     if (tx.status !== 200 || !txJson.orderGroup) {

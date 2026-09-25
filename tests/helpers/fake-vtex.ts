@@ -21,6 +21,8 @@ export type FakeVtexOptions = {
   callbackHasPix?: boolean;
   orderGroup?: string;
   pixAmount?: string;
+  // Desconto no Pix (Kopenhagen 3%): o pagamento fica menor que a cesta.
+  pixDiscountCents?: number;
 };
 export function fakeVtex(opts: FakeVtexOptions = {}) {
   const domain = opts.domain ?? "www.drogariasaopaulo.com.br";
@@ -75,7 +77,7 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
       recompute(); return json(200, form);
     }
     if (p.endsWith("/attachments/paymentData")) {
-      const value = form.value as number;
+      const value = (form.value as number) - (opts.pixDiscountCents ?? 0);
       form.paymentData = { payments: [{ paymentSystem: "125", bin: null, accountId: null, tokenId: null, installments: 1, referenceValue: value, value, merchantSellerPayments: [{ id: "DROGARIASP", installments: 1, referenceValue: value, value, interestRate: 0, installmentValue: value }] }] };
       return json(200, form);
     }
@@ -86,7 +88,7 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
     }
     if (p.includes("/gatewayCallback/")) {
       if (opts.callbackHasPix === false) return json(500, { error: { code: "CHK0223" } });
-      const code = emv(opts.pixAmount ?? ((form.value as number) / 100).toFixed(2));
+      const code = emv(opts.pixAmount ?? (((form.value as number) - (opts.pixDiscountCents ?? 0)) / 100).toFixed(2));
       return json(428, { RedirectResponseCollection: [], paymentAuthorizationAppCollection: [{ appName: "vtex.pix-payment", appPayload: JSON.stringify({ code, expiresAt: "2026-09-25 15:00:00Z", paymentId: "P1", transactionId: "TID1", qrCodeBase64Image: "" }) }] });
     }
     return json(404, { error: p });

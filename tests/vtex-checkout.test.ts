@@ -1,7 +1,8 @@
 import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { VtexCheckoutSession, VtexCheckoutRejected, VtexOrderWithoutPayment, vtexOrderId } from "../src/lib/purchase/vtex-checkout";
+import { VtexCheckoutSession, VtexCheckoutRejected, VtexOrderWithoutPayment, vtexOrderId, VTEX_API_STORE_KEYS } from "../src/lib/purchase/vtex-checkout";
+import { checkCheckout } from "../src/lib/purchase-execution";
 import { splitAddressText, resolveVtexAddress } from "../src/lib/purchase/vtex-address";
 import { parsePixEmv } from "../src/lib/pix-emv";
 import { classifyStoreMail } from "../src/lib/mailbox-policy";
@@ -102,4 +103,25 @@ test("e-mail da Drogaria SP: 'Pagamento foi aprovado' com número v…dgsp-01 vi
   const v = classifyStoreMail("drogariasp", { from: '"Drogaria São Paulo" <pedidos@drogariasaopaulo.com.br>', subject: "Drogaria São Paulo | Pagamento foi aprovado", text: "Olá, Lia ! Confirmamos o pagamento do seu pedido v79835708dgsp-01 :)" });
   assert.deepEqual(v, { kind: "paid", storeOrderNumber: "v79835708dgsp-01" });
   assert.equal(classifyStoreMail("drogariasp", { from: "golpe@example.test", subject: "Pagamento foi aprovado", text: "v79835708dgsp-01" }), null);
+});
+
+test("desconto no Pix (Kopenhagen/Ri Happy): total é o valor pago; conferência aceita itens + frete − desconto", async () => {
+  const fake = fakeVtex({ pixDiscountCents: 43 });
+  const session = new VtexCheckoutSession("drogariasp", fake.fetchImpl);
+  await session.prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address, deliveryPromise: "prazo da loja: 90 min" });
+  const e = session.snapshot(job);
+  assert.equal(e.totalCents, 1386);
+  assert.equal(e.discountCents, 43);
+  assert.equal(e.freightCents, 890);
+  const order = { items: [{ sku: "dsp-354260", qty: 1, unitPrice: 5.39, storeKey: "drogariasp", productUrl: "https://www.drogariasaopaulo.com.br/sabonete/p" }], deliveryAddress: job.customerAddress, customerName: "Joseph Teste", cep: "01233-020", deliveryFee: 8.9, itemsSubtotal: 5.39, fulfillments: [{ deliveryPromise: "prazo da loja: 90 min" }] };
+  const { purchaseCartHash } = await import("../src/lib/purchase-worker");
+  const hash = purchaseCartHash(order.items.map((i) => ({ ...i, name: "", storeLabel: "" })), order.deliveryFee, "prazo da loja: 90 min", order);
+  assert.doesNotThrow(() => checkCheckout(order, { ...e, cartHash: hash }));
+  assert.throws(() => checkCheckout(order, { ...e, cartHash: hash, discountCents: 0 }), /não fecha/);
+  const pix = await session.placeOrder();
+  assert.equal(parsePixEmv(pix.code).amountCents, 1386);
+  const tx = fake.calls.find((c) => c.url.endsWith("/transaction"))!.body as { value: number; referenceValue: number };
+  assert.equal(tx.value, 1386);
+  assert.equal(tx.referenceValue, 1429);
+  assert.deepEqual(VTEX_API_STORE_KEYS, ["drogariasp", "cobasi", "paguemenos", "swift", "kopenhagen", "rihappy"]);
 });

@@ -24,38 +24,45 @@ import { mercadoLivreEnabled, mercadoLivreStore, prefetchMercadoLivre } from "./
 // here (e.g. farmácia for higiene/beleza depth, Petz/Cobasi for pet). Nothing else
 // in the system needs to change — the chat flow and operator dashboard are
 // store-agnostic.
+// 25/09/2026 — decisão do dono: a Lia opera SEM operador. Só fica ligada por padrão a loja
+// que fecha pedido por API (checkout VTEX aberto + Pix, provado ou sondado no endereço do
+// dono): Drogaria SP, Cobasi, Pague Menos, Swift, Kopenhagen, Ri Happy. As demais viraram
+// opt-in (LIA_ENABLE_X=true) e ficam fora até fecharem sem humano: Carrefour e Petz
+// (barram o servidor), Boticário e Droga Raia (403), Oba e Divvino (sem Pix), Imigrantes,
+// Giuliana Flores, Decathlon, Kalunga, Cacau Show (não são VTEX abertas), Natural da Terra
+// (sem entrega no endereço de sondagem). Mercado Livre continua como estava (decisão pendente).
 const STORES: Record<string, StoreConnector> = {
   // Carrefour is the broadest vitrine (hipermercado, 1.094 seed items with real deep
   // links). Checkout automation stays OFF (the retailer blocked it on 19/07); in the
   // concierge product the operator buys by hand and the operator quote is the price
   // authority, so the seed serves as reference vitrine only.
-  ...(process.env.LIA_ENABLE_CARREFOUR !== "false" ? { [carrefourStore.key]: carrefourStore } : {}),
+  ...(process.env.LIA_ENABLE_CARREFOUR === "true" ? { [carrefourStore.key]: carrefourStore } : {}),
   // Oba is the groceries/essentials source. Catálogo colhido da API pública VTEX.
-  ...(process.env.LIA_ENABLE_OBA !== "false" ? { [obaStore.key]: obaStore } : {}),
+  ...(process.env.LIA_ENABLE_OBA === "true" ? { [obaStore.key]: obaStore } : {}),
   // Petz is the pet vertical. Delivery is by the retailer; no courier pickup is used.
-  ...(process.env.LIA_ENABLE_PETZ !== "false" ? { [petzStore.key]: petzStore } : {}),
+  ...(process.env.LIA_ENABLE_PETZ === "true" ? { [petzStore.key]: petzStore } : {}),
   // Boticário is the beauty vertical. Seed colhido; recolheita é manual (anti-bot).
-  ...(process.env.LIA_ENABLE_BOTICARIO !== "false" ? { [boticarioStore.key]: boticarioStore } : {}),
+  ...(process.env.LIA_ENABLE_BOTICARIO === "true" ? { [boticarioStore.key]: boticarioStore } : {}),
   // Decathlon: sports vitrine (small real seed; concierge/operator fulfills).
-  ...(process.env.LIA_ENABLE_DECATHLON !== "false" ? { [decathlonStore.key]: decathlonStore } : {}),
+  ...(process.env.LIA_ENABLE_DECATHLON === "true" ? { [decathlonStore.key]: decathlonStore } : {}),
   // Concierge vitrines added 2026-07-23 (real seeds harvested from each store's public
   // site; the operator buys by hand and the quote is the price authority).
   ...(process.env.LIA_ENABLE_SWIFT !== "false" ? { [swiftStore.key]: swiftStore } : {}),
-  ...(process.env.LIA_ENABLE_KALUNGA !== "false" ? { [kalungaStore.key]: kalungaStore } : {}),
+  ...(process.env.LIA_ENABLE_KALUNGA === "true" ? { [kalungaStore.key]: kalungaStore } : {}),
   ...(process.env.LIA_ENABLE_RIHAPPY !== "false" ? { [rihappyStore.key]: rihappyStore } : {}),
-  ...(process.env.LIA_ENABLE_CACAUSHOW !== "false" ? { [cacauShowStore.key]: cacauShowStore } : {}),
+  ...(process.env.LIA_ENABLE_CACAUSHOW === "true" ? { [cacauShowStore.key]: cacauShowStore } : {}),
   ...(process.env.LIA_ENABLE_KOPENHAGEN !== "false" ? { [kopenhagenStore.key]: kopenhagenStore } : {}),
-  ...(process.env.LIA_ENABLE_DROGARAIA !== "false" ? { [drogaRaiaStore.key]: drogaRaiaStore } : {}),
+  ...(process.env.LIA_ENABLE_DROGARAIA === "true" ? { [drogaRaiaStore.key]: drogaRaiaStore } : {}),
   // Vitrines adicionadas em 2026-08-02 para fechar as lacunas de demanda mapeadas
   // (farmácia não-remédio, bebidas, hortifruti, flores/presente e redundância de pet).
   // Farmácia: catálogo restrito por allowlist de categoria + deny-regex de medicamento.
   ...(process.env.LIA_ENABLE_DROGARIASP !== "false" ? { [drogariaSpStore.key]: drogariaSpStore } : {}),
   ...(process.env.LIA_ENABLE_PAGUEMENOS !== "false" ? { [pagueMenosStore.key]: pagueMenosStore } : {}),
-  ...(process.env.LIA_ENABLE_DIVVINO !== "false" ? { [divvinoStore.key]: divvinoStore } : {}),
-  ...(process.env.LIA_ENABLE_IMIGRANTES !== "false" ? { [imigrantesStore.key]: imigrantesStore } : {}),
-  ...(process.env.LIA_ENABLE_NATURALDATERRA !== "false" ? { [naturalDaTerraStore.key]: naturalDaTerraStore } : {}),
+  ...(process.env.LIA_ENABLE_DIVVINO === "true" ? { [divvinoStore.key]: divvinoStore } : {}),
+  ...(process.env.LIA_ENABLE_IMIGRANTES === "true" ? { [imigrantesStore.key]: imigrantesStore } : {}),
+  ...(process.env.LIA_ENABLE_NATURALDATERRA === "true" ? { [naturalDaTerraStore.key]: naturalDaTerraStore } : {}),
   ...(process.env.LIA_ENABLE_COBASI !== "false" ? { [cobasiStore.key]: cobasiStore } : {}),
-  ...(process.env.LIA_ENABLE_GIULIANAFLORES !== "false" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {}),
+  ...(process.env.LIA_ENABLE_GIULIANAFLORES === "true" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {}),
   // Mercado Livre: vitrine de CAUDA LONGA, ao vivo (decisão do dono 16/08). Fica por
   // ÚLTIMO no registry de propósito: as lojas locais decidem o "hoje"; o ML entra pra
   // resolver o que ninguém tem. Desligado por padrão — LIA_ENABLE_MERCADOLIVRE=true.

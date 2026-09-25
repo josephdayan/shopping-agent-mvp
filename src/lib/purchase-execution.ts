@@ -53,6 +53,8 @@ export const checkoutEvidenceSchema = z
       .min(1)
       .max(50),
     freightCents: z.number().int().nonnegative(),
+    // Desconto que a loja dá no meio de pagamento (Pix: Kopenhagen 3%, Ri Happy ~2%, 25/09).
+    discountCents: z.number().int().nonnegative().optional(),
     totalCents: z.number().int().positive(),
   })
   .strict();
@@ -156,7 +158,7 @@ export function checkCheckout(
     throw new Error("Preço por quantidade precisa de revisão.");
   if (
     e.totalCents !==
-    e.items.reduce((a, i) => a + i.lineTotalCents, 0) + e.freightCents
+    e.items.reduce((a, i) => a + i.lineTotalCents, 0) + e.freightCents - (e.discountCents ?? 0)
   )
     throw new Error("Total do checkout não fecha.");
   if (e.totalCents > dollars(order.itemsSubtotal + order.deliveryFee))

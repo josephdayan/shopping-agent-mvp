@@ -8,7 +8,8 @@ import { resolve } from "node:path";
 
 const args = process.argv.slice(2);
 const flag = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
-const STORES = ["drogariasp", "cobasi", "paguemenos"] as const;
+import { VTEX_API_STORE_KEYS } from "../src/lib/purchase/vtex-checkout";
+const STORES = (flag("--stores")?.split(",").map((s) => s.trim()).filter(Boolean) ?? VTEX_API_STORE_KEYS) as readonly string[];
 const EMAIL = process.env.LIA_BUYER_EMAIL?.trim() || "contato@liadelivery.com.br";
 type Account = { storeKey: string; email?: string | null; paymentKind?: string; enabled: boolean };
 type Order = { id: string; status: string; storeKey?: string | null; storeOrderNumber?: string | null; total?: number; paidAt?: string | Date | null; items?: unknown; purchaseJobs?: { status: string }[] };
