@@ -123,5 +123,19 @@ test("desconto no Pix (Kopenhagen/Ri Happy): total é o valor pago; conferência
   const tx = fake.calls.find((c) => c.url.endsWith("/transaction"))!.body as { value: number; referenceValue: number };
   assert.equal(tx.value, 1386);
   assert.equal(tx.referenceValue, 1429);
-  assert.deepEqual(VTEX_API_STORE_KEYS, ["drogariasp", "cobasi", "paguemenos", "swift", "kopenhagen", "rihappy"]);
+  assert.deepEqual(VTEX_API_STORE_KEYS.slice(0, 6), ["drogariasp", "cobasi", "paguemenos", "swift", "kopenhagen", "rihappy"]);
+  assert.ok(VTEX_API_STORE_KEYS.includes("mambo") && VTEX_API_STORE_KEYS.includes("epocacosmeticos"));
+});
+
+test("seller do SKU na hora: própria loja preferida; marketplace único aceito; ambíguo ou sem estoque recusa", async () => {
+  const own = fakeVtex({ sellers: [{ sellerId: "1", available: 5 }, { sellerId: "mkt1", available: 9 }] });
+  const s1 = new VtexCheckoutSession("drogariasp", own.fetchImpl);
+  await s1.prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address });
+  assert.equal((own.calls.find((c) => c.url.endsWith("/items"))!.body as { orderItems: { seller: string }[] }).orderItems[0].seller, "1");
+  const mkt = fakeVtex({ sellers: [{ sellerId: "epc057", available: 3 }] });
+  const s2 = new VtexCheckoutSession("drogariasp", mkt.fetchImpl);
+  await s2.prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address });
+  assert.equal(s2.snapshot(job).items[0].seller, "epc057");
+  await assert.rejects(new VtexCheckoutSession("drogariasp", fakeVtex({ sellers: [{ sellerId: "a", available: 3 }, { sellerId: "b", available: 3 }] }).fetchImpl).prepare({ items: [{ sku: "dsp-354260", qty: 1 }], profile, address }), /ambíguo/);
+  await assert.rejects(new VtexCheckoutSession("drogariasp", fakeVtex({ sellers: [{ sellerId: "1", available: 1 }] }).fetchImpl).prepare({ items: [{ sku: "dsp-354260", qty: 2 }], profile, address }), /sem seller/);
 });

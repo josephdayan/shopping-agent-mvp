@@ -36,7 +36,10 @@ const VTEX_LIVE: Record<string, { domain: string; sku: RegExp }> = {
   rihappy: { domain: "www.rihappy.com.br", sku: /^rihappy-(\d+)$/ },
   // 02/09: o chá de R$4,49 foi cobrado com "tarifa padrão" e não tinha estoque no CEP —
   // a simulação do site responde isso (withoutStock) e agora barra antes de cobrar.
-  naturaldaterra: { domain: "www.naturaldaterra.com.br", sku: /^naturaldaterra-(\d+)$/ }
+  naturaldaterra: { domain: "www.naturaldaterra.com.br", sku: /^naturaldaterra-(\d+)$/ },
+  mambo: { domain: "www.mambo.com.br", sku: /^mambo-(\d+)$/ },
+  epocacosmeticos: { domain: "www.epocacosmeticos.com.br", sku: /^epoca-(\d+)$/ },
+  drogal: { domain: "www.drogal.com.br", sku: /^drogal-(\d+)$/ }
 };
 
 function maxFastExtra(): number {

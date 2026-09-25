@@ -81,7 +81,10 @@ for (const store of [
   "IMIGRANTES",
   "NATURALDATERRA",
   "COBASI",
-  "GIULIANAFLORES"
+  "GIULIANAFLORES",
+  "MAMBO",
+  "EPOCACOSMETICOS",
+  "DROGAL"
 ]) {
   process.env[`LIA_ENABLE_${store}`] = "false";
 }

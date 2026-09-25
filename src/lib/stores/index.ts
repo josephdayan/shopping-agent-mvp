@@ -6,6 +6,8 @@ import { obaStore } from "./oba";
 import { carrefourStore } from "./carrefour";
 import { decathlonStore } from "./decathlon";
 import { swiftStore } from "./swift";
+import { mamboStore } from "./mambo";
+import { epocacosmeticosStore } from "./epocacosmeticos";
 import { kalungaStore } from "./kalunga";
 import { rihappyStore } from "./rihappy";
 import { cacauShowStore } from "./cacaushow";
@@ -63,6 +65,9 @@ const STORES: Record<string, StoreConnector> = {
   ...(process.env.LIA_ENABLE_NATURALDATERRA === "true" ? { [naturalDaTerraStore.key]: naturalDaTerraStore } : {}),
   ...(process.env.LIA_ENABLE_COBASI !== "false" ? { [cobasiStore.key]: cobasiStore } : {}),
   ...(process.env.LIA_ENABLE_GIULIANAFLORES === "true" ? { [giulianaFloresStore.key]: giulianaFloresStore } : {}),
+  // 25/09/2026: lojas somadas pela varredura de checkout VTEX aberto (compra por API no servidor).
+  ...(process.env.LIA_ENABLE_MAMBO !== "false" ? { [mamboStore.key]: mamboStore } : {}),
+  ...(process.env.LIA_ENABLE_EPOCACOSMETICOS !== "false" ? { [epocacosmeticosStore.key]: epocacosmeticosStore } : {}),
   // Mercado Livre: vitrine de CAUDA LONGA, ao vivo (decisão do dono 16/08). Fica por
   // ÚLTIMO no registry de propósito: as lojas locais decidem o "hoje"; o ML entra pra
   // resolver o que ninguém tem. Desligado por padrão — LIA_ENABLE_MERCADOLIVRE=true.

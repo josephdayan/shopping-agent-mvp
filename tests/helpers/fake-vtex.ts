@@ -23,6 +23,8 @@ export type FakeVtexOptions = {
   pixAmount?: string;
   // Desconto no Pix (Kopenhagen 3%): o pagamento fica menor que a cesta.
   pixDiscountCents?: number;
+  // Sellers do SKU na busca por skuId (marketplace). Padrão: só a loja ("1") com estoque.
+  sellers?: { sellerId: string; available: number; price?: number }[];
 };
 export function fakeVtex(opts: FakeVtexOptions = {}) {
   const domain = opts.domain ?? "www.drogariasaopaulo.com.br";
@@ -56,11 +58,16 @@ export function fakeVtex(opts: FakeVtexOptions = {}) {
     if (u.hostname === "api.vtexvault.com" || u.hostname.endsWith(".vtexpayments.com.br")) return json(opts.vaultStatus ?? 201, opts.vaultStatus && opts.vaultStatus >= 400 ? "<html>Error</html>" : "");
     if (u.hostname !== domain) return json(404, { error: "host" });
     const p = u.pathname;
+    if (p === "/api/catalog_system/pub/products/search") {
+      const id = (u.searchParams.get("fq") ?? "").replace("skuId:", "");
+      const sellers = opts.sellers ?? [{ sellerId: "1", available: opts.available === false ? 0 : 99 }];
+      return json(200, [{ productName: "Sabonete Dove", items: [{ itemId: id, sellers: sellers.map((s) => ({ sellerId: s.sellerId, commertialOffer: { AvailableQuantity: s.available, Price: (s.price ?? price) / 100 } })) }] }]);
+    }
     if (p === "/api/checkout/pub/orderForm") return json(200, form, { "set-cookie": "checkout.vtex.com=__ofid=of1; Path=/" });
     if (p.endsWith("/items/removeAll")) { form = { ...form, items: [], shippingData: undefined, paymentData: undefined }; recompute(); return json(200, form); }
     if (p.endsWith("/items")) {
       const wanted = (body.orderItems as { id: string; quantity: number; seller: string }[]);
-      form.items = wanted.map((w) => ({ id: w.id, name: "Sabonete Dove Creamy Comfort 90g", seller: w.seller, quantity: w.quantity, sellingPrice: price, availability: w.id === skuId && opts.available !== false ? "available" : "withoutStock", priceDefinition: { total: price * w.quantity } }));
+      form.items = wanted.map((w) => ({ id: w.id, name: "Sabonete Dove Creamy Comfort 90g", seller: w.seller, quantity: w.quantity, sellingPrice: price, availability: w.id === skuId && opts.available !== false && (opts.sellers ?? [{ sellerId: "1", available: 99 }]).some((s) => s.sellerId === w.seller && s.available >= w.quantity) ? "available" : "withoutStock", priceDefinition: { total: price * w.quantity } }));
       recompute(); return json(200, form);
     }
     if (p.endsWith("/attachments/clientProfileData")) { form.clientProfileData = { email: body.email, documentType: body.documentType, isCorporate: body.isCorporate }; return json(200, form); }

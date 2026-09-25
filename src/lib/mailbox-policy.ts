@@ -39,6 +39,9 @@ export const STORE_MAIL_RULES: Record<string, Rule> = {
   },
   rihappy: { domains: ["rihappy.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
   kopenhagen: { domains: ["kopenhagen.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
+  mambo: { domains: ["mambo.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
+  epocacosmeticos: { domains: ["epocacosmeticos.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
+  drogal: { domains: ["drogal.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
   // Drogaria SP numera como v79835708dgsp-01 e o assunto é "Pagamento foi aprovado" (25/09, pedido real).
   drogariasp: { domains: ["drogariasaopaulo.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
   naturaldaterra: { domains: ["naturaldaterra.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },

@@ -23,6 +23,9 @@ export const VTEX_API_STORES: Record<string, { domain: string; skuPrefix: string
   swift: { domain: "loja.swift.com.br", skuPrefix: "swift-", label: "Swift" },
   kopenhagen: { domain: "www.kopenhagen.com.br", skuPrefix: "kopenhagen-", label: "Kopenhagen" },
   rihappy: { domain: "www.rihappy.com.br", skuPrefix: "rihappy-", label: "Ri Happy" },
+  // 25/09 (varredura de 80 varejistas + sondagem a seco): supermercado, beleza e farmácia.
+  mambo: { domain: "www.mambo.com.br", skuPrefix: "mambo-", label: "Mambo" },
+  epocacosmeticos: { domain: "www.epocacosmeticos.com.br", skuPrefix: "epoca-", label: "Época Cosméticos" },
 };
 export const VTEX_API_STORE_KEYS = Object.keys(VTEX_API_STORES);
 export const PIX_PAYMENT_SYSTEM = "125";
@@ -102,14 +105,32 @@ export class VtexCheckoutSession {
     return this.form;
   }
 
+  // Seller do SKU na hora da compra (mesma regra do comprador do Mac): marketplace (Época,
+  // Ri Happy) vende o mesmo SKU por vários sellers; exige exatamente UM com estoque suficiente,
+  // preferindo a própria loja ("1"). Sem seller disponível = item indisponível.
+  private async sellerFor(id: string, quantity: number): Promise<string> {
+    const r = await this.call(`https://${this.domain}/api/catalog_system/pub/products/search?fq=${encodeURIComponent(`skuId:${id}`)}`);
+    if (r.status !== 200 && r.status !== 206) throw new VtexCheckoutRejected("seller", r.status, `catálogo não respondeu para o SKU ${id}`);
+    const products = Array.isArray(r.json) ? (r.json as Json[]) : [];
+    const sku = products.flatMap((p) => (p.items as Json[] | undefined) ?? []).find((i) => String(i.itemId) === id);
+    const sellers = ((sku?.sellers as Json[] | undefined) ?? []).filter((sl) => Number((sl.commertialOffer as Json | undefined)?.AvailableQuantity ?? 0) >= quantity && Number((sl.commertialOffer as Json | undefined)?.Price ?? 0) > 0);
+    if (!sellers.length) throw new VtexCheckoutRejected("items", 200, `item ${id} sem seller com estoque`);
+    const own = sellers.find((sl) => String(sl.sellerId) === "1");
+    if (own) return "1";
+    if (sellers.length !== 1) throw new VtexCheckoutRejected("items", 200, `item ${id} com vendedor ambíguo (${sellers.length})`);
+    return String(sellers[0].sellerId);
+  }
+
   // 1–5: cesta → perfil → endereço (com geo) → entrega escolhida → Pix. Nada é criado na loja.
   async prepare(input: { items: VtexCartItem[]; profile: VtexBuyerProfile; address: VtexAddress; deliveryPromise?: string }) {
     const { skuPrefix } = this.store;
-    const orderItems = input.items.map((item) => {
+    const orderItems: { id: string; quantity: number; seller: string }[] = [];
+    for (const item of input.items) {
       const id = item.sku.startsWith(skuPrefix) ? item.sku.slice(skuPrefix.length) : "";
       if (!/^\d+$/.test(id)) throw new VtexCheckoutRejected("sku", 0, `SKU ${item.sku} não é da loja ${this.storeKey}`);
-      return { id, quantity: Math.max(1, Math.round(item.qty)), seller: "1" };
-    });
+      const quantity = Math.max(1, Math.round(item.qty));
+      orderItems.push({ id, quantity, seller: await this.sellerFor(id, quantity) });
+    }
     const created = await this.orderFormCall("orderForm", "/orderForm");
     const orderFormId = String(created.orderFormId);
     const withItems = await this.orderFormCall("items", `/orderForm/${orderFormId}/items`, { orderItems });
