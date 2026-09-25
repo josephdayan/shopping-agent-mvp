@@ -8,8 +8,7 @@
 
 ## 25/09/2026 (noite) — depois do 1º pedido real
 
-- [ ] #UY6IV9 (água de coco, Mambo, R$18,66): estornar pelo /ops ou repetir a compra (a loja
-  entregaria amanhã 7h–10h e cobraria R$3 a mais que o pago). Decisão do dono.
+- [x] #UY6IV9 e #DSP0Y0 estornados automaticamente em 25/09 17:38 (regra nova).
 - [ ] Avisar "faturado/a caminho" consultando o status do pedido na loja (`orders/order-group`
   com os cookies salvos na tentativa `vtex_order`) em cron, além dos e-mails.
 - [ ] Pedido mínimo real de cada uma das 9 lojas (hoje todas 0 por env) para a ordem das opções.

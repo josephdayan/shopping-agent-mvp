@@ -1,3 +1,14 @@
+## 25/09/2026 (noite) — 2º pedido real (lenço, Mambo) e estorno automático provado
+
+#DSP0Y0 (lenço Huggies, Mambo, R$31,19 Pix) foi cotado já com a janela (frete R$15,90, 17h),
+mas o comprador parou em "Janela de entrega não selecionada": a VTEX guarda a janela em
+`slas[].deliveryWindow`, não em `logisticsInfo[].deliveryWindow`. Corrigido em c67d6ff e
+conferido contra uma cesta real do Mambo (janela, 17h, R$17,39). Antes do reenvio, o
+**estorno automático** (7771255) devolveu os dois pedidos de teste às 17:38: #UY6IV9 R$18,66
+(cartão, Pagar.me) e #DSP0Y0 R$31,19 (Pix, Mercado Pago) — primeira prova real da regra
+"loja recusou antes do pedido → estorna na hora". Ainda falta 1 pedido de ponta a ponta com
+a Asaas pagando a loja.
+
 ## 25/09/2026 (noite) — CONFIRMADO: "Lia Delivery" aprovado e não aplicado
 
 Leitura da Graph pelo /ops: `verified_name` = nome antigo, `new_display_name` = "Lia
