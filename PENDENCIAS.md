@@ -2,9 +2,12 @@
 
 - [x] `--buy` na Drogaria São Paulo: pedido `v79835708dgsp-01` criado sem CAPTCHA, Pix
   obtido no `gatewayCallback` (428 + `vtex.pix-payment`), pago pelo dono às 11:33.
-- [ ] Confirmar pelo e-mail da loja que o pedido `v79835708dgsp-01` foi faturado e entregue
-  (SUPER EXPRESSA 90 min). Se não chegar e-mail em `contato+probe@`, conferir para onde o
-  ImprovMX encaminha `contato@liadelivery.com.br`.
+- [x] Pagamento confirmado pela loja às 11:33:17 ("Pagamento foi aprovado", pedido
+  `v79835708dgsp-01`). `contato+probe@` cai em `joseph.dayan@beityaacov.com.br` via ImprovMX.
+- [ ] Conferir a entrega do sabonete (SUPER EXPRESSA, ~90 min) e os e-mails seguintes
+  (faturado / saiu para entrega / entregue).
+- [ ] `mailbox-policy.ts`: a regra `drogariasp` não reconheceu "Pagamento foi aprovado";
+  ajustar antes de o adaptador depender do e-mail para confirmar pagamento.
 - [ ] Repetir o `--buy` em **Cobasi** e **Pague Menos** (mesmo script; Pague Menos é a que
   mostrou CAPTCHA na UI em 10/09).
 - [ ] Se 2 de 3 passarem: decisão datada do dono para religar compra automática só nessas

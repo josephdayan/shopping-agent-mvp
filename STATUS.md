@@ -16,7 +16,12 @@ Teste autorizado em 24/09 executado hoje. Três rodadas reais, todas por HTTP pu
    gateway **201**, `gatewayCallback` **428** com `paymentAuthorizationAppCollection`
    (`vtex.pix-payment`) e o **copia-e-cola no `appPayload`** (Adyen, dinâmico, vence em 10 min).
    **Pedido `v79835708dgsp-01`, Sabonete Dove 90g R$5,39 + SUPER EXPRESSA 90 min R$8,90 =
-   R$14,29. Dono pagou o Pix às 11:33.** Confirmação da loja (e-mail) pendente na hora do registro.
+   R$14,29. Dono pagou o Pix às 11:33.** **Loja confirmou às 11:33:17**: e-mail "Pagamento foi
+aprovado" de `pedidos@drogariasaopaulo.com.br` para `contato+probe@liadelivery.com.br`, que o
+ImprovMX entrega em `joseph.dayan@beityaacov.com.br` (a mesma caixa operacional que o comprador lê).
+Dados de entrega corretos. Ressalva: `listStoreMessages("drogariasp")` do comprador não achou
+esse e-mail (regra de assunto/remetente em `mailbox-policy.ts` precisa reconhecer "Pagamento foi
+aprovado").
 
 Conclusão: para esta loja, **o fechamento por API sem operador e sem navegador está provado até
 o Pix**. O gate documentado em 23/09 (reCAPTCHA no `transaction`, Payment App headless) não
