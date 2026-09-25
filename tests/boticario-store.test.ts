@@ -1,3 +1,4 @@
+import "./helpers/load-env";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getStore, listStores } from "../src/lib/stores";

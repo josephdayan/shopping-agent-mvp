@@ -52,7 +52,9 @@ async function main() {
     const testFiles = files.length
       ? files
       : readdirSync("tests").filter((f) => f.endsWith(".test.ts")).map((f) => join("tests", f));
-    exit = run("node", ["--import", "tsx", "--test", ...testFiles], env);
+    // Arquivos em série (25/09): todos falam com o MESMO banco; em paralelo, o backfill de jobs
+    // de um arquivo cria `manual_queue` para o pedido pago de outro e o claim dele falha (flake).
+    exit = run("node", ["--import", "tsx", "--test", "--test-concurrency=1", ...testFiles], env);
   } finally {
     await pg.stop();
   }

@@ -51,6 +51,10 @@ process.env.LIA_CHARGE_ONLY_VERIFIED ??= "false";
 process.env.LIA_ENABLE_MERCADOLIVRE = "false";
 // Compra automática: nenhuma loja liberada por padrão nos testes (cada teste liga a sua).
 process.env.LIA_AUTO_PURCHASE_STORES ??= "";
+// Comprador VTEX no servidor (25/09): desligado na suíte. Ele dispara no pagamento
+// (order-payments → waitUntil) e roubaria o job dos testes do comprador do Mac, chamando a
+// loja REAL. tests/vtex-runner.test.ts liga explicitamente e usa a loja de mentira.
+process.env.LIA_SERVER_BUYER_OFF ??= "true";
 // Preparação de carrinho: desde 15/09 o default do produto é VAZIO (operador humano
 // compra; nenhuma loja monta carrinho sozinha). A suíte do comprador automático precisa
 // do mundo antigo para exercitar lease, aprovação e Pix, então fixa o ML aqui. O default
@@ -80,4 +84,10 @@ for (const store of [
   "GIULIANAFLORES"
 ]) {
   process.env[`LIA_ENABLE_${store}`] = "false";
+}
+// 25/09/2026: em produção só as lojas que fecham por API ficam ligadas por padrão (registry
+// opt-in). Os evals continuam no mundo original acima, então o elenco é ligado aqui de forma
+// explícita — a política de vitrine de produção tem teste próprio (vtex-checkout.test.ts).
+for (const store of ["CARREFOUR", "PETZ", "BOTICARIO", "DECATHLON", "OBA"]) {
+  process.env[`LIA_ENABLE_${store}`] = "true";
 }

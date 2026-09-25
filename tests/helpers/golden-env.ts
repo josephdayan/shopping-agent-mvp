@@ -9,3 +9,8 @@ process.env.OPENAI_API_KEY = "";
 process.env.WHATSAPP_PROVIDER = "mock";
 process.env.LIA_RETAILER_TEST_SEED = "true";
 process.env.LIA_SEND_PHOTOS = "false";
+// 25/09/2026: em produção só as lojas que fecham por API ficam ligadas por padrão. O golden
+// mede o BUSCADOR sobre o roster completo (18 vitrines), então liga tudo explicitamente aqui.
+for (const store of ["CARREFOUR", "OBA", "PETZ", "BOTICARIO", "DECATHLON", "SWIFT", "KALUNGA", "RIHAPPY", "CACAUSHOW", "KOPENHAGEN", "DROGARAIA", "DROGARIASP", "PAGUEMENOS", "DIVVINO", "IMIGRANTES", "NATURALDATERRA", "COBASI", "GIULIANAFLORES"]) {
+  process.env[`LIA_ENABLE_${store}`] = "true";
+}
