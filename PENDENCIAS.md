@@ -1,3 +1,12 @@
+## 25/09/2026 (noite) — RESOLVIDO: nome público do WhatsApp agora é "Lia Delivery"
+
+O dono re-registrou o número (POST `register` no /ops, PIN digitado por ele). Leitura da
+Graph logo depois: `verified_name` = **"Lia Delivery"**, `name_status` APPROVED,
+`new_name_status` NONE, `status` CONNECTED. Nome pessoal e CNPJ saíram do nome visível.
+Encerrar o acompanhamento horário do nome (automação do Codex) e os casos Meta/fórum; não
+reenviar pedido de nome. Regra para o futuro: toda troca de nome aprovada na Cloud API
+exige re-registro em até 14 dias; o webhook agora avisa a decisão.
+
 ## 25/09/2026 (noite) — Tirar nome/CNPJ do WhatsApp (bloqueia distribuição)
 
 1. Dono: abrir logado no /ops `https://liadelivery.com.br/api/ops/meta-setup?action=name`.
