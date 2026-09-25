@@ -1,3 +1,41 @@
+## 25/09/2026 — REMODELAGEM: a Lia compra sozinha (regra canônica vigente)
+
+**Modelo vigente.** Cliente pede no WhatsApp → cotação com frete/prazo reais da loja → paga a
+Lia (Pix ou cartão) → **o servidor compra na loja por API** (checkout VTEX aberto, perfil PJ
+com o CNPJ do MEI, endereço do cliente com coordenadas, entrega mais barata dentro do prazo
+prometido, Pix da loja) → **a Asaas paga o Pix** → compra registrada com o número da loja e
+cliente avisado → e-mails da loja (pagamento, faturado, saiu, entregue) lidos pelo servidor.
+Sem Mac, sem navegador, sem operador no caminho feliz. Código: `src/lib/purchase/`
+(`vtex-checkout.ts`, `vtex-address.ts`, `vtex-runner.ts`, `vtex-accounts.ts`),
+`src/lib/store-mail-reader.ts`, crons `/api/cron/purchase-runner` (2 min) e
+`/api/cron/store-mail` (3 min), disparo imediato no pagamento (`order-payments.ts`).
+
+**Vitrine = só loja que fecha por API.** Ligadas por padrão (9, ~18 mil itens): Drogaria SP,
+Drogal, Pague Menos, Cobasi, Swift, Kopenhagen, Ri Happy, Mambo, Época Cosméticos. As demais
+são opt-in por env (`src/lib/stores/index.ts` explica cada uma). Mercado Livre inalterado até
+decisão. Somar loja = checkout VTEX aberto + Pix + entrega no endereço de sondagem
+(`scripts/vtex-api-probe.mts <loja>` a seco) → colher catálogo → conector → `VTEX_API_STORES`,
+`PURCHASE_DOMAINS`, `VTEX_LIVE`, `mailbox-policy` → conta no /ops.
+
+**Controles que continuam valendo:** teto de R$500 por pedido/dia (política de 07/09),
+conferência da cesta (`checkCheckout`, agora com `discountCents`), reserva de orçamento,
+recebedor de Pix memorizado por loja (primeira vez pede um toque do dono), `outcome_unknown`
+para falha após o pedido existir, trava de 24h para pedido pago antigo, kill-switches
+`LIA_AUTO_PURCHASE_OFF` / `LIA_PURCHASE_SUBMIT_OFF` / `LIA_PIX_OUT_OFF` / `LIA_SERVER_BUYER_OFF`.
+
+**Onde AINDA entra humano (dono ou operador), em 25/09:** (1) item fora dos catálogos →
+`awaiting_operator_quote` (o caminho "operador cota"); (2) `needs_review`: item sem estoque ou
+sem entrega no CEP na hora da compra, loja recusou o fechamento, Pix recusado; (3)
+`outcome_unknown`; (4) cesta com mais de uma loja; (5) estornos e reclamações. Enquanto isso
+não for automatizado, alguém precisa olhar o /ops — hoje esses avisos vão para
+`LIA_OPERATOR_PHONE`/`LIA_OWNER_PHONE`. Tirar o operador exige apontar os dois telefones
+para o dono e decidir o caminho (1).
+
+**Testes:** `npm run test:local` (672/672 em 25/09), arquivos em série; loja VTEX de mentira
+em `tests/helpers/fake-vtex.ts`; evals no elenco histórico (load-env), golden no roster de 18
+(golden-env); comprador do servidor desligado no harness. Documento do comprador só em env
+(`LIA_BUYER_DOCUMENT`), nunca no repo.
+
 ## 25/09/2026 — DECISÃO VIGENTE: religar a compra automática; objetivo final é zero operador
 
 Com o fechamento por API provado nas três lojas VTEX abertas, o dono decidiu: **a Lia volta a

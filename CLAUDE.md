@@ -10,7 +10,11 @@
 > **removidos** em 03/08; a entrega é do varejista (sem motoboy); as 107 unidades
 > geocodadas e as guardas de cobertura/km são legado do modelo de julho.
 
-> **Decisão vigente — 15/09/2026:** contratar um operador humano e suspender a compra
+> **Decisão vigente — 25/09/2026:** a Lia compra sozinha por API (9 lojas VTEX, Pix pago pela
+> Asaas, sem operador no caminho feliz). Regra canônica e o que ainda cai em humano: topo de
+> [AGENTS.md](AGENTS.md). A decisão de 15/09 (operador) está superada.
+
+> **Decisão anterior — 15/09/2026:** contratar um operador humano e suspender a compra
 > automática. O fluxo operacional é a fila/manual do `/ops`; os planos do comprador local,
 > allowlist automática e tarefa horária ficam históricos até nova decisão.
 

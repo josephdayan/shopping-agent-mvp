@@ -1,3 +1,18 @@
+## 25/09/2026 — Para operar de fato sem ninguém (depois de ligar)
+
+- [ ] Ligar: /ops → "Habilitar todas as lojas por API"; envs de pausa fora +
+  `LIA_AUTO_PURCHASE_STORES` com as 9; redeploy; 1 pedido real por loja nova.
+- [ ] `LIA_OPERATOR_PHONE` → telefone do dono (ou vazio) quando o operador sair; conferir
+  `operatorIsHired()` e a promessa fora de horário (`LIA_OPERATOR_HOURS`), que hoje assume
+  operador contratado.
+- [ ] Caminho "operador cota" (`awaiting_operator_quote`) → recusa honesta + sugestão de
+  substituto nas 9 lojas (copy + evals). Sem isso, item fora do catálogo trava esperando humano.
+- [ ] `needs_review` por item sem estoque/entrega na compra → substituição automática ou estorno
+  automático com aviso ao cliente.
+- [ ] Cesta com mais de uma loja → dividir em jobs por loja (hoje é manual).
+- [ ] `store_silent` (Pix pago e loja calada 30 min) e `outcome_unknown` → alerta ao dono, não ao operador.
+- [ ] Runbook do operador (`docs/operador-runbook.md`) → reescrever como runbook do dono para exceções.
+
 ## 25/09/2026 — Depois de ligar: provar as 6 lojas novas e decidir o resto
 
 - [ ] Dono: `git push origin main` (c53d639 + Drogal) — o Claude foi barrado no push.

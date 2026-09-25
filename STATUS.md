@@ -1,3 +1,12 @@
+## 25/09/2026 — Remodelagem concluída no código e em produção; ligar depende de 2 cliques do dono
+
+Tudo do modelo "a Lia compra sozinha" está em `main` e deployado (8544ff3): comprador por API
+em 9 lojas, leitor de e-mails, crons, /ops com habilitação em um clique, registry opt-in,
+trava de 24h, desconto de Pix, seller na hora. Suíte 672/672, lint limpo. Kill-switches ainda
+LIGADOS na Vercel: nada compra até o dono (1) habilitar as lojas no /ops e (2) remover as 3
+envs de pausa e gravar `LIA_AUTO_PURCHASE_STORES` com as 9 lojas; depois redeploy e um pedido
+real por loja nova. Caminhos que ainda caem em humano listados em AGENTS.md (25/09).
+
 ## 25/09/2026 — Vitrine sem operador: 9 lojas por API (~19.000 itens); ML em espera
 
 Decisão do dono (25/09, à tarde): tudo que não fecha sem humano sai; somar toda loja que
