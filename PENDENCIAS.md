@@ -1,7 +1,7 @@
 ## 25/09/2026 — Para operar de fato sem ninguém (depois de ligar)
 
-- [ ] Ligar: /ops → "Habilitar todas as lojas por API"; envs de pausa fora +
-  `LIA_AUTO_PURCHASE_STORES` com as 9; redeploy; 1 pedido real por loja nova.
+- [x] Ligado em 25/09 à noite (contas, envs, redeploy a664e80). Falta: 1 pedido real por loja
+  nova pelo WhatsApp do dono.
 - [ ] `LIA_OPERATOR_PHONE` → telefone do dono (ou vazio) quando o operador sair; conferir
   `operatorIsHired()` e a promessa fora de horário (`LIA_OPERATOR_HOURS`), que hoje assume
   operador contratado.

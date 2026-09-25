@@ -1,3 +1,13 @@
+## 25/09/2026 (noite) — LIGADO: compra automática ativa em produção nas 9 lojas
+
+Kill-switches removidos, `LIA_AUTO_PURCHASE_STORES` com as 9 lojas, contas de compra ativas
+(`pix_out`), deploy a664e80. Logs de produção: `/api/cron/purchase-runner` `enabled: true`
+a cada 2 min (fila vazia); `/api/cron/store-mail` 200 listando e classificando. O leitor deu
+401 UNAUTHENTICATED com token válido até trocar para `fetch` com `cache: "no-store"` e
+`Headers` explícito: o fetch remendado do Next na Vercel derrubava o cabeçalho de
+autorização. Falta o primeiro pedido real de cliente pelo WhatsApp (dono) para provar a
+cadeia inteira em produção.
+
 ## 25/09/2026 — Remodelagem concluída no código e em produção; ligar depende de 2 cliques do dono
 
 Tudo do modelo "a Lia compra sozinha" está em `main` e deployado (8544ff3): comprador por API
