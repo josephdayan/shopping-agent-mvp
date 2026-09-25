@@ -168,7 +168,20 @@ async function ids(token: string) {
   return { appId, waba };
 }
 
-export type MetaSetupAction = "status" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors" | "carousel" | "templates" | "carousel_test";
+export type MetaSetupAction = "status" | "name" | "register" | "profile" | "picture" | "welcome" | "flow" | "flow_update" | "flow_errors" | "carousel" | "templates" | "carousel_test";
+
+// Estado real do display name (25/09): o WhatsApp Manager só mostrava "In Review" e o
+// suporte da Meta não respondia. Campo a campo porque alguns são beta e um campo
+// desconhecido derruba a leitura inteira com #100.
+async function nameStatus(token: string, phoneId: string) {
+  const fields = ["display_phone_number", "verified_name", "name_status", "new_name_status", "new_display_name", "messaging_limit_tier", "quality_rating", "status", "platform_type"];
+  const out: Record<string, unknown> = {};
+  for (const field of fields) {
+    const res = await graph(token, `${phoneId}?fields=${field}`).catch((e) => ({ [field]: `erro: ${String(e).slice(0, 200)}` }));
+    out[field] = (res as Record<string, unknown>)[field] ?? null;
+  }
+  return out;
+}
 
 // Erros de validação de um Flow (a Meta cria o rascunho mesmo inválido e recusa publicar).
 async function flowErrors(token: string, flowId: string) {
@@ -205,8 +218,17 @@ async function uploadBrandImage(token: string): Promise<string> {
   return upload.h;
 }
 
-export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: string } = {}): Promise<Record<string, unknown>> {
+export async function runMetaSetup(action: MetaSetupAction, opts: { flowId?: string; pin?: string } = {}): Promise<Record<string, unknown>> {
   const { token, phoneId } = creds();
+  if (action === "name") return nameStatus(token, phoneId);
+  if (action === "register") {
+    // Aplica um display name APROVADO (Cloud API exige re-registro em até 14 dias).
+    // PIN = verificação em duas etapas do número; nunca vai pra log nem pra env.
+    const pin = (opts.pin ?? "").trim();
+    if (!/^\d{6}$/.test(pin)) throw new Error("pin de 6 dígitos obrigatório");
+    const registered = await graph(token, `${phoneId}/register`, { method: "POST", body: JSON.stringify({ messaging_product: "whatsapp", pin }) });
+    return { registered, name: await nameStatus(token, phoneId) };
+  }
   if (action === "flow_errors" || action === "flow_update") {
     const flowId = (opts.flowId ?? process.env.LIA_FLOW_ADDRESS_ID ?? "").trim();
     if (!/^\d{6,}$/.test(flowId)) throw new Error("flow_id ausente (?flow_id=<id do Flow>)");

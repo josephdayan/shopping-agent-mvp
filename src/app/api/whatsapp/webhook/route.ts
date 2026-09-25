@@ -179,9 +179,18 @@ export async function POST(request: Request) {
     // o cliente via só o header e nada de opção, e nenhum log contava o porquê. O erro
     // da Meta (code/title/details) agora fica gritando no runtime log da Vercel.
     try {
-      const entries = (rawPayload as { entry?: Array<{ changes?: Array<{ value?: { statuses?: Array<Record<string, unknown>> } }> }> }).entry ?? [];
+      const entries = (rawPayload as { entry?: Array<{ changes?: Array<{ field?: string; value?: Record<string, unknown> & { statuses?: Array<Record<string, unknown>> } }> }> }).entry ?? [];
       for (const entry of entries) {
         for (const change of entry.changes ?? []) {
+          // Decisão do display name (25/09). Aprovado NÃO vale sozinho na Cloud API: é
+          // preciso re-registrar o número em até 14 dias, senão expira e volta pra revisão.
+          // Esse aviso era descartado em silêncio — provável motivo de "Lia Delivery"
+          // nunca ter aparecido depois de três pedidos.
+          if (change.field === "phone_number_name_update") {
+            const detail = JSON.stringify(change.value ?? {}).slice(0, 800);
+            console.warn("[whatsapp:meta:name-update]", detail);
+            await notifyOwner(`📛 Meta decidiu o nome do WhatsApp: ${detail}. Se APPROVED, re-registrar o número em até 14 dias (POST /api/ops/meta-setup {action:"register", pin}).`);
+          }
           for (const status of change.value?.statuses ?? []) {
             if (status.status === "failed") {
               const detail = JSON.stringify(status).slice(0, 1500);
