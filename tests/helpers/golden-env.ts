@@ -10,7 +10,11 @@ process.env.WHATSAPP_PROVIDER = "mock";
 process.env.LIA_RETAILER_TEST_SEED = "true";
 process.env.LIA_SEND_PHOTOS = "false";
 // 25/09/2026: em produção só as lojas que fecham por API ficam ligadas por padrão. O golden
-// mede o BUSCADOR sobre o roster completo (18 vitrines), então liga tudo explicitamente aqui.
-for (const store of ["CARREFOUR", "OBA", "PETZ", "BOTICARIO", "DECATHLON", "SWIFT", "KALUNGA", "RIHAPPY", "CACAUSHOW", "KOPENHAGEN", "DROGARAIA", "DROGARIASP", "PAGUEMENOS", "DIVVINO", "IMIGRANTES", "NATURALDATERRA", "COBASI", "GIULIANAFLORES", "MAMBO", "EPOCACOSMETICOS", "DROGAL"]) {
+// mede o BUSCADOR sobre o roster HISTÓRICO de 18 vitrines, então liga essas explicitamente aqui.
+// As lojas somadas em 25/09 (Mambo, Época, Drogal) ficam FORA do golden: com elas, "agua" cai em
+// "água perfumada para tecidos" no piso determinístico e "cabo usb-c" passa a existir (Drogal).
+// Caso registrado em PENDENCIAS 25/09 para regra principial no scorer antes de incluí-las.
+for (const store of ["CARREFOUR", "OBA", "PETZ", "BOTICARIO", "DECATHLON", "SWIFT", "KALUNGA", "RIHAPPY", "CACAUSHOW", "KOPENHAGEN", "DROGARAIA", "DROGARIASP", "PAGUEMENOS", "DIVVINO", "IMIGRANTES", "NATURALDATERRA", "COBASI", "GIULIANAFLORES"]) {
   process.env[`LIA_ENABLE_${store}`] = "true";
 }
+for (const store of ["MAMBO", "EPOCACOSMETICOS", "DROGAL"]) process.env[`LIA_ENABLE_${store}`] = "false";

@@ -11,6 +11,10 @@
   sem operador precisa virar recusa honesta + sugestão; decidir e implementar (copy + evals).
 - [ ] Item sem estoque/entrega no CEP na hora da compra: hoje `needs_review`; virar
   substituição/estorno automático.
+- [ ] Busca (golden): com Mambo/Drogal ligadas, "agua" sem qualificador vira "água perfumada para
+  tecidos" no piso determinístico (a IA de rerank cobre em produção). Regra principial no scorer
+  (básico > variante perfumada/para tecidos) e incluir as 3 lojas novas no roster do golden.
+  "cabo usb c" agora acha cabo na Drogal: atualizar a expectativa quando incluir.
 - [ ] Mercado Livre: manter (E8 do comprador por navegador) ou cortar.
 - [ ] Mais lojas: bebidas (nenhuma VTEX aberta achada), hortifruti dedicado; Pacheco/C&A/Hering/
   Polishop abertos mas com prazo de dias — decidir se entram como "não é hoje".
