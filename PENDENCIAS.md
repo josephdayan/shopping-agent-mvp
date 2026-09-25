@@ -1,3 +1,23 @@
+## 25/09/2026 — Religar compra automática (decisão do dono) — plano de trabalho
+
+- [ ] **Adaptador VTEX no servidor** (`src/lib/purchase/vtex-api.ts` + executor no job de
+  compra): cesta com os SKUs do pedido (`sku` do catálogo sem o prefixo da loja), endereço do
+  cliente + coordenadas, SLA rápido por nome (`SUPER EXPRESSA` / `Cobasi Já` / `Expressa`),
+  perfil PJ com o CNPJ (`LIA_BUYER_DOCUMENT`), `transaction` → vault → callback → EMV →
+  `capturePix` → Asaas. Evidência (itens, total, frete, prazo) gravada antes do fechamento;
+  `outcome_unknown` em queda após `transaction`. Testes com as respostas reais de 25/09.
+- [ ] Onde roda: no servidor (Vercel), disparado pelo pagamento do cliente; sem depender do Mac.
+- [ ] E-mails da loja: regra "Pagamento foi aprovado" + faturado/saiu/entregue em
+  `mailbox-policy.ts`, para confirmar ao cliente sem humano.
+- [ ] Ligar: saldo na Asaas (dono), `LIA_PIX_OUT_OFF`/`LIA_PURCHASE_SUBMIT_OFF`/
+  `LIA_AUTO_PURCHASE_OFF` desligados, `LIA_AUTO_PURCHASE_STORES=drogariasp,cobasi,paguemenos`,
+  `LIA_BUYER_DOCUMENT` na Vercel, deploy.
+- [ ] Um pedido real do dono pelo WhatsApp, de ponta a ponta, com a Asaas pagando.
+- [ ] Mercado Livre: retomar o gate E8 do comprador por navegador; decidir manter/cortar.
+- [ ] Demais lojas da vitrine: sondar fechamento por API; cortar as que não passam
+  (Carrefour e Petz já barram o servidor; Oba sem Pix; Swift/Natural da Terra por cobertura).
+- [ ] Operador: manter até a automação provada; depois só exceção; depois sair.
+
 ## 25/09/2026 — 3 de 3 fecharam; decisão do dono e trabalho para ligar
 
 - [x] Cobasi `--buy`: pedido `v147466794cbs` criado sem CAPTCHA, Pix pago pelo dono.

@@ -1,3 +1,22 @@
+## 25/09/2026 — DECISÃO VIGENTE: religar a compra automática; objetivo final é zero operador
+
+Com o fechamento por API provado nas três lojas VTEX abertas, o dono decidiu: **a Lia volta a
+comprar sozinha e o negócio passa a ser desenhado para não ter operador.** Regras:
+
+1. Compra por API (sem navegador) em Drogaria SP, Cobasi e Pague Menos, com a Asaas pagando o Pix
+   da loja. Adaptador no servidor a construir (ver PENDENCIAS de 25/09).
+2. **Loja que não fecha sem humano sai da vitrine.** Cada loja restante precisa provar o
+   fechamento (dry-run + um pedido real) ou é desligada.
+3. **Mercado Livre é exceção a preservar** ("um dos main drivers"): não tem API de compra, mas
+   tem comprador próprio por navegador (`scripts/retail-buyer/mercadolivre.ts`, gate E8 pendente)
+   e aceita Pix. Fica como segunda via automatizada, a provar; se não for confiável, sai.
+4. O operador (Carlos) continua até a automação estar no ar e provada com pedidos reais; depois
+   vira só exceção e, por fim, sai. A decisão de 15/09 fica substituída por esta.
+
+Ordem: adaptador VTEX no servidor → um pedido real do dono de ponta a ponta com Asaas → ligar
+para clientes nas três lojas → provar E8 do ML → sondar as demais lojas da vitrine → cortar
+as que não passam.
+
 ## 25/09/2026 — Cobasi e Pague Menos fecharam por API: 3 de 3 lojas VTEX provadas
 
 Mesmo fluxo da Drogaria SP (transaction → api.vtexvault.com → gatewayCallback 428 → EMV no

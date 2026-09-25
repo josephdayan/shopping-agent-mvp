@@ -1,3 +1,11 @@
+## 25/09/2026 — Decisão: religar a compra automática; meta é zero operador
+
+O dono decidiu religar a compra automática nas três lojas provadas hoje e reorientar o negócio
+para operação sem operador: loja que não fecha por API sai; Mercado Livre é a exceção a tentar
+manter pelo comprador por navegador já existente (E8). Trabalho iniciado: adaptador VTEX no
+servidor dentro do job de compra existente. Registro completo em `AGENTS.md` (25/09) e lista de
+trabalho em `PENDENCIAS.md`.
+
 ## 25/09/2026 — 3 de 3: Cobasi e Pague Menos também fecharam por API (Pix emitido e pago)
 
 Na sequência da Drogaria SP, o mesmo script (`vtex-api-probe.mts --buy`, convidado, CNPJ do MEI
