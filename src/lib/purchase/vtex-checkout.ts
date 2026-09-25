@@ -26,6 +26,7 @@ export const VTEX_API_STORES: Record<string, { domain: string; skuPrefix: string
   // 25/09 (varredura de 80 varejistas + sondagem a seco): supermercado, beleza e farmácia.
   mambo: { domain: "www.mambo.com.br", skuPrefix: "mambo-", label: "Mambo" },
   epocacosmeticos: { domain: "www.epocacosmeticos.com.br", skuPrefix: "epoca-", label: "Época Cosméticos" },
+  drogal: { domain: "www.drogal.com.br", skuPrefix: "drogal-", label: "Drogal" },
 };
 export const VTEX_API_STORE_KEYS = Object.keys(VTEX_API_STORES);
 export const PIX_PAYMENT_SYSTEM = "125";

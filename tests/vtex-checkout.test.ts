@@ -124,7 +124,7 @@ test("desconto no Pix (Kopenhagen/Ri Happy): total é o valor pago; conferência
   assert.equal(tx.value, 1386);
   assert.equal(tx.referenceValue, 1429);
   assert.deepEqual(VTEX_API_STORE_KEYS.slice(0, 6), ["drogariasp", "cobasi", "paguemenos", "swift", "kopenhagen", "rihappy"]);
-  assert.ok(VTEX_API_STORE_KEYS.includes("mambo") && VTEX_API_STORE_KEYS.includes("epocacosmeticos"));
+  assert.ok(VTEX_API_STORE_KEYS.includes("mambo") && VTEX_API_STORE_KEYS.includes("epocacosmeticos") && VTEX_API_STORE_KEYS.includes("drogal"));
 });
 
 test("seller do SKU na hora: própria loja preferida; marketplace único aceito; ambíguo ou sem estoque recusa", async () => {
