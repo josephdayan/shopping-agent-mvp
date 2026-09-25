@@ -82,6 +82,33 @@ export function PurchaseAccounts() {
     setEnabled(a?.enabled ?? false);
     setMessage("");
   }
+  // 25/09: um clique habilita todas as lojas VTEX por API (servidor faz a trava de pedidos antigos).
+  const [risky, setRisky] = useState<{ id: string; storeKey: string; total: number }[]>([]);
+  async function enableAll(force = false) {
+    setBusy(true);
+    setMessage("");
+    try {
+      const r = await fetch("/api/ops/purchase-accounts", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "enable_vtex_api", ...(email ? { email } : {}), ...(force ? { force: true } : {}) }),
+      });
+      const b = await r.json();
+      if (r.status === 409 && b.risky) {
+        setRisky(b.risky);
+        setMessage("Há pedido pago recente sem número da loja que a automação compraria. Registre o número ou estorne no painel, ou ligue mesmo assim.");
+        return;
+      }
+      if (!r.ok) throw new Error(b.error ?? "Não foi possível habilitar.");
+      setRisky([]);
+      setAccounts((old) => [...old.filter((a) => !b.accounts.some((n: Account) => n.storeKey === a.storeKey)), ...b.accounts]);
+      setMessage(`Lojas por API habilitadas: ${b.accounts.map((a: { label: string }) => a.label).join(", ")}.`);
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Não foi possível habilitar.");
+    } finally {
+      setBusy(false);
+    }
+  }
   async function save() {
     setBusy(true);
     try {
@@ -132,6 +159,14 @@ export function PurchaseAccounts() {
               ? ` Lojas liberadas após validação do checkout: ${policy.stores.map(s => stores[s] ?? s).join(", ")}. A conta também precisa estar conectada e ativa.`
               : " Nenhuma loja liberada ainda: falta validar checkout e comprovante."}
           </p>}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <button style={button} disabled={busy} onClick={() => enableAll(false)}>Habilitar todas as lojas por API (Pix pago pela Lia)</button>
+            {risky.length > 0 && (
+              <button style={{ ...button, borderColor: "#c33" }} disabled={busy} onClick={() => enableAll(true)}>
+                Ligar mesmo assim ({risky.map((o) => `#${o.id.slice(-6).toUpperCase()} ${stores[o.storeKey] ?? o.storeKey}`).join(", ")})
+              </button>
+            )}
+          </div>
           <p style={{ margin: 0 }}>
             Entre na conta da loja na janela do comprador e escolha como a Lia
             paga nessa loja. Depois confirme os dois itens abaixo. Senhas,

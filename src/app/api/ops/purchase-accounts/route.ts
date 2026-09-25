@@ -34,10 +34,19 @@ const schema = z
     paymentKind: z.enum(PURCHASE_PAYMENT_KINDS).optional(),
   })
   .strict();
+const enableSchema = z.object({ action: z.literal("enable_vtex_api"), email: z.string().email().optional(), force: z.boolean().optional() }).strict();
 export async function POST(request: Request) {
   const denied = requireOpsOwner(request);
   if (denied) return denied;
-  const parsed = schema.safeParse(await request.json().catch(() => null));
+  const body = await request.json().catch(() => null);
+  // 25/09: um clique habilita todas as lojas VTEX por API (com a trava de pedidos pagos antigos).
+  const enable = enableSchema.safeParse(body);
+  if (enable.success) {
+    const { enableVtexApiAccounts } = await import("@/lib/purchase/vtex-accounts");
+    const result = await enableVtexApiAccounts(enable.data);
+    return NextResponse.json(result, { status: result.ok ? 200 : 409 });
+  }
+  const parsed = schema.safeParse(body);
   if (!parsed.success)
     return NextResponse.json(
       { error: "Configuração inválida" },
