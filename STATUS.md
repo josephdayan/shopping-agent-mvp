@@ -1,3 +1,28 @@
+## 25/09/2026 — Vitrine sem operador: 9 lojas por API (~19.000 itens); ML em espera
+
+Decisão do dono (25/09, à tarde): tudo que não fecha sem humano sai; somar toda loja que
+funcione. Feito hoje:
+
+- **Comprador por API** cobre agora **9 lojas**: Drogaria SP (4.682 itens), Drogal (6.463),
+  Pague Menos (1.551), Cobasi (998), Swift (968), Kopenhagen (248), Ri Happy (1.196), Mambo
+  (1.500: supermercado, hortifruti, bebidas) e Época Cosméticos (459). Todas sondadas a seco
+  no endereço do dono com o cliente novo do servidor (seller resolvido na hora, PJ, geo,
+  SLA no prazo, Pix; cesta esvaziada). Três já provadas com pedido real e Pix pago.
+- **Desligadas por padrão no registry (opt-in por env):** Carrefour, Petz, Boticário, Droga
+  Raia, Oba, Divvino, Imigrantes, Giuliana Flores, Decathlon, Kalunga, Cacau Show, Natural da
+  Terra. Motivos no `src/lib/stores/index.ts`. Mercado Livre inalterado (decisão pendente).
+- Varredura de ~80 varejistas: também abertos, mas fora por prazo/aderência: Tok&Stok (7 dias),
+  Polishop, Hering, C&A, Lojas Rede, Drogarias Pacheco (RJ). Hortifruti/Mundo Verde não
+  entregam no endereço; Sonda/Livup bloqueiam catálogo.
+- Comprador: desconto de Pix (Kopenhagen/Ri Happy) via `discountCents`; `transaction` manda
+  `value` = pagamento e `referenceValue` = cesta; trava de 24h para pedido pago antigo.
+- Suíte: arquivos em série (paralelismo no mesmo banco causava flakes); elenco dos evals e do
+  golden fixado explicitamente; comprador do servidor desligado no harness.
+
+Pendente do dono: `git push origin main` (classificador barrou o último push do Claude),
+rodar `scripts/ops-enable-vtex-accounts.mts --db` (agora cria as 9 contas), e então o Claude
+desliga os kill-switches. Depois: um pedido real do dono pelo WhatsApp em cada loja nova.
+
 ## 25/09/2026 — Deploy do comprador no servidor em produção (Ready); ligar fica com o dono
 
 `git push origin main` feito (9eabfc2, 5834db3); produção Ready em 59 s com a migration

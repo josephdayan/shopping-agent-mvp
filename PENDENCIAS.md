@@ -1,3 +1,20 @@
+## 25/09/2026 — Depois de ligar: provar as 6 lojas novas e decidir o resto
+
+- [ ] Dono: `git push origin main` (c53d639 + Drogal) — o Claude foi barrado no push.
+- [ ] Dono: `DATABASE_URL="$(grep '^DIRECT_URL=' .env | cut -d= -f2- | tr -d '"')" npx tsx
+  scripts/ops-enable-vtex-accounts.mts --db` (pooler 6543 não respondeu do terminal do dono).
+- [ ] Claude: desligar `LIA_AUTO_PURCHASE_OFF`, `LIA_PURCHASE_SUBMIT_OFF`, `LIA_PIX_OUT_OFF` e
+  `LIA_AUTO_PURCHASE_STORES=drogariasp,cobasi,paguemenos,swift,kopenhagen,rihappy,mambo,epocacosmeticos,drogal`; redeploy.
+- [ ] Um pedido real do dono pelo WhatsApp em Swift, Kopenhagen, Ri Happy, Mambo, Época e Drogal
+  (recebedor novo → toque "Pagar e memorizar" uma vez por loja).
+- [ ] Caminho "operador cota" (item fora do catálogo → `awaiting_operator_quote`): num produto
+  sem operador precisa virar recusa honesta + sugestão; decidir e implementar (copy + evals).
+- [ ] Item sem estoque/entrega no CEP na hora da compra: hoje `needs_review`; virar
+  substituição/estorno automático.
+- [ ] Mercado Livre: manter (E8 do comprador por navegador) ou cortar.
+- [ ] Mais lojas: bebidas (nenhuma VTEX aberta achada), hortifruti dedicado; Pacheco/C&A/Hering/
+  Polishop abertos mas com prazo de dias — decidir se entram como "não é hoje".
+
 ## 25/09/2026 — Trava de idade no comprador; dois pedidos antigos para fechar no /ops
 
 - Comprador do servidor nunca compra pedido pago há mais de 24h (`LIA_SERVER_BUYER_MAX_AGE_HOURS`):
