@@ -47,10 +47,6 @@ export class GmailStoreMailReader {
     const body = (await r.json().catch(() => ({}))) as { access_token?: string; expires_in?: number; scope?: string; error?: string; error_description?: string };
     if (!r.ok || !body.access_token) throw new Error(`Gmail: refresh token recusado (${r.status} ${body.error ?? ""} ${body.error_description ?? ""}).`.replace(/\s+/g, " "));
     if (body.scope && !/gmail/i.test(body.scope)) console.warn("[store-mail] token sem escopo Gmail:", body.scope);
-    // Diagnóstico sem segredo: formato do token e das envs (tamanho/prefixo), nunca o valor.
-    const shape = (v: string | undefined) => `${(v ?? "").length}:${(v ?? "").slice(0, 4)}${/\s/.test(v ?? "") ? ":ESPACO" : ""}`;
-    console.log("[store-mail] token", { access: shape(body.access_token), scope: body.scope, expires: body.expires_in, clientId: shape(process.env.LIA_GMAIL_CLIENT_ID), secret: shape(process.env.LIA_GMAIL_CLIENT_SECRET).slice(0, 3), refresh: shape(process.env.LIA_GMAIL_REFRESH_TOKEN) });
-    this.token = { value: body.access_token, expiresAt: Date.now() + (body.expires_in ?? 3600) * 1000 };
     return this.token.value;
   }
   private async gmail<T>(path: string): Promise<T> {
@@ -80,10 +76,12 @@ export class GmailStoreMailReader {
 
 // Uma passada: lê, classifica por loja, reporta o veredito e marca a mensagem como vista.
 export async function readStoreMailOnce(reader = new GmailStoreMailReader(), days = 2) {
-  const report = { checked: 0, reported: 0, matched: 0, errors: [] as string[] };
+  const report = { listed: 0, alreadySeen: 0, checked: 0, reported: 0, matched: 0, verdicts: [] as string[], errors: [] as string[] };
   if (!storeMailReaderConfigured()) return { ...report, configured: false };
   const ids = await reader.listRecent(days);
   const seen = new Set((await prisma.storeMailSeen.findMany({ where: { messageId: { in: ids } }, select: { messageId: true } })).map((s) => s.messageId));
+  report.listed = ids.length;
+  report.alreadySeen = ids.filter((id) => seen.has(id)).length;
   for (const id of ids) {
     if (seen.has(id)) continue;
     report.checked += 1;
@@ -100,6 +98,7 @@ export async function readStoreMailOnce(reader = new GmailStoreMailReader(), day
           ...(verdict.trackingUrl ? { trackingUrl: verdict.trackingUrl } : {}), ...(verdict.deliveryCode ? { deliveryCode: verdict.deliveryCode } : {}),
         });
         report.reported += 1;
+        report.verdicts.push(`${storeKey}:${verdict.kind}:${result.matched ? "ok" : result.reason}`);
         if (result.matched) { matched = true; report.matched += 1; }
         break;
       }
