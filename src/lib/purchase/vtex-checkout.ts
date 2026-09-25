@@ -212,7 +212,9 @@ export class VtexCheckoutSession {
       if (l.selectedDeliveryChannel !== "delivery") throw new Error("Retirada não é entrega.");
       const raw = ((l.slas as Json[] | undefined) ?? []).find((v) => v.id === l.selectedSla);
       if (!raw) throw new Error("Entrega não selecionada.");
-      const chosen = l.deliveryWindow as { startDateUtc?: string; endDateUtc?: string } | undefined;
+      // A VTEX guarda a janela escolhida DENTRO da SLA selecionada (`slas[].deliveryWindow`), e deixa
+      // `logisticsInfo[].deliveryWindow` nulo (Mambo, 25/09). Aceita os dois lugares.
+      const chosen = ((l.deliveryWindow as { startDateUtc?: string; endDateUtc?: string } | null | undefined) ?? (raw.deliveryWindow as { startDateUtc?: string; endDateUtc?: string } | null | undefined)) ?? undefined;
       if ((raw.availableDeliveryWindows as unknown[] | undefined)?.length && !chosen?.endDateUtc) throw new Error("Janela de entrega não selecionada.");
       if (!chosen?.endDateUtc) return raw;
       const hours = Math.max(1, Math.ceil((Date.parse(chosen.endDateUtc) - Date.now()) / 3_600_000));
