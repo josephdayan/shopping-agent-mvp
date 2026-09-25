@@ -1,41 +1,76 @@
-// Passo 3 de 25/09: habilita as contas de compra das lojas VTEX por API no /ops de produção.
-//   OPS_TOKEN=<token do dono> npx tsx scripts/ops-enable-vtex-accounts.mts [--force] [--base https://…]
+// Passo 3 de 25/09: habilita as contas de compra das lojas VTEX por API em PRODUÇÃO.
+//   npx tsx scripts/ops-enable-vtex-accounts.mts --db [--force]        # direto no banco (DATABASE_URL do .env)
+//   OPS_TOKEN=<chave do dono> npx tsx scripts/ops-enable-vtex-accounts.mts [--force] [--base https://…]
 // Antes de habilitar, lista pedidos PAGOS sem número da loja nessas lojas: se houver algum,
 // para (a compra automática compraria de novo o que já foi comprado à mão). --force ignora.
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 const args = process.argv.slice(2);
 const flag = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
-const base = (flag("--base") ?? process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "");
-const token = process.env.OPS_TOKEN?.trim();
-if (!token) { console.error("Defina OPS_TOKEN (chave do dono do /ops de produção)."); process.exit(2); }
 const STORES = ["drogariasp", "cobasi", "paguemenos"] as const;
 const EMAIL = process.env.LIA_BUYER_EMAIL?.trim() || "contato@liadelivery.com.br";
-async function api(path: string, body?: unknown) {
-  const r = await fetch(`${base}${path}`, { method: body ? "POST" : "GET", headers: { "x-ops-key": token!, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(30_000) });
-  const json = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(`${path}: HTTP ${r.status} ${JSON.stringify(json).slice(0, 200)}`);
-  return json as Record<string, unknown>;
-}
-type Order = { id: string; status: string; storeKey?: string; storeOrderNumber?: string | null; total?: number; paidAt?: string; items?: { storeKey?: string }[]; purchaseJobs?: { status: string }[] };
-const storeOf = (o: Order) => { const ks = new Set((o.items ?? []).map((i) => i.storeKey).filter(Boolean)); return ks.size === 1 ? [...ks][0] : o.storeKey; };
+type Account = { storeKey: string; email?: string | null; paymentKind?: string; enabled: boolean };
+type Order = { id: string; status: string; storeKey?: string | null; storeOrderNumber?: string | null; total?: number; paidAt?: string | Date | null; items?: unknown; purchaseJobs?: { status: string }[] };
+const storeOf = (o: Order) => { const items = Array.isArray(o.items) ? (o.items as { storeKey?: string }[]) : []; const ks = new Set(items.map((i) => i?.storeKey).filter(Boolean)); return ks.size === 1 ? [...ks][0] : o.storeKey; };
 
-const orders = await api("/api/ops/orders");
-const rows = (Array.isArray(orders) ? orders : ((orders.orders ?? orders.items ?? []) as Order[])) as Order[];
-const risky = rows.filter((o) => o.status === "paid" && !o.storeOrderNumber && STORES.includes(storeOf(o) as never));
-console.log(`Pedidos no painel: ${rows.length}. Pagos sem número da loja em ${STORES.join("/")}: ${risky.length}`);
-for (const o of risky) console.log(`  - #${o.id.slice(-6).toUpperCase()} ${storeOf(o)} R$${o.total} pago em ${(o.paidAt ?? "").slice(0, 16)} jobs=${(o.purchaseJobs ?? []).map((j) => j.status).join(",") || "nenhum"}`);
+// ---- dois backends: banco direto (--db) ou API do /ops (OPS_TOKEN) ----
+type Backend = {
+  paidWithoutNumber(): Promise<Order[]>;
+  accounts(): Promise<Account[]>;
+  save(a: { storeKey: string; email: string }): Promise<Account>;
+  policy(): Promise<{ stores: string[]; paused: boolean; perOrderCents: number }>;
+};
+async function dbBackend(): Promise<Backend> {
+  for (const line of readFileSync(resolve(process.cwd(), ".env"), "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*"?([^"\n]*)"?\s*$/);
+    if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2];
+  }
+  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL ausente no .env");
+  const { prisma } = await import("../src/lib/prisma");
+  const { savePurchaseAccount } = await import("../src/lib/purchase-execution");
+  const { automaticPurchaseStores, AUTO_PURCHASE_LIMIT_CENTS } = await import("../src/lib/purchase-policy");
+  return {
+    paidWithoutNumber: async () => prisma.deliveryOrder.findMany({ where: { status: "paid", storeOrderNumber: null }, include: { purchaseJobs: { select: { status: true } } }, orderBy: { paidAt: "desc" } }) as unknown as Order[],
+    accounts: async () => prisma.purchaseAccount.findMany({ orderBy: { storeKey: "asc" } }),
+    save: async (a) => savePurchaseAccount({ storeKey: a.storeKey, email: a.email, loginReady: true, paymentReady: true, enabled: true, authKind: "none", paymentKind: "pix_out" }),
+    policy: async () => ({ stores: automaticPurchaseStores(), paused: process.env.LIA_AUTO_PURCHASE_OFF === "true" || process.env.LIA_PURCHASE_SUBMIT_OFF === "true", perOrderCents: AUTO_PURCHASE_LIMIT_CENTS }),
+  };
+}
+function apiBackend(): Backend {
+  const base = (flag("--base") ?? process.env.LIA_PUBLIC_URL ?? "https://liadelivery.com.br").replace(/\/$/, "");
+  const token = process.env.OPS_TOKEN?.trim();
+  if (!token) throw new Error("Defina OPS_TOKEN (chave do dono do /ops de produção) ou use --db.");
+  const api = async (path: string, body?: unknown) => {
+    const r = await fetch(`${base}${path}`, { method: body ? "POST" : "GET", headers: { "x-ops-key": token, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(30_000) });
+    const json = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(`${path}: HTTP ${r.status} ${JSON.stringify(json).slice(0, 200)}`);
+    return json as Record<string, unknown>;
+  };
+  return {
+    paidWithoutNumber: async () => { const o = await api("/api/ops/orders"); const rows = (Array.isArray(o) ? o : (o.orders ?? o.items ?? [])) as Order[]; return rows.filter((r) => r.status === "paid" && !r.storeOrderNumber); },
+    accounts: async () => ((await api("/api/ops/purchase-accounts")) as { accounts: Account[] }).accounts,
+    save: async (a) => ((await api("/api/ops/purchase-accounts", { storeKey: a.storeKey, email: a.email, loginReady: true, paymentReady: true, enabled: true, authKind: "none", paymentKind: "pix_out" })) as { account: Account }).account,
+    policy: async () => ((await api("/api/ops/purchase-accounts")) as { policy: { stores: string[]; paused: boolean; perOrderCents: number } }).policy,
+  };
+}
+
+const backend = args.includes("--db") ? await dbBackend() : apiBackend();
+const risky = (await backend.paidWithoutNumber()).filter((o) => STORES.includes(storeOf(o) as never));
+console.log(`Pedidos pagos sem número da loja em ${STORES.join("/")}: ${risky.length}`);
+for (const o of risky) console.log(`  - #${o.id.slice(-6).toUpperCase()} ${storeOf(o)} R$${o.total} pago em ${String(o.paidAt ?? "").slice(0, 16)} jobs=${(o.purchaseJobs ?? []).map((j) => j.status).join(",") || "nenhum"}`);
 if (risky.length && !args.includes("--force")) {
   console.error("\nPARADO: registre essas compras no /ops (número da loja) ou estorne antes de ligar. Use --force só se tiver certeza de que nenhuma foi comprada.");
   process.exit(1);
 }
-const before = (await api("/api/ops/purchase-accounts")) as { accounts: { storeKey: string; email?: string | null; paymentKind?: string; enabled: boolean }[] };
-console.log("\nContas antes:", before.accounts.map((a) => `${a.storeKey}(${a.enabled ? "ativa" : "inativa"},${a.paymentKind})`).join(" ") || "nenhuma");
+const before = await backend.accounts();
+console.log("\nContas antes:", before.map((a) => `${a.storeKey}(${a.enabled ? "ativa" : "inativa"},${a.paymentKind})`).join(" ") || "nenhuma");
 for (const storeKey of STORES) {
-  const current = before.accounts.find((a) => a.storeKey === storeKey);
-  const email = current?.email?.trim() || EMAIL;
-  const saved = await api("/api/ops/purchase-accounts", { storeKey, email, loginReady: true, paymentReady: true, enabled: true, authKind: "none", paymentKind: "pix_out" });
-  const a = (saved as { account: { storeKey: string; email: string; paymentKind: string; enabled: boolean } }).account;
+  const current = before.find((a) => a.storeKey === storeKey);
+  const a = await backend.save({ storeKey, email: current?.email?.trim() || EMAIL });
   console.log(`  ✓ ${a.storeKey}: ${a.email} · ${a.paymentKind} · ${a.enabled ? "ativa" : "inativa"}`);
 }
-const after = (await api("/api/ops/purchase-accounts")) as { policy: { stores: string[]; paused: boolean; perOrderCents: number } };
-console.log("\nPolítica:", `lojas automáticas=${after.policy.stores.join(",") || "(vazio)"} · pausado=${after.policy.paused} · teto=R$${after.policy.perOrderCents / 100}`);
-console.log(after.policy.paused ? "Ainda pausado pelos kill-switches (passo 5)." : "Compra automática LIGADA nessas lojas.");
+const policy = await backend.policy();
+console.log("\nPolítica:", `lojas automáticas=${policy.stores.join(",") || "(vazio — env LIA_AUTO_PURCHASE_STORES do servidor)"} · pausado=${policy.paused} · teto=R$${policy.perOrderCents / 100}`);
+console.log(args.includes("--db") ? "Contas gravadas em produção. Os kill-switches (passo 5) são envs da Vercel; o servidor decide." : policy.paused ? "Ainda pausado pelos kill-switches (passo 5)." : "Compra automática LIGADA nessas lojas.");
+process.exit(0);
