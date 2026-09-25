@@ -5,7 +5,7 @@ import { prisma } from "./prisma";
 import { isAdminPhone } from "./turn-runtime";
 import { whatsappAdapter } from "./adapters/whatsapp";
 import { parseOpsActionButton, consumeOpsAction, mirrorOpsAction } from "./ops-actions";
-import { ownerConfirmCartBought, ownerDeclineCart, ownerStoreNumber, approveCheckout, refuseReceiver, retryAfterPixFailure } from "./purchase-execution";
+import { ownerConfirmCartBought, ownerDeclineCart, ownerStoreNumber, approveCheckout, refuseReceiver, retryAfterPixFailure, approveReceiverAndPay, heldPixCode } from "./purchase-execution";
 import { opsPurchaseFailedRefund } from "./ops-lifecycle";
 import { createOpsAction } from "./ops-actions";
 import * as copy from "./lia-copy";
@@ -74,6 +74,13 @@ async function runOperatorButton(phone: string, button: { id: string; choice: st
       if (action.kind === "receiver_new") {
         if (button.choice === "pay") {
           await prisma.purchaseReceiver.updateMany({ where: { storeKey: job.storeKey, status: "pending", receiverDoc: String((action.payload as { receiverDoc?: string } | null)?.receiverDoc ?? "") }, data: { status: "approved", approvedBy: `wa:${phone}`, approvedAt: new Date() } });
+          // Comprador no servidor (25/09): o código ficou guardado; paga aqui mesmo, uma vez.
+          const held = await heldPixCode(job.id);
+          if (held) {
+            const paid = await approveReceiverAndPay(job.id, held, `wa:${phone}`);
+            await reply(phone, paid.status === "paid" || paid.status === "submitted" ? copy.operatorReceiverApproved(shortId) : copy.operatorPixFailed(shortId, paid.status));
+            return;
+          }
           await reply(phone, copy.operatorReceiverApproved(shortId));
           return;
         }

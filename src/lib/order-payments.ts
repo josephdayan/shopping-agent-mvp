@@ -782,7 +782,15 @@ export async function markDeliveryOrderPaid(orderId: string, evidence?: PaymentE
   try {
     const { ensurePurchaseJobForPaidOrder, manualQueueJobForPaidOrder } = await import("@/lib/purchase-worker");
     // Sem executor para esta loja/cesta: fila manual explícita no /ops (11/09).
-    if (!(await ensurePurchaseJobForPaidOrder(order.id))) await manualQueueJobForPaidOrder(order.id);
+    const job = await ensurePurchaseJobForPaidOrder(order.id);
+    if (!job) await manualQueueJobForPaidOrder(order.id);
+    // Comprador VTEX no servidor (25/09): compra na hora em que o dinheiro cai, sem esperar
+    // o cron. Corre depois da resposta ao webhook (waitUntil); o cron cobre o que sobrar.
+    else if ((await import("@/lib/purchase/vtex-checkout")).VTEX_API_STORE_KEYS.includes(job.storeKey)) {
+      const { runVtexApiPurchases } = await import("@/lib/purchase/vtex-runner");
+      const { waitUntil } = await import("@vercel/functions");
+      waitUntil(runVtexApiPurchases({ maxJobs: 1 }).then((r) => { if (r.errors.length) console.warn("[vtex-runner:on-paid]", r.errors); }).catch((error) => console.error("[vtex-runner:on-paid]", error instanceof Error ? error.message : error)));
+    }
   } catch (error) {
     console.error("[purchase-worker:enqueue-failed]", error instanceof Error ? error.message : error);
   }

@@ -1,0 +1,302 @@
+// Checkout VTEX por HTTP puro, no servidor (25/09/2026). Portado de scripts/vtex-api-probe.mts,
+// que fechou pedidos reais em Drogaria SP, Cobasi e Pague Menos sem navegador e sem CAPTCHA.
+//
+// O que a VTEX exige e o que aprendemos ao vivo:
+//   - Perfil de convidado (`loggedIn:false`). Pessoa jurídica = `documentType:"cnpj"` +
+//     `isCorporate` + `corporateDocument`; CNPJ em `documentType:"cpf"` dá `400 ORD007`.
+//   - Entrega é decidida por item + coordenadas (Cobasi só oferece entrega com geo).
+//   - O envio do pagamento NÃO vai ao `receiverUri` (/split → 500). O checkout-ui copia o
+//     pagamento da cesta com `merchantSellerPayments`, anexa `transaction`, `currencyCode`,
+//     `installments*` e posta em api.vtexvault.com com `orderId`, `redirect=false`,
+//     `callbackUrl`, `deviceInfo` e `an`. O `gatewayCallback` responde 428 com
+//     `paymentAuthorizationAppCollection[].appPayload` (vtex.pix-payment) = copia-e-cola.
+// Nada aqui toca o banco; a máquina de estados fica em purchase-execution.ts.
+import { estimateMinutes, humanEstimate, promisedMinutes } from "../live-freight";
+import { findPixCode } from "../pix-emv";
+import type { CheckoutEvidence } from "../purchase-execution";
+
+export const VTEX_API_STORES: Record<string, { domain: string; skuPrefix: string; label: string }> = {
+  drogariasp: { domain: "www.drogariasaopaulo.com.br", skuPrefix: "dsp-", label: "Drogaria São Paulo" },
+  cobasi: { domain: "www.cobasi.com.br", skuPrefix: "cobasi-", label: "Cobasi" },
+  paguemenos: { domain: "www.paguemenos.com.br", skuPrefix: "paguemenos-", label: "Pague Menos" },
+};
+export const VTEX_API_STORE_KEYS = Object.keys(VTEX_API_STORES);
+export const PIX_PAYMENT_SYSTEM = "125";
+const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36";
+
+type Json = Record<string, unknown>;
+export type VtexAddress = {
+  receiverName: string;
+  postalCode: string; // só dígitos
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  geo?: { lat: number; lng: number };
+};
+export type VtexBuyerProfile = { email: string; firstName: string; lastName: string; document: string; documentType: "cpf" | "cnpj"; corporateName?: string };
+export type VtexCartItem = { sku: string; qty: number };
+export type VtexPix = { code: string; expiresAt?: string; paymentId?: string; transactionId: string; orderGroup: string };
+
+export class VtexCheckoutRejected extends Error {
+  constructor(public readonly stage: string, public readonly status: number, public readonly detail: string) {
+    super(`${stage}: HTTP ${status} ${detail}`.slice(0, 400));
+    this.name = "VtexCheckoutRejected";
+  }
+}
+// Pedido criado na loja, mas o pagamento não foi enviado/lido: existe um pedido pendurado
+// (a loja cancela sozinha sem Pix), então o resultado precisa de conferência humana.
+export class VtexOrderWithoutPayment extends Error {
+  constructor(public readonly orderGroup: string, public readonly detail: string) {
+    super(`pedido ${orderGroup} criado sem pagamento: ${detail}`.slice(0, 400));
+    this.name = "VtexOrderWithoutPayment";
+  }
+}
+
+const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\W/g, "");
+export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
+
+export class VtexCheckoutSession {
+  private readonly jar = new Map<string, string>();
+  readonly base: string;
+  private form: Json | null = null;
+  constructor(readonly storeKey: string, private readonly fetchImpl: FetchLike = fetch, private readonly timeoutMs = 30_000) {
+    const store = VTEX_API_STORES[storeKey];
+    if (!store) throw new Error(`Loja sem checkout VTEX por API: ${storeKey}`);
+    this.base = `https://${store.domain}/api/checkout/pub`;
+  }
+  get store() { return VTEX_API_STORES[this.storeKey]; }
+  get domain() { return this.store.domain; }
+  get orderForm(): Json | null { return this.form; }
+  cookies(): Record<string, string> { return Object.fromEntries(this.jar); }
+
+  private async call(url: string, body?: unknown, init: { method?: string } = {}) {
+    const headers: Record<string, string> = { "User-Agent": UA, Accept: "application/json", "Content-Type": "application/json" };
+    if (this.jar.size) headers.Cookie = [...this.jar].map(([k, v]) => `${k}=${v}`).join("; ");
+    const response = await this.fetchImpl(url, {
+      method: init.method ?? (body === undefined ? "GET" : "POST"),
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
+    for (const c of response.headers.getSetCookie?.() ?? []) {
+      const [pair] = c.split(";");
+      const eq = pair.indexOf("=");
+      if (eq > 0) this.jar.set(pair.slice(0, eq).trim(), pair.slice(eq + 1).trim());
+    }
+    const text = await response.text();
+    let json: unknown = null;
+    try { json = text ? JSON.parse(text) : null; } catch { json = null; }
+    return { status: response.status, text, json };
+  }
+  private async orderFormCall(stage: string, path: string, body?: unknown) {
+    const r = await this.call(`${this.base}${path}`, body);
+    if (r.status !== 200 || !r.json || typeof r.json !== "object") throw new VtexCheckoutRejected(stage, r.status, r.text.slice(0, 300));
+    this.form = r.json as Json;
+    return this.form;
+  }
+
+  // 1–5: cesta → perfil → endereço (com geo) → entrega escolhida → Pix. Nada é criado na loja.
+  async prepare(input: { items: VtexCartItem[]; profile: VtexBuyerProfile; address: VtexAddress; deliveryPromise?: string }) {
+    const { skuPrefix } = this.store;
+    const orderItems = input.items.map((item) => {
+      const id = item.sku.startsWith(skuPrefix) ? item.sku.slice(skuPrefix.length) : "";
+      if (!/^\d+$/.test(id)) throw new VtexCheckoutRejected("sku", 0, `SKU ${item.sku} não é da loja ${this.storeKey}`);
+      return { id, quantity: Math.max(1, Math.round(item.qty)), seller: "1" };
+    });
+    const created = await this.orderFormCall("orderForm", "/orderForm");
+    const orderFormId = String(created.orderFormId);
+    const withItems = await this.orderFormCall("items", `/orderForm/${orderFormId}/items`, { orderItems });
+    const echoed = (withItems.items as Json[] | undefined) ?? [];
+    for (const wanted of orderItems) {
+      const got = echoed.find((i) => String(i.id) === wanted.id);
+      if (!got) throw new VtexCheckoutRejected("items", 200, `item ${wanted.id} não entrou na cesta`);
+      if (got.availability !== "available") throw new VtexCheckoutRejected("items", 200, `item ${wanted.id} indisponível (${String(got.availability)})`);
+      if (Number(got.quantity) !== wanted.quantity) throw new VtexCheckoutRejected("items", 200, `item ${wanted.id}: quantidade ${String(got.quantity)} ≠ ${wanted.quantity}`);
+    }
+    const corporate = input.profile.documentType === "cnpj";
+    await this.orderFormCall("clientProfileData", `/orderForm/${orderFormId}/attachments/clientProfileData`, {
+      email: input.profile.email,
+      firstName: input.profile.firstName,
+      lastName: input.profile.lastName,
+      document: input.profile.document,
+      documentType: input.profile.documentType,
+      isCorporate: corporate,
+      ...(corporate
+        ? { corporateDocument: input.profile.document, corporateName: input.profile.corporateName ?? `${input.profile.firstName} ${input.profile.lastName}`.trim(), tradeName: input.profile.corporateName ?? "", stateInscription: "isento" }
+        : {}),
+    });
+    const a = input.address;
+    const shipped = await this.orderFormCall("shippingData", `/orderForm/${orderFormId}/attachments/shippingData`, {
+      clearAddressIfPostalCodeNotFound: false,
+      selectedAddresses: [{
+        addressType: "residential",
+        receiverName: a.receiverName,
+        postalCode: a.postalCode,
+        country: "BRA",
+        street: a.street,
+        number: a.number,
+        complement: a.complement || null,
+        neighborhood: a.neighborhood,
+        city: a.city,
+        state: a.state,
+        ...(a.geo ? { geoCoordinates: [a.geo.lng, a.geo.lat] } : {}),
+      }],
+    });
+    const messages = ((shipped.messages as Json[] | undefined) ?? []).map((m) => String(m.text ?? "")).filter(Boolean);
+    const logistics = (((shipped.shippingData as Json | undefined)?.logisticsInfo as Json[] | undefined) ?? []);
+    if (!logistics.length) throw new VtexCheckoutRejected("shippingData", 200, messages[0] ?? "loja não devolveu logística");
+    const budget = promisedMinutes(input.deliveryPromise);
+    const selection = logistics.map((line) => {
+      const slas = ((line.slas as Json[] | undefined) ?? []).filter((s) =>
+        s.deliveryChannel === "delivery" && typeof s.price === "number" && Number.isFinite(s.price) && (s.price as number) >= 0 && !/retir/i.test(String(s.name ?? s.id ?? "")));
+      // Mesma regra do comprador do Mac (15/09): entrega com prazo igual ou MENOR que o
+      // prometido ao cliente, a mais barata; empate → a mais rápida. Sem promessa legível,
+      // a mais barata que exista.
+      const fits = slas.filter((s) => budget == null || (estimateMinutes(String(s.shippingEstimate)) >= 0 && estimateMinutes(String(s.shippingEstimate)) <= budget));
+      fits.sort((x, y) => (x.price as number) - (y.price as number) || estimateMinutes(String(x.shippingEstimate)) - estimateMinutes(String(y.shippingEstimate)));
+      if (!fits.length) throw new VtexCheckoutRejected("sla", 200, messages[0] ?? (slas.length ? `nenhuma entrega dentro do prazo prometido (${input.deliveryPromise ?? "?"})` : "loja não entrega esse item nesse endereço"));
+      return { itemIndex: Number(line.itemIndex ?? 0), selectedSla: String(fits[0].id), selectedDeliveryChannel: "delivery" };
+    });
+    await this.orderFormCall("selectedSla", `/orderForm/${orderFormId}/attachments/shippingData`, { ...(shipped.shippingData as Json), logisticsInfo: selection });
+    const value = Number(this.form!.value);
+    const paid = await this.orderFormCall("paymentData", `/orderForm/${orderFormId}/attachments/paymentData`, {
+      payments: [{ paymentSystem: PIX_PAYMENT_SYSTEM, referenceValue: value, value, installments: 1 }],
+    });
+    const payments = ((paid.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? [];
+    if (payments.length !== 1 || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM || Number(payments[0].value) !== value)
+      throw new VtexCheckoutRejected("paymentData", 200, "Pix não ficou selecionado na cesta");
+    return this.form!;
+  }
+
+  // Evidência no MESMO formato que o comprador do Mac entregava ao servidor (checkCheckout).
+  snapshot(job: { cartHash: string; customerAddress: string; items: { sku: string }[] }): CheckoutEvidence {
+    const form = this.form;
+    if (!form) throw new Error("Cesta ainda não preparada.");
+    const shipping = form.shippingData as Json;
+    const dest = ((shipping.selectedAddresses as Json[] | undefined) ?? [])[0] ?? {};
+    const logistics = (shipping.logisticsInfo as Json[] | undefined) ?? [];
+    const selected = logistics.map((l) => {
+      if (l.selectedDeliveryChannel !== "delivery") throw new Error("Retirada não é entrega.");
+      const s = ((l.slas as Json[] | undefined) ?? []).find((v) => v.id === l.selectedSla);
+      if (!s) throw new Error("Entrega não selecionada.");
+      return s;
+    });
+    const promises = [...new Set(selected.map((s) => humanEstimate(String(s.shippingEstimate))))];
+    if (!selected.length || promises.length !== 1 || !promises[0]) throw new Error("Prazo do checkout precisa de conferência.");
+    const payments = ((form.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? [];
+    if (payments.length !== 1 || Number(payments[0].value) !== Number(form.value) || String(payments[0].paymentSystem) !== PIX_PAYMENT_SYSTEM)
+      throw new Error("Pix não está selecionado no checkout.");
+    const { skuPrefix } = this.store;
+    const items = ((form.items as Json[] | undefined) ?? []).map((i) => {
+      const sku = `${skuPrefix}${String(i.id)}`;
+      if (!job.items.some((j) => j.sku === sku) || i.availability !== "available") throw new Error("Produto divergente ou sem estoque.");
+      const unit = Number(i.sellingPrice);
+      const total = Number((i.priceDefinition as Json | undefined)?.total ?? unit * Number(i.quantity));
+      return { sku, retailerSku: String(i.id), seller: String(i.seller), name: String(i.name).slice(0, 300), qty: Number(i.quantity), unitPriceCents: unit, lineTotalCents: total };
+    });
+    const freight = ((form.totalizers as Json[] | undefined) ?? []).find((t) => t.id === "Shipping");
+    return {
+      recipientName: String(dest.receiverName ?? ""),
+      accountEmail: String((form.clientProfileData as Json).email ?? ""),
+      checkoutUrl: `https://${this.domain}/checkout/#/payment`,
+      cartHash: job.cartHash,
+      destination: job.customerAddress,
+      postalCode: String(dest.postalCode ?? ""),
+      deliveryOption: selected.map((s) => String(s.id)).join(" · "),
+      deliveryPromise: String(promises[0]),
+      payment: { kind: "pix_store", paymentSystem: 125 },
+      observedAt: new Date().toISOString(),
+      items,
+      freightCents: Number(freight?.value ?? 0),
+      totalCents: Number(form.value),
+    };
+  }
+
+  // Esvazia a cesta (nunca deixar cesta com endereço pendurada na loja).
+  async clearCart() {
+    const form = this.form;
+    if (!form) return;
+    await this.call(`${this.base}/orderForm/${String(form.orderFormId)}/items/removeAll`, {}).catch(() => undefined);
+    this.form = null;
+  }
+
+  // 6: fechamento REAL. transaction → vault → gatewayCallback → Pix do Payment App.
+  async placeOrder(): Promise<VtexPix> {
+    const form = this.form;
+    if (!form) throw new Error("Cesta ainda não preparada.");
+    const orderFormId = String(form.orderFormId);
+    const value = Number(form.value);
+    const tx = await this.call(`${this.base}/orderForm/${orderFormId}/transaction`, {
+      referenceId: orderFormId, savePersonalData: false, optinNewsLetter: false, value, referenceValue: value, interestValue: 0,
+    });
+    const txJson = (tx.json ?? {}) as Json;
+    if (tx.status !== 200 || !txJson.orderGroup) {
+      await this.clearCart();
+      throw new VtexCheckoutRejected("transaction", tx.status, tx.text.slice(0, 300));
+    }
+    // A partir daqui existe pedido na loja: qualquer falha é "pedido sem pagamento".
+    this.form = null;
+    const orderGroup = String(txJson.orderGroup);
+    const merchants = (txJson.merchantTransactions as Json[]) ?? [];
+    const merchant = merchants[0] ?? {};
+    const tid = String(txJson.id ?? merchant.transactionId ?? "");
+    const account = new URL(String(txJson.receiverUri ?? `https://${this.storeKey}.vtexpayments.com.br/`)).hostname.split(".")[0];
+    const templatePath = String(txJson.gatewayCallbackTemplatePath ?? (txJson.transactionData as Json | undefined)?.gatewayCallbackTemplatePath ?? `/checkout/gatewayCallback/${orderGroup}/{messageCode}`);
+    const cartPayments = (((txJson.paymentData as Json | undefined)?.payments as Json[] | undefined) ?? ((form.paymentData as Json).payments as Json[]) ?? []);
+    const payments = cartPayments.flatMap((p, i) =>
+      (((p.merchantSellerPayments as Json[] | undefined) ?? [{ id: merchant.id, installments: 1, referenceValue: value, value, interestRate: 0, installmentValue: value }])).map((m) => {
+        const t = merchants.find((x) => String(x.id).toLowerCase() === String(m.id).toLowerCase()) ?? merchant;
+        return {
+          ...p, ...m,
+          paymentSystemName: "Pix", group: "instantPaymentPaymentGroup", fields: {},
+          transaction: { id: t.transactionId, merchantName: t.merchantName },
+          installmentsValue: m.installmentValue ?? value, installmentsInterestRate: m.interestRate ?? 0,
+          currencyCode: "BRL", originalPaymentIndex: i,
+        };
+      }));
+    const deviceInfo = Buffer.from("sw=1728&sh=1117&cd=30&tz=180&lang=pt-BR&java=false&sourceApplication=vcs.checkout-ui@6.152.3&installedApplications=[]").toString("base64");
+    const callbackUrl = `https://${this.domain}${templatePath}`;
+    const urls = [
+      `https://api.vtexvault.com/api/payments/transactions/${tid}/payments?&orderId=${orderGroup}&redirect=false&callbackUrl=${encodeURIComponent(callbackUrl)}&deviceInfo=${deviceInfo}&an=${account}`,
+      `https://${account}.vtexpayments.com.br/api/payments/pub/transactions/${tid}/payments?&orderId=${orderGroup}&redirect=false&callbackUrl=${callbackUrl}&deviceInfo=${deviceInfo}&an=${account}`,
+    ];
+    let sent: { status: number; text: string } | null = null;
+    for (const url of urls) {
+      try {
+        sent = await this.call(url, payments);
+        if (sent.status >= 200 && sent.status < 300) break;
+      } catch (error) {
+        sent = { status: 0, text: error instanceof Error ? error.message : String(error) };
+      }
+    }
+    if (!sent || sent.status < 200 || sent.status >= 300) throw new VtexOrderWithoutPayment(orderGroup, `gateway HTTP ${sent?.status ?? 0}`);
+    let pix = findPixCode(sent.text);
+    let expiresAt: string | undefined;
+    let paymentId: string | undefined;
+    const cb = await this.call(`${this.base}/gatewayCallback/${orderGroup}`, {}).catch((error) => ({ status: 0, text: String(error), json: null }));
+    const apps = ((cb.json as Json | null)?.paymentAuthorizationAppCollection as Json[] | undefined) ?? [];
+    for (const app of apps) {
+      try {
+        const payload = JSON.parse(String(app.appPayload ?? "{}")) as Json;
+        if (typeof payload.code === "string" && findPixCode(payload.code)) {
+          pix = payload.code;
+          expiresAt = typeof payload.expiresAt === "string" ? payload.expiresAt : undefined;
+          paymentId = typeof payload.paymentId === "string" ? payload.paymentId : undefined;
+        }
+      } catch { /* payload não-JSON: tenta o texto bruto abaixo */ }
+    }
+    pix = pix ?? findPixCode(cb.text);
+    if (!pix) throw new VtexOrderWithoutPayment(orderGroup, `callback HTTP ${cb.status} sem código Pix`);
+    return { code: pix, expiresAt, paymentId, transactionId: tid, orderGroup };
+  }
+}
+
+export function vtexOrderId(orderGroup: string) {
+  return `${orderGroup}-01`;
+}
+export function normalizeForCompare(value: string) {
+  return normalize(value);
+}

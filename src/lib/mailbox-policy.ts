@@ -20,7 +20,7 @@ const VTEX_KINDS: Rule["kinds"] = [
   { kind: "out_for_delivery", subject: /saiu para entrega|a caminho|em rota de entrega/i },
   { kind: "invoiced", subject: /nota fiscal|faturad[oa]/i },
   { kind: "canceled", subject: /cancelad[oa]/i },
-  { kind: "paid", subject: /pagamento (aprovado|confirmado)/i },
+  { kind: "paid", subject: /pagamento (foi )?(aprovado|confirmado)/i },
   { kind: "created", subject: /pedido (recebido|realizado|confirmado|criado)|recebemos seu pedido/i },
 ];
 const VTEX_NUMBER = /\b(\d{9,13}-\d{2})\b/;
@@ -38,7 +38,8 @@ export const STORE_MAIL_RULES: Record<string, Rule> = {
     codeMail: { subject: /c[oó]digo de seguran[cç]a para recebimento/i, code: /\b(\d{4,8})\s+Informe apenas ap[oó]s receber/i },
   },
   rihappy: { domains: ["rihappy.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
-  drogariasp: { domains: ["drogariasaopaulo.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
+  // Drogaria SP numera como v79835708dgsp-01 e o assunto é "Pagamento foi aprovado" (25/09, pedido real).
+  drogariasp: { domains: ["drogariasaopaulo.com.br"], number: /\b(v?\d{8,13}[a-z]{0,4}-\d{2})\b/i, kinds: VTEX_KINDS },
   naturaldaterra: { domains: ["naturaldaterra.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   paguemenos: { domains: ["paguemenos.com.br"], number: VTEX_NUMBER, kinds: VTEX_KINDS },
   mercadolivre: {

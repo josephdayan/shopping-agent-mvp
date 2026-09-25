@@ -587,6 +587,39 @@ export async function beginPurchase(
     await notifyOperator(`Pedido #${base.deliveryOrderId.slice(-6).toUpperCase()}: ${result.reason} Confira no painel de operações.`);
   return result;
 }
+// Fechamento por API recusado pela loja ANTES de criar pedido (25/09: ex. `403 CHK0082`
+// reCAPTCHA, `400 ORD007` documento). Nada foi criado nem pago: libera a reserva de
+// orçamento e devolve o job para revisão com o motivo. Nunca chamado após `transaction` 200.
+export async function abortSubmissionBeforeOrder(
+  jobId: string, workerId: string, token: string, submissionId: string, code: string, message: string,
+) {
+  return prisma.$transaction(async (tx) => {
+    const job = await owned(tx, jobId, workerId, token);
+    if (job.status !== "submitting" || job.submissionId !== submissionId) throw new Error("Tentativa não corresponde à reserva.");
+    await tx.purchaseSpend.updateMany({ where: { submissionId, status: "reserved" }, data: { status: "released", releasedAt: new Date(), releaseNote: `loja recusou antes do pedido: ${code}`.slice(0, 200) } });
+    await tx.purchaseAttempt.updateMany({ where: { purchaseJobId: job.id, idempotencyKey: submissionId }, data: { status: "rejected", errorCode: code.slice(0, 80), errorMessage: message.slice(0, 500), completedAt: new Date() } });
+    return tx.purchaseJob.update({ where: { id: job.id }, data: {
+      status: "needs_review", lastErrorCode: code.slice(0, 80), lastErrorMessage: message.slice(0, 500),
+      lockedAt: null, browserSessionId: null, claimToken: null,
+    } });
+  });
+}
+// Comprador no servidor (sem navegador segurando o modal): quando o recebedor é novo, o
+// copia-e-cola fica guardado na tentativa para o toque "Pagar e memorizar" pagar sozinho.
+export async function rememberPixCodeForOwnerApproval(jobId: string, submissionId: string, code: string) {
+  return prisma.purchaseAttempt.upsert({
+    where: { purchaseJobId_idempotencyKey: { purchaseJobId: jobId, idempotencyKey: `pix-code:${submissionId}` } },
+    create: { purchaseJobId: jobId, step: "pix_code", status: "held", idempotencyKey: `pix-code:${submissionId}`, details: { code } },
+    update: { details: { code } },
+  });
+}
+export async function heldPixCode(jobId: string): Promise<string | null> {
+  const job = await prisma.purchaseJob.findUnique({ where: { id: jobId }, select: { submissionId: true } });
+  if (!job?.submissionId) return null;
+  const attempt = await prisma.purchaseAttempt.findUnique({ where: { purchaseJobId_idempotencyKey: { purchaseJobId: jobId, idempotencyKey: `pix-code:${job.submissionId}` } } });
+  const code = (attempt?.details as { code?: unknown } | null)?.code;
+  return typeof code === "string" ? code : null;
+}
 export async function executionUnknown(
   jobId: string,
   workerId: string,

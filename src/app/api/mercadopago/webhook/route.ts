@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { markDeliveryOrderPaid } from "@/lib/delivery-service";
 import { mercadoPagoFees, type MercadoPagoPaymentBody } from "@/lib/payments/mercadopago";
+// Comprador VTEX no servidor roda em waitUntil depois da resposta (25/09): precisa de tempo.
+export const maxDuration = 120;
 
 export const dynamic = "force-dynamic";
 

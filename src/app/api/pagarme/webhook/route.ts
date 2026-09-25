@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { reconcilePagarmeOrder } from "@/lib/payments/whatsapp-pay";
+// Comprador VTEX no servidor roda em waitUntil depois da resposta (25/09): precisa de tempo.
+export const maxDuration = 120;
 
 export const dynamic = "force-dynamic";
 

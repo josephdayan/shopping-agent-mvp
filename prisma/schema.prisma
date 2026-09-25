@@ -588,3 +588,15 @@ model PixPayout {
   @@index([status, submittedAt])
   @@index([deliveryOrderId])
 }
+
+// E-mails transacionais das lojas já lidos pelo leitor no servidor (25/09/2026). Só o id
+// da mensagem e o veredito; nunca o corpo.
+model StoreMailSeen {
+  messageId String   @id
+  storeKey  String?
+  kind      String
+  matched   Boolean  @default(false)
+  seenAt    DateTime @default(now())
+
+  @@index([seenAt])
+}
