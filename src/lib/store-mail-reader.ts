@@ -40,7 +40,7 @@ export class GmailStoreMailReader {
   private async accessToken() {
     if (this.token && this.token.expiresAt > Date.now() + 30_000) return this.token.value;
     const r = await this.fetchImpl("https://oauth2.googleapis.com/token", {
-      method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
+      method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, cache: "no-store",
       body: new URLSearchParams({ client_id: process.env.LIA_GMAIL_CLIENT_ID!, client_secret: process.env.LIA_GMAIL_CLIENT_SECRET!, refresh_token: process.env.LIA_GMAIL_REFRESH_TOKEN!, grant_type: "refresh_token" }).toString(),
       signal: AbortSignal.timeout(15_000),
     });
@@ -55,7 +55,10 @@ export class GmailStoreMailReader {
   }
   private async gmail<T>(path: string): Promise<T> {
     const token = await this.accessToken();
-    const r = await this.fetchImpl(`https://gmail.googleapis.com${path}`, { headers: { authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(20_000) });
+    // `cache: "no-store"` + Headers explícito: o fetch remendado do Next na Vercel devolvia 401
+    // UNAUTHENTICATED com token válido (25/09) — cabeçalho de autorização não chegava ao Gmail.
+    const headers = new Headers({ Authorization: `Bearer ${token}`, Accept: "application/json" });
+    const r = await this.fetchImpl(`https://gmail.googleapis.com${path}`, { method: "GET", headers, cache: "no-store", signal: AbortSignal.timeout(20_000) });
     if (!r.ok) {
       const detail = (await r.json().catch(() => ({}))) as { error?: { message?: string; status?: string } };
       throw new Error(`Gmail ${r.status} em ${path.split("?")[0]}: ${detail.error?.status ?? ""} ${detail.error?.message ?? ""}`.replace(/\s+/g, " ").trim());
