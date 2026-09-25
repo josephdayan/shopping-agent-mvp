@@ -1,3 +1,11 @@
+## 25/09/2026 (noite) — Tirar nome/CNPJ do WhatsApp (bloqueia distribuição)
+
+1. Dono: abrir logado no /ops `https://liadelivery.com.br/api/ops/meta-setup?action=name`.
+2. `new_name_status` APPROVED → re-registrar com o PIN (POST `register`) em até 14 dias.
+3. PENDING_REVIEW → esperar; o webhook agora avisa a decisão.
+4. DECLINED/sem pedido → nome fantasia "Lia Delivery" no CNPJ do MEI e reenviar o nome.
+5. Conferir no App Dashboard se o webhook assina `phone_number_name_update`.
+
 ## 25/09/2026 (noite) — depois do 1º pedido real
 
 - [ ] #UY6IV9 (água de coco, Mambo, R$18,66): estornar pelo /ops ou repetir a compra (a loja

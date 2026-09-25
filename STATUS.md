@@ -1,3 +1,10 @@
+## 25/09/2026 (noite) — Nome do WhatsApp: leitura do estado real no ar
+
+Provável causa do nome antigo persistir: na Cloud API o nome aprovado só vale após
+re-registrar o número em até 14 dias, e o aviso de aprovação era descartado pelo webhook.
+Implantado: `/api/ops/meta-setup?action=name` (leitura), `register` por POST com PIN e aviso
+ao dono no webhook. Estado ainda não lido (precisa sessão do /ops). Detalhe em AGENTS.md.
+
 ## 25/09/2026 (noite) — 1º pedido real pelo WhatsApp: Mambo recusou (janela); corrigido
 
 Pedido #UY6IV9 (água de coco Kero Coco, Mambo, R$18,66 no cartão salvo) pago às 17:19; o

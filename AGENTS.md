@@ -1,3 +1,23 @@
+## 25/09/2026 (noite) — Nome do WhatsApp: provável causa achada (re-registro de 14 dias)
+
+A doc oficial (developers.facebook.com/docs/whatsapp/display-names) diz que, na Cloud API,
+um display name **aprovado não se aplica sozinho**: é preciso `POST /<PHONE_ID>/register`
+(com o PIN de duas etapas) em até **14 dias**; senão expira e volta pra revisão. A decisão
+chega só pelo webhook `phone_number_name_update` e pela notificação da Business Suite — e o
+nosso webhook descartava esse evento em silêncio (caía em `meta_event` e era ACKado). Os
+três pedidos de "Lia Delivery" (15/08, 01/09, 20/09) podem ter sido aprovados e expirado
+assim; **hipótese, não confirmada** até ler o estado.
+
+Implantado (commit 48a7e37, produção): `GET /api/ops/meta-setup?action=name` lê
+`verified_name`, `name_status`, `new_name_status`, `new_display_name` etc. campo a campo;
+`POST /api/ops/meta-setup {"action":"register","pin":"123456"}` aplica o nome aprovado
+(GET recusado para o PIN não ir em URL/log); o webhook loga `[whatsapp:meta:name-update]`
+e avisa o dono. Falta: o dono abrir a leitura logado no /ops; conferir se o app assina o
+campo `phone_number_name_update` nos webhooks. Se o estado vier `DECLINED`, o caminho é
+registrar **nome fantasia "Lia Delivery" no CNPJ do MEI** (Portal do Empreendedor →
+atualização cadastral) e reenviar — a Meta cruza o nome pedido com o nome legal. O nome do
+recebedor no app do banco (Pix) é a razão social do MEI e não muda com nome fantasia.
+
 ## 25/09/2026 — REMODELAGEM: a Lia compra sozinha (regra canônica vigente)
 
 **Modelo vigente.** Cliente pede no WhatsApp → cotação com frete/prazo reais da loja → paga a
@@ -4165,3 +4185,11 @@ de autorização do dono.
 - Ao concluir, criar ou repriorizar trabalho, atualize `PENDENCIAS.md` no mesmo momento.
 - Diferencie sempre: implementado, validado ao vivo, implantado, pendente e hipótese.
 - Não declare “pronto para lançamento” enquanto qualquer bloqueio acima estiver aberto.
+## 25/09/2026 — Acompanhamento do nome público do WhatsApp
+
+Às 16:55 (São Paulo), Gmail do contato correto continuava sem resposta de mérito dos casos
+Meta/WhatsApp; o fórum seguia `Unresolved`, sem resposta de terceiros. O WhatsApp Manager
+ainda mostrava o nome antigo com nome pessoal/CNPJ como `Name visible to customers`.
+O agendamento do acompanhamento havia voltado indevidamente para 10 horas; corrigido pela
+automação do Codex para `FREQ=HOURLY;INTERVAL=1`, status `ACTIVE`, e confirmado no arquivo
+de configuração. Continuar verificando a frequência, pois essa regressão já ocorreu antes.
