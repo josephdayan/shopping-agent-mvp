@@ -1,3 +1,70 @@
+## 24/09/2026 — Claude revisou o Muse: descartar; fechamento VTEX autorizado
+
+Parecer na §11 de [docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md).
+Fontes checadas na data: Model API da Meta é preview público para desenvolvedores nos EUA;
+computer use é screenshot + clique por pixel, sem VM, navegador, cofre ou carteira; Link Agent
+Wallet só para contas Link dos EUA. Nada disso ataca o que barrou Browserbase (anti-bot no login
+do Carrefour) nem o CAPTCHA/CVV da Pague Menos. Os controles da arquitetura proposta já existem
+em `purchase-execution.ts`/`purchase-worker.ts`; o comprador em `scripts/retail-buyer` é por
+seletor fixo, o modelo só extrai endereço, então não há "motor visual atual" para comparar.
+
+Decisão do dono: **Muse, Skyvern, Browser Use, Agentcard e Stark fora**. Autorizado um pedido
+real por API na Drogaria São Paulo (`vtex-api-probe.mts --buy`, R$15–20, Pix do dono). Regra:
+documento do comprador só em variável de ambiente na hora de rodar; `403 CHK0082` tira a loja da
+lista sem contorno. A decisão de 15/09 (operador humano) continua; religar compra automática,
+mesmo estreita, exige decisão datada depois do resultado.
+
+## 24/09/2026 — Pesquisa ampliada: alternativas ao comprador Muse
+
+**Refinamento após objeção do dono sobre Browserbase:** não há superioridade operacional
+demonstrada dos novos fornecedores. Revisado histórico 19–20/07: bloqueio de login
+Carrefour, ausência de entrega Petz/Boticário e problemas de UI distintos de pagamento.
+Agente/cofre pode reduzir implementação; não prova resolução dessas barreiras. Exigir
+evidência por loja antes de recomendar migração. Comparação documentada no relatório abaixo.
+
+Após o desbloqueio automático falhar, o dono pediu aprofundar a análise por Codex.
+Pesquisa registrada em [docs/alternativas-compra-agentes-2026-09-24.md](docs/alternativas-compra-agentes-2026-09-24.md)
+e conversa principal atualizada. **Somente pesquisado**, sem cadastro de credenciais,
+chamadas autenticadas a fornecedores novos, compra, runtime ou deploy.
+
+- Skyvern documenta agente + credencial de cartão para checkout; tratamento de cartão/CVV
+  e plano de intervenção humana precisam ser esclarecidos antes de adotá-lo como cofre.
+- Browser Use oferece agente hospedado/API ou browser CDP. Seus secret bindings não
+  garantem que o valor fique invisível após digitação na página.
+- Kernel + Agentcard Vault tem integração documentada de aprovação no celular e fluxo
+  específico Mercado Pago (`card_tokens`, preparação prévia). Não comprova Mercado Livre,
+  VTEX ou nossas lojas. Agentcard declara cartões internacionais; BRL, cobertura da loja,
+  controle real do valor e contratação ainda não homologados. SDK direto e Kernel têm
+  tabelas de cobertura distintas; não generalizar a promessa comercial.
+- Rye padrão: EUA, um produto distinto por checkout, sem escolha entre fretes. Seu bot
+  tem identificação/assinatura e rota de allowlisting; a descrição anterior de mero
+  “botting sem opt-in” era incompleta. Akamai exige opt-in do lojista nessa rota.
+- Visa também documenta piloto real no Brasil. Pagamento para agente não equivale a
+  concluir pedido. VTEX + Pix segue com mais evidência local, fechamento pendente.
+
+Recomendação de pesquisa: comparar um executor pronto com VTEX e operador; carteira
+direta do cliente é outra opção de produto e muda a cobrança da taxa Lia. Não ligar
+automação por inferência. A decisão de 15/09 permanece. Consulta ao Claude pendente.
+
+## 24/09/2026 — Muse: pesquisa de comprador na nuvem e revisão solicitada ao Claude
+
+O dono pediu analisar o mecanismo de compra do Muse, viabilidade para a Lia, registrar
+toda a conversa em Markdown e consultar nova sessão no projeto Lia do Claude por
+computer use, com **Fable 5.1 / Extra**. Documento:
+[docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md).
+
+Somente pesquisado: não encontramos API pública do navegador/VM do aplicativo Muse.
+A Meta documenta Muse Spark com computer use, mas o desenvolvedor fornece navegador,
+executor e controles. Acesso pela conta brasileira não foi comprovado. Link Agent Wallet
+documenta consumidores EUA; Stark tem emissão/consulta/regras de cartão corporativo por
+API, sem contratação ou homologação para a Lia. Trocar modelo não prova que o checkout
+de lojas brasileiras passe nem elimina o bloqueio remoto já observado no Carrefour.
+Veredito: protótipo tecnicamente plausível, operação autônoma ainda não demonstrada.
+
+Nenhum runtime, flag, conta, pagamento ou deploy alterado. A decisão de 15/09 permanece.
+Primeira tentativa de abrir Claude encontrou Mac bloqueado; desbloqueio solicitado ao dono.
+Envio e seleção do modelo ainda pendentes nesta anotação; não há parecer recebido.
+
 ## 23/09/2026 — Sondagem: compra por API sem operador (VTEX aberta em 3 lojas até o Pix)
 
 O dono perguntou se existe API de loja individual que faça o fluxo completo da Lia sem
@@ -69,6 +136,75 @@ produção da Vercel).
   o Postgres embutido de `.local-pg/`, nunca produção; `OPS_TOKEN=preview-owner`).
 - Testes: `tests/pnl.test.ts` (14: puro + banco: custo real, backfill com fetch mockado,
   replay do razão, leitura consolidada).
+
+## 23/09/2026 — Quarto caso Direct Support: bug no fluxo de contato
+
+Rechecagem às 20:51 São Paulo: o WhatsApp Manager ainda mostra o nome antigo
+como visível aos clientes e aprovado; o editor não exibe o estado do pedido de
+20/09 e foi fechado sem envio. O Activity log continua com `Name verification
+requested` de 20/09 às 11:52 como evento mais recente. Gmail e fórum ainda sem
+resposta nova. Corrigido o acompanhamento automático, que estava indevidamente
+em intervalo de 10 horas: a configuração ativa foi verificada em **1 hora**.
+O agendamento voltou indevidamente a 10 horas perto de 21:00; foi corrigido de
+novo via `automation_update` e permaneceu em 1 hora após três verificações ao
+longo de quase três minutos. Conferir a frequência nos próximos acompanhamentos.
+
+Às 20:55 São Paulo, enviado novo follow-up no mesmo fio do caso Meta
+**28122639484102795** para `case++aazr5wey3juyyq@support.facebook.com`.
+Cobra especialista humano, estado lido do registro do número, decisão ou
+correção específica, e rota privada funcional se o e-mail não reabrir o caso;
+relata o erro `Select issue` e o nome antigo ainda visível. Gmail confirmou o
+envio como mensagem **1a0d0b1cc95ba357** no mesmo thread. Resposta pendente.
+
+Com autorização específica do dono para aceitar os `Meta AI terms` no envio,
+o caso **28135432596128883** foi criado às 21:16 São Paulo em `Dev: Cloud API`
+→ `Bug or Implementation Issue`, com status inicial `Open` e assinante correto
+`Joseph.Dayan@beityaacov.com.br`:
+https://business.facebook.com/direct-support/case-detail/28135432596128883/?business_id=1802515380110705 .
+Relata o defeito real do suporte: Business Suite → Help → Contact support
+reconhece o ativo Lia, mas `Select issue` permanece vazio (`No matching
+results`), impedindo atendimento. Inclui WABA/Phone ID, casos anteriores,
+classificação incorreta do terceiro caso e pedido de encaminhamento humano.
+O Meta AI support perguntou se o Activity log mostra erro específico; respondido
+que há só `Name verification requested` de 20/09 11:52, sem decisão nem erro,
+com nome antigo ainda aprovado/visível. O bot disse que contas de desenvolvedor
+são atendidas pelo fórum e encerrou o chat. Após recarregar, o quarto caso já
+estava **Closed** e reclassificado como `Dev: Onboarding`, apesar de ter sido
+enviado em `Dev: Cloud API`; não houve encaminhamento humano. O fórum já havia
+sido acionado, então a resposta não traz passo novo. Aguardar eventual e-mail,
+sem tratar o texto do bot como decisão do nome.
+Nova conferência do WhatsApp Manager após o quarto caso: a lista ainda mostra
+`Lia Delivery by 67.742.955 Joseph Carlos Dayan` como `Name visible to customers`.
+Atualização publicada no tópico do fórum às 21:20 São Paulo, sem nome, CNPJ,
+telefone, e-mail ou IDs: informa que o quarto chamado `Dev: Cloud API` foi
+fechado por IA, reclassificado como `Dev: Onboarding` e devolvido ao próprio
+fórum; pede a moderador/especialista uma rota privada humana. Comentário
+visível no tópico, ainda sem resposta de terceiros.
+O painel `Support > Chats` da Business Suite foi inspecionado e apareceu vazio,
+sem conversa humana disponível. O terceiro caso continua `Closed` e o nome
+antigo segue visível na última conferência do WhatsApp Manager.
+
+## 23/09/2026 — Contato de privacidade do WhatsApp
+
+Em 23/09, também foi enviado o formulário oficial de perguntas sobre a Política
+de Privacidade do WhatsApp em
+https://www.whatsapp.com/contact/forms/915483389072145/ , opção `Como posso
+exercer meus direitos de privacidade?` → `Ainda tenho uma dúvida`, com o número
+comercial e o e-mail de suporte corretos já autorizados pelo dono. O formulário
+só oferece `WhatsApp Messenger` e `App WhatsApp Business`; foi escolhido o
+segundo por ser o mais próximo, embora a Lia use Cloud API diretamente. Não há
+campo de texto para explicar o caso antes do envio. A interface confirmou
+`Formulário enviado com sucesso` e prometeu resposta por e-mail. Chegou resposta
+de `case++aazj3hygwifxpf@globalprivacyops.whatsapp.com`, protocolo
+**28568296869468732**, às 13:17 São Paulo. O cabeçalho marca `Auto-Submitted:
+auto-generated`; o texto genérico orienta solicitar dados da conta ou apagar a
+conta pelo aplicativo, sem tratar da Cloud API nem do nome. O e-mail convidava a
+responder. Follow-up enviado no mesmo fio, esclarecendo Cloud API direta,
+WABA/Phone ID, nome antigo expondo nome pessoal/CNPJ, pedido de 20/09 ainda
+sem decisão verificável, e solicitando correção ou encaminhamento privado a uma
+pessoa da equipe responsável. Gmail confirmou o envio. **Não apagar a conta**;
+isso não foi solicitado e prejudicaria o serviço. Resposta de mérito pendente;
+não tratar resposta automática como atendimento humano.
 
 ## 23/09/2026 — Relato do fluxo de suporte quebrado
 

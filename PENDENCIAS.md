@@ -1,3 +1,47 @@
+## 24/09/2026 — Fechamento VTEX na Drogaria SP (autorizado) e o que vem depois
+
+- [ ] **Rodar o `--buy` na Drogaria São Paulo** (dono executa no terminal com
+  `LIA_PROBE_CONFIRM=sim` e `LIA_PROBE_DOCUMENT=<CNPJ do MEI>`; paga o Pix pelo celular).
+  Registrar: status do `transaction`, se o EMV apareceu nas leituras públicas, número do
+  pedido, e-mail da loja e entrega. Se voltar `403 CHK0082`, a loja sai da lista; sem contornar.
+- [ ] Se passar: repetir em Cobasi e Pague Menos (Pague Menos é a que mostrou CAPTCHA na UI em
+  10/09; por API é a pergunta que importa).
+- [ ] Se duas de três passarem: decisão datada do dono para religar compra automática **só
+  nessas lojas, por API**. Trabalho: adaptador no servidor reaproveitando o probe (o servidor já
+  fala com a VTEX em `instant-quote.ts`/`live-freight.ts`), contratar Asaas (PJ/MEI, saldo para
+  o Pix de saída), `LIA_AUTO_PURCHASE_STORES` + `LIA_PIX_OUT_PROVIDER=asaas` + deploy.
+- [ ] Se falhar: operador fica; energia vai para pedidos, não para automação de compra.
+- [x] Parecer do Claude sobre o Muse registrado na §11 do doc. Muse Spark, Skyvern, Browser Use,
+  Agentcard e Stark **fora** até nova decisão; o gate de acesso da Meta já falhou (EUA).
+
+## 24/09/2026 — Alternativas de compra: pesquisa concluída, validação futura
+
+- [ ] Antes de propor migração de Browserbase para outro executor, demonstrar qual barreira
+  concreta da loja será resolvida. Agente, cofre e preço não comprovam solução para bloqueio
+  de login ou entrega indisponível. Comparar a mesma etapa quando houver acesso autorizado.
+
+- [x] Comparar executores, carteiras e checkout por API em
+  [docs/alternativas-compra-agentes-2026-09-24.md](docs/alternativas-compra-agentes-2026-09-24.md).
+- [x] Distinguir compra com recursos da operação de cartão pessoal pagando diretamente
+  o varejista; registrar implicações para cobrança da taxa Lia.
+- [ ] Se avançar: qualificar Skyvern/Browser Use e Kernel + Agentcard para os requisitos
+  exatos do Brasil e das lojas. Perguntas preparadas no relatório, **não enviadas**.
+- [ ] Antes de cartão real: esclarecer tratamento de CVV/cofre, cobertura do processador
+  e vinculação efetiva de valor/moeda; tokenização isolada não comprova teto de cobrança.
+- [ ] Depois da qualificação: escolher um executor para comparação sintética e preparação
+  sem dinheiro frente à VTEX/operador. Não ativar compra ou contratar pelo resultado desta pesquisa.
+
+## 24/09/2026 — Segunda opinião sobre Muse Spark e compra da Lia
+
+- [x] Consolidar conversa e análise em
+  [docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md).
+- [x] Após desbloqueio manual do Mac, abrir nova sessão no projeto Lia do Claude,
+  selecionar **Fable 5.1 / Extra**, enviar o documento e solicitar parecer crítico. (feito 24/09, pelo dono)
+- [x] Registrar parecer recebido e divergências, distinguindo fontes de hipóteses. (§11 do doc)
+- [ ] Se escolher Muse Spark após comparar as alternativas: comprovar acesso à Meta Model
+  API para a conta brasileira e comparar navegação em ambiente sintético. Essa verificação
+  não é pré-requisito para estudar outros executores. Nada de reativar runtime ou compra por inferência.
+
 ## 23/09/2026 — Decidir se prova o fechamento por API (1 pedido real, ~R$15–20)
 
 Sondagem em [docs/api-compra-lojas-2026-09-23.md](docs/api-compra-lojas-2026-09-23.md):

@@ -1,3 +1,49 @@
+## 24/09/2026 — Parecer do Claude sobre o Muse: descartar; teste de fechamento VTEX autorizado
+
+Sessão nova no projeto Lia (Fable 5.1, esforço extra) revisou
+[docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md)
+e o relatório de alternativas, com checagem das fontes primárias na data. Parecer completo na
+§11 do próprio doc. Resumo: a Meta Model API é preview público **só para desenvolvedores nos
+EUA** (blog de lançamento; página `unavailable?reason=geo` existe), a API de computer use dá
+apenas screenshot e clique por pixel sem navegador, cofre ou carteira, e o Link Agent Wallet é
+só para contas Link dos EUA. Trocar de modelo não ataca o que barrou Browserbase (anti-bot no
+login do Carrefour) nem o CAPTCHA/CVV da Pague Menos. **Veredito: descartar Muse Spark; não
+qualificar Skyvern, Browser Use, Agentcard ou Stark agora.**
+
+O dono acatou e autorizou o passo mais barato: **fechar um pedido real por API na Drogaria
+São Paulo** com `scripts/vtex-api-probe.mts --buy` (R$15–20, Pix pago pelo dono, documento do
+comprador só na variável de ambiente, nunca no chat nem no repo). Rodada seca de 24/09 à noite
+confirmou a loja aberta: convidado sem login, SUPER EXPRESSA R$8,90 em 3h, NORMAL R$6,90 em 2
+dias, Pix aceito, cesta esvaziada. Resultado do fechamento fica registrado em entrada própria.
+
+## 24/09/2026 — Alternativas ao Muse analisadas, sem implementação
+
+Após o dono lembrar o fracasso com Browserbase, o histórico foi revisto: as alternativas
+não têm superioridade operacional comprovada. A lista curta compara interfaces disponíveis;
+não valida acesso às lojas. Prioridade refinada: provar solução da barreira específica
+antes de recomendar troca de fornecedor.
+
+Pesquisa ampliada em [docs/alternativas-compra-agentes-2026-09-24.md](docs/alternativas-compra-agentes-2026-09-24.md).
+Lista curta: Skyvern/Browser Use como executores; Kernel + Agentcard como hipótese de
+carteira com aprovação no celular. Existe documentação de tokenização Mercado Pago
+nessa última combinação, sem comprovação de compra BR nas lojas da Lia. Rye padrão
+limitado aos EUA e com restrições incompatíveis com cesta/frete do piloto. Comparação
+inclui TinyFish, VTEX + Pix, pagamentos regionais, parceria com loja e custos públicos.
+VTEX tem maior evidência nossa, mas ainda falta concluir o pedido. Nenhum provedor
+novo testado com conta/cartão, nenhum runtime ou deploy alterado. Claude segue pendente;
+o dono pediu continuar a análise por Codex após o bloqueio do Mac.
+
+## 24/09/2026 — Análise Muse concluída; consulta ao Claude aguarda desbloqueio do Mac
+
+Registrada a conversa completa por assuntos e sequência, fontes, análise de viabilidade,
+arquitetura proposta, economia ilustrativa e experimento em
+[docs/muse-lia-viabilidade-conversa-2026-09-24.md](docs/muse-lia-viabilidade-conversa-2026-09-24.md).
+Muse Spark tem computer use documentado, mas exige ambiente próprio; API do navegador
+pronto do aplicativo não foi encontrada. Acesso da conta brasileira, checkout local e
+economia permanecem não validados. Pesquisa não reativa compra automática.
+O dono pediu segunda opinião no Claude (Fable 5.1/Extra, nova sessão no projeto Lia).
+Computer use encontrou Mac bloqueado e o desbloqueio foi solicitado; envio ainda pendente.
+
 ## 23/09/2026 — API de compra sem operador: testada ao vivo, aberta em 3 lojas até o Pix
 
 O dono perguntou se existe API de loja que faça o fluxo inteiro sem operador. Pesquisa:
