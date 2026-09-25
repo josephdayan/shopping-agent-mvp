@@ -55,8 +55,16 @@ if (!probe?.cep || !probe.street || !probe.name) {
 const email = process.env.LIA_PROBE_EMAIL?.trim() || "contato+probe@liadelivery.com.br";
 const buy = has("--buy");
 const document = process.env.LIA_PROBE_DOCUMENT?.replace(/\D/g, "");
+// 25/09: a Drogaria SP devolveu `400 ORD007` ("documento de identificação inválido") quando um
+// CNPJ foi enviado como `documentType: "cpf"`. Pessoa jurídica na VTEX é `isCorporate` +
+// `corporateDocument` (docs "orderForm fields"); `LIA_PROBE_DOCUMENT_TYPE=cnpj` liga esse modo.
+const documentType = (process.env.LIA_PROBE_DOCUMENT_TYPE ?? (document && document.length === 14 ? "cnpj" : "cpf")).toLowerCase();
 if (buy && (process.env.LIA_PROBE_CONFIRM !== "sim" || !document)) {
   console.error("--buy cria um pedido REAL. Exige LIA_PROBE_CONFIRM=sim e LIA_PROBE_DOCUMENT (CPF/CNPJ do comprador).");
+  process.exit(2);
+}
+if (buy && !((documentType === "cpf" && document!.length === 11) || (documentType === "cnpj" && document!.length === 14))) {
+  console.error(`LIA_PROBE_DOCUMENT tem ${document!.length} dígitos; ${documentType} exige ${documentType === "cpf" ? 11 : 14}.`);
   process.exit(2);
 }
 
@@ -165,14 +173,19 @@ const added = await call(`${base}/orderForm/${orderFormId}/items`, { orderItems:
 step("items", added.status, orderFormSummary(added.json as Json));
 
 // 3. Perfil de convidado (sem login). O documento só entra em --buy.
+const corporate = buy && documentType === "cnpj";
 const profile = await call(`${base}/orderForm/${orderFormId}/attachments/clientProfileData`, {
   email,
   firstName: "Lia",
   lastName: "Delivery",
-  documentType: "cpf",
-  isCorporate: false,
+  documentType,
+  isCorporate: corporate,
   ...(buy ? { document } : {}),
+  ...(corporate
+    ? { corporateDocument: document, corporateName: "Lia Delivery", tradeName: "Lia Delivery", stateInscription: "isento" }
+    : {}),
 });
+step("clientProfileData(payload)", 0, { documentType, isCorporate: corporate, documentSent: buy });
 step("clientProfileData", profile.status, orderFormSummary(profile.json as Json));
 
 // 4. Endereço com geocoordenadas (Cobasi só oferece entrega com lat/lng)
@@ -264,7 +277,14 @@ const tx = await call(`${base}/orderForm/${orderFormId}/transaction`, {
 });
 const txJson = tx.json as Json;
 step("transaction", tx.status, tx.status === 200 ? { orderGroup: txJson.orderGroup, receiverUri: txJson.receiverUri, merchantTransactions: txJson.merchantTransactions } : tx.text.slice(0, 400));
-if (tx.status !== 200) fail("fechamento recusado (403 CHK0082 = reCAPTCHA exigido no fechamento; outro código = ver JSON)");
+if (tx.status !== 200) {
+  await clearCart();
+  fail(
+    tx.status === 403
+      ? "fechamento recusado: 403 CHK0082 = reCAPTCHA exigido no fechamento (loja sai da lista)"
+      : `fechamento recusado (HTTP ${tx.status}; ORD007 = documento inválido para o documentType enviado; ver JSON). Cesta esvaziada.`,
+  );
+}
 const orderGroup = String(txJson.orderGroup);
 const receiverUri = String(txJson.receiverUri);
 const merchant = (txJson.merchantTransactions as Json[])?.[0] ?? {};
