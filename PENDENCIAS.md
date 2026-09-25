@@ -1,3 +1,15 @@
+## 25/09/2026 — Trava de idade no comprador; dois pedidos antigos para fechar no /ops
+
+- Comprador do servidor nunca compra pedido pago há mais de 24h (`LIA_SERVER_BUYER_MAX_AGE_HOURS`):
+  vai para revisão com `STALE_PAID_ORDER`. Motivo: o saneamento de 25/09 achou pedidos pagos
+  sem número da loja que a automação recompraria.
+- [ ] **#5GUY4Z (Cobasi, R$21,50, 14/09)**: comprado e entregue pelo comprador do Mac; e-mails da
+  Cobasi confirmam `v146373290cbs-01` (pago 13/09 23:00, faturado e transportadora 14/09 09:51,
+  código de recebimento 18:44). Falta "Comprei — registrar nº" no /ops com esse número.
+- [ ] **#YAQHF8 (Drogaria SP, R$20,62, 25/08)**: sem job e sem e-mail da loja na caixa
+  operacional. Dono decide: registrar o número (se comprou à mão) ou cancelar/estornar. Com a
+  trava, a automação NÃO compra este pedido; ele aparece como revisão.
+
 ## 25/09/2026 — Comprador no servidor PRONTO no código; o que falta para ligar
 
 Código commitado (ver STATUS 25/09, "Comprador VTEX no servidor"). Para a Lia comprar sozinha

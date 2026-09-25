@@ -56,9 +56,18 @@ function apiBackend(): Backend {
 }
 
 const backend = args.includes("--db") ? await dbBackend() : apiBackend();
-const risky = (await backend.paidWithoutNumber()).filter((o) => STORES.includes(storeOf(o) as never));
-console.log(`Pedidos pagos sem número da loja em ${STORES.join("/")}: ${risky.length}`);
-for (const o of risky) console.log(`  - #${o.id.slice(-6).toUpperCase()} ${storeOf(o)} R$${o.total} pago em ${String(o.paidAt ?? "").slice(0, 16)} jobs=${(o.purchaseJobs ?? []).map((j) => j.status).join(",") || "nenhum"}`);
+const MAX_AGE_H = Number(process.env.LIA_SERVER_BUYER_MAX_AGE_HOURS ?? 24);
+const open = (await backend.paidWithoutNumber()).filter((o) => STORES.includes(storeOf(o) as never));
+console.log(`Pedidos pagos sem número da loja em ${STORES.join("/")}: ${open.length}`);
+// O comprador do servidor só compra pedido pago há menos de MAX_AGE_H e com job na fila (ou
+// sem job). Pedido mais velho vira revisão no /ops; job já pago (pix_paid) nunca é recomprado.
+const wouldBuy = (o: Order) => {
+  const ageH = o.paidAt ? (Date.now() - new Date(o.paidAt).getTime()) / 3_600_000 : 0;
+  const jobs = (o.purchaseJobs ?? []).map((j) => j.status);
+  return ageH <= MAX_AGE_H && (jobs.length === 0 || jobs.some((st) => ["queued", "retrying"].includes(st)));
+};
+const risky = open.filter(wouldBuy);
+for (const o of open) console.log(`  - #${o.id.slice(-6).toUpperCase()} ${storeOf(o)} R$${o.total} pago em ${String(o.paidAt ?? "").slice(0, 16)} jobs=${(o.purchaseJobs ?? []).map((j) => j.status).join(",") || "nenhum"} → ${wouldBuy(o) ? "A AUTOMAÇÃO COMPRARIA" : "vai para revisão no /ops; não compra"}`);
 if (risky.length && !args.includes("--force")) {
   console.error("\nPARADO: registre essas compras no /ops (número da loja) ou estorne antes de ligar. Use --force só se tiver certeza de que nenhuma foi comprada.");
   process.exit(1);

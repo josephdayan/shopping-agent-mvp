@@ -123,6 +123,15 @@ test("recebedor já memorizado: compra inteira sem nenhum toque; 403 no fechamen
   const j3 = await prisma.purchaseJob.findFirstOrThrow({ where: { deliveryOrderId: gone.id } });
   assert.equal(j3.lastErrorCode, "VTEX_ITEMS");
   assert.equal(await prisma.purchaseSpend.count({ where: { purchaseJobId: j3.id } }), 0);
+  // Pedido pago há dias (compra à mão não registrada): revisão, sem tocar a loja nem pagar.
+  const stale = await paidOrder({ paidAt: new Date(Date.now() - 3 * 86_400_000) });
+  const untouched = fakeVtex({ orderGroup: `v${process.pid}00009dgsp` });
+  const r4 = await runVtexApiPurchases({ maxJobs: 1, fetchImpl: untouched.fetchImpl });
+  assert.equal(r4.runs[0]?.status, "needs_review", JSON.stringify(r4.runs));
+  const j4 = await prisma.purchaseJob.findFirstOrThrow({ where: { deliveryOrderId: stale.id } });
+  assert.equal(j4.lastErrorCode, "STALE_PAID_ORDER");
+  assert.equal(untouched.calls.length, 0, "loja não é chamada para pedido velho");
+  assert.equal(mockPixOutCalls.pay, before + 1);
   // Kill-switch do comprador do servidor.
   process.env.LIA_SERVER_BUYER_OFF = "true";
   assert.equal((await runVtexApiPurchases({ maxJobs: 1 })).enabled, false);

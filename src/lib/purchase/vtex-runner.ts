@@ -20,6 +20,10 @@ import { VTEX_API_STORE_KEYS, VtexCheckoutRejected, VtexCheckoutSession, vtexOrd
 export const SERVER_BUYER_ID = "server-vtex-api";
 export type RunResult = { jobId: string; storeKey: string; status: string; detail?: string };
 
+export function maxPaidAgeHours() {
+  const v = Number(process.env.LIA_SERVER_BUYER_MAX_AGE_HOURS ?? 24);
+  return Number.isFinite(v) && v > 0 ? v : 24;
+}
 export function serverBuyerEnabled() {
   return process.env.LIA_AUTO_PURCHASE_OFF !== "true" && process.env.LIA_SERVER_BUYER_OFF !== "true";
 }
@@ -49,6 +53,16 @@ export async function executeVtexJob(
     await reportPurchaseJobFailure(payload.jobId, SERVER_BUYER_ID, { code, message, retryable }).catch(() => undefined);
     return { ...base, status: retryable ? "retrying" : "needs_review", detail: message } as RunResult;
   };
+  // Pedido pago há muito tempo (padrão 24h) nunca é comprado sozinho: quase sempre já foi
+  // comprado à mão sem registrar o número, e comprar de novo é dinheiro perdido. Vai para
+  // revisão com o motivo; o /ops registra o número ou estorna.
+  const order = await prisma.deliveryOrder.findUnique({ where: { id: payload.orderId }, select: { paidAt: true, createdAt: true } });
+  const paidAt = order?.paidAt ?? order?.createdAt ?? null;
+  const ageHours = paidAt ? (Date.now() - paidAt.getTime()) / 3_600_000 : null;
+  if (ageHours != null && ageHours > maxPaidAgeHours()) {
+    await reportPurchaseJobFailure(payload.jobId, SERVER_BUYER_ID, { code: "STALE_PAID_ORDER", message: `Pedido pago há ${Math.round(ageHours)}h; confira se já foi comprado à mão e registre o número, ou estorne.`, retryable: false }).catch(() => undefined);
+    return { ...base, status: "needs_review", detail: `pago há ${Math.round(ageHours)}h` };
+  }
   if (!payload.accountEmail) return fail("ACCOUNT_EMAIL_MISSING", "Conta da loja sem e-mail no /ops.");
   if (!payload.customer.cep || !payload.customer.address || !payload.customer.name) return fail("ADDRESS_MISSING", "Pedido sem nome, CEP ou endereço.");
   let profile: VtexBuyerProfile;
