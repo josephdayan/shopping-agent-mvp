@@ -1,3 +1,16 @@
+## 25/09/2026 (noite) — 1º pedido real pelo WhatsApp: Mambo recusou (janela); corrigido
+
+Pedido #UY6IV9 (água de coco Kero Coco, Mambo, R$18,66 no cartão salvo) pago às 17:19; o
+comprador do servidor rodou na hora e a loja recusou o `transaction` com `ORD006 A janela de
+entrega é obrigatória`. Nada criado nem pago na loja; orçamento liberado; job `needs_review`.
+Causa: "Entrega Agendada" do Mambo exige janela (a mais cedo: dia seguinte 7h–10h) que custa
+R$3 à parte; a cotação mostrava 2h e R$12,90. Corrigido em 2bb7361 (`effectiveSla` na cotação
+e na compra). Este pedido fica em revisão: com a janela, a loja cobraria R$3 acima do teto pago.
+Também: botões de dinheiro iam para o telefone do operador → agora dono; opções ordenadas por
+mínimo da loja, prazo e produto+frete; aviso "lista expirou" removido. Status do pedido na loja
+é legível com os cookies do fechamento (Cobasi `invoiced`, Pague Menos `payment-approved`, com
+data prevista) — base para avisar "a caminho" sem depender de e-mail.
+
 ## 25/09/2026 (noite) — LIGADO: compra automática ativa em produção nas 9 lojas
 
 Kill-switches removidos, `LIA_AUTO_PURCHASE_STORES` com as 9 lojas, contas de compra ativas
