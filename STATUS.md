@@ -1,3 +1,10 @@
+## 25/09/2026 (noite) — CONFIRMADO: "Lia Delivery" aprovado e não aplicado
+
+Leitura da Graph pelo /ops: `verified_name` = nome antigo, `new_display_name` = "Lia
+Delivery", `new_name_status` = **APPROVED**, `status` CONNECTED, `CLOUD_API`. A causa está
+confirmada: falta só re-registrar o número (POST `register` com o PIN de duas etapas) dentro
+da janela de 14 dias. O PIN é credencial do dono: ele mesmo dispara o POST logado no /ops.
+
 ## 25/09/2026 (noite) — Nome do WhatsApp: leitura do estado real no ar
 
 Provável causa do nome antigo persistir: na Cloud API o nome aprovado só vale após
