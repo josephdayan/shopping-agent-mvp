@@ -44,15 +44,19 @@ export class GmailStoreMailReader {
       body: new URLSearchParams({ client_id: process.env.LIA_GMAIL_CLIENT_ID!, client_secret: process.env.LIA_GMAIL_CLIENT_SECRET!, refresh_token: process.env.LIA_GMAIL_REFRESH_TOKEN!, grant_type: "refresh_token" }).toString(),
       signal: AbortSignal.timeout(15_000),
     });
-    const body = (await r.json().catch(() => ({}))) as { access_token?: string; expires_in?: number };
-    if (!r.ok || !body.access_token) throw new Error("Gmail: refresh token recusado.");
+    const body = (await r.json().catch(() => ({}))) as { access_token?: string; expires_in?: number; scope?: string; error?: string; error_description?: string };
+    if (!r.ok || !body.access_token) throw new Error(`Gmail: refresh token recusado (${r.status} ${body.error ?? ""} ${body.error_description ?? ""}).`.replace(/\s+/g, " "));
+    if (body.scope && !/gmail/i.test(body.scope)) console.warn("[store-mail] token sem escopo Gmail:", body.scope);
     this.token = { value: body.access_token, expiresAt: Date.now() + (body.expires_in ?? 3600) * 1000 };
     return this.token.value;
   }
   private async gmail<T>(path: string): Promise<T> {
     const token = await this.accessToken();
     const r = await this.fetchImpl(`https://gmail.googleapis.com${path}`, { headers: { authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(20_000) });
-    if (!r.ok) throw new Error(`Gmail ${r.status} em ${path.split("?")[0]}`);
+    if (!r.ok) {
+      const detail = (await r.json().catch(() => ({}))) as { error?: { message?: string; status?: string } };
+      throw new Error(`Gmail ${r.status} em ${path.split("?")[0]}: ${detail.error?.status ?? ""} ${detail.error?.message ?? ""}`.replace(/\s+/g, " ").trim());
+    }
     return (await r.json()) as T;
   }
   // Lista mensagens recentes de TODAS as lojas com regra, numa consulta só.
